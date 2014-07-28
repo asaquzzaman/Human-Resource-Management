@@ -1,16 +1,12 @@
 === WP human resource management ===
 
 Contributors: Asaquzzaman mishu
-Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
-Requires at least: 3.1
-Tested up to: 3.9
-Stable tag: 0.1
-License: GPLv2 or later
 
 Instant switching between user accounts in WordPress.
 
 == Description ==
-	Manage your organization, industry, office, task and assign task with the help of this plugin.
+
+    Manage your organization, industry, office, task and assign task with the help of this plugin.
 
 == Installation ==
 

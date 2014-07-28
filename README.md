@@ -2,8 +2,6 @@
 
 Contributors: Asaquzzaman mishu
 
-Instant switching between user accounts in WordPress.
-
 == Description ==
 
     Manage your organization, industry, office, task and assign task with the help of this plugin.

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP human resource management
- * Plugin URI:
+ * Plugin URI: https://github.com/asaquzzaman/hrm
  * Description: Organization, Industries and Office management
  * Author: Asaquzzaman Mishu
  * Version: 0.1

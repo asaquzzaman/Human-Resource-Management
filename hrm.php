@@ -134,11 +134,7 @@ class Wp_Hrm {
         } else {
             $user_id = get_current_user_id();
             $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'Hrm My Info', 'hrm' ), $capability, 'hrm_employer', array($this, 'admin_page_handler') );
-
-            //$pim       = add_submenu_page( 'hrm_pim', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_pim&nested_tab=personal&employee_id=2', array( $this, 'admin_page_handler' ) );
             $this->admin_scripts();
-            //$employer       = add_submenu_page( 'hrm_employer', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_employer', array( $this, 'admin_page_handler' ) );
-            //add_action( 'admin_print_styles-' . $employer, array( $this, 'employer_scripts' ) );
         }
     }
 

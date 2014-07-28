@@ -138,9 +138,6 @@ class Wp_Hrm {
         }
     }
 
-    function page_handler() {
-
-    }
 
     function admin_page_handler() {
 

@@ -3,23 +3,6 @@
 function hrm_page() {
     $path = dirname(__FILE__) . '/../views';
 
-    $page['hrm_management']['admin'] = array(
-        'id'        => 'hrm-admin',
-        'title'     => __( 'Employer', 'hrm' ),
-        'file_path' => $path . '/admin/admin.php',
-        'submenu' => array(
-            'admin_role' => array(
-                'title'     => __( 'Employer Role', 'hrm' ),
-                'file_path' => $path . '/admin/admin-role.php',
-            ),
-            'admin_list' => array(
-                'title'     => __( 'Employer lists', 'hrm' ),
-                'file_path' => $path . '/admin/admin-lists.php',
-            ),
-        ),
-
-    );
-
 	$page['hrm_management']['organization'] = array(
         'id'        => 'hrm-organization',
         'title'     => __( 'Organization', 'hrm' ),
@@ -43,6 +26,23 @@ function hrm_page() {
                 'file_path' => $path . '/admin/notice.php',
             ),
         ),
+    );
+
+    $page['hrm_management']['admin'] = array(
+        'id'        => 'hrm-admin',
+        'title'     => __( 'Employer', 'hrm' ),
+        'file_path' => $path . '/admin/admin.php',
+        'submenu' => array(
+            'admin_role' => array(
+                'title'     => __( 'Employer Role', 'hrm' ),
+                'file_path' => $path . '/admin/admin-role.php',
+            ),
+            'admin_list' => array(
+                'title'     => __( 'Employer lists', 'hrm' ),
+                'file_path' => $path . '/admin/admin-lists.php',
+            ),
+        ),
+
     );
 
     $page['hrm_management']['job'] = array(

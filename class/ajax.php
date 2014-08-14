@@ -181,16 +181,13 @@ class Hrm_Ajax {
             'search' => '*' . $_POST['search_admin'] . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
         ) );
-
         $data = array();
-
         foreach( $users as $user) {
             $data[] = array(
                 'label' => $user->display_name,
                 '_user_meta' => hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID ),
             );
         }
-
         if( count($data) ) {
             $user_info = json_encode( $data );
         } else {
@@ -513,14 +510,14 @@ class Hrm_Ajax {
         ) );
 
         $data = array();
-
+        $supper_admin = get_option( 'hrm_admin');
         foreach( $users as $user) {
+            if ( $user->ID == $supper_admin ) continue;
             $data[] = array(
                 'label' => $user->display_name,
                 '_user_meta' => hrm_Admin::getInstance()->create_user_meta( $user->display_name, $user->ID ),
             );
         }
-
         if( count($data) ) {
             $user_info = json_encode( $data );
         } else {

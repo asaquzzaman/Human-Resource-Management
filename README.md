@@ -20,17 +20,17 @@ Browser Compatibility
 
 	This plugin has three types of user.
 
-    Supper Admin :
-    HRM plugin installer is the supper admin. Its mean If you install this plugin then you are the supper admin.
+    Super Admin :
+    HRM plugin installer is the super admin. Its mean If you install this plugin then you are the super admin.
 
     General admin or Employer :
-    Employer created by supper admin. Employer also can create others employer if he has a permission by admin.
+    Employer created by super admin. Employer also can create others employer if he has a permission by admin.
 
 	Create general admin or employer:
 	First you have to create role for the employer. To create role goto Admin->Employer->Employer role, click add button, insert Role, Display name and choose the access permission for the individual page for this role. You can also create many others roles as your wish.
 	Now you can create employer. To create employer goto Admin->Employer->Employer List, click Add button, insert Name if the user exist then the user will shown in drpodown and select the user. Other wise Create a new user button will appear and create the user. Now you have to select the employer role  and press submit button. A new employer create successfully.
 
-    Employee : Employee created by supper admin or employer. Employee does not have permission to accea admin panel. Employee has only their personal account.
+    Employee : Employee created by super admin or employer. Employee does not have permission to accea admin panel. Employee has only their personal account.
 
 == Screenshots ==
 

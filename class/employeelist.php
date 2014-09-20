@@ -136,12 +136,22 @@ class Hrm_Employeelist {
         $hidden_form['first_name'] = array(
             'label' =>  __( 'First Name', 'hrm' ),
             'type'  => 'text',
-            'value' => get_user_meta( $employer_id, 'first_name', true )
+            'value' => get_user_meta( $employer_id, 'first_name', true ),
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
         );
         $hidden_form['last_name'] = array(
             'label' =>  __( 'Last Name', 'hrm' ),
             'type'  => 'text',
-            'value' => get_user_meta( $employer_id, 'last_name', true )
+            'value' => get_user_meta( $employer_id, 'last_name', true ),
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
         );
 
         $hidden_form['job_title'] = array(

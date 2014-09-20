@@ -1,0 +1,303 @@
+.chosen-container .search-field input {
+  height: 26px !important;
+}
+label em {
+  color: red;
+}
+.hrm-delte-user-meta:after {
+  background: #9C3232;
+  border-radius: 7px;
+  color: #FDFDFD;
+  content: "✖";
+  font-size: 12px;
+  margin-left: 7px;
+  padding: 0 3px;
+  cursor: pointer;
+}
+.hrm-required {
+  color: red;
+  padding: 6px 0 0;
+}
+.hrm-clear {
+  clear: both;
+}
+.hrm-spinner {
+  margin-top: 1%;
+}
+.hrm-error strong {
+  color: #C63E3E;
+}
+.hrm-success strong {
+  color: #1F8478;
+}
+.hrm-spinner:after {
+  background: url("images/loading.gif") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+  content: "";
+  display: inline-block;
+  height: 16px;
+  margin-bottom: -3px;
+  margin-left: 8px;
+  width: 16px;
+}
+#hrm-visible-form-warp,
+#hrm-hidden-form-warp {
+  border: 1px solid #FAD163;
+  margin-top: 2%;
+  background: #fff;
+}
+#hrm-visible-form-warp .hrm-text-wrap {
+  padding: 7px;
+}
+#hrm-visible-form-warp .hrm-text-label,
+#hrm-visible-form-warp .hrm-text-info {
+  float: left;
+  width: 35%;
+  text-align: justify;
+}
+#hrm-hidden-form-warp #hrm-select {
+  position: relative;
+}
+#hrm-hidden-form-warp .hrm-user-role-wrap {
+  position: absolute;
+  left: 60%;
+  top: -1px;
+}
+#hrm-hidden-form-warp .hrm-user-role-wrap label {
+  width: 40%;
+}
+#hrm-hidden-form-warp .hrm-user-role-wrap input {
+  float: none;
+  width: 50%;
+}
+#hrm-list-form {
+  border: 1px solid #FAD163;
+  margin-top: 2%;
+  background: #fff;
+}
+#hrm-list-form thead tr th {
+  background: #FAD163;
+}
+#hrm-list-form .hrm-even {
+  background: #F9F9F9;
+}
+#hrm-list-form #hrm-pagination {
+  margin-left: 4%;
+}
+#hrm-list-form .hrm-add-button,
+#hrm-list-form .hrm-delete-button {
+  margin: 6px 6px 15px 6px;
+}
+#hrm-list-form .hrm-pagination-wrap,
+#hrm-list-form .hrm-table-action-wrap {
+  float: left;
+}
+#hrm-list-form .hrm-pagination-wrap {
+  width: 50%;
+  margin: 6px 6px 15px;
+}
+#hrm-list-form .hrm-pagination-wrap select {
+  width: 18%;
+}
+#hrm-list-form .hrm-table-action-wrap {
+  width: 20%;
+}
+#hrm-list-form .widefat td {
+  padding: 8px 10px;
+  text-align: justify;
+  width: auto;
+}
+#hrm-list-form .widefat {
+  border: none;
+}
+#hrm-list-form .hrm-task-wrap {
+  width: 300px;
+}
+#hrm-list-form .hrm-task-title-wrap {
+  border: 1px solid #fad163;
+  padding: 5px;
+  text-align: justify;
+}
+#hrm-list-form .hrm-running-text {
+  background: #fad163;
+}
+#hrm-list-form .hrm-complete-text {
+  background: #1FF14D;
+}
+#hrm-list-form .hrm-outstanding-text {
+  background: #FF9898;
+}
+#hrm-list-form .hrm-running-text,
+#hrm-list-form .hrm-outstanding-text,
+#hrm-list-form .hrm-complete-text {
+  padding: 0px 5px 0 5px;
+  width: 77px;
+  text-align: center;
+}
+#hrm-list-form .hrm-task-desc,
+#hrm-list-form .hrm-outstanding-text,
+#hrm-list-form .hrm-complete-text,
+#hrm-list-form .hrm-running-text {
+  float: left;
+}
+#hrm-list-form .hrm-task-desc {
+  background: #B9E1BE;
+  padding: 0 5px 0 5px;
+}
+#hrm-list-form .hrm-task-status-desc {
+  margin: 0 0 5px 44.5%;
+}
+#hrm-skills .hrm-label-font {
+  font-weight: 600;
+  font-size: 14px;
+}
+#hrm-hidden-form,
+#hrm-visible-form {
+  padding: 10px;
+}
+#hrm-hidden-form label,
+#hrm-visible-form label,
+#hrm-hidden-form input,
+#hrm-visible-form input,
+#hrm-hidden-form select,
+#hrm-visible-form select,
+#hrm-hidden-form textarea,
+#hrm-visible-form textarea {
+  float: left;
+}
+#hrm-hidden-form label,
+#hrm-visible-form label {
+  width: 21%;
+  font-weight: 600;
+  font-size: 14px;
+}
+#hrm-hidden-form label.hrm-radio,
+#hrm-visible-form label.hrm-radio,
+#hrm-hidden-form label.hrm-checkbox,
+#hrm-visible-form label.hrm-checkbox {
+  width: 5%;
+}
+#hrm-hidden-form input,
+#hrm-visible-form input,
+#hrm-hidden-form textarea,
+#hrm-visible-form textarea,
+#hrm-hidden-form select,
+#hrm-visible-form select {
+  width: 30%;
+}
+#hrm-hidden-form input[type="radio"],
+#hrm-visible-form input[type="radio"],
+#hrm-hidden-form input[type="checkbox"],
+#hrm-visible-form input[type="checkbox"] {
+  width: 0;
+  margin: 2px;
+}
+#hrm-hidden-form span,
+#hrm-visible-form span {
+  display: block;
+  margin-left: 21.2%;
+}
+#hrm-hidden-form .description,
+#hrm-visible-form .description {
+  margin-bottom: 10px;
+}
+#hrm-hidden-form .hrm-submit-button,
+#hrm-visible-form .hrm-submit-button {
+  width: auto;
+  margin-right: 1%;
+}
+#hrm-hidden-form input[type='submit'],
+#hrm-visible-form input[type='submit'] {
+  float: none;
+  width: auto;
+}
+#hrm-hidden-form .hrm-form-field,
+#hrm-visible-form .hrm-form-field {
+  position: relative;
+}
+#hrm-hidden-form .hrm-notification,
+#hrm-visible-form .hrm-notification {
+  position: absolute;
+  left: 52%;
+  top: -2%;
+  color: red;
+  padding: 6px 0 0;
+}
+.hrm-search-head {
+  background-color: #FAD163;
+  border: 0 none;
+  color: #000000;
+  text-align: left;
+  width: auto;
+}
+.hrm-search-head h2 {
+  color: #000000;
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  margrin: 0;
+  padding: 0 0 0 5px;
+}
+.hrm-search-content {
+  border: 1px solid #FAD163;
+  background: #fff;
+}
+.hrm-search-content #hrm-search-form {
+  padding: 7px;
+}
+.hrm-search-content #hrm-search-form label {
+  float: left;
+}
+.hrm-search-content #hrm-search-form input,
+.hrm-search-content #hrm-search-form select {
+  width: 162px;
+}
+.hrm-search-content #hrm-search-form input[type="submit"] {
+  width: auto;
+}
+.hrm-search-content #hrm-search-form label {
+  width: 40%;
+  font-weight: 600;
+  font-size: 14px;
+}
+.hrm-search-content #hrm-search-form span {
+  margin-left: 41%;
+  display: block;
+}
+.hrm-search-content #hrm-search-form .description {
+  margin-bottom: 10px;
+}
+.hrm-search-content #hrm-search-form .hrm-text-wrap {
+  float: left;
+  width: 32%;
+}
+.hrm-sub-nav {
+  background: #FFFFFF;
+  border-color: #CCCCCC;
+  border-image: none;
+  border-right: 1px solid #CCCCCC;
+  border-style: none solid solid;
+  border-width: medium 1px 1px;
+  color: #898989;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0 0 10px;
+  padding: 5px 20px;
+  position: relative;
+}
+.hrm-sub-nav .hrm-subsubsub {
+  margin: 0;
+  padding: 0;
+}
+.hrm-sub-nav .hrm-subsubsub li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.hrm-sub-nav .hrm-subsubsub a {
+  text-decoration: none;
+}
+.hrm-sub-nav .hrm-subsubsub .hrm-sub-current {
+  font-weight: 600;
+  color: #000000;
+}

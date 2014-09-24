@@ -1,0 +1,1296 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: HRM\n"
+"POT-Creation-Date: 2014-09-24 10:43+0600\n"
+"PO-Revision-Date: 2014-09-24 10:44+0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n;_x\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: hrm.php:59
+msgid "Are you sure you want to delte it!"
+msgstr ""
+
+#: hrm.php:100 hrm.php:110
+msgid "HRM"
+msgstr ""
+
+#: hrm.php:101
+msgid "Admin"
+msgstr ""
+
+#: hrm.php:102
+msgid "Pim"
+msgstr ""
+
+#: hrm.php:103 include/page.php:218
+msgid "Leave"
+msgstr ""
+
+#: hrm.php:110
+msgid "Hrm My Info"
+msgstr ""
+
+#: hrm.php:152
+msgid "This account temporary disabled"
+msgstr ""
+
+#: views/admin/user-selection-demo.php:16 views/admin/skills.php:4
+#: views/employee/skill.php:42
+msgid "Skill"
+msgstr ""
+
+#: views/admin/admin.php:6 views/admin/job.php:6 views/admin/location.php:5
+#: views/admin/general_info.php:4 views/admin/notice.php:4
+#: class/admin.php:1418 class/admin.php:1432 class/admin.php:1456
+#: class/admin.php:1470
+msgid "You do no have permission to access this page"
+msgstr ""
+
+#: views/admin/admin-lists.php:4
+msgid "User name/Email/User ID"
+msgstr ""
+
+#: views/admin/admin-lists.php:97
+msgid "Create a new user"
+msgstr ""
+
+#: views/admin/admin-lists.php:105
+msgid "Username"
+msgstr ""
+
+#: views/admin/admin-lists.php:110 views/pim/employee-list.php:10
+#: class/employeelist.php:137
+msgid "First Name"
+msgstr ""
+
+#: views/admin/admin-lists.php:115 views/pim/employee-list.php:16
+#: class/employeelist.php:142
+msgid "Last Name"
+msgstr ""
+
+#: views/admin/admin-lists.php:120 views/employee/personal-info.php:105
+msgid "Email"
+msgstr ""
+
+#: views/admin/projects.php:4 views/admin/projects.php:61
+msgid "Project Title"
+msgstr ""
+
+#: views/admin/projects.php:62 views/admin/notice.php:71
+#: views/employee/holiday.php:44 views/employee/notice.php:43
+#: views/leave/leave-holidays.php:53 class/employeelist.php:205
+#: class/admin.php:69 class/admin.php:136 class/admin.php:233
+#: class/admin.php:349 class/admin.php:580 class/admin.php:859
+#: class/admin.php:892 class/admin.php:972 class/employee.php:247
+#: class/leave.php:200
+msgid "Description"
+msgstr ""
+
+#: views/admin/projects.php:63
+msgid "Task Title"
+msgstr ""
+
+#: views/admin/job_title.php:8 views/employee/work-experience.php:34
+#: class/employeelist.php:148 class/admin.php:1550 class/employee.php:222
+#: include/page.php:56
+msgid "Job Title"
+msgstr ""
+
+#: views/admin/job-categories.php:4
+msgid "Category Name"
+msgstr ""
+
+#: views/admin/location.php:11 views/admin/education.php:4
+#: views/admin/pay-grade.php:3 views/employee/holiday.php:41
+#: views/employee/location.php:52 views/employee/location.php:59
+#: views/leave/leave-holidays.php:50 class/admin.php:652 class/admin.php:849
+#: class/admin.php:887 class/admin.php:924 class/admin.php:960
+#: class/admin.php:1004 class/admin.php:1180 class/admin.php:1646
+#: class/leave.php:165
+msgid "Name"
+msgstr ""
+
+#: views/admin/location.php:13
+msgid "Location search by name"
+msgstr ""
+
+#: views/admin/location.php:17 views/admin/general_info.php:67
+#: views/employee/personal-info.php:71 views/employee/job.php:102
+#: views/employee/general-info.php:69 views/employee/location.php:80
+#: class/admin.php:1027
+msgid "City"
+msgstr ""
+
+#: views/admin/location.php:19
+msgid "Location search by city"
+msgstr ""
+
+#: views/admin/location.php:23 views/admin/general_info.php:84
+#: views/employee/personal-info.php:91 views/employee/general-info.php:93
+#: views/employee/location.php:66 class/admin.php:1015
+msgid "Country"
+msgstr ""
+
+#: views/admin/location.php:27
+msgid "Location search by country"
+msgstr ""
+
+#: views/admin/location.php:31 views/admin/location.php:68
+#: views/employee/location.php:29
+msgid "Phone Number"
+msgstr ""
+
+#: views/admin/location.php:33
+msgid "Location search by phone number"
+msgstr ""
+
+#: views/admin/location.php:38 class/employeelist.php:172 class/admin.php:1536
+#: include/page.php:37 include/page.php:178
+msgid "Location"
+msgstr ""
+
+#: views/admin/location.php:58 views/employee/job.php:39
+#: views/employee/location.php:19
+msgid "Location Name"
+msgstr ""
+
+#: views/admin/location.php:63 views/employee/location.php:24
+msgid "City Name"
+msgstr ""
+
+#: views/admin/language.php:4 views/employee/language.php:41
+#: class/admin.php:1600 class/employee.php:334 include/page.php:87
+msgid "Language"
+msgstr ""
+
+#: views/admin/general_info.php:16 views/employee/general-info.php:13
+msgid "Organization Name"
+msgstr ""
+
+#: views/admin/general_info.php:23 class/employeelist.php:114
+#: class/employeelist.php:125 class/employeelist.php:155
+#: class/employeelist.php:167 class/employeelist.php:179 class/admin.php:64
+#: class/admin.php:228 class/admin.php:268 class/admin.php:575
+#: class/admin.php:658 class/admin.php:700 class/admin.php:711
+#: class/admin.php:930 class/admin.php:967 class/admin.php:1010
+#: class/admin.php:1089 class/admin.php:1142 class/admin.php:1206
+#: class/admin.php:1652 class/employee.php:138 class/employee.php:217
+#: class/employee.php:228 class/employee.php:288 class/employee.php:341
+#: class/employee.php:433 class/employee.php:444 class/employee.php:463
+#: class/employee.php:476 class/employee.php:512 class/employee.php:526
+#: class/employee.php:539 class/employee.php:552 class/leave.php:134
+#: class/leave.php:171 class/leave.php:183 class/leave.php:195
+#: class/leave.php:281 class/leave.php:305 class/leave.php:318
+#: class/leave.php:331
+msgid "This field is required"
+msgstr ""
+
+#: views/admin/general_info.php:27 views/employee/general-info.php:21
+msgid "Tax ID"
+msgstr ""
+
+#: views/admin/general_info.php:32 views/employee/general-info.php:29
+msgid "Registration Number"
+msgstr ""
+
+#: views/admin/general_info.php:39 views/employee/job.php:125
+#: views/employee/general-info.php:37 views/employee/location.php:103
+#: class/admin.php:1044
+msgid "Phone"
+msgstr ""
+
+#: views/admin/general_info.php:44 views/employee/job.php:133
+#: views/employee/general-info.php:45 views/employee/location.php:111
+#: class/admin.php:1050
+msgid "Fax"
+msgstr ""
+
+#: views/admin/general_info.php:49
+msgid "email"
+msgstr ""
+
+#: views/admin/general_info.php:57 views/employee/personal-info.php:59
+#: views/employee/general-info.php:53
+msgid "Address Street 1"
+msgstr ""
+
+#: views/admin/general_info.php:62 views/employee/personal-info.php:65
+#: views/employee/general-info.php:61
+msgid "Address Street 2"
+msgstr ""
+
+#: views/admin/general_info.php:74 views/employee/personal-info.php:78
+#: views/employee/general-info.php:77 views/employee/location.php:73
+#: views/employee/notice.php:58 class/admin.php:1022
+msgid "State/Province"
+msgstr ""
+
+#: views/admin/general_info.php:79 views/employee/personal-info.php:84
+#: views/employee/job.php:117 views/employee/general-info.php:85
+#: views/employee/location.php:95 class/admin.php:1039
+msgid "Zip/Postal Code"
+msgstr ""
+
+#: views/admin/general_info.php:91 views/employee/general-info.php:101
+#: class/admin.php:1152
+msgid "Note"
+msgstr ""
+
+#: views/admin/pay-grade.php:54 include/page.php:67
+msgid "Pay Grades"
+msgstr ""
+
+#: views/admin/notice.php:10 views/admin/notice.php:70
+#: views/employee/job.php:25 views/employee/notice.php:15
+#: views/employee/notice.php:36 class/admin.php:58 class/admin.php:569
+msgid "Title"
+msgstr ""
+
+#: views/admin/notice.php:15 views/admin/notice.php:73
+msgid "Date"
+msgstr ""
+
+#: views/admin/notice.php:72 views/employee/notice.php:51
+msgid "Signature"
+msgstr ""
+
+#: views/employee/skill.php:42
+msgid "Year of experiance"
+msgstr ""
+
+#: views/employee/skill.php:42 views/employee/work-experience.php:34
+#: class/leave.php:338
+msgid "Comment"
+msgstr ""
+
+#: views/employee/organization.php:4 views/employee/personal.php:4
+#: views/employee/my-task.php:4 views/employee/leave.php:4
+#: class/settings.php:31 class/settings.php:45 class/settings.php:68
+#: class/settings.php:82
+msgid "You do not have permission to access this page"
+msgstr ""
+
+#: views/employee/personal-info.php:17
+msgid "Gender"
+msgstr ""
+
+#: views/employee/personal-info.php:22
+msgid "Male"
+msgstr ""
+
+#: views/employee/personal-info.php:27
+msgid "Female"
+msgstr ""
+
+#: views/employee/personal-info.php:35
+msgid "Marital Status"
+msgstr ""
+
+#: views/employee/personal-info.php:39 views/pim/employee-list.php:25
+msgid "--Select--"
+msgstr ""
+
+#: views/employee/personal-info.php:40
+msgid "Single"
+msgstr ""
+
+#: views/employee/personal-info.php:41
+msgid "Married"
+msgstr ""
+
+#: views/employee/personal-info.php:46
+msgid "Nationality"
+msgstr ""
+
+#: views/employee/personal-info.php:52
+msgid "Birthday"
+msgstr ""
+
+#: views/employee/personal-info.php:99
+msgid "Work Telephone"
+msgstr ""
+
+#: views/employee/personal-info.php:111 class/employeelist.php:126
+msgid "Please enter a valid email"
+msgstr ""
+
+#: views/employee/holiday.php:42 views/employee/work-experience.php:34
+#: views/leave/leave-holidays.php:51 class/employee.php:233
+#: class/leave.php:176
+msgid "From"
+msgstr ""
+
+#: views/employee/holiday.php:43 views/employee/work-experience.php:34
+#: views/leave/leave-holidays.php:52 class/employee.php:240
+#: class/leave.php:188
+msgid "To"
+msgstr ""
+
+#: views/employee/holiday.php:45 views/leave/leave-holidays.php:54
+#: class/leave.php:206
+msgid "Full Day/Half Day"
+msgstr ""
+
+#: views/employee/work-experience.php:34
+msgid "Company"
+msgstr ""
+
+#: views/employee/work-week.php:6 views/leave/leave-week.php:6
+msgid "Saturday"
+msgstr ""
+
+#: views/employee/work-week.php:17 views/leave/leave-week.php:17
+msgid "Sunday"
+msgstr ""
+
+#: views/employee/work-week.php:27 views/leave/leave-week.php:27
+msgid "Monday"
+msgstr ""
+
+#: views/employee/work-week.php:39 views/leave/leave-week.php:39
+msgid "Tuesday"
+msgstr ""
+
+#: views/employee/work-week.php:49 views/leave/leave-week.php:49
+msgid "Wednesday"
+msgstr ""
+
+#: views/employee/work-week.php:59 views/leave/leave-week.php:59
+msgid "Thursday"
+msgstr ""
+
+#: views/employee/work-week.php:72 views/leave/leave-week.php:72
+msgid "Friday"
+msgstr ""
+
+#: views/employee/job.php:20
+msgid "Job"
+msgstr ""
+
+#: views/employee/job.php:32 class/admin.php:1082
+msgid "Category"
+msgstr ""
+
+#: views/employee/job.php:46
+msgid "Location Country"
+msgstr ""
+
+#: views/employee/job.php:53
+msgid "Location Province"
+msgstr ""
+
+#: views/employee/job.php:60
+msgid "Location City"
+msgstr ""
+
+#: views/employee/job.php:67
+msgid "Location Address"
+msgstr ""
+
+#: views/employee/job.php:74
+msgid "Location zip code"
+msgstr ""
+
+#: views/employee/job.php:81
+msgid "Location Phone"
+msgstr ""
+
+#: views/employee/job.php:88
+msgid "Location Fax"
+msgstr ""
+
+#: views/employee/job.php:95
+msgid "Location Description"
+msgstr ""
+
+#: views/employee/job.php:109 views/employee/location.php:87
+#: class/admin.php:1033
+msgid "Address"
+msgstr ""
+
+#: views/employee/job.php:140 views/employee/location.php:118
+#: class/admin.php:1055
+msgid "Notes"
+msgstr ""
+
+#: views/employee/job.php:145
+msgid "Job description"
+msgstr ""
+
+#: views/employee/general-info.php:8 class/admin.php:1530 include/page.php:31
+#: include/page.php:173
+msgid "General Information"
+msgstr ""
+
+#: views/employee/language.php:41 class/employee.php:347
+msgid "Fluency"
+msgstr ""
+
+#: views/employee/language.php:41 class/employee.php:354
+msgid "Competency"
+msgstr ""
+
+#: views/employee/language.php:41 views/employee/salary.php:70
+#: views/leave/leave-summary.php:116 class/employee.php:300
+#: class/employee.php:362 class/employee.php:481
+msgid "Comments"
+msgstr ""
+
+#: views/employee/salary.php:28
+msgid "No"
+msgstr ""
+
+#: views/employee/salary.php:32
+msgid "Show Details"
+msgstr ""
+
+#: views/employee/salary.php:36 views/employee/salary.php:71
+msgid "Direct Deposit Details"
+msgstr ""
+
+#: views/employee/salary.php:37 class/employee.php:504
+msgid "Account Number"
+msgstr ""
+
+#: views/employee/salary.php:38 class/employee.php:517
+msgid "Account Type"
+msgstr ""
+
+#: views/employee/salary.php:39 class/employee.php:531
+msgid "Routing Number"
+msgstr ""
+
+#: views/employee/salary.php:40
+msgid "Deposit Amount"
+msgstr ""
+
+#: views/employee/salary.php:65 class/employee.php:426
+msgid "Pay Grade"
+msgstr ""
+
+#: views/employee/salary.php:66 class/employee.php:438
+msgid "Salary Component"
+msgstr ""
+
+#: views/employee/salary.php:67 class/employee.php:449
+msgid "Pay Frequency"
+msgstr ""
+
+#: views/employee/salary.php:68 views/employee/membership.php:27
+#: class/employee.php:456
+msgid "Currency"
+msgstr ""
+
+#: views/employee/salary.php:69 class/employee.php:470 class/employee.php:544
+msgid "Amount"
+msgstr ""
+
+#: views/employee/education.php:48 class/employee.php:131
+#: class/employee.php:281
+msgid "Level"
+msgstr ""
+
+#: views/employee/education.php:48 class/employee.php:143
+msgid "Institute"
+msgstr ""
+
+#: views/employee/education.php:48 class/employee.php:149
+msgid "Major/Specialization"
+msgstr ""
+
+#: views/employee/education.php:48 class/employee.php:155
+msgid "Year"
+msgstr ""
+
+#: views/employee/education.php:48 class/employee.php:162
+msgid "GPA/Score"
+msgstr ""
+
+#: views/employee/education.php:48 views/leave/leave-summary.php:113
+#: class/employee.php:168
+msgid "Start Date"
+msgstr ""
+
+#: views/employee/education.php:48 views/leave/leave-summary.php:114
+#: class/employee.php:175
+msgid "End Date"
+msgstr ""
+
+#: views/employee/membership.php:4
+msgid "Membership"
+msgstr ""
+
+#: views/employee/membership.php:11
+msgid "Subscription Paid By"
+msgstr ""
+
+#: views/employee/membership.php:21
+msgid "Subscription Amount"
+msgstr ""
+
+#: views/employee/membership.php:35
+msgid "Subscription Commence Date "
+msgstr ""
+
+#: views/employee/membership.php:43
+msgid "Subscription Renewal Date"
+msgstr ""
+
+#: views/leave/leave-summary.php:86
+msgid "Permission denied"
+msgstr ""
+
+#: views/leave/leave-summary.php:111 class/leave.php:129 class/leave.php:299
+#: include/page.php:248
+msgid "Leave Type"
+msgstr ""
+
+#: views/leave/leave-summary.php:112 class/leave.php:276
+msgid "Employee Name"
+msgstr ""
+
+#: views/leave/leave-summary.php:115
+msgid "Leave Status"
+msgstr ""
+
+#: views/leave/leave-summary.php:117
+msgid "Total Leave(day)"
+msgstr ""
+
+#: views/leave/leave-summary.php:118
+msgid "Leave Take(day)"
+msgstr ""
+
+#: views/leave/leave-summary.php:119
+msgid "Leave Remain(day)"
+msgstr ""
+
+#: views/leave/leave-summary.php:120
+msgid "Action"
+msgstr ""
+
+#: views/pim/employee-list.php:5
+msgid "User Name/E-mail"
+msgstr ""
+
+#: views/pim/employee-list.php:22 class/admin.php:165 class/admin.php:261
+#: class/admin.php:1095
+msgid "Status"
+msgstr ""
+
+#: views/pim/employee-list.php:26
+msgid "Enable"
+msgstr ""
+
+#: views/pim/employee-list.php:27
+msgid "Disable"
+msgstr ""
+
+#: views/pim/employee-list.php:32
+msgid "Mobile"
+msgstr ""
+
+#: class/employeelist.php:76 class/ajax.php:586
+msgid "Username required "
+msgstr ""
+
+#: class/employeelist.php:80 class/ajax.php:590
+msgid "Eamil required"
+msgstr ""
+
+#: class/employeelist.php:84 class/ajax.php:594
+msgid "Invalid email"
+msgstr ""
+
+#: class/employeelist.php:88 class/ajax.php:598
+msgid "Username already exist"
+msgstr ""
+
+#: class/employeelist.php:92 class/ajax.php:602
+msgid "Email already exist"
+msgstr ""
+
+#: class/employeelist.php:109
+msgid "User Name"
+msgstr ""
+
+#: class/employeelist.php:119
+msgid "E-mail"
+msgstr ""
+
+#: class/employeelist.php:160
+msgid "Job Category"
+msgstr ""
+
+#: class/employeelist.php:184
+msgid "status"
+msgstr ""
+
+#: class/employeelist.php:193
+msgid "Mobile Number"
+msgstr ""
+
+#: class/employeelist.php:198
+msgid "Joined Date"
+msgstr ""
+
+#: class/admin.php:79
+msgid "date"
+msgstr ""
+
+#: class/admin.php:130 class/admin.php:222
+msgid "Task title"
+msgstr ""
+
+#: class/admin.php:146 class/admin.php:242
+msgid "Start date"
+msgstr ""
+
+#: class/admin.php:156 class/admin.php:252
+msgid "End date"
+msgstr ""
+
+#: class/admin.php:167 class/admin.php:263 class/admin.php:520
+#: class/admin.php:529
+msgid "Running"
+msgstr ""
+
+#: class/admin.php:184 class/admin.php:285
+msgid "Assigned"
+msgstr ""
+
+#: class/admin.php:191
+msgid "Add Sub Task"
+msgstr ""
+
+#: class/admin.php:292
+msgid "Add Task"
+msgstr ""
+
+#: class/admin.php:367 class/admin.php:421
+msgid "Add more"
+msgstr ""
+
+#: class/admin.php:514
+msgid "Completed"
+msgstr ""
+
+#: class/admin.php:527
+msgid "Outstanding"
+msgstr ""
+
+#: class/admin.php:586
+msgid "Worker"
+msgstr ""
+
+#: class/admin.php:590
+msgid "Add co-workers"
+msgstr ""
+
+#: class/admin.php:603
+msgid "Add Project"
+msgstr ""
+
+#: class/admin.php:664
+msgid "Add Language"
+msgstr ""
+
+#: class/admin.php:693 class/admin.php:1198
+msgid "Role"
+msgstr ""
+
+#: class/admin.php:704
+msgid "Display Name"
+msgstr ""
+
+#: class/admin.php:722 class/admin.php:771 class/settings.php:588
+msgid "View"
+msgstr ""
+
+#: class/admin.php:729 class/admin.php:778 class/settings.php:577
+msgid "Add"
+msgstr ""
+
+#: class/admin.php:736 class/admin.php:785 class/settings.php:581
+msgid "Delete"
+msgstr ""
+
+#: class/admin.php:839
+msgid "Customer Name"
+msgstr ""
+
+#: class/admin.php:854
+msgid "Project Admin"
+msgstr ""
+
+#: class/admin.php:867 class/admin.php:936 class/admin.php:979
+msgid "Add Skills"
+msgstr ""
+
+#: class/admin.php:904
+msgid "Add Customer"
+msgstr ""
+
+#: class/admin.php:1100
+msgid "active"
+msgstr ""
+
+#: class/admin.php:1136
+msgid "job Title"
+msgstr ""
+
+#: class/admin.php:1146
+msgid "Job Description"
+msgstr ""
+
+#: class/admin.php:1202
+msgid "Select "
+msgstr ""
+
+#: class/admin.php:1236
+msgid "Manager"
+msgstr ""
+
+#: class/admin.php:1242
+msgid "Co-worker"
+msgstr ""
+
+#: class/admin.php:1248
+msgid "Client"
+msgstr ""
+
+#: class/admin.php:1505 class/settings.php:781
+msgid "&laquo;"
+msgstr ""
+
+#: class/admin.php:1506 class/settings.php:782
+msgid "&raquo;"
+msgstr ""
+
+#: class/admin.php:1524 include/page.php:25
+msgid "Organization"
+msgstr ""
+
+#: class/admin.php:1544 include/page.php:50 include/page.php:133
+msgid "job"
+msgstr ""
+
+#: class/admin.php:1556 include/page.php:62
+msgid "Job Categories"
+msgstr ""
+
+#: class/admin.php:1564
+msgid "admin"
+msgstr ""
+
+#: class/admin.php:1568
+msgid "Admin lists"
+msgstr ""
+
+#: class/admin.php:1573
+msgid "Admin Role"
+msgstr ""
+
+#: class/admin.php:1582 include/page.php:75
+msgid "Qualification"
+msgstr ""
+
+#: class/admin.php:1586 include/page.php:79 include/page.php:153
+msgid "Skills"
+msgstr ""
+
+#: class/admin.php:1591
+msgid "User selection demo"
+msgstr ""
+
+#: class/admin.php:1596 include/page.php:83 include/page.php:148
+msgid "Education"
+msgstr ""
+
+#: class/admin.php:1609 include/page.php:96
+msgid "Project info"
+msgstr ""
+
+#: class/admin.php:1613
+msgid "Customers"
+msgstr ""
+
+#: class/admin.php:1618
+msgid "Projects"
+msgstr ""
+
+#: class/db.php:543
+msgid "Human Resource management employeer"
+msgstr ""
+
+#: class/employee.php:184 class/employee.php:307 class/employee.php:370
+msgid "Add Education"
+msgstr ""
+
+#: class/employee.php:211
+msgid "Company Name"
+msgstr ""
+
+#: class/employee.php:254
+msgid "Add Work Experience"
+msgstr ""
+
+#: class/employee.php:293
+msgid "Years of experiance"
+msgstr ""
+
+#: class/employee.php:384
+msgid "Poor"
+msgstr ""
+
+#: class/employee.php:385
+msgid "Basic"
+msgstr ""
+
+#: class/employee.php:386
+msgid "Good"
+msgstr ""
+
+#: class/employee.php:387
+msgid "Mother Tongue"
+msgstr ""
+
+#: class/employee.php:398
+msgid "Writing"
+msgstr ""
+
+#: class/employee.php:399
+msgid "Reading"
+msgstr ""
+
+#: class/employee.php:400
+msgid "Speaking"
+msgstr ""
+
+#: class/employee.php:487
+msgid "Deposit"
+msgstr ""
+
+#: class/employee.php:491
+msgid "Add Direct Deposit Details "
+msgstr ""
+
+#: class/employee.php:574
+msgid "Bi Weekly"
+msgstr ""
+
+#: class/employee.php:575
+msgid "Hourly"
+msgstr ""
+
+#: class/employee.php:576
+msgid "Monthly"
+msgstr ""
+
+#: class/employee.php:577
+msgid "Monthly on first pay of month."
+msgstr ""
+
+#: class/employee.php:578
+msgid "Semi Monthly"
+msgstr ""
+
+#: class/employee.php:579
+msgid "Weekly"
+msgstr ""
+
+#: class/employee.php:590
+msgid "Savings"
+msgstr ""
+
+#: class/employee.php:591
+msgid "Checking"
+msgstr ""
+
+#: class/employee.php:592
+msgid "Other"
+msgstr ""
+
+#: class/settings.php:476
+msgid "Cancle"
+msgstr ""
+
+#: class/settings.php:477 class/settings.php:543
+msgid "Saving...."
+msgstr ""
+
+#: class/settings.php:798
+msgid "10"
+msgstr ""
+
+#: class/settings.php:799
+msgid "20"
+msgstr ""
+
+#: class/settings.php:800
+msgid "50"
+msgstr ""
+
+#: class/settings.php:801
+msgid "100"
+msgstr ""
+
+#: class/settings.php:871
+msgid "Australian Dollars"
+msgstr ""
+
+#: class/settings.php:872
+msgid "Brazilian Real"
+msgstr ""
+
+#: class/settings.php:873
+msgid "Canadian Dollars"
+msgstr ""
+
+#: class/settings.php:874
+msgid "Chinese Yuan"
+msgstr ""
+
+#: class/settings.php:875
+msgid "Czech Koruna"
+msgstr ""
+
+#: class/settings.php:876
+msgid "Danish Krone"
+msgstr ""
+
+#: class/settings.php:877
+msgid "Euros"
+msgstr ""
+
+#: class/settings.php:878
+msgid "Hong Kong Dollar"
+msgstr ""
+
+#: class/settings.php:879
+msgid "Hungarian Forint"
+msgstr ""
+
+#: class/settings.php:880
+msgid "Indonesia Rupiah"
+msgstr ""
+
+#: class/settings.php:881
+msgid "Indian Rupee"
+msgstr ""
+
+#: class/settings.php:882
+msgid "Israeli Shekel"
+msgstr ""
+
+#: class/settings.php:883
+msgid "Japanese Yen"
+msgstr ""
+
+#: class/settings.php:884
+msgid "South Korean Won"
+msgstr ""
+
+#: class/settings.php:885
+msgid "Malaysian Ringgits"
+msgstr ""
+
+#: class/settings.php:886
+msgid "Mexican Peso"
+msgstr ""
+
+#: class/settings.php:887
+msgid "Norwegian Krone"
+msgstr ""
+
+#: class/settings.php:888
+msgid "New Zealand Dollar"
+msgstr ""
+
+#: class/settings.php:889
+msgid "Philippine Pesos"
+msgstr ""
+
+#: class/settings.php:890
+msgid "Polish Zloty"
+msgstr ""
+
+#: class/settings.php:891
+msgid "Pounds Sterling"
+msgstr ""
+
+#: class/settings.php:892
+msgid "Romanian Leu"
+msgstr ""
+
+#: class/settings.php:893
+msgid "Singapore Dollar"
+msgstr ""
+
+#: class/settings.php:894
+msgid "South African rand"
+msgstr ""
+
+#: class/settings.php:895
+msgid "Swedish Krona"
+msgstr ""
+
+#: class/settings.php:896
+msgid "Swiss Franc"
+msgstr ""
+
+#: class/settings.php:897
+msgid "Taiwan New Dollars"
+msgstr ""
+
+#: class/settings.php:898
+msgid "Thai Baht"
+msgstr ""
+
+#: class/settings.php:899
+msgid "Turkish Lira"
+msgstr ""
+
+#: class/settings.php:900
+msgid "US Dollars"
+msgstr ""
+
+#: class/pim.php:16 include/page.php:114
+msgid "Employee List"
+msgstr ""
+
+#: class/leave.php:312
+msgid "From Date"
+msgstr ""
+
+#: class/leave.php:325
+msgid "To Date"
+msgstr ""
+
+#: class/leave.php:343
+msgid "Assign Leave"
+msgstr ""
+
+#: class/leave.php:360 class/leave.php:375
+msgid "- Select -"
+msgstr ""
+
+#: class/leave.php:361
+msgid "Pending"
+msgstr ""
+
+#: class/leave.php:362
+msgid "Approve"
+msgstr ""
+
+#: class/leave.php:363 class/leave.php:376
+msgid "Cancel"
+msgstr ""
+
+#: class/ajax.php:60
+msgid "Successfully deletet Project"
+msgstr ""
+
+#: class/ajax.php:65 class/ajax.php:76 class/ajax.php:96
+msgid "Failed to deletet employee"
+msgstr ""
+
+#: class/ajax.php:85
+msgid "You do not have permission deletet employee"
+msgstr ""
+
+#: class/ajax.php:91
+msgid "Successfully deletet employee"
+msgstr ""
+
+#: class/ajax.php:106 class/ajax.php:117 class/ajax.php:129 class/ajax.php:153
+#: class/ajax.php:173 class/ajax.php:238 class/ajax.php:274 class/ajax.php:330
+#: class/ajax.php:409 class/ajax.php:897
+msgid "Update successfull"
+msgstr ""
+
+#: class/ajax.php:151
+msgid "User name or E-mail already exist"
+msgstr ""
+
+#: class/ajax.php:162
+msgid "Successfully update leave status"
+msgstr ""
+
+#: class/ajax.php:164
+msgid "Failed to update leave status"
+msgstr ""
+
+#: class/ajax.php:175 class/ajax.php:240 class/ajax.php:276 class/ajax.php:332
+#: class/ajax.php:411 class/ajax.php:758 class/ajax.php:899
+msgid "Update Failed"
+msgstr ""
+
+#: class/ajax.php:198 class/ajax.php:528
+msgid "No user found!"
+msgstr ""
+
+#: class/ajax.php:198 class/ajax.php:528
+msgid "Create a new user?"
+msgstr ""
+
+#: class/ajax.php:481
+msgid "Update successful"
+msgstr ""
+
+#: class/ajax.php:495
+msgid "Delete user successfull"
+msgstr ""
+
+#: class/ajax.php:497
+msgid "Delete Failed"
+msgstr ""
+
+#: class/ajax.php:575
+msgid "Create admin successfull"
+msgstr ""
+
+#: class/ajax.php:579 class/ajax.php:664 class/ajax.php:687 class/ajax.php:735
+#: class/ajax.php:843
+msgid "Unknown Error!"
+msgstr ""
+
+#: class/ajax.php:611 class/ajax.php:634
+msgid "Error occured"
+msgstr ""
+
+#: class/ajax.php:650
+msgid "Delete successfull"
+msgstr ""
+
+#: class/ajax.php:662
+msgid "User role update successfull"
+msgstr ""
+
+#: class/ajax.php:680
+msgid "User role already exists"
+msgstr ""
+
+#: class/ajax.php:683
+msgid "User role add successfull"
+msgstr ""
+
+#: class/ajax.php:756
+msgid "Update Successfull"
+msgstr ""
+
+#: class/ajax.php:766 class/ajax.php:770 class/ajax.php:788
+msgid "Faild to deleted"
+msgstr ""
+
+#: class/ajax.php:786
+msgid "delete successfull"
+msgstr ""
+
+#: class/ajax.php:849
+msgid "Table option required!"
+msgstr ""
+
+#: class/ajax.php:856
+msgid "Table name required!"
+msgstr ""
+
+#: include/page.php:8
+msgid "Employer"
+msgstr ""
+
+#: include/page.php:12
+msgid "Employer Role"
+msgstr ""
+
+#: include/page.php:16
+msgid "Employer lists"
+msgstr ""
+
+#: include/page.php:42 include/page.php:183
+msgid "Notice"
+msgstr ""
+
+#: include/page.php:100
+msgid "Project"
+msgstr ""
+
+#: include/page.php:103
+msgid "View only assign project"
+msgstr ""
+
+#: include/page.php:123
+msgid "Personal"
+msgstr ""
+
+#: include/page.php:128
+msgid "Personal Information"
+msgstr ""
+
+#: include/page.php:138
+msgid "Salary"
+msgstr ""
+
+#: include/page.php:143
+msgid "Work Experience"
+msgstr ""
+
+#: include/page.php:158
+msgid "Languages"
+msgstr ""
+
+#: include/page.php:168
+msgid "Pim Organization"
+msgstr ""
+
+#: include/page.php:193
+msgid "My task"
+msgstr ""
+
+#: include/page.php:198
+msgid "Current Task"
+msgstr ""
+
+#: include/page.php:203
+msgid "Outstanding Task"
+msgstr ""
+
+#: include/page.php:208
+msgid "Completed Task"
+msgstr ""
+
+#: include/page.php:223
+msgid "Assigin"
+msgstr ""
+
+#: include/page.php:228 include/page.php:253
+msgid "Work Week"
+msgstr ""
+
+#: include/page.php:233
+msgid "Holiday"
+msgstr ""
+
+#: include/page.php:243
+msgid "Configure"
+msgstr ""
+
+#: include/page.php:258
+msgid "Holidays"
+msgstr ""
+
+#: include/page.php:266
+msgid "Leave Summary"
+msgstr ""
+
+#: include/page.php:269
+msgid "Can manage leave action"
+msgstr ""

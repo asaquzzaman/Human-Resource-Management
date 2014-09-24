@@ -63,10 +63,19 @@ class Wp_Hrm {
         $this->db_version = '0.1';
         $this->is_admin = ( is_admin() ) ? 'yes' : 'no';
         $this->instantiate();
-
+        add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
 
         register_activation_hook( __FILE__, array($this, 'install') );
+    }
+
+    /**
+     * Load plugin textdomain
+     *
+     * @since 0.3
+     */
+    function load_textdomain() {
+        load_plugin_textdomain( 'hrm', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
 

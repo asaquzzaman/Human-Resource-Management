@@ -211,9 +211,6 @@ label em {
     .hrm-form-field {
         position: relative;
     }
-    .hrm-child-field {
-        margin-left: 8.4%;
-    }
     .hrm-notification {
         position: absolute;
         left: 52%;

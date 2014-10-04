@@ -801,11 +801,10 @@ class Hrm_Admin {
                     }
 
                     $hidden_form['cap['.$submenu.'][]'] = array(
-                        'label'      => $submenu_item['title'],
-                        'type'       => 'checkbox',
-                        'desc'       => 'Choose access permission',
-                        'wrap_class' => 'hrm-child-field',
-                        'fields'     => $submenu_role,
+                        'label' => $submenu_item['title'],
+                        'type' => 'checkbox',
+                        'desc' => 'Choose access permission',
+                        'fields' => $submenu_role,
                     );
                     $submenu_role = '';
                 }

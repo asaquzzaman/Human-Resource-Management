@@ -752,10 +752,11 @@ class Hrm_Admin {
                 }
 
                 $hidden_form['cap['.$tab_name.'][]'] = array(
-                    'label' => $tab_name_itme['title'],
-                    'type' => 'checkbox',
-                    'desc' => 'Choose access permission',
-                    'fields' => $tab_role,
+                    'label'      => $tab_name_itme['title'],
+                    'type'       => 'checkbox',
+                    'desc'       => 'Choose access permission',
+                    'wrap_class' => 'hrm-parent-field',
+                    'fields'     => $tab_role,
                 );
 
                 $tab_role = '';

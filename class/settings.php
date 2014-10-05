@@ -228,7 +228,7 @@ class Hrm_Settings {
             return;
         }
 
-        $extra = '';
+        $extra_field = '';
         $id    = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
         $class = isset( $element['class'] ) ? esc_attr( $element['class'] ) : esc_attr( $name );
         $extra = isset( $element['extra'] ) ? $element['extra'] : array();
@@ -236,13 +236,13 @@ class Hrm_Settings {
 
         if( is_array( $extra ) && count( $extra ) ) {
             foreach( $extra as $key => $action ) {
-                $extra .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                $extra_field .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
             }
         }
 
 
         $html = sprintf( '<input type="hidden" name="%1$s" value="%2$s" class="%3$s" id="%4$s" %5$s />', $name,
-            $value, $class, $id, $extra );
+            $value, $class, $id, $extra_field );
 
         ob_start();
             echo '<div>';

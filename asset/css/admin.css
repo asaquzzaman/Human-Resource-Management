@@ -214,9 +214,10 @@ label em {
 #hrm-visible-form .hrm-form-field {
   position: relative;
 }
-#hrm-hidden-form .hrm-child-field,
-#hrm-visible-form .hrm-child-field {
-  margin-left: 8.4%;
+#hrm-hidden-form .hrm-child-field label:first-child,
+#hrm-visible-form .hrm-child-field label:first-child {
+  margin-left: 2%;
+  width: 19%;
 }
 #hrm-hidden-form .hrm-notification,
 #hrm-visible-form .hrm-notification {

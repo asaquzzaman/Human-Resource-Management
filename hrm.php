@@ -65,7 +65,6 @@ class Wp_Hrm {
         $this->instantiate();
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
-
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
@@ -92,7 +91,8 @@ class Wp_Hrm {
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
             '_wpnonce'    => wp_create_nonce( 'hrm_nonce' ),
             'is_admin'    => $this->is_admin,
-            'confirm_msg' => __( 'Are you sure you want to delte it!', 'hrm'),
+            'confirm_msg' => __( 'Are you sure!', 'hrm'),
+            'success_msg' => __( 'Changed Successfully', 'hrm' )
         ));
 
         wp_enqueue_style( 'hrm-chosen', plugins_url( '/asset/css/chosen.css', __FILE__ ), false, false, 'all' );
@@ -150,41 +150,33 @@ class Wp_Hrm {
 
 
     function admin_page_handler() {
-
+        $current_user_id = get_current_user_id();
+        $user_status = get_user_meta( $current_user_id, '_status', true );
+        
+        if ( $user_status == 'no' ) {
+            _e( '<div class="wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
+            return;
+        }
+        
         $page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 
         if ( $page == 'hrm_management' ) {
-            echo '<div class="hrm-admin-page wrap">';
-                require_once dirname (__FILE__) . '/views/admin/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/admin/header.php';
+
         } else if ( $page == 'hrm_pim' && ! isset( $_GET['employee_id'] ) ) {
-            echo '<div class="hrm-pim-page wrap">';
-                require_once dirname (__FILE__) . '/views/pim/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/pim/header.php';
+
         } else if ( ( $page == 'hrm_pim' )  && isset( $_GET['employee_id'] ) ) {
-            echo '<div class="hrm-pim-employee wrap">';
-                require_once dirname (__FILE__) . '/views/employee/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/employee/header.php';
+        
         } else if ( $page == 'hrm_leave' ) {
-            echo '<div class="hrm-leave-employee wrap">';
-                require_once dirname (__FILE__) . '/views/leave/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/leave/header.php';
+        
         } else if ( $page == 'hrm_recruitment' ) {
-            echo '<div class="hrm-recruitment-employee wrap">';
-                require_once dirname (__FILE__) . '/views/recruitment/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/recruitment/header.php';
+        
         } else if ( $page == 'hrm_employer' ) {
-            $user_id = get_current_user_id();
-            $status = get_user_meta( $user_id, '_status', true );
-            if ( $status == 'no' ) {
-                ?>
-                <h1><?php _e( 'This account temporary disabled', 'hrm' ); ?></h1>
-                <?php
-                return;
-            }
-            echo '<div class="hrm-pim-employee wrap">';
-                require_once dirname (__FILE__) . '/views/employee/header.php';
-            echo '</div>';
+            require_once dirname (__FILE__) . '/views/employee/header.php';
         }
     }
 }

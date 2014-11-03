@@ -20,6 +20,8 @@
             $('.hrm-incomplete-task').on( 'click', this.taskInComplete );
             $('.hrm-personal').on( 'click', '.hrm-deposit-check', this.depositStatus );
             $('.hrm-task-desc').on( 'click', this.showTaskDesc );
+            $('.hrm-admin-status').on( 'change', this.changeAdminStatus );
+
 
             $('body').on( 'before_send_edit', function( e, self, data ) {
                 if ( self.data('action') == 'get_role' ) {
@@ -127,6 +129,26 @@
                     hrmGeneral.chosen();
                 }
             } )
+        },
+
+        changeAdminStatus: function(e) {
+            e.preventDefault();
+            if ( !confirm( hrm_ajax_data.confirm_msg ) ) {
+                return;
+            }
+
+            var self = $(this),
+                data = {
+                    action: 'change_admin_status',
+                    _wpnonce: hrm_ajax_data._wpnonce,
+                    status: self.val(),
+                    user_id: self.data('user_id')
+                }
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                if ( res.success ) {
+                    alert( hrm_ajax_data.success_msg );
+                }
+            });
         },
 
         showTaskDesc: function(e) {
@@ -582,9 +604,11 @@
                 },
 
                 select: function( el, val ) {
+                    
                     var id = val.item.id,
                         self = $(this);
                     if( val.item.value == 'hrm_create_user') {
+                        val.item.value = '';
                         var dialog = $( "#hrm-create-user-wrap" );
                         hrmGeneral.openDialog( dialog );
                     } else {
@@ -599,6 +623,9 @@
                             .append( "<a>" + item.label + "</a>" )
                             .appendTo( ul );
             };
+
+
+
         },
 
         datePicker: function() {

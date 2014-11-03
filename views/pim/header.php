@@ -1,3 +1,4 @@
+<div class="hrm-pim-page wrap">
 <?php
 $instance = hrm_Settings::getInstance();
 
@@ -48,3 +49,4 @@ $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : key( $menu[$page] );
 <?php $subtab = isset( $subtab ) ? $subtab : ''; ?>
 
 <?php $instance->show_tab_page( $menu, $page, $tab, $subtab ); ?>
+</div>

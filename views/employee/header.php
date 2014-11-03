@@ -1,3 +1,4 @@
+<div class="hrm-pim-employee wrap">
 <?php
 $instance = hrm_Pim::getInstance();
 
@@ -54,3 +55,4 @@ if ( isset( $_GET['employee_id'] ) && !empty( $_GET['employee_id'] ) ) {
 <?php $subtab = isset( $subtab ) ? $subtab : ''; ?>
 
 <?php hrm_Settings::getInstance()->show_tab_page( $menu, $page, $tab, $subtab ); ?>
+</div>

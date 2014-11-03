@@ -1671,4 +1671,15 @@ class Hrm_Admin {
 
     }
 
+    function change_admin_status( $user_id, $status ) {
+
+        $success = update_user_meta( $user_id, '_status', $status );
+
+        if ( $success ) {
+            return $user_id;
+        } else {
+            return false;
+        }
+    }
+
 }

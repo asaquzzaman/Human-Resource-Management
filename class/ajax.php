@@ -44,6 +44,22 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_tast_incomplete', array( $this, 'incomplete_task' ) );
         add_action( 'wp_ajax_employee_delete', array( $this, 'delete_employee' ) );
         add_action( 'wp_ajax_delete_project', array( $this, 'project_delete' ) );
+        add_action( 'wp_ajax_change_admin_status', array( $this, 'change_admin_status' ) );
+
+        
+    }
+
+    function change_admin_status() {
+        check_ajax_referer('hrm_nonce');
+        $user_id = $_POST['user_id'];
+        $status = $_POST['status'];
+        $changed = Hrm_Admin::getInstance()->change_admin_status( $user_id, $status );
+
+        if ( $changed ) {
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
     }
 
     function project_delete() {
@@ -550,17 +566,18 @@ class Hrm_Ajax {
         $display_name = $first_name .' '. $last_name;
 
         $userdata = array(
-            'user_login' => $postdata['admin_name'],
-            'user_pass' =>  $random_password,
-            'user_email' => $postdata['admin_email'],
-            'first_name' => $first_name,
-            'last_name' => $last_name,
+            'user_login'   => $postdata['admin_name'],
+            'user_pass'    =>  $random_password,
+            'user_email'   => $postdata['admin_email'],
+            'first_name'   => $first_name,
+            'last_name'    => $last_name,
             'display_name' => $display_name,
         );
 
         $user_id = wp_insert_user( $userdata );
 
         if( $user_id ) {
+            update_user_meta( $user_id, '_user_flag', 1 );
             update_user_meta( $user_id, 'first_name', $first_name );
             update_user_meta( $user_id, 'last_name', $last_name );
             update_user_meta( $user_id, 'hrm_admin_level', 'admin' );

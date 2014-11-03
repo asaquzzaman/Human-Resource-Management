@@ -16,7 +16,7 @@ Organization, Industries and Office management
 
 * From admin panel you can manage
     1. Organization Information.
-    2. Create employer role, employer and employer access permission against the role.
+    2. Create employer role, employer and employer access permission in accordance to the role.
     3. Employee job information.
     4. Employee qualification.
     5. Create project, task and assign the task to the employee.

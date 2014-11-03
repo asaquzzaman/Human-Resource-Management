@@ -1,3 +1,4 @@
+<div class="hrm-leave-employee wrap">
 <?php
 $instance = hrm_Settings::getInstance();
 
@@ -47,3 +48,4 @@ $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : key( $menu[$page] );
 </h3>
 <?php $subtab = isset( $subtab ) ? $subtab : ''; ?>
 <?php $instance->show_tab_page( $menu, $page, $tab, $subtab ); ?>
+</div>

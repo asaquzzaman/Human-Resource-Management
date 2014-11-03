@@ -306,3 +306,18 @@ label em {
   font-weight: 600;
   color: #000000;
 }
+.hrm-create-user-form-wrap input:after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+.hrm-create-user-form-wrap label,
+.hrm-create-user-form-wrap input {
+  float: left;
+  margin-bottom: 14px;
+}
+.hrm-create-user-form-wrap label {
+  width: 30%;
+}

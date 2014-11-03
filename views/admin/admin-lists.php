@@ -41,8 +41,9 @@ $add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
 $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
 
 foreach ( $results as $id => $user_obj) {
+	$flag = get_user_meta( $user_obj->ID, '_status', true );
 
-	$status = ( $user_obj->user_status == 0 ) ? 'Enable' : 'Disable';
+	$status = ( $flag == 'yes' ) ? 'Enable' : 'Disable';
     $role = isset( $user_obj->roles[0] ) ? $user_obj->roles[0] : '';
 
     if ( $add_permission ) {
@@ -57,14 +58,30 @@ foreach ( $results as $id => $user_obj) {
         $del_checkbox = '';
     }
 
-
+    $employer_status = hrm_user_can_access( $tab, $subtab, 'admin_employer_status', true );
+    
+    if ( $employer_status ) {
+        $admin_status_dropdown = array(
+            'class'    => 'hrm-admin-status',
+            'extra'    => array(
+                'data-user_id' => $user_obj->ID,
+            ),
+            'option'   => array( 'yes' => __( 'Enable', 'hrm' ), 'no' => __('Disable', 'hrm') ),
+            'selected' => $flag
+        );    
+        $admin_status_dropdown = $this->select_field( 'admin_staus', $admin_status_dropdown );
+    } else {
+        $admin_status_dropdown = __('Permission denied', 'hrm' );
+    }
+    
+    
 
     $body[] = array(
         $del_checkbox,
         $name_id,
         $role,
         $user_obj->display_name,
-        $status,
+        $admin_status_dropdown,
     );
 
     $td_attr[] = array(

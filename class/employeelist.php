@@ -35,13 +35,13 @@ class Hrm_Employeelist {
             'first_name' => $first_name,
             'last_name' => $last_name,
             'display_name' => $display_name,
-            'role'  => 'hrm_employer'
+            'role'  => 'hrm_employee'
         );
 
         $user_id = wp_insert_user( $userdata );
 
         if( $user_id ) {
-            update_user_meta( $user_id, '_hrm_user_role', 'hrm_employer' );
+            update_user_meta( $user_id, '_hrm_user_role', 'hrm_employee' );
             $this->update_empoyer( $user_id, $postdata );
 
             wp_new_user_notification( $user_id, $random_password );
@@ -293,7 +293,7 @@ class Hrm_Employeelist {
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
-        $employers = new WP_User_Query( array( 'role' => 'hrm_employer', 'number' => $limit, 'offset' => $offset ) );
+        $employers = new WP_User_Query( array( 'role' => 'hrm_employee', 'number' => $limit, 'offset' => $offset ) );
         return $employers;
     }
 }

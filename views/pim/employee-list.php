@@ -42,7 +42,7 @@ echo hrm_Settings::getInstance()->get_serarch_form( $search, 'Employee Informati
 <?php
 
 
-    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
     if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
         $employers = hrm_Employeelist::getInstance()->employeer_search_query( $_GET, $limit );
 

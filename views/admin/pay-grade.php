@@ -12,7 +12,7 @@
 <div id="hrm_pay_grade"></div>
 <?php
 
-    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
     if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
         $pay_grade = Hrm_Settings::getInstance()->search_query( $limit );
 

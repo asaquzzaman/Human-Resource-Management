@@ -206,7 +206,12 @@ class Hrm_Settings {
             }
         }
 
+        ob_start();
+            do_action( 'text_field_before_input', $name, $element );
+        $input_before = ob_get_clean();
+
         $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html .= $input_before;
         $html .= sprintf( '<input type="text" name="%1$s" value="%2$s" placeholder="%3$s" class="%4$s" id="%5$s" %6$s %7$s />', $name,
             $value, $placeholder, $class, $id, $disabled, $extra_field );
         $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
@@ -872,8 +877,6 @@ class Hrm_Settings {
     function pagination_select() {
         $selectd = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
         $arg = array(
-            '2' => 2,
-            '4' => 4,
             '10'  => __( '10', 'hrm'),
             '20'  => __( '20','hrm' ),
             '50'  => __( '50', 'hrm' ),

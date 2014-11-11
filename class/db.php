@@ -540,8 +540,8 @@ class Hrm_Db {
     }
 
     function employer_role() {
-        $role_name            = 'hrm_employer';
-        $display_name         = __( 'Human Resource management employeer', 'hrm' );
+        $role_name            = 'hrm_employee';
+        $display_name         = __( 'HRM employee', 'hrm' );
         $capabilities['read'] = true;
         add_role( $role_name, $display_name, $capabilities );
     }

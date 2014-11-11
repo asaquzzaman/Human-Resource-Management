@@ -18,7 +18,7 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Project');
 //hidden form
 
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
 
 $results = Hrm_Admin::getInstance()->get_projects( $limit, $tab, $subtab );
 
@@ -36,11 +36,24 @@ foreach ( $results['posts'] as $key => $project_obj ) {
         }
     }
 
+    $currency_symbol = get_post_meta( $project_obj->ID, '_currency_symbol', true );
+    $total_budget = get_post_meta( $project_obj->ID, '_budget', true );
+    $budget_utilize = get_post_meta( $project_obj->ID, '_project_budget_utilize', true ); 
+    $budget_remain = $total_budget - $budget_utilize;
+
     $body[] = array(
         '<input name="hrm_check['.$project_obj->ID.']" value="'.$project_obj->ID.'" type="checkbox">',
-        '<a href="#" class="hrm-editable"  data-action="project_edit"  data-id='.$project_obj->ID.'>'.$project_obj->post_title.'<a>',
+        '<a href="#" class="hrm-editable"  data-action="project_edit"  data-id='.$project_obj->ID.'><strong>'.$project_obj->post_title.'</strong><a>' .
+        '<div style="color: #000;">'.
+        __( '<strong>Total budget:</strong> ' . $currency_symbol . $total_budget, 'hrm' ).
+        '</div><div style="color: #000;">'.
+        __( '<strong>Budget utilize:</strong> ' . $currency_symbol . $budget_utilize, 'hrm' ) .
+        '</div><div style="color: #000;">'.
+        __( '<strong>Budget remain:</strong> ' . $currency_symbol . $budget_remain, 'hrm' ).
+        '</div>'
+        ,
         $project_obj->post_content,
-        hrm_Admin::getInstance()->get_task_title( $results['posts'], $task_id, $project_obj->ID, $add_permission ),
+        hrm_Admin::getInstance()->get_task_title( $results['posts'], $task_id, $project_obj->ID, $add_permission, $currency_symbol ),
         //hrm_Admin::getInstance()->get_task_description( $results['posts'], $task_id ),
        // hrm_Admin::getInstance()->get_sub_task_title( $results['posts'], $task_id, $project_obj->ID, $add_permission ),
         //hrm_Admin::getInstance()->get_sub_task_description( $results['posts'], $task_id ),

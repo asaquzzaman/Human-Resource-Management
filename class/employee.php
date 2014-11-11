@@ -3,17 +3,17 @@
 class Hrm_Employee {
 
     function __construct() {
-        add_filter( 'hrm_employer_memu', array( $this, 'pim_to_employer' ) );
+        add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
     }
 
     function pim_to_employer( $page = null ) {
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'hrm_employer' ) {
+        if ( isset( $_GET['page'] ) && $_GET['page'] == 'hrm_employee' ) {
             unset( $page['hrm_pim']['employee_list'] );
-            $page['hrm_employer'] = $page['hrm_pim'];
-            $page['hrm_employer']['personal']['follow_access_role'] = false;
-            $page['hrm_employer']['organization_info']['follow_access_role'] = false;
-            $page['hrm_employer']['my_task']['follow_access_role'] = false;
-            $page['hrm_employer']['leave']['follow_access_role'] = false;
+            $page['hrm_employee'] = $page['hrm_pim'];
+            $page['hrm_employee']['personal']['follow_access_role'] = false;
+            $page['hrm_employee']['organization_info']['follow_access_role'] = false;
+            $page['hrm_employee']['my_task']['follow_access_role'] = false;
+            $page['hrm_employee']['leave']['follow_access_role'] = false;
             unset( $page['hrm_pim'] );
         }
 

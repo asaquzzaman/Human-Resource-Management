@@ -1,6 +1,6 @@
 <?php
 
-if ( hrm_current_user_role() == 'hrm_employer' ) {
+if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employer_id = get_current_user_id();
 } else {
     $employer_id = isset( $_GET['employee_id'] ) ? trim( $_GET['employee_id'] ) : '';
@@ -17,7 +17,7 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Leave');
 <div id="hrm_Leave_list"></div>
 <?php
 
-    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
     if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
         $results = $this->search_query( $limit );
     } else {

@@ -12,15 +12,18 @@ if ( !$wp_roles ) {
 }
 
 $role_names = $wp_roles->get_names();
-$wp_built_in_role = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'hrm_employer' );
+$wp_built_in_role = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'hrm_employee' );
 
 $add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
 $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
+$current_user_role = hrm_current_user_role();
 
 foreach ( $role_names as $name => $display_name) {
-    if ( in_array( $name, $wp_built_in_role ) ) {
+
+    if ( $current_user_role == $name || $name == 'hrm_employee'  ) {
         continue;
     }
+    
     if ( $delete_permission ) {
         $del_checkbox = '<input name="hrm_check['.$name.']" value="" type="checkbox">';
     } else {

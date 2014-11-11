@@ -21,7 +21,7 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $field, 'Job Category');
 
 
 //table
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
 if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
     $results = hrm_Settings::getInstance()->search_query( $limit );
 

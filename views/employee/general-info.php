@@ -1,6 +1,6 @@
 <?php
 $general_info = hrm_Admin::getInstance()->get_general_info();
-$general_info = $general_info['data'];
+$general_info = isset( $general_info['data'] ) ? $general_info['data'] : '' ;
 ?>
 
 <div id="hrm-visible-form-warp">

@@ -1,6 +1,6 @@
 <div class="hrm-error-notification"></div>
 <?php
-if ( hrm_current_user_role() == 'hrm_employer' ) {
+if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employer_id = get_current_user_id();
 } else {
     $employer_id = isset( $_GET['employee_id'] ) ? trim( $_GET['employee_id'] ) : '';
@@ -82,7 +82,7 @@ $table['action'] = 'hrm_delete';
 $table['table_attr'] = array( 'class' => 'widefat' );
 $table['tab'] = $tab;
 $table['subtab'] = $subtab;
-if ( $page == 'hrm_employer') {
+if ( $page == 'hrm_employee') {
     $table['add_buttion'] = false;
     $table['delete_buttion'] = false;
 }

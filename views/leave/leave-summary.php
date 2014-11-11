@@ -14,7 +14,7 @@ echo hrm_Settings::getInstance()->get_serarch_form( $search, 'Leave');
 <div id="hrm_Leave_list"></div>
 <?php
 
-    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
     if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
         $results = $this->search_query( $limit );
     } else {
@@ -32,7 +32,7 @@ echo hrm_Settings::getInstance()->get_serarch_form( $search, 'Leave');
 
     $leave_cat = isset( $leave_cat ) ? $leave_cat : array();
 
-    $users = get_users( array( 'role' => 'hrm_employer' ));
+    $users = get_users( array( 'role' => 'hrm_employee' ));
     foreach ( $users as $key => $user ) {
         $user_info[$user->ID] = $user->display_name;
     }

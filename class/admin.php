@@ -17,6 +17,19 @@ class Hrm_Admin {
 
         add_action( 'admin_init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
+        add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
+    }
+
+    function task_budget_crrency_symbol( $name, $element ) {
+        if ( $name == 'task_budget' ) {
+            $project_id = isset( $element['extra']['project_id'] ) ? $element['extra']['project_id'] : false;
+            if ( $project_id ) {
+                $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
+                ?>
+                <div style="float: left;"><?php echo $currency_symbol; ?></div>
+                <?php
+            } 
+        }
     }
 
     function get_general_info() {
@@ -201,7 +214,6 @@ class Hrm_Admin {
     }
 
     function task_form( $post = null ) {
-
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
 
         if ( gettype( $post ) !== 'object' && isset( $_POST['project_id'] ) ) {
@@ -286,7 +298,25 @@ class Hrm_Admin {
             'type' => 'radio',
             'desc' => 'Choose co-workers',
             'fields' => $check,
+
         );
+
+        $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
+        $total_budget = get_post_meta( $project_id, '_budget', true );
+        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true ); 
+        $budget_remain = $total_budget - $budget_utilize;
+
+        if ( $total_budget ) {
+            $form['task_budget'] = array(
+                'label' => __( 'Budget', 'hrm' ),
+                'type' => 'text',
+                'placeholder' => __( 'Insert value should be less than ' . $budget_remain, 'hrm' ),
+                'extra' => array( 'project_id' => $project_id ),
+                'value' => isset( $post->ID ) ? get_post_meta( $post->ID, '_task_budget', true ) : '',
+                'desc' => sprintf( 'Total budget: %1s, Budget utilize: %2s, Budget remain %3s', $currency_symbol . $total_budget, $currency_symbol . $budget_utilize, $currency_symbol . $budget_remain ),
+            );    
+        }
+        
 
         $form['action'] = 'add_task';
         $form['header'] = __('Add Task', 'hrm');
@@ -330,7 +360,7 @@ class Hrm_Admin {
 
     }
 
-    function get_task_title( $results, $task_id = array(), $project_id, $add_permission ) {
+    function get_task_title( $results, $task_id = array(), $project_id, $add_permission, $currency_symbol ) {
         if ( !is_array( $task_id ) ) {
             return;
         }
@@ -340,11 +370,30 @@ class Hrm_Admin {
             if ( !in_array( $result->ID, $task_id ) ) {
                 continue;
             }
+            $task_budget = get_post_meta( $result->ID, '_task_budget', true );
+            $task_budget = empty( $task_budget ) ? '0' : $task_budget;
+            $assign_to = get_post_meta($result->ID, '_assigned', true);
+            $user = get_user_by( 'id', $assign_to );
+            $url = admin_url( 'admin.php?' ) . 'page=hrm_pim&employee_id='.$assign_to.'&tab=my_task';  
             ?>
             <div class="hrm-task-wrap">
                 <div class="hrm-task-title-wrap">
-                    <a href="#" class="hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><?php echo $result->post_title; ?></a>
+                    <div style="float: left;">
+                        <a href="#" class="hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><strong><?php echo $result->post_title; ?></strong></a>
+                        <div>
+                            <strong><?php _e( 'Task Budget: ' ); ?></strong><?php echo $currency_symbol . $task_budget; ?>
+                        </div>
+                        <div>
+                            <strong><?php _e( 'Assign to: ' ); ?></strong>
+                            <a href="<?php echo $url; ?>"><?php echo $user->display_name; ?></a>
+                        </div>
+                    </div>
+                    <div style="float: right;">
+                        <a href="<?php echo $url; ?>"><?php echo get_avatar( $user->ID, '32' ); ?></a>
+                    </div>
+                    <div style="clear: both;"></div>
                 </div>
+
                 <div class="hrm-task-status-desc">
                     <div class="hrm-task-desc" data-task_id="<?php echo $result->ID; ?>"><a href="#"><?php _e( 'Description', 'hrm' ); ?></a></div>
                     <?php echo $this->get_task_status( $result->ID ); ?>
@@ -590,14 +639,26 @@ class Hrm_Admin {
             'placeholder' => __( 'Add co-workers', 'hrm' ),
         );
 
-
-
         if ( $project !== null ) {
             $user_lists = $this->get_co_worker( $project->ID );
             foreach ( $user_lists as $id => $user_list ) {
                 $form['role['.$id.']'] = $this->get_co_worker_field( $user_list['name'], $id, $user_list['role']  );
             }
         }
+
+        $form['budget'] = array(
+            'label' => __( 'Budget', 'hrm' ),
+            'type' => 'text',
+            'placeholder' => __( 'Greater than budget utilize amount', 'hrm' ),
+            'desc' => __( 'Budget amount should be greater than budget utilize amount', 'hrm' ),
+            'value' => isset( $project->ID ) ? get_post_meta( $project->ID, '_budget', true ) : '',
+        );
+
+        $form['currency_symbol'] = array(
+            'label' => __( 'Currency Symbol', 'hrm' ),
+            'type' => 'text',
+            'value' => isset( $project->ID ) ? get_post_meta( $project->ID, '_currency_symbol', true ) : '',
+        );
 
         $form['action'] = 'add_project';
         $form['header'] = __('Add Project', 'hrm');
@@ -1278,7 +1339,7 @@ class Hrm_Admin {
 
         $role_names = $wp_roles->get_names();
 
-        unset( $role_names['hrm_employer'] );
+        unset( $role_names['hrm_employee'] );
         ob_start();
         ?>
             <div class="select-field">
@@ -1679,6 +1740,24 @@ class Hrm_Admin {
             return $user_id;
         } else {
             return false;
+        }
+    }
+
+    function update_project_meta( $project_id, $post ) {
+        $budget = floatval( $post['budget'] ); 
+        $symbol = $post['currency_symbol'];
+        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
+        if ( $budget >=  $budget_utilize ) {
+            update_post_meta( $project_id, '_budget', $budget );
+        }
+
+        update_post_meta( $project_id, '_currency_symbol', $symbol );
+        
+        
+        if ( empty( $budget_utilize ) ) {
+            update_post_meta( $project_id, '_project_budget_utilize', '0' );
+        } else {
+          update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );  
         }
     }
 

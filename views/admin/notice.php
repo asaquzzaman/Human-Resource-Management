@@ -24,7 +24,7 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Notice');
 ?>
 <div id="hrm-admin-notice"></div>
 <?php
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
 if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
 
     $results = Hrm_Settings::getInstance()->search_query( $limit );

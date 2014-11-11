@@ -1,6 +1,6 @@
 <?php
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 5;
+$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
 if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
     $results = hrm_Settings::getInstance()->search_query( $limit );
 

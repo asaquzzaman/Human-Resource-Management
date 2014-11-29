@@ -64,21 +64,21 @@
         );
     }
 
-    $del_checkbox = ( $delete_permission ) ? '<input type="checkbox">' : '';
+    $del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
 
-    $table['head'] = array( $del_checkbox, 'Job Title', 'Job Description', 'Note' );
-    $table['body'] = isset( $body ) ? $body : array();
+    $table['head']       = array( $del_checkbox, 'Job Title', 'Job Description', 'Note' );
+    $table['body']       = isset( $body ) ? $body : array();
 
 
-    $table['td_attr'] = isset( $td_attr ) ? $td_attr : array();
-    $table['th_attr'] = array( 'class="check-column"' );
+    $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
+    $table['th_attr']    = array( 'class="check-column"' );
     $table['table_attr'] = array( 'class' => 'widefat' );
 
-    $table['table'] = 'hrm_job_title_option';
-    $table['action'] = 'hrm_delete';
+    $table['table']      = 'hrm_job_title_option';
+    $table['action']     = 'hrm_delete';
     $table['table_attr'] = array( 'class' => 'widefat' );
-    $table['tab'] = $tab;
-    $table['subtab'] = $subtab;
+    $table['tab']        = $tab;
+    $table['subtab']     = $subtab;
 
     echo Hrm_Settings::getInstance()->table( $table );
     //table

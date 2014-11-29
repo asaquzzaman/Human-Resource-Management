@@ -10,6 +10,42 @@ class Hrm_Db {
         $this->personal();
         $this->project_info();
         $this->pim();
+        $this->time();
+        $this->employer();
+    }
+
+    function employer() {
+        $table_option['table_option'] = array(
+            'employer' => 'employer',
+        );
+        $table_option_name = 'hrm_user_search';
+
+        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+    }
+
+    function time() {
+        $this->punch_in_out();
+        $this->employer_employee_records();
+    }
+
+    function employer_employee_records() {
+        $table_option['table_option'] = array(
+            'from_date' => 'from_date',
+            'to_date' => 'to_date',
+            'user_id' => 'user_id'
+        );
+        $table_option_name = 'hrm_attendance_record_both';
+
+        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+    }
+
+    function punch_in_out() {
+       $table_option['table_option'] = array(
+            'date'       => 'date',
+        );
+        $table_option_name = 'hrm_attendance';
+
+        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function pim() {

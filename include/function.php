@@ -86,6 +86,54 @@ function get_date2mysql( $date ) {
     return date_i18n( $format, $date );
 }
 
+function hrm_get_time( $time, $strtotime = true ) {
+    $time_format = get_option('time_format');
+    $time_format = apply_filters( 'hrm_time_format', $time_format );
+    if ( $strtotime ) {
+        $time = strtotime( $time );
+    }
+    return date( $time_format, $time );
+}
+
+function hrm_get_punch_in_time( $time, $strtotime = true ) {
+    $date_format = get_option('date_format');
+    $time_format = get_option('time_format');
+    if ( $strtotime ) {
+        $time = strtotime($time);
+    }
+
+    $format = $date_format .' '. $time_format;
+    return date( $format , $time );
+}
+
+function hrm_second_to_time( $seconds ) {
+    $total_second = $seconds;
+    // extract hours
+    $hours = floor( $seconds / (60 * 60) );
+
+    // extract minutes
+    $divisor_for_minutes = $seconds % (60 * 60);
+    $minutes = floor( $divisor_for_minutes / 60 );
+
+    // extract the remaining seconds
+    $divisor_for_seconds = $divisor_for_minutes % 60;
+    $seconds = ceil( $divisor_for_seconds );
+
+    // return the final array
+    $obj = array(
+        "hour"         => str_pad( (int) $hours, 2, '0', STR_PAD_LEFT ),
+        "minute"       => str_pad( (int) $minutes, 2, '0', STR_PAD_LEFT ),
+        "second"       => str_pad( (int) $seconds, 2, '0', STR_PAD_LEFT ),
+        'total_second' => $total_second
+    );
+
+    return $obj;
+}
+
+function hrm_single_tab_user_role_change( $post ) {
+    var_dump( $post ); die();
+}
+
 /*function pri( $data ) {
     echo '<pre>'; print_r( $data ); echo '</pre>';
 }*/

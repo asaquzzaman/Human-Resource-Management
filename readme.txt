@@ -10,8 +10,7 @@ License: GPLv2 or later
 Organization, Industries and Office management
 
 == Description ==
-[youtube https://www.youtube.com/watch?v=Y6_8IWWy2n4&feature=youtu.be]
-   Manage your human resource, project, task and assign task with the help of this plugin.
+    Manage your human resource, project, task and assign task with the help of this plugin.
 
 = Features:  =
 
@@ -29,6 +28,11 @@ Organization, Industries and Office management
     2. Get organization informtion which information include from admin panel.
     3. Employee can monitoring there current task, outstanding task and completed task.
     4. Leave Apply.
+
+* Time
+    1. Employer/Employee attendance records.
+    2. Punch In/Punch Out.
+    3. Configuration for access permission.
 
 
 == Installation ==
@@ -65,16 +69,22 @@ Browser Compatibility
 
 == Changelog ==
 
+= 0.3 =
+* Attendence
+* Attendence configuration
+* Punch in/out
+* Attendence record
+
 = 0.2 =
 * project budget
 * assign task
 * task user avater
 
 = 0.1 =
-* redirect problem 
-* table create 
+* redirect problem
+* table create
 * employer create
-* page handelar 
+* page handelar
 
 
 == Frequently Asked Questions ==

@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/asaquzzaman/hrm
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 0.2
+ * Version: 0.3
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -59,14 +59,14 @@ class Wp_Hrm {
     private $is_admin;
 
     function __construct() {
-        $this->version = '0.2';
+        $this->version = '0.3';
         $this->db_version = '0.1';
         $this->is_admin = ( is_admin() ) ? 'yes' : 'no';
         $this->instantiate();
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
         register_activation_hook( __FILE__, array($this, 'install') );
-        add_action( 'init', array( $this, 'register_post_type' ) );
+        add_action( 'init', array( $this, 'init' ) );
     }
 
     /**
@@ -78,72 +78,8 @@ class Wp_Hrm {
         load_plugin_textdomain( 'hrm', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
-    function register_post_type() {
-        register_post_type( 'hrm_project', array(
-            'label' => __( 'Project', 'hrm' ),
-            'description' => __( 'project manager post type', 'hrm' ),
-            'public' => false,
-            'show_in_admin_bar' => false,
-            'exclude_from_search' => true,
-            'publicly_queryable' => false,
-            'show_in_admin_bar' => false,
-            'show_ui' => false,
-            'show_in_menu' => false,
-            'capability_type' => 'post',
-            'hierarchical' => false,
-            'rewrite' => array('slug' => ''),
-            'query_var' => true,
-            'supports' => array('title', 'editor'),
-            'labels' => array(
-                'name' => __( 'Project', 'hrm' ),
-                'singular_name' => __( 'Project', 'hrm' ),
-                'menu_name' => __( 'Project', 'hrm' ),
-                'add_new' => __( 'Add Project', 'hrm' ),
-                'add_new_item' => __( 'Add New Project', 'hrm' ),
-                'edit' => __( 'Edit', 'hrm' ),
-                'edit_item' => __( 'Edit Project', 'hrm' ),
-                'new_item' => __( 'New Project', 'hrm' ),
-                'view' => __( 'View Project', 'hrm' ),
-                'view_item' => __( 'View Project', 'hrm' ),
-                'search_items' => __( 'Search Project', 'hrm' ),
-                'not_found' => __( 'No Project Found', 'hrm' ),
-                'not_found_in_trash' => __( 'No Project Found in Trash', 'hrm' ),
-                'parent' => __( 'Parent Project', 'hrm' ),
-            ),
-        ) );
-
-        register_post_type( 'hrm_task', array(
-            'label' => __( 'Task', 'hrm' ),
-            'description' => __( 'project manager post type', 'hrm' ),
-            'public' => false,
-            'show_in_admin_bar' => false,
-            'exclude_from_search' => true,
-            'publicly_queryable' => false,
-            'show_in_admin_bar' => false,
-            'show_ui' => false,
-            'show_in_menu' => false,
-            'capability_type' => 'post',
-            'hierarchical' => false,
-            'rewrite' => array('slug' => ''),
-            'query_var' => true,
-            'supports' => array('title', 'editor'),
-            'labels' => array(
-                'name' => __( 'Project', 'hrm' ),
-                'singular_name' => __( 'Project', 'hrm' ),
-                'menu_name' => __( 'Project', 'hrm' ),
-                'add_new' => __( 'Add Project', 'hrm' ),
-                'add_new_item' => __( 'Add New Project', 'hrm' ),
-                'edit' => __( 'Edit', 'hrm' ),
-                'edit_item' => __( 'Edit Project', 'hrm' ),
-                'new_item' => __( 'New Project', 'hrm' ),
-                'view' => __( 'View Project', 'hrm' ),
-                'view_item' => __( 'View Project', 'hrm' ),
-                'search_items' => __( 'Search Project', 'hrm' ),
-                'not_found' => __( 'No Project Found', 'hrm' ),
-                'not_found_in_trash' => __( 'No Project Found in Trash', 'hrm' ),
-                'parent' => __( 'Parent Project', 'hrm' ),
-            ),
-        ) );
+    function init() {
+        Hrm_Init::getInstance()->register_post_type();
     }
 
 
@@ -152,7 +88,8 @@ class Wp_Hrm {
         wp_enqueue_script( 'jquery-ui-dialog' );
         wp_enqueue_script( 'jquery-ui-autocomplete');
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.js', __FILE__ ), array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm_datetimepicker', plugins_url( '/asset/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
 
 
@@ -164,9 +101,10 @@ class Wp_Hrm {
             'success_msg' => __( 'Changed Successfully', 'hrm' )
         ));
 
-        wp_enqueue_style( 'hrm-chosen', plugins_url( '/asset/css/chosen.css', __FILE__ ), false, false, 'all' );
+        wp_enqueue_style( 'hrm-chosen', plugins_url( '/asset/css/chosen.min.css', __FILE__ ), false, false, 'all' );
         wp_enqueue_style( 'hrm-admin', plugins_url( '/asset/css/admin.css', __FILE__ ), false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui', plugins_url( '/asset/css/jquery-ui.css', __FILE__ ), false, false, 'all' );
+        wp_enqueue_style( 'hrm-jquery-ui-timepicker', plugins_url( '/asset/css/jquery-ui-timepicker.css', __FILE__ ), false, false, 'all' );
 
     }
 
@@ -201,6 +139,10 @@ class Wp_Hrm {
         $this->admin_scripts();
     }
 
+    function attendance_scripts() {
+        $this->admin_scripts();
+    }
+
     function admin_menu() {
         $capability = 'read'; //minimum level: subscriber
         if ( hrm_current_user_role() != 'hrm_employee' ) {
@@ -208,13 +150,18 @@ class Wp_Hrm {
             $admin_sub_menu = add_submenu_page( 'hrm_management', __( 'Admin', 'hrm' ), __( 'Admin', 'hrm' ), $capability, 'hrm_management', array($this, 'admin_page_handler') );
             $pim            = add_submenu_page( 'hrm_management', __( 'Pim', 'hrm' ), __( 'Pim', 'hrm' ), $capability, 'hrm_pim', array( $this, 'admin_page_handler' ) );
             $leave          = add_submenu_page( 'hrm_management', __( 'Leave', 'hrm' ), __( 'Leave', 'hrm' ), $capability, 'hrm_leave', array( $this, 'admin_page_handler' ) );
+            $attendance     = add_submenu_page( 'hrm_management', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
 
             add_action( 'admin_print_styles-' . $admin_sub_menu, array($this, 'admin_scripts') );
             add_action( 'admin_print_styles-' . $pim, array( $this, 'pim_scripts') );
             add_action( 'admin_print_styles-' . $leave, array( $this, 'leave_scripts' ) );
+            add_action( 'admin_print_styles-' . $attendance, array($this, 'attendance_scripts') );
         } else {
             $user_id = get_current_user_id();
-            $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'Hrm My Info', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
+            $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
+            $menu           = add_submenu_page( 'hrm_employee', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
+            $attendance     = add_submenu_page( 'hrm_employee', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
+            add_action( 'admin_print_styles-' . $attendance, array($this, 'attendance_scripts') );
             $this->admin_scripts();
         }
     }
@@ -248,6 +195,8 @@ class Wp_Hrm {
 
         } else if ( $page == 'hrm_employee' ) {
             require_once dirname (__FILE__) . '/views/employee/header.php';
+        } else if ( $page == 'hrm_time' ) {
+            require_once dirname (__FILE__) . '/views/time/header.php';
         }
     }
 }

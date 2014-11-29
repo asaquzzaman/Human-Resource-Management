@@ -5,6 +5,8 @@
 
             this.chosen();
             this.datePicker();
+            this.timePicker();
+            this.datePickerRestricted();
 
 
             $('.hrm-add-button').on( 'click', this.getInsertDataForm );
@@ -21,6 +23,7 @@
             $('.hrm-personal').on( 'click', '.hrm-deposit-check', this.depositStatus );
             $('.hrm-task-desc').on( 'click', this.showTaskDesc );
             $('.hrm-admin-status').on( 'change', this.changeAdminStatus );
+            $('.hrm-time-editable').on( 'click', this.editAttendance );
 
 
             $('body').on( 'before_send_edit', function( e, self, data ) {
@@ -129,6 +132,27 @@
                     hrmGeneral.chosen();
                 }
             } )
+        },
+
+        editAttendance: function(e) {
+            e.preventDefault();
+            var self = $(this),
+            data = {
+                action: 'edit_attendance',
+                _wpnonce: hrm_ajax_data._wpnonce,
+                post_id: self.data('post_id'),
+                hrm_dataAttr : hrm_dataAttr,
+            }
+
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                if ( res.success ) {
+                    $('#hrm-attendance').html( res.data.content )
+                        .find('#hrm-hidden-form-warp').slideDown('slow').show();
+                    hrmGeneral.datePicker();
+                    hrmGeneral.timePicker();
+                }
+            });
+
         },
 
         changeAdminStatus: function(e) {
@@ -604,7 +628,7 @@
                 },
 
                 select: function( el, val ) {
-                    
+
                     var id = val.item.id,
                         self = $(this);
                     if( val.item.value == 'hrm_create_user') {
@@ -628,8 +652,38 @@
 
         },
 
+        timePicker: function() {
+            $(".hrm-timepicker").timepicker({
+                timeFormat: "hh:mm tt"
+            });
+
+        },
+
         datePicker: function() {
             $(".hrm-datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+        },
+
+        datePickerRestricted: function() {
+             $( ".hrm-datepicker-from" ).datepicker({
+                defaultDate: "+1w",
+                dateFormat: 'yy-mm-dd',
+                changeYear: true,
+                changeMonth: true,
+                numberOfMonths: 1,
+                onClose: function( selectedDate ) {
+                    $( ".hrm-datepicker-to" ).datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $( ".hrm-datepicker-to" ).datepicker({
+                defaultDate: "+1w",
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                onClose: function( selectedDate ) {
+                    $( ".hrm-datepicker-from" ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
         }
     }
 
@@ -664,6 +718,9 @@
             self.closest('form').find( 'input#hrm-hidden-field-id').val(id);
         }
     });
+
+
+
 
 
 

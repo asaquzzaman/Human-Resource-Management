@@ -56,8 +56,8 @@
     $table['table_attr'] = array( 'class' => 'widefat' );
     $table['tab'] = $tab;
     $table['subtab'] = $subtab;
-    $table['add_buttion'] = false;
-    $table['delete_buttion'] = false;
+    $table['add_button'] = false;
+    $table['delete_button'] = false;
 
     echo hrm_Settings::getInstance()->table( $table );
     //table

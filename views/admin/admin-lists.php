@@ -1,6 +1,6 @@
 <?php
 
-$search['search_field'] = array(
+$search['employer'] = array(
     'label' => __( 'User name/Email/User ID', 'hrm' ),
     'type' => 'text',
     'desc' => 'You can search by user name, user email or user id',
@@ -16,24 +16,12 @@ echo Hrm_settings::getInstance()->get_serarch_form( $search, 'Admin');
 //hidden form
 
 $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset($_GET['search_field']) && ! empty($_GET['search_field']) ) {
-    $search = $_GET['search_field'];
+if( isset($_GET['employer']) && ! empty($_GET['employer']) ) {
+    $search = $_GET['employer'];
 } else {
     $search = '';
 }
-$pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-$offset  = ( $pagenum - 1 ) * $limit;
-
-$arg = array(
-    'meta_key'     => 'hrm_admin_level',
-    'meta_value'   => 'admin',
-    'meta_compare' => '=',
-    'search'       => $search,
-    'count_total'  => true,
-    'offset'       => $offset,
-    'number'       => $limit,
-);
-$search_query = new WP_User_Query( $arg );
+$search_query = Hrm_Admin::getInstance()->get_employer( $limit, $search );
 $results = $search_query->get_results();
 $total = $search_query->get_total();
 
@@ -63,7 +51,7 @@ foreach ( $results as $id => $user_obj) {
     }
 
     $employer_status = hrm_user_can_access( $tab, $subtab, 'admin_list_employer_status', true );
-    
+
     if ( $employer_status ) {
         $admin_status_dropdown = array(
             'class'    => 'hrm-admin-status',
@@ -72,13 +60,13 @@ foreach ( $results as $id => $user_obj) {
             ),
             'option'   => array( 'yes' => __( 'Enable', 'hrm' ), 'no' => __('Disable', 'hrm') ),
             'selected' => $flag
-        );    
+        );
         $admin_status_dropdown = $this->select_field( 'admin_staus', $admin_status_dropdown );
     } else {
         $admin_status_dropdown = __('Permission denied', 'hrm' );
     }
-    
-    
+
+
 
     $body[] = array(
         $del_checkbox,

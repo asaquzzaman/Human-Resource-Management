@@ -20,6 +20,23 @@ class Hrm_Admin {
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
     }
 
+    function get_employer( $limit = 0, $search = '' ) {
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $offset  = ( $pagenum - 1 ) * $limit;
+
+        $arg = array(
+            'meta_key'     => 'hrm_admin_level',
+            'meta_value'   => 'admin',
+            'meta_compare' => '=',
+            'search'       => $search,
+            'count_total'  => true,
+            'offset'       => $offset,
+            'posts_per_page'       => $limit,
+        );
+
+        return new WP_User_Query( $arg );
+    }
+
     function task_budget_crrency_symbol( $name, $element ) {
         if ( $name == 'task_budget' ) {
             $project_id = isset( $element['extra']['project_id'] ) ? $element['extra']['project_id'] : false;
@@ -28,7 +45,7 @@ class Hrm_Admin {
                 ?>
                 <div style="float: left;"><?php echo $currency_symbol; ?></div>
                 <?php
-            } 
+            }
         }
     }
 
@@ -303,7 +320,7 @@ class Hrm_Admin {
 
         $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
         $total_budget = get_post_meta( $project_id, '_budget', true );
-        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true ); 
+        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
         $budget_remain = $total_budget - $budget_utilize;
 
         if ( $total_budget ) {
@@ -314,9 +331,9 @@ class Hrm_Admin {
                 'extra' => array( 'project_id' => $project_id ),
                 'value' => isset( $post->ID ) ? get_post_meta( $post->ID, '_task_budget', true ) : '',
                 'desc' => sprintf( 'Total budget: %1s, Budget utilize: %2s, Budget remain %3s', $currency_symbol . $total_budget, $currency_symbol . $budget_utilize, $currency_symbol . $budget_remain ),
-            );    
+            );
         }
-        
+
 
         $form['action'] = 'add_task';
         $form['header'] = __('Add Task', 'hrm');
@@ -374,7 +391,7 @@ class Hrm_Admin {
             $task_budget = empty( $task_budget ) ? '0' : $task_budget;
             $assign_to = get_post_meta($result->ID, '_assigned', true);
             $user = get_user_by( 'id', $assign_to );
-            $url = admin_url( 'admin.php?' ) . 'page=hrm_pim&employee_id='.$assign_to.'&tab=my_task';  
+            $url = admin_url( 'admin.php?' ) . 'page=hrm_pim&employee_id='.$assign_to.'&tab=my_task';
             ?>
             <div class="hrm-task-wrap">
                 <div class="hrm-task-title-wrap">
@@ -506,7 +523,7 @@ class Hrm_Admin {
             'post_type' => 'hrm_project',
             'post_status' => 'publish',
         );
-        //var_dump( hrm_user_can_access( $tab, $subtab, 'projects_assign_project', true ) ); die();
+
         if ( hrm_user_can_access( $tab, $subtab, 'projects_assign_project', true ) === 'projects_assign_project' ) {
             add_filter('posts_join', array( $this, 'project_role_table' ) );
             add_filter( 'posts_where', array( $this, 'get_project_role' ), 10, 2 );
@@ -1744,7 +1761,7 @@ class Hrm_Admin {
     }
 
     function update_project_meta( $project_id, $post ) {
-        $budget = floatval( $post['budget'] ); 
+        $budget = floatval( $post['budget'] );
         $symbol = $post['currency_symbol'];
         $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
         if ( $budget >=  $budget_utilize ) {
@@ -1752,12 +1769,12 @@ class Hrm_Admin {
         }
 
         update_post_meta( $project_id, '_currency_symbol', $symbol );
-        
-        
+
+
         if ( empty( $budget_utilize ) ) {
             update_post_meta( $project_id, '_project_budget_utilize', '0' );
         } else {
-          update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );  
+          update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );
         }
     }
 

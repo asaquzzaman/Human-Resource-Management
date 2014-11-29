@@ -83,8 +83,8 @@ $table['table_attr'] = array( 'class' => 'widefat' );
 $table['tab'] = $tab;
 $table['subtab'] = $subtab;
 if ( $page == 'hrm_employee') {
-    $table['add_buttion'] = false;
-    $table['delete_buttion'] = false;
+    $table['add_button'] = false;
+    $table['delete_button'] = false;
 }
 
 

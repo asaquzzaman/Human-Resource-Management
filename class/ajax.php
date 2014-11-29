@@ -45,8 +45,86 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_employee_delete', array( $this, 'delete_employee' ) );
         add_action( 'wp_ajax_delete_project', array( $this, 'project_delete' ) );
         add_action( 'wp_ajax_change_admin_status', array( $this, 'change_admin_status' ) );
+        add_action( 'wp_ajax_create_punch_in', array( $this, 'new_punch_in' ) );
+        add_action( 'wp_ajax_create_punch_out', array( $this, 'new_punch_out' ) );
+        add_action( 'wp_ajax_edit_attendance', array( $this, 'time_editable' ) );
+        add_action( 'wp_ajax_edit_attendance_save', array( $this, 'edit_attendance_save' ) );
+        add_action( 'wp_ajax_single_tab_user_role', array( $this, 'single_tab_user_role' ) );
+        add_action( 'wp_ajax_hrm_post_delete', array( $this, 'hrm_post_delete' ) );
 
-        
+
+    }
+
+    function hrm_post_delete() {
+        check_ajax_referer('hrm_nonce');
+
+        $posts_id = isset( $_POST['hrm_check'] ) ? $_POST['hrm_check'] : array();
+        foreach ( $posts_id as $post_id => $value ) {
+            wp_delete_post( $post_id, true );
+        }
+
+        $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : '';
+        $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
+        $url = $_POST['redirect'] .'&tab=' . $tab .'&sub_tab=' . $subtab;
+        if ( count( $posts_id ) ) {
+            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ), 'redirect' => $url ) );
+        } else {
+            wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
+        }
+
+    }
+
+    function single_tab_user_role() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        hrm_single_tab_user_role_change( $post );
+    }
+
+    function edit_attendance_save() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $edit_form = Hrm_Time::getInstance()->edit_attendance_save( $post );
+        $url = $post['url'];
+        if ( $edit_form ) {
+            wp_send_json_success( array(
+                'success_msg' => __( 'Successfully update punch', 'hrm' ),
+            ));
+        }
+    }
+
+    function time_editable() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+
+        $edit_form = Hrm_Time::getInstance()->generate_edit_form( $post );
+        wp_send_json_success( array( 'content' => $edit_form ) );
+    }
+
+    function new_punch_out() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $punch = Hrm_Time::getInstance()->new_punch_out($post);
+        $url = $post['url'];
+        if ( $punch ) {
+             wp_send_json_success( array(
+                'success_msg' => __( 'Successfully update punch', 'hrm' ),
+                'redirect' => $url
+            ));
+        }
+    }
+
+    function new_punch_in() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $punch = Hrm_Time::getInstance()->new_punch_in($post);
+
+        $url = $post['url'];
+        if ( $punch ) {
+             wp_send_json_success( array(
+                'success_msg' => __( 'Successfully update puch', 'hrm' ),
+                'redirect' => $url
+            ));
+        }
     }
 
     function change_admin_status() {
@@ -291,19 +369,19 @@ class Hrm_Ajax {
             update_post_meta( $task_id, '_end_date', $end_date );
             update_post_meta( $task_id, '_assigned', $assign_to );
             update_post_meta( $task_id, '_completed', $_POST['status'] );
-            
+
             $project_budget = get_post_meta( $project_id, '_budget', true );
-            
+
             if ( $project_budget ) {
-                
+
                 $project_budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
                 $task_budget = floatval( $_POST['task_budget'] );
                 $new_budget_utilize = $project_budget_utilize + $task_budget;
-                
+
                 if ( floatval( $project_budget ) >= $new_budget_utilize ) {
                     update_post_meta( $project_id, '_project_budget_utilize', $new_budget_utilize );
                     update_post_meta( $task_id, '_task_budget', $task_budget );
-                } 
+                }
             }
 
             wp_send_json_success( array( 'task_id' => $task_id, 'sub_task_create_status' => $status, 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
@@ -813,11 +891,13 @@ class Hrm_Ajax {
         global $wpdb;
         $table = $wpdb->prefix . $table_option['table_name'];
 
-        foreach( $_POST['hrm_check'] as $id => $value ) {
+        $users_id = isset( $_POST['hrm_check'] ) ? $_POST['hrm_check'] : array();
+
+        foreach( $users_id as $id => $value ) {
             $delete = $wpdb->delete( $table, array( 'id' => $id ), array( '%d' ) );
         }
 
-        if ( $delete ) {
+        if ( count( $users_id ) ) {
             $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : '';
             $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
             $url = $_POST['redirect'] .'&tab=' . $tab .'&sub_tab=' . $subtab;

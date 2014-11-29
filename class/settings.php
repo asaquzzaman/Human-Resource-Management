@@ -59,7 +59,6 @@ class Hrm_Settings {
 
     function show_sub_tab_page( $menu, $page, $tab, $subtab ) {
 
-
         if( empty( $subtab ) && count( $menu[$page][$tab]['submenu'] ) ) {
 
             $subtab = key( $menu[$page][$tab]['submenu'] );
@@ -207,7 +206,7 @@ class Hrm_Settings {
         }
 
         ob_start();
-            do_action( 'text_field_before_input', $name, $element );
+            //do_action( 'text_field_before_input', $name, $element );
         $input_before = ob_get_clean();
 
         $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
@@ -418,6 +417,31 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function descriptive_field( $element ) {
+
+        $extra_field = '';
+        $id    = isset( $element['id'] ) ? esc_attr( $element['id'] ) : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $value    = isset( $element['value'] ) ? $element['value'] : '';
+
+        $html = sprintf( '<label for="%1s">%2s</label>', $id, $label );
+        $html .= $value;
+
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+    }
+
     function get_serarch_form( $form, $heading = null ) {
         $form['action'] = isset( $form['action'] ) ? $form['action'] : '';
         $form['table_option'] = isset( $form['table_option'] ) ? $form['table_option'] : '';
@@ -470,6 +494,9 @@ class Hrm_Settings {
                                 break;
                             case 'paretn_wrap_close':
                                 echo $this->multiple_field_inside_this_wrap_close( $field_obj );
+                                break;
+                            case 'descriptive':
+                                echo $this->descriptive_field( $field_obj );
                                 break;
                         }
                         echo '</div>';
@@ -544,6 +571,9 @@ class Hrm_Settings {
                                 case 'paretn_wrap_close':
                                     echo $this->multiple_field_inside_this_wrap_close( $field_obj );
                                     break;
+                                case 'descriptive':
+                                    echo $this->descriptive_field( $field_obj );
+                                    break;
                             }
 
                         }
@@ -617,6 +647,9 @@ class Hrm_Settings {
                             case 'paretn_wrap_close':
                                 echo $this->multiple_field_inside_this_wrap_close( $field_obj );
                                 break;
+                            case 'descriptive':
+                                echo $this->descriptive_field( $field_obj );
+                                break;
                         }
 
                     }
@@ -646,9 +679,10 @@ class Hrm_Settings {
         $tab             = isset( $table['tab'] ) ? $table['tab'] : null;
         $subtab          = isset( $table['subtab'] ) ? $table['subtab'] : null;
         $count           = 1;
-        $add_buttion     = isset( $table['add_buttion'] ) ?  $table['add_buttion'] : true;
-        $delet_buttion   = isset( $table['delete_buttion'] ) ?  $table['delete_buttion'] : true;
+        $add_button     = isset( $table['add_button'] ) ?  $table['add_button'] : true;
+        $delet_button   = isset( $table['delete_button'] ) ?  $table['delete_button'] : true;
         $pagination      = isset( $table['view_btn'] ) ? $table['view_btn'] : true;
+        $add_btn_name = isset( $table['add_btn_name'] ) ? $table['add_btn_name'] : __( 'Add', 'hrm' );
 
         ob_start();
         ?>
@@ -657,11 +691,11 @@ class Hrm_Settings {
             <input type="hidden" name="action" value="<?php echo esc_attr( $table['action'] ); ?>">
             <input type="hidden" name="table_option" value="<?php echo esc_attr( $table['table'] ); ?>">
             <div class="hrm-table-action-wrap">
-                <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_buttion ) { ?>
-                    <a href="#" class="button button-primary hrm-add-button"><?php _e( 'Add', 'hrm' ); ?></a>
+                <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_button ) { ?>
+                    <a href="#" class="button button-primary hrm-add-button"><?php echo $add_btn_name; ?></a>
                 <?php } ?>
 
-                <?php if ( hrm_user_can_access( $tab, $subtab, 'delete' ) && $delet_buttion ) { ?>
+                <?php if ( hrm_user_can_access( $tab, $subtab, 'delete' ) && $delet_button ) { ?>
                     <a href="#" class="button hrm-delete-button"><?php _e( 'Delete', 'hrm' ); ?></a>
                 <?php } ?>
 
@@ -750,7 +784,6 @@ class Hrm_Settings {
 
 
     function search( $limit = null ) {
-
         check_ajax_referer( 'hrm_nonce' );
 
         if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {

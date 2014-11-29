@@ -293,7 +293,7 @@ class Hrm_Employeelist {
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
-        $employers = new WP_User_Query( array( 'role' => 'hrm_employee', 'number' => $limit, 'offset' => $offset ) );
+        $employers = new WP_User_Query( array( 'role' => 'hrm_employee', 'posts_per_page' => $limit, 'offset' => $offset ) );
         return $employers;
     }
 }

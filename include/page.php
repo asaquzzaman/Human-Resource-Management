@@ -32,7 +32,7 @@ function hrm_page() {
         'id'        => 'hrm-admin',
         'title'     => __( 'Employer', 'hrm' ),
         'file_path' => $path . '/admin/admin.php',
-        
+
         'submenu' => array(
             'admin_role' => array(
                 'title'     => __( 'Employer Role', 'hrm' ),
@@ -110,8 +110,6 @@ function hrm_page() {
         ),
 
     );
-
-   $page = apply_filters( 'hrm_admin_menu', $page );
 
     $page['hrm_pim']['employee_list'] = array(
         'id'        => 'hrm-employee-list',
@@ -240,30 +238,28 @@ function hrm_page() {
         ),
     );
 
-    $page = apply_filters( 'hrm_employee_memu', $page );
-
     $page['hrm_leave']['configure'] = array(
-            'id' => 'hrm-employee-configure',
-            'title' => __( 'Configure', 'hrm' ),
-            'file_path' => $path . '/leave/configure.php',
-            'submenu' => array(
-                'leave_type' => array(
-                    'id' => 'hrm-leave-type',
-                    'title' => __( 'Leave Type', 'hrm' ),
-                    'file_path' => $path . '/leave/leave-type.php',
-                ),
-                'leave_week' => array(
-                    'id' => 'hrm-leave-week',
-                    'title' => __( 'Work Week', 'hrm' ),
-                    'file_path' => $path . '/leave/leave-week.php',
-                ),
-                'leave_holidays' => array(
-                    'id' => 'hrm-leave-holidays',
-                    'title' => __( 'Holidays', 'hrm' ),
-                    'file_path' => $path . '/leave/leave-holidays.php',
-                ),
+        'id' => 'hrm-employee-configure',
+        'title' => __( 'Configure', 'hrm' ),
+        'file_path' => $path . '/leave/configure.php',
+        'submenu' => array(
+            'leave_type' => array(
+                'id' => 'hrm-leave-type',
+                'title' => __( 'Leave Type', 'hrm' ),
+                'file_path' => $path . '/leave/leave-type.php',
             ),
-        );
+            'leave_week' => array(
+                'id' => 'hrm-leave-week',
+                'title' => __( 'Work Week', 'hrm' ),
+                'file_path' => $path . '/leave/leave-week.php',
+            ),
+            'leave_holidays' => array(
+                'id' => 'hrm-leave-holidays',
+                'title' => __( 'Holidays', 'hrm' ),
+                'file_path' => $path . '/leave/leave-holidays.php',
+            ),
+        ),
+    );
 
     $page['hrm_leave']['leave_summary'] = array(
         'id' => 'hrm-employee-leave_summary',
@@ -274,7 +270,34 @@ function hrm_page() {
         )
     );
 
+    $page['hrm_time']['attendance'] = array(
+        'id' => 'hrm-employee-attendance',
+        'title' => __( 'Attendance', 'hrm' ),
+        'file_path' => $path . '/time/attendance.php',
+        'submenu' => array(
+            'employee_employer_records' => array(
+                'id' => 'hrm-time-my-records',
+                'title' => __( 'Employee/Employer', 'hrm' ),
+                'file_path' => $path . '/time/employee-employer.php',
+            ),
+            'punch' => array(
+                'id' => 'hrm-time-punch',
+                'title' => __( 'Punch In/Out', 'hrm' ),
+                'file_path' => $path . '/time/punch.php',
+                'role' => array(
+                    'edit' => __( 'Edit', 'hrm' ),
+                )
+            ),
 
+            'config' => array(
+                'id' => 'hrm-time-config',
+                'title' => __( 'Configuration', 'hrm' ),
+                'file_path' => $path . '/time/config.php',
+            ),
+        ),
+    );
+
+    $page = apply_filters( 'hrm_employee_memu', $page );
 
     if( ! empty( $page ) && is_array( $page ) ) {
         return $page;

@@ -10,7 +10,7 @@ global $wp_roles;
 if ( !$wp_roles ) {
     $wp_roles = new WP_Roles();
 }
-
+//echo '<pre>'; print_r( $wp_roles ); echo '</pre>'; die();
 $role_names = $wp_roles->get_names();
 $wp_built_in_role = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'hrm_employee' );
 
@@ -19,45 +19,34 @@ $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : fal
 $current_user_role = hrm_current_user_role();
 
 foreach ( $role_names as $name => $display_name) {
-
-    if ( $current_user_role == $name || $name == 'hrm_employee'  ) {
+    if ( $current_user_role == $name ) {
         continue;
     }
-
-    if ( $delete_permission ) {
-        $del_checkbox = '<input name="hrm_check['.$name.']" value="" type="checkbox">';
-    } else {
-        $del_checkbox = '';
-    }
-
     if ( $add_permission ) {
         $name_id = '<a data-role_name="'.$name.'" data-action="get_role" data-display_name="'.$display_name.'" class="hrm-editable" href="#">'.$name.'</a>';
     } else {
         $name_id = $name;
     }
     $body[] = array(
-        $del_checkbox,
         $name_id,
         $display_name
     );
-
-    $td_attr[] = array(
-        'class="check-column"'
-    );
 }
-$del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
-$table['head']       = array( $del_checkbox, 'User Role', 'Display Name' );
-$table['body']       = isset( $body ) ? $body : array();
+
+$table['head']          = array( 'User Role', 'Display Name' );
+$table['body']          = isset( $body ) ? $body : array();
 
 
-$table['td_attr']    = isset( $td_attr ) ? $td_attr : '';
-$table['th_attr']    = array( 'class="check-column"' );
-$table['table_attr'] = array( 'class' => 'widefat' );
+$table['td_attr']       = isset( $td_attr ) ? $td_attr : '';
+$table['th_attr']       = array( 'class="check-column"' );
+$table['table_attr']    = array( 'class' => 'widefat' );
 
-$table['action']     = 'role_delete';
-$table['table_attr'] = array( 'class' => 'widefat' );
-$table['tab']        = $tab;
-$table['subtab']     = $subtab;
+$table['action']        = 'role_delete';
+$table['table_attr']    = array( 'class' => 'widefat' );
+$table['tab']           = $tab;
+$table['subtab']        = $subtab;
+$table['add_button']    = false;
+$table['delete_button'] = false;
 
 echo Hrm_Settings::getInstance()->table( $table );
 
@@ -68,9 +57,10 @@ echo Hrm_Settings::getInstance()->table( $table );
         hrm_dataAttr = {
            add_form_generator_action : 'add_form',
            add_form_apppend_wrap : 'hrm-admin-role',
-           class_name : 'Hrm_Admin',
+           class_name : 'Hrm_Time',
            redirect : '<?php echo $url; ?>',
-           function_name : 'admin_role_form',
+           function_name : 'role_permission',
+           tab: '<?php echo $tab; ?>'
         };
     });
 </script>

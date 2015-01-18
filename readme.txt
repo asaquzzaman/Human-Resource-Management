@@ -10,7 +10,7 @@ License: GPLv2 or later
 Organization, Industries and Office management
 
 == Description ==
-    Manage your human resource, project, task and assign task with the help of this plugin.
+    Managing human resource, project, task and assign task.
 
 = Features:  =
 
@@ -20,8 +20,12 @@ Organization, Industries and Office management
     3. Employee job information.
     4. Employee qualification.
     5. Create project, task and assign the task to the employee.
-    6. Personal information management (pim). Where you create employee and manage there information and access each employee profile.
-    7. leave management system.
+
+* PIM
+    1. Personal information management (PIM). Where you create employee and manage there information and can access each employee profile.
+
+* Leave
+    1. leave management system.
 
 * Each employee has there personal account where employee can manage
     1. Personal information, work experiance, education, skill and language.
@@ -33,6 +37,10 @@ Organization, Industries and Office management
     1. Employer/Employee attendance records.
     2. Punch In/Punch Out.
     3. Configuration for access permission.
+
+* Evaluation
+    1. Employee evaluation by project task.
+    2. Employee evaluation record.
 
 
 == Installation ==
@@ -68,6 +76,13 @@ Browser Compatibility
     3. Leave management
 
 == Changelog ==
+
+= 0.4 =
+* hrm_employer can assign only project co-worder
+* delete action
+* support page
+* register post type hrm_task
+* New feature Evaluation
 
 = 0.3 =
 * Attendence

@@ -130,10 +130,125 @@ function hrm_second_to_time( $seconds ) {
     return $obj;
 }
 
-function hrm_single_tab_user_role_change( $post ) {
-    var_dump( $post ); die();
+function hrm_get_header( $page, $tab, $subtab = false ) {
+    $menu = hrm_page();
+    ?>
+    <h2 class="nav-tab-wrapper">
+        <?php
+
+        foreach ( $menu[$page] as $key => $tab_event ) {
+
+            $active = ( $tab == $key ) ? 'nav-tab-active' : '';
+
+            $url = hrm_admin_menu_url( $key );
+            printf( '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>',$url, $tab_event['id'], $tab_event['title'], $active );
+        }
+
+        ?>
+    </h2>
+    <?php
+    if ( ! $subtab ) {
+       return;
+    }
+
+    if( !isset( $menu[$page][$tab]['submenu'] ) ) {
+        return;
+    }
+
+    if ( !count( $menu[$page][$tab]['submenu'] ) ) {
+        return;
+    }
+
+    $subtab = key( $menu[$page][$tab]['submenu'] );
+    ?>
+    <h3 class="hrm-sub-nav">
+        <ul class="hrm-subsubsub">
+            <?php
+                foreach ( $menu[$page][$tab]['submenu'] as $sub_key => $sub_event ) {
+                    $sub_active = ( $sub_key == $subtab ) ? 'hrm-sub-current' : '';
+                    $sub_event['id'] = isset( $sub_event['id'] ) ? $sub_event['id'] : '';
+                    $sub_url = hrm_admin_sub_menu_url( $tab, $sub_key );
+                    printf( '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',$sub_url , $sub_event['id'], $sub_event['title'], $sub_active );
+                }
+            ?>
+        </ul>
+    </h3>
+    <?php
 }
 
-/*function pri( $data ) {
-    echo '<pre>'; print_r( $data ); echo '</pre>';
-}*/
+function hrm_get_employee_id() {
+    $query = hrm_get_query_args();
+    $menu  = hrm_page();
+    $page  = $query['page'];
+    $tab   = $query['tab'];
+
+    if ( !isset( $menu[$page][$tab]['nested_tab'] ) ) {
+        return false;
+    }
+
+    if ( !$menu[$page][$tab]['nested_tab'] ) {
+        return false;
+    }
+
+    $employee_id = !empty( $_GET['employee_id'] ) ? intval( $_GET['employee_id'] ) : false;
+
+    return $employee_id;
+}
+
+function hrm_get_query_args() {
+
+    $menu = hrm_page();
+    $page = isset( $_GET['page'] ) && !empty( $_GET['page'] ) ? $_GET['page'] : false;
+
+    if ( !$page ) {
+        $query = array(
+            'page'   => false,
+            'tab'    => false,
+            'subtab' => false,
+        );
+        return apply_filters( 'hrm_query_var', $query );
+    }
+
+    if ( isset( $_GET['tab'] ) && !empty( $_GET['tab'] ) ) {
+        $tab = $_GET['tab'];
+    } else if ( isset( $menu[$page] ) && count( $menu[$page] ) ) {
+        $tab = array_keys( $menu[$page] )[0];
+    } else {
+        $tab = false;
+    }
+
+    if ( !$tab ) {
+        $query = array(
+            'page' => $page,
+            'tab'  => false,
+            'subtab' => false,
+        );
+
+        return apply_filters( 'hrm_query_var', $query );
+    }
+
+    if ( isset( $_GET['sub_tab'] ) && !empty( $_GET['sub_tab'] ) ) {
+        $subtab = $_GET['sub_tab'];
+    } else if ( isset( $menu[$page][$tab]['submenu'] ) && count( $menu[$page][$tab]['submenu'] ) ) {
+        $subtab = array_keys( $menu[$page][$tab]['submenu'] )[0];
+    } else {
+        $subtab = false;
+    }
+    if ( !$subtab ) {
+        $query = array(
+            'page'   => $page,
+            'tab'    => $tab,
+            'subtab' => false,
+        );
+        return apply_filters( 'hrm_query_var', $query );
+    } else {
+        $query = array(
+            'page'   => $page,
+            'tab'    => $tab,
+            'subtab' => $subtab,
+        );
+
+        return apply_filters( 'hrm_query_var', $query );
+    }
+}
+

@@ -40,10 +40,26 @@ label em {
   width: 16px;
 }
 #hrm-visible-form-warp,
+.hrm-visible-form-warp,
 #hrm-hidden-form-warp {
   border: 1px solid #FAD163;
   margin-top: 2%;
   background: #fff;
+}
+#hrm-visible-form-warp .hrm-inside-padding-wrap,
+.hrm-visible-form-warp .hrm-inside-padding-wrap,
+#hrm-hidden-form-warp .hrm-inside-padding-wrap {
+  padding: 10px;
+}
+#hrm-visible-form-warp .hrm-slider-width,
+.hrm-visible-form-warp .hrm-slider-width,
+#hrm-hidden-form-warp .hrm-slider-width {
+  width: 50%;
+}
+#hrm-visible-form-warp .hrm-task-wrap,
+.hrm-visible-form-warp .hrm-task-wrap,
+#hrm-hidden-form-warp .hrm-task-wrap {
+  line-height: 30px;
 }
 #hrm-visible-form-warp .hrm-text-wrap {
   padding: 7px;
@@ -111,6 +127,14 @@ label em {
 }
 #hrm-list-form .hrm-task-wrap {
   width: 300px;
+  position: relative;
+  margin-bottom: 16px;
+}
+#hrm-list-form .hrm-task-wrap .hrm-task-content {
+  float: left;
+}
+#hrm-list-form .hrm-task-wrap .hrm-task-avatar {
+  float: right;
 }
 #hrm-list-form .hrm-task-title-wrap {
   border: 1px solid #fad163;
@@ -145,6 +169,15 @@ label em {
 }
 #hrm-list-form .hrm-task-status-desc {
   margin: 0 0 5px 44.5%;
+}
+#hrm-list-form .hrm-task-status-desc .hrm-delete-task {
+  background: #ef4646;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 400;
+  left: 0;
+  padding: 0 5px;
+  position: absolute;
 }
 #hrm-skills .hrm-label-font {
   font-weight: 600;
@@ -320,4 +353,15 @@ label em {
 }
 .hrm-create-user-form-wrap label {
   width: 30%;
+}
+.hrm-author-wrap .hrm-author-dis-ul li {
+  font-size: 14px;
+  line-height: 28px;
+  list-style-type: initial;
+  margin-left: 3%;
+}
+.ui-slider .ui-slider-handle {
+  height: 15px;
+  width: 5px;
+  padding-left: 5px;
 }

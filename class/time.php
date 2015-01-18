@@ -40,7 +40,7 @@ class Hrm_Time {
             'type' => 'text',
             'class' => 'hrm-timepicker',
             'label'=> __( 'Punch In Time', 'hrm' ),
-            'value' => date( 'h:i a', strtotime( $post->post_date ) )
+            'value' => date( 'h:i:s a', strtotime( $post->post_date ) )
         );
 
 
@@ -60,7 +60,7 @@ class Hrm_Time {
             'type' => 'text',
             'class' => 'hrm-timepicker',
             'label'=> __( 'Punch Out Time', 'hrm' ),
-            'value' => !empty( $punch_out_time ) ? date( 'h:i a', $punch_out_time ) : ''
+            'value' => !empty( $punch_out_time ) ? date( 'h:i:s a', $punch_out_time ) : ''
         );
 
 
@@ -100,17 +100,19 @@ class Hrm_Time {
     }
 
     function new_punch_in($post) {
-        $args = array(
+        $user_id = ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : get_current_user_id();
+
+        $post_arg = array(
             'post_type' => 'hrm_punch',
             'post_status' => 'publish',
-            'post_content' => $post['note']
+            'post_content' => $post['note'],
+            'post_author' => $user_id
         );
-        $user_id = get_current_user_id();
 
         $arg = array(
             'post_type' => 'hrm_punch',
             'post_status'=> 'publish',
-            'author' => get_current_user_id(),
+            'author' => $user_id,
             'meta_query' => array(
                 array(
                     'key' => '_puch_in_status',
@@ -125,7 +127,7 @@ class Hrm_Time {
             return false;
         }
 
-        $post_id = wp_insert_post( $args );
+        $post_id = wp_insert_post( $post_arg );
 
         if ( $post_id ) {
             update_post_meta( $post_id, '_puch_user', $user_id );
@@ -138,7 +140,7 @@ class Hrm_Time {
 
     function new_punch_out($post) {
         $post_id = isset( $post['post_id'] ) ? intval( $post['post_id'] ) : false;
-        $user_id = get_current_user_id();
+        $user_id = ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : get_current_user_id();
         $punch_out_time = strtotime( current_time('mysql') );
         if ( $post_id ) {
             update_post_meta( $post_id, '_puch_out_time', $punch_out_time );
@@ -153,18 +155,16 @@ class Hrm_Time {
     }
 
     function punch_in_out_form() {
-        $puch_status = get_user_meta( get_current_user_id(), '_puch_in_status', true );
-        if ( $puch_status == '1' ) {
-
-            return $this->punch_out_form();
-        } else {
-            return $this->punch_in_form();
-        }
-
+        return $this->punch_out_form();
     }
 
     function punch_in_form() {
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+
+        $form['user_id'] = array(
+            'type' => 'hidden',
+            'value' => ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['hrm_dataAttr']['user_id'] ) : '0',
+        );
         $form[] = array(
             'type' => 'descriptive',
             'label'=> __( 'Date', 'hrm' ),
@@ -199,10 +199,15 @@ class Hrm_Time {
 
     function punch_out_form() {
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $user_id = ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['hrm_dataAttr']['user_id'] ) : false;
+        $form['user_id'] = array(
+            'type' => 'hidden',
+            'value' => $user_id,
+        );
         $arg = array(
             'post_type' => 'hrm_punch',
             'post_status'=> 'publish',
-            'author' => get_current_user_id(),
+            'author' => $user_id ? $user_id : get_current_user_id(),
             'meta_query' => array(
                 array(
                     'key' => '_puch_in_status',

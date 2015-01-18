@@ -73,7 +73,7 @@ class Hrm_Pim {
         if( empty( $tab ) && count( $menu )  ) {
             $tab = key( $menu );
             $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
-            $path = dirname (__FILE__) . '/../views/pim/' .$file_name. '.php';
+            $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
 
             if( file_exists( $path ) ) {
                 require_once $path;
@@ -82,7 +82,7 @@ class Hrm_Pim {
             }
         } else {
             $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
-            $path = dirname (__FILE__) . '/../views/pim/' .$file_name. '.php';
+            $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
 
             if( file_exists( $path ) ) {
                 require_once $path;

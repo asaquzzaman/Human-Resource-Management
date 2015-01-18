@@ -20,46 +20,39 @@ class Hrm_Settings {
         return apply_filters( 'hrm_redirect_url', $url, $page, $tab, $subtab );
     }
 
-    function show_tab_page( $menu, $page, $tab, $subtab, $nested_tab = '' ) {
+    function show_tab_page( $page, $tab, $subtab, $nested_tab = '' ) {
+        if ( !$tab ) {
+            _e( 'Missing Tab Page!', 'hrm' );
+            return;
+        }
 
+        $menu = hrm_page();
         $tab = empty( $nested_tab ) ? $tab : $nested_tab;
 
-        if( empty( $tab ) && count( $menu[$page] )  ) {
-            $tab = key( $menu[$page] );
-
-            if ( ! hrm_user_can_access( $tab, null, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
-            $path = isset( $menu[$page][$tab]['file_path'] ) ? $menu[$page][$page][$tab]['file_path'] : '';
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        } else {
-
-            if ( ! hrm_user_can_access( $tab, null, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
-            $path = isset( $menu[$page][$tab]['file_path'] ) ? $menu[$page][$tab]['file_path'] : '';
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
+        if ( ! hrm_user_can_access( $tab, null, 'view' ) ) {
+            printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
+            return false;
         }
+
+        $path = isset( $menu[$page][$tab]['file_path'] ) ? $menu[$page][$tab]['file_path'] : '';
+
+        if( file_exists( $path ) ) {
+            require_once $path;
+        } else {
+            _e('Page not found', 'hrm' );
+        }
+
     }
 
 
-    function show_sub_tab_page( $menu, $page, $tab, $subtab ) {
+    function show_sub_tab_page( $page, $tab, $subtab ) {
 
-        if( empty( $subtab ) && count( $menu[$page][$tab]['submenu'] ) ) {
+        $menu = hrm_page();
+        if( !isset( $menu[$page][$tab]['submenu'] ) ) {
+            return;
+        }
+
+        if( empty( $menu[$page][$tab]['submenu'] ) && count( $menu[$page][$tab]['submenu'] ) ) {
 
             $subtab = key( $menu[$page][$tab]['submenu'] );
 
@@ -69,6 +62,7 @@ class Hrm_Settings {
             }
 
             $path = isset( $menu[$page][$tab]['submenu'][$subtab]['file_path'] ) ? $menu[$page][$tab]['submenu'][$subtab]['file_path'] : '';
+            $path = apply_filters( 'hrm_subtab_path', $path, $page, $tab, $subtab );
 
             if( file_exists( $path ) ) {
                 require_once $path;
@@ -84,6 +78,7 @@ class Hrm_Settings {
 
             $path = isset( $menu[$page][$tab]['submenu'][$subtab]['file_path'] ) ? $menu[$page][$tab]['submenu'][$subtab]['file_path'] : '';
 
+            $path = apply_filters( 'hrm_subtab_path', $path, $page, $tab, $subtab );
 
             if( file_exists( $path ) ) {
                 require_once $path;
@@ -268,6 +263,7 @@ class Hrm_Settings {
 
         $fields = isset( $element['fields'] ) ? $element['fields'] : array();
 
+        $html .= '<span class="hrm-radio-wrap">';
         foreach( $fields as $field ) {
             $extra_attr = '';
             $value      = isset( $field['value'] ) ? esc_attr( $field['value'] ) : '';
@@ -288,6 +284,8 @@ class Hrm_Settings {
             $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
 
         }
+
+        $html .= '</span>';
 
         $desc = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
         $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
@@ -316,6 +314,7 @@ class Hrm_Settings {
         $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
         $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
 
+        $html .= '<span class="hrm-checkbox-wrap">';
 
         foreach( $fields as $field ) {
             $extra_attr = '';
@@ -337,6 +336,8 @@ class Hrm_Settings {
             $html .= sprintf( '<label class="hrm-checkbox" for="%1s">%2s</label>', $id, $label );
 
         }
+
+        $html .= '</span>';
 
         $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
         $html       .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
@@ -679,10 +680,10 @@ class Hrm_Settings {
         $tab             = isset( $table['tab'] ) ? $table['tab'] : null;
         $subtab          = isset( $table['subtab'] ) ? $table['subtab'] : null;
         $count           = 1;
-        $add_button     = isset( $table['add_button'] ) ?  $table['add_button'] : true;
-        $delet_button   = isset( $table['delete_button'] ) ?  $table['delete_button'] : true;
+        $add_button      = isset( $table['add_button'] ) ?  $table['add_button'] : true;
+        $delet_button    = isset( $table['delete_button'] ) ?  $table['delete_button'] : true;
         $pagination      = isset( $table['view_btn'] ) ? $table['view_btn'] : true;
-        $add_btn_name = isset( $table['add_btn_name'] ) ? $table['add_btn_name'] : __( 'Add', 'hrm' );
+        $add_btn_name    = isset( $table['add_btn_name'] ) ? $table['add_btn_name'] : __( 'Add', 'hrm' );
 
         ob_start();
         ?>
@@ -691,7 +692,7 @@ class Hrm_Settings {
             <input type="hidden" name="action" value="<?php echo esc_attr( $table['action'] ); ?>">
             <input type="hidden" name="table_option" value="<?php echo esc_attr( $table['table'] ); ?>">
             <div class="hrm-table-action-wrap">
-                <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_button ) { ?>
+                <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_btn_name ) { ?>
                     <a href="#" class="button button-primary hrm-add-button"><?php echo $add_btn_name; ?></a>
                 <?php } ?>
 
@@ -785,6 +786,7 @@ class Hrm_Settings {
 
     function search( $limit = null ) {
         check_ajax_referer( 'hrm_nonce' );
+        $data = false;
 
         if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {
 
@@ -815,6 +817,8 @@ class Hrm_Settings {
             }
         }
 
+
+
         if( $data ) {
             $data['table_option'] = $_POST['table_option'];
             $data['_wpnonce'] = $_POST['_wpnonce'];
@@ -830,8 +834,9 @@ class Hrm_Settings {
         $data['pagenum'] = 1;
         $data = apply_filters( 'hrm_search_parm', $data );
         $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-
+        $query_arg = apply_filters( 'hrm_search_redirect', $query_arg, $data );
         wp_redirect(  $query_arg );
+        exit();
     }
 
     function update_table_option( $table_option_name, $table_option ) {
@@ -881,7 +886,7 @@ class Hrm_Settings {
         $data['pagination'] = $_POST['paginaton'];
         $data['pagenum'] = 1;
         $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-
+        $query_arg = apply_filters( 'hrm_pagination_redirect', $query_arg, $data );
         wp_redirect( $query_arg  );
         exit;
     }
@@ -897,6 +902,7 @@ class Hrm_Settings {
             'format'    => '',
             'prev_text' => __( '&laquo;', 'aag' ),
             'next_text' => __( '&raquo;', 'aag' ),
+            'add_args'  => false,
             'total'     => $num_of_pages,
             'current'   => $pagenum
         ) );
@@ -910,8 +916,8 @@ class Hrm_Settings {
     function pagination_select() {
         $selectd = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
         $arg = array(
-            '10'  => __( '10', 'hrm'),
-            '20'  => __( '20','hrm' ),
+            '2'  => __( '10', 'hrm'),
+            '4'  => __( '20','hrm' ),
             '50'  => __( '50', 'hrm' ),
             '100' => __( '100', 'hrm' ),
         );

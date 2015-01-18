@@ -52,7 +52,45 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_single_tab_user_role', array( $this, 'single_tab_user_role' ) );
         add_action( 'wp_ajax_hrm_post_delete', array( $this, 'hrm_post_delete' ) );
 
+        add_action( 'wp_ajax_rating_task', array( $this, 'rating_task' ) );
+        add_action( 'wp_ajax_user_task_rating_content', array( $this, 'user_task_rating_content' ) );
+        add_action( 'wp_ajax_task_rating', array( $this, 'task_rating' ) );
+        add_action( 'wp_ajax_delete_task', array( $this, 'task_delete' ) );
 
+
+    }
+
+    function task_delete() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        //always before delete task
+        Hrm_Evaluation::getInstance()->reduce_task_rating( $_POST['project_id'], $_POST['assing_to'] );
+        wp_delete_post( $_POST['task_id'], true );
+        wp_send_json_success();
+    }
+
+    function task_rating() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $post_id = Hrm_Evaluation::getInstance()->new_task_rating( $post );
+        wp_send_json_success( array( 'post_id' => $post_id, 'btn_text' => __( 'Edit', 'hrm' ) ) );
+    }
+
+    function user_task_rating_content() {
+        check_ajax_referer('hrm_nonce');
+        $project_id = intval( $_POST['project_id'] );
+        $user_id = intval( $_POST['user_id'] );
+        $content = Hrm_Evaluation::getInstance()->user_task_content( $project_id, $user_id );
+
+        wp_send_json_success( array( 'slider_value' => $content['slider_value'], 'max' => $content['max'], 'append_data' => $content['content'], 'tasks_id' => $content['tasks_id'] ) );
+    }
+
+    function rating_task() {
+        check_ajax_referer('hrm_nonce');
+        $project_id = intval( $_POST['project_id'] );
+        ob_start();
+        Hrm_Evaluation::getInstance()->get_user_by_project_id( $project_id );
+        wp_send_json_success( array( 'append_data' => ob_get_clean() ) );
     }
 
     function hrm_post_delete() {
@@ -65,9 +103,9 @@ class Hrm_Ajax {
 
         $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : '';
         $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
-        $url = $_POST['redirect'] .'&tab=' . $tab .'&sub_tab=' . $subtab;
+
         if ( count( $posts_id ) ) {
-            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ), 'redirect' => $url ) );
+            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ) ) );
         } else {
             wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
         }
@@ -102,6 +140,7 @@ class Hrm_Ajax {
 
     function new_punch_out() {
         check_ajax_referer('hrm_nonce');
+        $post = array();
         $post = $_POST;
         $punch = Hrm_Time::getInstance()->new_punch_out($post);
         $url = $post['url'];
@@ -115,10 +154,11 @@ class Hrm_Ajax {
 
     function new_punch_in() {
         check_ajax_referer('hrm_nonce');
+        $post = array();
         $post = $_POST;
         $punch = Hrm_Time::getInstance()->new_punch_in($post);
-
         $url = $post['url'];
+
         if ( $punch ) {
              wp_send_json_success( array(
                 'success_msg' => __( 'Successfully update puch', 'hrm' ),
@@ -143,17 +183,14 @@ class Hrm_Ajax {
     function project_delete() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-
-        $url = $postdata['redirect'] . '&tab=' . $postdata['tab'];
-
         foreach ( $postdata['hrm_check'] as $key => $porject_id ) {
-            $project_delete = hrm_Admin::getInstance()->project_delete( $porject_id );
+            $project_delete = Hrm_Admin::getInstance()->project_delete( $porject_id );
+            Hrm_Evaluation::getInstance()->parent_rating_delete( $porject_id );
         }
 
         if ( $project_delete ) {
             wp_send_json_success( array(
-                'msg' => __( 'Successfully deletet Project', 'hrm' ),
-                'redirect' => $url
+                'msg' => __( 'Successfully deletet Project', 'hrm' )
             ));
         } else {
             wp_send_json_error( array(
@@ -172,7 +209,6 @@ class Hrm_Ajax {
             ));
         }
         $delete_user = false;
-        $url = $postdata['redirect'] .'&tab='. $postdata['tab'];
         if ( hrm_user_can_access( $postdata['tab'], null, 'delete' ) ) {
             $delete_user = hrm_Employee::getInstance()->delete_employee( $postdata['hrm_check'] );
         } else {
@@ -184,7 +220,6 @@ class Hrm_Ajax {
         if ( $delete_user ) {
             wp_send_json_success( array(
                 'msg' => __( 'Successfully deletet employee', 'hrm' ),
-                'redirect' => $url
             ) );
         } else {
             wp_send_json_error( array(
@@ -196,7 +231,7 @@ class Hrm_Ajax {
     function complete_task() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-        $update = hrm_Admin::getInstance()->task_complete( $postdata['task_id'] );
+        $update = Hrm_Admin::getInstance()->task_complete( $postdata['task_id'] );
         if ( $update ) {
             wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
         } else {
@@ -207,7 +242,7 @@ class Hrm_Ajax {
     function incomplete_task() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-        $update = hrm_Admin::getInstance()->task_incomplete( $postdata['task_id'] );
+        $update = Hrm_Admin::getInstance()->task_incomplete( $postdata['task_id'] );
         if ( $update ) {
             wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
         } else {
@@ -280,14 +315,14 @@ class Hrm_Ajax {
         foreach( $users as $user) {
             $data[] = array(
                 'label' => $user->display_name,
-                '_user_meta' => hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID ),
+                '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
             );
         }
         if( count($data) ) {
             $user_info = json_encode( $data );
         } else {
             $data[] = array(
-                'label' => '<div class="no-user-wrap"><p>' . __( 'No user found!', 'cpm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'cpm' ) . '</span></div>',
+                'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'cpm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'cpm' ) . '</span></div>',
                 'value' => 'hrm_create_user',
                 '_user_meta' =>'',
             );
@@ -335,25 +370,27 @@ class Hrm_Ajax {
 
     function insert_task() {
         check_ajax_referer('hrm_nonce');
-        $is_update = isset( $_POST['id'] ) ? true : false;
-        $url = isset( $_POST['url'] ) ? $_POST['url'] : '';
+        $is_update  = isset( $_POST['id'] ) ? true : false;
+        $url        = isset( $_POST['url'] ) ? $_POST['url'] : '';
         $start_date = !empty( $_POST['start_date'] ) ? hrm_date2mysql( $_POST['start_date'] ) : '';
-        $end_date = !empty( $_POST['end_date'] ) ? hrm_date2mysql( $_POST['end_date'] ) : '';
+        $end_date   = !empty( $_POST['end_date'] ) ? hrm_date2mysql( $_POST['end_date'] ) : '';
 
         $data = array(
-            'post_title' => $_POST['title'],
+            'post_title'   => $_POST['title'],
             'post_content' => $_POST['description'],
-            'post_type' => 'hrm_task',
-            'post_status' => 'publish'
+            'post_type'    => 'hrm_task',
+            'post_status'  => 'publish'
         );
 
         if ( $is_update ) {
             $data['ID'] = $_POST['id'];
             $task_id = wp_update_post( $data );
+            Hrm_Evaluation::getInstance()->update_task_rating( $_POST );
             $status = false;
         } else {
             $data['post_parent'] = $_POST['project_id'];
             $task_id = wp_insert_post( $data );
+            Hrm_Evaluation::getInstance()->new_inserted_task_rating( $_POST['project_id'], $_POST['assigned'] );
             $status = false;
         }
 
@@ -394,7 +431,7 @@ class Hrm_Ajax {
         check_ajax_referer('hrm_nonce');
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
-        $data = hrm_Admin::getInstance()->project_insert_form( $post );
+        $data = Hrm_Admin::getInstance()->project_insert_form( $post );
         wp_send_json_success( array( 'append_data' => $data ) );
 
     }
@@ -403,7 +440,7 @@ class Hrm_Ajax {
         check_ajax_referer('hrm_nonce');
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
-        $data = hrm_Admin::getInstance()->task_form( $post );
+        $data = Hrm_Admin::getInstance()->task_form( $post );
         wp_send_json_success( array( 'append_data' => $data ) );
 
     }
@@ -412,7 +449,7 @@ class Hrm_Ajax {
         check_ajax_referer('hrm_nonce');
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
-        $data = hrm_Admin::getInstance()->sub_task_form( $post );
+        $data = Hrm_Admin::getInstance()->sub_task_form( $post );
         wp_send_json_success( array( 'append_data' => $data ) );
 
     }
@@ -545,7 +582,7 @@ class Hrm_Ajax {
                     'label' => $value->$search_field,
                     'value' => $value->$search_field,
                     'id' => $value->id,
-                    '_user_meta'=> hrm_Admin::getInstance()->skill_user_meta( $value->id, $value->emp_firstname, $value->emp_lastname  ),
+                    '_user_meta'=> Hrm_Admin::getInstance()->skill_user_meta( $value->id, $value->emp_firstname, $value->emp_lastname  ),
                 );
             }
         } else {
@@ -605,9 +642,8 @@ class Hrm_Ajax {
                 $delete_user = wp_delete_user( $user_id );
             }
         }
-        $url = $_POST['redirect'] .'&tab='. $_POST['tab'] . '&sub_tab='. $_POST['sub_tab'];
         if( $delete_user ) {
-            wp_send_json_success( array( 'msg' => __( 'Delete user successfully', 'hrm' ), 'redirect' => $url ) );
+            wp_send_json_success( array( 'msg' => __( 'Delete user successfully', 'hrm' ) ) );
         } else {
             wp_send_json_error( __( 'Delete Failed', 'hrm' ) );
         }
@@ -633,7 +669,7 @@ class Hrm_Ajax {
             if ( $user->ID == $super_admin ) continue;
             $data[] = array(
                 'label' => $user->display_name,
-                '_user_meta' => hrm_Admin::getInstance()->create_user_meta( $user->display_name, $user->ID ),
+                '_user_meta' => Hrm_Admin::getInstance()->create_user_meta( $user->display_name, $user->ID ),
             );
         }
         if( count($data) ) {
@@ -686,7 +722,7 @@ class Hrm_Ajax {
 
             wp_new_user_notification( $user_id, $random_password );
 
-            $user_meta = hrm_Admin::getInstance()->create_user_meta( $display_name, $user_id );
+            $user_meta = Hrm_Admin::getInstance()->create_user_meta( $display_name, $user_id );
             wp_send_json_success( array(
                 'success_msg' => __('Create admin successfull', 'hrm'),
                  '_user_meta' => $user_meta,
@@ -761,9 +797,7 @@ class Hrm_Ajax {
                remove_role( $role_name );
             }
         }
-        $url = $_POST['redirect'] .'&tab='. $_POST['tab'] . '&sub_tab='. $_POST['sub_tab'];
-
-        wp_send_json_success(array('msg' => __('Delete successfull'), 'redirect' => $url ) );
+        wp_send_json_success(array('msg' => __('Delete successfull') ) );
     }
 
     function create_user_role() {
@@ -900,8 +934,7 @@ class Hrm_Ajax {
         if ( count( $users_id ) ) {
             $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : '';
             $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
-            $url = $_POST['redirect'] .'&tab=' . $tab .'&sub_tab=' . $subtab;
-            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ), 'redirect' => $url ) );
+            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ) ) );
         } else {
             wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
         }
@@ -980,7 +1013,7 @@ class Hrm_Ajax {
         foreach( $table_option['table_option'] as $field => $name ) {
             $fiel_val = isset( $_POST[$name] ) ? $_POST[$name] : '';
 
-            $data[$field] = is_array( $fiel_val ) ? esc_sql( maybe_serialize( $fiel_val ) ) : esc_sql( $fiel_val );
+            $data[$field] = is_array( $fiel_val ) ? maybe_serialize( $fiel_val ) : $fiel_val;
         }
 
         $data = ( isset( $data ) && is_array( $data ) ) ? $data : array();

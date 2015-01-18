@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: WP human resource management
- * Plugin URI: https://github.com/asaquzzaman/hrm
+ * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 0.3
+ * Version: 0.4
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -37,6 +37,7 @@
  */
 
 
+
 function hrm_autoload( $class ) {
     $name = explode( '_', $class );
 
@@ -59,14 +60,25 @@ class Wp_Hrm {
     private $is_admin;
 
     function __construct() {
-        $this->version = '0.3';
+        $this->version = '0.4';
         $this->db_version = '0.1';
+        $this->plugin_dir = dirname(__FILE__);
         $this->is_admin = ( is_admin() ) ? 'yes' : 'no';
         $this->instantiate();
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
+        add_action( 'admin_notices', array($this, 'fornt_end') );
         register_activation_hook( __FILE__, array($this, 'install') );
         add_action( 'init', array( $this, 'init' ) );
+    }
+
+    function fornt_end() {
+        ?>
+         <div class="update-nag">
+            <?php printf( __( 'If you want the <strong>front-end</strong> version of <strong>wp human resource management</strong> plugin,
+            then contact please, <a href="mailto:joy.mishu@gmail.com">Email</a> or <a href="http://mishubd.com/contact/" target="_blank">Website</a>' )  ); ?>
+        </div>
+        <?php
     }
 
     /**
@@ -83,11 +95,12 @@ class Wp_Hrm {
     }
 
 
-    function admin_scripts() {
+    static function admin_scripts() {
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'jquery-ui-dialog' );
         wp_enqueue_script( 'jquery-ui-autocomplete');
         wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_script( 'jquery-ui-slider' );
         wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_datetimepicker', plugins_url( '/asset/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
@@ -96,7 +109,7 @@ class Wp_Hrm {
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
             '_wpnonce'    => wp_create_nonce( 'hrm_nonce' ),
-            'is_admin'    => $this->is_admin,
+            'is_admin'    => is_admin() ? 'yes' : 'no',
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
             'success_msg' => __( 'Changed Successfully', 'hrm' )
         ));
@@ -143,21 +156,34 @@ class Wp_Hrm {
         $this->admin_scripts();
     }
 
+    function evaluation_scripts() {
+        $this->admin_scripts();
+    }
+
+    function author_scripts() {
+        $this->admin_scripts();
+    }
+
     function admin_menu() {
         $capability = 'read'; //minimum level: subscriber
         if ( hrm_current_user_role() != 'hrm_employee' ) {
             $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, 'hrm_management', array($this, 'admin_page_handler'), ''  );
             $admin_sub_menu = add_submenu_page( 'hrm_management', __( 'Admin', 'hrm' ), __( 'Admin', 'hrm' ), $capability, 'hrm_management', array($this, 'admin_page_handler') );
-            $pim            = add_submenu_page( 'hrm_management', __( 'Pim', 'hrm' ), __( 'Pim', 'hrm' ), $capability, 'hrm_pim', array( $this, 'admin_page_handler' ) );
+            $pim            = add_submenu_page( 'hrm_management', __( 'PIM', 'hrm' ), __( 'PIM', 'hrm' ), $capability, 'hrm_pim', array( $this, 'admin_page_handler' ) );
             $leave          = add_submenu_page( 'hrm_management', __( 'Leave', 'hrm' ), __( 'Leave', 'hrm' ), $capability, 'hrm_leave', array( $this, 'admin_page_handler' ) );
             $attendance     = add_submenu_page( 'hrm_management', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
+            $evaluation     = add_submenu_page( 'hrm_management', __( 'Evaluation', 'hrm' ), __( 'Evaluation', 'hrm' ), $capability, 'hrm_evaluation', array( $this, 'admin_page_handler' ) );
+            $author         = add_submenu_page( 'hrm_management', __( 'Support', 'hrm' ), __( 'Support', 'hrm' ), $capability, 'hrm_author', array( $this, 'admin_page_handler' ) );
 
             add_action( 'admin_print_styles-' . $admin_sub_menu, array($this, 'admin_scripts') );
             add_action( 'admin_print_styles-' . $pim, array( $this, 'pim_scripts') );
             add_action( 'admin_print_styles-' . $leave, array( $this, 'leave_scripts' ) );
             add_action( 'admin_print_styles-' . $attendance, array($this, 'attendance_scripts') );
+            add_action( 'admin_print_styles-' . $evaluation, array($this, 'evaluation_scripts') );
+            add_action( 'admin_print_styles-' . $author, array($this, 'author_scripts') );
+
         } else {
-            $user_id = get_current_user_id();
+            $user_id        = get_current_user_id();
             $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
             $menu           = add_submenu_page( 'hrm_employee', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
             $attendance     = add_submenu_page( 'hrm_employee', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
@@ -168,36 +194,32 @@ class Wp_Hrm {
 
 
     function admin_page_handler() {
+        if( !is_user_logged_in() ) {
+            sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
+            return;
+        }
         $current_user_id = get_current_user_id();
         $user_status = get_user_meta( $current_user_id, '_status', true );
 
         if ( $user_status == 'no' ) {
-            _e( '<div class="wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
+            _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
             return;
         }
 
-        $page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+        $menu       = hrm_page();
+        $query_args = hrm_get_query_args();
+        $page       = $query_args['page'];
+        $tab        = $query_args['tab'];
+        $subtab     = $query_args['subtab'];
 
-        if ( $page == 'hrm_management' ) {
-            require_once dirname (__FILE__) . '/views/admin/header.php';
-
-        } else if ( $page == 'hrm_pim' && ! isset( $_GET['employee_id'] ) ) {
-            require_once dirname (__FILE__) . '/views/pim/header.php';
-
-        } else if ( ( $page == 'hrm_pim' )  && isset( $_GET['employee_id'] ) ) {
-            require_once dirname (__FILE__) . '/views/employee/header.php';
-
-        } else if ( $page == 'hrm_leave' ) {
-            require_once dirname (__FILE__) . '/views/leave/header.php';
-
-        } else if ( $page == 'hrm_recruitment' ) {
-            require_once dirname (__FILE__) . '/views/recruitment/header.php';
-
-        } else if ( $page == 'hrm_employee' ) {
-            require_once dirname (__FILE__) . '/views/employee/header.php';
-        } else if ( $page == 'hrm_time' ) {
-            require_once dirname (__FILE__) . '/views/time/header.php';
+        if ( $page == 'hrm_author' ) {
+            require_once dirname (__FILE__) . '/templates/author/header.php';
+            return;
         }
+
+        echo '<div class="hrm wrap" id="hrm">';
+        Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+        echo '</div>';
     }
 }
 

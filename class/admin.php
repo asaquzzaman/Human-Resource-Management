@@ -6,7 +6,7 @@ class Hrm_Admin {
 
     public static function getInstance() {
         if ( !self::$_instance ) {
-            self::$_instance = new hrm_Admin();
+            self::$_instance = new Hrm_Admin();
         }
 
         return self::$_instance;
@@ -15,7 +15,7 @@ class Hrm_Admin {
 
     function __construct() {
 
-        add_action( 'admin_init', array($this, 'admin_init_action') );
+        add_action( 'init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
     }
@@ -25,13 +25,13 @@ class Hrm_Admin {
         $offset  = ( $pagenum - 1 ) * $limit;
 
         $arg = array(
-            'meta_key'     => 'hrm_admin_level',
-            'meta_value'   => 'admin',
-            'meta_compare' => '=',
-            'search'       => $search,
-            'count_total'  => true,
-            'offset'       => $offset,
-            'posts_per_page'       => $limit,
+            'meta_key'       => 'hrm_admin_level',
+            'meta_value'     => 'admin',
+            'meta_compare'   => '=',
+            'search'         => $search,
+            'count_total'    => true,
+            'offset'         => $offset,
+            'number' => $limit,
         );
 
         return new WP_User_Query( $arg );
@@ -391,11 +391,11 @@ class Hrm_Admin {
             $task_budget = empty( $task_budget ) ? '0' : $task_budget;
             $assign_to = get_post_meta($result->ID, '_assigned', true);
             $user = get_user_by( 'id', $assign_to );
-            $url = admin_url( 'admin.php?' ) . 'page=hrm_pim&employee_id='.$assign_to.'&tab=my_task';
+            $url = hrm_task_assing_user_url( 'hrm_pim', 'my_task', $assign_to );
             ?>
             <div class="hrm-task-wrap">
                 <div class="hrm-task-title-wrap">
-                    <div style="float: left;">
+                    <div class="hrm-task-content">
                         <a href="#" class="hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><strong><?php echo $result->post_title; ?></strong></a>
                         <div>
                             <strong><?php _e( 'Task Budget: ' ); ?></strong><?php echo $currency_symbol . $task_budget; ?>
@@ -405,13 +405,14 @@ class Hrm_Admin {
                             <a href="<?php echo $url; ?>"><?php echo $user->display_name; ?></a>
                         </div>
                     </div>
-                    <div style="float: right;">
+                    <div class="hrm-task-avatar">
                         <a href="<?php echo $url; ?>"><?php echo get_avatar( $user->ID, '32' ); ?></a>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
 
                 <div class="hrm-task-status-desc">
+                    <div data-task_assign="<?php echo $assign_to; ?>" data-task_id="<?php echo $result->ID; ?>" data-project_id="<?php echo $project_id; ?>" class="hrm-delete-task"><?php _e( 'Delete', 'cpm' ); ?></div>
                     <div class="hrm-task-desc" data-task_id="<?php echo $result->ID; ?>"><a href="#"><?php _e( 'Description', 'hrm' ); ?></a></div>
                     <?php echo $this->get_task_status( $result->ID ); ?>
 
@@ -1288,8 +1289,6 @@ class Hrm_Admin {
             );
         }
 
-
-
         $hidden_form['action'] = 'update_user_role';
 
         $hidden_form['header'] = 'Create Admin';
@@ -1307,35 +1306,43 @@ class Hrm_Admin {
 
     function get_co_worker_field( $display_name, $user_id, $value = null ) {
         $name = str_replace(' ', '_', $display_name );
+        $user = get_user_by( 'id', $user_id );
+
+        $fields = array();
+        if ( reset( $user->roles ) != 'hrm_employee' ) {
+            $fields[] = array(
+                'label'   => __( 'Manager', 'hrm' ),
+                'id'      => 'hrm-manager-'.$name,
+                'value'   => 'manager',
+                'checked' => isset( $value ) ? $value : '',
+            );
+
+            $fields[] = array(
+                'label'   => __( 'Client', 'hrm' ),
+                'id'      => 'hrm-client-'.$name,
+                'value'   => 'client',
+                'checked' => isset( $value ) ? $value : '',
+            );
+        }
+
+        $fields[] = array(
+            'label'   => __( 'Co-worker', 'hrm' ),
+            'id'      => 'hrm-co-worker-'.$name,
+            'value'   => 'co_worker',
+            'checked' => isset( $value ) ? $value : 'co_worker',
+        );
+
         return $hidden_form = array(
-            'label' => $display_name,
-            'type' => 'radio',
-            'desc' => 'Choose access permission',
-            'fields' => array(
-                array(
-                    'label' => __( 'Manager', 'hrm' ),
-                    'id' => 'hrm-manager-'.$name,
-                    'value' => 'manager',
-                    'checked' => isset( $value ) ? $value : '',
-                ),
-                array(
-                    'label' => __( 'Co-worker', 'hrm' ),
-                    'id' => 'hrm-co-worker-'.$name,
-                    'value' => 'co_worker',
-                    'checked' => isset( $value ) ? $value : 'co_worker',
-                ),
-                array(
-                    'label' => __( 'Client', 'hrm' ),
-                    'id' => 'hrm-client-'.$name,
-                    'value' => 'client',
-                    'checked' => isset( $value ) ? $value : '',
-                ),
-            ),
+            'label'  => $display_name,
+            'type'   => 'radio',
+            'desc'   => 'Choose access permission',
+            'fields' => $fields,
         );
     }
 
-    function project_user_meta( $display_name, $user_id ) {
+    function project_user_meta( $display_name, $user_id, $user ) {
         $form = $this->get_co_worker_field( $display_name, $user_id );
+
         ob_start();
             echo hrm_settings::getInstance()->radio_field( 'role['.$user_id.']', $form );
 

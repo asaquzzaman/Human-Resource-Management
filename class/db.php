@@ -12,6 +12,17 @@ class Hrm_Db {
         $this->pim();
         $this->time();
         $this->employer();
+        $this->worker_evaluation();
+    }
+
+    function worker_evaluation() {
+        $table_option['table_option'] = array(
+            'from_date' => 'from_date',
+            'to_date'   => 'to_date',
+        );
+        $table_option_name = 'hrm_rating_record';
+
+        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function employer() {

@@ -1,11 +1,16 @@
 <?php
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
+$pagenum     = hrm_pagenum();
+$limit       = '20000';
 
-    $results = hrm_Settings::getInstance()->search_query( $limit );
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $post = $_POST;
+    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
+    $search_satus = true;
+
 } else {
-    $results = hrm_Settings::getInstance()->hrm_query( 'hrm_notice', $limit );
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_notice', $limit, $pagenum );
+    $search_satus = false;
 }
 
 $total = $results['total_row'];
@@ -15,6 +20,11 @@ $search['title'] = array(
     'label' => __( 'Title', 'hrm' ),
     'type' => 'text',
     'desc' => 'please insert title',
+);
+
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
 );
 
 $search['action'] = 'hrm_search';
@@ -55,10 +65,26 @@ foreach ( $results as $key => $value ) {
 		<?php
 			if ( isset( $value->date ) && !empty( $value->date ) ) {
 				?>
-				<div class="hrm-text-wrap"><strong class="hrm-text-label"><?php _e( 'State/Province', 'hrm' ); ?></strong><div class="hrm-text-info"><?php echo get_date2mysql( $value->date ); ?></div><div class="hrm-clear"></div></div>
+				<div class="hrm-text-wrap"><strong class="hrm-text-label"><?php _e( 'State/Province', 'hrm' ); ?></strong><div class="hrm-text-info"><?php echo hrm_get_date2mysql( $value->date ); ?></div><div class="hrm-clear"></div></div>
 				<?php
 			}
 		?>
 	</div>
 	<?php
 }
+$file_path = urlencode(__FILE__);
+?>
+
+<script type="text/javascript">
+    jQuery(function($) {
+        hrm_dataAttr = {
+			page: '<?php echo $page; ?>',
+			tab: '<?php echo $tab; ?>',
+			subtab: '<?php echo $subtab; ?>',
+			req_frm: '<?php echo $file_path; ?>',
+			limit: '<?php echo $limit; ?>',
+			search_satus: '<?php echo $search_satus; ?>',
+			subtab: true
+        };
+    });
+</script>

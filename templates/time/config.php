@@ -1,4 +1,4 @@
-<div class="hrm-error-notification"></div>
+<div class="hrm-update-notification"></div>
 <div id="hrm-admin-role"></div>
 <?php
 $jk = get_option( 'pro_test_role' );
@@ -49,9 +49,8 @@ $table['add_button']    = false;
 $table['delete_button'] = false;
 
 echo Hrm_Settings::getInstance()->table( $table );
-
-?>
-<?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+$file_path = urlencode(__FILE__);
+$url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -60,7 +59,12 @@ echo Hrm_Settings::getInstance()->table( $table );
            class_name : 'Hrm_Time',
            redirect : '<?php echo $url; ?>',
            function_name : 'role_permission',
-           tab: '<?php echo $tab; ?>'
+           tab: '<?php echo $tab; ?>',
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           subtab: true
         };
     });
 </script>

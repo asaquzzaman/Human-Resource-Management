@@ -8,6 +8,6 @@ if ( file_exists( $header_path ) ) {
 
 ?>
 <!-- default $this for class hrm_Admin, $tab; -->
-<div class="hrm-personal">
+<div class="hrm-personal" id="hrm-subtab-wrap">
     <?php Hrm_Settings::getInstance()->show_sub_tab_page( $page, $tab, $subtab ); ?>
 </div>

@@ -174,9 +174,9 @@ class Hrm_Leave {
 
         $holiday['from'] = array(
             'label' =>  __( 'From', 'hrm' ),
-            'class' => 'hrm-datepicker',
+            'class' => 'hrm-datepicker-from',
             'type'  => 'text',
-            'value' => isset( $field_value['from'] ) ? hrm_date2mysql( $field_value['from'] ) : '',
+            'value' => isset( $field_value['from'] ) ? hrm_get_date2mysql( $field_value['from'] ) : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,
@@ -186,9 +186,9 @@ class Hrm_Leave {
 
         $holiday['to'] = array(
             'label' =>  __( 'To', 'hrm' ),
-            'class' => 'hrm-datepicker',
+            'class' => 'hrm-datepicker-to',
             'type'  => 'text',
-            'value' => isset( $field_value['to'] ) ? hrm_date2mysql( $field_value['to'] ) : '',
+            'value' => isset( $field_value['to'] ) ? hrm_get_date2mysql( $field_value['to'] ) : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,
@@ -310,7 +310,7 @@ class Hrm_Leave {
         );
         $field['from'] = array(
             'label' => __( 'From Date', 'hrm' ),
-            'class' => 'hrm-datepicker',
+            'class' => 'hrm-datepicker-leave-from',
             'required' => 'required',
             'extra' => array(
                 'data-hrm_validation' => true,
@@ -318,12 +318,12 @@ class Hrm_Leave {
                 'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
             ),
             'type'  => 'text',
-            'value' => isset( $field_value['from'] ) ? hrm_date2mysql( $field_value['from'] ) : ''
+            'value' => isset( $field_value['from'] ) ? hrm_get_date2mysql( $field_value['from'] ) : ''
         );
 
         $field['to'] = array(
             'label' => __( 'To Date', 'hrm' ),
-            'class' => 'hrm-datepicker',
+            'class' => 'hrm-datepicker-leave-to',
             'required' => 'required',
             'extra' => array(
                 'data-hrm_validation' => true,
@@ -331,7 +331,7 @@ class Hrm_Leave {
                 'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
             ),
             'type'  => 'text',
-            'value' => isset( $field_value['to'] ) ? hrm_date2mysql( $field_value['to'] ) : ''
+            'value' => isset( $field_value['to'] ) ? hrm_get_date2mysql( $field_value['to'] ) : ''
         );
 
         $field['comment'] = array(

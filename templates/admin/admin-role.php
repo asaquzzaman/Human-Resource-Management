@@ -1,4 +1,4 @@
-<div class="hrm-error-notification"></div>
+<div class="hrm-update-notification"></div>
 <div id="hrm-admin-role"></div>
 <?php
 $jk = get_option( 'pro_test_role' );
@@ -46,6 +46,7 @@ foreach ( $role_names as $name => $display_name) {
     );
 }
 $del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
+$table = array();
 $table['head']       = array( $del_checkbox, 'User Role', 'Display Name' );
 $table['body']       = isset( $body ) ? $body : array();
 
@@ -60,7 +61,7 @@ $table['tab']        = $tab;
 $table['subtab']     = $subtab;
 
 echo Hrm_Settings::getInstance()->table( $table );
-
+$file_path = urlencode(__FILE__);
 ?>
 <?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
 <script type="text/javascript">
@@ -71,6 +72,11 @@ echo Hrm_Settings::getInstance()->table( $table );
            class_name : 'Hrm_Admin',
            redirect : '<?php echo $url; ?>',
            function_name : 'admin_role_form',
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           subtab: true
         };
     });
 </script>

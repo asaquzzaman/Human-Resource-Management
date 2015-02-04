@@ -124,7 +124,7 @@ class Hrm_Employee {
 
         $hidden_form['emp_id'] = array(
             'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['emp_id'] ) ? $_POST['hrm_dataAttr']['emp_id'] : '',
+            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
         $hidden_form['education_id'] = array(
@@ -204,7 +204,7 @@ class Hrm_Employee {
 
         $hidden_form['emp_id'] = array(
             'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['emp_id'] ) ? $_POST['hrm_dataAttr']['emp_id'] : '',
+            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
         $hidden_form['company_name'] = array(
@@ -274,7 +274,7 @@ class Hrm_Employee {
 
         $hidden_form['emp_id'] = array(
             'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['emp_id'] ) ? $_POST['hrm_dataAttr']['emp_id'] : '',
+            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
         $hidden_form['skill_id'] = array(
@@ -291,7 +291,7 @@ class Hrm_Employee {
 
         $hidden_form['years_of_exp'] = array(
             'label' =>  __( 'Years of experiance', 'hrm' ),
-            'class' => 'hrm-datepicker',
+            //'class' => 'hrm-datepicker',
             'type' => 'text',
             'value' => isset( $field_data['years_of_exp'] ) ?  $field_data['years_of_exp'] : '',
         );
@@ -327,7 +327,7 @@ class Hrm_Employee {
 
         $hidden_form['emp_id'] = array(
             'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['emp_id'] ) ? $_POST['hrm_dataAttr']['emp_id'] : '',
+            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
         $hidden_form['language_id'] = array(
@@ -418,49 +418,49 @@ class Hrm_Employee {
         }
 
         $field['emp_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['emp_id'] ) ? $_POST['hrm_dataAttr']['emp_id'] : '',
+            'type'  => 'hidden',
+            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
         $field['pay_grade'] = array(
-            'label' => __( 'Pay Grade', 'hrm' ),
-            'type' => 'select',
-            'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['pay_grade'] ) ),
+            'label'    => __( 'Pay Grade', 'hrm' ),
+            'type'     => 'select',
+            'option'   => json_decode( stripcslashes( $_POST['hrm_dataAttr']['pay_grade_js'] ) ),
             'selected' => isset( $field_value->pay_grade ) ? $field_value->pay_grade : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['component'] = array(
             'label' => __( 'Salary Component', 'hrm' ),
-            'type' => 'text',
+            'type'  => 'text',
             'value' => isset( $field_value['component'] ) ? $field_value['component'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['frequency'] = array(
-            'label' => __( 'Pay Frequency', 'hrm' ),
-            'type' => 'select',
-            'option' => $this->pay_frequency(),
+            'label'    => __( 'Pay Frequency', 'hrm' ),
+            'type'     => 'select',
+            'option'   => $this->pay_frequency(),
             'selected' => isset( $field_value['frequency'] ) ? $field_value['frequency'] : ''
         );
 
         $field['currency'] = array(
-            'label' => __( 'Currency', 'hrm' ),
-            'type' => 'select',
-            'option' => hrm_Settings::getInstance()->get_currency_list(),
+            'label'    => __( 'Currency', 'hrm' ),
+            'type'     => 'select',
+            'option'   => hrm_Settings::getInstance()->get_currency_list(),
             'selected' => isset( $field_value['currency'] ) ? $field_value['currency'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
@@ -468,30 +468,30 @@ class Hrm_Employee {
 
         $field['amount'] = array(
             'label' => __( 'Amount', 'hrm' ),
-            'type' => 'text',
+            'type'  => 'text',
             'value' => isset( $field_value['amount'] ) ? $field_value['amount'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['comments'] = array(
             'label' => __( 'Comments', 'hrm' ),
-            'type' => 'textarea',
+            'type'  => 'textarea',
             'value' => isset( $field_value['comments'] ) ? $field_value['comments'] : ''
         );
 
         $field['direct_deposit'] = array(
             'label' => __( 'Deposit', 'hrm' ),
-            'type' => 'checkbox',
+            'type'  => 'checkbox',
             'fields' => array(
                 array(
-                    'label' => __( 'Add Direct Deposit Details ', 'hrm' ),
-                    'class' => 'hrm-direct-deposit-handelar',
-                    'value' => 'yes',
-                    'checked'=> isset( $field_value['direct_deposit'] ) ? $field_value['direct_deposit'] : '',
+                    'label'   => __( 'Add Direct Deposit Details ', 'hrm' ),
+                    'class'   => 'hrm-direct-deposit-handelar',
+                    'value'   => 'yes',
+                    'checked' => isset( $field_value['direct_deposit'] ) ? $field_value['direct_deposit'] : '',
                     'extra' => array(
                         'data-direct_deposit' => 'checked',
                     ),
@@ -503,66 +503,66 @@ class Hrm_Employee {
         $field['account_number'] = array(
             'label' => __( 'Account Number', 'hrm' ),
             'class' => 'hrm-direct-deposit-part',
-            'type' => 'text',
+            'type'  => 'text',
             'value' => isset( $field_value['account_number'] ) ? $field_value['account_number'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_dependency' => 'direct_deposit',
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_dependency'         => 'direct_deposit',
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['account_type'] = array(
-            'label' => __( 'Account Type', 'hrm' ),
-            'type' => 'select',
-            'class' => 'hrm-direct-deposit-part',
-            'option' => $this->account_type(),
+            'label'    => __( 'Account Type', 'hrm' ),
+            'type'     => 'select',
+            'class'    => 'hrm-direct-deposit-part',
+            'option'   => $this->account_type(),
             'selected' => isset( $field_value['account_type'] ) ? $field_value['account_type'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_dependency' => 'direct_deposit',
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_dependency'         => 'direct_deposit',
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['routing'] = array(
             'label' => __( 'Routing Number', 'hrm' ),
-            'type' => 'text',
+            'type'  => 'text',
             'class' => 'hrm-direct-deposit-part',
             'value' => isset( $field_value['routing'] ) ? $field_value['routing'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_dependency' => 'direct_deposit',
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_dependency'         => 'direct_deposit',
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
         $field['dipo_amount'] = array(
             'label' => __( 'Amount', 'hrm' ),
-            'type' => 'text',
+            'type'  => 'text',
             'class' => 'hrm-direct-deposit-part',
             'value' => isset( $field_value['dipo_amount'] ) ? $field_value['dipo_amount'] : '',
             'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_dependency' => 'direct_deposit',
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_dependency'         => 'direct_deposit',
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
             ),
         );
 
-        $field['header'] = 'Salary';
-        $field['action'] = 'ajax_referer_insert';
+        $field['header']       = 'Salary';
+        $field['action']       = 'ajax_referer_insert';
         $field['table_option'] = 'hrm_salary';
-        $field['url'] = $redirect;
+        $field['url']          = $redirect;
 
         ob_start();
         echo hrm_Settings::getInstance()->hidden_form_generator( $field );
 
         $return_value = array(
-            'append_data' => ob_get_clean(),
+            'append_data'     => ob_get_clean(),
             'personal_salary' => true
         );
 

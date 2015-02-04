@@ -1,20 +1,19 @@
-<div class="hrm-error-notification"></div>
+<div class="hrm-update-notification"></div>
 <?php
+
 if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employer_id = get_current_user_id();
 } else {
-    $employer_id = isset( $_GET['employee_id'] ) ? trim( $_GET['employee_id'] ) : '';
+    $employer_id = isset( $_REQUEST['employee_id'] ) ? trim( $_REQUEST['employee_id'] ) : '';
 }
 ?>
 <div id="hrm_personal_salary"></div>
 <?php
 
-
-$results = hrm_Settings::getInstance()->conditional_query_val( 'hrm_salary', $field = '*', $compare = array( 'emp_id' => $employer_id ) );
-
+$results     = hrm_Settings::getInstance()->conditional_query_val( 'hrm_salary', $field = '*', $compare = array( 'emp_id' => $employer_id ) );
 $pary_grades = hrm_Settings::getInstance()->hrm_query( 'hrm_pay_grade' );
-unset( $pary_grades['total_row'] );
 
+unset( $pary_grades['total_row'] );
 
 foreach ( $pary_grades as $key => $pary_grade ) {
     $pay_grade_label[$pary_grade->id] = $pary_grade->name;
@@ -60,6 +59,7 @@ foreach ( $results as $key => $value) {
     );
 }
 $input_field = ( $page == 'hrm_pim' ) ? '<input type="checkbox">' : '';
+$table = array();
 $table['head'] = array(
     $input_field,
     __( 'Pay Grade', 'hrm'),
@@ -70,28 +70,26 @@ $table['head'] = array(
     __( 'Comments', 'hrm'),
     __( 'Direct Deposit Details', 'hrm'),
 );
-$table['body'] = isset( $body ) ? $body : array();
-
-
-$table['td_attr'] = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr'] = array( 'class="check-column"' );
+$table['body']       = isset( $body ) ? $body : array();
+$table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
+$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
+$table['table']      = 'hrm_salary';
+$table['action']     = 'hrm_delete';
+$table['tab']        = $tab;
+$table['subtab']     = $subtab;
 
-$table['table'] = 'hrm_qualification_languages';
-$table['action'] = 'hrm_delete';
-$table['table_attr'] = array( 'class' => 'widefat' );
-$table['tab'] = $tab;
-$table['subtab'] = $subtab;
 if ( $page == 'hrm_employee') {
-    $table['add_button'] = false;
+    $table['add_button']    = false;
     $table['delete_button'] = false;
 }
 
 
 echo hrm_Settings::getInstance()->table( $table );
 
+$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id;
+$file_path = urlencode(__FILE__);
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id; ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -100,8 +98,13 @@ echo hrm_Settings::getInstance()->table( $table );
            class_name : 'hrm_Employee',
            function_name : 'salary',
            redirect : '<?php echo $url; ?>',
-           pay_grade: '<?php echo json_encode( $pay_grade_label ); ?>',
-           emp_id: "<?php echo $employer_id; ?>"
+           pay_grade_js: '<?php echo json_encode( $pay_grade_label ); ?>',
+           employee_id: "<?php echo $employer_id; ?>",
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           subtab: true
         };
     });
 </script>
@@ -115,7 +118,6 @@ echo hrm_Settings::getInstance()->table( $table );
             width: 485,
             height: 425,
             position:['middle', 100],
-
             zIndex: 9999,
 
         });

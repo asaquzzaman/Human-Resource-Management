@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <?php
 if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employee_id = get_current_user_id();
@@ -52,7 +53,7 @@ $field['birthday'] = array(
     'label' => __( 'Birthday', 'hrm' ),
     'type'  => 'text',
     'class' => 'hrm-datepicker',
-    'value' => get_date2mysql( $this->get_emp_meta( $employee_id, '_birthday' ) ),
+    'value' => hrm_get_date2mysql( $this->get_emp_meta( $employee_id, '_birthday' ) ),
 );
 
 $field['street1'] = array(

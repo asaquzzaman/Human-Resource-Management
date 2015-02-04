@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <?php
 
 if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {

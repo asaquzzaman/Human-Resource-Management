@@ -1,13 +1,10 @@
 <?php
-$menu = hrm_page();
+$menu   = hrm_page();
 ?>
 <h2 class="nav-tab-wrapper">
     <?php
 
     foreach ( $menu[$page] as $key => $tab_event ) {
-        if ( isset( $tab_event['nested_tab'] ) && $tab_event['nested_tab'] === true ) {
-            continue;
-        }
 
         $active = ( $tab == $key ) ? 'nav-tab-active' : '';
         $url = hrm_tab_menu_url( $key, $page );
@@ -19,10 +16,12 @@ $menu = hrm_page();
 <?php
 if ( ! $subtab ) {
    if( !isset( $menu[$page][$tab]['submenu'] ) ) {
+        echo '<h3 class="hrm-sub-nav"></h3>';
         return;
     }
 
     if ( !count( $menu[$page][$tab]['submenu'] ) ) {
+        echo '<h3 class="hrm-sub-nav"></h3>';
         return;
     }
 

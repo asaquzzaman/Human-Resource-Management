@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <!-- default instance $instance = hrm_Admin::getInstance(); -->
 <?php
 if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
@@ -10,12 +11,14 @@ $country = Hrm_Settings::getInstance()->country_list();
 $search['name'] = array(
     'label' => __( 'Name', 'hrm' ),
     'type' => 'text',
+    'value' => isset( $_POST['name'] ) ? $_POST['name'] : '',
     'desc' => __( 'Location search by name', 'hrm' ),
 );
 
 $search['city'] = array(
     'label' => __( 'City', 'hrm' ),
     'type' => 'text',
+    'value' => isset( $_POST['city'] ) ? $_POST['city'] : '',
     'desc' => __( 'Location search by city', 'hrm' ),
 );
 
@@ -30,29 +33,38 @@ $search['country'] = array(
 $search['phone'] = array(
     'label' => __( 'Phone Number', 'hrm' ),
     'type' => 'text',
+    'value' => isset( $_POST['phone'] ) ? $_POST['phone'] : '',
     'desc' => __( 'Location search by phone number', 'hrm' ),
 );
 $search['table_option'] = 'hrm_location_option';
 $search['action'] = 'hrm_search';
 
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
+);
+
+
 echo Hrm_settings::getInstance()->get_serarch_form( $search, __( 'Location', 'hrm' ) );
-?>
- <?php
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
 
-    $limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-    if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
-        $results = Hrm_Settings::getInstance()->search_query( $limit );
 
-    } else {
-        $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit );
-    }
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $post = $_POST;
+    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
+    $search_satus = true;
+} else {
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit, $pagenum );
+    $search_satus = false;
+}
 
-    if( isset( $results['total_row'] ) ) {
-        $total = $results['total_row'];
-        unset( $results['total_row'] );
-    } else {
-        $total = 0;
-    };
+if( isset( $results['total_row'] ) ) {
+    $total = $results['total_row'];
+    unset( $results['total_row'] );
+} else {
+    $total = 0;
+};
 
 ?>
 <div class="hrm-location">
@@ -91,6 +103,7 @@ echo Hrm_settings::getInstance()->get_serarch_form( $search, __( 'Location', 'hr
         }
 
         $del_checkbox = ( $delete_permission ) ? '<input type="checkbox">' : '';
+        $table = array();
         $table['head'] = array( $del_checkbox, 'Name', 'City', 'Country', 'Phone' );
         $table['body'] = isset( $body ) ? $body : '';
 
@@ -115,20 +128,30 @@ echo Hrm_settings::getInstance()->get_serarch_form( $search, __( 'Location', 'hr
 
    <?php
 
-        echo Hrm_Settings::getInstance()->pagination( $total, $limit );
+        echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
    ?>
 </div>
 
-<?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+<?php
+$file_path = urlencode(__FILE__);
+$url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+?>
 
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
-           add_form_generator_action : 'add_form',
-           add_form_apppend_wrap : 'hrm-admin-location',
-           class_name : 'Hrm_Admin',
-           redirect : '<?php echo $url; ?>',
-           function_name : 'admin_location',
+            add_form_generator_action : 'add_form',
+            add_form_apppend_wrap : 'hrm-admin-location',
+            class_name : 'Hrm_Admin',
+            redirect : '<?php echo $url; ?>',
+            function_name : 'admin_location',
+            page: '<?php echo $page; ?>',
+            tab: '<?php echo $tab; ?>',
+            subtab: '<?php echo $subtab; ?>',
+            req_frm: '<?php echo $file_path; ?>',
+            limit: '<?php echo $limit; ?>',
+            search_satus: '<?php echo $search_satus; ?>',
+            subtab: true
         };
     });
 </script>

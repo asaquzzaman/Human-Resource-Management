@@ -17,6 +17,134 @@ class Hrm_Time {
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
     }
 
+    function get_individulat_punch( $post, $limit, $pagenum ) {
+
+        if ( isset( $post['from_date'] ) && isset( $post['to_date'] ) ) {
+            if ( !empty( $post['from_date'] ) && !empty( $post['to_date'] ) ) {
+                if ( strtotime( $post['from_date'] ) > strtotime( $post['to_date'] ) ) {
+                    return false;
+                }
+            }
+        }
+
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        $args = array(
+            'post_type'      => 'hrm_punch',
+            'post_status'    => 'publish',
+            'author'         => get_current_user_id(),
+            'posts_per_page' => $limit,
+            'offset'         => $offset
+        );
+        $post_date = false;
+        if ( isset( $post['from_date'] ) && isset( $post['to_date'] ) && !empty( $post['from_date'] ) && !empty( $post['to_date'] ) ) {
+
+            $from_date = $post['from_date'];
+            $to_date = $post['to_date'];
+
+            $args['date_query'] = array(
+                'after'     => array(
+                    'year'  => date( 'Y', strtotime( $from_date ) ),
+                    'month' => date( 'm', strtotime( $from_date ) ),
+                    'day'   => date( 'd', strtotime( $from_date ) ),
+                ),
+                'before'    => array(
+                    'year'  => date( 'Y', strtotime( $to_date ) ),
+                    'month' => date( 'm', strtotime( $to_date ) ),
+                    'day'   => date( 'd', strtotime( $to_date ) ),
+                ),
+                'inclusive' => true,
+            );
+        } else {
+            if ( isset( $post['from_date'] ) && !empty( $post['from_date'] ) ) {
+                $post_date = $post['from_date'];
+            }
+
+            if ( isset( $post['to_date'] ) && !empty( $post['to_date'] ) ) {
+                $post_date = $post['to_date'];
+            }
+
+            if ( $post_date ) {
+                $args['date_query'] = array(
+                    'year'  => date( 'Y', strtotime($post_date) ),
+                    'month' => date( 'm', strtotime($post_date) ),
+                    'day'   => date( 'd', strtotime($post_date) ),
+                );
+            }
+        }
+        //var_dump( $args ); die();
+        return new WP_Query($args);
+    }
+
+    function search_punch_in_out_recored( $post, $limit, $pagenum ) {
+        $user_id = isset( $post['user_id'] ) ? $post['user_id'] : false;
+        //var_dump( $post ); die();
+        if ( !$user_id ) {
+            $user_id = isset( $post['user_id_js'] ) ? $post['user_id_js'] : false;
+        }
+
+        if ( !$user_id ) {
+            return false;
+        }
+
+        if ( isset( $post['from_date'] ) && isset( $post['to_date'] ) ) {
+            if ( !empty( $post['from_date'] ) && !empty( $post['to_date'] ) ) {
+                if ( strtotime( $post['from_date'] ) > strtotime( $post['to_date'] ) ) {
+                    return false;
+                }
+            }
+        }
+
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        $args = array(
+            'post_type'      => 'hrm_punch',
+            'post_status'    => 'publish',
+            'author'         => $user_id,
+            'posts_per_page' => $limit,
+            'offset'         => $offset
+        );
+        $post_date = false;
+        if ( isset( $post['from_date'] ) && isset( $post['to_date'] ) && !empty( $post['from_date'] ) && !empty( $post['to_date'] ) ) {
+
+            $from_date = $post['from_date'];
+            $to_date = $post['to_date'];
+
+            $args['date_query'] = array(
+                'after'     => array(
+                    'year'  => date( 'Y', strtotime( $from_date ) ),
+                    'month' => date( 'm', strtotime( $from_date ) ),
+                    'day'   => date( 'd', strtotime( $from_date ) ),
+                ),
+                'before'    => array(
+                    'year'  => date( 'Y', strtotime( $to_date ) ),
+                    'month' => date( 'm', strtotime( $to_date ) ),
+                    'day'   => date( 'd', strtotime( $to_date ) ),
+                ),
+                'inclusive' => true,
+            );
+        } else {
+            if ( isset( $post['from_date'] ) && !empty( $post['from_date'] ) ) {
+                $post_date = $post['from_date'];
+            }
+
+            if ( isset( $post['to_date'] ) && !empty( $post['to_date'] ) ) {
+                $post_date = $post['to_date'];
+            }
+
+            if ( $post_date ) {
+                $args['date_query'] = array(
+                    'year'  => date( 'Y', strtotime($post_date) ),
+                    'month' => date( 'm', strtotime($post_date) ),
+                    'day'   => date( 'd', strtotime($post_date) ),
+                );
+            }
+        }
+        //var_dump( $args ); die();
+        return new WP_Query($args);
+
+    }
+
     function generate_edit_form( $post ) {
         $post_id = $post['post_id'];
         $post = get_post( $post_id );
@@ -63,6 +191,11 @@ class Hrm_Time {
             'value' => !empty( $punch_out_time ) ? date( 'h:i:s a', $punch_out_time ) : ''
         );
 
+        $form['type'] = array(
+            'type'  => 'hidden',
+            'value' => '_search'
+        );
+
 
         $form['punch_out_note'] = array(
             'label' => __( 'Punch Out Note', 'hrm' ),
@@ -100,7 +233,7 @@ class Hrm_Time {
     }
 
     function new_punch_in($post) {
-        $user_id = ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : get_current_user_id();
+        $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
 
         $post_arg = array(
             'post_type' => 'hrm_punch',
@@ -163,17 +296,22 @@ class Hrm_Time {
 
         $form['user_id'] = array(
             'type' => 'hidden',
-            'value' => ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['hrm_dataAttr']['user_id'] ) : '0',
+            'value' => isset( $_POST['hrm_dataAttr']['user_id_js'] )  ? intval( $_POST['hrm_dataAttr']['user_id_js'] ) : '0',
         );
         $form[] = array(
             'type' => 'descriptive',
             'label'=> __( 'Date', 'hrm' ),
-            'value' => get_date2mysql( current_time('mysql') )
+            'value' => hrm_get_date2mysql( current_time('mysql') )
         );
         $form[] = array(
             'type' => 'descriptive',
             'label'=> __( 'Time', 'hrm' ),
             'value' => hrm_get_time( current_time('mysql'), true )
+        );
+
+        $form['type'] = array(
+            'type'  => 'hidden',
+            'value' => '_search'
         );
 
 
@@ -199,7 +337,8 @@ class Hrm_Time {
 
     function punch_out_form() {
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        $user_id = ( isset( $_POST['user_id'] ) && $_POST['user_id'] ) ? intval( $_POST['hrm_dataAttr']['user_id'] ) : false;
+        $user_id = isset( $_POST['hrm_dataAttr']['user_id_js'] ) ? intval( $_POST['hrm_dataAttr']['user_id_js'] ) : false;
+
         $form['user_id'] = array(
             'type' => 'hidden',
             'value' => $user_id,
@@ -229,6 +368,11 @@ class Hrm_Time {
             'value' => $post->ID
         );
 
+         $form['type'] = array(
+            'type'  => 'hidden',
+            'value' => '_search'
+        );
+
         $form[] = array(
             'type' => 'descriptive',
             'label'=> __( 'Punch in Time', 'hrm' ),
@@ -244,7 +388,7 @@ class Hrm_Time {
         $form[] = array(
             'type' => 'descriptive',
             'label'=> __( 'Date', 'hrm' ),
-            'value' => get_date2mysql( current_time('mysql') )
+            'value' => hrm_get_date2mysql( current_time('mysql') )
         );
         $form[] = array(
             'type' => 'descriptive',

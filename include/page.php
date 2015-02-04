@@ -174,6 +174,7 @@ function hrm_page() {
             'education' => array(
                 'id'        => 'hrm-personal-education',
                 'title'     => __( 'Education', 'hrm' ),
+                'file_slug' => 'employee/education',
                 'file_path' => $path . '/employee/education.php',
             ),
             'skill' => array(
@@ -218,6 +219,28 @@ function hrm_page() {
                 'file_path' => $path . '/employee/notice.php',
             ),
         ),
+    );
+
+    $hrm_file = hrm_file_page();
+
+    $page[$hrm_file]['share'] = array(
+        'follow_access_role' => false,
+        'nested_tab'         => true,
+        'id'                 => 'hrm-file-share',
+        'title'              => __( 'Share', 'hrm' ),
+        'file_slug'          => 'file/share',
+        'file_path'          => $path . '/file/share.php',
+        //'submenu'            => false,
+    );
+
+    $page[$hrm_file]['inbox'] = array(
+        'follow_access_role' => false,
+        'nested_tab'         => true,
+        'id'                 => 'hrm-file-inbox',
+        'title'              => __( 'Inbox', 'hrm' ),
+        'file_slug'          => 'file/inbox',
+        'file_path'          => $path . '/file/inbox.php',
+        //'submenu'            => false,
     );
 
     $page[$hrm_pim]['my_task'] = array(
@@ -400,5 +423,8 @@ function hrm_time_page() {
 
 function hrm_evaluation_page() {
     return 'hrm_evaluation';
+}
+function hrm_file_page() {
+    return 'hrm_file';
 }
 

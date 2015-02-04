@@ -57,7 +57,171 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_task_rating', array( $this, 'task_rating' ) );
         add_action( 'wp_ajax_delete_task', array( $this, 'task_delete' ) );
 
+        add_action( 'wp_ajax_hrm_ajax_upload', array( $this, 'ajax_upload' ) );
+        add_action( 'wp_ajax_hrm_delete_file', array( $this, 'hrm_delete_file' ) );
+        add_action( 'wp_ajax_file_upload', array( $this, 'file_upload' ) );
+        add_action( 'wp_ajax_edit_file', array( $this, 'edit_file' ) );
+        add_action( 'wp_ajax_file_search', array( $this, 'file_search' ) );
+        add_action( 'wp_ajax_file_delete', array( $this, 'file_delete' ) );
+        add_action( 'wp_ajax_delete_inbox_file', array( $this, 'delete_inbox_file' ) );
 
+        add_action( 'wp_ajax_pagination', array( $this, 'pagination' ) );
+        add_action( 'wp_ajax_view_pagination', array( $this, 'view_pagination' ) );
+
+        add_action( 'wp_ajax_project_search', array( $this, 'project_search' ) );
+        add_action( 'wp_ajax_hrm_search', array( $this, 'hrm_search' ) );
+
+
+    }
+
+    function hrm_search() {
+        check_ajax_referer('hrm_nonce');
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean() ) );
+    }
+
+    function project_search() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean() ) );
+    }
+
+    function file_delete() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
+        HRM_File::getInstance()->file_delete($post);
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array(  'success_msg' => __( 'Deleted successfull', 'hrm' ), 'content' => ob_get_clean() ) );
+    }
+
+    function file_search() {
+        check_ajax_referer('hrm_nonce');
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean() ) );
+    }
+
+    function view_pagination() {
+        check_ajax_referer('hrm_nonce');
+        $page    = $_POST['hrm_attr']['page'];
+        $tab     = $_POST['hrm_attr']['tab'];
+        $subtab  = $_POST['hrm_attr']['subtab'];
+        $req_frm = urldecode( $_POST['hrm_attr']['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean() ) );
+    }
+
+    function pagination() {
+        check_ajax_referer('hrm_nonce');
+        $page    = $_POST['hrm_attr']['page'];
+        $tab     = $_POST['hrm_attr']['tab'];
+        $subtab  = $_POST['hrm_attr']['subtab'];
+        $req_frm = urldecode( $_POST['hrm_attr']['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean() ) );
+
+    }
+
+    function delete_inbox_file() {
+        check_ajax_referer('hrm_nonce');
+
+        $file_ids = $_POST['hrm_check'];
+        $user_id = $_POST['user_id'];
+        HRM_File::getInstance()->delete_inbox_file( $file_ids, $user_id );
+
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean() ) );
+    }
+
+    function edit_file() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $edit_form = HRM_File::getInstance()->file_upload_form( $post );
+        wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'append_data' => $edit_form['append_data'], 'tinymce_id' => $edit_form['tinymce_id'] ) );
+    }
+
+    function file_upload() {
+        check_ajax_referer('hrm_nonce');
+        $post = $_POST;
+        $content = HRM_File::getInstance()->file_user_set( $post );
+        if ( $content ) {
+            wp_send_json_success( array( 'success_msg' => __( 'Updated successfully' ), 'content' => $content['content'] ) );
+        } else {
+            wp_send_json_error( array( 'error_msg' => __( 'No file found!', 'hrm' ) ) );
+        }
+
+    }
+
+    function hrm_delete_file() {
+        check_ajax_referer('hrm_nonce');
+
+        $file_id = (isset( $_POST['file_id'] )) ? intval( $_POST['file_id'] ) : 0;
+
+        HRM_File::getInstance()->delete_file( $file_id, true );
+
+        wp_send_json_success(array( 'success_msg' => __( 'Deleted successfull', 'hrm' ) ) );
+    }
+
+    function ajax_upload() {
+        check_ajax_referer('hrm_nonce');
+        $response = HRM_File::getInstance()->file_upload();
+
+        if ( $response['success'] ) {
+            $file = HRM_File::getInstance()->get_file( $response['file_id'] );
+
+            $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file button">%s</a>', $file['id'], __( 'Delete File', 'hrm' ) );
+            $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $file['id'] );
+            $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" /></a>', $file['url'], $file['thumb'], esc_attr( $file['name'] ) );
+
+            $html = '<div class="hrm-uploaded-item">' . $file_url . ' ' . $delete . $hidden . '</div>';
+            echo json_encode( array(
+                'success' => true,
+                'content' => $html
+            ) );
+
+            exit;
+        }
+
+        echo json_encode( array(
+            'success' => false,
+            'error' => $response['error']
+        ) );
+
+        exit;
     }
 
     function task_delete() {
@@ -105,9 +269,16 @@ class Hrm_Ajax {
         $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
 
         if ( count( $posts_id ) ) {
-            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ) ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'deleted successfully', 'hrm' ) ) );
         } else {
-            wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Failed to delete', 'hrm' ) ) );
         }
 
     }
@@ -124,7 +295,15 @@ class Hrm_Ajax {
         $edit_form = Hrm_Time::getInstance()->edit_attendance_save( $post );
         $url = $post['url'];
         if ( $edit_form ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
             wp_send_json_success( array(
+                'content' => ob_get_clean(),
                 'success_msg' => __( 'Successfully update punch', 'hrm' ),
             ));
         }
@@ -145,7 +324,15 @@ class Hrm_Ajax {
         $punch = Hrm_Time::getInstance()->new_punch_out($post);
         $url = $post['url'];
         if ( $punch ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
              wp_send_json_success( array(
+                'content' => ob_get_clean(),
                 'success_msg' => __( 'Successfully update punch', 'hrm' ),
                 'redirect' => $url
             ));
@@ -160,9 +347,15 @@ class Hrm_Ajax {
         $url = $post['url'];
 
         if ( $punch ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+            ob_start();
+                require_once $req_frm;
              wp_send_json_success( array(
+                'content' => ob_get_clean(),
                 'success_msg' => __( 'Successfully update puch', 'hrm' ),
-                'redirect' => $url
             ));
         }
     }
@@ -188,13 +381,18 @@ class Hrm_Ajax {
             Hrm_Evaluation::getInstance()->parent_rating_delete( $porject_id );
         }
 
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
         if ( $project_delete ) {
-            wp_send_json_success( array(
-                'msg' => __( 'Successfully deletet Project', 'hrm' )
-            ));
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'success_msg' => __( 'Deleted successfull', 'hrm' ), 'content' => ob_get_clean() ) );
         } else {
             wp_send_json_error( array(
-                'msg' => __( 'Failed to deletet employee', 'hrm' ),
+                'error_msg' => __( 'Failed to deletet employee', 'hrm' ),
             ));
         }
 
@@ -205,7 +403,7 @@ class Hrm_Ajax {
         $postdata = $_POST;
         if ( !isset( $postdata['hrm_check'] ) || !is_array( $postdata['hrm_check'] ) ) {
             wp_send_json_error( array(
-                'msg' => __( 'Failed to deletet employee', 'hrm' ),
+                'success_msg' => __( 'Failed to deletet employee', 'hrm' ),
             ));
         }
         $delete_user = false;
@@ -213,17 +411,26 @@ class Hrm_Ajax {
             $delete_user = hrm_Employee::getInstance()->delete_employee( $postdata['hrm_check'] );
         } else {
            wp_send_json_error( array(
-                'msg' => __( 'You do not have permission deletet employee', 'hrm' ),
+                'error_msg' => __( 'You do not have permission deletet employee', 'hrm' ),
             ));
         }
 
         if ( $delete_user ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+
             wp_send_json_success( array(
-                'msg' => __( 'Successfully deletet employee', 'hrm' ),
+                'content' => ob_get_clean(),
+                'success_msg' => __( 'Successfully deletet employee', 'hrm' ),
             ) );
         } else {
             wp_send_json_error( array(
-                'msg' => __( 'Failed to deletet employee', 'hrm' ),
+                'error_msg' => __( 'Failed to deletet employee', 'hrm' ),
             ));
         }
     }
@@ -267,7 +474,7 @@ class Hrm_Ajax {
         $id = $_POST['id'];
         $user = get_user_by( 'id', $id );
         $data = hrm_Employeelist::getInstance()->new_employee_form( $user );
-        wp_send_json_success( array( 'append_data' => $data ) );
+        wp_send_json_success( array('success_msg' => __( 'Update successfull', 'hrm' ), 'append_data' => $data ) );
     }
 
     function add_employer() {
@@ -280,7 +487,14 @@ class Hrm_Ajax {
         if ( isset( $user_id->errors ) ) {
             wp_send_json_error( array( 'error_msg' => __( 'User name or E-mail already exist', 'hrm' ), 'redirect' => $url ) );
         } else {
-            wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
         }
     }
 
@@ -289,9 +503,9 @@ class Hrm_Ajax {
         $postdata = $_POST;
         $update = hrm_Leave::getInstance()->update_leave_status( $postdata );
         if ( $update ) {
-            wp_send_json_success( array( 'msg' => __( 'Successfully update leave status', 'hrm' ) ) );
+            wp_send_json_success( array( 'success_msg' => __( 'Successfully update leave status', 'hrm' ) ) );
         } else {
-           wp_send_json_error( array( 'msg' => __( 'Failed to update leave status', 'hrm' ) ) );
+           wp_send_json_error( array( 'error_msg' => __( 'Failed to update leave status', 'hrm' ) ) );
         }
     }
 
@@ -300,9 +514,16 @@ class Hrm_Ajax {
         $postdata = $_POST;
         $update = hrm_Leave::getInstance()->new_leave( $postdata );
         if( $update ) {
-            wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' )  ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Updated successfully', 'hrm' )  ) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
@@ -322,7 +543,7 @@ class Hrm_Ajax {
             $user_info = json_encode( $data );
         } else {
             $data[] = array(
-                'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'cpm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'cpm' ) . '</span></div>',
+                'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
                 'value' => 'hrm_create_user',
                 '_user_meta' =>'',
             );
@@ -364,12 +585,13 @@ class Hrm_Ajax {
 
             wp_send_json_success( array( 'sub_task_id' => $task_id, 'sub_task' => $status, 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
     function insert_task() {
         check_ajax_referer('hrm_nonce');
+
         $is_update  = isset( $_POST['id'] ) ? true : false;
         $url        = isset( $_POST['url'] ) ? $_POST['url'] : '';
         $start_date = !empty( $_POST['start_date'] ) ? hrm_date2mysql( $_POST['start_date'] ) : '';
@@ -390,7 +612,8 @@ class Hrm_Ajax {
         } else {
             $data['post_parent'] = $_POST['project_id'];
             $task_id = wp_insert_post( $data );
-            Hrm_Evaluation::getInstance()->new_inserted_task_rating( $_POST['project_id'], $_POST['assigned'] );
+            $assign = isset( $_POST['assigned'] ) ? $_POST['assigned'] : 0;
+            Hrm_Evaluation::getInstance()->new_inserted_task_rating( $_POST['project_id'], $assign );
             $status = false;
         }
 
@@ -398,7 +621,7 @@ class Hrm_Ajax {
             $post = get_post($task_id);
             $project_id = $post->post_parent;
             if ( !isset($_POST['assigned']) ) {
-                $assign_to = $post->post_author;
+                $assign_to = 0;
             } else {
                 $assign_to = $_POST['assigned'];
             }
@@ -421,9 +644,16 @@ class Hrm_Ajax {
                 }
             }
 
-            wp_send_json_success( array( 'task_id' => $task_id, 'sub_task_create_status' => $status, 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'success_msg' => __( 'Updated successfully' ), 'content' => ob_get_clean() ) );
+
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
@@ -432,7 +662,7 @@ class Hrm_Ajax {
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
         $data = Hrm_Admin::getInstance()->project_insert_form( $post );
-        wp_send_json_success( array( 'append_data' => $data ) );
+        wp_send_json_success( array( 'success_msg' => __( 'Updated successfully' ), 'append_data' => $data  ) );
 
     }
 
@@ -441,7 +671,7 @@ class Hrm_Ajax {
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
         $data = Hrm_Admin::getInstance()->task_form( $post );
-        wp_send_json_success( array( 'append_data' => $data ) );
+        wp_send_json_success(  array( 'success_msg' => __( 'Updated successfully' ),'append_data' => $data ) );
 
     }
 
@@ -450,7 +680,7 @@ class Hrm_Ajax {
         $post_id = $_POST['id'];
         $post = get_post( $post_id );
         $data = Hrm_Admin::getInstance()->sub_task_form( $post );
-        wp_send_json_success( array( 'append_data' => $data ) );
+        wp_send_json_success(  array( 'success_msg' => __( 'Updated successfully' ),'append_data' => $data ) );
 
     }
 
@@ -478,9 +708,16 @@ class Hrm_Ajax {
         if( $project_id ) {
             $this->insert_project_user_role( $_POST, $project_id  );
             Hrm_Admin::getInstance()->update_project_meta( $project_id, $_POST );
-            wp_send_json_success( array( 'project_id' => $project_id, 'task_create_status' => $status, 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'project_id' => $project_id, 'task_create_status' => $status, 'dataBreak' => $status, 'success_msg' => __( 'Updated successfully', 'hrm' ) ) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array('error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
@@ -559,7 +796,7 @@ class Hrm_Ajax {
         if( $update ) {
             wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
@@ -629,7 +866,15 @@ class Hrm_Ajax {
             wp_update_user( array( 'ID' => $user_id, 'role' => $_POST['admin_role'][$key] ) );
             update_user_meta( $user_id, 'hrm_admin_level', 'admin' );
         }
-        wp_send_json_success( array( 'success_msg' => __( 'Update successful', 'hrm' ) ) );
+
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Update successful', 'hrm' ) ) );
     }
 
     function user_delete() {
@@ -643,9 +888,16 @@ class Hrm_Ajax {
             }
         }
         if( $delete_user ) {
-            wp_send_json_success( array( 'msg' => __( 'Delete user successfully', 'hrm' ) ) );
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Delete user successfully', 'hrm' ) ) );
         } else {
-            wp_send_json_error( __( 'Delete Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Delete Failed', 'hrm' ) ) );
         }
 
     }
@@ -676,7 +928,7 @@ class Hrm_Ajax {
             $user_info = json_encode( $data );
         } else {
             $data[] = array(
-                'label' => '<div class="no-user-wrap"><p>' . __( 'No user found!', 'cpm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'cpm' ) . '</span></div>',
+                'label' => '<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
                 'value' => 'hrm_create_user',
                 '_user_meta' =>'',
             );
@@ -728,30 +980,30 @@ class Hrm_Ajax {
                  '_user_meta' => $user_meta,
             ));
         } else {
-            wp_send_json_error( __('Unknown Error!', 'hrm') );
+            wp_send_json_error( array( 'error_msg' => __('Unknown Error!', 'hrm') ) );
         }
     }
 
     function new_admin_form_validate( $postdata ) {
 
         if( empty($postdata['admin_name']) ) {
-            return new WP_Error( 'error', __('Username required ', 'cpm' ) );
+            return new WP_Error( 'error', __('Username required ', 'hrm' ) );
         }
 
         if( empty($postdata['admin_email']) ) {
-            return new WP_Error( 'error', __('Eamil required', 'cpm' ) );
+            return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
         }
 
         if ( ! is_email($postdata['admin_email'] ) ) {
-            return new WP_Error( 'error', __('Invalid email', 'cpm' ) );
+            return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
         }
 
         if( username_exists( $postdata['admin_name'] ) ) {
-            return new WP_Error( 'error', __('Username already exist', 'cpm' ) );
+            return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
         }
 
         if( email_exists( $postdata['admin_email']) ) {
-            return new WP_Error( 'error', __('Email already exist', 'cpm' ) );
+            return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
         }
 
         return true;
@@ -797,7 +1049,14 @@ class Hrm_Ajax {
                remove_role( $role_name );
             }
         }
-        wp_send_json_success(array('msg' => __('Delete successfull') ) );
+
+        $page    = $_POST['page'];
+        $tab     = $_POST['tab'];
+        $subtab  = $_POST['subtab'];
+        $req_frm = urldecode( $_POST['req_frm'] );
+        ob_start();
+            require_once $req_frm;
+        wp_send_json_success(array( 'content' => ob_get_clean(), 'success_msg' => __('Delete successfull') ) );
     }
 
     function create_user_role() {
@@ -809,9 +1068,16 @@ class Hrm_Ajax {
             $edit_role = $this->edit_capabilities( $_POST['role_name'], $capabilities );
 
             if ( $edit_role ) {
-                wp_send_json_success( array( 'success_msg' => __('User role update successfull', 'hrm') ) );
+                $page    = $_POST['page'];
+                $tab     = $_POST['tab'];
+                $subtab  = $_POST['subtab'];
+                $req_frm = urldecode( $_POST['req_frm'] );
+
+                ob_start();
+                    require_once $req_frm;
+                wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __('User role update successfull', 'hrm') ) );
             } else {
-                wp_send_json_error( __('Unknown Error!', 'hrm') );
+                wp_send_json_error( array( 'error_mst' => __('Unknown Error!', 'hrm') ) );
             }
         } else if ( ! empty( $_POST['role_name'] ) && ! empty( $_POST['display_name'] ) ) {
 
@@ -829,8 +1095,14 @@ class Hrm_Ajax {
             if ( $add_role == null ) {
                 wp_send_json_error( __( 'User role already exists', 'hrm' ) );
             } else if ( is_object( $add_role ) ) {
-                $url = isset( $_POST['url'] ) ? $_POST['url'] : '';
-                wp_send_json_success( array( 'success_msg' => __( 'User role add successfull', 'hrm' ), 'redirect' => $url ) );
+                $page    = $_POST['page'];
+                $tab     = $_POST['tab'];
+                $subtab  = $_POST['subtab'];
+                $req_frm = urldecode( $_POST['req_frm'] );
+
+                ob_start();
+                    require_once $req_frm;
+                wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'User role add successfull', 'hrm' ) ) );
             }
 
         } else {
@@ -882,7 +1154,7 @@ class Hrm_Ajax {
         check_ajax_referer( 'hrm_nonce' );
 
         if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
-            wp_send_json_error(__('Unknown Error!', 'hrm') );
+            wp_send_json_error( array( 'error_msg' => __('Update Failed', 'hrm') ) );
         }
 
         $data = array();
@@ -903,40 +1175,52 @@ class Hrm_Ajax {
         }
 
         if( $update ) {
-            wp_send_json_success( array( 'success_msg' => __( 'Update Successfull', 'hrm' ) ) );
+            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
     }
 
     function delete() {
         check_ajax_referer( 'hrm_nonce' );
 
-        if( ! isset( $_POST['hrm_check'] ) && ! count( $_POST['hrm_check'] ) ) {
-            wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
+        if( ! isset( $_POST['hrm_check'] ) ) {
+            wp_send_json_error( array( 'error_msg' => __( 'Faild to deleted', 'hrm' ) ) );
         }
 
-        if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
-            wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
+        if( ! isset( $_POST['table_option'] ) ) {
+            wp_send_json_error( array( 'error_msg' => __( 'Faild to deleted', 'hrm' ) ) );
         }
-        $table_option['table_option'] = array();
+
+        if ( empty( $_POST['table_option'] ) ) {
+            wp_send_json_error( array( 'error_msg' => __( 'Faild to deleted', 'hrm' ) ) );
+        }
+
+        if ( !is_array( $_POST['hrm_check'] ) || !count( $_POST['hrm_check'] ) ) {
+            wp_send_json_error( array( 'error_msg' => __( 'Faild to deleted', 'hrm' ) ) );
+        }
+
         $table_option = get_option( $_POST['table_option'] );
 
         global $wpdb;
-        $table = $wpdb->prefix . $table_option['table_name'];
-
-        $users_id = isset( $_POST['hrm_check'] ) ? $_POST['hrm_check'] : array();
+        $table    = $wpdb->prefix . $table_option['table_name'];
+        $users_id = $_POST['hrm_check'];
 
         foreach( $users_id as $id => $value ) {
             $delete = $wpdb->delete( $table, array( 'id' => $id ), array( '%d' ) );
         }
 
-        if ( count( $users_id ) ) {
-            $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : '';
-            $subtab = isset( $_POST['sub_tab'] ) ? $_POST['sub_tab'] : '';
-            wp_send_json_success( array( 'msg' => __( 'delete successfull', 'hrm' ) ) );
+        if ( $delete ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+
+            ob_start();
+                require_once $req_frm;
+            wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Deleted record successfully', 'hrm' ) ) );
         } else {
-            wp_send_json_error( array( 'msg' => __( 'Faild to deleted', 'hrm' ) ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Failed to delete', 'hrm' ) ) );
         }
 
     }
@@ -977,7 +1261,7 @@ class Hrm_Ajax {
         }
 
         //$data = $_POST['class_name']::getInstance()->$_POST['function_name'] ( $set_form_field );
-        wp_send_json_success( array( 'append_data' => $data ) );
+        wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'append_data' => $data ) );
 
     }
 
@@ -991,20 +1275,19 @@ class Hrm_Ajax {
         check_ajax_referer( 'hrm_nonce' );
 
         if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
-            wp_send_json_error( __( 'Unknown Error!', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg'=> __( 'Failed!', 'hrm' ) ) );
         }
 
         $table_option = get_option( $_POST['table_option'] );
 
         if( ! is_array( $table_option ) || ! count( $table_option ) ) {
-            wp_send_json_error( __( 'Table option required!', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Table option required!', 'hrm' ) ) );
         }
 
-        $url = $_POST['url'];
         $id = ( isset( $_POST['id'] ) && !empty( $_POST['id'] ) ) ? $_POST['id'] : '';
 
         if( ! isset( $table_option['table_name'] ) || empty( $table_option['table_name'] ) ) {
-            wp_send_json_error( __( 'Table name required!', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Table name required!', 'hrm' ) ) );
         }
 
         $format = ( isset( $table_option['table_format'] ) && is_array( $table_option['table_format'] ) ) ? $table_option['table_format'] : array();
@@ -1044,10 +1327,16 @@ class Hrm_Ajax {
         }
 
         if( $update ) {
+            ob_start();
+                $page    = $_POST['page'];
+                $tab     = $_POST['tab'];
+                $subtab  = $_POST['subtab'];
+                $req_frm = urldecode( $_POST['req_frm'] );
+                    require_once $req_frm;
             do_action( 'hrm_after_save_data', $update, $update_status, $table_option['table_name'], $_POST );
-            wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
+            wp_send_json_success(  array( 'content'=> ob_get_clean(), 'success_msg' => __( 'Updated successfully', 'hrm' )) );
         } else {
-            wp_send_json_error( __( 'Update Failed', 'hrm' ) );
+            wp_send_json_error( array( 'error_msg' => __( 'Failed!', 'hrm' ) ) );
         }
     }
 }

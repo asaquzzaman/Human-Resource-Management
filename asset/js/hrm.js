@@ -1,33 +1,35 @@
-
 ;(function($){
     var hrmGeneral = {
         init: function() {
-
             this.chosen();
             this.datePicker();
             this.timePicker();
             this.datePickerRestricted();
             //this.slider();
-            $('.hrm-add-button').on( 'click', this.getInsertDataForm );
-            $('body').on( 'click', '.hrm-form-cancel', this.formshowHide );
-            $('body').on( 'submit', '#hrm-hidden-form', this.add );
-            $('a.hrm-editable').on( 'click', this.edit );
-            $('.hrm-delete-button').on( 'click', this.delete );
-            $('#hrm-visible-form-warp').on( 'submit', '#hrm-visible-form', this.singleFormAdd );
-            $('.hrm-user-create-form').on('submit', this.userCreate);
-            $('body').on('click', '.hrm-delte-user-meta', this.removeUserMeta);
-            $('body').on('change', '.hrm-leave-action', this.leaveStatusChange);
-            $('.hrm-complete-task').on( 'click', this.taskComplete );
-            $('.hrm-incomplete-task').on( 'click', this.taskInComplete );
-            $('.hrm-personal').on( 'click', '.hrm-deposit-check', this.depositStatus );
-            $('.hrm-task-desc').on( 'click', this.showTaskDesc );
-            $('.hrm-admin-status').on( 'change', this.changeAdminStatus );
-            $('.hrm-time-editable').on( 'click', this.editAttendance );
-            $('#hrm-search-form').on( 'change', '#hrm-rank-task-user', this.userTaskRating );
-            $('.hrm-evaluation-task-wrap').on( 'submit', '#hrm-task-rating-form', this.taskRatingSubmission );
-            $('.hrm-task-wrap').on( 'click', '.hrm-delete-task', this.deleteTask );
+            $('#hrm').on( 'click', '.hrm-add-button', this.getInsertDataForm );
+            $('#hrm').on( 'click', '.hrm-form-cancel', this.formshowHide );
+            $('#hrm').on( 'submit', '#hrm-hidden-form', this.add );
+            $('#hrm').on( 'click', 'a.hrm-editable', this.edit );
+            $('#hrm').on( 'click', '.hrm-delete-button', this.delete );
+            $('#hrm').on( 'submit', '#hrm-visible-form-warp #hrm-visible-form', this.singleFormAdd );
+            $('body').on('submit', '.hrm-user-create-form', this.userCreate);
+            $('#hrm').on('click', '.hrm-delte-user-meta', this.removeUserMeta);
+            $('#hrm').on('change', '.hrm-leave-action', this.leaveStatusChange);
+            $('#hrm').on( 'click', '.hrm-complete-task', this.taskComplete );
+            $('#hrm').on( 'click', '.hrm-incomplete-task', this.taskInComplete );
+            $('#hrm').on( 'click', '.hrm-personal .hrm-deposit-check', this.depositStatus );
+            $('#hrm').on( 'click', '.hrm-task-desc', this.showTaskDesc );
+            $('#hrm').on( 'change', '.hrm-admin-status', this.changeAdminStatus );
+            $('#hrm').on( 'click', '.hrm-time-editable', this.editAttendance );
+            $('#hrm').on( 'change', '#hrm-search-form #hrm-rank-task-user', this.userTaskRating );
+            $('#hrm').on( 'submit', '.hrm-evaluation-task-wrap #hrm-task-rating-form', this.taskRatingSubmission );
+            $('#hrm').on( 'click', '.hrm-task-wrap .hrm-delete-task', this.deleteTask );
+            $('#hrm').on( 'click', '#hrm-file .hrm-file-edit', this.editFile );
+            $('#hrm').on( 'click', '.hrm-pagination a', this.pagination );
+            $('#hrm').on( 'change', '#hrm-pagination', this.viewPagination );
+            $('#hrm').on( 'submit', '#hrm-search-form', this.search );
 
-            $('body').on( 'before_send_edit', function( e, self, data ) {
+            $('#hrm').on( 'before_send_edit', function( e, self, data ) {
                 if ( self.data('action') == 'get_role' ) {
 
                     data.role_name = self.data('role_name');
@@ -40,7 +42,7 @@
                 }
             });
 
-            $('body').on( 'before_send_getInsertDataForm', function( e, self, data ) {
+            $('#hrm').on( 'before_send_getInsertDataForm', function( e, self, data ) {
 
                 if ( self.data('task') == 'task'  ) {
                     data.function_name = 'task_form';
@@ -63,16 +65,14 @@
 
             });
 
-            $('body').on('after_add', function( e, self, res ) {
+            $('#hrm').on('after_add', function( e, self, res ) {
                 if ( res.data.task_create_status === true ) {
-                    hrm_dataAttr = {
-                        add_form_generator_action : 'add_form',
-                        add_form_apppend_wrap : 'hrm-projects',
-                        class_name : 'Hrm_Admin',
-                        function_name : 'task_form',
-                        project_id : res.data.project_id,
-                        redirect: hrm_dataAttr.redirect,
-                    };
+                    hrm_dataAttr.add_form_generator_action = 'add_form';
+                    hrm_dataAttr.add_form_apppend_wrap = 'hrm-projects';
+                    hrm_dataAttr.class_name = 'Hrm_Admin';
+                    hrm_dataAttr.function_name = 'task_form';
+                    hrm_dataAttr.project_id = res.data.project_id;
+                    hrm_dataAttr.redirect = hrm_dataAttr.redirect;
 
                     hrmGeneral.getInsertDataForm(e);
 
@@ -97,9 +97,16 @@
 
             });
 
-            $('body').on( 'after_getInsertDataForm', function( e, self, res ) {
+            $('#hrm').on( 'before_send_insert_data', function( e, form, data ) {
+                if ( hrm_dataAttr.class_name == 'HRM_File' && hrm_dataAttr.function_name == 'file_upload_form' ) {
+                    data = form.serialize()+'&'+$.param(hrm_dataAttr);
+                }
+            });
+
+            $('#hrm').on( 'after_getInsertDataForm', function( e, self, res ) {
 
                 hrmGeneral.datePicker();
+                hrmGeneral.datePickerRestricted();
 
                 if ( res.data['append_data']['project_autocomplete'] === true ) {
                     hrmGeneral.project();
@@ -111,19 +118,24 @@
 
                 if ( hrm_dataAttr.class_name == 'hrm_Leave' && hrm_dataAttr.function_name == 'assign' ) {
                     hrmGeneral.chosen();
+                    hrmGeneral.datePickerLeaveRestricted();
+                }
+
+                if ( hrm_dataAttr.class_name == 'HRM_File' && hrm_dataAttr.function_name == 'file_upload_form' ) {
+                    hrmGeneral.chosen();
+                    //hrmGeneral.tinymceInit(res.data.tinymce_id);
                 }
 
                 if ( res.data.append_data.personal_salary ) {
                     hrmGeneral.directDepositHandelar();
                     $('#hrm_personal_salary').on( 'change', '.hrm-direct-deposit-handelar', hrmGeneral.directDepositHandelar );
                 }
-
-
             });
 
-            $('body').on( 'after_success_edit', function( e, self, res ) {
+            $('#hrm').on( 'after_success_edit', function( e, self, res ) {
 
                 hrmGeneral.datePicker();
+                hrmGeneral.datePickerRestricted();
 
                 if ( res.data['append_data']['project_autocomplete'] === true ) {
                     hrmGeneral.project();
@@ -131,8 +143,222 @@
 
                 if ( hrm_dataAttr.class_name == 'hrm_Leave' && hrm_dataAttr.function_name == 'assign' ) {
                     hrmGeneral.chosen();
+                    hrmGeneral.datePickerLeaveRestricted();
                 }
-            } )
+
+            });
+        },
+
+        search: function(e) {
+            e.preventDefault();
+            var form = $(this),
+                btn = form.find('.hrm-spinner'),
+                limit = $('#hrm-pagination').val(),
+                limit = ( typeof limit !== 'undefined' ) ? limit : 0,
+                data = form.serialize()+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+
+            var validate = hrmGeneral.formValidation( form );
+            if( ! validate ) {
+                return false;
+            }
+            btn.show();
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                btn.hide();
+                if( res.success ) {
+                    if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
+                        $('#hrm-subtab-wrap').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    } else {
+                        $('#hrm').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    }
+                }
+            });
+        },
+
+        viewPagination: function() {
+            var self = $(this),
+                limit = $('#hrm-pagination').val();
+            if ( hrm_dataAttr.search_satus ) {
+                var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+            } else {
+                var data = {
+                    action: 'view_pagination',
+                    _wpnonce: hrm_ajax_data._wpnonce,
+                    hrm_attr: hrm_dataAttr,
+                    limit: self.val(),
+                };
+            }
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                if( res.success ) {
+                    if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
+                        $('#hrm-subtab-wrap').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    } else {
+                        $('#hrm').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    }
+                }
+            });
+        },
+
+        pagination: function(e) {
+            e.preventDefault();
+            var self = $(this),
+                url = self.attr('href'),
+                limit = $('#hrm-pagination').val(),
+                pagenum = hrmGetUrlParameter( url )['pagenum'];
+            if ( hrm_dataAttr.search_satus ) {
+                var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&pagenum='+pagenum+'&limit='+limit;
+            } else {
+                var data = {
+                    action: 'pagination',
+                    pagenum: pagenum,
+                    _wpnonce: hrm_ajax_data._wpnonce,
+                    hrm_attr: hrm_dataAttr
+                };
+            }
+
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                if ( res.success ) {
+                    if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
+                        $('#hrm-subtab-wrap').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    } else {
+                        $('#hrm').html( res.data.content );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    }
+                }
+            });
+
+        },
+
+        editFile: function(e) {
+            e.preventDefault();
+            var self = $(this),
+                data = {
+                    action: 'edit_file',
+                    _wpnonce: hrm_ajax_data._wpnonce,
+                    post_id: self.data('id'),
+                };
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                if ( res.success ) {
+                    $('#hrm-file-form-wrap').html( res.data.append_data )
+                        .find('#hrm-hidden-form-warp').slideDown('slow').show();
+                    hrmGeneral.chosen();
+                    //hrmGeneral.tinymceInit(res.data.tinymce_id);
+
+
+                    var uploader = new plupload.Uploader({
+                    runtimes : 'html5,html4',
+                    browse_button : 'hrm-pickfiles',
+                    drop_element : 'hrm-drop-files-zone',
+                    container : 'hrm-upload-file-container',
+                    file_data_name: 'hrm_attachment',
+                    max_file_size : '1mb',
+                    url : hrm_ajax_data.ajax_url,
+                    multipart_params: {
+                        action: 'hrm_ajax_upload',
+                        _wpnonce: hrm_ajax_data._wpnonce
+                    },
+                    filters : [
+                        {title : "Image files", extensions : 'jpg, JPEG,png'},
+                        {title : "Zip files", extensions : "zip"}
+                    ],
+                   // resize : {width : 1000, height : 1000 }
+                });
+
+                uploader.bind('Init', function(up, params) {
+                    //console.log('alskjfhskfj');
+                   //$('#art-filelist').html("<div>Current runtime: " + params.runtime + "</div>");
+                });
+
+
+                uploader.init();
+
+                uploader.bind('FilesAdded', function(up, files) {
+
+                    $.each(files, function(i, file) {
+                        $('#hrm-filelist').append(
+                            '<div class="hrm-single-progress">'+
+                                '<span class="hrm-filename">'
+                                     +file.name+
+                                '<strong>0%</strong></span>'+
+                                '<div class="hrm-upload-bar" id="' + file.id + '"></div>' +
+                            '</div>'
+                        );
+                    });
+                   // (' + plupload.formatSize(file.size) + ')
+                    up.start();
+                    up.refresh(); // Reposition Flash/Silverlight
+                });
+
+                uploader.bind('UploadProgress', function(up, file) {
+                    $('#' + file.id ).css( {
+                        'width' : file.percent+'%',
+                    } );
+
+                    $('#' + file.id).siblings('span').children('strong').html(file.percent + "%");
+
+                    //'#' + file.id + " b"
+                });
+
+                uploader.bind('UploadComplete', function( up, files, object ) {
+
+                    //location.href = art_image.dashboard;
+                });
+
+                uploader.bind('Error', function(up, err) {
+
+                    $('#art-filelist').append(
+                        '<div class="art-error">'+
+                        'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under '+art_image.max_file_size+'.<br>'+
+                        'Try again or manage your artwork'+
+                        '</div>'
+                    );
+
+                   /* $('#art-filelist').append("<div class=\"art-error\">Error: " + err.code +
+                        ", Message: " + err.message +
+                        (err.file ? ", File: " + err.file.name : "") +
+                        "</div>"
+                    );*/
+
+                    up.refresh(); // Reposition Flash/Silverlight
+                });
+
+                uploader.bind('FileUploaded', function( up, file, response ) {
+
+                    var res = $.parseJSON(response.response);
+
+                    $('#' + file.id + " b").html("100%");
+                    var append = $('#' + file.id).closest('.hrm-single-progress');
+
+                    if(res.success) {
+                        append.html(res.content);
+                    } else {
+                        alert(res.error);
+                    }
+                });
+                }
+            });
+        },
+
+        tinymceInit: function( id ) {
+
+            tinymce.execCommand( 'mceRemoveEditor', true, id );
+            tinymce.execCommand( 'mceAddEditor', true, id );
         },
 
         taskRatingSubmission: function(e) {
@@ -196,8 +422,9 @@
             });
         },
 
-        sliderWithInitialValue: function( id, val=0, max=100  ) {
-
+        sliderWithInitialValue: function( id, val, max  ) {
+            val = typeof val !== 'undefined' ? val : 0;
+            max = typeof max !== 'undefined' ? max : '100';
             $('#hrm-rating-slider-'+id).slider({
                 value: parseFloat(val),
                 min: 0,
@@ -211,8 +438,8 @@
             });
         },
 
-        slider: function( max=100 ) {
-
+        slider: function( max ) {
+            max = typeof max !== 'undefined' ? max : 100;
             $( ".hrm-slider-range-max" ).slider({
                 min: 0,
                 max: parseFloat(max),
@@ -271,7 +498,8 @@
                 task_id = self.data('task_id');
                 open_dialog_wrap = 'hrm-task-desc-wrap-'+task_id;
 
-            $( '.'+open_dialog_wrap ).dialog( "open" );
+            $( '#'+open_dialog_wrap ).dialog( "open" );
+
         },
 
         depositStatus: function(e) {
@@ -362,7 +590,6 @@
 
         getInsertDataForm: function(e) {
             e.preventDefault();
-
             var self = $(this);
             var data = {
                 action : hrm_dataAttr.add_form_generator_action,
@@ -372,9 +599,12 @@
                 hrm_dataAttr : hrm_dataAttr
             }
 
-            $('body').trigger( 'before_send_getInsertDataForm', [self, data] );
+            $('#hrm').trigger( 'before_send_getInsertDataForm', [self, data] );
+
+            self.addClass('hrm-spinner');
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                self.removeClass('hrm-spinner');
                 var form_wrap = $('#'+hrm_dataAttr.add_form_apppend_wrap);
                 if( res.success ) {
                     form_wrap.html( res.data['append_data']['append_data'] );
@@ -382,7 +612,7 @@
 
                     hidden_form.slideDown('slow');
 
-                    $('body').trigger( 'after_getInsertDataForm', [self, res] );
+                    $('#hrm').trigger( 'after_getInsertDataForm', [self, res] );
 
                 }
             });
@@ -495,14 +725,11 @@
                 submit_button.attr('disabled', false );
 
                 if( res.success ) {
-                    $('.hrm-error-notification')
-                        .removeClass('error')
-                        .addClass('updated')
-                        .html( '<p><strong>'+ res.data.success_msg+'</strong></p>' );
+                    hrmGeneral.scrollTop( '.hrm-update-notification' );
+                    hrmGeneral.updateNotification( res.data.success_msg );
                 } else {
-                    $('.hrm-error-notification')
-                        .addClass('updated error')
-                        .html( '<p><strong>'+res.data+'<strong></p>' );
+                    hrmGeneral.scrollTop( '.hrm-update-notification' );
+                    hrmGeneral.errorNotification( res.data.error_msg );
                 }
             });
         },
@@ -565,46 +792,41 @@
             }
         },
 
-        scrollTop: function() {
+        scrollTop: function( wrap ) {
+            if ( typeof wrap !== 'undefined' ) {
+                var top = $(wrap).position().top;
+            } else {
+                var top = 0;
+            }
             $('body,html').animate({
-                scrollTop: 0
+                scrollTop: top
             }, 800);
         },
 
-        delete: function(e) {
-            e.preventDefault();
-            var form = $('#hrm-list-form');
-            data = form.serialize();
-
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
-                hrmGeneral.scrollTop();
-                if( res.success ) {
-                    $('.hrm-error-notification')
-                        .removeClass('error')
-                        .addClass('updated')
-                        .html( '<p><strong>'+ res.data.msg+'</strong></p>' );
-                    setTimeout(function() {
-                        location.href = hrm_dataAttr.redirect;
-                    }, 3000 );
-                } else {
-                    $('.hrm-error-notification')
-                        .addClass('updated error')
-                        .html( '<p><strong>'+res.data.msg+'<strong></p>' );
-                }
-            });
+        errorNotification: function( message ) {
+            var message = ( typeof message !== 'undefined' ) ? message : '';
+            $('.hrm-update-notification')
+                .addClass('error')
+                .html( '<p class="hrm-error"><strong>'+message+'<strong></p>' );
+            setTimeout(function() {
+                $('.hrm-update-notification').removeClass('error').html('');
+            }, 5000);
         },
-        search: function(e) {
-            e.preventDefault();
-            var self = $(this),
-                data = self.serialize();
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
-                location.reload();
-            });
+
+        updateNotification: function( message ) {
+            var message = ( typeof message !== 'undefined' ) ? message : '',
+                notification_wrap = $('.hrm-update-notification');
+            notification_wrap
+                .addClass('updated')
+                .removeClass('error')
+                .html( '<p class="hrm-update"><strong>'+message+'<strong></p>' );
+            setTimeout(function() {
+                notification_wrap.removeClass('updated').html('');
+            }, 5000);
         },
 
         formshowHide: function(e) {
             e.preventDefault();
-
             $(this).closest('#hrm-hidden-form-warp').slideUp('slow').remove('slow');
 
         },
@@ -614,7 +836,9 @@
             var form = $(this),
             spinner = form.find('.hrm-spinner'),
             submit = form.find('.hrm-submit-button'),
-            data = form.serialize();
+            data = form.serialize()+'&'+$.param(hrm_dataAttr);
+
+            $('#hrm').trigger( 'before_send_insert_data', [form, data] );
 
             var validate = hrmGeneral.formValidation( form );
             if( ! validate ) {
@@ -625,7 +849,6 @@
             submit.attr( 'disabled', true );
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
-
                 hrmGeneral.scrollTop();
                 spinner.hide();
                 submit.attr( 'disabled', false );
@@ -633,31 +856,69 @@
                 form.find('#hrm-form-field').find('input[type=text], select, textarea').val('');
 
                 if( res.success ) {
-                    $('.hrm-error-notification')
-                        .removeClass('error')
-                        .addClass('updated')
-                        .html( '<p><strong>'+ res.data.success_msg+'</strong></p>' );
 
-                    $('body').trigger('after_add', [form, res] );
+                    $('#hrm').trigger('after_add', [form, res] );
 
-                    setTimeout(function() {
-                        location.href = hrm_dataAttr.redirect;
-                    }, 3000 );
+                    if ( typeof res.data.dataBreak !== 'undefined' && res.data.dataBreak ) {
+                        return;
+                    }
 
-
+                    if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
+                        $('#hrm-subtab-wrap').html( res.data.content );
+                        hrmGeneral.scrollTop( '.hrm-update-notification' );
+                        hrmGeneral.updateNotification( res.data.success_msg );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    } else {
+                        $('#hrm').html( res.data.content );
+                        hrmGeneral.scrollTop( '.hrm-update-notification' );
+                        hrmGeneral.updateNotification( res.data.success_msg );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    }
                 } else {
-                    $('.hrm-error-notification')
-                        .addClass('updated error')
-                        .html( '<p><strong>'+res.data.error_msg+'<strong></p>' );
-                    $('#hrm-hidden-form-warp').remove();
+                    hrmGeneral.scrollTop( '.hrm-update-notification' );
+                    hrmGeneral.errorNotification( res.data.error_msg );
                 }
             });
+        },
 
+        delete: function(e) {
+            e.preventDefault();
+            var form = $('#hrm-list-form'),
+                btn  = form.find('.hrm-delete-button'),
+                data = form.serialize()+'&'+$.param(hrm_dataAttr);
 
+            btn.addClass('hrm-spinner');
+
+            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+                btn.removeClass('hrm-spinner');
+                if ( res.success ) {
+                    if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
+                        $('#hrm-subtab-wrap').html( res.data.content );
+                        hrmGeneral.scrollTop( '.hrm-update-notification' );
+                        hrmGeneral.updateNotification( res.data.success_msg );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    } else {
+                        $('#hrm').html( res.data.content );
+                        hrmGeneral.scrollTop( '.hrm-update-notification' );
+                        hrmGeneral.updateNotification( res.data.success_msg );
+                        hrmGeneral.chosen();
+                        hrmGeneral.datePicker();
+                        hrmGeneral.datePickerRestricted();
+                    }
+                } else {
+                    hrmGeneral.scrollTop( '.hrm-update-notification' );
+                    hrmGeneral.errorNotification( res.data.error_msg );
+                }
+            });
         },
 
         edit: function(e) {
-
             e.preventDefault();
             var self = $(this),
                 data = {
@@ -671,7 +932,7 @@
                     selfData : self.data(),
                 }
 
-            $('body').trigger( 'before_send_edit', [self, data] );
+            $('#hrm').trigger( 'before_send_edit', [self, data] );
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
                 var form_wrap = $('#'+hrm_dataAttr.add_form_apppend_wrap);
@@ -679,14 +940,14 @@
                     form_wrap.html( res.data['append_data']['append_data'] );
                     var hidden_form = form_wrap.find( '#hrm-hidden-form-warp');
                     hidden_form.slideDown('slow');
-                    $('body').trigger( 'after_success_edit', [self, res] );
+                    $('#hrm').trigger( 'after_success_edit', [self, res] );
                 }
             });
         },
 
         chosen: function() {
 
-            $('.hrm-chosen').chosen().change(function(e, value) {
+            $('#hrm .hrm-chosen').chosen().change(function(e, value) {
                 hrmGeneral.getRatingTaskUser(value);
             });
 
@@ -798,6 +1059,30 @@
                 }
             });
         },
+
+        datePickerLeaveRestricted: function() {
+             $( ".hrm-datepicker-leave-from" ).datepicker({
+                defaultDate: "+1w",
+                dateFormat: 'yy-mm-dd',
+                changeYear: true,
+                changeMonth: true,
+                numberOfMonths: 1,
+                minDate: new Date,
+                onClose: function( selectedDate ) {
+                    $( ".hrm-datepicker-leave-to" ).datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $( ".hrm-datepicker-leave-to" ).datepicker({
+                defaultDate: "+1w",
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                onClose: function( selectedDate ) {
+                    $( ".hrm-datepicker-leave-from" ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
+        },
     }
 
     hrmGeneral.init();
@@ -833,7 +1118,18 @@
     });
 
 
-
+    function hrmGetUrlParameter( url ){
+        var vars = [],
+            hash = [];
+        var hashes = url.slice( url.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
 
 
 

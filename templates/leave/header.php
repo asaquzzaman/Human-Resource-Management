@@ -19,18 +19,21 @@ $menu = hrm_page();
 <?php
 if ( ! $subtab ) {
    if( !isset( $menu[$page][$tab]['submenu'] ) ) {
-        echo '<h3 class="hrm-sub-nav"></div>';
+        echo '<h3 class="hrm-sub-nav"></h3>';
         return;
     }
 
     if ( !count( $menu[$page][$tab]['submenu'] ) ) {
-        echo '<h3 class="hrm-sub-nav"></div>';
+        echo '<h3 class="hrm-sub-nav"></h3>';
         return;
     }
 
     $subtab = key( $menu[$page][$tab]['submenu'] );
 }
 
+if ( ! $subtab ) {
+    return;
+}
 
 ?>
 <h3 class="hrm-sub-nav">

@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <?php
 //default $this for class hrm_Admin, $tab, $subtab;
 $data = get_option( 'hrm_work_week' );

@@ -141,7 +141,7 @@ class Hrm_Settings {
         $extra       = isset( $element['extra'] ) ? $element['extra'] : array();
         $label       = isset( $element['label'] ) ? $element['label'] : '';
         $option      = isset( $element['option'] ) ? $element['option'] : array();
-        $selected    = isset( $element['selected'] ) ? $element['selected'] : '';
+        $selected    = isset( $element['selected'] ) && is_array($element['selected']) ? $element['selected'] : array();
         $desc        = isset( $element['desc'] ) ? $element['desc'] : '';
         $required    = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
         $wrap_class  = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
@@ -157,7 +157,7 @@ class Hrm_Settings {
         $html .= sprintf( '<select multiple class="%1$s" name="%2$s" id="%3$s" %4$s %5$s>', $class, $name, $id, $disabled, $extra_field );
 
         foreach ( $option as $key => $label ) {
-            $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
+            $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( in_array( $key, $selected ), true, false ), esc_attr( $label ) );
         }
 
         $html .= sprintf( '</select>' );
@@ -394,6 +394,39 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function hrm_tinymce( $element ) {
+        if ( !isset( $element['content'] ) || !isset($element['editor_id'] ) ) {
+            return;
+        }
+
+        if ( empty( $element['editor_id'] ) ) {
+            return;
+        }
+        ob_start();
+        $settings = isset( $element['settings'] ) && is_array( $element['settings'] ) ? $element['settings'] : array();
+        $id         = isset( $element['id'] ) ? esc_attr( $element['id'] ) : '';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $extra      = isset( $element['extra'] ) ? $element['extra'] : array();
+        $required   = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+
+
+
+        echo $this->multiple_field_inside_this_wrap( $element );
+            printf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+                printf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+                printf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+                wp_editor( $element['content'], $element['editor_id'], $settings );
+                printf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+            printf('</%s>', $wrap_tag);
+        echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        _WP_Editors::editor_js();
+        return ob_get_clean();
+    }
+
     function multiple_field_inside_this_wrap( $element ) {
         $parent_wrap_attr = ( isset( $element['parent_wrap_attr'] ) && is_array( $element['parent_wrap_attr'] ) ) ? $element['parent_wrap_attr'] : array();
         $parent_wrap_start_tag = isset( $element['parent_wrap_start_tag'] ) ? $element['parent_wrap_start_tag'] : 'div';
@@ -446,6 +479,7 @@ class Hrm_Settings {
     function get_serarch_form( $form, $heading = null ) {
         $form['action'] = isset( $form['action'] ) ? $form['action'] : '';
         $form['table_option'] = isset( $form['table_option'] ) ? $form['table_option'] : '';
+        $button = isset( $form['button'] ) ? $form['button'] : true;
 
         ob_start();
 
@@ -499,6 +533,12 @@ class Hrm_Settings {
                             case 'descriptive':
                                 echo $this->descriptive_field( $field_obj );
                                 break;
+                            case 'html':
+                                echo $field_obj['content'];
+                                break;
+                            case 'tinymce':
+                                echo $this->hrm_tinymce( $field_obj );
+                                break;
                         }
                         echo '</div>';
 
@@ -506,7 +546,14 @@ class Hrm_Settings {
 
                     ?>
                     <span class="hrm-clear"></span>
-                    <input type="submit" name="<?php echo $form['action']; ?>" class="button-primary hrm-search" value="Search">
+                    <?php
+                    if ( $button ) {
+                        ?>
+                            <input type="submit" name="<?php echo $form['action']; ?>" class="button-primary hrm-search" value="Search">
+                        <?php
+                    }
+                    ?>
+                    <div class="hrm-spinner" style="display: none;">Searching....</div>
                 </form>
             </div>
 
@@ -574,6 +621,12 @@ class Hrm_Settings {
                                     break;
                                 case 'descriptive':
                                     echo $this->descriptive_field( $field_obj );
+                                    break;
+                                case 'html':
+                                    echo $field_obj['content'];
+                                    break;
+                                case 'tinymce':
+                                    echo $this->hrm_tinymce( $field_obj );
                                     break;
                             }
 
@@ -651,6 +704,12 @@ class Hrm_Settings {
                             case 'descriptive':
                                 echo $this->descriptive_field( $field_obj );
                                 break;
+                            case 'html':
+                                echo $field_obj['content'];
+                                break;
+                            case 'tinymce':
+                                echo $this->hrm_tinymce( $field_obj );
+                                break;
                         }
 
                     }
@@ -680,10 +739,11 @@ class Hrm_Settings {
         $tab             = isset( $table['tab'] ) ? $table['tab'] : null;
         $subtab          = isset( $table['subtab'] ) ? $table['subtab'] : null;
         $count           = 1;
-        $add_button      = isset( $table['add_button'] ) ?  $table['add_button'] : true;
         $delet_button    = isset( $table['delete_button'] ) ?  $table['delete_button'] : true;
         $pagination      = isset( $table['view_btn'] ) ? $table['view_btn'] : true;
         $add_btn_name    = isset( $table['add_btn_name'] ) ? $table['add_btn_name'] : __( 'Add', 'hrm' );
+        $add_btn_class   = isset( $table['add_btn_class'] ) ? $table['add_btn_class'] : 'hrm-add-button';
+        $body            = isset( $table['body'] ) && is_array( $table['body'] ) ? $table['body'] : array();
 
         ob_start();
         ?>
@@ -693,7 +753,7 @@ class Hrm_Settings {
             <input type="hidden" name="table_option" value="<?php echo esc_attr( $table['table'] ); ?>">
             <div class="hrm-table-action-wrap">
                 <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_btn_name ) { ?>
-                    <a href="#" class="button button-primary hrm-add-button"><?php echo $add_btn_name; ?></a>
+                    <a href="#" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
                 <?php } ?>
 
                 <?php if ( hrm_user_can_access( $tab, $subtab, 'delete' ) && $delet_button ) { ?>
@@ -704,7 +764,7 @@ class Hrm_Settings {
             <?php if ( $pagination ) {  ?>
                 <div class="hrm-pagination-wrap">
                     <?php $this->pagination_select(); ?>
-                    <input type="submit" class="button-primary hrm-view-action" value="<?php _e( 'View', 'hrm' ); ?>" name="hrm_pagination">
+                    <!-- <input type="submit" class="button-primary hrm-view-action" value="<?php _e( 'View', 'hrm' ); ?>" name="hrm_pagination"> -->
                 </div>
             <?php } ?>
 
@@ -724,7 +784,7 @@ class Hrm_Settings {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach( $table['body']  as $key => $val ) { ?>
+                    <?php foreach( $body  as $key => $val ) { ?>
                     <?php $odd_even = ( $count % 2 == 0 ) ? 'hrm-even' : 'hrm-odd'; ?>
                     <tr class="<?php echo $odd_even; ?>">
                         <?php
@@ -738,6 +798,14 @@ class Hrm_Settings {
                     <?php } ?>
                 </tbody>
             </table>
+            <?php
+            if ( !count( $body ) ) {
+                ?>
+                <center><?php _e( 'No result found!', 'hrm' ); ?></center>
+                <?php
+            }
+            ?>
+
         </form><?php
 
         return ob_get_clean();
@@ -758,17 +826,17 @@ class Hrm_Settings {
     }
 
 
-    function hrm_query( $table, $limit = 0 ) {
+    function hrm_query( $table, $limit = 0, $pagenum = 1 ) {
         global $wpdb;
         $tabledb = $wpdb->prefix . $table;
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
-        if ( $limit != 0 ) {
+        if ( $limit ) {
             $limit = "LIMIT $offset,$limit";
         } else {
-            $limit = '';
+            $limit = hrm_result_limit();
+            $limit = "LIMIT 0,$limit";
         }
 
         $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc $limit" );
@@ -787,7 +855,6 @@ class Hrm_Settings {
     function search( $limit = null ) {
         check_ajax_referer( 'hrm_nonce' );
         $data = false;
-
         if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {
 
             foreach ($_GET as $key => $value) {
@@ -844,32 +911,32 @@ class Hrm_Settings {
     }
 
 
-    function search_query( $limit ) {
+    function search_query( $post, $limit, $pagenum  ) {
         check_ajax_referer( 'hrm_nonce' );
-        if( ! isset( $_GET['table_option'] ) || empty( $_GET['table_option'] ) ) {
+        if( ! isset( $post['table_option'] ) || empty( $post['table_option'] ) ) {
             return array();
         }
 
-        $table_option = get_option( $_GET['table_option'] );
+        $table_option = get_option( $post['table_option'] );
 
         $data = array();
         foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $_GET[$value] ) && ! empty( $_GET[$value] ) ) {
-                $data[] = $name .' LIKE ' ."'%".trim( $_GET[$value] ) ."%'";
+            if( isset( $post[$value] ) && ! empty( $post[$value] ) ) {
+                $data[] = $name .' LIKE ' ."'%".trim( $post[$value] ) ."%'";
             }
         }
 
         $data = apply_filters( 'hrm_search_query', $data, $table_option, $limit );
-
+        if ( !count( $data ) ) {
+            return array( 'total_row' => 0 );
+        }
         $where = implode( $data, ' AND ');
 
         global $wpdb;
         $tabledb = $wpdb->prefix . $table_option['table_name'];
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $pagenum = absint( $pagenum );
         $offset = ( $pagenum - 1 ) * $limit;
-
-        $query = "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit";
 
         $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
 
@@ -892,9 +959,8 @@ class Hrm_Settings {
     }
 
 
-    function pagination( $total, $limit ) {
+    function pagination( $total, $limit = 1, $pagenum = false ) {
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
@@ -904,17 +970,17 @@ class Hrm_Settings {
             'next_text' => __( '&raquo;', 'aag' ),
             'add_args'  => false,
             'total'     => $num_of_pages,
-            'current'   => $pagenum
+            'current'   => $pagenum,
         ) );
 
         if ( $page_links ) {
-            return '<div class="tablenav"><div class="tablenav-pages" style="margin: 1em 0">' . $page_links . '</div></div>';
+            return '<div class="hrm-pagination"><div class="tablenav"><div class="tablenav-pages" style="margin: 1em 0">' . $page_links . '</div></div></div>';
         }
     }
 
 
     function pagination_select() {
-        $selectd = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 2;
+        $selectd = isset( $_POST['limit'] ) ? $_POST['limit'] : 2;
         $arg = array(
             '2'  => __( '10', 'hrm'),
             '4'  => __( '20','hrm' ),

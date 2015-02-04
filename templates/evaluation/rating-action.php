@@ -5,6 +5,12 @@ $search['from_date'] = array(
 	'class' => 'hrm-datepicker-from',
 	'type'  => 'text',
 	'desc'  => __( 'Choose Date', 'hrm' ),
+    'value' => isset( $_POST['from_date'] ) ? hrm_get_date2mysql( $_POST['from_date'] ) : '',
+    'extra' => array(
+        'data-hrm_validation' => true,
+        'data-hrm_required' => true,
+        'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+    ),
 );
 
 $search['to_date'] = array(
@@ -12,93 +18,32 @@ $search['to_date'] = array(
     'class' => 'hrm-datepicker-to',
     'type'  => 'text',
     'desc'  => __( 'Choose Date', 'hrm' ),
+    'value' => isset( $_POST['to_date'] ) ? hrm_get_date2mysql( $_POST['to_date'] ) : '',
+    'extra' => array(
+        'data-hrm_validation' => true,
+        'data-hrm_required' => true,
+        'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+    ),
 );
 
 $search['action'] = 'hrm_search';
 $search['table_option'] = 'hrm_rating_record';
 echo hrm_Settings::getInstance()->get_serarch_form( $search, __( 'Employee and employer rating record', 'hrm' ) );
 
-if ( isset( $_GET['from_date'] ) && isset( $_GET['to_date'] ) ) {
-    if ( strtotime( $_GET['from_date'] ) > strtotime( $_GET['to_date'] ) ) {
-        return;
-    }
-}
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
 
-$pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-$offset = ( $pagenum - 1 ) * $limit;
+if( isset( $_POST['action'] ) && $_POST['action'] == 'hrm_search' ) {
+    $post = $_POST;
+    $search_satus = true;
+    $query  = Hrm_Evaluation::getInstance()->search_rating_record( $post, $limit, $pagenum );
 
-$args = array(
-    'post_type'      => 'hrm_task',
-    'post_status'    => array( 'publish', 'future' ),
-    'posts_per_page' => $limit,
-    'offset'         => $offset
-);
-
-if ( isset( $_GET['from_date'] ) && isset( $_GET['to_date'] ) ) {
-    $from_date = $_GET['from_date'];
-    $to_date = $_GET['to_date'];
-
-    $args['meta_query'] = array(
-        array(
-            'key' => '_rating_date',
-            'value' => strtotime($from_date),
-            'compare' => '>='
-        ),
-
-        array(
-            'key' => '_rating_date',
-            'value' => strtotime($to_date),
-            'compare' => '<='
-        ),
-    );
-
-/*    $args['date_query'] = array(
-        array(
-            'year' => date( 'Y', strtotime( $from_date ) ),
-            'compare'   => '>=',
-        ),
-        array(
-            'year' => date( 'Y', strtotime( $to_date ) ),
-            'compare'   => '<=',
-        ),
-        array(
-            'month' => date( 'm', strtotime( $from_date ) ),
-            'compare'   => '>=',
-        ),
-        array(
-            'month' => date( 'm', strtotime( $to_date ) ),
-            'compare'   => '<=',
-        ),
-        array(
-            'day' => date( 'd', strtotime( $from_date ) ),
-            'compare'   => '>=',
-        ),
-        array(
-            'day' => date( 'd', strtotime( $to_date ) ),
-            'compare'   => '<=',
-        ),
-    );*/
 } else {
-    $args['meta_query'] = array(
-        'relation' => 'AND',
-         array(
-            'key' => '_rating_date',
-            'value' => strtotime( date( 'Y-m-01', time() ) ),
-            'compare' => '>='
-        ),
-
-        array(
-            'key' => '_rating_date',
-            'value' => strtotime( date( 'Y-m-d', time() ) ),
-            'compare' => '<='
-        ),
-    );
+    $query  = Hrm_Evaluation::getInstance()->rating_recored( $limit, $pagenum );
+    $search_satus = false;
 }
 
-$query = new WP_Query($args);
 
-//echo '<pre>'; print_r( $query ); echo '</pre>'; die();
 $total_pagination = $query->found_posts;
 $posts = $query->posts;
 
@@ -116,7 +61,6 @@ foreach ($posts as $key => $post) {
 }
 
 arsort( $rating_users );
-
 
 foreach ( $rating_users as $user_id => $ragin_value ) {
     /*if ( $add_permission ) {
@@ -146,15 +90,11 @@ foreach ( $rating_users as $user_id => $ragin_value ) {
 
 $table['head']          = array( __( 'Display Name', 'hrm' ), __( 'Total Score', 'hrm' ) );
 $table['body']          = isset( $body ) ? $body : array();
-
-
 $table['td_attr']       = isset( $td_attr ) ? $td_attr : array();
 $table['th_attr']       = array( 'style="width:50%"' );
 $table['table_attr']    = array( 'class' => 'widefat' );
-
 $table['table']         = 'hrm_job_title_option';
 $table['action']        = 'hrm_delete';
-$table['table_attr']    = array( 'class' => 'widefat' );
 $table['tab']           = $tab;
 $table['subtab']        = $subtab;
 $table['add_btn_name']  = false;
@@ -162,4 +102,19 @@ $table['delete_button'] = false;
 
 echo Hrm_Settings::getInstance()->table( $table );
 
-echo Hrm_Settings::getInstance()->pagination( $total_pagination, $limit );
+echo Hrm_Settings::getInstance()->pagination( $total_pagination, $limit, $pagenum );
+$file_path = urlencode(__FILE__);
+?>
+
+<script type="text/javascript">
+jQuery(function($) {
+    hrm_dataAttr = {
+       page: '<?php echo $page; ?>',
+       tab: '<?php echo $tab; ?>',
+       subtab: '<?php echo $subtab; ?>',
+       req_frm: '<?php echo $file_path; ?>',
+       limit: '<?php echo $limit; ?>',
+       search_satus: '<?php echo $search_satus; ?>'
+    };
+});
+</script>

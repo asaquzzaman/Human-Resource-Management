@@ -1,9 +1,9 @@
-<div class="hrm-error-notification"></div>
+<div class="hrm-update-notification"></div>
 <?php
 if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employer_id = get_current_user_id();
 } else {
-    $employer_id = isset( $_GET['employee_id'] ) ? trim( $_GET['employee_id'] ) : '';
+    $employer_id = isset( $_REQUEST['employee_id'] ) ? trim( $_REQUEST['employee_id'] ) : '';
 }
 ?>
 
@@ -18,11 +18,11 @@ foreach ( $results as $key => $value) {
       continue;
     }
     $body[] = array(
-        '<input name="hrm_check['.$value->emp_number.']" value="" type="checkbox">',
+        '<input name="hrm_check['.$value->id.']" value="" type="checkbox">',
         '<a href="#" class="hrm-editable" data-table_option="hrm_work_experience" data-id='.$value->id.'>'.$value->eexp_company.'<a>',
         $value->eexp_jobtit,
-        get_date2mysql( $value->eexp_from_date ),
-        get_date2mysql( $value->eexp_to_date ),
+        hrm_get_date2mysql( $value->eexp_from_date ),
+        hrm_get_date2mysql( $value->eexp_to_date ),
         $value->eexp_comments,
     );
 
@@ -31,23 +31,21 @@ foreach ( $results as $key => $value) {
     );
 }
 
-$table['head'] = array( '<input type="checkbox">', __( 'Company', 'hrm'), __( 'Job Title', 'hrm'), __( 'From', 'hrm'), __( 'To', 'hrm'), __( 'Comment', 'hrm') );
-$table['body'] = isset( $body ) ? $body : array();
-
-
-$table['td_attr'] = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr'] = array( 'class="check-column"' );
+$table = array();
+$table['head']       = array( '<input type="checkbox">', __( 'Company', 'hrm'), __( 'Job Title', 'hrm'), __( 'From', 'hrm'), __( 'To', 'hrm'), __( 'Comment', 'hrm') );
+$table['body']       = isset( $body ) ? $body : array();
+$table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
+$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
-
-$table['table'] = 'hrm_qualification_skills';
-$table['action'] = 'hrm_delete';
-$table['table_attr'] = array( 'class' => 'widefat' );
-$table['tab'] = $tab;
-$table['subtab'] = $subtab;
+$table['table']      = 'hrm_work_experience';
+$table['action']     = 'hrm_delete';
+$table['tab']        = $tab;
+$table['subtab']     = $subtab;
 
 echo hrm_Settings::getInstance()->table( $table );
+$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id;
+$file_path = urlencode(__FILE__);
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id; ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -56,7 +54,12 @@ echo hrm_Settings::getInstance()->table( $table );
            redirect : '<?php echo $url; ?>',
            class_name : 'hrm_Employee',
            function_name : 'work_experience',
-           emp_id: "<?php echo $employer_id; ?>"
+           employee_id: "<?php echo $employer_id; ?>",
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           subtab: true
         };
     });
 </script>

@@ -1,42 +1,44 @@
+<div class="hrm-update-notification"></div>
 <?php
+$search['from_date'] = array(
+    'label' => __( 'From Date', 'hrm' ),
+    'class' => 'hrm-datepicker-from',
+    'value' => isset( $_POST['from_date'] ) ? hrm_date2mysql( $_POST['from_date'] ) : '',
+    'type'  => 'text',
+    'desc'  => __( 'Choose Date', 'hrm' ),
+);
 
-	//search form
-	$search['date'] = array(
-		'label' => __( 'Date', 'hrm' ),
-		'class' => 'hrm-datepicker',
-		'type'  => 'text',
-		'desc'  => __( 'Choose Date', 'hrm' ),
-	);
-    $search['action'] = 'hrm_search';
-    $search['table_option'] = 'hrm_attendance';
-	echo hrm_Settings::getInstance()->get_serarch_form( $search, __( 'Attendance Records', 'hrm' ) );
+$search['to_date'] = array(
+    'label' => __( 'To Date', 'hrm' ),
+    'class' => 'hrm-datepicker-to',
+    'value' => isset( $_POST['to_date'] ) ? hrm_date2mysql( $_POST['to_date'] ) : '',
+    'type'  => 'text',
+    'desc'  => __( 'Choose Date', 'hrm' ),
+);
+
+$search['type'] = array(
+    'type'  => 'hidden',
+    'value' => '_search'
+);
+$search['action'] = 'hrm_search';
+$search['table_option'] = 'hrm_attendance';
+echo hrm_Settings::getInstance()->get_serarch_form( $search, __( 'Attendance Records', 'hrm' ) );
 	//search form
 ?>
 <?php
-$post_date = isset( $_GET['date'] ) ? $_GET['date'] : false;
+
 $user_id = get_current_user_id();
 
-$pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-$offset = ( $pagenum - 1 ) * $limit;
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
 
-$args = array(
-    'post_type'      => 'hrm_punch',
-    'post_status'    => 'publish',
-    'author'         => $user_id,
-    'posts_per_page' => $limit,
-    'offset'         => $offset
-);
-
-if ( $post_date ) {
-    $args['date_query'] = array(
-        'year' => date( 'Y', strtotime($post_date) ),
-        'month' => date( 'm', strtotime($post_date) ),
-        'day' => date( 'd', strtotime($post_date) ),
-    );
+    $search_satus     = true;
+    $query = Hrm_Time::getInstance()->get_individulat_punch( $_POST, $limit, $pagenum );
+} else {
+    $search_satus     = false;
+    $query = Hrm_Time::getInstance()->get_individulat_punch( $_POST, $limit, $pagenum );
 }
-
-$query = new WP_Query($args);
 
 $posts = $query->posts;
 $total_pagination = $query->found_posts;
@@ -160,9 +162,10 @@ $total_pagination = $query->found_posts;
     echo Hrm_Settings::getInstance()->table( $table );
 
 
-echo Hrm_Settings::getInstance()->pagination( $total_pagination, $limit );
+echo Hrm_Settings::getInstance()->pagination( $total_pagination, $limit, $pagenum );
+$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+$file_path = urlencode(__FILE__);
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -171,6 +174,14 @@ echo Hrm_Settings::getInstance()->pagination( $total_pagination, $limit );
            class_name : 'Hrm_Time',
            redirect : '<?php echo $url; ?>',
            function_name : 'punch_in_out_form',
+           user_id_js : '<?php echo $user_id; ?>',
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           limit: '<?php echo $limit; ?>',
+           search_satus: '<?php echo $search_satus; ?>',
+           subtab: true
         };
     });
 </script>

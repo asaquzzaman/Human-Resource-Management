@@ -32,7 +32,7 @@ label em {
 }
 .hrm-error {
     strong {
-        color: #C63E3E;
+        //color: #C63E3E;
     }
 }
 .hrm-success {
@@ -290,10 +290,13 @@ label em {
             font-weight: 600;
             font-size: 14px;
         }
-        span {
+        .hrm-notification, span {
             margin-left: 41%;
             display: block;
 
+        }
+        .hrm-notification {
+            color: red;
         }
         .description {
             margin-bottom: 10px;
@@ -373,5 +376,71 @@ label em {
     height: 15px;
     width: 5px;
     padding-left: 5px; //add this
+}
+.hrm-file-index-file-wrap {
+    .hrm-file-tag {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        max-width: 150px;
+        padding: 5px;
+
+    }
+    .avatar {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        max-width: 80px;
+        padding: 2px;
+    }
+}
+#hrm {
+    #hrm-file-index {
+        .hrm-file-index-file-wrap();
+    }
+    #hrm-file {
+        .hrm-file-index-file-wrap();
+        #hrm-upload-file-container {
+            border: 1px dashed #9f9898;
+            margin-left: 21%;
+            margin-bottom: 15px;
+            margin-top: 50px;
+            padding: 10px;
+            text-align: center;
+            width: 29%;
+
+            #hrm-filelist {
+                .hrm-single-progress {
+                    position: relative;
+                    overflow: hidden;
+                    margin: 10px;
+                    .hrm-filename {
+                        left: 2%;
+                        position: absolute;
+                        text-align: left;
+                        width: 98%;
+
+                        strong {
+                            position: absolute;
+                            right: 2%;
+                        }
+                    }
+                    .hrm-upload-bar {
+                        height: 20px;
+                        background-color: #5EB95E;
+                        width: 1px;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+}
+.hrm-ui-dialog {
+    left: 32% !important;
+    top: 10% !important;
 }
 

@@ -11,31 +11,92 @@ class Hrm_Evaluation {
     }
 
     function get_project_by_manager() {
-    	global $wpdb;
+        global $wpdb;
 
-		$table   = $wpdb->prefix . 'hrm_user_role';
-		$user_id = get_current_user_id();
+        $table   = $wpdb->prefix . 'hrm_user_role';
+        $user_id = get_current_user_id();
 
-	    $args = array(
-			'post_type'      => 'hrm_project',
-			'posts_per_page' => '-1',
-			'post_status'    => 'publish',
-			'author__not_in' => array( $user_id ),
-	    );
+        $args = array(
+            'post_type'      => 'hrm_project',
+            'posts_per_page' => '-1',
+            'post_status'    => 'publish',
+            'author__not_in' => array( $user_id ),
+        );
 
-	    add_filter( 'posts_join', array( $this, 'jonin_user_role_table') );
+        add_filter( 'posts_join', array( $this, 'jonin_user_role_table') );
         add_filter( 'posts_where', array( $this, 'get_project_where_user_role'), 10, 2 );
 
-	    $query = new WP_Query( $args );
+        $query = new WP_Query( $args );
 
-	    remove_filter( 'posts_join', array( $this, 'jonin_user_role_table') );
+        remove_filter( 'posts_join', array( $this, 'jonin_user_role_table') );
         remove_filter( 'posts_where', array( $this, 'get_project_where_user_role'), 10, 2 );
 
-	    return $query;
+        return $query;
+    }
+
+    function search_rating_record( $post, $limit, $pagenum ) {
+        if ( isset( $post['from_date'] ) && isset( $post['to_date'] ) ) {
+            if ( !empty( $post['from_date'] ) && !empty( $post['to_date'] ) ) {
+                if ( strtotime( $post['from_date'] ) > strtotime( $post['to_date'] ) ) {
+                    return;
+                }
+            }
+        }
+
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        $args = array(
+            'post_type'      => 'hrm_task',
+            'post_status'    => array( 'publish', 'future' ),
+            'posts_per_page' => $limit,
+            'offset'         => $offset,
+            'meta_query'     => array(
+                'relation' => 'AND',
+                 array(
+                    'key' => '_rating_date',
+                    'value' => date( 'Y-m-d', strtotime( $post['from_date'] ) ),
+                    'compare' => '>='
+                ),
+
+                array(
+                    'key' => '_rating_date',
+                    'value' => date( 'Y-m-d', strtotime( $post['to_date'] ) ),
+                    'compare' => '<='
+                ),
+            )
+        );
+
+        return new WP_Query($args);
+    }
+
+    function rating_recored( $limit, $pagenum ) {
+        $offset  = ( $pagenum - 1 ) * $limit;
+        $args = array(
+            'post_type'      => 'hrm_task',
+            'post_status'    => array( 'publish', 'future' ),
+            'posts_per_page' => $limit,
+            'offset'         => $offset,
+            'meta_query'     => array(
+                'relation' => 'AND',
+                 array(
+                    'key' => '_rating_date',
+                    'value' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                    'compare' => '>='
+                ),
+
+                array(
+                    'key' => '_rating_date',
+                    'value' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                    'compare' => '<='
+                ),
+            )
+        );
+
+        return new WP_Query($args);
     }
 
     function jonin_user_role_table( $join ) {
-    	global $wpdb;
+        global $wpdb;
 
         $table = $wpdb->prefix . 'hrm_user_role';
         $join .= "LEFT JOIN $table ON $wpdb->posts.ID = $table.project_id";
@@ -44,59 +105,59 @@ class Hrm_Evaluation {
     }
 
     function get_project_where_user_role( $where, &$wp_query ) {
-    	global $wpdb;
+        global $wpdb;
 
-		$table   = $wpdb->prefix . 'hrm_user_role';
-		$user_id = get_current_user_id();
-		$where   .= " AND $table.user_id = $user_id AND $table.role = 'manager'";
+        $table   = $wpdb->prefix . 'hrm_user_role';
+        $user_id = get_current_user_id();
+        $where   .= " AND $table.user_id = $user_id AND $table.role = 'manager'";
 
         return $where;
     }
 
     function get_project_by_author() {
-    	$user_id = get_current_user_id();
+        $user_id = get_current_user_id();
 
-	    $args = array(
-			'post_type'      => 'hrm_project',
-			'author'         => $user_id,
-			'posts_per_page' => '-1',
-			'post_status'    => 'publish'
-	    );
-	    $query = new WP_Query( $args );
+        $args = array(
+            'post_type'      => 'hrm_project',
+            'author'         => $user_id,
+            'posts_per_page' => '-1',
+            'post_status'    => 'publish'
+        );
+        $query = new WP_Query( $args );
 
-	    return $query;
+        return $query;
     }
 
     function get_user_by_project_id( $project_id ) {
-    	$users = Hrm_Admin::getInstance()->get_project_assigned_user( $project_id );
-    	$option_value = array();
-    	$option_value['-1'] = __( '-Select-', 'hrm' );
-    	foreach ( $users as $user_id => $user ) {
-    		$option_value[$user_id] = $user['name'];
-    	}
-    	$co_worker = array(
-			'label'    => __( 'Co Worker', 'hrm' ),
-			'class'    => 'hrm-chosen',
-			'id'	   => 'hrm-rank-task-user',
-			'type'     => 'select',
-			'option'   => $option_value,
-			'selected' => '',
-			'desc'     => __( 'Type project name', 'hrm' ),
-			'extra' => array(
-				'data-placeholder' => __( "Choose project", 'hrm' ),
-				'data-project_id'  => $project_id
-		    ),
-		);
-    	echo '<div class="hrm-text-wrap hrm-task-rating-user">';
-		echo Hrm_Settings::getInstance()->select_field( 'co_worker', $co_worker );
-		echo '</div>';
+        $users = Hrm_Admin::getInstance()->get_project_assigned_user( $project_id );
+        $option_value = array();
+        $option_value['-1'] = __( '-Select-', 'hrm' );
+        foreach ( $users as $user_id => $user ) {
+            $option_value[$user_id] = $user['name'];
+        }
+        $co_worker = array(
+            'label'    => __( 'Co Worker', 'hrm' ),
+            'class'    => 'hrm-chosen',
+            'id'       => 'hrm-rank-task-user',
+            'type'     => 'select',
+            'option'   => $option_value,
+            'selected' => '',
+            'desc'     => __( 'Type project name', 'hrm' ),
+            'extra' => array(
+                'data-placeholder' => __( "Choose project", 'hrm' ),
+                'data-project_id'  => $project_id
+            ),
+        );
+        echo '<div class="hrm-text-wrap hrm-task-rating-user">';
+        echo Hrm_Settings::getInstance()->select_field( 'co_worker', $co_worker );
+        echo '</div>';
     }
 
     function user_task_content( $project_id, $user_id ) {
 
         $outstanding_tasks = $this->get_outstnding_task( $project_id, $user_id, 'outstanding_task' );
-		$completed_tasks   = $this->get_outstnding_task( $project_id, $user_id, 'completed_task' );
-		$running_tasks     = $this->get_outstnding_task( $project_id, $user_id );
+        $completed_tasks   = $this->get_outstnding_task( $project_id, $user_id, 'completed_task' );
+        $running_tasks     = $this->get_outstnding_task( $project_id, $user_id );
         $all_task_id       = array();
         $slider_value      = array();
         $running_task_total = 0;
@@ -187,23 +248,8 @@ class Hrm_Evaluation {
                     foreach ( $running_task as $key => $task ) {
                         $task_id = $task['tID'];
                         $all_task_id[] = $task_id;
-                        $ratings = get_posts( array(
-                            'post_type'   => 'hrm_rating',
-                            'post_status' => array( 'publish, future' ),
-                            'post_parent' => $post_id,
-                            'meta_key'    =>  '_rating_task_id',
-                            'meta_value'  => $task_id
-                        ));
 
-                        if ( count( $ratings ) ) {
-                            $rating = reset( $ratings );
-                            $rating_value = get_post_meta( $rating->ID, '_rating_value', true );
-                        } else {
-                            $rating = 0;
-                            $rating_value = 0;
-                        }
-
-                        $rating_post_id = isset($rating->ID) ? $rating->ID : 0;
+                        $rating_value = get_post_meta( $task_id, '_rating_value', true );
 
                         $slider_value[] = array(
                             'id'    => $task['tID'],
@@ -223,7 +269,7 @@ class Hrm_Evaluation {
                                     <div class="hrm-slider-field hrm-task-rating">
                                         <strong><?php _e( 'Rating ', 'hrm' ); ?></strong><span class="hrm-task-rating-value"><?php echo intval( $rating_value ); ?></span>
                                     </div>
-                                    <?php echo Hrm_Settings::getInstance()->hidden_field( 'task_rating['.$task_id.']['.$rating_post_id.']', $slider ) ;?>
+                                    <?php echo Hrm_Settings::getInstance()->hidden_field( 'task_rating['.$task_id.']', $slider ) ;?>
                                     <div class="hrm-slider-width" id="hrm-rating-slider-<?php echo $task['tID']; ?>"></div>
                                 </div>
                             </li>
@@ -256,21 +302,7 @@ class Hrm_Evaluation {
                     foreach ( $running_task as $key => $task ) {
                         $task_id = $task['tID'];
                         $all_task_id[] = $task_id;
-                        $ratings = get_posts( array(
-                            'post_type'   => 'hrm_rating',
-                            'post_status' => array( 'publish, future' ),
-                            'post_parent' => $post_id,
-                            'meta_key'    =>  '_rating_task_id',
-                            'meta_value'  => $task_id
-                        ));
-
-                        if ( count( $ratings ) ) {
-                            $rating = reset( $ratings );
-                            $rating_value = get_post_meta( $rating->ID, '_rating_value', true );
-                        } else {
-                            $rating = 0;
-                            $rating_value = 0;
-                        }
+                        $rating_value = get_post_meta( $task_id, '_rating_value', true );
 
                         $rating_post_id = isset( $rating->ID ) ? $rating->ID : 0;
 
@@ -292,7 +324,7 @@ class Hrm_Evaluation {
                                     <div class="hrm-slider-field hrm-task-rating">
                                         <strong><?php _e( 'Rating ', 'hrm' ); ?></strong><span class="hrm-task-rating-value"><?php echo intval( $rating_value ); ?></span>
                                     </div>
-                                    <?php echo Hrm_Settings::getInstance()->hidden_field( 'task_rating['.$task_id.']['.$rating_post_id.']', $slider ) ;?>
+                                    <?php echo Hrm_Settings::getInstance()->hidden_field( 'task_rating['.$task_id.']', $slider ) ;?>
                                     <div class="hrm-slider-width" id="hrm-rating-slider-<?php echo $task['tID']; ?>"></div>
                                 </div>
                             </li>
@@ -305,7 +337,7 @@ class Hrm_Evaluation {
         </div>
         <?php
         $rating_date = isset( $task_id ) ? get_post_meta( $task_id, '_rating_date', true ) : '';
-        $rating_date = !empty( $rating_date ) ? get_date2mysql( date( 'Y-m-d', $rating_date ) ) : '';
+        $rating_date = !empty( $rating_date ) ? hrm_get_date2mysql( $rating_date ) : '';
         ?>
         <br>
         <input type="text" placeholder="<?php _e( 'Date', 'hrm' ); ?>" class="hrm-datepicker" name="task_rate_date" value="<?php echo $rating_date; ?>">
@@ -320,7 +352,7 @@ class Hrm_Evaluation {
     }
 
     function get_outstnding_task( $project_id, $user_id, $subtab = null ) {
-    	global $wpdb;
+        global $wpdb;
 
         if ( isset( $subtab ) && $subtab == 'outstanding_task' ) {
 
@@ -334,7 +366,7 @@ class Hrm_Evaluation {
             $query1 = "AND tcomp.meta_key = '_completed' AND tcomp.meta_value = '0'";
             $query2 = "AND ( tend.meta_value = '' OR STR_TO_DATE( tend.meta_value, '%Y-%m-%d') >= STR_TO_DATE( NOW(), '%Y-%m-%d') ) ";
         }
-    	$sql = "SELECT t.post_title as t_t, t.ID as tID, tpm.meta_value as tassign, tend.meta_value as tend,
+        $sql = "SELECT t.post_title as t_t, t.ID as tID, tpm.meta_value as tassign, tend.meta_value as tend,
                 p.post_title as p_t, p.ID as pID
                 FROM $wpdb->posts as t
                 LEFT JOIN $wpdb->posts as p ON p.ID = t.post_parent
@@ -376,12 +408,15 @@ class Hrm_Evaluation {
 
         foreach ( $post['task_rating'] as $task_id => $rating_value ) {
             update_post_meta( $task_id, '_rating_value', $rating_value );
-            update_post_meta( $task_id, '_rating_date', strtotime($rating_date) );
+            update_post_meta( $task_id, '_rating_date', $rating_date );
         }
     }
 
 
     function new_inserted_task_rating( $project_id, $assing_to ) {
+        if ( !$assing_to ) {
+            return false;
+        }
 
         $tasks = $this->count_total_task( $project_id, $assing_to );
         $total_task = $tasks->found_posts;

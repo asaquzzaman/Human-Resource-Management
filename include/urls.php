@@ -1,12 +1,12 @@
 <?php
 function hrm_tab_menu_url( $tab = null, $page ) {
     $url = sprintf( '%1s?page=%2s&tab=%3s', admin_url( 'admin.php' ), $page, $tab );
-    return apply_filters( 'hrm_tab_menu_url', $url, $tab );
+    return apply_filters( 'hrm_tab_menu_url', $url, $page, $tab );
 }
 
 function hrm_subtab_menu_url( $tab = null, $sub_tab = null, $page ) {
     $url = sprintf( '%1s?page=%2s&tab=%3s&sub_tab=%4s', admin_url( 'admin.php' ), $page, $tab, $sub_tab );
-    return apply_filters( 'hrm_subtab_menu_url', $url, $tab, $sub_tab );
+    return apply_filters( 'hrm_subtab_menu_url', $url, $page, $tab, $sub_tab );
 }
 
 function hrm_employee_menu_url( $page, $tab = null, $employee_id = null ) {

@@ -1,9 +1,9 @@
-<div class="hrm-error-notification"></div>
+<div class="hrm-update-notification"></div>
 <?php
 if ( hrm_current_user_role() == 'hrm_employee' ) {
     $employer_id = get_current_user_id();
 } else {
-    $employer_id = isset( $_GET['employee_id'] ) ? trim( $_GET['employee_id'] ) : '';
+    $employer_id = isset( $_REQUEST['employee_id'] ) ? trim( $_REQUEST['employee_id'] ) : '';
 }
 ?>
 <div id="hrm_personal_language"></div>
@@ -25,6 +25,10 @@ foreach ( $results as $key => $value) {
         continue;
     }
 
+    if ( !isset( $label[$value->language_id] ) ) {
+        continue;
+    }
+
     $body[] = array(
         '<input name="hrm_check['.$value->id.']" value="" type="checkbox">',
         '<a href="#" class="hrm-editable" data-table_option="hrm_personal_language"  data-id='.$value->id.'>'.$label[$value->language_id].'<a>',
@@ -38,23 +42,21 @@ foreach ( $results as $key => $value) {
     );
 }
 
+$table = array();
 $table['head']       = array( '<input type="checkbox">', __( 'Language', 'hrm'), __( 'Fluency', 'hrm'), __( 'Competency', 'hrm'), __( 'Comments', 'hrm') );
 $table['body']       = isset( $body ) ? $body : array();
-
-
 $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
 $table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
-
-$table['table']      = 'hrm_qualification_languages';
+$table['table']      = 'hrm_personal_language';
 $table['action']     = 'hrm_delete';
-$table['table_attr'] = array( 'class' => 'widefat' );
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
 
 echo hrm_Settings::getInstance()->table( $table );
+$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id;
+$file_path = urlencode(__FILE__);
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id; ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -64,7 +66,12 @@ echo hrm_Settings::getInstance()->table( $table );
            redirect : '<?php echo $url; ?>',
            function_name : 'personal_language',
            language: '<?php echo json_encode( $label); ?>',
-           emp_id: "<?php echo $employer_id; ?>"
+           employee_id: "<?php echo $employer_id; ?>",
+           page: '<?php echo $page; ?>',
+           tab: '<?php echo $tab; ?>',
+           subtab: '<?php echo $subtab; ?>',
+           req_frm: '<?php echo $file_path; ?>',
+           subtab: true
         };
     });
 </script>

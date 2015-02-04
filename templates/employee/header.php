@@ -35,6 +35,10 @@ if ( ! $subtab ) {
     $subtab = key( $menu[$page][$tab]['submenu'] );
 }
 
+if ( ! $subtab ) {
+    return;
+}
+
 ?>
 <h3 class="hrm-sub-nav">
     <ul class="hrm-subsubsub">

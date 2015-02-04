@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <?php
 //search form
 $search['title'] = array(
@@ -6,8 +7,12 @@ $search['title'] = array(
     'desc' => 'please insert project title',
 );
 
-$search['action'] = 'hrm_search';
-$search['table_option'] = 'hrm_projects';
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
+);
+
+$search['action'] = 'project_search';
 
 echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Project');
 
@@ -18,9 +23,10 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Project');
 //hidden form
 
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
 
-$results = Hrm_Admin::getInstance()->get_projects( $limit, $tab, $subtab );
+$results = Hrm_Admin::getInstance()->get_projects( $limit, $tab, $subtab, $pagenum );
 
 $add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
 $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
@@ -37,9 +43,9 @@ foreach ( $results['posts'] as $key => $project_obj ) {
     }
 
     $currency_symbol = get_post_meta( $project_obj->ID, '_currency_symbol', true );
-    $total_budget = get_post_meta( $project_obj->ID, '_budget', true );
-    $budget_utilize = get_post_meta( $project_obj->ID, '_project_budget_utilize', true );
-    $budget_remain = $total_budget - $budget_utilize;
+    $total_budget    = get_post_meta( $project_obj->ID, '_budget', true );
+    $budget_utilize  = get_post_meta( $project_obj->ID, '_project_budget_utilize', true );
+    $budget_remain   = $total_budget - $budget_utilize;
 
     $body[] = array(
         '<input name="hrm_check['.$project_obj->ID.']" value="'.$project_obj->ID.'" type="checkbox">',
@@ -96,7 +102,13 @@ echo Hrm_Settings::getInstance()->table( $table );
 //table
 
 //pagination
-echo Hrm_Settings::getInstance()->pagination( $results['found_posts'], $limit );
+echo Hrm_Settings::getInstance()->pagination( $results['found_posts'], $limit, $pagenum );
+$file_path = urlencode(__FILE__);
+if ( isset( $_POST['type'] ) && $_POST['type'] == '_search' ) {
+    $search_satus = true;
+} else {
+    $search_satus = false;
+}
 ?>
 <?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
 <script type="text/javascript">
@@ -107,6 +119,13 @@ jQuery(function($) {
        redirect : '<?php echo $url; ?>',
        class_name : 'Hrm_Admin',
        function_name : 'project_insert_form',
+       page: '<?php echo $page; ?>',
+       tab: '<?php echo $tab; ?>',
+       subtab: '<?php echo $subtab; ?>',
+       req_frm: '<?php echo $file_path; ?>',
+       limit: '<?php echo $limit; ?>',
+       search_satus: '<?php echo $search_satus; ?>',
+       subtab: true
     };
 });
 </script>

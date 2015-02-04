@@ -1,3 +1,4 @@
+<div class="hrm-update-notification"></div>
 <?php
 if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
 
@@ -10,13 +11,20 @@ $search['title'] = array(
     'label' => __( 'Title', 'hrm' ),
     'type' => 'text',
     'desc' => 'please insert title',
+    'value' => isset( $_POST['title'] ) ? $_POST['title'] : '',
 );
 $search['date'] = array(
     'label' => __( 'Date', 'hrm' ),
     'id'=> 'hrm-src-date',
     'class' => 'hrm-datepicker',
     'type' => 'text',
+    'value' => isset( $_POST['date'] ) ? hrm_date2mysql( $_POST['date'] ) : '',
     'desc' => 'please insert title',
+);
+
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
 );
 $search['action'] = 'hrm_search';
 $search['table_option'] = 'hrm_notice';
@@ -24,14 +32,15 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Notice');
 ?>
 <div id="hrm-admin-notice"></div>
 <?php
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
-
-    $results = Hrm_Settings::getInstance()->search_query( $limit );
-
-
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $post = $_POST;
+    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
+    $search_satus = true;
 } else {
-    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_notice', $limit );
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_notice', $limit, $pagenum );
+    $search_satus = false;
 }
 
 $total = $results['total_row'];
@@ -57,7 +66,7 @@ foreach ( $results as $key => $value) {
         $name_id,
         $value->description,
         $user_info->display_name,
-        get_date2mysql( $value->date )
+        hrm_get_date2mysql( $value->date )
     );
 
     $td_attr[] = array(
@@ -65,13 +74,14 @@ foreach ( $results as $key => $value) {
     );
 }
 $del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
+$table = array();
 $table['head'] = array(
-                $del_checkbox,
-                __( 'Title', 'hrm' ),
-                __( 'Description', 'hrm' ),
-                __( 'Signature', 'hrm' ),
-                __( 'Date', 'hrm' )
-            );
+    $del_checkbox,
+    __( 'Title', 'hrm' ),
+    __( 'Description', 'hrm' ),
+    __( 'Signature', 'hrm' ),
+    __( 'Date', 'hrm' )
+);
 $table['body']       = isset( $body ) ? $body : array();
 
 
@@ -89,18 +99,25 @@ echo Hrm_Settings::getInstance()->table( $table );
 //table
 
 //pagination
-echo Hrm_Settings::getInstance()->pagination( $total, $limit );
+echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
 $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
-
+$file_path = urlencode(__FILE__);
 ?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
-           add_form_generator_action : 'add_form',
-           add_form_apppend_wrap : 'hrm-admin-notice',
-           class_name : 'Hrm_Admin',
-           redirect : '<?php echo $url; ?>',
-           function_name : 'admin_notice',
+            add_form_generator_action : 'add_form',
+            add_form_apppend_wrap : 'hrm-admin-notice',
+            class_name : 'Hrm_Admin',
+            redirect : '<?php echo $url; ?>',
+            function_name : 'admin_notice',
+            page: '<?php echo $page; ?>',
+            tab: '<?php echo $tab; ?>',
+            subtab: '<?php echo $subtab; ?>',
+            req_frm: '<?php echo $file_path; ?>',
+            limit: '<?php echo $limit; ?>',
+            search_satus: '<?php echo $search_satus; ?>',
+            subtab: true
         };
     });
 </script>

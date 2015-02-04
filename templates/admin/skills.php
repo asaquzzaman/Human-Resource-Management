@@ -1,9 +1,16 @@
+<div class="hrm-update-notification"></div>
 <?php
 //search form
 $search['skill_name'] = array(
     'label' => __( 'Skill', 'hrm' ),
     'type' => 'text',
+    'value' => isset( $_POST['skill_name'] ) ? $_POST['skill_name'] : '',
     'desc' => 'please insert skills name',
+);
+
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
 );
 
 $search['action'] = 'hrm_search';
@@ -14,14 +21,15 @@ echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Skills');
 
 <?php
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
-
-    $results = Hrm_Settings::getInstance()->search_query( $limit );
-
-
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $post = $_POST;
+    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
+    $search_satus = true;
 } else {
-    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_skill', $limit );
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_skill', $limit, $pagenum );
+    $search_satus = false;
 }
 
 $total = $results['total_row'];
@@ -51,7 +59,8 @@ foreach ( $results as $key => $value) {
     );
 }
 $del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
-$table['head']       = array( $del_checkbox, 'Name', 'Description' );
+$table = array();
+$table['head']       = array( $del_checkbox, __( 'Name', 'hrm' ), __( 'Description', 'hrm' ) );
 $table['body']       = isset( $body ) ? $body : array();
 
 
@@ -69,8 +78,8 @@ echo Hrm_Settings::getInstance()->table( $table );
 //table
 
 //pagination
-echo Hrm_Settings::getInstance()->pagination( $total, $limit );
-
+echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
+$file_path = urlencode(__FILE__);
 ?>
 <?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
 <script type="text/javascript">
@@ -81,6 +90,13 @@ jQuery(function($) {
        redirect : '<?php echo $url; ?>',
        class_name : 'Hrm_Admin',
        function_name : 'skills',
+       page: '<?php echo $page; ?>',
+       tab: '<?php echo $tab; ?>',
+       subtab: '<?php echo $subtab; ?>',
+       req_frm: '<?php echo $file_path; ?>',
+       limit: '<?php echo $limit; ?>',
+       search_satus: '<?php echo $search_satus; ?>',
+       subtab: true
     };
 });
 </script>

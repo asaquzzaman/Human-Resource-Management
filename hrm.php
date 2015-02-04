@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: WP human resource management
+ * Plugin Name: WP human resource management development version
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 0.4
+ * Version: 0.5
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -60,14 +60,14 @@ class Wp_Hrm {
     private $is_admin;
 
     function __construct() {
-        $this->version = '0.4';
+        $this->version = '0.5';
         $this->db_version = '0.1';
         $this->plugin_dir = dirname(__FILE__);
         $this->is_admin = ( is_admin() ) ? 'yes' : 'no';
         $this->instantiate();
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
-        add_action( 'admin_notices', array($this, 'fornt_end') );
+        //add_action( 'admin_notices', array($this, 'fornt_end') );
         register_activation_hook( __FILE__, array($this, 'install') );
         add_action( 'init', array( $this, 'init' ) );
     }
@@ -117,7 +117,7 @@ class Wp_Hrm {
         wp_enqueue_style( 'hrm-chosen', plugins_url( '/asset/css/chosen.min.css', __FILE__ ), false, false, 'all' );
         wp_enqueue_style( 'hrm-admin', plugins_url( '/asset/css/admin.css', __FILE__ ), false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui', plugins_url( '/asset/css/jquery-ui.css', __FILE__ ), false, false, 'all' );
-        wp_enqueue_style( 'hrm-jquery-ui-timepicker', plugins_url( '/asset/css/jquery-ui-timepicker.css', __FILE__ ), false, false, 'all' );
+        wp_enqueue_style( 'hrm-jquery-ui-timepicker', plugins_url( '/asset/css/jquery-ui-timepicker-addon.css', __FILE__ ), false, false, 'all' );
 
     }
 
@@ -164,6 +164,15 @@ class Wp_Hrm {
         $this->admin_scripts();
     }
 
+    static function file_scripts() {
+        self::admin_scripts();
+        wp_enqueue_script( 'jquery-ui' );
+        wp_enqueue_script( 'jquery-ui-mouse' );
+        wp_enqueue_script( 'jquery-ui-sortable' );
+        wp_enqueue_script( 'plupload-handlers' );
+        wp_enqueue_script( 'hrm-file', plugins_url( '/asset/js/file.js', __FILE__ ) );
+    }
+
     function admin_menu() {
         $capability = 'read'; //minimum level: subscriber
         if ( hrm_current_user_role() != 'hrm_employee' ) {
@@ -173,6 +182,7 @@ class Wp_Hrm {
             $leave          = add_submenu_page( 'hrm_management', __( 'Leave', 'hrm' ), __( 'Leave', 'hrm' ), $capability, 'hrm_leave', array( $this, 'admin_page_handler' ) );
             $attendance     = add_submenu_page( 'hrm_management', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
             $evaluation     = add_submenu_page( 'hrm_management', __( 'Evaluation', 'hrm' ), __( 'Evaluation', 'hrm' ), $capability, 'hrm_evaluation', array( $this, 'admin_page_handler' ) );
+            $file           = add_submenu_page( 'hrm_management', __( 'File', 'hrm' ), __( 'File', 'hrm' ), $capability, 'hrm_file', array( $this, 'admin_page_handler' ) );
             $author         = add_submenu_page( 'hrm_management', __( 'Support', 'hrm' ), __( 'Support', 'hrm' ), $capability, 'hrm_author', array( $this, 'admin_page_handler' ) );
 
             add_action( 'admin_print_styles-' . $admin_sub_menu, array($this, 'admin_scripts') );
@@ -181,13 +191,16 @@ class Wp_Hrm {
             add_action( 'admin_print_styles-' . $attendance, array($this, 'attendance_scripts') );
             add_action( 'admin_print_styles-' . $evaluation, array($this, 'evaluation_scripts') );
             add_action( 'admin_print_styles-' . $author, array($this, 'author_scripts') );
+            add_action( 'admin_print_styles-' . $file, array($this, 'file_scripts') );
 
         } else {
-            $user_id        = get_current_user_id();
-            $menu           = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
-            $menu           = add_submenu_page( 'hrm_employee', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
-            $attendance     = add_submenu_page( 'hrm_employee', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
+            $user_id    = get_current_user_id();
+            $menu       = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
+            $menu       = add_submenu_page( 'hrm_employee', __( 'My Info', 'hrm' ), __( 'My Info', 'hrm' ), $capability, 'hrm_employee', array($this, 'admin_page_handler') );
+            $attendance = add_submenu_page( 'hrm_employee', __( 'Time', 'hrm' ), __( 'Time', 'hrm' ), $capability, 'hrm_time', array( $this, 'admin_page_handler' ) );
+            $file       = add_submenu_page( 'hrm_employee', __( 'File', 'hrm' ), __( 'File', 'hrm' ), $capability, 'hrm_file', array( $this, 'admin_page_handler' ) );
             add_action( 'admin_print_styles-' . $attendance, array($this, 'attendance_scripts') );
+            add_action( 'admin_print_styles-' . $file, array($this, 'file_scripts') );
             $this->admin_scripts();
         }
     }

@@ -26,6 +26,7 @@ $search['project_id'] = array(
 
 $search['action'] = 'hrm_search';
 $search['table_option'] = '';
+$search['button'] = false;
 
 echo hrm_Settings::getInstance()->get_serarch_form( $search, __( 'project', 'hrm' ) );
 

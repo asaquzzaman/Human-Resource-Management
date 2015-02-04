@@ -20,8 +20,8 @@ class Hrm_Admin {
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
     }
 
-    function get_employer( $limit = 0, $search = '' ) {
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+    function get_employer( $limit, $search = '', $pagenum ) {
+
         $offset  = ( $pagenum - 1 ) * $limit;
 
         $arg = array(
@@ -393,6 +393,7 @@ class Hrm_Admin {
             $user = get_user_by( 'id', $assign_to );
             $url = hrm_task_assing_user_url( 'hrm_pim', 'my_task', $assign_to );
             ?>
+
             <div class="hrm-task-wrap">
                 <div class="hrm-task-title-wrap">
                     <div class="hrm-task-content">
@@ -402,11 +403,11 @@ class Hrm_Admin {
                         </div>
                         <div>
                             <strong><?php _e( 'Assign to: ' ); ?></strong>
-                            <a href="<?php echo $url; ?>"><?php echo $user->display_name; ?></a>
+                            <a href="<?php echo $url; ?>"><?php echo isset( $user->display_name ) ? $user->display_name : ''; ?></a>
                         </div>
                     </div>
                     <div class="hrm-task-avatar">
-                        <a href="<?php echo $url; ?>"><?php echo get_avatar( $user->ID, '32' ); ?></a>
+                        <a href="<?php echo $url; ?>"><?php echo isset( $user->ID ) ? get_avatar( $user->ID, '32' ) : ''; ?></a>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
@@ -420,7 +421,7 @@ class Hrm_Admin {
                 </div>
             </div>
 
-            <div title="<?php echo $result->post_title; ?>" class="hrm-deposit-dialog hrm-task-desc-wrap-<?php echo $result->ID; ?>" style="display: none;">
+            <div title="<?php echo $result->post_title; ?>" class="hrm-deposit-dialog" id="hrm-task-desc-wrap-<?php echo $result->ID; ?>" style="display: none;">
                 <?php echo $result->post_content; ?>
             </div>
 
@@ -513,16 +514,15 @@ class Hrm_Admin {
     }
 
 
-    function get_projects( $limit = -1, $tab, $subtab ) {
+    function get_projects( $limit = 0, $tab, $subtab, $pagenum ) {
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
         $args = array(
             'posts_per_page' => $limit,
-            'offset'=> $offset,
-            'post_type' => 'hrm_project',
-            'post_status' => 'publish',
+            'offset'         => $offset,
+            'post_type'      => 'hrm_project',
+            'post_status'    => 'publish',
         );
 
         if ( hrm_user_can_access( $tab, $subtab, 'projects_assign_project', true ) === 'projects_assign_project' ) {
@@ -531,8 +531,9 @@ class Hrm_Admin {
         }
 
 
-        if ( isset( $_GET['type'] ) && $_GET['type'] == '_search' ) {
-            add_filter( 'posts_where', array( $this, 'get_project_where' ), 10, 2 );
+        if ( isset( $_POST['type'] ) && $_POST['type'] == '_search' ) {
+            $args['s'] = isset( $_POST['title'] ) ? trim( $_POST['title'] ) : '';
+            $args['post_type'] = array( 'hrm_project', 'hrm_task' );
         }
 
         $projects_query = new WP_Query( $args );
@@ -1248,6 +1249,15 @@ class Hrm_Admin {
         return $return_value;
     }
 
+    function get_user_role() {
+        global $current_user;
+
+        $user_roles = $current_user->roles;
+        $user_role = array_shift($user_roles);
+
+        return $user_role;
+    }
+
     function admin_list( $user_id = null ) {
         global $wp_roles;
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
@@ -1256,6 +1266,9 @@ class Hrm_Admin {
         }
 
         $role_names = $wp_roles->get_names();
+
+        $current_user_role = $this->get_user_role();
+
         if( $user_id === null ) {
             $hidden_form['user_name'] = array(
                 'label' => __( 'Name', 'hrm' ),

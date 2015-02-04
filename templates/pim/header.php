@@ -17,8 +17,9 @@ $menu = hrm_page();
     ?>
 </h2>
 <?php
+
 if ( ! $subtab ) {
-   if( !isset( $menu[$page][$tab]['submenu'] ) ) {
+    if( !isset( $menu[$page][$tab]['submenu'] ) ) {
         return;
     }
 
@@ -26,9 +27,12 @@ if ( ! $subtab ) {
         return;
     }
 
-    $subtab = key( $menu[$page][$tab]['submenu'] );
-}
+    $subtab = array_keys( $menu[$page][$tab]['submenu'] );
+    $subtab = reset( $subtab );
 
+} else {
+    return;
+}
 
 ?>
 <h3 class="hrm-sub-nav">

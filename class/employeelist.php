@@ -233,35 +233,35 @@ class Hrm_Employeelist {
 
     }
 
-    function employeer_search_query( $get, $limit ) {
-        if ( !empty( $get['first_name'] ) ) {
+    function employeer_search_query( $post, $limit, $pagenum ) {
+        if ( !empty( $post['first_name'] ) ) {
             $meta[] =   array(
                 'key'     => 'first_name',
-                'value'   =>  trim( $get['first_name'] ),
+                'value'   =>  trim( $post['first_name'] ),
                 'compare' => 'LIKE'
             );
         }
 
-        if ( !empty( $get['last_name'] ) ) {
+        if ( !empty( $post['last_name'] ) ) {
             $meta[] = array(
                 'key'     => 'last_name',
-                'value'   =>  trim( $get['last_name'] ),
+                'value'   =>  trim( $post['last_name'] ),
                 'compare' => 'LIKE'
             );
         }
 
-        if ( !empty( $get['status'] ) ) {
+        if ( !empty( $post['status'] ) ) {
             $meta[] = array(
                 'key'     => '_status',
-                'value'   =>  trim( $get['status'] ),
+                'value'   =>  trim( $post['status'] ),
                 'compare' => 'LIKE'
             );
         }
 
-        if ( !empty( $get['mobile'] ) ) {
+        if ( !empty( $post['mobile'] ) ) {
             $meta[] = array(
                 'key'     => '_mob_number',
-                'value'   =>  trim( $get['mobile'] ),
+                'value'   =>  trim( $post['mobile'] ),
                 'compare' => 'LIKE'
             );
         }
@@ -272,15 +272,14 @@ class Hrm_Employeelist {
             $meta = '';
         }
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
         $args = array(
-            'search'         => !empty( $get['user'] ) ? trim( $get['user'] ) : '',
+            'search'         => !empty( $post['user'] ) ? trim( $post['user'] ) : '',
             'search_columns' => array( 'user_login', 'user_email' ),
-            'meta_query' => $meta,
-            'number' => $limit,
-            'offset' => $offset
+            'meta_query'     => $meta,
+            'number'         => $limit,
+            'offset'         => $offset
         );
 
 
@@ -289,11 +288,13 @@ class Hrm_Employeelist {
         return $user_query;
     }
 
-    function get_employee( $limit = 0 ) {
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+    function get_employee( $limit = 0, $pagenum ) {
         $offset = ( $pagenum - 1 ) * $limit;
-
-        $employers = new WP_User_Query( array( 'role' => 'hrm_employee', 'posts_per_page' => $limit, 'offset' => $offset ) );
+        $employers = new WP_User_Query( array(
+            'role'   => 'hrm_employee',
+            'number' => $limit,
+            'offset' => $offset
+        ) );
         return $employers;
     }
 }

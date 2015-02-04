@@ -1,11 +1,15 @@
 <?php
+$pagenum     = hrm_pagenum();
+$limit       = '20000';
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset( $_GET['type'] ) && ( $_GET['type'] == '_search' ) ) {
-    $results = hrm_Settings::getInstance()->search_query( $limit );
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $post = $_POST;
+    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
+    $search_satus = true;
 
 } else {
-    $results = hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit );
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit, $pagenum );
+    $search_satus = false;
 }
 
 if( isset( $results['total_row'] ) ) {
@@ -19,21 +23,27 @@ $field['name'] = array(
     'label' => __( 'Location Name', 'hrm' ),
     'type' => 'text',
     'desc' => 'please insert location name',
+    'value' => isset( $_POST['name'] ) ? $_POST['name'] : '',
 );
 $field['city'] = array(
     'label' => __( 'City Name', 'hrm' ),
     'type' => 'text',
     'desc' => 'please insert city',
+    'value' => isset( $_POST['city'] ) ? $_POST['city'] : '',
 );
 $field['phone'] = array(
     'label' => __( 'Phone Number', 'hrm' ),
     'type' => 'text',
     'desc' => 'please insert phone number',
+    'value' => isset( $_POST['phone'] ) ? $_POST['phone'] : '',
 );
-
+$field['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
+);
 $field['action'] = 'hrm_search';
 $field['table_option'] = 'hrm_location_option';
-$field['pagination_limit'] = $limit;
+
 
 echo hrm_Settings::getInstance()->get_serarch_form( $field, 'Location');
 
@@ -63,7 +73,7 @@ foreach ( $results as $key => $value ) {
 		<?php
 			if ( isset( $value->country_code ) && !empty( $value->country_code ) ) {
 				?>
-				<div class="hrm-text-wrap"><strong class="hrm-text-label"><?php _e( 'Country', 'hrm' ); ?></strong><div class="hrm-text-info"><?php echo $this->get_country_by_code( $value->country_code ); ?></div><div class="hrm-clear"></div></div>
+				<div class="hrm-text-wrap"><strong class="hrm-text-label"><?php _e( 'Country', 'hrm' ); ?></strong><div class="hrm-text-info"><?php echo hrm_Settings::getInstance()->get_country_by_code( $value->country_code ); ?></div><div class="hrm-clear"></div></div>
 				<?php
 			}
 		?>
@@ -122,3 +132,20 @@ foreach ( $results as $key => $value ) {
 	</div>
 	<?php
 }
+
+$file_path = urlencode(__FILE__);
+?>
+
+<script type="text/javascript">
+    jQuery(function($) {
+        hrm_dataAttr = {
+			page: '<?php echo $page; ?>',
+			tab: '<?php echo $tab; ?>',
+			subtab: '<?php echo $subtab; ?>',
+			req_frm: '<?php echo $file_path; ?>',
+			limit: '<?php echo $limit; ?>',
+			search_satus: '<?php echo $search_satus; ?>',
+			subtab: true
+        };
+    });
+</script>

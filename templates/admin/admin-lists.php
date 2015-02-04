@@ -1,9 +1,16 @@
+<div class="hrm-update-notification"></div>
 <?php
 
 $search['employer'] = array(
     'label' => __( 'User name/Email/User ID', 'hrm' ),
-    'type' => 'text',
-    'desc' => 'You can search by user name, user email or user id',
+    'type'  => 'text',
+    'value' => isset( $_POST['employer'] ) ? $_POST['employer'] : '',
+    'desc'  => 'You can search by user name, user email or user id',
+);
+
+$search['type'] = array(
+    'type' => 'hidden',
+    'value' => '_search'
 );
 $search['action'] = 'hrm_search';
 $search['table_option'] = 'hrm_user_search';
@@ -15,19 +22,21 @@ echo Hrm_settings::getInstance()->get_serarch_form( $search, 'Admin');
 <?php
 //hidden form
 
-$limit = isset( $_GET['pagination'] ) ? $_GET['pagination'] : 10;
-if( isset($_GET['employer']) && ! empty($_GET['employer']) ) {
-    $search = $_GET['employer'];
+$pagenum     = hrm_pagenum();
+$limit       = hrm_result_limit();
+if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
+    $search = $_POST['employer'];
+    $search_satus = true;
 } else {
     $search = '';
+    $search_satus = false;
 }
-$search_query = Hrm_Admin::getInstance()->get_employer( $limit, $search );
-$results = $search_query->get_results();
-$total = $search_query->get_total();
-
-$add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
+$search_query      = Hrm_Admin::getInstance()->get_employer( $limit, $search, $pagenum );
+$results           = $search_query->get_results();
+$total             = $search_query->get_total();
+$add_permission    = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
 $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
-$user = wp_get_current_user();
+$user              = wp_get_current_user();
 
 foreach ( $results as $id => $user_obj) {
     if ( $user->user_login ==  $user_obj->user_login ) {
@@ -61,7 +70,7 @@ foreach ( $results as $id => $user_obj) {
             'option'   => array( 'yes' => __( 'Enable', 'hrm' ), 'no' => __('Disable', 'hrm') ),
             'selected' => $flag
         );
-        $admin_status_dropdown = $this->select_field( 'admin_staus', $admin_status_dropdown );
+        $admin_status_dropdown = Hrm_settings::getInstance()->select_field( 'admin_staus', $admin_status_dropdown );
     } else {
         $admin_status_dropdown = __('Permission denied', 'hrm' );
     }
@@ -82,7 +91,7 @@ foreach ( $results as $id => $user_obj) {
 }
 
 $del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
-
+$table = array();
 $table['head']       = array( $del_checkbox , 'Admin Name', 'Role', 'Display Name', 'Status' );
 $table['body']       = isset( $body ) ? $body : '';
 
@@ -98,9 +107,9 @@ $table['tab']        = $tab;
 $table['subtab']     = $subtab;
 
 echo Hrm_settings::getInstance()->table( $table );
-
+$file_path = urlencode(__FILE__);
 //pagination
-echo Hrm_settings::getInstance()->pagination( $total, $limit );
+echo Hrm_settings::getInstance()->pagination( $total, $limit, $pagenum );
 ?>
 
 <div id="hrm-create-user-wrap" title="<?php _e( 'Create a new user', 'hrm' ); ?>">
@@ -161,6 +170,13 @@ jQuery(function($) {
        redirect : '<?php echo $url; ?>',
        class_name : 'Hrm_Admin',
        function_name : 'admin_list',
+       page: '<?php echo $page; ?>',
+       tab: '<?php echo $tab; ?>',
+       subtab: '<?php echo $subtab; ?>',
+       req_frm: '<?php echo $file_path; ?>',
+       limit: '<?php echo $limit; ?>',
+       search_satus: '<?php echo $search_satus; ?>',
+       subtab: true
     };
 });
 </script>

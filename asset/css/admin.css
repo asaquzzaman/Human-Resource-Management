@@ -39,14 +39,12 @@ label em {
 #hrm-visible-form-warp,
 .hrm-visible-form-warp,
 #hrm-hidden-form-warp {
-  border: 1px solid #FAD163;
   margin-top: 2%;
-  background: #fff;
 }
 #hrm-visible-form-warp .hrm-inside-padding-wrap,
 .hrm-visible-form-warp .hrm-inside-padding-wrap,
 #hrm-hidden-form-warp .hrm-inside-padding-wrap {
-  padding: 10px;
+  padding: 5px 10px 20px 20px;
 }
 #hrm-visible-form-warp .hrm-slider-width,
 .hrm-visible-form-warp .hrm-slider-width,
@@ -59,13 +57,19 @@ label em {
   line-height: 30px;
 }
 #hrm-visible-form-warp .hrm-text-wrap {
-  padding: 7px;
+  padding: 10px;
 }
 #hrm-visible-form-warp .hrm-text-label,
 #hrm-visible-form-warp .hrm-text-info {
   float: left;
   width: 35%;
   text-align: justify;
+}
+#hrm-hidden-form-warp .chosen-container {
+  width: 30%;
+}
+#hrm-hidden-form-warp .hrm-form-link {
+  text-decoration: none;
 }
 #hrm-hidden-form-warp #hrm-select {
   position: relative;
@@ -83,44 +87,60 @@ label em {
   width: 50%;
 }
 #hrm-list-form {
-  border: 1px solid #FAD163;
   margin-top: 2%;
-  background: #fff;
 }
-#hrm-list-form thead tr th {
-  background: #FAD163;
+#hrm-list-form .hrm-delete,
+#hrm-list-form .hrm-edit {
+  display: none;
 }
-#hrm-list-form .hrm-even {
-  background: #F9F9F9;
+#hrm-list-form .hrm-title-action {
+  height: 15px;
+  width: 110px;
 }
-#hrm-list-form #hrm-pagination {
-  margin-left: 4%;
+#hrm-list-form .hrm-single-checked {
+  margin: 0;
 }
-#hrm-list-form .hrm-add-button,
-#hrm-list-form .hrm-delete-button {
-  margin: 6px 6px 15px 6px;
+#hrm-list-form .hrm-title {
+  display: block;
 }
-#hrm-list-form .hrm-pagination-wrap,
+#hrm-list-form .hrm-title-wrap:hover .hrm-delete,
+#hrm-list-form .hrm-title-wrap:hover .hrm-edit {
+  display: inline-block;
+}
+#hrm-list-form .hrm-all-checked {
+  margin: 0;
+}
+#hrm-list-form .hrm-table-checkbox {
+  width: 4%;
+}
+#hrm-list-form .hrm-nothing-found {
+  padding: 10px;
+  font-weight: 800;
+}
+#hrm-list-form .hrm-edit {
+  font-size: 10px;
+  margin-right: 10px;
+  color: #838383;
+  font-weight: 800;
+}
+#hrm-list-form .hrm-delete {
+  font-size: 10px;
+  color: #A96464;
+  font-weight: 800;
+}
 #hrm-list-form .hrm-table-action-wrap {
   float: left;
 }
-#hrm-list-form .hrm-pagination-wrap {
-  width: 50%;
-  margin: 6px 6px 15px;
-}
-#hrm-list-form .hrm-pagination-wrap select {
-  width: 18%;
-}
-#hrm-list-form .hrm-table-action-wrap {
-  width: 20%;
+#hrm-list-form .hrm-pagi-src {
+  width: 70%;
+  float: right;
+  text-align: right;
+  margin-top: 0px;
 }
 #hrm-list-form .widefat td {
   padding: 8px 10px;
   text-align: justify;
   width: auto;
-}
-#hrm-list-form .widefat {
-  border: none;
 }
 #hrm-list-form .hrm-task-wrap {
   width: 300px;
@@ -134,7 +154,7 @@ label em {
   float: right;
 }
 #hrm-list-form .hrm-task-title-wrap {
-  border: 1px solid #fad163;
+  border: 2px solid #e5e5e5;
   padding: 5px;
   text-align: justify;
 }
@@ -147,34 +167,14 @@ label em {
 #hrm-list-form .hrm-outstanding-text {
   background: #FF9898;
 }
-#hrm-list-form .hrm-running-text,
-#hrm-list-form .hrm-outstanding-text,
-#hrm-list-form .hrm-complete-text {
-  padding: 0px 5px 0 5px;
-  width: 77px;
-  text-align: center;
+#hrm-list-form .hrm-task-status-desc ul {
+  margin: 0;
 }
-#hrm-list-form .hrm-task-desc,
-#hrm-list-form .hrm-outstanding-text,
-#hrm-list-form .hrm-complete-text,
-#hrm-list-form .hrm-running-text {
-  float: left;
-}
-#hrm-list-form .hrm-task-desc {
-  background: #B9E1BE;
-  padding: 0 5px 0 5px;
-}
-#hrm-list-form .hrm-task-status-desc {
-  margin: 0 0 5px 44.5%;
-}
-#hrm-list-form .hrm-task-status-desc .hrm-delete-task {
-  background: #ef4646;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 400;
-  left: 0;
-  padding: 0 5px;
-  position: absolute;
+#hrm-list-form .hrm-task-status-desc ul li {
+  margin: 0;
+  display: inline-block;
+  margin-right: 5px;
+  padding-top: 5px;
 }
 #hrm-skills .hrm-label-font {
   font-weight: 600;
@@ -197,7 +197,6 @@ label em {
 #hrm-hidden-form label,
 #hrm-visible-form label {
   width: 21%;
-  font-weight: 600;
   font-size: 14px;
 }
 #hrm-hidden-form label.hrm-radio,
@@ -224,10 +223,10 @@ label em {
 #hrm-hidden-form span,
 #hrm-visible-form span {
   display: block;
-  margin-left: 21.2%;
 }
 #hrm-hidden-form .description,
 #hrm-visible-form .description {
+  margin-left: 21%;
   margin-bottom: 10px;
 }
 #hrm-hidden-form .hrm-submit-button,
@@ -242,7 +241,10 @@ label em {
 }
 #hrm-hidden-form .hrm-form-field,
 #hrm-visible-form .hrm-form-field {
+  display: inline-block;
+  margin-bottom: 6px;
   position: relative;
+  width: 100%;
 }
 #hrm-hidden-form .hrm-child-field label:first-child,
 #hrm-visible-form .hrm-child-field label:first-child {
@@ -257,27 +259,24 @@ label em {
   color: red;
   padding: 6px 0 0;
 }
-.hrm-search-head {
-  background-color: #FAD163;
-  border: 0 none;
-  color: #000000;
-  text-align: left;
-  width: auto;
+.hrm-search-head h3 {
+  font-size: 14px;
+  line-height: 1.4;
+  border-bottom: 1px solid #eee;
+  margin: 0;
+  padding: 8px 12px;
 }
-.hrm-search-head h2 {
-  color: #000000;
-  font-family: Arial, Verdana, Helvetica, sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-  margrin: 0;
-  padding: 0 0 0 5px;
+.hrm-premission-form-wrap .hrm-permission-content {
+  padding: 8px 12px;
 }
-.hrm-search-content {
-  border: 1px solid #FAD163;
-  background: #fff;
+.hrm-premission-form-wrap .hrm-permission-check-all {
+  float: right;
 }
 .hrm-search-content #hrm-search-form {
-  padding: 7px;
+  padding: 10px;
+}
+.hrm-search-content #hrm-search-form .chosen-container {
+  width: 170px;
 }
 .hrm-search-content #hrm-search-form label {
   float: left;
@@ -291,12 +290,10 @@ label em {
 }
 .hrm-search-content #hrm-search-form label {
   width: 40%;
-  font-weight: 600;
   font-size: 14px;
 }
 .hrm-search-content #hrm-search-form .hrm-notification,
 .hrm-search-content #hrm-search-form span {
-  margin-left: 41%;
   display: block;
 }
 .hrm-search-content #hrm-search-form .hrm-notification {
@@ -381,6 +378,137 @@ label em {
   max-width: 80px;
   padding: 2px;
 }
+.hrm-secondary-button {
+  background: none repeat scroll 0 0 #f7f7f7;
+  border-color: #ccc;
+  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  color: #555;
+  vertical-align: top;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  height: 28px;
+  line-height: 26px;
+  margin: 0;
+  padding: 0 10px 1px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+#hrm .hrm-assign-leave .hrm-popup-desc-leave-cat {
+  float: right;
+}
+#hrm .hrm-assign-leave #hrm-list-form .hrm-pagi-src {
+  margin-top: 0;
+}
+#hrm .hrm-notification-cross {
+  float: right;
+  color: #dd3d36;
+  cursor: pointer;
+}
+#hrm .chosen-search {
+  width: 100%;
+  display: inline-block;
+}
+#hrm .chosen-search input[type="text"] {
+  width: 100% !important;
+}
+#hrm .chosen-results {
+  overflow-x: visible;
+  overflow-y: hidden;
+}
+#hrm .hrm-pagination .tablenav .tablenav-pages a {
+  background: none;
+}
+#hrm #hrm-job-info .title {
+  width: 20%;
+}
+#hrm #hrm-job-info .title,
+#hrm #hrm-job-info .content {
+  float: left;
+}
+#hrm #hrm-job-info .job-content-warp {
+  width: 100%;
+  display: inline-block;
+}
+#hrm #hrm-job-info .padding-wrap {
+  padding-left: 10px;
+}
+#hrm #hrm-list-form {
+  width: 100%;
+}
+#hrm #hrm-list-form #hrm-data-table {
+  width: 100%;
+}
+#hrm #hrm-list-form #hrm-data-table .odd {
+  background: #f9f9f9;
+}
+#hrm #hrm-list-form .widefat td,
+#hrm #hrm-list-form .widefat th {
+  padding: 8px 10px;
+}
+#hrm #hrm-list-form .hrm-before-table {
+  display: inline-block;
+  width: 100%;
+}
+#hrm #hrm-list-form .hrm-sub-table td {
+  width: 50%;
+  text-align: right !important;
+}
+#hrm #hrm-list-form .dataTables_filter,
+#hrm #hrm-list-form .dataTables_length {
+  float: right;
+  margin-bottom: 10px;
+}
+#hrm #hrm-list-form .dataTables_filter::after,
+#hrm #hrm-list-form .dataTables_length::after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+#hrm #hrm-list-form .hrm-table-action-wrap {
+  margin-bottom: 10px;
+  width: 200px;
+}
+#hrm #hrm-list-form .hrm-table-action-wrap .hrm-add-button {
+  margin-right: 5px;
+}
+#hrm #hrm-list-form .dataTables_length {
+  margin-left: 5px;
+}
+#hrm #hrm-list-form .dataTables_paginate {
+  float: right;
+  margin-top: 10px;
+}
+#hrm #hrm-list-form .dataTables_paginate .paginate_button {
+  background: none repeat scroll 0 0 #f7f7f7;
+  border-color: #ccc;
+  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  color: #555;
+  vertical-align: top;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  height: 28px;
+  line-height: 26px;
+  margin: 0;
+  padding: 0 10px 1px;
+  text-decoration: none;
+  white-space: nowrap;
+  margin: 0 2px;
+}
+#hrm #hrm-list-form .dataTables_empty {
+  text-align: center;
+}
 #hrm #hrm-file-index .hrm-file-tag {
   background: #fff;
   border: 1px solid #ddd;
@@ -440,7 +568,183 @@ label em {
   background-color: #5EB95E;
   width: 1px;
 }
+#hrm .hrm-personal {
+  position: relative;
+}
+#hrm .hrm-personal .hrm-employee-avatar,
+#hrm .hrm-personal .hrm-profile-image-wrap {
+  position: absolute;
+  top: -585px;
+  left: 56%;
+}
+#hrm .hrm-personal .hrm-employee-display-name {
+  font-size: 24px;
+  left: 110%;
+  line-height: 8px;
+  position: absolute;
+  top: 10%;
+  width: 375px;
+  font-weight: 900;
+}
+#hrm .hrm-personal #hrm-user-image-wrap img {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 2px;
+}
+#hrm .hrm-personal .hrm-employee-pic-text {
+  position: absolute;
+  top: 24%;
+  left: 110%;
+  width: 100%;
+}
+#hrm .hrm-personal #hrm-pickfiles {
+  position: absolute;
+  top: 24%;
+  left: 168%;
+  text-decoration: none;
+}
+#hrm .hrm-personal .hrm-delete-file {
+  position: absolute;
+  top: 24%;
+  left: 199%;
+  width: 100%;
+  text-decoration: none;
+  margin: 0;
+}
+#hrm .hrm-personal .hrm-delete-file:before {
+  content: "| ";
+}
+#hrm #hrm-eployee-list #hrm-upload-file-container,
+#hrm #hrm-admin-list #hrm-upload-file-container {
+  margin-left: 21%;
+}
+#hrm #hrm-eployee-list .hrm-employee-pic-text,
+#hrm #hrm-admin-list .hrm-employee-pic-text {
+  left: 20%;
+  position: absolute;
+  top: 9%;
+}
+#hrm #hrm-eployee-list #hrm-user-image-wrap img,
+#hrm #hrm-admin-list #hrm-user-image-wrap img {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 2px;
+}
+#hrm #hrm-eployee-list #hrm-drop-files-zone,
+#hrm #hrm-admin-list #hrm-drop-files-zone {
+  left: 20%;
+  position: absolute;
+  top: 21%;
+}
+#hrm #hrm-eployee-list #hrm-drop-files-zone a,
+#hrm #hrm-admin-list #hrm-drop-files-zone a {
+  text-decoration: none;
+}
+#hrm #hrm-eployee-list .hrm-delete-file:before,
+#hrm #hrm-admin-list .hrm-delete-file:before {
+  content: "| ";
+}
+#hrm #hrm-eployee-list .hrm-delete-file,
+#hrm #hrm-admin-list .hrm-delete-file {
+  left: 25%;
+  position: absolute;
+  top: 21%;
+  text-decoration: none;
+  margin: 0;
+}
+#hrm #hrm-admin-leave-summary,
+#hrm #hrm-assign-leave-summary {
+  margin-top: 0px;
+}
+#hrm #hrm-admin-leave-summary .hrm-popup-desc-leave-cat,
+#hrm #hrm-assign-leave-summary .hrm-popup-desc-leave-cat {
+  float: right;
+}
+#hrm #hrm-admin-leave-summary .hrm-table-action-wrap,
+#hrm #hrm-assign-leave-summary .hrm-table-action-wrap {
+  float: none;
+  margin-bottom: 0;
+  width: auto;
+}
+#hrm #hrm-admin-leave-summary #hrm-list-form,
+#hrm #hrm-assign-leave-summary #hrm-list-form {
+  position: relative;
+  margin-top: 55px;
+}
+#hrm #hrm-admin-leave-summary .hrm-delete-button,
+#hrm #hrm-assign-leave-summary .hrm-delete-button {
+  float: left;
+}
+#hrm #hrm-admin-leave-summary .hrm-before-table,
+#hrm #hrm-assign-leave-summary .hrm-before-table {
+  float: right;
+  width: auto;
+}
+#hrm #hrm-admin-leave-summary .hrm-add-button,
+#hrm #hrm-assign-leave-summary .hrm-add-button {
+  position: absolute;
+  top: -43px;
+  left: 0;
+}
+#hrm #hrm-admin-leave-summary .hrm-pagi-src,
+#hrm #hrm-assign-leave-summary .hrm-pagi-src {
+  position: absolute;
+  top: -55px;
+  left: 30%;
+}
+#hrm #hrm-admin-leave-summary table th,
+#hrm #hrm-assign-leave-summary table th,
+#hrm #hrm-admin-leave-summary table td,
+#hrm #hrm-assign-leave-summary table td {
+  padding: 0;
+}
+#hrm #hrm-admin-leave-summary .hrm-head-notice,
+#hrm #hrm-assign-leave-summary .hrm-head-notice {
+  font-size: 10px;
+}
+#hrm #hrm-admin-leave-summary .hrm-nested-table,
+#hrm #hrm-assign-leave-summary .hrm-nested-table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+#hrm #hrm-admin-leave-summary .hrm-nested-table td:first-child,
+#hrm #hrm-assign-leave-summary .hrm-nested-table td:first-child {
+  padding-left: 11px;
+  padding-top: 10px;
+  width: 30px;
+}
+#hrm #hrm-admin-leave-summary .hrm-nested-table .hrm-table-checkbox,
+#hrm #hrm-assign-leave-summary .hrm-nested-table .hrm-table-checkbox {
+  width: 16px;
+}
+#hrm #hrm-admin-leave-summary .hrm-nested-table .hrm-leave-td-tr,
+#hrm #hrm-assign-leave-summary .hrm-nested-table .hrm-leave-td-tr {
+  padding: 10px;
+  padding-left: 0;
+}
+#hrm #hrm-admin-leave-summary .hrm-nested-table .hrm-leave-cal-bottom,
+#hrm #hrm-assign-leave-summary .hrm-nested-table .hrm-leave-cal-bottom {
+  padding-bottom: 20px;
+}
+#hrm #hrm-admin-leave-summary .hrm-leave-td-tr,
+#hrm #hrm-assign-leave-summary .hrm-leave-td-tr {
+  width: 12%;
+}
+#hrm .hrm-my-task .hrm-my-task-body {
+  padding: 10px;
+}
 .hrm-ui-dialog {
   left: 32% !important;
   top: 10% !important;
+}
+.hrm-leave-details-dialog .widefat {
+  border: none;
+}
+.hrm-disable-field-css {
+  resize: none !important;
+  border: none !important;
+}
+.hrm-partial-payment-date-field,
+.hrm-partial-payment-amount-field {
+  width: 60%;
 }

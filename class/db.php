@@ -13,6 +13,39 @@ class Hrm_Db {
         $this->time();
         $this->employer();
         $this->worker_evaluation();
+        $this->client_partial_payment();
+    }
+
+    function client_partial_payment() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'hrm_client_partial_payment';
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `client_id` bigint(20) NOT NULL,
+          `description` text NOT NULL,
+          `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          `currency` VARCHAR( 10 ) NOT NULL,
+          `project_id` BIGINT NOT NULL,
+          `amount` BIGINT NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+
+        $table_option['table_name'] = 'hrm_client_partial_payment';
+        $table_option['table_option'] = array(
+            'client_id'   => 'client_id',
+            'description' => 'description',
+            'date'        => 'date',
+            'currency'    => 'currency',
+            'project_id'  => 'project_id',
+            'amount'      => 'amount',
+        );
+
+        $table_option_name = 'hrm_client_partial_payment';
+
+        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function worker_evaluation() {
@@ -42,8 +75,8 @@ class Hrm_Db {
     function employer_employee_records() {
         $table_option['table_option'] = array(
             'from_date' => 'from_date',
-            'to_date' => 'to_date',
-            'user_id' => 'user_id'
+            'to_date'   => 'to_date',
+            'user_id'   => 'user_id'
         );
         $table_option_name = 'hrm_attendance_record_both';
 
@@ -117,11 +150,11 @@ class Hrm_Db {
 
     function personal_job() {
         $user_meta_key = array(
-            '_job_title' => 'job_title',
-            '_job_category' => 'job_category',
-            '_location' => 'location',
-            '_contract_start' => 'contract_start',
-            '_contract_end' => 'contract_end',
+            '_job_title'        => 'job_title',
+            '_job_category'     => 'job_category',
+            '_location'         => 'location',
+            '_contract_start'   => 'contract_start',
+            '_contract_end'     => 'contract_end',
             '_contract_details' => 'contract_details',
         );
 
@@ -132,18 +165,18 @@ class Hrm_Db {
 
     function personal_info() {
         $user_meta_key = array(
-            '_gender' => 'gender',
+            '_gender'         => 'gender',
             '_marital_status' => 'marital_status',
-            '_national_code' => 'national_code',
-            '_birthday' => 'birthday',
-            '_street1' => 'street1',
-            '_street2' => 'street2',
-            '_city_code' => 'city_code',
-            '_state' => 'state',
-            '_zip' => 'zip',
-            '_country_code' => 'country_code',
-            '_work_mobile' => 'work_mobile',
-            '_work_email' => 'work_email'
+            '_national_code'  => 'national_code',
+            '_birthday'       => 'birthday',
+            '_street1'        => 'street1',
+            '_street2'        => 'street2',
+            '_city_code'      => 'city_code',
+            '_state'          => 'state',
+            '_zip'            => 'zip',
+            '_country_code'   => 'country_code',
+            '_work_mobile'    => 'work_mobile',
+            '_work_email'     => 'work_email'
         );
 
         $table_option_name = 'hrm_personal_info';
@@ -171,11 +204,11 @@ class Hrm_Db {
         $table_option['table_name'] = 'hrm_personal_language';
         $table_option['table_format'] = array( '%d', '%d', '%s', '%s', '%s' );
         $table_option['table_option'] = array(
-            'emp_id' => 'emp_id',
+            'emp_id'      => 'emp_id',
             'language_id' => 'language_id',
-            'fluency' => 'fluency',
-            'competency' => 'competency',
-            'comments' => 'comments',
+            'fluency'     => 'fluency',
+            'competency'  => 'competency',
+            'comments'    => 'comments',
         );
         $table_option_name = 'hrm_personal_language';
 
@@ -271,12 +304,12 @@ class Hrm_Db {
         $table_option['table_name'] = 'hrm_work_experience';
         $table_option['table_format'] = array( '%s', '%s', '%s', '%s', '%s', '%s');
         $table_option['table_option'] = array(
-            'emp_number' => 'emp_id',
-            'eexp_company' => 'company_name',
-            'eexp_jobtit' => 'job_title',
+            'emp_number'     => 'emp_id',
+            'eexp_company'   => 'company_name',
+            'eexp_jobtit'    => 'job_title',
             'eexp_from_date' => 'form',
-            'eexp_to_date' => 'to',
-            'eexp_comments' => 'description',
+            'eexp_to_date'   => 'to',
+            'eexp_comments'  => 'description',
         );
         $table_option_name = 'hrm_work_experience';
 
@@ -301,6 +334,7 @@ class Hrm_Db {
           `specify` varchar(200) NOT NULL,
           `routing` int(11) NOT NULL,
           `dipo_amount` int(11) NOT NULL,
+           `billing_date` TIMESTAMP NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
@@ -308,20 +342,21 @@ class Hrm_Db {
         dbDelta( $sql );
 
         $table_option['table_name'] = 'hrm_salary';
-        $table_option['table_format'] = array( '%d', '%s', '%s', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%d', '%d' );
+        $table_option['table_format'] = array( '%d', '%s', '%s', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%d', '%s' );
         $table_option['table_option'] = array(
-            'emp_id' => 'emp_id',
-            'pay_grade' => 'pay_grade',
-            'component' => 'component',
-            'frequency' => 'frequency',
-            'currency' => 'currency',
-            'amount' => 'amount',
-            'comments' => 'comments',
+            'emp_id'         => 'emp_id',
+            'pay_grade'      => 'pay_grade',
+            'component'      => 'component',
+            'frequency'      => 'frequency',
+            'currency'       => 'currency',
+            'amount'         => 'amount',
+            'comments'       => 'comments',
             'direct_deposit' => 'direct_deposit',
             'account_number' => 'account_number',
-            'account_type' => 'account_type',
-            'routing' => 'routing',
-            'dipo_amount' => 'dipo_amount'
+            'account_type'   => 'account_type',
+            'routing'        => 'routing',
+            'dipo_amount'    => 'dipo_amount',
+            'billing_date'   => 'billing_date'
         );
         $table_option_name = 'hrm_salary';
 
@@ -348,12 +383,12 @@ class Hrm_Db {
         $table_option['table_name'] = 'hrm_leave';
         $table_option['table_format'] = array( '%s', '%s', '%s', '%s', '%s', '%d' );
         $table_option['table_option'] = array(
-            'start_time' => 'from',
-            'end_time' => 'to',
+            'start_time'     => 'from',
+            'end_time'       => 'to',
             'leave_comments' => 'comment',
-            'leave_type_id' => 'type_id',
-            'emp_id'=> 'emp_id',
-            'leave_status' => 'leave_status'
+            'leave_type_id'  => 'type_id',
+            'emp_id'         => 'emp_id',
+            'leave_status'   => 'leave_status'
         );
         $table_option_name = 'hrm_leave';
 
@@ -392,11 +427,11 @@ class Hrm_Db {
         $table_option['table_name'] = 'hrm_holiday';
         $table_option['table_format'] = array( '%s', '%s', '%s', '%s', '%s' );
         $table_option['table_option'] = array(
-            'name' => 'name',
+            'name'        => 'name',
             'description' => 'description',
-            'from' => 'from',
-            'to' => 'to',
-            'length' => 'length',
+            'from'        => 'from',
+            'to'          => 'to',
+            'length'      => 'length',
         );
         $table_option_name = 'hrm_holiday';
 
@@ -410,22 +445,24 @@ class Hrm_Db {
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
           `id` bigint(13) NOT NULL AUTO_INCREMENT,
           `leave_type_name` varchar(50) DEFAULT NULL,
-          `available_flag` smallint(6) DEFAULT NULL,
-          `operational_country_id` int(10) unsigned DEFAULT NULL,
-          PRIMARY KEY (`id`),
-          KEY `operational_country_id` (`operational_country_id`)
+          `entitlement` smallint(6) DEFAULT NULL,
+          `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 
         $table_option['table_name'] = 'hrm_leave_type';
-        $table_option['table_format'] = array( '%s' );
+        $table_option['table_format'] = array( '%s', '%d', '%s', '%s' );
         $table_option['table_option'] = array(
-            'leave_type_name' => 'leave_type'
+            'leave_type_name' => 'leave_type',
+            'entitlement'     => 'entitlement',
+            'entitle_from'    => 'entitle_from',
+            'entitle_to'      => 'entitle_to'
         );
         $table_option_name = 'hrm_leave_type';
-
         hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
@@ -618,10 +655,10 @@ class Hrm_Db {
         $table_option['table_name'] = 'hrm_notice';
         $table_option['table_format'] = array( '%s', '%s', '%d', '%s' );
         $table_option['table_option'] = array(
-            'title' => 'title',
+            'title'       => 'title',
             'description' => 'description',
-            'user_id' => 'user_id',
-            'date' => 'date'
+            'user_id'     => 'user_id',
+            'date'        => 'date'
         );
         $table_option_name = 'hrm_notice';
 

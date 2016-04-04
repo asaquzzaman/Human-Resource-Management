@@ -9,17 +9,17 @@ $pagenum     = hrm_pagenum();
 $limit       = hrm_result_limit();
 if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
     $post         = $_POST;
-    $search_satus = true;
+    $search_status = true;
     $results      = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
 } else {
     $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_holiday', $limit, $pagenum );
-    $search_satus = false;
+    $search_status = false;
 }
 
 $total = $results['total_row'];
 unset( $results['total_row'] );
-$add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
+$add_permission = hrm_user_can_access( $page,  $tab, $subtab, 'add' ) ? true : false;
+$delete_permission = hrm_user_can_access( $page,  $tab, $subtab, 'delete' ) ? true : false;
 foreach ( $results as $key => $value) {
     $value->length = ( $value->length == 'full' ) ? 'Full Day' : 'Half Day';
     $body[] = array(
@@ -42,7 +42,7 @@ $table['head'] = array(
     __('Description','hrm'),
     __('Full Day/Half Day','hrm')
 );
-$table['body'] = isset( $body ) ? $body : '';
+$table['body']          = isset( $body ) ? $body : '';
 $table['td_attr']       = isset( $td_attr ) ? $td_attr : '';
 $table['th_attr']       = array( 'class="check-column"' );
 $table['table_attr']    = array( 'class' => 'widefat' );
@@ -50,6 +50,7 @@ $table['table']         = 'hrm_holiday';
 $table['action']        = 'hrm_delete';
 $table['tab']           = $tab;
 $table['subtab']        = $subtab;
+$table['page']          = $page;
 $table['add_btn_name']  = false;
 $table['delete_button'] = false;
 
@@ -57,7 +58,10 @@ echo hrm_Settings::getInstance()->table( $table );
 //table
 echo hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
 $file_path = urlencode(__FILE__);
-$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+$url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+
+global $hrm_is_admin;
+?>
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -71,8 +75,8 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
            subtab: '<?php echo $subtab; ?>',
            req_frm: '<?php echo $file_path; ?>',
            limit: '<?php echo $limit; ?>',
-           search_satus: '<?php echo $search_satus; ?>',
-           subtab: true
+           search_status: '<?php echo $search_status; ?>',
+           is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

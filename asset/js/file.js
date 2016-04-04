@@ -36,9 +36,6 @@ jQuery(function($) {
 
                 uploader.init();
 
-
-
-
                 uploader.bind('FilesAdded', function(up, files) {
 
                     $.each(files, function(i, file) {
@@ -128,17 +125,17 @@ jQuery(function($) {
                         _wpnonce: hrm_ajax_data._wpnonce
                     };
 
-                $.post(hrm_ajax_data.ajax_url, data, function() {});
-                that.closest('.hrm-single-progress').fadeOut(function(){
-                    $(this).remove();
+                $.post(hrm_ajax_data.ajax_url, data, function( res ) {
+                    if( res.success ) {
+                        that.closest('.hrm-single-progress').fadeOut(function(){
+                            $(this).remove();
+                        });
+                    }
                 });
+
             }
         }
     }
-
-
-
-
 
     hrm_file_ajax.init();
 });

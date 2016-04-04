@@ -46,3 +46,56 @@ function hrm_task_assing_user_url( $page, $tab, $user_id ) {
     $url = admin_url( 'admin.php?' ) . 'page='.$page.'&employee_id='.$user_id.'&tab='. $tab;
     return apply_filters( 'hrm_task_assign_user_url', $url, $page, $tab, $user_id );
 }
+
+function hrm_employee_profile_url( $page, $tab, $employee_id ) {
+    $admin_url = add_query_arg(
+        array(
+            'page'        => $page,
+            'tab'         => $tab,
+            'employee_id' => trim( $employee_id )
+        ), admin_url( 'admin.php' )
+    );
+
+    return apply_filters( 'hrm_employee_profile', $admin_url, $page, $tab, $employee_id );
+
+}
+
+function hrm_job_title() {
+    $page_name = hrm_admin_page();
+    $tab = 'job';
+    $sub_tab = 'job_title';
+    $url = admin_url( 'admin.php?' ) . 'page='.$page_name.'&tab='.$tab.'&sub_tab='.$sub_tab;
+    return apply_filters( 'hrm_job_title_url', $url, $page_name, $tab, $sub_tab );
+}
+
+function hrm_job_category() {
+    $page_name = hrm_admin_page();
+    $tab = 'job';
+    $sub_tab = 'job_categories';
+    $url = admin_url( 'admin.php?' ) . 'page='.$page_name.'&tab='.$tab.'&sub_tab='.$sub_tab;
+    return apply_filters( 'hrm_job_category_url', $url, $page_name, $tab, $sub_tab );
+}
+
+function hrm_job_location() {
+    $page_name = hrm_admin_page();
+    $tab = 'organization';
+    $sub_tab = 'location';
+    $url = admin_url( 'admin.php?' ) . 'page='.$page_name.'&tab='.$tab.'&sub_tab='.$sub_tab;
+    return apply_filters( 'hrm_job_location_url', $url, $page_name, $tab, $sub_tab );
+}
+
+function hrm_new_role_url() {
+    $page_name = hrm_admin_page();
+    $tab = 'admin';
+    $sub_tab = 'admin_role';
+    $url = admin_url( 'admin.php?' ) . 'page='.$page_name.'&tab='.$tab.'&sub_tab='.$sub_tab;
+    return apply_filters( 'hrm_new_role_url', $url, $page_name, $tab, $sub_tab );
+}
+
+function hrm_new_pay_grade_url() {
+    $page_name = hrm_admin_page();
+    $tab = 'job';
+    $sub_tab = 'pay_grade';
+    $url = admin_url( 'admin.php?' ) . 'page='.$page_name.'&tab='.$tab.'&sub_tab='.$sub_tab;
+    return apply_filters( 'hrm_new_pay_grade_url', $url, $page_name, $tab, $sub_tab );
+}

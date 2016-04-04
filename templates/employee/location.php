@@ -5,11 +5,11 @@ $limit       = '20000';
 if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
     $post = $_POST;
     $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
-    $search_satus = true;
+    $search_status = true;
 
 } else {
     $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit, $pagenum );
-    $search_satus = false;
+    $search_status = false;
 }
 
 if( isset( $results['total_row'] ) ) {
@@ -52,17 +52,11 @@ foreach ( $results as $key => $value ) {
 		continue;
 	}
 	?>
-	<div id="hrm-visible-form-warp">
+	<div id="hrm-visible-form-warp" class="postbox">
 		<div class="hrm-search-head">
-			<h2 id="hrm-searchLocationHeading"><?php echo 'Location ' . $value->name; ?></h2>
+			<h3><?php echo 'Location ' . $value->name; ?></h3>
 		</div>
-		<?php
-			if ( isset( $value->name ) && !empty( $value->name ) ) {
-				?>
-				<div class="hrm-text-wrap"><strong class="hrm-text-label"><?php _e( 'Name', 'hrm' ); ?></strong><div class="hrm-text-info"><?php echo $value->name; ?></div><div class="hrm-clear"></div></div>
-				<?php
-			}
-		?>
+
 		<?php
 			if ( isset( $value->name ) && !empty( $value->name ) ) {
 				?>
@@ -134,6 +128,7 @@ foreach ( $results as $key => $value ) {
 }
 
 $file_path = urlencode(__FILE__);
+global $hrm_is_admin;
 ?>
 
 <script type="text/javascript">
@@ -144,8 +139,8 @@ $file_path = urlencode(__FILE__);
 			subtab: '<?php echo $subtab; ?>',
 			req_frm: '<?php echo $file_path; ?>',
 			limit: '<?php echo $limit; ?>',
-			search_satus: '<?php echo $search_satus; ?>',
-			subtab: true
+			search_status: '<?php echo $search_status; ?>',
+			is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

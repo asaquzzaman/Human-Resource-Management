@@ -79,11 +79,12 @@ $field['friday'] = array(
     'selected' => isset( $data['data']['friday'] ) ? $data['data']['friday'] : ''
 );
 
-$field['header'] = 'Work Week';
-$field['action'] = 'single_form';
+$field['header']       = 'Work Week';
+$field['action']       = 'single_form';
 $field['table_option'] = 'hrm_work_week';
-$field['tab'] = $tab;
-$field['subtab'] = $subtab;
-$field['submit_btn'] = false;
+$field['tab']          = $tab;
+$field['subtab']       = $subtab;
+$field['page']         = $page;
+$field['submit_btn']   = false;
 
 echo hrm_Settings::getInstance()->visible_form_generator( $field );

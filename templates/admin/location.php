@@ -1,63 +1,14 @@
 <div class="hrm-update-notification"></div>
-<!-- default instance $instance = hrm_Admin::getInstance(); -->
+
 <?php
-if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
+if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
 
     printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
     return;
 }
 
-$country = Hrm_Settings::getInstance()->country_list();
-$search['name'] = array(
-    'label' => __( 'Name', 'hrm' ),
-    'type' => 'text',
-    'value' => isset( $_POST['name'] ) ? $_POST['name'] : '',
-    'desc' => __( 'Location search by name', 'hrm' ),
-);
 
-$search['city'] = array(
-    'label' => __( 'City', 'hrm' ),
-    'type' => 'text',
-    'value' => isset( $_POST['city'] ) ? $_POST['city'] : '',
-    'desc' => __( 'Location search by city', 'hrm' ),
-);
-
-$search['country'] = array(
-    'label' =>  __( 'Country', 'hrm' ),
-    'type' => 'select',
-    'option'=> $country,
-    'selected' => isset( $_GET['country'] ) ? $_GET['country'] : '',
-    'desc' => __( 'Location search by country', 'hrm' ),
-);
-
-$search['phone'] = array(
-    'label' => __( 'Phone Number', 'hrm' ),
-    'type' => 'text',
-    'value' => isset( $_POST['phone'] ) ? $_POST['phone'] : '',
-    'desc' => __( 'Location search by phone number', 'hrm' ),
-);
-$search['table_option'] = 'hrm_location_option';
-$search['action'] = 'hrm_search';
-
-$search['type'] = array(
-    'type' => 'hidden',
-    'value' => '_search'
-);
-
-
-echo Hrm_settings::getInstance()->get_serarch_form( $search, __( 'Location', 'hrm' ) );
-$pagenum     = hrm_pagenum();
-$limit       = hrm_result_limit();
-
-
-if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
-    $post = $_POST;
-    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
-    $search_satus = true;
-} else {
-    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location', $limit, $pagenum );
-    $search_satus = false;
-}
+$results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location' );
 
 if( isset( $results['total_row'] ) ) {
     $total = $results['total_row'];
@@ -70,71 +21,82 @@ if( isset( $results['total_row'] ) ) {
 <div class="hrm-location">
 
     <div class="hrm-main-content">
-    <div id="hrm-admin-location"></div>
+        <div id="hrm-admin-location"></div>
 
-    <?php
-        $add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-        $delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
+        <?php
+        $add_permission    = hrm_user_can_access( $page, $tab, $subtab, 'add' ) ? true : false;
+        $delete_permission = hrm_user_can_access( $page, $tab, $subtab, 'delete' ) ? true : false;
+        $body              = array();
+        $td_attr           = array();
 
         foreach ( $results as $key => $value) {
+
+            if ( $delete_permission ) {
+                $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
+                $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
+                $td_attr[][0] = 'class="hrm-table-checkbox"';
+            } else {
+                $del_checkbox = '';
+                $delete_text  = '';
+            }
+
             if ( $add_permission ) {
-                $name_id = '<a href="#" class="hrm-editable" data-table_option="hrm_location_option" data-id='.$value->id.'>'.$value->name.'<a>';
+                $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable" data-table_option="hrm_location_option" data-id='.$value->id.'>'.$value->name.'</a>
+                 <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_location_option" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
+                 .$delete_text. '</div></div>';
             } else {
                 $name_id = $value->name;
             }
 
             if ( $delete_permission ) {
-                $del_checkbox = '<input name="hrm_check['.$value->id.']" value="" type="checkbox">';
+                $body[] = array(
+                    $del_checkbox,
+                    $name_id,
+                    $value->city,
+                    hrm_Settings::getInstance()->get_country_by_code( $value->country_code ),
+                    $value->phone,
+                );
             } else {
-                $del_checkbox = '';
+                $body[] = array(
+                    $name_id,
+                    $value->city,
+                    hrm_Settings::getInstance()->get_country_by_code( $value->country_code ),
+                    $value->phone,
+                );
             }
-
-            $body[] = array(
-                $del_checkbox,
-                $name_id,
-                $value->city,
-                hrm_Settings::getInstance()->get_country_by_code( $value->country_code ),
-                $value->phone,
-            );
-
-            $td_attr[] = array(
-                'class="check-column"'
-            );
         }
 
-        $del_checkbox = ( $delete_permission ) ? '<input type="checkbox">' : '';
         $table = array();
-        $table['head'] = array( $del_checkbox, 'Name', 'City', 'Country', 'Phone' );
-        $table['body'] = isset( $body ) ? $body : '';
 
+        if ( $delete_permission ) {
+            $table['head'] = array( '<input class="hrm-all-checked" type="checkbox">', __( 'Name', 'hrm' ), __( 'City', 'hrm' ), __( 'Country', 'hrm' ), __( 'Phone', 'hrm' ) );
+        } else {
+            $table['head'] = array( __( 'Name', 'hrm' ), __( 'City', 'hrm' ), __( 'Country', 'hrm' ), __( 'Phone', 'hrm' ) );
+        }
 
-        $table['td_attr'] = isset( $td_attr ) ? $td_attr : '';
-
-        $table['th_attr'] = array( 'class="check-column"' );
-
+        $table['body']       = isset( $body ) ? $body : '';
+        $table['td_attr']    = isset( $td_attr ) ? $td_attr : '';
+        $table['th_attr']    = array();
         $table['table_attr'] = array( 'class' => 'widefat' );
-
-        $table['table'] = 'hrm_location_option';
-        $table['action'] = 'hrm_delete';
+        $table['table']      = 'hrm_location_option';
+        $table['action']     = 'hrm_delete';
         $table['table_attr'] = array( 'class' => 'widefat' );
-        $table['tab'] = $tab;
-        $table['subtab'] = $subtab;
+        $table['tab']        = $tab;
+        $table['subtab']     = $subtab;
+        $table['page']       = $page;
+        $table['search']     = __( 'Search Mode', 'hrm' );
 
         echo Hrm_Settings::getInstance()->table( $table );
 
     ?>
 
     </div>
-
-   <?php
-
-        echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
-   ?>
 </div>
 
 <?php
 $file_path = urlencode(__FILE__);
 $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+global $hrm_is_admin;
 ?>
 
 <script type="text/javascript">
@@ -149,9 +111,7 @@ $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             tab: '<?php echo $tab; ?>',
             subtab: '<?php echo $subtab; ?>',
             req_frm: '<?php echo $file_path; ?>',
-            limit: '<?php echo $limit; ?>',
-            search_satus: '<?php echo $search_satus; ?>',
-            subtab: true
+            is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

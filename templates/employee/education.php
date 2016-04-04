@@ -1,9 +1,9 @@
 <div class="hrm-update-notification"></div>
 <?php
-if ( hrm_current_user_role() == 'hrm_employee' ) {
-    $employer_id = get_current_user_id();
+if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {
+    $employer_id = intval( $_REQUEST['employee_id'] );
 } else {
-    $employer_id = isset( $_REQUEST['employee_id'] ) ? trim( $_REQUEST['employee_id'] ) : '';
+    $employer_id = get_current_user_id();
 }
 ?>
 <div id="hrm_personal_education"></div>
@@ -38,9 +38,17 @@ foreach ( $results as $key => $value) {
         continue;
     }
 
+    $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
+    $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
+    $td_attr[][0] = 'class="hrm-table-checkbox"';
+
+    $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_education" data-id='.$value->id.'>'.$label[$value->education_id].'</a>
+    <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_personal_education" data-emp_id="'.$value->emp_id.'" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
+    .$delete_text. '</div></div>';
+
     $body[] = array(
-        '<input name="hrm_check['.$value->id.']" value="" type="checkbox">',
-        '<a href="#" class="hrm-editable" data-table_option="hrm_personal_education" data-emp_id="'.$value->emp_id.'" data-id='.$value->id.'>'.$label[$value->education_id].'<a>',
+        $del_checkbox,
+        $name_id,
         $value->institute,
         $value->major,
         hrm_get_date2mysql( $value->year ),
@@ -48,26 +56,23 @@ foreach ( $results as $key => $value) {
         hrm_get_date2mysql( $value->start_date ),
         hrm_get_date2mysql( $value->end_date ),
     );
-
-    $td_attr[] = array(
-        'class="check-column"'
-    );
 }
 
 $table               = array();
-$table['head']       = array( '<input type="checkbox">', __( 'Level', 'hrm'), __( 'Institute', 'hrm'), __( 'Major/Specialization', 'hrm'), __( 'Year', 'hrm'), __( 'GPA/Score', 'hrm'), __( 'Start Date', 'hrm'), __( 'End Date', 'hrm') );
+$table['head']       = array( '<input class="hrm-all-checked" type="checkbox">', __( 'Level', 'hrm'), __( 'Institute', 'hrm'), __( 'Major/Specialization', 'hrm'), __( 'Year', 'hrm'), __( 'GPA/Score', 'hrm'), __( 'Start Date', 'hrm'), __( 'End Date', 'hrm') );
 $table['body']       = isset( $body ) ? $body : array();
 $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
 $table['table']      = 'hrm_personal_education';
 $table['action']     = 'hrm_delete';
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
+$table['page']       = $page;
 
 echo hrm_Settings::getInstance()->table( $table );
 $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id;
 $file_path = urlencode(__FILE__);
+global $hrm_is_admin;
 ?>
 <script type="text/javascript">
     jQuery(function($) {
@@ -83,7 +88,7 @@ $file_path = urlencode(__FILE__);
             tab: '<?php echo $tab; ?>',
             subtab: '<?php echo $subtab; ?>',
             req_frm: '<?php echo $file_path; ?>',
-            subtab: true
+            is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

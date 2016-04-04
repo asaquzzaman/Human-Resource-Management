@@ -1,56 +1,41 @@
-<div class="hrm-update-notification"></div>
-<div id="hrm-admin-role"></div>
 <?php
-$jk = get_option( 'pro_test_role' );
+$header_path = dirname(__FILE__) . '/header.php';
+$header_path = apply_filters( 'hrm_header_path', $header_path, 'time' );
 
-//hidden form
-
-global $wp_roles;
-
-if ( !$wp_roles ) {
-    $wp_roles = new WP_Roles();
+if ( file_exists( $header_path ) ) {
+  require_once $header_path;
 }
-//echo '<pre>'; print_r( $wp_roles ); echo '</pre>'; die();
-$role_names = $wp_roles->get_names();
-$wp_built_in_role = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'hrm_employee' );
-
-$add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
-$current_user_role = hrm_current_user_role();
-
-foreach ( $role_names as $name => $display_name) {
-    if ( $current_user_role == $name ) {
-        continue;
-    }
-    if ( $add_permission ) {
-        $name_id = '<a data-role_name="'.$name.'" data-action="get_role" data-display_name="'.$display_name.'" class="hrm-editable" href="#">'.$name.'</a>';
-    } else {
-        $name_id = $name;
-    }
-    $body[] = array(
-        $name_id,
-        $display_name
-    );
+if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
+    printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
+    return;
 }
+?>
+<div class="hrm-update-notification"></div>
+<?php
+$hidden_form['punch_without_frm'] = array(
+    'label'      => __( 'Punch Form' ),
+    'type'       => 'checkbox',
+    'desc'       => 'Punch in/out with submit form',
+    'wrap_class' => 'hrm-parent-field',
+    'fields'     => array(
+        array(
+            'label' => __( 'Enabel', 'hrm' ),
+            'value' => 'yes',
+            'checked' => get_option( 'hrm_punch_form_status', true ),
+            'class'  => 'hrm-punch-form-status'
+        )
+    )
+);
+$hidden_form['header'] = __( 'Punch Form Status', 'hrm' );
+$hidden_form['class'] = 'postbox';
 
-$table['head']          = array( 'User Role', 'Display Name' );
-$table['body']          = isset( $body ) ? $body : array();
+echo hrm_Settings::getInstance()->form_field_only( $hidden_form  );
 
-
-$table['td_attr']       = isset( $td_attr ) ? $td_attr : '';
-$table['th_attr']       = array( 'class="check-column"' );
-$table['table_attr']    = array( 'class' => 'widefat' );
-
-$table['action']        = 'role_delete';
-$table['table_attr']    = array( 'class' => 'widefat' );
-$table['tab']           = $tab;
-$table['subtab']        = $subtab;
-$table['add_button']    = false;
-$table['delete_button'] = false;
-
-echo Hrm_Settings::getInstance()->table( $table );
 $file_path = urlencode(__FILE__);
-$url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+$url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+global $hrm_is_admin;
+?>
+
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -64,7 +49,7 @@ $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
            tab: '<?php echo $tab; ?>',
            subtab: '<?php echo $subtab; ?>',
            req_frm: '<?php echo $file_path; ?>',
-           subtab: true
+           is_admin: '<?php echo $hrm_is_admin; ?>',
         };
     });
 </script>

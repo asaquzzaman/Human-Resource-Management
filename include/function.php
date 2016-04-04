@@ -1,61 +1,94 @@
 <?php
-function hrm_user_can_access( $tab = null, $subtab = null, $access_point = null, $inside_role = false  ) {
+function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access_point = null, $user_id = null ) {
+    if( ! apply_filters( 'hrm_free_permission', false ) ) {
+        return true;
+    }
 
+    if ( $user_id === null ) {
+        $user_id = get_current_user_id();
+    }
 
-    $user_id = get_current_user_id();
+    $current_user = get_user_by( 'id', $user_id );
+
     $super_admin = get_option( 'hrm_admin', true );
+    $user_role = reset( $current_user->roles );
 
     if ( $user_id == $super_admin ) {
         return true;
     }
 
-    $page = hrm_page();
-
-    //if tab has no access role
-    if ( isset( $page[$_REQUEST['page']][$tab]['follow_access_role'] ) && ! $page[$_REQUEST['page']][$tab]['follow_access_role'] ) {
+    if ( $user_role == 'administrator' ) {
         return true;
     }
 
+    $get_role = get_role( $user_role );
+    $get_role_cap = $get_role->capabilities;
 
-    $current_user_role = hrm_current_user_role();
-    $roles =  get_role( $current_user_role );
-
-    if ( $inside_role ) {
-        return  isset( $roles->capabilities[$access_point] ) ? $access_point : false;
-    }
-
-    $tab_access = isset( $roles->capabilities[$tab.'_'.$access_point] ) ? $roles->capabilities[$tab.'_'.$access_point] : '';
-    $subtab_access = isset( $roles->capabilities[$subtab.'_'.$access_point] ) ? $roles->capabilities[$subtab.'_'.$access_point] : '';
-
-    if( $tab_access != $access_point ) {
+    if ( ! array_key_exists( $page, $get_role_cap ) ) {
         return false;
     }
 
-    if( $subtab == null ) {
-        if( $roles->capabilities[$tab.'_'.$access_point] == $access_point ) {
-            return true;
-        } else {
-            return false;
+    if ( $tab === null ) {
+        return true;
+    }
+
+    $menu = hrm_page();
+
+    //if tab has no access role
+    if ( isset( $menu[$page][$tab]['follow_access_role'] ) && ! $menu[$page][$tab]['follow_access_role'] ) {
+        return true;
+    }
+
+    //for custom access role
+    $inside_tab_role = false;
+    $inside_subtab_role = false;
+
+    if ( isset( $menu[$page][$tab]['role'] ) && is_array( $menu[$page][$tab]['role'] ) ) {
+        $inside_tab_role = array_key_exists( $access_point, $menu[$page][$tab]['role'] ) ? true : false;
+    }
+
+    if ( isset( $menu[$page][$tab]['submenu'] ) && isset( $menu[$page][$tab]['submenu']['role'] ) ) {
+        if ( is_array( $menu[$page][$tab]['submenu']['role'] ) && array_key_exists( $access_point, $menu[$page][$tab]['submenu']['role'] ) ) {
+            $inside_subtab_role = true;
         }
     }
 
-    if( $subtab_access != $access_point ) {
-        return false;
+    if ( $inside_tab_role ) {
+       if ( user_can( $user_id, $tab .'_'. $access_point ) ) {
+            return true;
+        }
     }
 
-    if( isset( $roles->capabilities[$subtab.'_'.$access_point] ) && $roles->capabilities[$subtab.'_'.$access_point]  == $access_point ) {
+    if ( $inside_subtab_role ) {
+       if ( user_can( $user_id, $subtab .'_'. $access_point ) ) {
+            return true;
+        }
+    }
+    //end
+
+    //check permission for view, edit, delete
+    if ( $subtab == null && user_can( $user_id, $tab .'_'. $access_point ) ) {
         return true;
-    } else {
+    } else if ( $subtab == null && ! user_can( $user_id, $tab .'_'. $access_point ) ) {
         return false;
     }
 
+    if ( ! user_can( $user_id, $tab .'_'. $access_point ) ) {
+        return false;
+    }
+
+    if ( user_can( $user_id, $subtab .'_'. $access_point ) ) {
+        return true;
+    }
+
+    return false;
 }
 
 function hrm_current_user_role() {
     global $current_user;
 
     $user_roles = $current_user->roles;
-    $user_role = array_shift($user_roles);
+    $user_role = reset($user_roles);
 
     return $user_role;
 }
@@ -198,6 +231,7 @@ function hrm_get_employee_id() {
 function hrm_get_query_args() {
 
     $menu = hrm_page();
+
     $page = isset( $_GET['page'] ) && !empty( $_GET['page'] ) ? $_GET['page'] : false;
 
     if ( !$page ) {
@@ -211,9 +245,10 @@ function hrm_get_query_args() {
 
     if ( isset( $_GET['tab'] ) && !empty( $_GET['tab'] ) ) {
         $tab = $_GET['tab'];
-    } else if ( isset( $menu[$page] ) && count( $menu[$page] ) ) {
-        $tab =  array_keys( $menu[$page] );
+    } else if ( isset( $menu[$page] ) && is_array( $menu[$page] ) ) {
+        $tab = array_keys( $menu[$page] );
         $tab = reset( $tab );
+        $tab = isset( $menu[$page]['tab'] ) && ( $menu[$page]['tab'] === false ) ? false : $tab;
     } else {
         $tab = false;
     }
@@ -255,17 +290,53 @@ function hrm_get_query_args() {
 }
 
 function hrm_pagenum() {
-    return isset( $_POST['pagenum'] ) ? intval( $_POST['pagenum'] ) : 1;
+    return isset( $_REQUEST['pagenum'] ) ? intval( $_REQUEST['pagenum'] ) : 1;
 }
 
 function hrm_result_limit() {
 
-    if ( isset( $_POST['limit'] ) && $_POST['limit'] ) {
-        return intval( $_POST['limit'] );
-    } else if ( isset( $_POST['hrm_attr']['limit'] ) && $_POST['hrm_attr']['limit'] ) {
-        return intval( $_POST['hrm_attr']['limit'] );
+    if ( isset( $_REQUEST['limit'] ) && $_REQUEST['limit'] != '-1' ) {
+        return intval( $_REQUEST['limit'] );
+    } else if ( isset( $_REQUEST['hrm_attr']['limit'] ) && $_REQUEST['hrm_attr']['limit'] != '-1' ) {
+        return intval( $_REQUEST['hrm_attr']['limit'] );
     } else {
         return 2;
     }
+}
+
+function hrm_log( $type = '', $msg = '' ) {
+
+    $msg = sprintf( "[%s][%s] %s\n", date( 'd.m.Y h:i:s' ), $type, $msg );
+    error_log( $msg, 3, dirname( __FILE__ ) . '/log.txt' );
+
+}
+
+function hrm_message() {
+    $message = array(
+        'datatable_pagination' => __( '--Select Pagination--', 'hrm' ),
+        'searchPlaceholder'    => __( 'Seach...', 'hrm' ),
+        'dtb_pag_all'          => __( 'All', 'hrm' ),
+     );
+
+    return apply_filters( 'hrm_message', $message );
+}
+
+function hrm_get_role() {
+    global $wp_roles;
+
+    if ( !$wp_roles ) {
+        $wp_roles = new WP_Roles();
+    }
+
+    return $wp_roles->get_names();
+}
+
+function hrm_page_slug() {
+    $menu = hrm_menu_label();
+    foreach ( $menu as $page_slug => $value ) {
+        break;
+    }
+
+    return $page_slug ? $page_slug : false;
 }
 

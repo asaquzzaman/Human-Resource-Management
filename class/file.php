@@ -26,12 +26,17 @@ class HRM_File {
     }
 
     function get_assing_user( $post_id ) {
+        $role = hrm_current_user_role();
         $users = get_post_meta( $post_id, '_attachment_user' );
         $assing = '';
         foreach ( $users as $key => $user_id ) {
             $user = get_user_by( 'id', $user_id );
-            $url = hrm_employee_menu_url( hrm_pim_page(), $tab = 'personal', $user_id );
-            $assing .= sprintf( '<a class="hrm-avatar" href="%1s" title="%2s">%3s</a>', $url, $user->display_name, get_avatar( $user_id, 36 ) );
+            if ( $role == 'hrm_employee' ) {
+                $assing .= sprintf( '<span title="%s">%s</span>', $user->display_name, get_avatar( $user_id, 36 ) );
+            } else {
+                $url = hrm_employee_menu_url( hrm_pim_page(), 'personal', $user_id );
+                $assing .= sprintf( '<a class="hrm-avatar" href="%1s" title="%2s">%3s</a>', $url, $user->display_name, get_avatar( $user_id, 36 ) );
+            }
         }
 
         return $assing;
@@ -42,7 +47,7 @@ class HRM_File {
         $args = array(
             'post_type'   => 'attachment',
             'post_status' => 'inherit',
-            'post_per_page' => '-1'
+            'posts_per_page' => '-1'
         );
 
         if ( $post_author ) {
@@ -73,16 +78,16 @@ class HRM_File {
         return new WP_Query( $args );
     }
 
-    function get_share_file_posts( $limit = 0, $pagenum, $post_author = false ) {
+    function get_share_file_posts( $limit = 0, $pagenum = 1, $post_author = false ) {
         $post_author = $post_author ? $post_author : get_current_user_id();
-        $offset  = ( $pagenum - 1 ) * $limit;
+        //$offset  = ( $pagenum - 1 ) * $limit;
 
         $args = array(
             'post_type'      => 'hrm_file',
             'author'         => $post_author,
             'post_status'    => 'publish',
-            'offset'         => $offset,
-            'posts_per_page' => $limit,
+            //'offset'         => $offset,
+            'posts_per_page' => -1,
         );
 
         return new WP_Query( $args );
@@ -111,14 +116,14 @@ class HRM_File {
         return new WP_Query( $args );
     }
 
-    function get_file_posts_inbox( $limit = 0, $pagenum, $inbox_user_id ) {
+    function get_file_posts_inbox( $inbox_user_id ) {
 
-        $offset  = ( $pagenum - 1 ) * $limit;
+        //$offset  = ( $pagenum - 1 ) * $limit;
         $args = array(
             'post_type'      => 'hrm_file',
             'post_status'    => 'publish',
-            'offset'         => $offset,
-            'posts_per_page' => $limit,
+            //'offset'         => $offset,
+            'posts_per_page' => -1,
             'meta_query'     => array(
                 array(
                     'key'    => '_attachment_user',
@@ -354,6 +359,115 @@ class HRM_File {
         } else {
             delete_post_meta( intval( $file_id ), '_attachment_user', $user_id );
         }
+    }
+
+    function role_permission ( $role_name = false, $display_name = null ) {
+
+        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+
+        $get_page = isset( $_POST['hrm_dataAttr']['page'] ) ? $_POST['hrm_dataAttr']['page'] : '';
+        if ( $role_name !== false ) {
+            $roles =  get_role( $role_name );
+            $hidden_form['id'] = array(
+                'type' => 'hidden',
+                'value' => 'edit'
+            );
+        }
+
+        $page = hrm_page();
+
+        //hidden form
+        $hidden_form['role_name'] = array(
+            'label' =>  __( 'Role', 'hrm' ),
+            'type' => ( $role_name === false ) ? 'text' : 'hidden',
+            'required' => 'required',
+            'value' => ( $role_name === false ) ? '' : esc_attr( $role_name ),
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
+        );
+        $hidden_form['display_name'] = array(
+            'label' =>  __( 'Display Name', 'hrm' ),
+            'type' => ( $display_name === null ) ? 'text' : 'hidden',
+            'value' => ( $display_name === null ) ? '' : esc_attr( $display_name ),
+            'required' => 'required',
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
+        );
+
+        foreach( $page as $tab => $tab_item )  {
+
+            if ( $get_page != $tab ) {
+                continue;
+            }
+            foreach ($tab_item as $tab_name => $tab_name_itme) {
+
+                $view = isset( $roles->capabilities[$tab_name.'_view'] ) ? 'view' : '';
+                $add = isset( $roles->capabilities[$tab_name.'_add'] ) ? 'add' : '';
+                $delete = isset( $roles->capabilities[$tab_name.'_delete'] ) ? 'delete' : '';
+
+                $tab_role[] = array(
+                    'label' => __( 'View', 'hrm' ),
+                    'value' => 'view',
+                    'class' => 'hrm-cap-'.$tab_name.'_view',
+                    'checked' => ( $role_name === false ) ? 'view' : $view,
+                );
+
+                $tab_role[] = array(
+                    'label' => __( 'Add', 'hrm' ),
+                    'value' => 'add',
+                    'class' => 'hrm-cap-'.$tab_name.'_add',
+                    'checked' => ( $role_name === false ) ? 'add' : $add,
+                );
+
+                $tab_role[] = array(
+                    'label' => __( 'Delete', 'hrm' ),
+                    'value' => 'delete',
+                    'class' => 'hrm-cap-'.$tab_name.'_delete',
+                    'checked' => ( $role_name === false ) ? 'delete' : $delete,
+                );
+
+                if ( isset( $tab_name_itme['role'] ) && is_array( $tab_name_itme['role'] ) && count( $tab_name_itme['role'] ) ) {
+                    foreach ( $tab_name_itme['role'] as $role_value => $label ) {
+                        $checked = isset( $roles->capabilities[$tab_name.'_'.$role_value] ) ? $role_value : '';
+                        $tab_role[] = array(
+                            'label' => $label,
+                            'value' => $role_value,
+                            'class' => 'hrm-cap-'.$tab_name.'_'.$role_value,
+                            'checked' => ( $role_name === false ) ? $role_value : $checked,
+                        );
+                    }
+                }
+
+                $hidden_form['cap['.$tab_name.'][]'] = array(
+                    'label'      => $tab_name_itme['title'],
+                    'type'       => 'checkbox',
+                    'desc'       => 'Choose access permission',
+                    'wrap_class' => 'hrm-parent-field',
+                    'fields'     => $tab_role,
+                );
+
+                $tab_role = '';
+            }
+        }
+
+        $hidden_form['header'] = 'User Role';
+        $hidden_form['action'] = 'user_role';
+        $hidden_form['url'] = $redirect;
+
+        ob_start();
+        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
+
+        $return_value = array(
+            'append_data' => ob_get_clean(),
+        );
+
+        return $return_value;
     }
 
 }

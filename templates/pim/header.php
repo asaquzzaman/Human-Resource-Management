@@ -31,6 +31,7 @@ if ( ! $subtab ) {
     $subtab = reset( $subtab );
 
 } else {
+    echo '<h3 class="hrm-sub-nav"></h3>';
     return;
 }
 

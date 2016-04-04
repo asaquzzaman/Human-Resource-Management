@@ -1,95 +1,82 @@
 <div class="hrm-update-notification"></div>
-<?php
-$field = array();
-$field['job_category'] = array(
-    'label' => __( 'Category Name', 'hrm' ),
-    'type'  => 'text',
-    'value' => isset( $_POST['job_category'] ) ? $_POST['job_category'] : '',
-    'desc'  => 'please insert category name',
-);
-
-$field['type'] = array(
-    'type' => 'hidden',
-    'value' => '_search'
-);
-
-$field['action'] = 'hrm_search';
-$field['table_option'] = 'hrm_job_category';
-
-
-echo Hrm_Settings::getInstance()->get_serarch_form( $field, 'Job Category');
-?>
-
 <div id="hrm-admin-job-category"></div>
 <?php
-
-//hidden form or insert form
-
-
-//table
-$pagenum     = hrm_pagenum();
-$limit       = hrm_result_limit();
-if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
-    $post = $_POST;
-    $results = hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
-    $search_satus = true;
-
+$results = hrm_Settings::getInstance()->hrm_query( 'hrm_job_category' );
+if( isset( $results['total_row'] ) ) {
+    $total = $results['total_row'];
+    unset( $results['total_row'] );
 } else {
-    $results = hrm_Settings::getInstance()->hrm_query( 'hrm_job_category', $limit, $pagenum );
-    $search_satus = false;
-}
+    $total = 0;
+};
 
-    if( isset( $results['total_row'] ) ) {
-        $total = $results['total_row'];
-        unset( $results['total_row'] );
-    } else {
-        $total = 0;
-    };
-
-$add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
+$add_permission    = hrm_user_can_access( $page, $tab, $subtab, 'add' ) ? true : false;
+$delete_permission = hrm_user_can_access( $page, $tab, $subtab, 'delete' ) ? true : false;
 
 foreach ( $results as $key => $value) {
 	$active = ( $value->active == 'yes' ) ? 'Enable' : 'Disable';
-    if ( $delete_permission ) {
-        $del_checkbox = '<input name="hrm_check['.$value->id.']" value="" type="checkbox">';
+
+     if ( $delete_permission ) {
+        $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
+        $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
+        $td_attr[][0] = 'class="hrm-table-checkbox"';
     } else {
         $del_checkbox = '';
+        $delete_text  = '';
     }
 
     if ( $add_permission ) {
-        $name_id = '<a href="#" class="hrm-editable" data-table_option="hrm_job_category" data-id='.$value->id.'>'.$value->name.'<a>';
+        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_job_category" data-id='.$value->id.'>'.$value->name.'</a>
+        <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_job_category" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
+        .$delete_text. '</div></div>';
     } else {
         $name_id = $value->name;
     }
 
-    $body[] = array(
-        $del_checkbox,
-        $name_id,
-        $active,
-    );
+    if ( $delete_permission ) {
+        $body[] = array(
+            $del_checkbox,
+            $name_id,
+            $active,
+        );
+    } else {
+        $body[] = array(
+            $name_id,
+            $active,
+        );
+    }
+}
 
-    $td_attr[] = array(
-        'class="check-column"'
+$table = array();
+
+if ( $delete_permission ) {
+    $table['head'] = array(
+        '<input class="hrm-all-checked" type="checkbox">',
+        __( 'Job Category', 'hrm' ),
+        __( 'Activity', 'hrm' ),
+    );
+} else {
+    $table['head'] = array(
+        __( 'Job Category', 'hrm' ),
+        __( 'Activity', 'hrm' ),
     );
 }
-$del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
-$table               = array();
-$table['head']       = array( $del_checkbox, 'Job Category', 'Activity' );
+
 $table['body']       = isset( $body ) ? $body : array();
 $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
 $table['table']      = 'hrm_job_category';
 $table['action']     = 'hrm_delete';
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
+$table['page']       = $page;
 
 echo Hrm_Settings::getInstance()->table( $table );
-echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
+
 $file_path = urlencode(__FILE__);
+$url       = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+global $hrm_is_admin;
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+
 <script type="text/javascript">
     jQuery(function($) {
         hrm_dataAttr = {
@@ -102,9 +89,7 @@ $file_path = urlencode(__FILE__);
             tab: '<?php echo $tab; ?>',
             subtab: '<?php echo $subtab; ?>',
             req_frm: '<?php echo $file_path; ?>',
-            limit: '<?php echo $limit; ?>',
-            search_satus: '<?php echo $search_satus; ?>',
-            subtab: true
+            is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

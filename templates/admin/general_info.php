@@ -1,7 +1,7 @@
 <div class="hrm-update-notification"></div>
 <?php
 
-if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
+if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
 
     printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
     return;
@@ -99,6 +99,7 @@ $field['action'] = 'single_form';
 $field['table_option'] = 'hrm_general_info';
 $field['tab'] = $tab;
 $field['subtab'] = $subtab;
+$field['page'] = $page;
 
 echo Hrm_Settings::getInstance()->visible_form_generator( $field );
 

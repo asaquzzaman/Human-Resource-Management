@@ -1,6 +1,6 @@
 <?php
 class Hrm_Settings {
-	private static $_instance;
+    private static $_instance;
 
     public static function getInstance() {
         if ( !self::$_instance ) {
@@ -20,6 +20,19 @@ class Hrm_Settings {
         return apply_filters( 'hrm_redirect_url', $url, $page, $tab, $subtab );
     }
 
+    function show_page( $page ) {
+
+        $menu = hrm_page();
+
+        $path = isset( $menu[$page]['file_path'] ) ? $menu[$page]['file_path'] : '';
+
+        if( file_exists( $path ) ) {
+            include_once $path;
+        } else {
+            _e('Page not found', 'hrm' );
+        }
+    }
+
     function show_tab_page( $page, $tab, $subtab, $nested_tab = '' ) {
         if ( !$tab ) {
             _e( 'Missing Tab Page!', 'hrm' );
@@ -29,15 +42,10 @@ class Hrm_Settings {
         $menu = hrm_page();
         $tab = empty( $nested_tab ) ? $tab : $nested_tab;
 
-        if ( ! hrm_user_can_access( $tab, null, 'view' ) ) {
-            printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
-            return false;
-        }
-
         $path = isset( $menu[$page][$tab]['file_path'] ) ? $menu[$page][$tab]['file_path'] : '';
 
         if( file_exists( $path ) ) {
-            require_once $path;
+            include_once $path;
         } else {
             _e('Page not found', 'hrm' );
         }
@@ -56,39 +64,29 @@ class Hrm_Settings {
 
             $subtab = key( $menu[$page][$tab]['submenu'] );
 
-            if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
             $path = isset( $menu[$page][$tab]['submenu'][$subtab]['file_path'] ) ? $menu[$page][$tab]['submenu'][$subtab]['file_path'] : '';
             $path = apply_filters( 'hrm_subtab_path', $path, $page, $tab, $subtab );
 
             if( file_exists( $path ) ) {
-                require_once $path;
+                include_once $path;
             } else {
                 echo 'Page not found';
             }
         } else {
 
-            if ( ! hrm_user_can_access( $tab, $subtab, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do not have permission to access this page', 'cpm' ) );
-                return;
-            }
-
             $path = isset( $menu[$page][$tab]['submenu'][$subtab]['file_path'] ) ? $menu[$page][$tab]['submenu'][$subtab]['file_path'] : '';
 
             $path = apply_filters( 'hrm_subtab_path', $path, $page, $tab, $subtab );
 
             if( file_exists( $path ) ) {
-                require_once $path;
+                include_once $path;
             } else {
                 echo 'Page not found';
             }
         }
     }
 
-	function select_field( $name, $element ) {
+    function select_field( $name, $element ) {
 
         $extra_field = '';
         $id          = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
@@ -110,7 +108,7 @@ class Hrm_Settings {
         }
 
         $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
-        $html .= sprintf( '<select class="%1$s" name="%2$s" id="%3$s" %4$s %5$s>', $class, $name, $id, $disabled, $extra_field );
+        $html .= sprintf( '<select class="%1$s" name="%2$s" id="%3$s" %4$s %5$s data-placeholder="%6$s">', $class, $name, $id, $disabled, $extra_field, __( '-- Chose --', 'hrm' ) );
 
         foreach ( $option as $key => $label ) {
             $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
@@ -123,7 +121,7 @@ class Hrm_Settings {
         $wrap_close = sprintf('</%1$s>', $wrap_tag);
 
         ob_start();
-           	echo $this->multiple_field_inside_this_wrap( $element );
+            echo $this->multiple_field_inside_this_wrap( $element );
                 echo $wrap;
                 echo $html;
                 echo $wrap_close;
@@ -454,17 +452,17 @@ class Hrm_Settings {
     function descriptive_field( $element ) {
 
         $extra_field = '';
-        $id    = isset( $element['id'] ) ? esc_attr( $element['id'] ) : '';
-        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
-        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
-        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
-        $value    = isset( $element['value'] ) ? $element['value'] : '';
+        $id          = isset( $element['id'] ) ? esc_attr( $element['id'] ) : '';
+        $label       = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $wrap_tag    = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $wrap_class  = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $value       = isset( $element['value'] ) ? $element['value'] : '';
 
-        $html = sprintf( '<label for="%1s">%2s</label>', $id, $label );
-        $html .= $value;
+        $html        = sprintf( '<label for="%1s">%2s</label>', $id, $label );
+        $html        .= $value;
 
-        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
-        $wrap_close = sprintf('</%s>', $wrap_tag);
+        $wrap        = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close  = sprintf('</%s>', $wrap_tag);
 
         ob_start();
             echo $this->multiple_field_inside_this_wrap( $element );
@@ -476,18 +474,19 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+
+
     function get_serarch_form( $form, $heading = null ) {
-        $form['action'] = isset( $form['action'] ) ? $form['action'] : '';
+        $form['action']       = isset( $form['action'] ) ? $form['action'] : '';
         $form['table_option'] = isset( $form['table_option'] ) ? $form['table_option'] : '';
-        $button = isset( $form['button'] ) ? $form['button'] : true;
-
+        $button               = isset( $form['button'] ) ? $form['button'] : true;
+        $visibility           = !isset( $form['visibility'] ) ? true : !$form['visibility'] ? 'display: none;' : true;
         ob_start();
-
         ?>
             <div class="hrm-error-notification"></div>
-            <div class="hrm-search-content">
+            <div class="hrm-search-content postbox" style="<?php echo $visibility; ?>">
                 <div class="hrm-search-head">
-                    <h2 id="hrm-searchLocationHeading"><?php echo $heading; ?></h2>
+                    <h3><?php echo $heading; ?></h3>
                 </div>
                 <form id="hrm-search-form" method="post" action="">
                     <input type="hidden" name="action" value="<?php echo esc_attr( $form['action'] ); ?>">
@@ -549,11 +548,12 @@ class Hrm_Settings {
                     <?php
                     if ( $button ) {
                         ?>
-                            <input type="submit" name="<?php echo $form['action']; ?>" class="button-primary hrm-search" value="Search">
+                            <input type="submit" name="action_search" class="button-primary hrm-search" value="<?php _e( 'Search', 'hrm' ); ?>">
+                            <a class="button hrm-search-button hrm-search-cancel" href="#"><?php _e( 'Cancel', 'hrm' ); ?></a>
                         <?php
                     }
                     ?>
-                    <div class="hrm-spinner" style="display: none;">Searching....</div>
+                    <div class="hrm-spinner" style="display: none;"><?php _e( 'Searching....', 'hrm' ); ?></div>
                 </form>
             </div>
 
@@ -568,14 +568,26 @@ class Hrm_Settings {
         $tab                  = isset( $form['tab'] ) ? $form['tab'] : null;
         $subtab               = isset( $form['subtab'] ) ? $form['subtab'] : null;
         $form['url']          = isset( $form['url'] ) ? $form['url'] : '';
-
+        $form_header          = isset( $form['header'] ) ? $form['header'] : false;
+        $form_wrap_class      = isset( $form['form_wrap_class'] ) ? $form['form_wrap_class'] : 'postbox';
+        $submit_disabled      = isset( $form['submit_btn_disabled'] ) ? $form['submit_btn_disabled'] : false;
+        $submit_value         = isset( $form['submit_btn_value'] ) ? $form['submit_btn_value'] : __( 'Submit', 'hrm' );
+        $cancel_href          = isset( $form['cancel_href'] ) ? $form['cancel_href'] : '#';
+        $cancel_text          = isset( $form['cancel_text'] ) ? $form['cancel_text'] : __( 'Cancel', 'hrm' );
+        $cancel_btn_class     = isset( $form['cancel_btn_class'] ) ? $form['cancel_btn_class'] : 'hrm-form-cancel';
         ob_start();
         ?>
 
-        <div id="hrm-hidden-form-warp" style="display: none;">
-            <div class="hrm-search-head">
-                    <h2 id="hrm-searchLocationHeading"><?php echo $form['header']; ?></h2>
-            </div>
+        <div id="hrm-hidden-form-warp" class="<?php echo $form_wrap_class;?>" style="display: none;">
+            <?php
+            if ( $form_header ) {
+                ?>
+                <div class="hrm-search-head">
+                    <h3><?php echo $form['header']; ?></h3>
+                </div>
+                <?php
+            }
+            ?>
             <form id="hrm-hidden-form" action="" >
                 <input type="hidden" name="action" value="<?php echo esc_attr( $form['action'] ); ?>">
                 <input type="hidden" name="url" value="<?php echo $form['url']; ?>">
@@ -623,7 +635,7 @@ class Hrm_Settings {
                                     echo $this->descriptive_field( $field_obj );
                                     break;
                                 case 'html':
-                                    echo $field_obj['content'];
+                                     echo $field_obj['content'];
                                     break;
                                 case 'tinymce':
                                     echo $this->hrm_tinymce( $field_obj );
@@ -631,11 +643,25 @@ class Hrm_Settings {
                             }
 
                         }
+
+                        do_action( 'hrm_after_new_entry_form_field', $form );
                     ?>
+
                 </div>
                 <div class="hrm-action-wrap">
-                    <input type="submit" class="button hrm-submit-button button-primary" name="requst" value="Submit">
-                    <a href="#" class="button hrm-form-cancel"><?php _e( 'Cancel', 'hrm' ); ?></a>
+                    <?php
+                    if ( ! $submit_disabled ) {
+                        ?>
+                        <input type="submit" class="button hrm-submit-button button-primary" name="requst" value="<?php echo $submit_value; ?>">
+                        
+                        <?php
+                    } else {
+                        ?>
+                        <input type="submit" disabled="disabled" class="button hrm-submit-button button-primary" name="requst" value="<?php echo $submit_value; ?>">
+                        <?php
+                    }
+                    ?>
+                    <a target="_blank" href="<?php echo $cancel_href; ?>" class="button <?php echo $cancel_btn_class; ?>"><?php echo $cancel_text; ?></a>
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
                 </div>
             </form>
@@ -652,12 +678,13 @@ class Hrm_Settings {
         $form['subtab']       = isset( $form['subtab'] ) ? $form['subtab'] : null;
         $form['tab']          = isset( $form['tab'] ) ? $form['tab'] : null;
         $submit_btn           = isset( $form['submit_btn'] ) ? $form['submit_btn'] : true;
+        $page         = isset( $form['page'] ) ? $form['page'] : null;
         ob_start();
         ?>
         <div class="hrm-error-notification"></div>
-        <div id="hrm-visible-form-warp">
+        <div id="hrm-visible-form-warp" class="postbox">
             <div class="hrm-search-head">
-                <h2 id="hrm-searchLocationHeading"><?php echo $form['header']; ?></h2>
+                <h3><?php echo $form['header']; ?></h3>
             </div>
             <form id="hrm-visible-form" action="" method="post">
                 <input type="hidden" name="action" value="<?php echo esc_attr( $form['action'] ); ?>">
@@ -714,7 +741,7 @@ class Hrm_Settings {
 
                     }
 
-                if ( hrm_user_can_access( $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
+                if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
                     ?>
                     <input type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
@@ -728,7 +755,93 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function form_field_only( $form ) {
+        $form['action']       = isset( $form['action'] ) ? $form['action'] : '';
+        $form['table_option'] = isset( $form['table_option'] ) ? $form['table_option'] : '';
+        $form['header']       = isset( $form['header'] ) ? $form['header'] : '';
+        $form['id']           = isset( $form['id'] ) ? $form['id'] : '';
+        $form['subtab']       = isset( $form['subtab'] ) ? $form['subtab'] : null;
+        $form['tab']          = isset( $form['tab'] ) ? $form['tab'] : null;
+        $submit_btn           = isset( $form['submit_btn'] ) ? $form['submit_btn'] : true;
+        $class                = isset( $form['class'] ) ? $form['class'] : '';
+        $page                 = isset( $form['page'] ) ? $form['page'] : null;
+        ob_start();
+        ?>
+        <div class="hrm-error-notification"></div>
+        <div id="hrm-visible-form-warp" class="<?php echo $class; ?>">
+            <div class="hrm-search-head">
+                <h3><?php echo $form['header']; ?></h3>
+            </div>
+            <form id="hrm-visible-form" action="" method="post">
+                <input type="hidden" name="action" value="<?php echo esc_attr( $form['action'] ); ?>">
+                <input type="hidden" name="id" value="<?php echo esc_attr( $form['id'] ); ?>">
+                <input type="hidden" name="url" value="<?php echo get_permalink(); ?>">
+                <input type="hidden" name="table_option" value="<?php echo esc_attr( $form['table_option'] ); ?>">
+                <?php wp_nonce_field( 'hrm_nonce', '_wpnonce' ); ?>
+
+                <?php
+                    foreach( $form as $name => $field_obj ) {
+
+                        if( ! isset( $field_obj['type'] ) || empty( $field_obj['type'] ) ) {
+                            continue;
+                        }
+
+                        switch ( $field_obj['type'] ) {
+                            case 'text':
+                                echo $this->text_field( $name, $field_obj );
+                                break;
+                            case 'select':
+                                echo $this->select_field( $name, $field_obj );
+                                break;
+                            case 'textarea':
+                                echo $this->textarea_field( $name, $field_obj );
+                                break;
+                            case 'radio':
+                                echo $this->radio_field( $name, $field_obj );
+                                break;
+                            case 'checkbox':
+                                echo $this->checkbox_field( $name, $field_obj );
+                                break;
+                            case 'hidden':
+                                echo $this->hidden_field( $name, $field_obj );
+                                break;
+                            case 'multiple':
+                                echo $this->multiple_select_field( $name, $field_obj );
+                                break;
+                            case 'paretn_wrap':
+                                echo $this->multiple_field_inside_this_wrap( $field_obj );
+                                break;
+                            case 'paretn_wrap_close':
+                                echo $this->multiple_field_inside_this_wrap_close( $field_obj );
+                                break;
+                            case 'descriptive':
+                                echo $this->descriptive_field( $field_obj );
+                                break;
+                            case 'html':
+                                echo $field_obj['content'];
+                                break;
+                            case 'tinymce':
+                                echo $this->hrm_tinymce( $field_obj );
+                                break;
+                        }
+
+                    }
+
+                if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
+                    ?>
+                    <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
+                    <?php
+                }
+
+                ?>
+            </form>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
     function table( $table ) {
+        $table = apply_filters( 'hrm_table_data', $table );
         if( ! isset( $table['head'] ) || ! is_array( $table['head'] ) || ! count( $table['head'] ) ) {
             return;
         }
@@ -740,75 +853,123 @@ class Hrm_Settings {
         $subtab          = isset( $table['subtab'] ) ? $table['subtab'] : null;
         $count           = 1;
         $delet_button    = isset( $table['delete_button'] ) ?  $table['delete_button'] : true;
-        $pagination      = isset( $table['view_btn'] ) ? $table['view_btn'] : true;
+        $pagination      = isset( $table['pagination'] ) ? $table['pagination'] : true;
         $add_btn_name    = isset( $table['add_btn_name'] ) ? $table['add_btn_name'] : __( 'Add', 'hrm' );
         $add_btn_class   = isset( $table['add_btn_class'] ) ? $table['add_btn_class'] : 'hrm-add-button';
-        $body            = isset( $table['body'] ) && is_array( $table['body'] ) ? $table['body'] : array();
 
+        $searc_mode      = isset( $table['search_mode'] ) ?  $table['search_mode'] : false;
+        $search          = isset( $table['search'] ) && $table['search'] ? $table['search'] : false;
+        $page            = isset( $table['page'] ) ? $table['page'] : null;
+
+        if ( isset( $table['data_table'] ) && $table['data_table'] ) {
+            $datatable = 'hrm-data-table';
+        } else if ( isset( $table['data_table'] ) && !$table['data_table'] ) {
+            $datatable = '';
+        } else {
+            $datatable = 'hrm-data-table';
+        }
+
+        $insert_new = ( hrm_user_can_access( $page, $tab, $subtab, 'add' ) &&  $add_btn_name ) ? true : false;
+        $event_delete = ( hrm_user_can_access( $page,$tab, $subtab, 'delete' ) && $delet_button ) ? true : false;
         ob_start();
         ?>
 
-        <form id="hrm-list-form" action="" method="post">
+        <form id="hrm-list-form" class="" action="" method="post">
             <input type="hidden" name="action" value="<?php echo esc_attr( $table['action'] ); ?>">
             <input type="hidden" name="table_option" value="<?php echo esc_attr( $table['table'] ); ?>">
-            <div class="hrm-table-action-wrap">
-                <?php if ( hrm_user_can_access( $tab, $subtab, 'add' ) &&  $add_btn_name ) { ?>
-                    <a href="#" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
-                <?php } ?>
-
-                <?php if ( hrm_user_can_access( $tab, $subtab, 'delete' ) && $delet_button ) { ?>
-                    <a href="#" class="button hrm-delete-button"><?php _e( 'Delete', 'hrm' ); ?></a>
-                <?php } ?>
-
-            </div>
-            <?php if ( $pagination ) {  ?>
-                <div class="hrm-pagination-wrap">
-                    <?php $this->pagination_select(); ?>
-                    <!-- <input type="submit" class="button-primary hrm-view-action" value="<?php _e( 'View', 'hrm' ); ?>" name="hrm_pagination"> -->
-                </div>
-            <?php } ?>
-
-            <span class="hrm-clear"></span>
-            <?php wp_nonce_field( 'hrm_nonce', '_wpnonce' ); ?>
-
-            <table <?php echo $table['table_attr']; ?>>
-                <thead>
-                    <tr>
-                        <?php foreach( $table['head']  as $key => $val ) { ?>
-
-                            <?php $th_attr = isset( $table['th_attr'][$key] ) ? $table['th_attr'][$key] : ''; ?>
-
-                            <th <?php echo $th_attr;?>><?php echo $val; ?></th>
-
-                        <?php } ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach( $body  as $key => $val ) { ?>
-                    <?php $odd_even = ( $count % 2 == 0 ) ? 'hrm-even' : 'hrm-odd'; ?>
-                    <tr class="<?php echo $odd_even; ?>">
-                        <?php
-                        for( $i=0; $i<$count_head; $i++ ) {
-                                $td_attr = isset( $table['td_attr'][$key][$i] ) ? $table['td_attr'][$key][$i] : ''; ?>
-                                <td <?php echo $td_attr; ?>><?php echo isset( $val[$i] ) ? $val[$i] : ''; ?></td>
-
-                        <?php } ?>
-                    </tr>
-                    <?php $count++; ?>
-                    <?php } ?>
-                </tbody>
-            </table>
             <?php
-            if ( !count( $body ) ) {
+            if ( $insert_new || $event_delete ) {
                 ?>
-                <center><?php _e( 'No result found!', 'hrm' ); ?></center>
+                <div class="hrm-table-action-wrap">
+                    <?php if ( $insert_new ) { ?>
+                        <a href="#" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
+                    <?php } ?>
+
+                    <?php if ( $event_delete ) { ?>
+                        <a href="#" class="button hrm-delete-button"><?php _e( 'Delete', 'hrm' ); ?></a>
+                    <?php } ?>
+
+                </div>
+                <?php
+            }
+            if ( $searc_mode ) {
+                ?>
+                    <div class="hrm-pagi-src">
+                        <?php if ( $pagination ) {  ?>
+
+                                <?php $this->pagination_select(); ?>
+
+                        <?php } ?>
+
+                        <?php if ( $search ) {
+                            ?>
+                                <a class="button button-primary hrm-search-button" href="#"><?php echo $search; ?></a>
+                            <?php
+                        }
+                        ?>
+                    </div>
                 <?php
             }
             ?>
 
+            <span class="hrm-clear"></span>
+            <?php wp_nonce_field( 'hrm_nonce', '_wpnonce' ); ?>
+            <?php echo isset( $table['before'] ) ? '<div class="hrm-before-table">'.$table['before'].'</div>': ''; ?>
+            <?php $this->table_generate( $table ); ?>
         </form><?php
 
         return ob_get_clean();
+    }
+
+    function table_generate( $table ) {
+        $body            = isset( $table['body'] ) && is_array( $table['body'] ) ? $table['body'] : array();
+        $td_length   = $count    = count( reset( $body ) );
+        if ( isset( $table['data_table'] ) && $table['data_table'] ) {
+            $datatable = 'hrm-data-table';
+        } else if ( isset( $table['data_table'] ) && !$table['data_table'] ) {
+            $datatable = '';
+        } else {
+            $datatable = 'hrm-data-table';
+        }
+        ?>
+        <table id="<?php echo $datatable; ?>" <?php echo $table['table_attr']; ?>>
+            <thead>
+                <tr>
+                    <?php foreach( $table['head']  as $key => $val ) { ?>
+
+                        <?php $th_attr = isset( $table['th_attr'][$key] ) ? $table['th_attr'][$key] : ''; ?>
+
+                        <th <?php echo $th_attr;?>><?php echo $val; ?></th>
+
+                    <?php } ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach( $body  as $key => $val ) { ?>
+                <?php $odd_even = ( $count % 2 == 0 ) ? 'hrm-even' : 'hrm-odd'; ?>
+                <tr class="<?php echo $odd_even; ?>">
+                    <?php
+
+                    for( $i=0; $i<$td_length; $i++ ) {
+                            $td_attr = isset( $table['td_attr'][$key][$i] ) ? $table['td_attr'][$key][$i] : '';
+
+                            ?>
+
+                            <td <?php echo $td_attr; ?>><?php echo isset( $val[$i] ) ? $val[$i] : ''; ?></td>
+
+                    <?php } ?>
+                </tr>
+                <?php $count++; ?>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php
+
+        if ( !count( $body ) && empty( $datatable ) ) {
+            ?>
+            <tr><td><center><div class="hrm-nothing-found"><?php _e( 'No result found!', 'hrm' ); ?></div></center></td></tr>
+            <?php
+        }
     }
 
     function data_formating( $table ) {
@@ -829,17 +990,18 @@ class Hrm_Settings {
     function hrm_query( $table, $limit = 0, $pagenum = 1 ) {
         global $wpdb;
         $tabledb = $wpdb->prefix . $table;
-
         $offset = ( $pagenum - 1 ) * $limit;
 
         if ( $limit ) {
             $limit = "LIMIT $offset,$limit";
-        } else {
-            $limit = hrm_result_limit();
-            $limit = "LIMIT 0,$limit";
         }
 
-        $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc $limit" );
+        if ( !$limit ) {
+            $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc" );
+        } else {
+            $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc $limit" );
+        }
+
         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
 
         return $results;
@@ -912,7 +1074,7 @@ class Hrm_Settings {
 
 
     function search_query( $post, $limit, $pagenum  ) {
-        check_ajax_referer( 'hrm_nonce' );
+
         if( ! isset( $post['table_option'] ) || empty( $post['table_option'] ) ) {
             return array();
         }
@@ -934,10 +1096,8 @@ class Hrm_Settings {
 
         global $wpdb;
         $tabledb = $wpdb->prefix . $table_option['table_name'];
-
         $pagenum = absint( $pagenum );
         $offset = ( $pagenum - 1 ) * $limit;
-
         $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
 
         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
@@ -964,13 +1124,15 @@ class Hrm_Settings {
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
-            'base'      => add_query_arg( 'pagenum', '%#%' ),
-            'format'    => '',
-            'prev_text' => __( '&laquo;', 'aag' ),
-            'next_text' => __( '&raquo;', 'aag' ),
-            'add_args'  => false,
-            'total'     => $num_of_pages,
-            'current'   => $pagenum,
+            'base'               => add_query_arg( 'pagenum', '%#%' ),
+            'format'             => '',
+            'prev_text'          => __( '&laquo;', 'aag' ),
+            'next_text'          => __( '&raquo;', 'aag' ),
+            'add_args'           => false,
+            'total'              => $num_of_pages,
+            'current'            => $pagenum,
+            'before_page_number' => '<span class="button-secondary">',
+            'after_page_number'  => '</span>'
         ) );
 
         if ( $page_links ) {
@@ -980,10 +1142,11 @@ class Hrm_Settings {
 
 
     function pagination_select() {
-        $selectd = isset( $_POST['limit'] ) ? $_POST['limit'] : 2;
+        $selectd = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : 2;
         $arg = array(
-            '2'  => __( '10', 'hrm'),
-            '4'  => __( '20','hrm' ),
+            '-1'  => __( '--Select Pagination--', 'hrm' ),
+            '4'  => __( '10', 'hrm'),
+            '20'  => __( '20','hrm' ),
             '50'  => __( '50', 'hrm' ),
             '100' => __( '100', 'hrm' ),
         );
@@ -1003,33 +1166,52 @@ class Hrm_Settings {
         echo '</select>';
     }
 
-    function conditional_query_val( $table_option = null, $fields = '*', $compare = array(), $row = false ) {
-        $table = get_option( $table_option );
-        $table = isset( $table['table_name'] ) ? $table['table_name'] : '';
+    function conditional_query_val( $table, $fields = '*', $compare = array(), $row = false, $limit = 0, $pagenum = 1 ) {
 
         if ( is_array( $fields ) && count( $fields ) ) {
-            $fields = implode( ', ', $field );
+            $fields = implode( ', ', $fields );
+        }
+
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        if ( $limit ) {
+            $limit = " LIMIT $offset,$limit";
+        } else {
+            $limit = '';
         }
 
         $where = array();
+
         foreach ($compare as $tb_field => $value ) {
             if ( is_array( $value ) ) {
+                if ( ! count( $value ) ) {
+                    continue;
+                }
                 $in = implode( ',' , $value );
                 $where[] = "$tb_field IN ( $in )";
             } else {
                 $where[] =  "$tb_field = '$value'";
             }
-
         }
 
         $where = implode( ' AND ', $where );
         $where = apply_filters( 'hrm_where_query', $where );
+
         global $wpdb;
-        $table = $wpdb->prefix.$table;
+        $table = $wpdb->prefix . $table;
+
+        if ( empty( $where ) ) {
+            $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE 1=1 $limit" );
+
+            $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
+            return $results;
+        }
+
         if ( $row ) {
             return $wpdb->get_row( "SELECT $fields FROM $table WHERE $where" );
         } else {
-            $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where" );
+            $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where $limit" );
+
             $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
             return $results;
         }
@@ -1090,5 +1272,69 @@ class Hrm_Settings {
         return array_unique( $currency );
     }
 
+    function send( $to, $subject, $message, $sender_id ) {
+
+        $current_user = get_user_by( 'id', $sender_id );
+        $reply        = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $_SERVER['SERVER_NAME'] ) );;
+        $reply_to     = "Reply-To: <$reply>";
+        $content_type = 'Content-Type: text/html';
+        $charset      = 'Charset: UTF-8';
+        $blogname     = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+        $from_email   = $current_user->user_email;
+        $from         = "From: $blogname <$from_email>";
+
+        $headers = array(
+            $reply_to,
+            $content_type,
+            $charset,
+            $from
+        );
+
+        wp_mail( $to, $subject, $message, $headers );
+    }
+
+
+
+    /*
+     *
+     * @Create an HTML drop down menu
+     *
+     * @param string $name The element name and ID
+     *
+     * @param int $selected The month to be selected
+     *
+     * @return string
+     *
+     */
+    function month( $selected = false ) {
+        $months = array(
+            '-1' => __( '--None--', 'hrm' ),
+            1    => __( 'january', 'hrm' ),
+            2    => __('february', 'hrm' ),
+            3    => __('march', 'hrm' ),
+            4    => __('april', 'hrm' ),
+            5    => __('may', 'hrm' ),
+            6    => __('june', 'hrm' ),
+            7    => __('july', 'hrm' ),
+            8    => __('august', 'hrm' ),
+            9    => __('september', 'hrm' ),
+            10   => __('october', 'hrm' ),
+            11   => __('november', 'hrm' ),
+            12   => __('december', 'hrm' )
+        );
+        /*** the current month ***/
+       // $selected = is_null($selected) ? date('n', time()) : $selected;
+
+        return $selected ? $months[$selected] : $months;
+    }
+
+    function year( $selected = false ) {
+        $year = array( '-1' => __( '--None--', 'hrm' ) );
+        for( $i = 2010; $i <= 2050; $i++ ) {
+            $year[$i] = $i;
+        }
+
+        return $selected ? $year[$selected] : $year;
+    }
 
 }

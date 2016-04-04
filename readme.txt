@@ -3,7 +3,7 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 3.3
-Tested up to: 4.1
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -80,6 +80,36 @@ Browser Compatibility
     3. Leave management
 
 == Changelog ==
+==1.1==
+* Just fix the dataTable problem
+==1.0==
+* Employee page not found problem fix
+* Permission management code separated by addon
+* Only administator can maintain update and permission tab
+* Fix many undefined index problem
+* Improved some permission management function
+
+= 0.9 =
+* client management system.
+* code fromat change
+
+= 0.8.1 =
+* fix chosen problem.
+* employee can apply there leave from their personal profile
+* fix undefined problem from salary
+
+= 0.8 =
+* fix many undefined index
+* Advanced leave search
+* fix conflict for individual employee profile and my info
+
+= 0.7 =
+* Change design and menu rearrange
+* leave system change
+
+= 0.6 =
+* fix permission management
+* extra field add for salary
 
 = 0.5 =
 * File management

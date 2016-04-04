@@ -4,10 +4,13 @@ $menu = hrm_page();
 <h2 class="nav-tab-wrapper">
     <?php
 
-    foreach ( $menu[$page] as $key => $tab_event ) {
+    foreach ( $menu[$page] as $tab_key => $tab_event ) {
+        if ( ! hrm_user_can_access( $page, $tab_key, null, 'view' ) ) {
+            continue;
+        }
 
-        $active = ( $tab == $key ) ? 'nav-tab-active' : '';
-        $url = hrm_tab_menu_url( $key, $page );
+        $active = ( $tab == $tab_key ) ? 'nav-tab-active' : '';
+        $url = hrm_tab_menu_url( $tab_key, $page );
         printf( '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>',$url, $tab_event['id'], $tab_event['title'], $active );
     }
 
@@ -32,6 +35,10 @@ if ( ! $subtab ) {
     <ul class="hrm-subsubsub">
         <?php
             foreach ( $menu[$page][$tab]['submenu'] as $sub_key => $sub_event ) {
+                if ( ! hrm_user_can_access( $page, $tab, $sub_key, 'view' ) ) {
+                    continue;
+                }
+
                 $sub_active = ( $sub_key == $subtab ) ? 'hrm-sub-current' : '';
                 $sub_event['id'] = isset( $sub_event['id'] ) ? $sub_event['id'] : '';
                 $sub_url = hrm_subtab_menu_url( $tab, $sub_key, $page );

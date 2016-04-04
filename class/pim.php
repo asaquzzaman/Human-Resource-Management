@@ -66,7 +66,7 @@ class Hrm_Pim {
         return array();
     }
 
-    function show_tab_page() {
+    function show_tab_page( $page ) {
         $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
         $menu = $this->menu_section();
 

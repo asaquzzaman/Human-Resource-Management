@@ -66,6 +66,17 @@ class Hrm_Evaluation {
             )
         );
 
+        if ( $post['emp_id'] != '-1'  ) {
+            $user_meta = array(
+                array(
+                    'key'     => '_assigned',
+                    'value'   => $post['emp_id'],
+                    'compare' => '='
+                )
+            );
+            $args['meta_query'] = array_merge( $args['meta_query'], $user_meta );
+        }
+
         return new WP_Query($args);
     }
 
@@ -172,9 +183,9 @@ class Hrm_Evaluation {
         <input type="hidden" id="hrm-project-id" name="project_id" value="<?php echo $project_id; ?>">
         <input type="hidden" name="action" value="task_rating">
         <?php wp_nonce_field( 'hrm_nonce', '_wpnonce' ); ?>
-        <div class="hrm-visible-form-warp">
+        <div class="hrm-visible-form-warp postbox">
             <div class="hrm-search-head">
-                <h2 id="hrm-searchLocationHeading"><?php _e( 'Current Task', 'hrm' ); ?></h2>
+                <h3><?php _e( 'Current Task', 'hrm' ); ?></h3>
             </div>
             <div class="hrm-inside-padding-wrap">
 
@@ -185,7 +196,7 @@ class Hrm_Evaluation {
 
                 foreach ( $running_tasks as $project_id => $running_task ) {
 
-                    echo '<h3>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h3>';
+                    echo '<h4>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h4>';
                     unset( $running_task['p_title'] );
                     $running_task_total = count( $running_task );
 
@@ -229,9 +240,9 @@ class Hrm_Evaluation {
             </div>
         </div>
 
-        <div class="hrm-visible-form-warp">
+        <div class="hrm-visible-form-warp postbox">
             <div class="hrm-search-head">
-                <h2 id="hrm-searchLocationHeading"><?php _e( 'Outstanding Task', 'hrm' ); ?></h2>
+                <h3><?php _e( 'Outstanding Task', 'hrm' ); ?></h3>
             </div>
             <div class="hrm-inside-padding-wrap">
                 <?php
@@ -241,7 +252,7 @@ class Hrm_Evaluation {
 
                 foreach ( $outstanding_tasks as $project_id => $running_task ) {
 
-                    echo '<h3>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h3>';
+                    echo '<h4>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h4>';
                     unset( $running_task['p_title'] );
                     $outstanding_task_total = count( $running_task );
 
@@ -283,9 +294,9 @@ class Hrm_Evaluation {
             </div>
         </div>
 
-        <div class="hrm-visible-form-warp">
+        <div class="hrm-visible-form-warp postbox">
             <div class="hrm-search-head">
-                <h2 id="hrm-searchLocationHeading"><?php _e( 'Complete Task', 'hrm' ); ?></h2>
+                <h3><?php _e( 'Complete Task', 'hrm' ); ?></h3>
             </div>
             <div class="hrm-inside-padding-wrap">
                 <?php
@@ -295,7 +306,7 @@ class Hrm_Evaluation {
 
                 foreach ( $completed_tasks as $project_id => $running_task ) {
 
-                    echo '<h3>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h3>';
+                    echo '<h4>'. __('Project Title', 'hrm') . ' &#8594; ' . $running_task['p_title'] . '</h4>';
                     unset( $running_task['p_title'] );
                     $completed_task_total = count( $running_task );
 
@@ -337,7 +348,7 @@ class Hrm_Evaluation {
         </div>
         <?php
         $rating_date = isset( $task_id ) ? get_post_meta( $task_id, '_rating_date', true ) : '';
-        $rating_date = !empty( $rating_date ) ? hrm_get_date2mysql( $rating_date ) : '';
+        $rating_date = !empty( $rating_date ) ?  $rating_date : '';
         ?>
         <br>
         <input type="text" placeholder="<?php _e( 'Date', 'hrm' ); ?>" class="hrm-datepicker" name="task_rate_date" value="<?php echo $rating_date; ?>">

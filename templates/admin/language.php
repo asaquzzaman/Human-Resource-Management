@@ -1,87 +1,80 @@
 <div class="hrm-update-notification"></div>
-<?php
-//search form
-$search['language'] = array(
-    'label' => __( 'Language', 'hrm' ),
-    'type' => 'text',
-    'value' => isset( $_POST['language'] ) ? $_POST['language'] : '',
-    'desc' => 'please insert language',
-);
-$search['type'] = array(
-    'type' => 'hidden',
-    'value' => '_search'
-);
-
-$search['action'] = 'hrm_search';
-$search['table_option'] = 'hrm_language';
-
-
-echo Hrm_Settings::getInstance()->get_serarch_form( $search, 'Language');
-?>
 <div id="hrm-language"></div>
-
 <?php
-$pagenum     = hrm_pagenum();
-$limit       = hrm_result_limit();
-if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
-    $post = $_POST;
-    $results = Hrm_Settings::getInstance()->search_query( $post, $limit, $pagenum );
-    $search_satus = true;
-} else {
-    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_language', $limit, $pagenum );
-    $search_satus = false;
-}
+    $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_language' );
 
-$total = $results['total_row'];
-unset( $results['total_row'] );
-$add_permission = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
-foreach ( $results as $key => $value) {
+    if( isset( $results['total_row'] ) ) {
+        $total = $results['total_row'];
+        unset( $results['total_row'] );
+    } else {
+        $total = 0;
+    };
+
+    $add_permission    = hrm_user_can_access( $page, $tab, $subtab, 'add' ) ? true : false;
+    $delete_permission = hrm_user_can_access( $page, $tab, $subtab, 'delete' ) ? true : false;
+
+    foreach ( $results as $key => $value) {
+
+        if ( $delete_permission ) {
+            $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
+            $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
+            $td_attr[][0] = 'class="hrm-table-checkbox"';
+        } else {
+            $del_checkbox = '';
+            $delete_text  = '';
+        }
+
+        if ( $add_permission ) {
+            $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_language" data-id='.$value->id.'>'.$value->name.'</a>
+            <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_language" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
+            .$delete_text. '</div></div>';
+        } else {
+            $name_id = $value->name;
+        }
+
+         if ( $delete_permission ) {
+            $body[] = array(
+                $del_checkbox,
+                $name_id,
+            );
+        } else {
+            $body[] = array(
+                $name_id,
+            );
+        }
+    }
+
+    $table = array();
 
     if ( $delete_permission ) {
-        $del_checkbox = '<input name="hrm_check['.$value->id.']" value="" type="checkbox">';
+        $table['head'] = array(
+            '<input class="hrm-all-checked" type="checkbox">',
+            __( 'Name', 'hrm' ),
+        );
     } else {
-        $del_checkbox = '';
+        $table['head'] = array(
+            __( 'Name', 'hrm' ),
+        );
     }
 
-    if ( $add_permission ) {
-        $name_id = '<a href="#" class="hrm-editable" data-table_option="hrm_language" data-id='.$value->id.'>'.$value->name.'</a>';
-    } else {
-        $name_id = $value->name;
-    }
 
-    $body[] = array(
-        $del_checkbox,
-        $name_id
-    );
+    $table['body']       = isset( $body ) ? $body : array();
+    $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
+    $table['table_attr'] = array( 'class' => 'widefat' );
+    $table['tab']        = $tab;
+    $table['subtab']     = $subtab;
+    $table['page']       = $page;
+    $table['table']      = 'hrm_language';
+    $table['action']     = 'hrm_delete';
+    $table['table_attr'] = array( 'class' => 'widefat' );
 
-    $td_attr[] = array(
-        'class="check-column"'
-    );
-}
-$del_checkbox = ( $delete_permission ) ? '<input type="checkbox">' : '';
-$table = array();
-$table['head'] = array( $del_checkbox, 'Name', 'Description' );
-$table['body'] = isset( $body ) ? $body : array();
+    echo Hrm_Settings::getInstance()->table( $table );
 
-
-$table['td_attr'] = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr'] = array( 'class="check-column"' );
-$table['table_attr'] = array( 'class' => 'widefat' );
-$table['tab'] = $tab;
-$table['subtab'] = $subtab;
-$table['table'] = 'hrm_language';
-$table['action'] = 'hrm_delete';
-$table['table_attr'] = array( 'class' => 'widefat' );
-
-echo Hrm_Settings::getInstance()->table( $table );
-//table
-
-//pagination
-echo Hrm_Settings::getInstance()->pagination( $total, $limit, $pagenum );
-$file_path = urlencode(__FILE__);
+    $file_path = urlencode(__FILE__);
+    $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+    global $hrm_is_admin;
 ?>
-<?php $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+
 <script type="text/javascript">
 jQuery(function($) {
     hrm_dataAttr = {
@@ -94,9 +87,7 @@ jQuery(function($) {
        tab: '<?php echo $tab; ?>',
        subtab: '<?php echo $subtab; ?>',
        req_frm: '<?php echo $file_path; ?>',
-       limit: '<?php echo $limit; ?>',
-       search_satus: '<?php echo $search_satus; ?>',
-       subtab: true
+       is_admin : '<?php echo $hrm_is_admin; ?>'
     };
 });
 </script>

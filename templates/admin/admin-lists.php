@@ -1,42 +1,17 @@
 <div class="hrm-update-notification"></div>
-<?php
 
-$search['employer'] = array(
-    'label' => __( 'User name/Email/User ID', 'hrm' ),
-    'type'  => 'text',
-    'value' => isset( $_POST['employer'] ) ? $_POST['employer'] : '',
-    'desc'  => 'You can search by user name, user email or user id',
-);
-
-$search['type'] = array(
-    'type' => 'hidden',
-    'value' => '_search'
-);
-$search['action'] = 'hrm_search';
-$search['table_option'] = 'hrm_user_search';
-
-echo Hrm_settings::getInstance()->get_serarch_form( $search, 'Admin');
-
-?>
 <div id="hrm-admin-list"></div>
 <?php
-//hidden form
 
-$pagenum     = hrm_pagenum();
-$limit       = hrm_result_limit();
-if( isset( $_POST['type'] ) && ( $_POST['type'] == '_search' ) ) {
-    $search = $_POST['employer'];
-    $search_satus = true;
-} else {
-    $search = '';
-    $search_satus = false;
-}
-$search_query      = Hrm_Admin::getInstance()->get_employer( $limit, $search, $pagenum );
+$search_query = Hrm_Admin::getInstance()->get_employer();
+
 $results           = $search_query->get_results();
 $total             = $search_query->get_total();
-$add_permission    = hrm_user_can_access( $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $tab, $subtab, 'delete' ) ? true : false;
+$add_permission    = hrm_user_can_access( $page, $tab, $subtab, 'add' ) ? true : false;
+$delete_permission = hrm_user_can_access( $page, $tab, $subtab, 'delete' ) ? true : false;
 $user              = wp_get_current_user();
+$body              = array();
+$td_attr           = array();
 
 foreach ( $results as $id => $user_obj) {
     if ( $user->user_login ==  $user_obj->user_login ) {
@@ -47,19 +22,24 @@ foreach ( $results as $id => $user_obj) {
 	$status = ( $flag == 'yes' ) ? 'Enable' : 'Disable';
     $role = isset( $user_obj->roles[0] ) ? $user_obj->roles[0] : '';
 
+    if ( $delete_permission ) {
+        $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$user_obj->ID.']" value="" type="checkbox">';
+        $delete_text  = '<a href="#" class="hrm-delete" data-id='.$user_obj->ID.'>'.__( 'Delete', 'hrm' ).'</a>';
+        $td_attr[][0] = 'class="hrm-table-checkbox"';
+    } else {
+        $del_checkbox = '';
+        $delete_text  = '';
+    }
+
     if ( $add_permission ) {
-        $name_id = '<a href="#" class="hrm-editable" data-action="user-role-edit-form-appear" data-id='.$user_obj->ID.'>'.$user_obj->user_login.'<a>';
+        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable" data-action="user-role-edit-form-appear" data-id='.$user_obj->ID.'>'.$user_obj->user_login.'<a>
+         <div class="hrm-title-action"><a href="#" data-action="user-role-edit-form-appear" class="hrm-editable hrm-edit" data-id='.$user_obj->ID.'>'.__( 'Edit', 'hrm' ).'</a>'
+        .$delete_text. '</div></div>';
     } else {
         $name_id = $user_obj->user_login;
     }
 
-    if ( $delete_permission ) {
-        $del_checkbox = '<input name="hrm_check['.$user_obj->ID.']" value="" type="checkbox">';
-    } else {
-        $del_checkbox = '';
-    }
-
-    $employer_status = hrm_user_can_access( $tab, $subtab, 'admin_list_employer_status', true );
+    $employer_status = hrm_user_can_access( $page, $tab, $subtab, 'admin_list_employer_status' );
 
     if ( $employer_status ) {
         $admin_status_dropdown = array(
@@ -75,44 +55,49 @@ foreach ( $results as $id => $user_obj) {
         $admin_status_dropdown = __('Permission denied', 'hrm' );
     }
 
+    if ( $delete_permission ) {
+        $body[] = array(
+            $del_checkbox,
+            $name_id,
+            $role,
+            $user_obj->display_name,
+            $admin_status_dropdown,
+        );
 
-
-    $body[] = array(
-        $del_checkbox,
-        $name_id,
-        $role,
-        $user_obj->display_name,
-        $admin_status_dropdown,
-    );
-
-    $td_attr[] = array(
-        'class="check-column"'
-    );
+    } else {
+        $body[] = array(
+            $name_id,
+            $role,
+            $user_obj->display_name,
+            $admin_status_dropdown,
+        );
+    }
 }
 
-$del_checkbox        = ( $delete_permission ) ? '<input type="checkbox">' : '';
 $table = array();
-$table['head']       = array( $del_checkbox , 'Admin Name', 'Role', 'Display Name', 'Status' );
+if ( $delete_permission ) {
+    $table['head']   = array( '<input class="hrm-all-checked" type="checkbox">', __( 'Admin Name', 'hrm') , __( 'Role', 'hrm' ), __( 'Display Name', 'hrm' ), __( 'Status', 'hrm' ) );
+} else {
+    $table['head']   = array( __( 'Admin Name', 'hrm') , __( 'Role', 'hrm' ), __( 'Display Name', 'hrm' ), __( 'Status', 'hrm' ) );
+}
+
 $table['body']       = isset( $body ) ? $body : '';
-
-
 $table['td_attr']    = isset( $td_attr ) ? $td_attr : '';
-$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
-
 $table['table']      = 'hrm_job_title_option';
 $table['action']     = 'hrm_user_delete';
 $table['table_attr'] = array( 'class' => 'widefat' );
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
+$table['page']       = $page;
+
 
 echo Hrm_settings::getInstance()->table( $table );
 $file_path = urlencode(__FILE__);
-//pagination
-echo Hrm_settings::getInstance()->pagination( $total, $limit, $pagenum );
+
 ?>
 
-<div id="hrm-create-user-wrap" title="<?php _e( 'Create a new user', 'hrm' ); ?>">
+<div id="hrm-create-user-wrap" title="<?php _e( 'Create a new user', 'hrm' ); ?>" style="display: none;">
     <div class="hrm-create-user-form-wrap">
 
         <div class="hrm-error"></div>
@@ -161,7 +146,9 @@ echo Hrm_settings::getInstance()->pagination( $total, $limit, $pagenum );
         });
     });
 </script>
-<?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ); ?>
+<?php $url = Hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
+global $hrm_is_admin;
+?>
 <script type="text/javascript">
 jQuery(function($) {
     hrm_dataAttr = {
@@ -174,9 +161,7 @@ jQuery(function($) {
        tab: '<?php echo $tab; ?>',
        subtab: '<?php echo $subtab; ?>',
        req_frm: '<?php echo $file_path; ?>',
-       limit: '<?php echo $limit; ?>',
-       search_satus: '<?php echo $search_satus; ?>',
-       subtab: true
+       is_admin : '<?php echo $hrm_is_admin; ?>'
     };
 });
 </script>

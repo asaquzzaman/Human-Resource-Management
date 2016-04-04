@@ -1,16 +1,16 @@
 <div class="hrm-update-notification"></div>
 <?php
-if ( hrm_current_user_role() == 'hrm_employee' ) {
-    $employer_id = get_current_user_id();
+if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {
+    $employer_id = intval( $_REQUEST['employee_id'] );
 } else {
-    $employer_id = isset( $_REQUEST['employee_id'] ) ? trim( $_REQUEST['employee_id'] ) : '';
+    $employer_id = get_current_user_id();
 }
 ?>
 <div id="hrm_personal_language"></div>
 
 <?php
 
-$results = hrm_Settings::getInstance()->conditional_query_val( 'hrm_personal_language', $field = '*', $compare = array( 'emp_id' => $employer_id ) );
+$results = hrm_Settings::getInstance()->conditional_query_val( 'hrm_personal_language', '*', array( 'emp_id' => $employer_id ) );
 
 $language_labels = hrm_Settings::getInstance()->hrm_query( 'hrm_language' );
 unset( $language_labels['total_row'] );
@@ -29,33 +29,38 @@ foreach ( $results as $key => $value) {
         continue;
     }
 
+    $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
+    $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
+    $td_attr[][0] = 'class="hrm-table-checkbox"';
+
+    $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_language" data-id='.$value->id.'>'.$label[$value->language_id].'</a>
+    <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_personal_language" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
+    .$delete_text. '</div></div>';
+
     $body[] = array(
-        '<input name="hrm_check['.$value->id.']" value="" type="checkbox">',
-        '<a href="#" class="hrm-editable" data-table_option="hrm_personal_language"  data-id='.$value->id.'>'.$label[$value->language_id].'<a>',
+        $del_checkbox,
+        $name_id,
         hrm_Employee::getInstance()->fluency( $value->fluency ),
         hrm_Employee::getInstance()->competency( $value->competency ),
         $value->comments,
     );
-
-    $td_attr[] = array(
-        'class="check-column"'
-    );
 }
 
 $table = array();
-$table['head']       = array( '<input type="checkbox">', __( 'Language', 'hrm'), __( 'Fluency', 'hrm'), __( 'Competency', 'hrm'), __( 'Comments', 'hrm') );
+$table['head']       = array( '<input class="hrm-all-checked" type="checkbox">', __( 'Language', 'hrm'), __( 'Fluency', 'hrm'), __( 'Competency', 'hrm'), __( 'Comments', 'hrm') );
 $table['body']       = isset( $body ) ? $body : array();
 $table['td_attr']    = isset( $td_attr ) ? $td_attr : array();
-$table['th_attr']    = array( 'class="check-column"' );
 $table['table_attr'] = array( 'class' => 'widefat' );
 $table['table']      = 'hrm_personal_language';
 $table['action']     = 'hrm_delete';
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
+$table['page']       = $page;
 
 echo hrm_Settings::getInstance()->table( $table );
 $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab ) . '&employee_id='. $employer_id;
 $file_path = urlencode(__FILE__);
+global $hrm_is_admin;
 ?>
 <script type="text/javascript">
     jQuery(function($) {
@@ -71,7 +76,7 @@ $file_path = urlencode(__FILE__);
            tab: '<?php echo $tab; ?>',
            subtab: '<?php echo $subtab; ?>',
            req_frm: '<?php echo $file_path; ?>',
-           subtab: true
+           is_admin : '<?php echo $hrm_is_admin; ?>'
         };
     });
 </script>

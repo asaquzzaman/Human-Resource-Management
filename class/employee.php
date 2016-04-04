@@ -3,11 +3,185 @@
 class Hrm_Employee {
 
     function __construct() {
-        add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
+        //add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
+        add_action( 'cpm_after_ajax_upload', array( $this, 'after_ajax_upload' ), 10, 3 );
+        add_action( 'hrm_after_new_information', array( $this, 'after_inset_information' ), 10, 2 );
+    }
+
+    function after_inset_information( $post, $last_inserted_id ) {
+        if ( isset( $post['table_option'] ) && $post['table_option'] == 'hrm_salary' ) {
+            $table_option = get_option( $post['table_option'] );
+            $employee_id  = $post['emp_id'];
+            $to_user      = get_user_by( 'id', $employee_id );
+            $to           = $to_user->user_email;
+            $sender       = get_current_user_id();
+            $subject      = __( 'Salary', 'hrm' );
+
+            $last_recored = Hrm_Settings::getInstance()->conditional_query_val( $table_option['table_name'], '*', array( 'id' => $last_inserted_id ), true );
+
+            $message = $this->get_salary_message_body( $last_recored, $post, $to_user );
+
+            Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender );
+        }
+    }
+
+    function get_salary_message_body( $last_recored, $post, $to_user ) {
+        $employer = wp_get_current_user();
+        $pay_grade = json_decode( stripcslashes( $post['pay_grade_js'] ), true );
+        $direct_deposit = $last_recored->direct_deposit != 'yes' ? __( 'Nothing', 'hrm' ) : $last_recored->direct_deposit;
+        ob_start();
+        ?>
+        <div style="width: 600px; background: #eee; padding: 5px;">
+        <table width="600" style="background: #fff; padding: 10px;">
+        <tr>
+            <td style="padding: 10px;"><?php sprintf( 'Hello, %s', $to_user->display_name ); ?></td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;"><?php _e( 'Your salaray details', 'hrm' ); ?></td>
+        </tr>
+        </table>
+        <table width="600" style="background: #fff; padding: 10px;">
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Employer Name', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $employer->display_name; ?></td>
+            </tr>
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Date', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo hrm_get_date2mysql( $last_recored->billing_date ); ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Grade', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $pay_grade[$last_recored->pay_grade]; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Salary Component', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->component; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Frequency', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->pay_frequency( $last_recored->frequency ); ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Currency', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->currency; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Amount', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->amount; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Comments', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->comments; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Direct Deposit Details', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $direct_deposit; ?></td>
+            </tr>
+        <?php
+        if ( $last_recored->direct_deposit == 'yes' ) {
+            ?>
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Number', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->account_number; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Type', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->account_type( $last_recored->account_type ); ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Routing Number', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->routing; ?></td>
+            </tr>
+
+            <tr>
+                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Deposit Amount', 'hrm' ); ?></th>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->dipo_amount; ?></td>
+            </tr>
+
+            <?php
+        }
+            ?>
+        </table>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    function delete_file( $file_id, $force = true, $employee_id ) {
+        wp_delete_attachment( $file_id, $force );
+        ob_start();
+        $this->emp_upload_image($employee_id);
+        return ob_get_clean();
+    }
+
+     function get_image( $attachment_id ) {
+        $file = get_post( $attachment_id );
+        if ( $file ) {
+            $response = array(
+                'id' => $attachment_id,
+                'name' => get_the_title( $attachment_id ),
+                'url' => wp_get_attachment_url( $attachment_id ),
+            );
+
+            if ( wp_attachment_is_image( $attachment_id ) ) {
+
+                $thumb = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
+                $response['thumb'] = $thumb[0];
+                $response['type'] = 'image';
+                return $response;
+            }
+        }
+
+        return false;
+    }
+
+    function emp_upload_image($employee_id) {
+
+        $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
+        $image_attchment = $this->get_image( $image_id );
+
+        ?>
+        <div id="hrm-user-image-wrap">
+            <?php
+            if ( $image_attchment ) {
+
+                $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
+                $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
+                $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" height="160" width="160"/></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name'] ) );
+
+                echo '<div class="hrm-uploaded-item">' . $file_url . ' ' . $delete . $hidden . '</div>';
+            } else {
+                echo get_avatar( $employee_id, 160 );
+            }
+            ?>
+
+        </div>
+        <?php
+    }
+
+    function after_ajax_upload( $response, $file, $post ) {
+        if ( !isset( $post['employee_id'] ) ) {
+            return;
+        }
+        $file_id = $response['file_id'];
+        $employee_id = $post['employee_id'];
+        update_user_meta( $employee_id, '_hrm_user_image_id', $file_id );
     }
 
     function pim_to_employer( $page = null ) {
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'hrm_employee' ) {
+        $current_user = wp_get_current_user();
+        $role = reset( $current_user->roles );
+
+        if ( $role == 'hrm_employee' ) {
             unset( $page['hrm_pim']['employee_list'] );
             $page['hrm_employee'] = $page['hrm_pim'];
             $page['hrm_employee']['personal']['follow_access_role'] = false;
@@ -77,7 +251,8 @@ class Hrm_Employee {
 
     function delete_employee( $users_id = array() ) {
         $delte_user = false;
-        foreach ( $users_id as $user_id ) {
+
+        foreach ( $users_id as $user_id => $empty ) {
             $delte_user = wp_delete_user( $user_id );
         }
 
@@ -245,6 +420,7 @@ class Hrm_Employee {
 
         $hidden_form['description'] = array(
             'label' =>  __( 'Description', 'hrm' ),
+            'class' => 'hrm-des-field',
             'type' => 'textarea',
             'value' => isset( $field_data['description'] ) ? $field_data['description'] : '',
         );
@@ -407,8 +583,66 @@ class Hrm_Employee {
         }
     }
 
+    function salary_search_query( $search_post, $limit, $pagenum ) {
+
+        if ( !isset( $search_post['emp_id'] ) || !$search_post['emp_id'] ) {
+            return array( 'total_row' => 0 );
+        }
+
+        $emp_id = $search_post['emp_id'];
+        $where = "emp_id = $emp_id";
+
+        $year = false;
+        $month = false;
+
+        if ( isset( $search_post['year'] ) && $search_post['year'] != '-1' ) {
+            $year = $search_post['year'];
+        }
+
+        if ( isset( $search_post['month'] ) && $search_post['month'] != '-1' ) {
+            $month = $search_post['month'];
+        }
+
+        if ( $year && $month ) {
+
+            $custom_start = $year .'-'. $month . '-' . '01';
+            $custom_end   = $year .'-'. $month . '-' . '31';
+
+            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
+            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
+
+            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
+        } else if ( $year && !$month ) {
+            $custom_start = $year .'-01-01';
+            $custom_end   = $year .'-12-31';
+
+            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
+            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
+            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
+        } else if ( !$year && $month ) {
+            $year = date( 'Y' );
+
+            $custom_start = $year . '-' .$month. '-01';
+            $custom_end   = $year . '-' .$month. '-31';
+
+            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
+            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
+
+            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
+        }
+        $offset = ( $pagenum - 1 ) * $limit;
+        global $wpdb;
+        $table                = $wpdb->prefix . 'hrm_salary';
+        $sql                  = "SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE $where ORDER BY id desc LIMIT $offset,$limit";
+        $results              = $wpdb->get_results( $sql );
+        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
+
+        return $results;
+    }
+
     function salary( $field_value = null ) {
         $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $search_status = $_POST['hrm_dataAttr']['search_status'] ? $_POST['hrm_dataAttr']['search_status'] : false;
         if ( $field_value !== null ) {
 
             $field['id'] = array(
@@ -417,16 +651,34 @@ class Hrm_Employee {
             );
         }
 
-        $field['emp_id'] = array(
-            'type'  => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
-        );
+        $users = get_users();
 
+        foreach ( $users as $key => $user ) {
+            $user_info[$user->ID] = $user->display_name;
+        }
+
+        $user_info = isset( $user_info ) ? $user_info : array();
+
+        $field['emp_id'] = array(
+            'label'    => __( 'Employee Name', 'hrm' ),
+            'required' => 'required',
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
+            'class'  => 'hrm-chosen',
+            'type'   => 'select',
+            'option' => $user_info,
+            'selected' => $search_status ? $search_post['emp_id'] : ''
+        );
+        $new_pay_grade = hrm_new_pay_grade_url();
         $field['pay_grade'] = array(
             'label'    => __( 'Pay Grade', 'hrm' ),
             'type'     => 'select',
             'option'   => json_decode( stripcslashes( $_POST['hrm_dataAttr']['pay_grade_js'] ) ),
-            'selected' => isset( $field_value->pay_grade ) ? $field_value->pay_grade : '',
+            'selected' => isset( $field_value['pay_grade'] ) ? $field_value['pay_grade'] : '',
+            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_pay_grade,  __( 'Create New', 'hrm' ) ),
             'extra' => array(
                 'data-hrm_validation'         => true,
                 'data-hrm_required'           => true,
@@ -438,6 +690,18 @@ class Hrm_Employee {
             'label' => __( 'Salary Component', 'hrm' ),
             'type'  => 'text',
             'value' => isset( $field_value['component'] ) ? $field_value['component'] : '',
+            'extra' => array(
+                'data-hrm_validation'         => true,
+                'data-hrm_required'           => true,
+                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
+            ),
+        );
+
+        $field['billing_date'] = array(
+            'label' =>  __( 'Billing Date', 'hrm' ),
+            'type'  => 'text',
+            'class' => 'hrm-datepicker',
+            'value' => isset( $field_value['billing_date'] ) ? hrm_get_date2mysql( $field_value['billing_date'] ) : hrm_get_date2mysql( current_time( 'mysql' ) ),
             'extra' => array(
                 'data-hrm_validation'         => true,
                 'data-hrm_required'           => true,

@@ -340,3 +340,15 @@ function hrm_page_slug() {
     return $page_slug ? $page_slug : false;
 }
 
+function hrm_get_roles() {
+    global $wp_roles;
+
+    if ( !$wp_roles ) {
+        $wp_roles = new WP_Roles();
+    }
+
+    return apply_filters( 'hrm_get_roles', $wp_roles );
+}
+
+
+

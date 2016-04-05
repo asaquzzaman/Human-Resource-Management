@@ -4,7 +4,7 @@ $header_path = dirname(__FILE__) . '/header.php';
 $header_path = apply_filters( 'hrm_header_path', $header_path, 'pim' );
 
 if ( file_exists( $header_path ) ) {
-    //require_once $header_path;
+    require_once $header_path;
 }
 
 $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
@@ -12,25 +12,15 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
 <div id="hrm-eployee-list"></div>
 <?php
 
-    global $wp_roles;
+    $role_names = hrm_get_roles()->get_names();
+    $employees  = Hrm_Employeelist::getInstance()->get_employees(); 
 
-    if ( !$wp_roles ) {
-        $wp_roles = new WP_Roles();
-    }
-
-    $role_names   = $wp_roles->get_names();
-
-    $employers = get_users(); //hrm_Employeelist::getInstance()->get_employee();
-
-    if ( !$employers ) {
+    if ( !$employees ) {
         return;
     }
 
-    //$total             = $employers->total_users;
-    //$employers         = $employers->results;
     $add_permission    = hrm_user_can_access( $page, $tab, null, 'add' ) ? true : false;
     $delete_permission = hrm_user_can_access( $page, $tab, null, 'delete' ) ? true : false;
-    $hrm_menu = hrm_page();
 
     $menu_pim_page = isset( $menu[hrm_pim_page()] ) ? $menu[hrm_pim_page()] : array();
     foreach ( $menu_pim_page as $pim_tab => $pim_tab_item ) {
@@ -39,7 +29,8 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             break;
         }
     };
-    foreach ( $employers as $key => $employer ) {
+    foreach ( $employees as $key => $employer ) {
+
         $admin_url = hrm_employee_profile_url( hrm_pim_page(), $pim_single_tab, $employer->ID );
 
         if ( $delete_permission ) {
@@ -120,7 +111,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
+            __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),
@@ -130,7 +121,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
+            __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),

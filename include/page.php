@@ -211,7 +211,7 @@ function hrm_time_page_items( $path, $hrm_time, $exclude ) {
     return apply_filters( 'hrm_time_page_items', $time, $path, $hrm_time );
 }
 
-function hrm_leave_page_items( $path, $hrm_leave ) {
+function hrm_leave_page_items( $path, $hrm_leave, $exclude ) {
 
     $leave = array();
     $leave['configure'] = array(

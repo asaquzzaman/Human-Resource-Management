@@ -398,10 +398,8 @@ class Hrm_Employeelist {
         return $user_query;
     }
 
-    function get_employee() {
-        $employers = new WP_User_Query( array(
-            //'role'   => 'hrm_employee',
-        ) );
-        return $employers;
+    function get_employees() {
+
+        return apply_filters( 'hrm_employess_list', get_users() );
     }
 }

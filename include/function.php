@@ -321,24 +321,6 @@ function hrm_message() {
     return apply_filters( 'hrm_message', $message );
 }
 
-function hrm_get_role() {
-    global $wp_roles;
-
-    if ( !$wp_roles ) {
-        $wp_roles = new WP_Roles();
-    }
-
-    return $wp_roles->get_names();
-}
-
-function hrm_page_slug() {
-    $menu = hrm_menu_label();
-    foreach ( $menu as $page_slug => $value ) {
-        break;
-    }
-
-    return $page_slug ? $page_slug : false;
-}
 
 function hrm_get_roles() {
     global $wp_roles;

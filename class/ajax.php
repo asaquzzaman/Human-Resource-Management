@@ -78,6 +78,33 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_partial_payment_update', array( $this, 'partial_payment_update' ) );
         add_action( 'wp_ajax_partial_payment_cancel', array( $this, 'partial_payment_cancel' ) );
         add_action( 'wp_ajax_partial_payment_delete', array( $this, 'partial_payment_delete' ) );
+
+        add_action( 'wp_ajax_hrm_new_job_title', array( $this, 'hrm_new_job_title' ) );
+        add_action( 'wp_ajax_hrm_new_job_location', array( $this, 'hrm_new_job_location' ) );
+    }
+
+    function hrm_new_job_location() {
+        check_ajax_referer('hrm_nonce');
+        parse_str( $_POST['form_data'], $postdata );
+        $id = Hrm_Admin::getInstance()->update_job_location( $postdata );
+        
+        if ( $id ) {
+            wp_send_json_success( array( 'id' => $id, 'data' => $postdata ) );
+        }
+
+        wp_send_json_error();
+    }
+
+    function hrm_new_job_title() {
+        check_ajax_referer('hrm_nonce');
+        parse_str( $_POST['form_data'], $postdata );
+        $id = Hrm_Admin::getInstance()->update_job_title( $postdata );
+        
+        if ( $id ) {
+            wp_send_json_success( array( 'id' => $id, 'data' => $postdata ) );
+        }
+
+        wp_send_json_error();
     }
 
     function partial_payment_delete() {

@@ -197,7 +197,6 @@ class Hrm_Settings {
                 $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
             }
         }
-
         ob_start();
             //do_action( 'text_field_before_input', $name, $element );
         $input_before = ob_get_clean();
@@ -679,6 +678,12 @@ class Hrm_Settings {
         $form['tab']          = isset( $form['tab'] ) ? $form['tab'] : null;
         $submit_btn           = isset( $form['submit_btn'] ) ? $form['submit_btn'] : true;
         $page         = isset( $form['page'] ) ? $form['page'] : null;
+        $cancel_href          = isset( $form['cancel_href'] ) ? $form['cancel_href'] : '#';
+        $cancel_btn_class     = isset( $form['cancel_btn_class'] ) ? $form['cancel_btn_class'] : 'hrm-form-cancel';
+        $cancel_text          = isset( $form['cancel_text'] ) ? $form['cancel_text'] : __( 'Cancel', 'hrm' );
+        $cancel_id            = isset( $form['cancel_id'] ) ? $form['cancel_id'] : '';
+        $submit_id            = isset( $form['submit_id'] ) ? $form['submit_id'] : '';
+
         ob_start();
         ?>
         <div class="hrm-error-notification"></div>
@@ -743,7 +748,8 @@ class Hrm_Settings {
 
                 if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
                     ?>
-                    <input type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
+                    <input v-on:click.prevent="hrmSubmit" data-submit="<?php echo $submit_id; ?>" type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
+                    <a v-on:click.prevent="hrmCancel" data-cancel="<?php echo $cancel_id; ?>" target="_blank" href="<?php echo $cancel_href; ?>" class="button <?php echo $cancel_btn_class; ?>"><?php echo $cancel_text; ?></a>
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
                     <?php
                 }
@@ -882,7 +888,7 @@ class Hrm_Settings {
                 ?>
                 <div class="hrm-table-action-wrap">
                     <?php if ( $insert_new ) { ?>
-                        <a href="#" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
+                        <a href="#" v-on:click.prevent="hrmAddNew()" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
                     <?php } ?>
 
                     <?php if ( $event_delete ) { ?>

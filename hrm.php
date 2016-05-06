@@ -103,6 +103,7 @@ class WP_Hrm {
         $this->define( 'HRM_DB_VERSION', '0.2' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_URL', plugins_url( '', __FILE__ ) );
+        $this->define( 'HRM_TEMP_PATH', dirname( __FILE__ ) . '/templates' );
         $this->define( 'HRM_PERMISSION_PURCHASE_URL', 'http://mishubd.com/product/hrm-permission/' );
     }
 
@@ -171,9 +172,12 @@ class WP_Hrm {
         wp_enqueue_script( 'jquery-ui-autocomplete');
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'jquery-ui-slider' );
+        wp_enqueue_media();
         wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_datetimepicker', plugins_url( '/asset/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm-jquery.dataTables', plugins_url( '/asset/js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm-vue', plugins_url( '/asset/js/vue/vue.min.js', __FILE__ ), array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm-custom-vue', plugins_url( '/asset/js/vue/hrm.vue.js', __FILE__ ), array( 'jquery', 'hrm-vue', 'hrm_admin' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
 
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(

@@ -610,17 +610,6 @@ class Hrm_Db {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
-
-        $table_option['table_name'] = 'hrm_job_title';
-        $table_option['table_format'] = array( '%s', '%s', '%s' );
-        $table_option['table_option'] = array(
-            'job_title'       => 'job_title',
-            'job_description' => 'job_description',
-            'note'            => 'note',
-        );
-        $table_option_name = 'hrm_job_title_option';
-
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function employer_role() {

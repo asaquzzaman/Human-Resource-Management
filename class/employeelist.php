@@ -103,7 +103,7 @@ class Hrm_Employeelist {
             'first_name'   => $first_name,
             'last_name'    => $last_name,
             'display_name' => $display_name,
-            'role'         => $postdata['emp_role']
+            'role'         => 'hrm_employee'
         );
 
         $user_id = wp_insert_user( $userdata );
@@ -234,6 +234,7 @@ class Hrm_Employeelist {
                 'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
             ),
         );
+        
         $hidden_form['last_name'] = array(
             'label' =>  __( 'Last Name', 'hrm' ),
             'type'  => 'text',
@@ -244,20 +245,7 @@ class Hrm_Employeelist {
                 'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
             ),
         );
-        $new_role_url = hrm_new_role_url();
-        $hidden_form['emp_role'] = array(
-            'label'    => __( 'Role', 'hrm' ),
-            'type'     => 'select',
-            'option'   => $role_names,
-            'selected' => isset( $user->roles ) ? reset( $user->roles ) : '',
-            //'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_role_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
+        
         $new_job_title_url = hrm_job_title();
         $hidden_form['emp_job_title'] = array(
             'label' => __( 'Job Title', 'hrm' ),
@@ -392,7 +380,6 @@ class Hrm_Employeelist {
             'offset'         => $offset
         );
 
-
         $user_query = new WP_User_Query( $args );
 
         return $user_query;
@@ -400,6 +387,6 @@ class Hrm_Employeelist {
 
     function get_employees() {
 
-        return apply_filters( 'hrm_employess_list', get_users() );
+        return apply_filters( 'hrm_employess_list', get_users(array( 'role' => 'hrm_employee' )) );
     }
 }

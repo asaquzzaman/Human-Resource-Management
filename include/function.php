@@ -316,6 +316,7 @@ function hrm_message() {
         'datatable_pagination' => __( '--Select Pagination--', 'hrm' ),
         'searchPlaceholder'    => __( 'Seach...', 'hrm' ),
         'dtb_pag_all'          => __( 'All', 'hrm' ),
+        'confirmMsg'           => __( 'Are you sure!', 'hrm' )
      );
 
     return apply_filters( 'hrm_message', $message );

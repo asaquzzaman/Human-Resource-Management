@@ -179,6 +179,7 @@ class WP_Hrm {
         wp_enqueue_script( 'hrm-vue', plugins_url( '/asset/js/vue/vue.min.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm-custom-vue', plugins_url( '/asset/js/vue/hrm.vue.js', __FILE__ ), array( 'jquery', 'hrm-vue', 'hrm_admin' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm_file', plugins_url( '/asset/js/file.js', __FILE__ ), array( 'jquery' ), false, true);
 
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
@@ -186,7 +187,14 @@ class WP_Hrm {
             'is_admin'    => $hrm_is_admin,
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' )
+            'success_msg' => __( 'Changed Successfully', 'hrm' ),
+            'plupload'   => array(
+                'url'              => admin_url( 'admin-ajax.php' ) . '?nonce=' . wp_create_nonce( 'erp_ac_featured_img' ),
+                'flash_swf_url'    => includes_url( 'js/plupload/plupload.flash.swf' ),
+                'filters'          => array( array('title' => __( 'Allowed Files', 'accounting' ), 'extensions' => '*')),
+                'multipart'        => true,
+                'urlstream_upload' => true,
+            )
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', plugins_url( '/asset/css/jquery.dataTables.css', __FILE__ ), false, false, 'all' );

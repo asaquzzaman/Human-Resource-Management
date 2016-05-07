@@ -473,7 +473,52 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function file( $field ) {
 
+        //need to enqueue   wp_enqueue_script( 'plupload-handlers' ); wp_enqueue_script( 'hrm-file-upload' );
+        $id         = $field['id'];
+        $pick_files = $id . '-upload-pickfiles';
+        $drop       = $id . '-drop-files';
+        $action     = isset( $field['action'] ) ? $field['action'] : 'hrm_file_upload';
+        $call_back  = isset( $field['callback'] ) ? json_encode( $field['callback'] ) : json_encode([]);
+        $values     = is_array( $field['value'] ) ? $field['value'] : [];
+        ?>
+
+        <div id="<?php echo $id; ?>" class="hrm-attachment-area">
+
+            <div id="<?php echo $drop; ?>" class="hrm-drop-jon">
+                <div class="hrm-attachment-upload-filelist" data-type="file">
+                    <ul class="hrm-attachment-list">
+                        <?php
+                            //$uploader = new \WeDevs\hrm\Uploader();
+                                // foreach ( $values as $key => $attach_id ) {
+                                //     echo $uploader->attach_html( $attach_id, $custom_attributes );
+                                // }
+                        ?>
+
+                    </ul>
+                    <div class="hrm-clear"></div>
+
+                    <div class="hrm-attc-link-text"><?php _e( 'To attach, ', 'hrm' ); ?> <a id="<?php echo $pick_files; ?>" href="#"><?php _e( 'select files', 'hrm' ); ?></a><?php _e( ' from your computer.', 'hrm' ); ?></div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            jQuery(function($) {
+                var pick_files = '<?php echo $pick_files; ?>',
+                    id         = '<?php echo $id; ?>',
+                    drop_jone  = '<?php echo $drop; ?>',
+                    action     = '<?php echo $action; ?>',
+                    callback   = <?php echo $call_back; ?>;
+
+                new hrm_Uploader( action, pick_files, id, drop_jone, 'file_upload', 'jpg,jpeg,gif,png,bmp,zip', 1024, callback );
+
+            });
+        </script>
+        <?php
+    }
 
     function get_serarch_form( $form, $heading = null ) {
         $form['action']       = isset( $form['action'] ) ? $form['action'] : '';
@@ -742,6 +787,8 @@ class Hrm_Settings {
                             case 'tinymce':
                                 echo $this->hrm_tinymce( $field_obj );
                                 break;
+                            case 'file':
+                                $this->file( $field_obj );
                         }
 
                     }

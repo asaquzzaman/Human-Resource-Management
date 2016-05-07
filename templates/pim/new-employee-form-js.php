@@ -155,6 +155,16 @@
         )
     );
 
+    $hidden_form['job_file'] = array(
+        'label' =>  __( 'Description', 'hrm' ),
+        'type'  => 'file',
+        'id'    => 'hrm-new-employee-file',
+        'value' => isset( $transaction['files'] ) ?  maybe_unserialize( $transaction['files'] ) : array(),
+        'extra' => array(
+            'file_id' => isset( $transaction['id'] ) ? intval( $transaction['id'] ) : 0
+        )
+    );
+
 
     $hidden_form['action'] = 'new_employer';
     $hidden_form['header'] = 'Employee Information';

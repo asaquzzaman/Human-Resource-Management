@@ -81,6 +81,43 @@ class Hrm_Ajax {
 
         add_action( 'wp_ajax_hrm_new_job_title', array( $this, 'hrm_new_job_title' ) );
         add_action( 'wp_ajax_hrm_new_job_location', array( $this, 'hrm_new_job_location' ) );
+        add_action( 'wp_ajax_hrm_file_upload', array( $this, 'file_uploader' ) );
+        add_action( 'wp_ajax_hrm_file_delete', array( $this, 'delete_attach_file' ) );
+    }
+
+    function delete_attach_file() {
+        
+        check_ajax_referer('hrm_nonce');
+        $attach_id = isset( $_POST['attach_id'] ) ? $_POST['attach_id'] : 0;
+        $custom_attr = isset( $_POST['custom_attr'] ) ? $_POST['custom_attr'] : [];
+        $upload    = HRM_Uploader::getInstance()->upload_file();
+
+        if ( is_array( $attach_id) ) {
+            foreach ( $attach_id as $id ) {
+                do_action( 'hrm_before_delete_file', $id, $custom_attr );
+                $delete = $upload->delete_file( $id );
+            }
+        } else {
+            do_action( 'hrm_before_delete_file', $attach_id, $custom_attr );
+            $delete = $upload->delete_file( intval( $attach_id ) );
+        }
+
+        if ( $delete ) {
+            wp_send_json_success();
+        } 
+
+        wp_send_json_error();  
+    }
+
+    /**
+     * Upload a new file
+     *
+     * @return void
+     */
+    function file_uploader() {
+        check_ajax_referer('hrm_nonce');
+        $file   = HRM_Uploader::getInstance()->upload_file();
+        wp_send_json_success( $file );
     }
 
     function hrm_new_job_location() {

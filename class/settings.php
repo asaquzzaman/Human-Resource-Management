@@ -483,23 +483,25 @@ class Hrm_Settings {
         $call_back  = isset( $field['callback'] ) ? json_encode( $field['callback'] ) : json_encode([]);
         $values     = is_array( $field['value'] ) ? $field['value'] : [];
         ?>
+        <div class="hrm-form-field ">
+            <label for=""><?php echo isset( $field['label'] ) ? $field['label'] : ''; ?></label>
+            <div id="<?php echo $id; ?>" class="hrm-attachment-area">
 
-        <div id="<?php echo $id; ?>" class="hrm-attachment-area">
+                <div id="<?php echo $drop; ?>" class="hrm-drop-jon">
+                    <div class="hrm-attachment-upload-filelist" data-type="file">
+                        <ul class="hrm-attachment-list">
+                            <?php
+                                //$uploader = new \WeDevs\hrm\Uploader();
+                                    // foreach ( $values as $key => $attach_id ) {
+                                    //     echo $uploader->attach_html( $attach_id, $custom_attributes );
+                                    // }
+                            ?>
 
-            <div id="<?php echo $drop; ?>" class="hrm-drop-jon">
-                <div class="hrm-attachment-upload-filelist" data-type="file">
-                    <ul class="hrm-attachment-list">
-                        <?php
-                            //$uploader = new \WeDevs\hrm\Uploader();
-                                // foreach ( $values as $key => $attach_id ) {
-                                //     echo $uploader->attach_html( $attach_id, $custom_attributes );
-                                // }
-                        ?>
+                        </ul>
+                        <div class="hrm-clear"></div>
 
-                    </ul>
-                    <div class="hrm-clear"></div>
-
-                    <div class="hrm-attc-link-text"><?php _e( 'To attach, ', 'hrm' ); ?> <a id="<?php echo $pick_files; ?>" href="#"><?php _e( 'select files', 'hrm' ); ?></a><?php _e( ' from your computer.', 'hrm' ); ?></div>
+                        <div class="hrm-attc-link-text"><?php _e( 'To attach, ', 'hrm' ); ?> <a id="<?php echo $pick_files; ?>" href="#"><?php _e( 'select files', 'hrm' ); ?></a><?php _e( ' from your computer.', 'hrm' ); ?></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -259,6 +259,93 @@ label em {
   color: red;
   padding: 6px 0 0;
 }
+#hrm-hidden-form .hrm-attachment-area,
+#hrm-visible-form .hrm-attachment-area {
+  position: relative;
+  float: right;
+  width: 79%;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon {
+  border: 1px dashed #b4b9be;
+  padding: 10px;
+  width: 35%;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-pre-load-image-wrap,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-pre-load-image-wrap {
+  background: red;
+  height: 100px;
+  width: 100px;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .bar,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .bar {
+  background-color: #83b4d8;
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  height: 5px;
+  width: 0;
+  z-index: 9;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-attc-link-text,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-attc-link-text {
+  text-align: center;
+  padding: 12px 0;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap {
+  float: left;
+  position: relative;
+  padding-left: 17px;
+  padding-top: 10px;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .hrm-img-progress,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .hrm-img-progress {
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fff;
+  width: 80px;
+  height: 80px;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .attachment-name img,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .attachment-name img {
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fff;
+  max-width: 150px;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .caption,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .caption {
+  background: #000;
+  border: medium none;
+  border-radius: 0;
+  color: red;
+  display: none;
+  height: 80px;
+  left: 23px;
+  line-height: 150%;
+  opacity: 0.5;
+  padding-top: 0;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  top: 16px;
+  width: 80px;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap:hover .caption,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap:hover .caption {
+  display: inline-block;
+}
+#hrm-hidden-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .hrm-del-attc-button,
+#hrm-visible-form .hrm-attachment-area .hrm-drop-jon .hrm-image-wrap .hrm-del-attc-button {
+  color: red;
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  padding-top: 30px;
+  text-decoration: none;
+}
 .hrm-search-head h3 {
   font-size: 14px;
   line-height: 1.4;
@@ -381,7 +468,7 @@ label em {
 .hrm-secondary-button {
   background: none repeat scroll 0 0 #f7f7f7;
   border-color: #ccc;
-  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
   color: #555;
   vertical-align: top;
   border-radius: 3px;
@@ -488,7 +575,7 @@ label em {
 #hrm #hrm-list-form .dataTables_paginate .paginate_button {
   background: none repeat scroll 0 0 #f7f7f7;
   border-color: #ccc;
-  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
   color: #555;
   vertical-align: top;
   border-radius: 3px;

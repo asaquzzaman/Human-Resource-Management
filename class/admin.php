@@ -1390,101 +1390,101 @@ class Hrm_Admin {
         return $return_value;
     }
 
-    // function job_category_insert_form( $field_value = null ) {
+    function job_category_insert_form( $field_value = null ) {
 
-    //     $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-    //     $add_field['id'] = array(
-    //         'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-    //         'type' => 'hidden',
-    //     );
-    //     $add_field['job_category'] = array(
-    //         'label' =>  __( 'Category', 'hrm' ),
-    //         'type' => 'text',
-    //         'desc' => 'please insert category name',
-    //         'value' => isset( $field_value['job_category'] ) ? $field_value['job_category'] : '',
-    //         'extra' => array(
-    //             'data-hrm_validation' => true,
-    //             'data-hrm_required' => true,
-    //             'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-    //         ),
-    //     );
+        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $add_field['id'] = array(
+            'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
+            'type' => 'hidden',
+        );
+        $add_field['job_category'] = array(
+            'label' =>  __( 'Category', 'hrm' ),
+            'type' => 'text',
+            'desc' => 'please insert category name',
+            'value' => isset( $field_value['job_category'] ) ? $field_value['job_category'] : '',
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
+        );
 
-    //     $add_field['active'] = array(
+        $add_field['active'] = array(
 
-    //         'label' => __( 'Status', 'hrm' ),
-    //         'type' => 'checkbox',
-    //         'desc' => 'please active this category',
-    //         'fields' => array(
-    //             array(
-    //                 'label' => __( 'active', 'hrm' ),
-    //                 'value' => 'yes',
-    //                 'checked' => isset( $field_value['active'] ) ? $field_value['active'] : '',
-    //             ),
-    //         )
-    //     );
+            'label' => __( 'Status', 'hrm' ),
+            'type' => 'checkbox',
+            'desc' => 'please active this category',
+            'fields' => array(
+                array(
+                    'label' => __( 'active', 'hrm' ),
+                    'value' => 'yes',
+                    'checked' => isset( $field_value['active'] ) ? $field_value['active'] : '',
+                ),
+            )
+        );
 
-    //     $add_field['action'] = 'ajax_referer_insert';
-    //     $add_field['table'] = 'hrm_job_category';
-    //     $add_field['header'] = 'Job Catgory';
-    //     $add_field['table_option'] = 'hrm_job_category';
-    //     $add_field['url'] = $redirect;
+        $add_field['action'] = 'ajax_referer_insert';
+        $add_field['table'] = 'hrm_job_category';
+        $add_field['header'] = 'Job Catgory';
+        $add_field['table_option'] = 'hrm_job_category';
+        $add_field['url'] = $redirect;
 
-    //     ob_start();
-    //     echo hrm_Settings::getInstance()->hidden_form_generator( $add_field );
+        ob_start();
+        echo hrm_Settings::getInstance()->hidden_form_generator( $add_field );
 
-    //     $return_value = array(
-    //         'append_data' => ob_get_clean(),
-    //     );
+        $return_value = array(
+            'append_data' => ob_get_clean(),
+        );
 
-    //     return $return_value;
-    // }
+        return $return_value;
+    }
 
-    // function job_title_insert_form( $field_value = null ) {
+    function job_title_insert_form( $field_value = null ) {
 
-    //     $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
 
-    //     if ( $field_value !== null ) {
+        if ( $field_value !== null ) {
 
-    //         $job['id'] = array(
-    //             'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-    //             'type' => 'hidden',
-    //         );
-    //     }
-    //     //hidden form
-    //     $job['job_title'] = array(
-    //         'label' =>  __( 'job Title', 'hrm' ),
-    //         'value' => isset( $field_value['job_title'] ) ? $field_value['job_title'] : '',
-    //         'type' => 'text',
-    //         'extra' => array(
-    //             'data-hrm_validation' => true,
-    //             'data-hrm_required' => true,
-    //             'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-    //         ),
-    //     );
-    //     $job['job_description'] = array(
-    //         'label' =>  __( 'Job Description', 'hrm' ),
-    //         'value' => isset( $field_value['job_description'] ) ? $field_value['job_description'] : '',
-    //         'type' => 'text',
-    //     );
+            $job['id'] = array(
+                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
+                'type' => 'hidden',
+            );
+        }
+        //hidden form
+        $job['job_title'] = array(
+            'label' =>  __( 'job Title', 'hrm' ),
+            'value' => isset( $field_value['job_title'] ) ? $field_value['job_title'] : '',
+            'type' => 'text',
+            'extra' => array(
+                'data-hrm_validation' => true,
+                'data-hrm_required' => true,
+                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+            ),
+        );
+        $job['job_description'] = array(
+            'label' =>  __( 'Job Description', 'hrm' ),
+            'value' => isset( $field_value['job_description'] ) ? $field_value['job_description'] : '',
+            'type' => 'text',
+        );
 
-    //     $job['note'] = array(
-    //         'label' =>  __( 'Note', 'hrm' ),
-    //         'value' => isset( $field_value['note'] ) ? $field_value['note'] : '',
-    //         'type' => 'textarea',
-    //     );
-    //     $job['action'] = 'ajax_referer_insert';
-    //     $job['table_option'] = 'hrm_job_title_option';
-    //     $job['header'] = 'Job Title';
-    //     $job['url'] = $redirect;
-    //     ob_start();
-    //     echo hrm_Settings::getInstance()->hidden_form_generator( $job );
+        $job['note'] = array(
+            'label' =>  __( 'Note', 'hrm' ),
+            'value' => isset( $field_value['note'] ) ? $field_value['note'] : '',
+            'type' => 'textarea',
+        );
+        $job['action'] = 'ajax_referer_insert';
+        $job['table_option'] = 'hrm_job_title_option';
+        $job['header'] = 'Job Title';
+        $job['url'] = $redirect;
+        ob_start();
+        echo hrm_Settings::getInstance()->hidden_form_generator( $job );
 
-    //     $return_value = array(
-    //         'append_data' => ob_get_clean(),
-    //     );
+        $return_value = array(
+            'append_data' => ob_get_clean(),
+        );
 
-    //     return $return_value;
-    // }
+        return $return_value;
+    }
 
     function get_user_role() {
         global $current_user;
@@ -1580,13 +1580,13 @@ class Hrm_Admin {
         $display_name = $first_name .' '. $last_name;
 
         $userdata = array(
-            'user_login'   => $postdata['user_name'],
-            'user_pass'    =>  $random_password,
-            'user_email'   => $postdata['email'],
-            'first_name'   => $first_name,
-            'last_name'    => $last_name,
+            'user_login' => $postdata['user_name'],
+            'user_pass' =>  $random_password,
+            'user_email' => $postdata['email'],
+            'first_name' => $first_name,
+            'last_name' => $last_name,
             'display_name' => $display_name,
-            'role'         => 'hrm_employee'
+            'role'  => 'hrm_employee'
         );
 
         $user_id = wp_insert_user( $userdata );
@@ -2300,112 +2300,4 @@ class Hrm_Admin {
         }
     }
 
-    function get_job_titles( $id = false ) {
-        $job_titles = hrm_Settings::getInstance()->hrm_query( 'hrm_job_title' );
-        
-        unset($job_titles['total_row']);
-        $job_title['-1'] = __('-Select-', 'hrm');
-        
-        foreach ($job_titles as $key => $value) {
-            $job_title[$value->id] = $value->job_title;
-        }
-        
-        if ( $id ) {
-            return isset( $job_title[$id] ) ? $job_title[$id] : array();
-        } 
-
-        return isset( $job_title ) ? $job_title : array();
-    }
-
-    function get_job_categorys( $id = false ) {
-        $job_categorys = hrm_Settings::getInstance()->hrm_query( 'hrm_job_category' );
-        
-        unset($job_categorys['total_row']);
-        $job_category['-1'] = __('-Select-', 'hrm');
-        
-        foreach ($job_categorys as $key => $value) {
-            $job_category[$value->id] = $value->name;
-        }
-        
-        if ( $id ) {
-            return isset( $job_category[$id] ) ? $job_category[$id] : array();
-        } 
-
-        return isset( $job_category ) ? $job_category : array();
-    }
-
-    function get_job_locations( $id = false ) {
-        $locations    = hrm_Settings::getInstance()->hrm_query( 'hrm_location' );
-        
-        unset($locations['total_row']);
-        $location['-1'] = __('-Select-', 'hrm');
-        
-        foreach ($locations as $key => $value) {
-            $location[$value->id] = $value->name;
-        }
-        
-        if ( $id ) {
-            return isset( $location[$id] ) ? $location[$id] : array();
-        } 
-
-        return isset( $location ) ? $location : array();
-    }
-
-    function update_job_title( $postdata ) {
-        global $wpdb;
-
-        $id     = isset( $postdata['id'] ) ? intval( $postdata['id'] ) : false;
-        $table  = $wpdb->prefix . 'hrm_job_title';
-        $format = array( '%s', '%s', '%s' );
-        $data   = array(
-            'job_title'       => isset( $postdata['job_title'] ) ? $postdata['job_title'] : '',
-            'job_description' => isset( $postdata['job_description'] ) ? $postdata['job_description'] : '',
-            'note'            => isset( $postdata['note'] ) ? $postdata['note'] : '',
-        );
-        
-        if ( $id ) {
-            $update = $wpdb->update( $table, $data, array( 'id' => $id ), $format );
-        } else {
-            $update = $wpdb->insert( $table, $data, $format );
-        }
-        
-        if ( $update ) {
-           return $wpdb->insert_id;
-        }
- 
-        return false;
-    }
-
-    function update_job_location() {
-        global $wpdb;
-
-        $id     = isset( $postdata['id'] ) ? intval( $postdata['id'] ) : false;
-        $table  = $wpdb->prefix . 'hrm_location';
-        $format = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
-        $data = array(
-            'name'         => isset( $postdata['name'] ) ? $postdata['name'] : '',
-            'country_code' => isset( $postdata['country'] ) ? $postdata['country'] : '',
-            'province'     => isset( $postdata['province'] ) ? $postdata['province'] : '',
-            'city'         => isset( $postdata['city'] ) ? $postdata['city'] : '',
-            'address'      => isset( $postdata['address'] ) ? $postdata['address'] : '',
-            'zip_code'     => isset( $postdata['zipcode'] ) ? $postdata['zipcode'] : '',
-            'phone'        => isset( $postdata['phone'] ) ? $postdata['phone'] : '',
-            'fax'          => isset( $postdata['fax'] ) ? $postdata['job_title'] : '',
-            'notes'        => isset( $postdata['notes'] ) ? $postdata['notes'] : ''
-        );
-        
-        if ( $id ) {
-            $update = $wpdb->update( $table, $data, array( 'id' => $id ), $format );
-        } else {
-            $update = $wpdb->insert( $table, $data, $format );
-        }
-        
-        if ( $update ) {
-           return $wpdb->insert_id;
-        }
- 
-        return false; 
-    }
-
 }
-

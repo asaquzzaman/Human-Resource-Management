@@ -4,30 +4,33 @@ $header_path = dirname(__FILE__) . '/header.php';
 $header_path = apply_filters( 'hrm_header_path', $header_path, 'pim' );
 
 if ( file_exists( $header_path ) ) {
-    require_once $header_path;
+    //require_once $header_path;
 }
 
 $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
 ?>
-<div v-show="{{job_title_form}}" id="hrm-job-title-form-wrap" style="display: none;">
-    <?php require_once HRM_TEMP_PATH . '/admin/js-job-title-form.php'; ?>
-</div>
-<div v-show="{{job_location_form}}" id="hrm-job-location-form-wrap" style="display: none;">
-    <?php require_once HRM_TEMP_PATH . '/admin/js-job-location-form-wrap.php'; ?>
-</div>
-<div v-show="{{job_category_form}}" id="hrm-job-category-form-wrap" style="display: none;">
-    <?php require_once HRM_TEMP_PATH . '/admin/js-job-category-form.php'; ?>
-</div>
-<div v-show="{{employee_form}}" id="hrm-eployee-list" style="display: none;">
-    <?php require_once HRM_TEMP_PATH . '/pim/new-employee-form-js.php'; ?>
-</div>
+<div id="hrm-eployee-list"></div>
 <?php
 
-    $role_names = hrm_get_roles()->get_names();
-    $employees  = Hrm_Employeelist::getInstance()->get_employees(); 
+    global $wp_roles;
 
+    if ( !$wp_roles ) {
+        $wp_roles = new WP_Roles();
+    }
+
+    $role_names   = $wp_roles->get_names();
+
+    $employers = get_users(); //hrm_Employeelist::getInstance()->get_employee();
+
+    if ( !$employers ) {
+        return;
+    }
+
+    //$total             = $employers->total_users;
+    //$employers         = $employers->results;
     $add_permission    = hrm_user_can_access( $page, $tab, null, 'add' ) ? true : false;
     $delete_permission = hrm_user_can_access( $page, $tab, null, 'delete' ) ? true : false;
+    $hrm_menu = hrm_page();
 
     $menu_pim_page = isset( $menu[hrm_pim_page()] ) ? $menu[hrm_pim_page()] : array();
     foreach ( $menu_pim_page as $pim_tab => $pim_tab_item ) {
@@ -36,20 +39,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             break;
         }
     };
-    wp_localize_script( 'hrm_admin', 'hrm_employee', $employees );
-    foreach ( $employees as $key => $employer ) {
-        $employee_info[$employer->ID] = array(
-            'job_title' => get_user_meta( $employer->ID, '_job_title', true ),
-            'job_category' => get_user_meta( $employer->ID, '_job_category', true ),
-            'job_location' => get_user_meta( $employer->ID, '_location', true ),
-            'first_name'   => get_user_meta( $employer->ID, 'first_name', true ),
-            'last_name'    => get_user_meta( $employer->ID, 'last_name', true ),
-            'joined_date'  => hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
-            'job_desc'     => get_user_meta( $employer->ID, '_job_desc', true ),
-            'mobile'       => get_user_meta( $employer->ID, '_mob_number', true ),
-            'status'       => get_user_meta( $employer->ID, '_status', true ),
-        );
-
+    foreach ( $employers as $key => $employer ) {
         $admin_url = hrm_employee_profile_url( hrm_pim_page(), $pim_single_tab, $employer->ID );
 
         if ( $delete_permission ) {
@@ -70,7 +60,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
                 <a href="'.$admin_url.'" class="hrm-edit">'
                     .__( 'Profile', 'hrm' ).
                 '</a>
-                <a href="#" v-on:click="hrmEdit"  class="hrm-editable hrm-edit" data-action="employer_edit" data-table_option="hrm_notice" data-id='.$employer->ID.'>'
+                <a href="#" class="hrm-editable hrm-edit" data-action="employer_edit" data-table_option="hrm_notice" data-id='.$employer->ID.'>'
                     .__( 'Edit', 'hrm' ).
                 '</a>'
 
@@ -79,6 +69,18 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         } else {
             $name_id = $employer->display_name;
         }
+
+        /*if ( $delete_permission ) {
+            $del_checkbox = '<input name="hrm_check['.$employer->ID.']" value="'.$employer->ID.'" type="checkbox">';
+        } else {
+            $del_checkbox = '';
+        }
+
+        if ( $add_permission ) {
+            $name_id = '<a href="#" class="hrm-editable" data-action="employer_edit" data-table_option="" data-id='.$employer->ID.'>'.get_user_meta( $employer->ID, 'first_name', true ).'<a>';
+        } else {
+            $name_id = get_user_meta( $employer->ID, 'first_name', true );
+        }*/
 
         $status = ( get_user_meta( $employer->ID, '_status', true ) == 'yes' ) ? 'Enable' : 'Disable';
 
@@ -109,7 +111,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             ), $employer );
         }
     }
-wp_localize_script( 'hrm_admin', 'hrm_employee_info', $employee_info );
+
     $table = array();
 
     if ( $delete_permission ) {
@@ -118,7 +120,7 @@ wp_localize_script( 'hrm_admin', 'hrm_employee_info', $employee_info );
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Department', 'hrm' ),
+            __( 'Role', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),
@@ -128,7 +130,7 @@ wp_localize_script( 'hrm_admin', 'hrm_employee_info', $employee_info );
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Department', 'hrm' ),
+            __( 'Role', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),
@@ -145,8 +147,33 @@ wp_localize_script( 'hrm_admin', 'hrm_employee_info', $employee_info );
     $table['table_attr'] = array( 'class' => 'widefat' );
 
     echo hrm_Settings::getInstance()->table( $table );
+    //table
+    $job_titles = hrm_Settings::getInstance()->hrm_query( 'hrm_job_title' );
 
+    unset($job_titles['total_row']);
 
+    foreach ($job_titles as $key => $value) {
+        $job_title[$value->id] = $value->job_title;
+    }
+    $job_title     = isset( $job_title ) ? $job_title : array();
+    $job_categorys = hrm_Settings::getInstance()->hrm_query( 'hrm_job_category' );
+
+    unset($job_categorys['total_row']);
+
+    foreach ($job_categorys as $key => $value) {
+        $job_category[$value->id] = $value->name;
+    }
+
+    $job_category = isset( $job_category ) ? $job_category : array();
+    $locations    = hrm_Settings::getInstance()->hrm_query( 'hrm_location' );
+
+    unset($locations['total_row']);
+
+    foreach ($locations as $key => $value) {
+        $location[$value->id] = $value->name;
+    }
+
+    $location  = isset( $location ) ? $location : array();
     $file_path = urlencode(__FILE__);
     ?>
 
@@ -163,6 +190,9 @@ jQuery(function($) {
         redirect : '<?php echo $url; ?>',
         class_name : 'hrm_Employeelist',
         function_name : 'new_employee_form',
+        job_title : '<?php echo json_encode( $job_title ); ?>',
+        job_category : '<?php echo json_encode( $job_category ); ?>',
+        location : '<?php echo json_encode( $location ); ?>',
         page: '<?php echo $page; ?>',
         tab: '<?php echo $tab; ?>',
         subtab: '<?php echo $subtab; ?>',
@@ -287,10 +317,6 @@ jQuery(function($) {
 
     hrm_file_ajax.init();
 });
+
+
 </script>
-
-
-<?php
-//$new_employee_form_path = HRM_TEMP_PATH . '/pim/new-employee-form-js.php';
-//hrm_get_js_template( $new_employee_form_path, 'hrm-new-employee-form' );
-

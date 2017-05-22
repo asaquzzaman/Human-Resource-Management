@@ -197,6 +197,7 @@ class Hrm_Settings {
                 $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
             }
         }
+
         ob_start();
             //do_action( 'text_field_before_input', $name, $element );
         $input_before = ob_get_clean();
@@ -473,54 +474,7 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
-    function file( $field ) {
 
-        //need to enqueue   wp_enqueue_script( 'plupload-handlers' ); wp_enqueue_script( 'hrm-file-upload' );
-        $id         = $field['id'];
-        $pick_files = $id . '-upload-pickfiles';
-        $drop       = $id . '-drop-files';
-        $action     = isset( $field['action'] ) ? $field['action'] : 'hrm_file_upload';
-        $call_back  = isset( $field['callback'] ) ? json_encode( $field['callback'] ) : json_encode([]);
-        $values     = is_array( $field['value'] ) ? $field['value'] : [];
-        ?>
-        <div class="hrm-form-field ">
-            <label for=""><?php echo isset( $field['label'] ) ? $field['label'] : ''; ?></label>
-            <div id="<?php echo $id; ?>" class="hrm-attachment-area">
-
-                <div id="<?php echo $drop; ?>" class="hrm-drop-jon">
-                    <div class="hrm-attachment-upload-filelist" data-type="file">
-                        <ul class="hrm-attachment-list">
-                            <?php
-                                //$uploader = new \WeDevs\hrm\Uploader();
-                                    // foreach ( $values as $key => $attach_id ) {
-                                    //     echo $uploader->attach_html( $attach_id, $custom_attributes );
-                                    // }
-                            ?>
-
-                        </ul>
-                        <div class="hrm-clear"></div>
-
-                        <div class="hrm-attc-link-text"><?php _e( 'To attach, ', 'hrm' ); ?> <a id="<?php echo $pick_files; ?>" href="#"><?php _e( 'select files', 'hrm' ); ?></a><?php _e( ' from your computer.', 'hrm' ); ?></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <script type="text/javascript">
-            jQuery(function($) {
-                var pick_files = '<?php echo $pick_files; ?>',
-                    id         = '<?php echo $id; ?>',
-                    drop_jone  = '<?php echo $drop; ?>',
-                    action     = '<?php echo $action; ?>',
-                    callback   = <?php echo $call_back; ?>;
-
-                new hrm_Uploader( action, pick_files, id, drop_jone, 'file_upload', 'jpg,jpeg,gif,png,bmp,zip', 1024, callback );
-
-            });
-        </script>
-        <?php
-    }
 
     function get_serarch_form( $form, $heading = null ) {
         $form['action']       = isset( $form['action'] ) ? $form['action'] : '';
@@ -725,12 +679,6 @@ class Hrm_Settings {
         $form['tab']          = isset( $form['tab'] ) ? $form['tab'] : null;
         $submit_btn           = isset( $form['submit_btn'] ) ? $form['submit_btn'] : true;
         $page         = isset( $form['page'] ) ? $form['page'] : null;
-        $cancel_href          = isset( $form['cancel_href'] ) ? $form['cancel_href'] : '#';
-        $cancel_btn_class     = isset( $form['cancel_btn_class'] ) ? $form['cancel_btn_class'] : 'hrm-form-cancel';
-        $cancel_text          = isset( $form['cancel_text'] ) ? $form['cancel_text'] : __( 'Cancel', 'hrm' );
-        $cancel_id            = isset( $form['cancel_id'] ) ? $form['cancel_id'] : '';
-        $submit_id            = isset( $form['submit_id'] ) ? $form['submit_id'] : '';
-
         ob_start();
         ?>
         <div class="hrm-error-notification"></div>
@@ -789,16 +737,13 @@ class Hrm_Settings {
                             case 'tinymce':
                                 echo $this->hrm_tinymce( $field_obj );
                                 break;
-                            case 'file':
-                                $this->file( $field_obj );
                         }
 
                     }
 
                 if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
                     ?>
-                    <input v-on:click.prevent="hrmSubmit" data-submit="<?php echo $submit_id; ?>" type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
-                    <a v-on:click.prevent="hrmCancel" data-cancel="<?php echo $cancel_id; ?>" target="_blank" href="<?php echo $cancel_href; ?>" class="button <?php echo $cancel_btn_class; ?>"><?php echo $cancel_text; ?></a>
+                    <input type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
                     <?php
                 }
@@ -937,7 +882,7 @@ class Hrm_Settings {
                 ?>
                 <div class="hrm-table-action-wrap">
                     <?php if ( $insert_new ) { ?>
-                        <a href="#" v-on:click.prevent="hrmAddNew()" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
+                        <a href="#" class="button button-primary <?php echo $add_btn_class; ?>"><?php echo $add_btn_name; ?></a>
                     <?php } ?>
 
                     <?php if ( $event_delete ) { ?>

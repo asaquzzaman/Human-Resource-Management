@@ -64,11 +64,8 @@ class WP_Hrm {
         $this->initial();
 
         $this->instantiate();
-        add_action( 'plugins_loaded', array($this, 'load_textdomain') );
-        add_action( 'admin_menu', array($this, 'admin_menu') );
-        add_action( 'admin_notices', array($this, 'fornt_end') );
+        $this->init_action();
         register_activation_hook( __FILE__, array($this, 'install') );
-        add_action( 'init', array( $this, 'init' ) );
     }
 
     function initial() {
@@ -102,8 +99,8 @@ class WP_Hrm {
         $this->define( 'HRM_VERSION', '0.9' );
         $this->define( 'HRM_DB_VERSION', '0.2' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
+        $this->define( 'HRM_COMP_PATH', dirname( __FILE__ ) . '/asset/js/components' );
         $this->define( 'HRM_URL', plugins_url( '', __FILE__ ) );
-        $this->define( 'HRM_TEMP_PATH', dirname( __FILE__ ) . '/templates' );
         $this->define( 'HRM_PERMISSION_PURCHASE_URL', 'http://mishubd.com/product/hrm-permission/' );
     }
 
@@ -163,6 +160,31 @@ class WP_Hrm {
         Hrm_Init::getInstance()->register_post_type();
     }
 
+    function init_action() {
+        add_action( 'plugins_loaded', array($this, 'load_textdomain') );
+        add_action( 'admin_menu', array($this, 'admin_menu') );
+        add_action( 'admin_notices', array($this, 'fornt_end') );
+        add_action( 'wp_enqueue_scripts', array($this, 'register_scripts') );
+        add_action( 'admin_enqueue_scripts', array($this, 'register_scripts') );
+        add_action( 'init', array( $this, 'init' ) );
+    }
+
+    function register_scripts() {
+        wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.min.js', array( 'jquery' ), time(), true );
+        wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.min.js', array( 
+            'jquery',
+            'hrm-vue', 
+        ), time(), true );
+
+        wp_register_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.min.js', array( 
+            'jquery',
+            'hrm-vue',
+        ), time(), true );
+
+        wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
+        wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
+    }
+
 
     static function admin_scripts() {
         global $hrm_is_admin;
@@ -172,14 +194,10 @@ class WP_Hrm {
         wp_enqueue_script( 'jquery-ui-autocomplete');
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'jquery-ui-slider' );
-        wp_enqueue_media();
         wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_datetimepicker', plugins_url( '/asset/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm-jquery.dataTables', plugins_url( '/asset/js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ), false, true);
-        wp_enqueue_script( 'hrm-vue', plugins_url( '/asset/js/vue/vue.min.js', __FILE__ ), array( 'jquery' ), false, true);
-        wp_enqueue_script( 'hrm-custom-vue', plugins_url( '/asset/js/vue/hrm.vue.js', __FILE__ ), array( 'jquery', 'hrm-vue', 'hrm_admin' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
-        wp_enqueue_script( 'hrm_file', plugins_url( '/asset/js/file.js', __FILE__ ), array( 'jquery' ), false, true);
 
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
@@ -187,14 +205,7 @@ class WP_Hrm {
             'is_admin'    => $hrm_is_admin,
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' ),
-            'plupload'   => array(
-                'url'              => admin_url( 'admin-ajax.php' ) . '?nonce=' . wp_create_nonce( 'erp_ac_featured_img' ),
-                'flash_swf_url'    => includes_url( 'js/plupload/plupload.flash.swf' ),
-                'filters'          => array( array('title' => __( 'Allowed Files', 'accounting' ), 'extensions' => '*')),
-                'multipart'        => true,
-                'urlstream_upload' => true,
-            )
+            'success_msg' => __( 'Changed Successfully', 'hrm' )
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', plugins_url( '/asset/css/jquery.dataTables.css', __FILE__ ), false, false, 'all' );
@@ -212,6 +223,7 @@ class WP_Hrm {
         Hrm_Admin::getInstance();
         Hrm_Leave::getInstance();
         Hrm_Employee::getInstance();
+        Hrm_JsTemplate::getInstance();
     }
 
     function install() {
@@ -289,7 +301,7 @@ class WP_Hrm {
         }
 
         if( isset( $style_slug[hrm_admin_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_admin_page()], array( $this, 'admin_scripts') );
+            add_action( 'admin_print_styles-' . $style_slug[hrm_admin_page()], array( 'Hrm_Scripts', 'admin') );
         }
 
         if( isset( $style_slug[hrm_pim_page()] ) ) {
@@ -355,7 +367,7 @@ class WP_Hrm {
         $tab        = $query_args['tab'];
         $subtab     = $query_args['subtab'];
 
-        echo '<div class="hrm wrap" id="hrm">';
+        echo '<div class="hrm wrap hrm-content-wrap" id="hrm">';
         if ( $tab === false ) {
             Hrm_Settings::getInstance()->show_page( $page );
         } else {

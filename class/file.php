@@ -469,9 +469,5 @@ class HRM_File {
 
         return $return_value;
     }
+
 }
-
-
-
-
-

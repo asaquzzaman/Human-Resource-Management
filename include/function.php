@@ -316,25 +316,34 @@ function hrm_message() {
         'datatable_pagination' => __( '--Select Pagination--', 'hrm' ),
         'searchPlaceholder'    => __( 'Seach...', 'hrm' ),
         'dtb_pag_all'          => __( 'All', 'hrm' ),
-        'confirmMsg'           => __( 'Are you sure!', 'hrm' )
      );
 
     return apply_filters( 'hrm_message', $message );
 }
 
-
-function hrm_get_roles() {
+function hrm_get_role() {
     global $wp_roles;
 
     if ( !$wp_roles ) {
         $wp_roles = new WP_Roles();
     }
 
-    return apply_filters( 'hrm_get_roles', $wp_roles );
+    return $wp_roles->get_names();
+}
+
+function hrm_page_slug() {
+    $menu = hrm_menu_label();
+    foreach ( $menu as $page_slug => $value ) {
+        break;
+    }
+
+    return $page_slug ? $page_slug : false;
 }
 
 /**
  * Embed a JS template page with its ID
+ * 
+ * @since  0.1
  *
  * @param  string  the file path of the file
  * @param  string  the script id
@@ -342,12 +351,11 @@ function hrm_get_roles() {
  * @return void
  */
 function hrm_get_js_template( $file_path, $id ) {
+   
     if ( file_exists( $file_path ) ) {
         echo '<script type="text/html" id="tmpl-' . $id . '">' . "\n";
         include_once $file_path;
         echo "\n" . '</script>' . "\n";
     }
 }
-
-
 

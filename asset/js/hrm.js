@@ -9,10 +9,10 @@
             this.monthYearPicker();
             this.crossNotice();
             //this.slider();
-            //$('#hrm').on( 'click', '.hrm-add-button', this.getInsertDataForm );
+            $('#hrm').on( 'click', '.hrm-add-button', this.getInsertDataForm );
             $('#hrm').on( 'click', '.hrm-form-cancel', this.formshowHide );
             $('#hrm').on( 'submit', '#hrm-hidden-form', this.add );
-            //$('#hrm').on( 'click', '.hrm-editable', this.edit );
+            $('#hrm').on( 'click', '.hrm-editable', this.edit );
             $('#hrm').on( 'click', '.hrm-delete-button', this.delete );
             $('#hrm').on( 'submit', '#hrm-visible-form-warp #hrm-visible-form', this.singleFormAdd );
             $('body').on('submit', '.hrm-user-create-form', this.userCreate);

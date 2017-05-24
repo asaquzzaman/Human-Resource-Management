@@ -65,5 +65,6 @@ class Hrm_JsTemplate {
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-paginate-drop-down.php', 'hrm-department-paginate-drop-down' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-table.php', 'hrm-department-table' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-pagination.php', 'hrm-department-pagination' );
+        hrm_get_js_template( HRM_COMP_PATH . '/department/new-department-form.php', 'hrm-new-department-form' );
     }
 }

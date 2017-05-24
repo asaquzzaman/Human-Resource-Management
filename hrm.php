@@ -181,6 +181,7 @@ class WP_Hrm {
             'hrm-vue',
         ), time(), true );
 
+        wp_register_script( 'hrm-common-mixin', HRM_URL . '/asset/js/hrm-common-mixin.js', array(), time(), true );
         wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
         wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
     }

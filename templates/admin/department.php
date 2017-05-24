@@ -13,6 +13,8 @@ if ( file_exists( $header_path ) ) {
 
 	<div id="hrm-admin-department">
 
+        <div class="hrm-slide-up" v-hrm-slide-down style="display: none;" v-if="is_new_department_form_visible"><new-department-form></new-department-form></div>
+
         <form id="hrm-list-form" class="" action="" method="post">
 
             <div class="hrm-table-action-wrap">
@@ -31,7 +33,6 @@ if ( file_exists( $header_path ) ) {
                <department-table></department-table>
                <department-pagination></department-pagination>
 
-        		
         	</div>
         </form>
     </div>

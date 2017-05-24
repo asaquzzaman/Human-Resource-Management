@@ -38,6 +38,8 @@ class Hrm_Scripts {
     	wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
+
+        wp_enqueue_script( 'hrm-common-mixin' );
     
         wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/asset/js/components/department/department-add-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-del-btn', HRM_URL . '/asset/js/components/department/department-del-btn.js', array(), false, true);
@@ -45,6 +47,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-department-paginate-drop-dwon', HRM_URL . '/asset/js/components/department/department-paginate-drop-down.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-table', HRM_URL . '/asset/js/components/department/department-table.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-pagination', HRM_URL . '/asset/js/components/department/department-pagination.js', array(), false, true);
+        wp_enqueue_script( 'hrm-new-department-form', HRM_URL . '/asset/js/components/department/new-department-form.js', array(), false, true);
         
         wp_enqueue_script( 'hrm-admin-vue-store' );
         wp_enqueue_script( 'hrm-admin-vue' );

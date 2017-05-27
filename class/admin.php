@@ -2345,4 +2345,67 @@ class Hrm_Admin {
         return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
     }
 
+    public static function ajax_get_departments() {
+        check_ajax_referer('hrm_nonce');
+
+        $departments = self::get_departments();
+
+        wp_send_json_success(array( 'departments' => $departments ));
+    }
+
+    public static function get_departments( 
+        $dept_id  = false, 
+        $limit    = 50, 
+        $show_all = false,
+        $pagenum  = 1
+    ) {
+        
+        global $wpdb;
+
+        $table  = $wpdb->prefix . 'hrm_job_category';
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        if ( $dept_id ) {
+            $query =  $wpdb->prepare( 
+                "
+                SELECT      *
+                FROM        {$table}
+                WHERE       1 = 1
+                AND         id = %d
+                ",
+                $dept_id
+            ); 
+
+            return $wpdb->get_row( $query );
+
+        } else if ( true === $show_all ) {
+            
+            $query =  $wpdb->prepare( 
+                "
+                SELECT      *
+                FROM        {$table}
+                WHERE       1 = 1
+                ORDER BY    id ASC
+                "
+            ) ; 
+            
+            return $wpdb->get_results( $query );
+        } else {
+            
+            $query =  $wpdb->prepare( 
+                "
+                SELECT      *
+                FROM        {$table}
+                WHERE       1 = 1
+                ORDER BY    id ASC
+                LiMIT       %d,%d
+                ",
+                $offset,
+                $limit
+            ); 
+
+            return $wpdb->get_results( $query );
+        }
+    }
+
 }

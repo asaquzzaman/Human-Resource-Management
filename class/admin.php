@@ -2300,4 +2300,49 @@ class Hrm_Admin {
         }
     }
 
+    public static function ajax_update_department() {
+        check_ajax_referer('hrm_nonce');
+        $results = self::update_department( $_POST );
+
+        if ( is_wp_error( $results ) ) {
+            wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 'result' => $results, 'success' => __( 'Department has been created successfully', 'hrm' ) ) );
+        }
+    }
+
+    public static function update_department( $postdata ) {
+        
+        if ( empty( $postdata['title'] ) ) {
+            return new WP_Error( 'dept_title', __( 'Department title required', 'hrm' ) );
+        }
+
+        global $wpdb;
+
+        $dept_id = empty( $postdata['dept_id'] ) ? false : absint( $postdata['dept_id'] );
+        $dept_id = $dept_id ? $dept_id : false;
+
+        $table = $wpdb->prefix . 'hrm_job_category'; 
+        $data  = array(
+            'name'        => $postdata['title'],
+            'active'      => $postdata['status'],
+            'description' => $postdata['description'],
+            'parent'      => empty( $postdata['parent'] ) ? 0 : absint( $_POST['parent'] ),
+        );
+        $format = array( '%s', '%d', '%s', '%d' );
+
+        if ( $dept_id ) {
+            $result = $wpdb->update( $table, $data, array( 'id' => $dept_id ), $format, array( '%d' ) );
+
+        } else {
+            $result = $wpdb->insert( $table, $data, $format );
+        }
+
+        if ( $result ) {
+            return array( 'dept_id' => $wpdb->insert_id, 'data' => $data );
+        }
+
+        return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
+    }
+
 }

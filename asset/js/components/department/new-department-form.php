@@ -9,7 +9,7 @@
             	<label for="title">
             		<?php _e( 'Title', 'hrm' ); ?><em>*</em>
             	</label>
-            	<input type="text" v-model="title" name="title" value="" placeholder="" class="title" id="title"  data-hrm_validation="1" data-hrm_required="1" data-hrm_required_error_msg="This field is required"  />
+            	<input type="text" required="required" v-model="title" name="title" value="" placeholder="" class="title" id="title"  data-hrm_validation="1" data-hrm_required="1" data-hrm_required_error_msg="This field is required"  />
             	<span class="hrm-clear"></span>
             	<span class="description"></span>
             </div>
@@ -50,7 +50,7 @@
             <input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Submit">
 
             <a @click.prevent="showHideNewDepartmentForm($event)" target="_blank" href="#" class="button hrm-form-cancel"><?php _e( 'Cancel', 'hrm' ); ?></a>
-            <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
+            <div class="hrm-spinner" v-if="show_spinner"><?php _e( 'Saving....', 'hrm' ); ?></div>
         </div>
     </form>
 </div>

@@ -8,16 +8,16 @@ Vue.component('new-department-form', {
 			title: '',
 			description: '',
 			status: '0',
-			parent: '0'
+			parent: '0',
+			show_spinner: false
 		}
 	},
 
 	methods: {
 		showHideNewDepartmentForm: function(el) {
-
 			var self = this;
 
-			this.slideUp(el, function() {
+			this.slideUp(el.target, function() {
 				self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
 			});
 						
@@ -33,10 +33,27 @@ Vue.component('new-department-form', {
             },
             self = this;
 
+            this.show_spinner = true;
+
             wp.ajax.send('create_new_department', {
                 data: request_data,
                 success: function(res) {
+                	self.show_spinner = false;
                     
+                    // Display a success toast, with a title
+                    toastr.success(res.success);
+                    
+                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
+                    	self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+                    });
+                },
+
+                error: function(res) {
+                	self.show_spinner = false;
+                	// Showing error
+                    res.error.map( function( value, index ) {
+                        toastr.error(value);
+                    });
                 }
             });
 		}

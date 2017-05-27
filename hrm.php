@@ -171,6 +171,8 @@ class WP_Hrm {
 
     function register_scripts() {
         wp_enqueue_media();
+        wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
+        
         wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.min.js', array( 'jquery' ), time(), true );
         wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.min.js', array( 
             'jquery',
@@ -185,6 +187,8 @@ class WP_Hrm {
         wp_register_script( 'hrm-common-mixin', HRM_URL . '/asset/js/hrm-common-mixin.js', array(), time(), true );
         wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
         wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
+
+        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
     }
 
 

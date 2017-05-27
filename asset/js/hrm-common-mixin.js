@@ -13,8 +13,8 @@ Vue.directive('hrm-slide-down', {
 
 var HRM_Common_Mixin = {
 	methods: {
-		slideUp: function(el, callback) {
-			var node = jQuery(el.target).closest('.hrm-slide-up');
+		slideUp: function(target_el, callback) {
+			var node = jQuery(target_el).closest('.hrm-slide-up');
 
 			node.slideUp(400, function() {
 				callback();

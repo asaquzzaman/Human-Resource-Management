@@ -53,7 +53,7 @@ class Hrm_JsTemplate {
 				break;
 			
 			default:
-				self::admin_default();
+				//self::admin_default();
 				break;
 		}
     }

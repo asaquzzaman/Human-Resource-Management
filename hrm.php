@@ -96,7 +96,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '0.9' );
+        $this->define( 'HRM_VERSION', '1.2' );
         $this->define( 'HRM_DB_VERSION', '0.2' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_COMP_PATH', dirname( __FILE__ ) . '/asset/js/components' );
@@ -170,6 +170,7 @@ class WP_Hrm {
     }
 
     function register_scripts() {
+        wp_enqueue_media();
         wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.min.js', array( 'jquery' ), time(), true );
         wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.min.js', array( 
             'jquery',
@@ -225,6 +226,7 @@ class WP_Hrm {
         Hrm_Leave::getInstance();
         Hrm_Employee::getInstance();
         Hrm_JsTemplate::getInstance();
+        Hrm_Update::getInstance();
     }
 
     function install() {

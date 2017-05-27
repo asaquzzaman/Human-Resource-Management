@@ -34,11 +34,21 @@ class Hrm_Scripts {
 		}
     }
 
+    public static function admin_localize($key) {
+        wp_localize_script( $key, 'HRM_Admin', array(
+            'ajax_url'    => admin_url( 'admin-ajax.php' ),
+            'nonce'    => wp_create_nonce( 'hrm_nonce' ),
+            'message'     => hrm_message(),
+            'confirm_msg' => __( 'Are you sure!', 'hrm'),
+            'success_msg' => __( 'Changed Successfully', 'hrm' )
+        ));
+    }
+
     public static function department() {
     	wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
-
+        self::admin_localize( 'hrm-vue' );
         wp_enqueue_script( 'hrm-common-mixin' );
     
         wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/asset/js/components/department/department-add-btn.js', array(), false, true);

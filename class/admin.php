@@ -2348,15 +2348,24 @@ class Hrm_Admin {
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
 
-        $departments = self::get_departments();
+        $departments = self::get_departments(false, true);
+        $departments = self::display_rows_hierarchical( $departments, 1, 5 );
 
-        wp_send_json_success(array( 'departments' => $departments ));
+        $send_deprtments = array();
+
+        foreach ( $departments as $id => $hierarchical_depth ) {
+            $dept = self::get_departments($id);
+            $dept->hierarchical_depth = $hierarchical_depth;
+            $send_deprtments[] = $dept;
+        }
+        
+        wp_send_json_success(array( 'departments' => $send_deprtments ));
     }
 
     public static function get_departments( 
         $dept_id  = false, 
-        $limit    = 50, 
         $show_all = false,
+        $limit    = 50, 
         $pagenum  = 1
     ) {
         
@@ -2407,5 +2416,140 @@ class Hrm_Admin {
             return $wpdb->get_results( $query );
         }
     }
+
+    /**
+     * Display Row hierarchical
+     *
+     * @param array departments
+     * @param integer $pagenum
+     * @param integer $per_page
+     *
+     * @return void
+     */
+    public static function display_rows_hierarchical( $departments, $pagenum = 1, $per_page = 20 ) {
+        
+        $level = 0;
+
+        if ( empty( $_REQUEST['s'] ) ) {
+
+            $top_level_departments = array();
+            $children_departments = array();
+
+            foreach ( $departments as $page ) {
+
+                if ( 0 == $page->parent )
+                    $top_level_departments[] = $page;
+                else
+                    $children_departments[ $page->parent ][] = $page;
+            }
+
+            $departments = &$top_level_departments;
+        }
+
+        $count = 0;
+        $start = ( $pagenum - 1 ) * $per_page;
+        $end = $start + $per_page;
+        $to_display = array();
+
+        foreach ( $departments as $page ) {
+            if ( $count >= $end )
+                break;
+
+            if ( $count >= $start ) {
+                $to_display[$page->id] = $level;
+            }
+
+            $count++;
+
+            if ( isset( $children_departments ) )
+                self::page_rows( $children_departments, $count, $page->id, $level + 1, $pagenum, $per_page, $to_display );
+        }
+
+        // If it is the last pagenum and there are orphaned departments, display them with paging as well.
+        if ( isset( $children_departments ) && $count < $end ){
+            foreach ( $children_departments as $orphans ){
+                foreach ( $orphans as $op ) {
+                    if ( $count >= $end )
+                        break;
+
+                    if ( $count >= $start ) {
+                        $to_display[$op->id] = 0;
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+
+        // foreach ( $to_display as $department_id => $level ) {
+
+        //     $this->single_row( $department_id, $level );
+        // }
+        return $to_display;
+    }
+
+        /**
+     * Single Page row
+     *
+     * @param array $children_departments
+     * @param integer $count
+     * @param integer $parent
+     * @param integer $level
+     * @param integer $pagenum
+     * @param integer $per_page
+     * @param array $to_display List of pages to be displayed. Passed by reference.
+     *
+     * @return void
+     */
+    public static function page_rows( &$children_departments, &$count, $parent, $level, $pagenum, $per_page, &$to_display ) {
+
+        if ( ! isset( $children_departments[$parent] ) )
+            return;
+
+        $start = ( $pagenum - 1 ) * $per_page;
+        $end = $start + $per_page;
+
+        foreach ( $children_departments[$parent] as $page ) {
+
+            if ( $count >= $end )
+                break;
+
+            // If the page starts in a subtree, print the parents.
+            if ( $count == $start && $page->parent > 0 ) {
+                $my_parents = array();
+                $my_parent = $page->parent;
+                while ( $my_parent ) {
+                    // Get the ID from the list or the attribute if my_parent is an object
+                    $parent_id = $my_parent;
+                    if ( is_object( $my_parent ) ) {
+                        $parent_id = $my_parent->id;
+                    }
+
+                    $my_parent = self::get_departments($parent_id); //(object) \WeDevs\ERP\HRM\Models\Department::find($parent_id)->toArray();//get_post( $parent_id );
+                    $my_parents[] = $my_parent;
+                    if ( !$my_parent->parent )
+                        break;
+                    $my_parent = $my_parent->parent;
+                }
+                $num_parents = count( $my_parents );
+                while ( $my_parent = array_pop( $my_parents ) ) {
+                    $to_display[$my_parent->id] = $level - $num_parents;
+                    $num_parents--;
+                }
+            }
+
+            if ( $count >= $start ) {
+                $to_display[$page->id] = $level;
+            }
+
+            $count++;
+
+            self::page_rows( $children_departments, $count, $page->id, $level + 1, $pagenum, $per_page, $to_display );
+        }
+
+        unset( $children_departments[$parent] ); //required in order to keep track of orphans
+    }
+
 
 }

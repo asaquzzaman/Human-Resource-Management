@@ -3,7 +3,7 @@
     <thead>
         <tr role="row">
         	<th class="sorting_asc" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending">
-        		<input class="hrm-all-checked" type="checkbox">
+        		<input @change.prevent="delAllDept()" class="hrm-all-checked" v-model="del_all_dept" type="checkbox">
         	</th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
             	<?php _e( 'Job Title', 'hrm' ); ?>
@@ -24,7 +24,7 @@
         <tr class="hrm-even odd" role="row" v-for="department in departments">
     
             <td class="hrm-table-checkbox sorting_1">
-            	<input class="hrm-single-checked" name="hrm_check[3]" value="" type="checkbox">
+            	<input @change.prevent="delDept(department)" v-model="del_dept" class="hrm-single-checked" name="" :value="department.id" type="checkbox">
             </td>
 
     

@@ -3,6 +3,7 @@ var HRM_Admin_Store = new Vuex.Store({
 		is_new_department_form_visible: false,
 		departments: [],
 		department_id: false,
+		del_dept: []
 	},
 
 	mutations: {
@@ -24,6 +25,10 @@ var HRM_Admin_Store = new Vuex.Store({
 			} else {
 				state.departments = department.departments;
 			}
+		},
+
+		departmentDelId: function(state, del_dept) {
+			state.del_dept = del_dept.del_dept;
 		}
 	}
 });

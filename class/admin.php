@@ -2563,5 +2563,65 @@ class Hrm_Admin {
         unset( $children_departments[$parent] ); //required in order to keep track of orphans
     }
 
+    public static function delete_department() {
+        check_ajax_referer('hrm_nonce');
 
+        global $wpdb;
+
+        $dept_id = $_POST['dept_id'];
+
+        //get all employee
+        $employess   = self::is_employee_exist_in_department( $dept_id );
+        //filter department id from all employees
+        $emp_dept_id = wp_list_pluck( $employess, 'department_id' );
+
+        $undone_dept = array();
+
+        foreach ( $dept_id as $key => $department_id ) {
+            if ( in_array( $department_id, $emp_dept_id ) ) {
+                unset( $dept_id[$key] );
+                $undone_dept[$department_id] = $department_id;
+            }
+        }   
+
+        $table = $wpdb->prefix . 'hrm_job_category';
+        $dept_ids = implode( ',', $dept_id );
+
+        $wpdb->query( 
+            $wpdb->prepare( 
+                "
+                 DELETE FROM {$table}
+                 WHERE id IN %s
+                ",
+                $dept_ids 
+            )
+        );     
+    }
+
+    public static function is_employee_exist_in_department( $depts_id ) {
+        
+        $args = array(
+            'role__in' => array( 'hrm_employee' ),
+            'fields'   => 'all_with_meta',
+            'meta_query' => array(
+
+                array(
+                    'key'     => 'hrm_department_id',
+                    'value'   => $depts_id,
+                    'compare' => 'IN'
+                )
+            )
+        );
+
+        $users = new WP_User_Query( $args );
+
+        foreach ( $users->results as $key => $user ) {
+            $user->department_id = get_user_meta( $user->id, 'hrm_department_id', true );
+        }
+
+        return $users->results;
+
+    }
 }
+
+

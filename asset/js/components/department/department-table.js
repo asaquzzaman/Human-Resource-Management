@@ -52,7 +52,7 @@ Vue.component('department-table', {
             if (depts_id.length != this.del_dept.length) {
                 this.del_all_dept = false;
             }
-
+            
             this.$store.commit('departmentDelId', {del_dept: this.del_dept});
         },
 

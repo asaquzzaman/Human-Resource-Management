@@ -2563,12 +2563,24 @@ class Hrm_Admin {
         unset( $children_departments[$parent] ); //required in order to keep track of orphans
     }
 
-    public static function delete_department() {
+    public static function ajax_delete_department() {
         check_ajax_referer('hrm_nonce');
+        $results = self::delete_department( $_POST['dept_id'] );
 
+        if ( is_wp_error( $results ) ) {
+            wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 
+                'deleted_dept' => $results['deleted_dept'], 
+                'undone_dept'  => $results['undone_dept'], 
+                'success'      => __( 'Department has been deleted successfully', 'hrm' ) 
+            ) );
+        }
+    }
+
+    public static function delete_department($dept_id) {
+        
         global $wpdb;
-
-        $dept_id = $_POST['dept_id'];
 
         //get all employee
         $employess   = self::is_employee_exist_in_department( $dept_id );
@@ -2584,18 +2596,26 @@ class Hrm_Admin {
             }
         }   
 
-        $table = $wpdb->prefix . 'hrm_job_category';
-        $dept_ids = implode( ',', $dept_id );
+        if ( empty( $dept_id ) ) {
+            return new WP_Error( 'dept_id', __( 'Required department id!', 'hrm' ) );
+        }
 
-        $wpdb->query( 
-            $wpdb->prepare( 
-                "
-                 DELETE FROM {$table}
-                 WHERE id IN %s
-                ",
-                $dept_ids 
-            )
-        );     
+        $table    = $wpdb->prefix . 'hrm_job_category';
+        $dept_ids = implode( "','", $dept_id );
+
+        $delete = $wpdb->query( 
+            "
+             DELETE FROM {$table}
+             WHERE id IN ('$dept_ids')
+            "
+        ); 
+        
+        if ( $delete ) {
+            return array( 'deleted_dept' => $dept_id, 'undone_dept' => $undone_dept ); 
+        } else {
+            return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
+        }
+          
     }
 
     public static function is_employee_exist_in_department( $depts_id ) {

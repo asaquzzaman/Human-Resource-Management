@@ -29,6 +29,9 @@ var HRM_Admin_Store = new Vuex.Store({
 
 		departmentDelId: function(state, del_dept) {
 			state.del_dept = del_dept.del_dept;
+		},
+		afterDeleteDept: function(state, deleted_dept) {
+			state.departments.splice(deleted_dept.target_del_dept, 1);
 		}
 	}
 });

@@ -2302,12 +2302,13 @@ class Hrm_Admin {
 
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
-        $results = self::update_department( $_POST );
+        $department = self::update_department( $_POST );
+        $departments = self::get_departments_meta();
 
         if ( is_wp_error( $results ) ) {
             wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
         } else {
-            wp_send_json_success( array( 'result' => $results, 'success' => __( 'Department has been created successfully', 'hrm' ) ) );
+            wp_send_json_success( array( 'department' => $department, 'departments' => $departments, 'success' => __( 'Department has been created successfully', 'hrm' ) ) );
         }
     }
 
@@ -2327,7 +2328,7 @@ class Hrm_Admin {
             'name'        => $postdata['title'],
             'active'      => $postdata['status'],
             'description' => $postdata['description'],
-            'parent'      => empty( $postdata['parent'] ) ? 0 : absint( $_POST['parent'] ),
+            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $_POST['parent'] ),
         );
         $format = array( '%s', '%d', '%s', '%d' );
 
@@ -2335,29 +2336,40 @@ class Hrm_Admin {
             $result = $wpdb->update( $table, $data, array( 'id' => $dept_id ), $format, array( '%d' ) );
 
         } else {
-            $result = $wpdb->insert( $table, $data, $format );
+            $result  = $wpdb->insert( $table, $data, $format );
+            $dept_id = $wpdb->insert_id;
         }
 
+        $department = self::get_departments( $dept_id );
+
         if ( $result ) {
-            return array( 'dept_id' => $wpdb->insert_id, 'data' => $data );
+            return array( 'dept_id' => $dept_id, 'department' => $department );
         }
 
         return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
     }
 
-    public static function ajax_get_departments() {
-        check_ajax_referer('hrm_nonce');
-
+    public static function get_departments_meta() {
         $departments = self::get_departments(false, true);
-        $departments = self::display_rows_hierarchical( $departments, 1, 5 );
+        $departments = self::display_rows_hierarchical( $departments, 1, 50 );
 
         $send_deprtments = array();
 
         foreach ( $departments as $id => $hierarchical_depth ) {
             $dept = self::get_departments($id);
             $dept->hierarchical_depth = $hierarchical_depth;
+            $dept->hierarchical_pad   = str_repeat( '&#8212; ', $hierarchical_depth );
+            $dept->hierarchical_free_pad = str_repeat( '&nbsp; ', $hierarchical_depth ); 
             $send_deprtments[] = $dept;
         }
+
+        return $send_deprtments;
+    }
+
+    public static function ajax_get_departments() {
+        check_ajax_referer('hrm_nonce');
+
+        $send_deprtments = self::get_departments_meta();
         
         wp_send_json_success(array( 'departments' => $send_deprtments ));
     }

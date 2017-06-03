@@ -60,6 +60,7 @@ class Hrm_JsTemplate {
 
     public static function department() {
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-add-btn.php', 'hrm-department-add-btn' );
+        hrm_get_js_template( HRM_COMP_PATH . '/department/department-edit-btn.php', 'hrm-department-edit-btn' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-del-btn.php', 'hrm-department-del-btn' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-search.php', 'hrm-department-search' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-paginate-drop-down.php', 'hrm-department-paginate-drop-down' );

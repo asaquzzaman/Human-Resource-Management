@@ -50,7 +50,8 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-vue-router' );
         self::admin_localize( 'hrm-vue' );
         wp_enqueue_script( 'hrm-common-mixin' );
-    
+        
+        wp_enqueue_script( 'hrm-department-edit-btn', HRM_URL . '/asset/js/components/department/department-edit-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/asset/js/components/department/department-add-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-del-btn', HRM_URL . '/asset/js/components/department/department-del-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-search', HRM_URL . '/asset/js/components/department/department-search.js', array(), false, true);

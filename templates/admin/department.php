@@ -19,7 +19,7 @@ if ( file_exists( $header_path ) ) {
 
             <div class="hrm-table-action-wrap">
                 <department-add-btn></department-add-btn>
-                <department-del-btn></department-del-btn>
+                <department-del-btn :type="'group'"></department-del-btn>
                 
             </div>
                 

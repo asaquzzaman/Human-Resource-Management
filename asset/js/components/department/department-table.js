@@ -1,9 +1,23 @@
 Vue.component('department-table', {
 	template: '#tmpl-hrm-department-table',
 
+    data: function() {
+        return {
+            
+        }
+    },
+
 	created: function() {
-		this.getDepartments();
+        if ( !this.$store.state.departments.length ) {
+            this.getDepartments();
+        }
 	},
+
+    computed: {
+        departments: function() {
+            return this.$store.state.departments;
+        }
+    },
 
 	methods: {
 		getDepartments: function() {
@@ -15,13 +29,17 @@ Vue.component('department-table', {
             wp.ajax.send('get_departments', {
                 data: request_data,
                 success: function(res) {
-                	
+                    self.$store.commit( 'setDepartments', { departments: res.departments} );
                 },
 
                 error: function(res) {
                 	
                 }
             });
-		}
+		},
+
+        departmentActivity: function(department) {
+            return parseInt(department.active) == 0 ? 'Disable' : 'Enable'; 
+        }
 	}
 });

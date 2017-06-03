@@ -19,6 +19,26 @@ var HRM_Common_Mixin = {
 			node.slideUp(400, function() {
 				callback();
 			});
-		}
-	}
+		},
+
+		/**
+	     * Get index from array object element
+	     * 
+	     * @param   array 
+	     * @param   id    
+	     * 
+	     * @return  int      
+	     */
+	    getIndex: function ( array,  id, slug) {
+	        var target = false;
+
+	        array.map(function(content, index) {
+	            if ( content[slug] == id ) {
+	                target = index;
+	            }
+	        });
+
+	        return target;
+	    },
+	},
 }

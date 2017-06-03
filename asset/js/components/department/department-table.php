@@ -1,4 +1,4 @@
- <table id="hrm-data-table" class="widefat dataTable no-footer" role="grid">
+<table id="hrm-data-table" class="widefat dataTable no-footer" role="grid">
             
     <thead>
         <tr role="row">
@@ -6,13 +6,13 @@
         		<input class="hrm-all-checked" type="checkbox">
         	</th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
-            	Job Title
+            	<?php _e( 'Job Title', 'hrm' ); ?>
             </th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Description: activate to sort column ascending" style="width: 304px;">
-            	Job Description
+            	<?php _e( 'Job Description', 'hrm' ); ?>
             </th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
-            	Note
+            	<?php _e( 'Note', 'hrm' ); ?>
             </th>
         </tr>
     </thead>
@@ -21,7 +21,7 @@
                                 
                                                 
                                                 
-        <tr class="hrm-even odd" role="row">
+        <tr class="hrm-even odd" role="row" v-for="department in departments">
     
             <td class="hrm-table-checkbox sorting_1">
             	<input class="hrm-single-checked" name="hrm_check[3]" value="" type="checkbox">
@@ -30,70 +30,23 @@
     
             <td>
             	<div class="hrm-title-wrap">
-            		<a href="#" class="hrm-editable hrm-title" data-table_option="hrm_job_title_option" data-id="3">Forum</a>
+            		<a href="#" class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></a>
 					<div class="hrm-title-action">
-						<a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_job_title_option" data-id="3">Edit</a>
-						<a href="#" class="hrm-delete" data-id="3">Delete</a>
+						<department-edit-btn :department_id="department.id"></department-edit-btn>
+                        <department-del-btn :department_id="department.id" :type="'single'"></department-del-btn>
+						<!-- <a href="#" class="hrm-delete" data-id="3"><?php _e( 'Delete', 'hrm' ); ?></a> -->
 					</div>
 				</div>
 			</td>
 
     
-            <td>Forum</td>
+            <td>{{ department.description }}</td>
 
     
-            <td>Forum</td>
+            <td>{{ departmentActivity(department) }}</td>
 
         </tr>
         
-        <tr class="hrm-odd even" role="row">
-    
-            	<td class="hrm-table-checkbox sorting_1">
-            		<input class="hrm-single-checked" name="hrm_check[2]" value="" type="checkbox">
-            	</td>
 
-    
-                <td>
-                	<div class="hrm-title-wrap">
-                		<a href="#" class="hrm-editable hrm-title" data-table_option="hrm_job_title_option" data-id="2">Support Engineer</a>
-	 						<div class="hrm-title-action">
-	 							<a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_job_title_option" data-id="2">Edit</a>
-	 							<a href="#" class="hrm-delete" data-id="2">Delete</a>
-	 						</div>
-	 					</div>
-	 				</td>
-
-    
-            	<td>Support Engineer</td>
-
-    
-            	<td>Support Engineer</td>
-
-        </tr>
-
-        <tr class="hrm-even odd" role="row">
-    
-            <td class="hrm-table-checkbox sorting_1">
-            	<input class="hrm-single-checked" name="hrm_check[1]" value="" type="checkbox">
-            </td>
-
-    
-            <td>
-            	<div class="hrm-title-wrap">
-            		<a href="#" class="hrm-editable hrm-title" data-table_option="hrm_job_title_option" data-id="1">Software Engineer</a>
-					<div class="hrm-title-action">
-						<a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_job_title_option" data-id="1">Edit</a>
-						<a href="#" class="hrm-delete" data-id="1">Delete</a>
-					</div>
-				</div>
-			</td>
-
-    
-            <td>Software Engineer</td>
-
-    
-            <td>Software Engineer</td>
-
-        </tr>
     </tbody>
 </table>

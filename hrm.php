@@ -173,13 +173,13 @@ class WP_Hrm {
         wp_enqueue_media();
         wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
         
-        wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.min.js', array( 'jquery' ), time(), true );
-        wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.min.js', array( 
+        wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.js', array( 'jquery' ), time(), true );
+        wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.js', array( 
             'jquery',
             'hrm-vue', 
         ), time(), true );
 
-        wp_register_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.min.js', array( 
+        wp_register_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.js', array( 
             'jquery',
             'hrm-vue',
         ), time(), true );

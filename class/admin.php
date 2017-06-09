@@ -2383,8 +2383,9 @@ class Hrm_Admin {
         
         global $wpdb;
 
-        $table  = $wpdb->prefix . 'hrm_job_category';
-        $offset = ( $pagenum - 1 ) * $limit;
+        $table           = $wpdb->prefix . 'hrm_job_category';
+        $user_meta_table = $wpdb->prefix . 'usermeta';
+        $offset          = ( $pagenum - 1 ) * $limit;
 
         if ( $dept_id ) {
             $query =  $wpdb->prepare( 
@@ -2397,7 +2398,7 @@ class Hrm_Admin {
                 $dept_id
             ); 
 
-            return $wpdb->get_row( $query );
+            $results = $wpdb->get_row( $query );
 
         } else if ( true === $show_all ) {
             
@@ -2410,7 +2411,8 @@ class Hrm_Admin {
                 "
             ) ; 
             
-            return $wpdb->get_results( $query );
+            $results = $wpdb->get_results( $query );
+
         } else {
             
             $query =  $wpdb->prepare( 
@@ -2425,9 +2427,51 @@ class Hrm_Admin {
                 $limit
             ); 
 
-            return $wpdb->get_results( $query );
+            $results = $wpdb->get_results( $query );
+            
         }
+
+        if ( $dept_id && $results ) {
+
+            $query = "
+                SELECT      meta_value as department_id, count(meta_value) as num_of_employee
+                FROM        {$user_meta_table}
+                WHERE       1 = 1
+                AND         meta_key = '_job_category'
+                AND         meta_value = $dept_id
+                GROUP BY meta_value
+                ";
+                
+            $employee_counts = $wpdb->get_row($query);
+            $results->number_of_employee = empty( $employee_counts->num_of_employee ) ? 0 : $employee_counts->num_of_employee;
+        
+        } else if ( $results ) {
+            $dept_emps = wp_list_pluck( $results, 'id' );
+            $dept_emps = implode( ",", $dept_emps);
+            
+            $query = "
+                SELECT      meta_value as department_id, count(meta_value) as num_of_employee
+                FROM        {$user_meta_table}
+                WHERE       1 = 1
+                AND         meta_key = '_job_category'
+                AND         meta_value IN ($dept_emps)
+                GROUP BY meta_value
+                ";
+                
+            $employee_counts = $wpdb->get_results($query);
+            $employee_counts = wp_list_pluck( $employee_counts, 'num_of_employee', 'department_id' );
+            
+
+            foreach ( $results as $key => $employee ) {
+                $count = empty( $employee_counts[$employee->id] ) ? 0 : $employee_counts[$employee->id];
+                $employee->number_of_employee = $count;
+            }
+        }
+        
+        return $results;
     }
+
+
 
     /**
      * Display Row hierarchical
@@ -2626,7 +2670,7 @@ class Hrm_Admin {
             'meta_query' => array(
 
                 array(
-                    'key'     => 'hrm_department_id',
+                    'key'     => '_job_category',
                     'value'   => $depts_id,
                     'compare' => 'IN'
                 )
@@ -2636,7 +2680,7 @@ class Hrm_Admin {
         $users = new WP_User_Query( $args );
 
         foreach ( $users->results as $key => $user ) {
-            $user->department_id = get_user_meta( $user->id, 'hrm_department_id', true );
+            $user->department_id = get_user_meta( $user->id, '_job_category', true );
         }
 
         return $users->results;

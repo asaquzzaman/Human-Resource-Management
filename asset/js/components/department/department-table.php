@@ -6,13 +6,16 @@
         		<input @change.prevent="delAllDept()" class="hrm-all-checked" v-model="del_all_dept" type="checkbox">
         	</th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
-            	<?php _e( 'Job Title', 'hrm' ); ?>
+            	<?php _e( 'Department Title', 'hrm' ); ?>
             </th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Description: activate to sort column ascending" style="width: 304px;">
-            	<?php _e( 'Job Description', 'hrm' ); ?>
+            	<?php _e( 'Department Description', 'hrm' ); ?>
             </th>
             <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
-            	<?php _e( 'Note', 'hrm' ); ?>
+            	<?php _e( 'Status', 'hrm' ); ?>
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
+                <?php _e( 'No. of Employee', 'hrm' ); ?>
             </th>
         </tr>
     </thead>
@@ -44,6 +47,7 @@
 
     
             <td>{{ departmentActivity(department) }}</td>
+            <td>{{ department.number_of_employee }}</td>
 
         </tr>
         

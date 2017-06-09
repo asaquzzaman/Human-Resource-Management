@@ -15,23 +15,39 @@ Vue.component('department-del-btn', {
 		},
 
 		deleteDepartment: function(dept_id) {
+            var is_continue = true;
+
+            this.$store.state.departments.forEach(function(department) {
+
+                if ( dept_id.includes(department.id) ) {
+                    if ( parseInt(department.number_of_employee) > 0 && is_continue ) {
+                        toastr.success('The departments are contain employee you can not remove them');
+                        is_continue = false;
+                    }
+                }
+            });
+
+            if (!is_continue) {
+                return false;
+            }
+            
 			var request_data = {
                 _wpnonce: HRM_Admin.nonce,
                 dept_id: dept_id
             },
-            self = this;
-
+            self = this; //The departments are contain employee you can not remove them
+            
             wp.ajax.send('delete_department', {
                 data: request_data,
                 success: function(res) {
                 	// Display a success toast, with a title
                     toastr.success(res.success);
-                    console.log(res);
+                    
                     self.$store.commit('departmentDelId', {del_dept: []});
 
                     res.deleted_dept.map(function(deleted_id) {
                     	var index = self.getIndex(self.$store.state.departments, deleted_id, 'id');
-                    	console.log(index);
+                    	
                     	self.$store.commit('afterDeleteDept', {target_del_dept: index});
                     });
                     

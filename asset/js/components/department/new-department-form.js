@@ -7,7 +7,7 @@ Vue.component('new-department-form', {
 		return {
 			title: '',
 			description: '',
-			status: '0',
+			status: '1',
 			parent: '-1',
             department_id: false,
 			show_spinner: false,

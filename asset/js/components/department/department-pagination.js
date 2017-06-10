@@ -1,11 +1,14 @@
 var HRM_Department_pagination = {
 	template: "<span></span>",
+	mixins: [HRM_Common_Mixin],
+	
 	created: function() {
-		console.log(this.$store);
+		this.getDepartments();
 	},
+	
 	watch: {
 		'$route': function (to, from) {
-           console.log(to, from);
+           this.getDepartments();
         }
 	}
 };
@@ -13,13 +16,9 @@ var HRM_Department_pagination = {
 Vue.component( 'department-pagination', {
     template: '#tmpl-hrm-department-pagination',
 
-    created: function() {
-    	
-    },
-
     computed: {
     	total: function() {
-    		return this.$store.state.dept_pagination.total;
+    		return Math.ceil( this.$store.state.dept_pagination.total / this.$store.state.dept_pagination.limit );
     	},
 
     	limit: function() {

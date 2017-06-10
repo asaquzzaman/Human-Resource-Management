@@ -2357,28 +2357,32 @@ class Hrm_Admin {
 
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
-        $departments = self::get_departments(false, true);
-        $send_depts = self::get_department_by_hierarchical( $departments['departments'] );
+        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        
+        $departments = self::get_departments( false, true );
+
+        $send_depts  = self::get_department_by_hierarchical( $departments['departments'], $page_number, 2 );
         
         wp_send_json_success(array( 
+            
             'departments' => $send_depts,
             'total_dept'  => $departments['total_dept']
         ));
     }
 
-    public static function get_department_by_hierarchical( $departments ) {
+    public static function get_department_by_hierarchical( $departments, $page_number, $per_page ) {
         $depts = array();
         
         foreach ( $departments as $key => $dept ) {
             $depts[$dept->id] = $dept;
         }
         
-        $departments_hierachical = self::display_rows_hierarchical( $departments, 1, 20 );
+        $departments_hierachical = self::display_rows_hierarchical( $departments, $page_number, $per_page );
         $fromated_depts = array();
         
         foreach ( $departments_hierachical as $id => $hierarchical_depth ) {
-            $depts[$id]->hierarchical_depth = $hierarchical_depth;
-            $depts[$id]->hierarchical_pad   = str_repeat( '&#8212; ', $hierarchical_depth );
+            $depts[$id]->hierarchical_depth    = $hierarchical_depth;
+            $depts[$id]->hierarchical_pad      = str_repeat( '&#8212; ', $hierarchical_depth );
             $depts[$id]->hierarchical_free_pad = str_repeat( '&nbsp; ', $hierarchical_depth ); 
 
             $fromated_depts[] = $depts[$id];
@@ -2390,8 +2394,8 @@ class Hrm_Admin {
     public static function get_departments( 
         $dept_id  = false, 
         $show_all = false,
-        $limit    = 50, 
-        $pagenum  = 1
+        $pagenum  = 1,
+        $limit    = 50
     ) {
         
         global $wpdb;
@@ -2471,7 +2475,7 @@ class Hrm_Admin {
                 WHERE       1 = 1
                 AND         meta_key = '_job_category'
                 AND         meta_value IN ($dept_emps)
-                GROUP BY meta_value
+                GROUP BY    meta_value
                 ";
                 
             $employee_counts = $wpdb->get_results($query);

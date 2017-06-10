@@ -18,6 +18,7 @@ var HRM_Admin_Store = new Vuex.Store({
 
 		setDepartments: function(state, departments) {
 			state.departments = departments.departments;
+			state.dept_pagination.total = departments.total_dept;
 		},
 
 		department_edit_id: function(state, department) {

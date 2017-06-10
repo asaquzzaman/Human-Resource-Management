@@ -40,5 +40,25 @@ var HRM_Common_Mixin = {
 
 	        return target;
 	    },
+
+	    getDepartments: function() {
+	    	
+			var request_data = {
+                _wpnonce: HRM_Admin.nonce,
+                page_number: this.$route.params.page_number
+            },
+            self = this;
+
+            wp.ajax.send('get_departments', {
+                data: request_data,
+                success: function(res) {
+                    self.$store.commit( 'setDepartments', { departments: res.departments, 'total_dept': res.total_dept} );
+                },
+
+                error: function(res) {
+                	
+                }
+            });
+		},
 	},
 }

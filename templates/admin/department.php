@@ -7,8 +7,9 @@ if ( file_exists( $header_path ) ) {
 }
 
 ?>
-
+<router-view name="HRM_Dept_Pagination"></router-view>
 <div class="hrm-department">
+    
     <div class="hrm-update-notification"></div>
 
 	<div id="hrm-admin-department">
@@ -35,7 +36,9 @@ if ( file_exists( $header_path ) ) {
 
         	</div>
         </form>
+
     </div>
+    
 </div>
 
 

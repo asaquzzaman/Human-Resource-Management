@@ -3,7 +3,12 @@ var HRM_Admin_Store = new Vuex.Store({
 		is_new_department_form_visible: false,
 		departments: [],
 		department_id: false,
-		del_dept: []
+		del_dept: [],
+		dept_pagination: {
+			total: 0,
+			limit: 2,
+			page_number: 1
+		}
 	},
 
 	mutations: {

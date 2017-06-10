@@ -2302,13 +2302,19 @@ class Hrm_Admin {
 
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
-        $department = self::update_department( $_POST );
-        $departments = self::get_departments_meta();
+        $department     = self::update_department( $_POST );
+        $departments    = self::get_departments(false, true);
+        $formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
 
-        if ( is_wp_error( $results ) ) {
-            wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
+        if ( is_wp_error( $department ) ) {
+            wp_send_json_error( array( 'error' => $department->get_error_messages() ) ); 
         } else {
-            wp_send_json_success( array( 'department' => $department, 'departments' => $departments, 'success' => __( 'Department has been created successfully', 'hrm' ) ) );
+            wp_send_json_success( array( 
+                'department'  => $department, 
+                'departments' => $formated_depts, 
+                'total_dept'  => $departments['total_dept'],
+                'success'     => __( 'Department has been created successfully', 'hrm' ) 
+            ) );
         }
     }
 
@@ -2349,29 +2355,36 @@ class Hrm_Admin {
         return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
     }
 
-    public static function get_departments_meta() {
-        $departments = self::get_departments(false, true);
-        $departments = self::display_rows_hierarchical( $departments, 1, 50 );
-
-        $send_deprtments = array();
-
-        foreach ( $departments as $id => $hierarchical_depth ) {
-            $dept = self::get_departments($id);
-            $dept->hierarchical_depth = $hierarchical_depth;
-            $dept->hierarchical_pad   = str_repeat( '&#8212; ', $hierarchical_depth );
-            $dept->hierarchical_free_pad = str_repeat( '&nbsp; ', $hierarchical_depth ); 
-            $send_deprtments[] = $dept;
-        }
-
-        return $send_deprtments;
-    }
-
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
-
-        $send_deprtments = self::get_departments_meta();
+        $departments = self::get_departments(false, true);
+        $send_depts = self::get_department_by_hierarchical( $departments['departments'] );
         
-        wp_send_json_success(array( 'departments' => $send_deprtments ));
+        wp_send_json_success(array( 
+            'departments' => $send_depts,
+            'total_dept'  => $departments['total_dept']
+        ));
+    }
+
+    public static function get_department_by_hierarchical( $departments ) {
+        $depts = array();
+        
+        foreach ( $departments as $key => $dept ) {
+            $depts[$dept->id] = $dept;
+        }
+        
+        $departments_hierachical = self::display_rows_hierarchical( $departments, 1, 20 );
+        $fromated_depts = array();
+        
+        foreach ( $departments_hierachical as $id => $hierarchical_depth ) {
+            $depts[$id]->hierarchical_depth = $hierarchical_depth;
+            $depts[$id]->hierarchical_pad   = str_repeat( '&#8212; ', $hierarchical_depth );
+            $depts[$id]->hierarchical_free_pad = str_repeat( '&nbsp; ', $hierarchical_depth ); 
+
+            $fromated_depts[] = $depts[$id];
+        }
+
+        return $fromated_depts;
     }
 
     public static function get_departments( 
@@ -2404,7 +2417,7 @@ class Hrm_Admin {
             
             $query =  $wpdb->prepare( 
                 "
-                SELECT      *
+                SELECT      SQL_CALC_FOUND_ROWS *
                 FROM        {$table}
                 WHERE       1 = 1
                 ORDER BY    id ASC
@@ -2412,12 +2425,13 @@ class Hrm_Admin {
             ) ; 
             
             $results = $wpdb->get_results( $query );
+            $total_departments = $wpdb->get_var( "SELECT FOUND_ROWS()" );
 
         } else {
             
             $query =  $wpdb->prepare( 
                 "
-                SELECT      *
+                SELECT      SQL_CALC_FOUND_ROWS *
                 FROM        {$table}
                 WHERE       1 = 1
                 ORDER BY    id ASC
@@ -2428,9 +2442,11 @@ class Hrm_Admin {
             ); 
 
             $results = $wpdb->get_results( $query );
+            $total_departments = $wpdb->get_var( "SELECT FOUND_ROWS()" );
             
         }
 
+        
         if ( $dept_id && $results ) {
 
             $query = "
@@ -2467,8 +2483,12 @@ class Hrm_Admin {
                 $employee->number_of_employee = $count;
             }
         }
-        
-        return $results;
+
+        if ( $dept_id ) {
+            return $results;
+        }
+       
+        return array( 'total_dept' => $total_departments, 'departments' => $results );
     }
 
 

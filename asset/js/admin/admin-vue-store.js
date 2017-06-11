@@ -8,7 +8,8 @@ var HRM_Admin_Store = new Vuex.Store({
 			total: 0,
 			limit: 2,
 			page_number: 1
-		}
+		},
+		dept_drop_down: []
 	},
 
 	mutations: {
@@ -19,6 +20,7 @@ var HRM_Admin_Store = new Vuex.Store({
 		setDepartments: function(state, departments) {
 			state.departments = departments.departments;
 			state.dept_pagination.total = departments.total_dept;
+			state.dept_drop_down = departments.dept_drop_down;
 		},
 
 		department_edit_id: function(state, department) {
@@ -31,6 +33,8 @@ var HRM_Admin_Store = new Vuex.Store({
 			} else {
 				state.departments = department.departments;
 			}
+
+			state.dept_drop_down = department.dept_drop_down;
 		},
 
 		departmentDelId: function(state, del_dept) {
@@ -38,6 +42,7 @@ var HRM_Admin_Store = new Vuex.Store({
 		},
 		afterDeleteDept: function(state, deleted_dept) {
 			state.departments.splice(deleted_dept.target_del_dept, 1);
+			state.dept_drop_down = deleted_dept.dept_drop_down;
 		}
 	}
 });

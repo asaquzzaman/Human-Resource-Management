@@ -2303,16 +2303,25 @@ class Hrm_Admin {
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
         $department     = self::update_department( $_POST );
-        $departments    = self::get_departments(false, true);
-        $formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
+        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        //$departments    = self::get_departments(false, true);
+        //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
+
+
+        $departments = self::get_departments( false, true );
+        
+        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 2 );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
+        
 
         if ( is_wp_error( $department ) ) {
             wp_send_json_error( array( 'error' => $department->get_error_messages() ) ); 
         } else {
             wp_send_json_success( array( 
                 'department'  => $department, 
-                'departments' => $formated_depts, 
+                'departments' => $send_depts, 
                 'total_dept'  => $departments['total_dept'],
+                'dept_drop_down' => $dept_drop_down,
                 'success'     => __( 'Department has been created successfully', 'hrm' ) 
             ) );
         }
@@ -2360,13 +2369,14 @@ class Hrm_Admin {
         $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
         
         $departments = self::get_departments( false, true );
-
-        $send_depts  = self::get_department_by_hierarchical( $departments['departments'], $page_number, 2 );
+        
+        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 2 );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
         
         wp_send_json_success(array( 
-            
             'departments' => $send_depts,
-            'total_dept'  => $departments['total_dept']
+            'total_dept'  => $departments['total_dept'],
+            'dept_drop_down' => $dept_drop_down
         ));
     }
 
@@ -2635,12 +2645,16 @@ class Hrm_Admin {
         check_ajax_referer('hrm_nonce');
         $results = self::delete_department( $_POST['dept_id'] );
 
+        $departments = self::get_departments( false, true );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
+
         if ( is_wp_error( $results ) ) {
             wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
         } else {
             wp_send_json_success( array( 
                 'deleted_dept' => $results['deleted_dept'], 
                 'undone_dept'  => $results['undone_dept'], 
+                'dept_drop_down' => $dept_drop_down,
                 'success'      => __( 'Department has been deleted successfully', 'hrm' ) 
             ) );
         }

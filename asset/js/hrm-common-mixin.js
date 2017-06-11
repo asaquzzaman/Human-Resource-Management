@@ -52,7 +52,11 @@ var HRM_Common_Mixin = {
             wp.ajax.send('get_departments', {
                 data: request_data,
                 success: function(res) {
-                    self.$store.commit( 'setDepartments', { departments: res.departments, 'total_dept': res.total_dept} );
+                    self.$store.commit( 'setDepartments', { 
+                    	departments: res.departments, 
+                    	'total_dept': res.total_dept,
+                    	'dept_drop_down': res.dept_drop_down
+                    });
                 },
 
                 error: function(res) {

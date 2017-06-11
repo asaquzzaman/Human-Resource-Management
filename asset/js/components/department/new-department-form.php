@@ -25,9 +25,10 @@
 
             <div class="hrm-form-field ">
                 <label for="status"><?php _e( 'Parent', 'hrm' ); ?><em>   </em></label>
+                
                 <select v-model="parent" class="status" name="status" id="status" data-placeholder="-- Chose --">
                     <option value="-1"><?php _e( '-Select-', 'hrm' ); ?></option>
-                    <option v-for="department in departments" :value="department.id"><span v-html="department.hierarchical_free_pad"></span>{{ department.name }}</option>
+                    <option v-for="department in deptDropDown" :value="department.id"><span v-html="department.hierarchical_free_pad"></span>{{ department.name }}</option>
                 </select>
                 <span class="hrm-clear"></span>
                 <span class="description"><?php _e( 'Choose Parent Department', 'hrm' ); ?></span>

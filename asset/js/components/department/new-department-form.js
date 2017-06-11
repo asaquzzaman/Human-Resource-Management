@@ -32,6 +32,10 @@ Vue.component('new-department-form', {
         departments: function() {
             return this.$store.state.departments;
         },
+
+        deptDropDown: function() {
+            return this.$store.state.dept_drop_down;  
+        }
     },
 
 	methods: {
@@ -42,6 +46,8 @@ Vue.component('new-department-form', {
 
             var dept_index = this.getIndex(this.$store.state.departments, department_id, 'id' ),
                 department = this.$store.state.departments[dept_index];
+
+            //console.log(department);
 
             this.department_id = department_id;
             this.title         = department.name;
@@ -83,7 +89,8 @@ Vue.component('new-department-form', {
                 description: this.description,
                 status: this.status,
                 parent: this.parent,
-                dept_id: this.department_id
+                dept_id: this.department_id,
+                page_number: this.$route.params.page_number
             },
             is_update  = parseInt( this.department_id ) ? true : false,
             
@@ -112,7 +119,8 @@ Vue.component('new-department-form', {
                         is_update: is_update, 
                         dept_id: self.department_id,
                         target_index: target_index,
-                        departments: res.departments
+                        departments: res.departments,
+                        dept_drop_down: res.dept_drop_down
                     });
                 },
 

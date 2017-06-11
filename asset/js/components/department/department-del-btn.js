@@ -48,7 +48,7 @@ Vue.component('department-del-btn', {
                     res.deleted_dept.map(function(deleted_id) {
                     	var index = self.getIndex(self.$store.state.departments, deleted_id, 'id');
                     	
-                    	self.$store.commit('afterDeleteDept', {target_del_dept: index});
+                    	self.$store.commit('afterDeleteDept', {target_del_dept: index, dept_drop_down: res.dept_drop_down});
                     });
                     
                 },

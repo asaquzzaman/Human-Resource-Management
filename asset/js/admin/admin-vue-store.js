@@ -6,7 +6,7 @@ var HRM_Admin_Store = new Vuex.Store({
 		del_dept: [],
 		dept_pagination: {
 			total: 0,
-			limit: 2,
+			limit: 5,
 			page_number: 1
 		},
 		dept_drop_down: []

@@ -94,8 +94,13 @@ label em {
   display: none;
 }
 #hrm-list-form .hrm-title-action {
-  height: 15px;
+  height: 20px;
   width: 110px;
+}
+#hrm-list-form .hrm-title-action .hrm-department-edit-btn-wrap,
+#hrm-list-form .hrm-title-action .hrm-department-del-btn-wrap {
+  float: left;
+  display: inline-block;
 }
 #hrm-list-form .hrm-single-checked {
   margin: 0;
@@ -129,7 +134,24 @@ label em {
   font-weight: 800;
 }
 #hrm-list-form .hrm-table-action-wrap {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+#hrm-list-form .hrm-table-action-wrap .hrm-left-action {
   float: left;
+  width: 50%;
+}
+#hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-tbl-action-btn-sibling,
+#hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-department-del-btn-wrap {
+  float: left;
+}
+#hrm-list-form .hrm-table-action-wrap .hrm-right-action {
+  float: right;
+  width: 50%;
+}
+#hrm-list-form .hrm-table-action-wrap .hrm-right-action #hrm-data-table_filter,
+#hrm-list-form .hrm-table-action-wrap .hrm-right-action #hrm-data-table_length {
+  float: right;
 }
 #hrm-list-form .hrm-pagi-src {
   width: 70%;
@@ -381,7 +403,7 @@ label em {
 .hrm-secondary-button {
   background: none repeat scroll 0 0 #f7f7f7;
   border-color: #ccc;
-  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
   color: #555;
   vertical-align: top;
   border-radius: 3px;
@@ -472,8 +494,7 @@ label em {
   clear: both;
 }
 #hrm #hrm-list-form .hrm-table-action-wrap {
-  margin-bottom: 10px;
-  width: 200px;
+  width: 100%;
 }
 #hrm #hrm-list-form .hrm-table-action-wrap .hrm-add-button {
   margin-right: 5px;
@@ -488,7 +509,7 @@ label em {
 #hrm #hrm-list-form .dataTables_paginate .paginate_button {
   background: none repeat scroll 0 0 #f7f7f7;
   border-color: #ccc;
-  box-shadow: 0 1px 0 #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
   color: #555;
   vertical-align: top;
   border-radius: 3px;
@@ -732,6 +753,24 @@ label em {
 }
 #hrm .hrm-my-task .hrm-my-task-body {
   padding: 10px;
+}
+#hrm .cpm-pagination-wrap {
+  margin-top: 10px;
+}
+#hrm .cpm-pagination-wrap .cpm-pagination-btn {
+  padding: 4px 10px;
+  margin-right: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+  display: inline-block;
+  background: #fff;
+}
+#hrm .cpm-pagination-wrap .router-link-active,
+#hrm .cpm-pagination-wrap > .cpm-pagination-btn:hover {
+  background: #32373c;
+  border-color: #ddd;
+  color: #fff;
 }
 .hrm-ui-dialog {
   left: 32% !important;

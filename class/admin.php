@@ -2370,7 +2370,7 @@ class Hrm_Admin {
         
         $departments = self::get_departments( false, true );
         
-        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 2 );
+        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 5 );
         $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
         
         wp_send_json_success(array( 

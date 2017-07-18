@@ -37,7 +37,7 @@
 					<div class="hrm-title-action">
 						<department-edit-btn :department_id="department.id"></department-edit-btn>
                         <department-del-btn :department_id="department.id" :type="'single'"></department-del-btn>
-						<!-- <a href="#" class="hrm-delete" data-id="3"><?php _e( 'Delete', 'hrm' ); ?></a> -->
+						<span class="hrm-clear"></span>
 					</div>
 				</div>
 			</td>

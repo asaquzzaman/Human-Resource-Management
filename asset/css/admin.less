@@ -106,8 +106,13 @@ label em {
        display: none;
     }
     .hrm-title-action {
-        height: 15px;
+        height: 20px;
         width: 110px;
+
+        .hrm-department-edit-btn-wrap, .hrm-department-del-btn-wrap {
+            float: left;
+            display: inline-block;
+        }
     }
     .hrm-single-checked {
         margin: 0;
@@ -146,7 +151,24 @@ label em {
     }
 
     .hrm-table-action-wrap {
-        float: left;
+        display: inline-block;
+        margin-bottom: 5px;
+
+        .hrm-left-action {
+            float: left;
+            width: 50%;
+
+            .hrm-tbl-action-btn-sibling, .hrm-department-del-btn-wrap {
+                float: left;
+            }
+        }
+        .hrm-right-action {
+            float: right;
+            width: 50%;
+            #hrm-data-table_filter, #hrm-data-table_length {
+                float: right;
+            }
+        }
     }
     .hrm-pagi-src {
         width: 70%;
@@ -517,8 +539,7 @@ label em {
             clear: both;
         }
         .hrm-table-action-wrap {
-            margin-bottom: 10px;
-            width: 200px;
+            width: 100%;
             .hrm-add-button {
                 margin-right: 5px;
             }
@@ -730,6 +751,25 @@ label em {
     .hrm-my-task {
         .hrm-my-task-body {
             padding: 10px;
+        }
+    }
+
+    .cpm-pagination-wrap {
+        margin-top: 10px;
+        .cpm-pagination-btn {
+            padding: 4px 10px;
+            margin-right: 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            text-decoration: none;
+            display: inline-block;
+            background: #fff;
+        }
+
+        .router-link-active, >.cpm-pagination-btn:hover {
+            background: #32373c;
+            border-color: #ddd;
+            color: #fff;
         }
     }
 

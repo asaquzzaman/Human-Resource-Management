@@ -16,8 +16,8 @@ function hrm_page( $exclude = true ) {
     $hrm_leave             = hrm_leave_page();
     $page[$hrm_leave]      = hrm_leave_page_items( $path, $hrm_leave, $exclude );
 
-    $hrm_time              = hrm_time_page();
-    $page[$hrm_time]       = hrm_time_page_items( $path, $hrm_time, $exclude );
+    $hrm_time              = hrm_attendance_page();
+    $page[$hrm_time]       = hrm_attendance_page_items( $path, $hrm_time, $exclude );
 
     $hrm_evaluation        = hrm_evaluation_page();
     $page[$hrm_evaluation] = hrm_evaluation_page_items( $path, $hrm_evaluation, $exclude );
@@ -179,13 +179,13 @@ function hrm_evaluation_page_items( $path, $hrm_evaluation, $exclude ) {
     return apply_filters( 'hrm_evaluation_page_items', $evaluation, $path, $hrm_evaluation );
 }
 
-function hrm_time_page_items( $path, $hrm_time, $exclude ) {
+function hrm_attendance_page_items( $path, $hrm_time, $exclude ) {
     $time = array();
     $time['punch'] = array(
         'id'        => 'hrm-time-punch',
         'title'     => __( 'My Punch In/Out', 'hrm' ),
-        'file_slug' => 'time/punch',
-        'file_path' => $path . '/time/punch.php',
+        'file_slug' => 'attendance/punch',
+        'file_path' => $path . '/attendance/attendance.php',
         'role'      => array(
             'edit' => __( 'Edit', 'hrm' ),
         )
@@ -194,21 +194,21 @@ function hrm_time_page_items( $path, $hrm_time, $exclude ) {
     $time['employee_employer_records'] = array(
         'id'        => 'hrm-time-my-records',
         'title'     => __( 'Employee Punch In/Out History', 'hrm' ),
-        'file_slug' => 'time/employee-employer',
-        'file_path' => $path . '/time/employee-employer.php',
+        'file_slug' => 'attendance/employee-employer',
+        'file_path' => $path . '/attendance/employee-employer.php',
     );
     $time['config'] = array(
         'id'        => 'hrm-time-config',
         'title'     => __( 'Configuration', 'hrm' ),
-        'file_slug' => 'time/config',
-        'file_path' => $path . '/time/config.php',
+        'file_slug' => 'attendance/config',
+        'file_path' => $path . '/attendance/config.php',
     );
 
     if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
         return $time;   
     }
 
-    return apply_filters( 'hrm_time_page_items', $time, $path, $hrm_time );
+    return apply_filters( 'hrm_attendance_page_items', $time, $path, $hrm_time );
 }
 
 function hrm_leave_page_items( $path, $hrm_leave, $exclude ) {
@@ -559,8 +559,8 @@ function hrm_leave_page() {
     return apply_filters( 'hrm_leave_page_slug', 'hrm_leave' );
 }
 
-function hrm_time_page() {
-    return apply_filters( 'hrm_time_page_slug', 'hrm_time' );
+function hrm_attendance_page() {
+    return apply_filters( 'hrm_attendance_page_slug', 'hrm_attendance' );
 }
 
 function hrm_evaluation_page() {
@@ -599,7 +599,7 @@ function hrm_menu_label() {
         hrm_admin_page()      => __( 'Admin', 'hrm' ),
         hrm_pim_page()        => __( 'Employee', 'hrm' ),
         hrm_leave_page()      => __( 'Leave', 'hrm' ),
-        hrm_time_page()       => __( 'Attendance', 'hrm' ),
+        hrm_attendance_page()       => __( 'Attendance', 'hrm' ),
        // hrm_evaluation_page() => __( 'Evaluation', 'hrm' ),
         hrm_file_page()       => __( 'File', 'hrm' ),
         hrm_project_page()    => __( 'Project', 'hrm' ),

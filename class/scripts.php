@@ -37,7 +37,7 @@ class Hrm_Scripts {
     public static function admin_localize($key) {
         wp_localize_script( $key, 'HRM_Admin', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            'nonce'    => wp_create_nonce( 'hrm_nonce' ),
+            'nonce'       => wp_create_nonce( 'hrm_nonce' ),
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
             'success_msg' => __( 'Changed Successfully', 'hrm' )
@@ -94,4 +94,28 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/asset/css/jquery-ui.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/asset/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
     }
+
+    /**
+     * Attendance scripts
+     * 
+     * @return void
+     */
+    public static function attendance_scripts() {
+        wp_enqueue_script( 'hrm-vue' );
+        wp_enqueue_script( 'hrm-vuex' );
+        wp_enqueue_script( 'hrm-vue-router' );
+        wp_enqueue_script( 'hrm-common-mixin' );
+        
+        wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/asset/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
+
+        
+        wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/attendance/attendance-vue-store.js', array(), false, true );
+        wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/asset/js/attendance/attendance-vue.js', array(), false, true );
+        
+        wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+    }
 }
+
+
+
+

@@ -189,6 +189,7 @@ class WP_Hrm {
         wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
 
         wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/asset/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
     }
 
 
@@ -327,8 +328,8 @@ class WP_Hrm {
             add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( $this, 'leave_scripts') );
         }
 
-        if( isset( $style_slug[hrm_time_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_time_page()], array( $this, 'attendance_scripts') );
+        if( isset( $style_slug[hrm_attendance_page()] ) ) {
+            add_action( 'admin_print_styles-' . $style_slug[hrm_attendance_page()], array( 'Hrm_Scripts', 'attendance_scripts') );
         }
 
         if( isset( $style_slug[hrm_evaluation_page()] ) ) {

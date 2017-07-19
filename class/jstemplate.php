@@ -19,9 +19,13 @@ class Hrm_JsTemplate {
     	$page = self::get_page();
 
     	switch ( $page ) {
-    		case 'hrm_management':
+    		case hrm_admin_page():
     			self::admin();
     			break;
+
+            case hrm_attendance_page():
+                self::attendance();
+                break;
     		
     		default:
     			# code...
@@ -67,5 +71,15 @@ class Hrm_JsTemplate {
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-table.php', 'hrm-department-table' );
     	hrm_get_js_template( HRM_COMP_PATH . '/department/department-pagination.php', 'hrm-department-pagination' );
         hrm_get_js_template( HRM_COMP_PATH . '/department/new-department-form.php', 'hrm-new-department-form' );
+    }
+
+    /**
+     * Attendance js templaate
+     * 
+     * @return voide
+     */
+    public static function attendance() {
+        hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-punch-in-out-btn.php', 'hrm-attendance-punch-in-out-btn' );
+  
     }
 }

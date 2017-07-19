@@ -787,3 +787,14 @@ label em {
 .hrm-partial-payment-amount-field {
   width: 60%;
 }
+.hrm-attendance .hrm-punch-in-out-main {
+  text-align: center;
+}
+.hrm-attendance .hrm-clock-wrap {
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.hrm-attendance .hrm-clock-wrap time {
+  margin-right: 10px;
+}

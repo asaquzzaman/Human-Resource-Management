@@ -85,6 +85,7 @@ class Hrm_Ajax {
 
         add_action( 'wp_ajax_punch_in', array( 'Hrm_Attendance', 'ajax_punch_in' ) );
         add_action( 'wp_ajax_attendance_init', array( 'Hrm_Attendance', 'attendance_init' ) );
+        add_action( 'wp_ajax_punch_out', array( 'Hrm_Attendance', 'ajax_punch_out' ) );
     }
 
     function partial_payment_delete() {

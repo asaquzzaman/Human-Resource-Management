@@ -13,7 +13,7 @@
 				</div>
 				
 				<button :disabled="isDisabled()" class="button button-primary" @click.prevent="punchIn()"><?php _e( 'Punch In', 'hrm' ); ?></button>
-				<button class="button button-secondary"><?php _e( 'Punch Out', 'hrm' ); ?></button>
+				<button :disabled="punch_out_disable" class="button button-secondary" @click.prevent="punchOut()"><?php _e( 'Punch Out', 'hrm' ); ?></button>
 			</div>
 		</div>
 	</div>

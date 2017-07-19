@@ -78,9 +78,13 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_partial_payment_update', array( $this, 'partial_payment_update' ) );
         add_action( 'wp_ajax_partial_payment_cancel', array( $this, 'partial_payment_cancel' ) );
         add_action( 'wp_ajax_partial_payment_delete', array( $this, 'partial_payment_delete' ) );
+        
         add_action( 'wp_ajax_create_new_department', array( 'Hrm_Admin', 'ajax_update_department' ) );
         add_action( 'wp_ajax_get_departments', array( 'Hrm_Admin', 'ajax_get_departments' ) );
         add_action( 'wp_ajax_delete_department', array( 'Hrm_Admin', 'ajax_delete_department' ) );
+
+        add_action( 'wp_ajax_punch_in', array( 'Hrm_Attendance', 'ajax_punch_in' ) );
+        add_action( 'wp_ajax_attendance_init', array( 'Hrm_Attendance', 'attendance_init' ) );
     }
 
     function partial_payment_delete() {

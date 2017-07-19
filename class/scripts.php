@@ -104,6 +104,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
+        self::admin_localize( 'hrm-vue' );
         wp_enqueue_script( 'hrm-common-mixin' );
         
         wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/asset/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
@@ -111,7 +112,7 @@ class Hrm_Scripts {
         
         wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/attendance/attendance-vue-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/asset/js/attendance/attendance-vue.js', array(), false, true );
-        
+
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
     }
 }

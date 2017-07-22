@@ -35,8 +35,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  * **********************************************************************
  */
-
-
 class WP_Hrm {
 
     /**
@@ -392,7 +390,6 @@ function hrm() {
 
 //hrm instance.
 hrm();
-
 
 
 

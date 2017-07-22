@@ -1,6 +1,9 @@
 <?php
+
 class Hrm_Attendance {
     private static $_instance;
+
+    public $unique_ids = array();
 
     public static function getInstance() {
         if ( ! self::$_instance ) {
@@ -11,7 +14,7 @@ class Hrm_Attendance {
     }
 
     function __construct() {
-
+        
     }
 
     public static function attendance_init() {
@@ -156,4 +159,238 @@ class Hrm_Attendance {
     }
 
 
+
+    function get_attendance( $table_name, $args = array() ) {
+        
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . $table_name;
+
+        $args = array (
+            'relation' => 'AND',
+            'field'     => 'first',
+            'value'     => 6,
+            'condition' => '=',
+
+            array(
+                'field'     => 'kabir',
+                'value'     => 6,
+                'condition' => '='
+            ),
+            array(
+                'relation' => 'OR',
+                array(
+                    'field'     => 'mishu',
+                    'value'     => 6,
+                    'condition' => '='
+                ),
+                array(
+                    'field'     => 'tania',
+                    'value'     => 6,
+                    'condition' => '='
+                ),
+
+
+                array(
+                    'relation' => 'OR',
+                    array(
+                        'field'     => 'toma',
+                        'value'     => 6,
+                        'condition' => '='
+                    ),
+                    array(
+                        'field'     => 'kuenai',
+                        'value'     => 6,
+                        'condition' => '='
+                    ),
+
+                    array(
+                        'relation' => 'AND',
+                        array(
+                            'field'     => 'shipon',
+                            'value'     => 6,
+                            'condition' => '='
+                        ),
+                        array(
+                            'field'     => 'kharuj',
+                            'value'     => 6,
+                            'condition' => '='
+                        ),
+
+                        array(
+                            'relation' => 'AND',
+                            array(
+                                'field'     => 'rode',
+                                'value'     => 6,
+                                'condition' => '='
+                            ),
+                            array(
+                                'field'     => 'brider',
+                                'value'     => 6,
+                                'condition' => '='
+                            )
+                        )
+                    )
+                )
+            )
+            
+     
+        );
+
+        $ll = $this->generate_query( $args );
+        
+    }
+
+    function data_formating( $args ) {
+        if ( !empty( $args['field'] ) && !empty( $args['value'] ) && !empty( $args['condition'] ) ) {
+            $args[] = array(
+                'field'     => $args['field'],
+                'value'     => $args['value'],
+                'condition' => $args['condition']
+            );
+
+            $args['id'] = $this->generate_unique_id();
+               
+
+            unset( $args['field'], $args['value'], $args['condition'] );
+        }
+
+        return $args;
+    }
+
+    function data_formating2( $args ) {
+        $format_data = array();
+
+        foreach ( $args as $key => $value) {
+            if ( is_array( $value ) ) {
+                continue;
+            }
+
+            $format_data[$key] = $value;
+
+            unset( $args[$key] );
+        }
+
+        if ( $format_data ) {
+            $args[] = $format_data;
+        }
+
+        return $args;
+    }
+
+    function find_children() {
+        
+    }
+
+
+    function generate_query( $args ) {
+        $args = $this->data_formating( $args );
+        //echo '<pre>'; print_r( $args ); echo '</pre>';
+        $args = $this->condition_make_micro_query( $args, $args['id'] );
+        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        $args = $this->data_formating2( $args );
+        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        $args = $this->condition_make_micro_query2( $args );
+        echo '<pre>'; print_r( $args ); echo '</pre>'; 
+
+        $args = $this->find_children( $args );
+
+    }
+
+    function get_integer_key_value( $ele, $key ) {
+        
+        if ( ! is_array( $ele ) ) {
+            return $ele;
+        }
+    }
+
+    function condition_make_micro_query2( $array, &$new_array = array() ) {
+ 
+        $iterator = new RecursiveArrayIterator($array); 
+
+        while ( $iterator->valid() ) { 
+
+            if ( $iterator->hasChildren() ) { 
+
+                $condition = array_filter( $iterator->current(), array( $this, 'get_integer_key_value' ), ARRAY_FILTER_USE_BOTH );
+                $new_array[] = $condition;
+                $this->condition_make_micro_query2( $iterator->getChildren(), $new_array );
+            } 
+
+            $iterator->next();
+        }
+
+        return $new_array;
+        
+    }
+
+
+    function condition_make_micro_query( $args, $parent_id = false  ) {
+
+        
+        foreach ( $args as $key => $element ) {
+            if ( ! is_array( $element ) ) {
+                continue;
+            }
+
+            $has_childer = $this->has_children( $element, $key );
+            
+            if ( $has_childer ) {
+                $id                      = $this->generate_unique_id();
+                $args[$key]              = $this->condition_make_micro_query( $element, $id );
+                $args[$key]['id']        = $id;
+                $args[$key]['parent_id'] = $parent_id;
+
+            } else  {
+                $args[$key] =  $element['field'] .' '. $element['condition'] .' '. $element['value'];
+            }
+        }
+
+        return $args;
+    }
+
+    function has_children( $elements, $array_key ) {
+        $has_childer = false;
+
+        if ( ! is_int( $array_key ) ) {
+            return $has_childer;
+        }
+
+        foreach ( $elements as $key => $element ) {
+            if (  is_array( $element ) ) {
+                $has_childer = true;
+            }
+        }
+
+        return $has_childer;
+    }
+
+    function generate_unique_id() {
+        $id = $this->unique_id( 6 );
+
+        if ( in_array( $id, $this->unique_ids ) ) {
+            $this->generate_unique_id();
+        }
+
+        $this->unique_ids[] = $id;
+
+        return $id;
+    }
+
+    function unique_id( $length ) {
+        $token = "";
+        //$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        //$codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet.= "0123456789";
+        $max = strlen($codeAlphabet); // edited
+
+        for ( $i=0; $i < $length; $i++ ) {
+            $token .= $codeAlphabet[random_int(0, $max-1)];
+        }
+
+        return $token;
+    }
+
+
 }
+

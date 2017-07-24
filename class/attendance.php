@@ -4,6 +4,7 @@ class Hrm_Attendance {
     private static $_instance;
 
     public $unique_ids = array();
+    private $relation = 'AND';
 
     public static function getInstance() {
         if ( ! self::$_instance ) {
@@ -166,32 +167,7 @@ class Hrm_Attendance {
 
         $table_name = $wpdb->prefix . $table_name;
 
-        $args = array (
-            'relation' => 'AND',
-            'field'     => 'first',
-            'value'     => 6,
-            'condition' => '=',
-
-            array(
-                'field'     => 'kabir',
-                'value'     => 6,
-                'condition' => '='
-            ),
-            array(
-                'relation' => 'OR',
-                array(
-                    'field'     => 'mishu',
-                    'value'     => 6,
-                    'condition' => '='
-                ),
-                array(
-                    'field'     => 'tania',
-                    'value'     => 6,
-                    'condition' => '='
-                ),
-
-
-                array(
+        $args = array(
                     'relation' => 'OR',
                     array(
                         'field'     => 'toma',
@@ -230,13 +206,24 @@ class Hrm_Attendance {
                                 'condition' => '='
                             )
                         )
-                    )
-                )
-            )
-            
-     
-        );
+                    ),
 
+                    array(
+                        'relation' => 'AND',
+                        array(
+                            'field'     => 'kjhkjhkj',
+                            'value'     => 6,
+                            'condition' => '='
+                        ),
+                        array(
+                            'field'     => 'hkjhjh',
+                            'value'     => 6,
+                            'condition' => '='
+                        )
+                    )
+                );
+            
+            
         $ll = $this->generate_query( $args );
         
     }
@@ -250,8 +237,6 @@ class Hrm_Attendance {
             );
 
             $args['id'] = $this->generate_unique_id();
-               
-
             unset( $args['field'], $args['value'], $args['condition'] );
         }
 
@@ -278,49 +263,142 @@ class Hrm_Attendance {
         return $args;
     }
 
-    function find_children() {
-        
+    // function has_chield_query( $args ) {
+    //     var_dump( $args); die();
+    // }
+
+    // function get_chield_query( $args, $element, $query = '' ) {
+    //     $element_id = $element['id'];
+    //     $relation   = isset( $element['relation'] ) ? $element['relation'] : 'AND';
+
+    //     foreach ( $args as $key => $ele ) {
+    //         $parent_id = isset( $ele['parent_id'] ) ? $ele['parent_id'] : false;
+
+    //         if ( ! $parent_id ) {
+    //             return $query;
+    //         } 
+
+    //         if ( $element_id == $parent_id ) {
+    //             $query .= $relation .' ( '. $ele['query'];
+    //         }
+            
+    //         $query .= $this->get_chield_query( $args, $ele, $query = '' );
+    //     }
+
+    //     return $query;
+    // }
+
+    function build_query( $args, $query = '' ) {
+        foreach ( $args as $key => $element ) {
+
+            if ( ! is_array( $element ) || empty( $element['query'] ) ) {
+                continue;
+            }
+
+
+            $relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
+
+            if ( empty( $element['parent_id'] ) ) {
+                $query .= $this->relation . ' ';
+            }
+            
+            $query .= $element['query'] .' ';
+
+            if ( $this->has_children( $element, $key ) ) { 
+                $query .=  $relation . ' ( ';
+
+                $query =  $this->build_query( $element, $query );
+            }
+                       
+        }
+
+        return $query;
     }
 
 
     function generate_query( $args ) {
+        $this->relation = empty( $args['relation'] ) ? $this->relation : $args['relation'];
         $args = $this->data_formating( $args );
         //echo '<pre>'; print_r( $args ); echo '</pre>';
-        $args = $this->condition_make_micro_query( $args, $args['id'] );
+        $parent_id = empty( $args['id'] ) ? false : $args['id'];
+        $args = $this->condition_make_micro_query( $args, $parent_id );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
         $args = $this->data_formating2( $args );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
         $args = $this->condition_make_micro_query2( $args );
         echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        //$args = $this->condition_make_micro_query3( $args );
+        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
 
-        $args = $this->find_children( $args );
+        $args = $this->build_query( $args );
+
+        echo $args;
 
     }
 
-    function get_integer_key_value( $ele, $key ) {
+    function get_without_array_ele( $ele, $key ) {
         
         if ( ! is_array( $ele ) ) {
             return $ele;
         }
     }
 
-    function condition_make_micro_query2( $array, &$new_array = array() ) {
- 
-        $iterator = new RecursiveArrayIterator($array); 
+    function get_integer_array( $ele, $key ) {
+        
+        if ( is_int( $key ) && ! is_array( $ele ) ) {
+            return $ele;
+        }
+    }
 
-        while ( $iterator->valid() ) { 
+    // function condition_make_micro_query3( $args ) {
+    //     $condition = array();
+        
+    //     foreach ( $args as $key => $element ) {
+    //         $condition = array_filter( $element, array( $this, 'get_integer_array' ), ARRAY_FILTER_USE_BOTH );
+    //         $relation = isset( $element['relation'] ) ? $element['relation'] : 'AND';
 
-            if ( $iterator->hasChildren() ) { 
+    //         $args[$key]['query'] = '( ' . implode( ' '. $relation .' ',  $condition ) . ' )';
+    //     }
 
-                $condition = array_filter( $iterator->current(), array( $this, 'get_integer_key_value' ), ARRAY_FILTER_USE_BOTH );
-                $new_array[] = $condition;
-                $this->condition_make_micro_query2( $iterator->getChildren(), $new_array );
-            } 
+    //     return $args;
+    // }
+    // 
+    // function has_children( $array ) {
+    //     $iterator = new RecursiveArrayIterator($array); 
 
-            $iterator->next();
+    //     if ( $iterator->hasChildren() ) {
+
+    //         return true;
+    //     }
+
+    //     return false;
+    // }
+
+
+    function condition_make_micro_query2( $array ) {
+
+        foreach ( $array as $key => $element ) {
+
+            if ( ! is_array( $element ) ) {
+                continue;
+            }
+
+            if ( $this->has_children( $element, $key ) ) { 
+
+                $array[$key] = $this->condition_make_micro_query2( $element );
+            }
+                
+            $relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
+            $condition = array_filter( $element, array( $this, 'get_integer_array' ), ARRAY_FILTER_USE_BOTH );
+            
+            if ( count( $condition ) > 1 ) {
+                $query = '( ' . implode( ' '. $relation .' ',  $condition ) . ' )';
+                $array[$key]['query'] = $query;
+            }
+            
         }
 
-        return $new_array;
+        return $array;
         
     }
 
@@ -329,7 +407,7 @@ class Hrm_Attendance {
 
         
         foreach ( $args as $key => $element ) {
-            if ( ! is_array( $element ) ) {
+            if ( ! is_array( $element )  ) {
                 continue;
             }
 
@@ -342,7 +420,7 @@ class Hrm_Attendance {
                 $args[$key]['parent_id'] = $parent_id;
 
             } else  {
-                $args[$key] =  $element['field'] .' '. $element['condition'] .' '. $element['value'];
+                $args[$key] =  $element['field'] ." ". $element['condition'] ." '". $element['value'] ."'";
             }
         }
 
@@ -381,8 +459,8 @@ class Hrm_Attendance {
         $token = "";
         //$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         //$codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
-        $codeAlphabet.= "0123456789";
-        $max = strlen($codeAlphabet); // edited
+        $codeAlphabet = "0123456789";
+        $max = strlen( $codeAlphabet ); // edited
 
         for ( $i=0; $i < $length; $i++ ) {
             $token .= $codeAlphabet[random_int(0, $max-1)];

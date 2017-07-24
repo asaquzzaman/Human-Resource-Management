@@ -7,7 +7,7 @@ if ( file_exists( $header_path ) ) {
 }
 
 $kk = Hrm_Attendance::getInstance()->get_attendance('asdfadsf');
- die();
+
 ?>
 <!-- default $this for class hrm_Admin, $tab; -->
 <div class="hrm-attendance" id="hrm-subtab-wrap">

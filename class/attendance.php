@@ -187,23 +187,38 @@ class Hrm_Attendance {
                             'value'     => 6,
                             'condition' => '='
                         ),
-                        array(
-                            'field'     => 'kharuj',
-                            'value'     => 6,
-                            'condition' => '='
-                        ),
+                        // array(
+                        //     'field'     => 'kharuj',
+                        //     'value'     => 6,
+                        //     'condition' => '='
+                        // ),
 
                         array(
-                            'relation' => 'AND',
+                            'relation' => 'OR',
                             array(
                                 'field'     => 'rode',
                                 'value'     => 6,
                                 'condition' => '='
                             ),
+                            // array(
+                            //     'field'     => 'brider',
+                            //     'value'     => 6,
+                            //     'condition' => '='
+                            // ),
+
+
                             array(
-                                'field'     => 'brider',
-                                'value'     => 6,
-                                'condition' => '='
+                                'relation' => 'AND',
+                                array(
+                                    'field'     => 'radio',
+                                    'value'     => 6,
+                                    'condition' => '='
+                                ),
+                                // array(
+                                //     'field'     => 'brider',
+                                //     'value'     => 6,
+                                //     'condition' => '='
+                                // )
                             )
                         )
                     ),
@@ -263,31 +278,6 @@ class Hrm_Attendance {
         return $args;
     }
 
-    // function has_chield_query( $args ) {
-    //     var_dump( $args); die();
-    // }
-
-    // function get_chield_query( $args, $element, $query = '' ) {
-    //     $element_id = $element['id'];
-    //     $relation   = isset( $element['relation'] ) ? $element['relation'] : 'AND';
-
-    //     foreach ( $args as $key => $ele ) {
-    //         $parent_id = isset( $ele['parent_id'] ) ? $ele['parent_id'] : false;
-
-    //         if ( ! $parent_id ) {
-    //             return $query;
-    //         } 
-
-    //         if ( $element_id == $parent_id ) {
-    //             $query .= $relation .' ( '. $ele['query'];
-    //         }
-            
-    //         $query .= $this->get_chield_query( $args, $ele, $query = '' );
-    //     }
-
-    //     return $query;
-    // }
-
     function build_query( $args, $query = '' ) {
         foreach ( $args as $key => $element ) {
 
@@ -295,20 +285,27 @@ class Hrm_Attendance {
                 continue;
             }
 
+            if ( empty( $element['parent_id'] ) && !empty( $query ) ) {
+                $query .= $this->relation;
+            }
 
-            $relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
-
-            if ( empty( $element['parent_id'] ) ) {
-                $query .= $this->relation . ' ';
+            if ( $this->has_children( $element, $key ) ) {
+                $query .= '(';
             }
             
-            $query .= $element['query'] .' ';
+            $query .= $element['query'];
+
+            if ( $element['parent_id'] && !$this->has_children( $element, $key ) ) {
+                $query .= ')';
+            }
+
+            $parent_relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
 
             if ( $this->has_children( $element, $key ) ) { 
-                $query .=  $relation . ' ( ';
+                $query .= $parent_relation;
 
                 $query =  $this->build_query( $element, $query );
-            }
+            } 
                        
         }
 
@@ -323,16 +320,14 @@ class Hrm_Attendance {
         $parent_id = empty( $args['id'] ) ? false : $args['id'];
         $args = $this->condition_make_micro_query( $args, $parent_id );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
-        $args = $this->data_formating2( $args );
-        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
         $args = $this->condition_make_micro_query2( $args );
-        echo '<pre>'; print_r( $args ); echo '</pre>'; 
-        //$args = $this->condition_make_micro_query3( $args );
+        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        $args = $this->condition_make_micro_query3( $args, $parent_id );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
 
         $args = $this->build_query( $args );
 
-        echo $args;
+        //echo $args;
 
     }
 
@@ -350,30 +345,21 @@ class Hrm_Attendance {
         }
     }
 
-    // function condition_make_micro_query3( $args ) {
-    //     $condition = array();
-        
-    //     foreach ( $args as $key => $element ) {
-    //         $condition = array_filter( $element, array( $this, 'get_integer_array' ), ARRAY_FILTER_USE_BOTH );
-    //         $relation = isset( $element['relation'] ) ? $element['relation'] : 'AND';
 
-    //         $args[$key]['query'] = '( ' . implode( ' '. $relation .' ',  $condition ) . ' )';
-    //     }
-
-    //     return $args;
-    // }
-    // 
-    // function has_children( $array ) {
-    //     $iterator = new RecursiveArrayIterator($array); 
-
-    //     if ( $iterator->hasChildren() ) {
-
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
+    function condition_make_micro_query3( $args ) {
+        $root_el = array();
+        $relation = $this->relation;
+        foreach ( $args as $key => $element ) {
+            if ( is_int( $key ) && !is_array( $element ) ) {
+                $root_el[] = $element;
+            }
+        }
+        $condition['parent_id'] = false;
+        $condition['relation'] = $relation;
+        $condition['query'] = '( '. implode( ' '. $relation .' ', $root_el ) .' )';
+        array_unshift( $args, $condition );
+        return $args;
+    }
 
     function condition_make_micro_query2( $array ) {
 
@@ -393,6 +379,9 @@ class Hrm_Attendance {
             
             if ( count( $condition ) > 1 ) {
                 $query = '( ' . implode( ' '. $relation .' ',  $condition ) . ' )';
+                $array[$key]['query'] = $query;
+            } else {
+                $query = implode( '',  $condition );
                 $array[$key]['query'] = $query;
             }
             

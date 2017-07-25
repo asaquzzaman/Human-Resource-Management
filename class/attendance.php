@@ -169,16 +169,16 @@ class Hrm_Attendance {
 
         $args = array(
                     'relation' => 'OR',
-                    array(
-                        'field'     => 'toma',
-                        'value'     => 6,
-                        'condition' => '='
-                    ),
-                    array(
-                        'field'     => 'kuenai',
-                        'value'     => 6,
-                        'condition' => '='
-                    ),
+                    // array(
+                    //     'field'     => 'toma',
+                    //     'value'     => 6,
+                    //     'condition' => '='
+                    // ),
+                    // array(
+                    //     'field'     => 'kuenai',
+                    //     'value'     => 6,
+                    //     'condition' => '='
+                    // ),
 
                     array(
                         'relation' => 'AND',
@@ -208,7 +208,7 @@ class Hrm_Attendance {
 
 
                             array(
-                                'relation' => 'AND',
+                                'relation' => 'OR',
                                 array(
                                     'field'     => 'radio',
                                     'value'     => 6,
@@ -219,6 +219,19 @@ class Hrm_Attendance {
                                 //     'value'     => 6,
                                 //     'condition' => '='
                                 // )
+                                 array(
+                                    'relation' => 'AND',
+                                    array(
+                                        'field'     => 'kkkk',
+                                        'value'     => 6,
+                                        'condition' => '='
+                                    ),
+                                    // array(
+                                    //     'field'     => 'brider',
+                                    //     'value'     => 6,
+                                    //     'condition' => '='
+                                    // )
+                                )
                             )
                         )
                     ),
@@ -234,14 +247,30 @@ class Hrm_Attendance {
                             'field'     => 'hkjhjh',
                             'value'     => 6,
                             'condition' => '='
+                        ),
+
+                        array(
+                            'relation' => 'AND',
+                            array(
+                                'field'     => 'jjjjjjj',
+                                'value'     => 6,
+                                'condition' => '='
+                            ),
+                            array(
+                                'field'     => 'yyyyyy',
+                                'value'     => 6,
+                                'condition' => '='
+                            )
                         )
                     )
                 );
-            
+
+     
             
         $ll = $this->generate_query( $args );
         
     }
+
 
     function data_formating( $args ) {
         if ( !empty( $args['field'] ) && !empty( $args['value'] ) && !empty( $args['condition'] ) ) {
@@ -312,8 +341,31 @@ class Hrm_Attendance {
         return $query;
     }
 
+    // function test($args, $depth = 0) {
+    //     foreach ( $args as $key => $value) {
+            
+    //         if ( ! is_array( $value ) ) {
+    //             continue;
+    //         }
+            
+    //         $args['depth'] = $depth;
+            
+    //         if ( $this->has_children($value, $key) ) {
+    //             $depth = $depth + 1;
+    //             $args[$key] = $this->test( $value, $depth );
+    //             $args[$key]['depth'] = $depth;
+    //             $depth = 0;
+    //         } else {
+    //             $args[$key]['depth'] = $depth+1;
+    //         }
+    //     }
+
+    //     return $args;
+    // }
+
 
     function generate_query( $args ) {
+    
         $this->relation = empty( $args['relation'] ) ? $this->relation : $args['relation'];
         $args = $this->data_formating( $args );
         //echo '<pre>'; print_r( $args ); echo '</pre>';
@@ -321,13 +373,13 @@ class Hrm_Attendance {
         $args = $this->condition_make_micro_query( $args, $parent_id );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
         $args = $this->condition_make_micro_query2( $args );
-        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        echo '<pre>'; print_r( $args ); echo '</pre>'; 
         $args = $this->condition_make_micro_query3( $args, $parent_id );
         //echo '<pre>'; print_r( $args ); echo '</pre>'; 
 
         $args = $this->build_query( $args );
 
-        //echo $args;
+        echo $args;
 
     }
 
@@ -361,17 +413,25 @@ class Hrm_Attendance {
         return $args;
     }
 
-    function condition_make_micro_query2( $array ) {
+    function condition_make_micro_query2( $array, $depth = 0 ) {
 
         foreach ( $array as $key => $element ) {
 
             if ( ! is_array( $element ) ) {
                 continue;
             }
-
+            
+            $array['depth'] = $depth;
+            
             if ( $this->has_children( $element, $key ) ) { 
 
-                $array[$key] = $this->condition_make_micro_query2( $element );
+                $depth               = $depth + 1;
+                $array[$key]         = $this->condition_make_micro_query2( $element, $depth );
+                $array[$key]['depth'] = $depth;
+                $depth               = 0;
+                
+            } else {
+                $array[$key]['depth'] = $depth+1;
             }
                 
             $relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
@@ -392,7 +452,7 @@ class Hrm_Attendance {
     }
 
 
-    function condition_make_micro_query( $args, $parent_id = false  ) {
+    function condition_make_micro_query( $args, $parent_id = false ) {
 
         
         foreach ( $args as $key => $element ) {
@@ -403,6 +463,7 @@ class Hrm_Attendance {
             $has_childer = $this->has_children( $element, $key );
             
             if ( $has_childer ) {
+                
                 $id                      = $this->generate_unique_id();
                 $args[$key]              = $this->condition_make_micro_query( $element, $id );
                 $args[$key]['id']        = $id;
@@ -410,6 +471,8 @@ class Hrm_Attendance {
 
             } else  {
                 $args[$key] =  $element['field'] ." ". $element['condition'] ." '". $element['value'] ."'";
+                $depth = 0;
+
             }
         }
 

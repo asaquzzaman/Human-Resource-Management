@@ -18,8 +18,23 @@ label em {
   color: red;
   padding: 6px 0 0;
 }
-.hrm-clear {
+.hrm-clear:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
   clear: both;
+  height: 0;
+}
+.hrm-clear {
+  display: inline-block;
+}
+/* start commented backslash hack \*/
+.hrm-clear {
+  height: 1%;
+}
+.hrm-clear {
+  display: block;
 }
 .hrm-spinner {
   margin-top: 1%;
@@ -786,6 +801,48 @@ label em {
 .hrm-partial-payment-date-field,
 .hrm-partial-payment-amount-field {
   width: 60%;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-text {
+  margin-bottom: 8px;
+  line-height: 2;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-text h2 {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-from {
+  margin-right: 8px;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-from,
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-to {
+  float: left;
+  font-size: 14px;
+  background: #fff;
+  padding: 2px 12px;
+  border: 1px solid #e5e5e5;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-from h2,
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-to h2 {
+  display: inline-block;
+  margin-right: 8px;
+}
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-from i,
+.hrm-attendance .hrm-attendance-records-wrap .hrm-records-to i {
+  margin-right: 5px;
+}
+.hrm-attendance .hrm-attendance-user-serch-wrap .hrm-form-field {
+  float: left;
+  width: 25%;
+}
+.hrm-attendance .hrm-attendance-user-serch-wrap .hrm-form-field label {
+  margin-right: 5px;
+  font-weight: 600;
+}
+.hrm-attendance .hrm-attendance-user-serch-wrap .hrm-form-field .hrm-date-picker-from,
+.hrm-attendance .hrm-attendance-user-serch-wrap .hrm-form-field .hrm-date-picker-to {
+  width: 80%;
+  padding: 5px;
 }
 .hrm-attendance .hrm-punch-in-out-main {
   text-align: center;

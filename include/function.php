@@ -120,7 +120,7 @@ function hrm_get_date2mysql( $date ) {
 }
 
 function hrm_get_time( $time, $strtotime = true ) {
-    $time_format = get_option('time_format');
+    $time_format = get_option( 'time_format' );
     $time_format = apply_filters( 'hrm_time_format', $time_format );
     if ( $strtotime ) {
         $time = strtotime( $time );
@@ -128,15 +128,30 @@ function hrm_get_time( $time, $strtotime = true ) {
     return date( $time_format, $time );
 }
 
-function hrm_get_punch_in_time( $time, $strtotime = true ) {
-    $date_format = get_option('date_format');
-    $time_format = get_option('time_format');
-    if ( $strtotime ) {
-        $time = strtotime($time);
+function hrm_get_date( $date, $default = false, $gmt = false ) {
+    $date_format = get_option( 'date_format' );
+
+    if ( $default ) {
+        $date_format = $default;
     }
 
-    $format = $date_format .' '. $time_format;
-    return date( $format , $time );
+    $date_format = apply_filters( 'hrm_date_format', $date_format );
+
+    return date_i18n( $date_format, strtotime( $date ), $gmt );
+}
+
+function hrm_get_date_time( $time, $default = false ) {
+    $date_format      = get_option( 'date_format' );
+    $time_format      = get_option( 'time_format' );
+    $date_time_format = $date_format .' '. $time_format;
+    
+    if ( $default ) {
+        $date_time_format = $default;
+    }
+
+    $date_time_format = apply_filters( 'hrm_date_time_format', $date_time_format );
+
+    return date_i18n( $date_time_format, strtotime( $time ) );
 }
 
 function hrm_second_to_time( $seconds ) {

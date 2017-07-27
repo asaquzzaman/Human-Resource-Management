@@ -24,9 +24,19 @@ label em {
     color: red;
     padding: 6px 0 0;
 }
-.hrm-clear {
-    clear: both;
+
+.hrm-clear:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
 }
+.hrm-clear { display: inline-block; }
+/* start commented backslash hack \*/
+.hrm-clear { height: 1%; }
+.hrm-clear { display: block; }
 .hrm-spinner {
     margin-top: 1%;
 }
@@ -794,6 +804,50 @@ label em {
 }
 
 .hrm-attendance {
+    .hrm-attendance-records-wrap {
+        .hrm-records-text {
+            margin-bottom: 8px;
+            line-height: 2;
+            h2 {
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+            }
+        }
+        .hrm-records-from {
+            margin-right: 8px;
+        }
+        .hrm-records-from, .hrm-records-to {
+            float: left;
+            font-size: 14px;
+            background: #fff;
+            padding: 2px 12px;
+            border: 1px solid #e5e5e5;
+
+            h2 {
+                display: inline-block;
+                margin-right: 8px;
+            }
+
+            i {
+                margin-right: 5px;
+            }
+        }
+    }
+    .hrm-attendance-user-serch-wrap {
+        .hrm-form-field  {
+            float: left;
+            width: 25%;
+            label {
+                margin-right: 5px;
+                font-weight: 600;
+            }
+            .hrm-date-picker-from, .hrm-date-picker-to {
+                width: 80%;
+                padding: 5px;
+            }
+        }
+    }
     .hrm-punch-in-out-main {
         text-align: center;
     }

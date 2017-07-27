@@ -1,4 +1,4 @@
-Vue.component('hrm-attendace-punch-in-out-btn',{
+var hrm_attendace_punch_in_out_btn = {
 	template: '#tmpl-hrm-attendance-punch-in-out-btn',
 	mixins: [HRM_Common_Mixin],
 	data: function() {
@@ -14,7 +14,7 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
 	methods: {
 		punchIn: function() {
 			var request_data = {
-					_wpnonce: HRM_Admin.nonce,
+					_wpnonce: hrm_ajax_data.nonce,
 				},
 				self = this;
 			
@@ -27,6 +27,8 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
                     toastr.success(res.success);
                     self.punch_id = res.punch_id;
                     self.punch_id = res.punch_in_status;
+
+                    self.$store.commit( 'setAttendance', {records: res.attendance} );
                 },
 
                 error: function(res) {
@@ -40,7 +42,7 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
 
 		punchOut: function() {
 			var request_data = {
-					_wpnonce: HRM_Admin.nonce,
+					_wpnonce: hrm_ajax_data.nonce,
 				},
 				self = this;
 
@@ -53,6 +55,8 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
                     toastr.success(res.success);
 					self.punch_in          = res.punch_in_status;
 					self.punch_out_disable = false;
+
+					self.$store.commit( 'setAttendance', {records: res.attendance} );
                 },
 
                 error: function(res) {
@@ -67,7 +71,7 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
 
 		attendanceInit: function() {
 			var request_data = {
-				_wpnonce: HRM_Admin.nonce,
+				_wpnonce: hrm_ajax_data.nonce,
 			},
 			self  = this;
 
@@ -91,4 +95,4 @@ Vue.component('hrm-attendace-punch-in-out-btn',{
 			return true;
 		}
 	}
-});
+};

@@ -80,7 +80,7 @@ class Hrm_Scripts {
 
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            '_wpnonce'    => wp_create_nonce( 'hrm_nonce' ),
+            'nonce'       => wp_create_nonce( 'hrm_nonce' ),
             'is_admin'    => $hrm_is_admin,
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
@@ -101,6 +101,7 @@ class Hrm_Scripts {
      * @return void
      */
     public static function attendance_scripts() {
+        self::admin_default();
         wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
@@ -108,6 +109,8 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-common-mixin' );
         
         wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/asset/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
+        wp_enqueue_script( 'hrm-attendance-user-search', HRM_URL . '/asset/js/components/attendance/attendance-user-search.js', array(), false, true);
+        wp_enqueue_script( 'hrm-attendance-records', HRM_URL . '/asset/js/components/attendance/attendance-records.js', array(), false, true);
 
         
         wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/attendance/attendance-vue-store.js', array(), false, true );

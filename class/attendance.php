@@ -55,7 +55,7 @@ class Hrm_Attendance {
 
     function is_multi_attendance() {
         $is_multi_attendance = get_option( 'hrm_is_multi_attendance', false );
-        return $is_multi_attendance;
+        return true; //$is_multi_attendance;
     }
 
     public static function ajax_punch_in() {
@@ -69,6 +69,7 @@ class Hrm_Attendance {
         
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been save successfully', 'hrm' ),
+            'attendance'      => self::getInstance()->get_attendance(),
             'punch_id'        => $punch_id,
             'punch_in_status' => self::getInstance()->punch_in_status()
         ) );
@@ -114,6 +115,7 @@ class Hrm_Attendance {
         
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been updated successfully', 'hrm' ),
+            'attendance'      => self::getInstance()->get_attendance(),
             'punch_in_status' => self::getInstance()->punch_in_status()
         ) );
     }
@@ -159,116 +161,97 @@ class Hrm_Attendance {
         return false;
     }
 
+    public static function ajax_get_attendance() {
+        check_ajax_referer('hrm_nonce');
+
+        $attendance = self::getInstance()->get_attendance();
+        
+        if ( ! $attendance ) {
+            wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
+        }
+        
+        wp_send_json_success( array(
+            'attendance' => $attendance
+        ) );
+    }
+
+    function get_attendance_meta( $attendance ) {
+        foreach ( $attendance as $key => $attend ) {
+            $attend->date      = hrm_get_date_time( $attend->date, false, true );
+            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, false, true );
+            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, false, true ) : '&#8211 &#8211';
+            
+            if ( strtotime( $attend->punch_out ) > 0 ) {
+                $total = hrm_second_to_time( $attend->total );
+                $attend->total = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
+            } else {
+                $attend->total = '&#8211 &#8211';
+            }
+                
+        }
+
+        return $attendance;
+    }   
 
 
-    function get_attendance( $table_name, $args = array() ) {
+
+    function get_attendance( $args = array() ) {
         
         global $wpdb;
 
-        $table_name = $wpdb->prefix . $table_name;
+        $defaults = array(
+            'user_id'   => get_current_user_id(),
+            'punch_in'  => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
+            'punch_out' => date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) )
+        );
 
-        $args = array(
-                    'relation' => 'OR',
-                    // array(
-                    //     'field'     => 'toma',
-                    //     'value'     => 6,
-                    //     'condition' => '='
-                    // ),
-                    // array(
-                    //     'field'     => 'kuenai',
-                    //     'value'     => 6,
-                    //     'condition' => '='
-                    // ),
-
-                    array(
-                        'relation' => 'AND',
-                        array(
-                            'field'     => 'shipon',
-                            'value'     => 6,
-                            'condition' => '='
-                        ),
-                        // array(
-                        //     'field'     => 'kharuj',
-                        //     'value'     => 6,
-                        //     'condition' => '='
-                        // ),
-
-                        array(
-                            'relation' => 'OR',
-                            array(
-                                'field'     => 'rode',
-                                'value'     => 6,
-                                'condition' => '='
-                            ),
-                            // array(
-                            //     'field'     => 'brider',
-                            //     'value'     => 6,
-                            //     'condition' => '='
-                            // ),
-
-
-                            array(
-                                'relation' => 'OR',
-                                array(
-                                    'field'     => 'radio',
-                                    'value'     => 6,
-                                    'condition' => '='
-                                ),
-                                // array(
-                                //     'field'     => 'brider',
-                                //     'value'     => 6,
-                                //     'condition' => '='
-                                // )
-                                 array(
-                                    'relation' => 'AND',
-                                    array(
-                                        'field'     => 'kkkk',
-                                        'value'     => 6,
-                                        'condition' => '='
-                                    ),
-                                    // array(
-                                    //     'field'     => 'brider',
-                                    //     'value'     => 6,
-                                    //     'condition' => '='
-                                    // )
-                                )
-                            )
-                        )
-                    ),
-
-                    array(
-                        'relation' => 'AND',
-                        array(
-                            'field'     => 'kjhkjhkj',
-                            'value'     => 6,
-                            'condition' => '='
-                        ),
-                        array(
-                            'field'     => 'hkjhjh',
-                            'value'     => 6,
-                            'condition' => '='
-                        ),
-
-                        array(
-                            'relation' => 'AND',
-                            array(
-                                'field'     => 'jjjjjjj',
-                                'value'     => 6,
-                                'condition' => '='
-                            ),
-                            array(
-                                'field'     => 'yyyyyy',
-                                'value'     => 6,
-                                'condition' => '='
-                            )
-                        )
-                    )
-                );
-
+        $args       = wp_parse_args( $args, $defaults );
+        $cache_key  = 'hrm-get-attendance' . md5( serialize( $args ) );
+        $items      = wp_cache_get( $cache_key, 'erp' );
+        $query_args = array( 'relation' => 'AND' );
      
+        if ( false === $items ) {
+            $items = $this->generate_query( $args );
+
+            foreach ( $args as $key => $arg ) {
+                switch ( $key ) {
+                    case 'user_id':
+                        $query_args[] = array(
+                            'field'     => 'user_id',
+                            'value'     => $arg,
+                            'condition' => '='
+                        );
+                        break;
+
+                    case 'punch_in':
+                        $query_args[] = array(
+                            'field'     => 'date',
+                            'value'     => $arg,
+                            'condition' => '>='
+                        );
+                        break;
+
+                    case 'punch_out':
+                        $query_args[] = array(
+                            'field'     => 'date',
+                            'value'     => $arg,
+                            'condition' => '<='
+                        );
+                        break;
+                }
+            }
+
+            $query = $this->generate_query( $query_args );
+            $table = $wpdb->prefix . 'hrm_attendance';
+
+            $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
             
-        $ll = $this->generate_query( $args );
+            $items = $this->get_attendance_meta( $items );
+            
+            wp_cache_set( $cache_key, $items, 'erp' );
+        }        
         
+        return $items;
     }
 
 
@@ -314,8 +297,8 @@ class Hrm_Attendance {
                 continue;
             }
 
-            if ( empty( $element['parent_id'] ) && !empty( $query ) ) {
-                $query .= $this->relation;
+            if ( empty ( $element['parent_id'] ) && ! empty( $query ) ) {
+                $query .= ' ' . $this->relation .' ';
             }
 
             if ( $this->has_children( $element, $key ) ) {
@@ -325,13 +308,14 @@ class Hrm_Attendance {
             $query .= $element['query'];
 
             if ( $element['parent_id'] && !$this->has_children( $element, $key ) ) {
-                $query .= ')';
+                $depth = $element['depth'] - 1;
+                $query .= str_repeat( ')', $depth );
             }
 
             $parent_relation  = isset( $element['relation'] ) ? $element['relation'] : 'AND';
 
             if ( $this->has_children( $element, $key ) ) { 
-                $query .= $parent_relation;
+                $query .= ' ' . $parent_relation .' ';
 
                 $query =  $this->build_query( $element, $query );
             } 
@@ -367,19 +351,14 @@ class Hrm_Attendance {
     function generate_query( $args ) {
     
         $this->relation = empty( $args['relation'] ) ? $this->relation : $args['relation'];
-        $args = $this->data_formating( $args );
-        //echo '<pre>'; print_r( $args ); echo '</pre>';
-        $parent_id = empty( $args['id'] ) ? false : $args['id'];
-        $args = $this->condition_make_micro_query( $args, $parent_id );
-        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
-        $args = $this->condition_make_micro_query2( $args );
-        echo '<pre>'; print_r( $args ); echo '</pre>'; 
-        $args = $this->condition_make_micro_query3( $args, $parent_id );
-        //echo '<pre>'; print_r( $args ); echo '</pre>'; 
+        $args           = $this->data_formating( $args );
+        $parent_id      = empty( $args['id'] ) ? false : $args['id'];
+        $args           = $this->condition_make_micro_query( $args, $parent_id );
+        $args           = $this->condition_make_micro_query2( $args );
+        $args           = $this->condition_make_micro_query3( $args, $parent_id );
+        $args           = $this->build_query( $args );
 
-        $args = $this->build_query( $args );
-
-        echo $args;
+        return '( ' . $args . ')';
 
     }
 
@@ -398,6 +377,7 @@ class Hrm_Attendance {
     }
 
 
+    //Only root query filter
     function condition_make_micro_query3( $args ) {
         $root_el = array();
         $relation = $this->relation;
@@ -406,9 +386,20 @@ class Hrm_Attendance {
                 $root_el[] = $element;
             }
         }
+
+        if ( ! $root_el ) {
+            return $args;
+        }
+
         $condition['parent_id'] = false;
-        $condition['relation'] = $relation;
-        $condition['query'] = '( '. implode( ' '. $relation .' ', $root_el ) .' )';
+        $condition['relation']  = $relation;
+
+        if ( count( $root_el ) > 1 ) {
+            $condition['query']     = '( '. implode( ' '. $relation .' ', $root_el ) .' )';
+        } else {
+            $condition['query']     = implode( '', $root_el );
+        }
+
         array_unshift( $args, $condition );
         return $args;
     }

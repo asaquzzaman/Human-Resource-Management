@@ -21,7 +21,6 @@ class Hrm_Settings {
     }
 
     function show_page( $page ) {
-
         $menu = hrm_page();
 
         $path = isset( $menu[$page]['file_path'] ) ? $menu[$page]['file_path'] : '';
@@ -194,22 +193,29 @@ class Hrm_Settings {
 
         if( is_array( $extra ) && count( $extra ) ) {
             foreach( $extra as $key => $action ) {
-                $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
+                if ( is_int( $key ) ) {
+
+                    $extra_field .= esc_attr( $action );
+
+                } else {
+                    $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
+
+                }
             }
         }
 
         ob_start();
             //do_action( 'text_field_before_input', $name, $element );
-        $input_before = ob_get_clean();
-
-        $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
-        $html .= $input_before;
-        $html .= sprintf( '<input type="text" name="%1$s" value="%2$s" placeholder="%3$s" class="%4$s" id="%5$s" %6$s %7$s />', $name,
+            $input_before = ob_get_clean();
+            
+            $html         = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+            $html         .= $input_before;
+            $html         .= sprintf( '<input type="text" name="%1$s" value="%2$s" placeholder="%3$s" class="%4$s" id="%5$s" %6$s %7$s />', $name,
             $value, $placeholder, $class, $id, $disabled, $extra_field );
-        $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
-
-        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
-        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+            $html         .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+            
+            $wrap         = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+            $wrap_close   = sprintf('</%1$s>', $wrap_tag);
 
         ob_start();
             echo $this->multiple_field_inside_this_wrap( $element );

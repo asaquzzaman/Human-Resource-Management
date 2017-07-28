@@ -14,14 +14,40 @@ var hrm_attendace_records = {
 		}
 	},
 	created: function() {
-		this.getAttendance();
+		this.attendanceInit();
+		if( this.$route.name != 'attendance_search') {
+			this.getAttendance();
+		}
 	},
 	computed: {
 		attendace_records: function() {
 			return this.$store.state.attendance;
+		},
+		punchInFormatedDate: function() {
+			return this.$store.state.punch_in_formated_date
+		},
+		punchOutFormatedDate: function() {
+			return this.$store.state.punch_out_formated_date
 		}
 	},
 	methods: {
+		attendanceInit: function() {
+			var request_data = {
+				_wpnonce: hrm_ajax_data.nonce,
+			},
+			self  = this;
+
+			wp.ajax.send( 'attendance_init', {
+                data: request_data,
+                success: function(res) {
+      				self.$store.commit( 'setInitVal', res );
+                },
+
+                error: function(res) {
+                	
+                }
+            });
+		},
 		getAttendance: function() {
 			var request_data = {
                 _wpnonce: hrm_ajax_data.nonce,

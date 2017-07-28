@@ -185,7 +185,7 @@
                     action: 'partial_payment_delete',
                     id: self.data('id'),
                     table: self.data('table_option'),
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                 }
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -235,7 +235,7 @@
                     description: wrap.find( 'textarea[name="description"]' ).val(),
                     date: wrap.find( 'input[name="date"]' ).val(),
                     amount: wrap.find( 'input[name="amount"]' ).val(),
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                 }
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -255,7 +255,7 @@
                     action: 'partial_payment_cancel',
                     id: self.data('id'),
                     table: self.data('table_option'),
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                 }
 
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -270,7 +270,7 @@
                 data = {
                     client_id: self.val(),
                     action: 'get_clients_project',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                 };
             if( self.val() === '' || self.val() === null ) {
                 $('.hrm-client-project-dropdown').remove();
@@ -339,7 +339,7 @@
                 data = {
                     status: self.is(":checked") ? 'yes' : 0,
                     action: 'punch_form_status',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                 };
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
                 if ( res.success ) {
@@ -391,7 +391,7 @@
             if ( hrm_dataAttr.search_status ) {
                 var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&limit='+limit+'&pagenum='+pagenum;
             } else {
-                var data = 'action=view_pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data._wpnonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+                var data = 'action=view_pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
             }
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
                 if( res.success ) {
@@ -422,7 +422,7 @@
             if ( hrm_dataAttr.search_status ) {
                 var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&pagenum='+pagenum+'&limit='+limit;
             } else {
-                var data = 'action=pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data._wpnonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+                var data = 'action=pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
             }
             self.addClass('hrm-spinner');
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -451,7 +451,7 @@
             var self = $(this),
                 data = {
                     action: 'edit_file',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     post_id: self.data('id'),
                 };
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -472,7 +472,7 @@
                     url : hrm_ajax_data.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
-                        _wpnonce: hrm_ajax_data._wpnonce
+                        _wpnonce: hrm_ajax_data.nonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg, JPEG,png'},
@@ -587,7 +587,7 @@
             var self = $(this),
                 data = {
                     action: 'delete_task',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     project_id: self.data('project_id'),
                     task_id : self.data('task_id'),
                     assing_to: self.data('task_assign')
@@ -605,7 +605,7 @@
             var self = $(this),
                 data = {
                     action: 'user_task_rating_content',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     project_id: self.data('project_id'),
                     user_id : self.val(),
                 }
@@ -659,7 +659,7 @@
             var self = $(this),
             data = {
                 action: 'edit_attendance',
-                _wpnonce: hrm_ajax_data._wpnonce,
+                _wpnonce: hrm_ajax_data.nonce,
                 post_id: self.data('post_id'),
                 hrm_dataAttr : hrm_dataAttr,
             }
@@ -684,7 +684,7 @@
             var self = $(this),
                 data = {
                     action: 'change_admin_status',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     status: self.val(),
                     user_id: self.data('user_id')
                 }
@@ -736,7 +736,7 @@
             var self = $(this),
                 data = {
                     action: 'tast_complete',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     task_id: self.val(),
                 }
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -750,7 +750,7 @@
             var self = $(this),
                 data = {
                     action: 'tast_incomplete',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     task_id: self.val(),
                 }
             $.post( hrm_ajax_data.ajax_url, data, function( res ) {
@@ -765,7 +765,7 @@
             var self = $(this),
                 data = {
                     action: 'change_leave_status',
-                    _wpnonce: hrm_ajax_data._wpnonce,
+                    _wpnonce: hrm_ajax_data.nonce,
                     status: self.val(),
                     leave_id: self.data('leave_id')
                 }
@@ -796,7 +796,7 @@
             var self = $(this);
             var data = {
                 action : hrm_dataAttr.add_form_generator_action,
-                _wpnonce : hrm_ajax_data._wpnonce,
+                _wpnonce : hrm_ajax_data.nonce,
                 class_name : hrm_dataAttr.class_name,
                 function_name : hrm_dataAttr.function_name,
                 hrm_dataAttr : hrm_dataAttr
@@ -835,7 +835,7 @@
                     var data = {
                         action: self.data('action'),
                         search_admin: request.term,
-                        _wpnonce : hrm_ajax_data._wpnonce,
+                        _wpnonce : hrm_ajax_data.nonce,
                     };
 
                     $.post( hrm_ajax_data.ajax_url, data, function( resp ) {
@@ -1162,7 +1162,7 @@
             var self = $(this),
                 data = {
                     action : ( typeof self.data('action') !== 'undefined' ) ? self.data('action') : 'hrm_form_edit',
-                    _wpnonce : hrm_ajax_data._wpnonce,
+                    _wpnonce : hrm_ajax_data.nonce,
                     id : self.data('id'),
                     table_option : self.data('table_option'),
                     class_name : hrm_dataAttr.class_name,
@@ -1199,7 +1199,7 @@
             }
             var data = {
                 action: 'rating_task',
-                _wpnonce : hrm_ajax_data._wpnonce,
+                _wpnonce : hrm_ajax_data.nonce,
                 project_id : value.selected,
             };
 

@@ -24,7 +24,12 @@ class Hrm_Attendance {
         $punch_in = self::getInstance()->punch_in_status();
         
         wp_send_json_success(array(
-            'punch_in' => $punch_in
+            'punch_in'                => $punch_in,
+            'punch_in_date'           => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
+            'punch_out_date'          => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+            'punch_in_formated_date'  => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
+            'punch_out_formated_date' => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
+            'search_user_id'          => get_current_user_id()
         ));
     }
 
@@ -164,12 +169,40 @@ class Hrm_Attendance {
     public static function ajax_get_attendance() {
         check_ajax_referer('hrm_nonce');
 
-        $attendance = self::getInstance()->get_attendance();
+        $args = array();
+        
+        if ( ! empty( $_POST['search'] ) ) {
+            $postdata = $_POST['search'];
+
+            if ( ! empty( $postdata['punch_in'] ) && validateDate( $postdata['punch_in'], 'Y-m-d' ) ) {
+                $args['punch_in'] = $postdata['punch_in'] .' '. '00:00:00'; 
+            }
+
+            if ( ! empty( $postdata['punch_out'] ) && validateDate( $postdata['punch_out'], 'Y-m-d' ) ) {
+                $args['punch_out'] = $postdata['punch_out'] .' '. '24:59:59'; 
+            }
+
+            if ( ! empty( $postdata['user_id'] ) && intval( $postdata['user_id'] ) > 0 ) {
+                $args['user_id'] = $postdata['user_id']; 
+            }
+        }
+
+        $attendance = self::getInstance()->get_attendance( $args );
         
         if ( ! $attendance ) {
-            wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
+            //wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
         }
         
+        if ( ! empty( $_POST['search'] ) ) {
+            wp_send_json_success( array(
+                'attendance' => $attendance,
+                'punch_in_formated_date' => hrm_get_date( $args['punch_in'] ),
+                'punch_out_formated_date' => hrm_get_date( $postdata['punch_out'] ),
+                'punch_in_date' => $postdata['punch_in'],
+                'punch_out_date' => $postdata['punch_out'] 
+            ) );
+        }
+
         wp_send_json_success( array(
             'attendance' => $attendance
         ) );
@@ -206,6 +239,11 @@ class Hrm_Attendance {
         );
 
         $args       = wp_parse_args( $args, $defaults );
+
+        if ( $args['punch_in'] > $args['punch_out'] ) {
+            return false;
+        }
+
         $cache_key  = 'hrm-get-attendance' . md5( serialize( $args ) );
         $items      = wp_cache_get( $cache_key, 'erp' );
         $query_args = array( 'relation' => 'AND' );
@@ -246,7 +284,9 @@ class Hrm_Attendance {
 
             $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
             
-            $items = $this->get_attendance_meta( $items );
+            if ( $items ) {
+                $items = $this->get_attendance_meta( $items );
+            }
             
             wp_cache_set( $cache_key, $items, 'erp' );
         }        

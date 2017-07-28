@@ -32,7 +32,7 @@ Vue.component('department-del-btn', {
             }
             
 			var request_data = {
-                _wpnonce: HRM_Admin.nonce,
+                _wpnonce: hrm_ajax_data.nonce,
                 dept_id: dept_id
             },
             self = this; //The departments are contain employee you can not remove them

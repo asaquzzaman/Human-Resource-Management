@@ -206,7 +206,7 @@ class WP_Hrm {
 
         wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
             'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            '_wpnonce'    => wp_create_nonce( 'hrm_nonce' ),
+            'nonce'    => wp_create_nonce( 'hrm_nonce' ),
             'is_admin'    => $hrm_is_admin,
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),

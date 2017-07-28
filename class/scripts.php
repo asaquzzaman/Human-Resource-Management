@@ -45,6 +45,7 @@ class Hrm_Scripts {
     }
 
     public static function department() {
+        self::admin_default();
     	wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );

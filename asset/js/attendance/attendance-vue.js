@@ -2,10 +2,16 @@ var HRM_Attendance_Routes_Property = {
 
 	routes: [
 	    { 
-        	path: '/', components: { 'attendance_records': hrm_attendace_records }, name: 'punch_in_out',
+        	path: '/', 
+        	components: { 'attendance_records': hrm_attendace_records }, 
+        	name: 'attendance_records',
 
         	children: [
-                { path: 'user/:user/page/:page_number', components: {} , name: 'pagination' },
+                { 
+                	path: '/search/', 
+                	components: { 'attendance_search': hrm_attendace_user_search } , 
+                	name: 'attendance_search' 
+                },
             ]   
 
     	},

@@ -398,10 +398,24 @@ class Hrm_Employeelist {
         return $user_query;
     }
 
+    function get_employee_drop_down() {
+        $employees = $this->get_employee();
+        $emp_lists = array(
+            '-1' => __( '-Select-', 'hrm' )
+        );
+
+        foreach ( $employees->results as $key => $employee ) {
+            $emp_lists[$employee->ID] = $employee->display_name;
+        }
+
+        return $emp_lists;
+    }
+
     function get_employee() {
-        $employers = new WP_User_Query( array(
-            //'role'   => 'hrm_employee',
+        $employees = new WP_User_Query( array(
+            'role'   => 'hrm_employee',
         ) );
-        return $employers;
+
+        return $employees;
     }
 }

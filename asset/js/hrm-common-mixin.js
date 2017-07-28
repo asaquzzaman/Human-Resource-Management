@@ -44,7 +44,7 @@ var HRM_Common_Mixin = {
 	    getDepartments: function() {
 	    	
 			var request_data = {
-                _wpnonce: HRM_Admin.nonce,
+                _wpnonce: hrm_ajax_data.nonce,
                 page_number: this.$route.params.page_number
             },
             self = this;

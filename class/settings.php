@@ -195,10 +195,10 @@ class Hrm_Settings {
             foreach( $extra as $key => $action ) {
                 if ( is_int( $key ) ) {
 
-                    $extra_field .= esc_attr( $action );
+                    $extra_field .= ' '. esc_attr( $action ) .' ';
 
                 } else {
-                    $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
+                    $extra_field .= ' '. esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
 
                 }
             }

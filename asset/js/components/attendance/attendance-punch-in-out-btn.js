@@ -9,7 +9,7 @@ var hrm_attendace_punch_in_out_btn = {
 		}
 	},
 	created: function() {
-		this.attendanceInit();
+		this.punch_in = this.$store.state.punch_in_status;
 	},
 	methods: {
 		punchIn: function() {
@@ -65,24 +65,6 @@ var hrm_attendace_punch_in_out_btn = {
                     res.error.map( function( value, index ) {
                         toastr.error(value);
                     });
-                }
-            });
-		},
-
-		attendanceInit: function() {
-			var request_data = {
-				_wpnonce: hrm_ajax_data.nonce,
-			},
-			self  = this;
-
-			wp.ajax.send( 'attendance_init', {
-                data: request_data,
-                success: function(res) {
-      				self.punch_in = res.punch_in;
-                },
-
-                error: function(res) {
-                	
                 }
             });
 		},

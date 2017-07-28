@@ -2429,14 +2429,11 @@ class Hrm_Admin {
 
         } else if ( true === $show_all ) {
             
-            $query =  $wpdb->prepare( 
-                "
+            $query = "
                 SELECT      SQL_CALC_FOUND_ROWS *
                 FROM        {$table}
                 WHERE       1 = 1
-                ORDER BY    id ASC
-                "
-            ) ; 
+                ORDER BY    id ASC"; 
             
             $results = $wpdb->get_results( $query );
             $total_departments = $wpdb->get_var( "SELECT FOUND_ROWS()" );

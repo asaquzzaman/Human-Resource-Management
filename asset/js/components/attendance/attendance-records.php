@@ -10,11 +10,11 @@
 			<div  class="hrm-records-from">
 				<h2><?php _e( 'From', 'hrm' ); ?></h2>
 
-				<span><i aria-hidden="true" class="fa fa-calendar"></i><?php echo date( 'F j, Y', strtotime( date('Y-m-01') ) ) ?></span>
+				<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchInFormatedDate }}<?php //echo date( 'F j, Y', strtotime( date('Y-m-01') ) ) ?></span>
 			</div>
 			<div class="hrm-records-to">
 				<h2><?php _e( 'To', 'hrm' ); ?></h2>
-				<span><i aria-hidden="true" class="fa fa-calendar"></i><?php echo date( 'F j, Y', strtotime( current_time( 'mysql' ) ) ) ?></span>
+				<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchOutFormatedDate }}<?php //echo date( 'F j, Y', strtotime( current_time( 'mysql' ) ) ) ?></span>
 			</div>
 			<div class="hrm-clear"></div>
 		</div>
@@ -35,6 +35,10 @@
 					<td>{{ attendace.punch_in }}</td>
 					<td v-html="attendace.punch_out"></td>
 					<td v-html="attendace.total"></td>
+				</tr>
+				<tr v-if="!attendace_records.length">
+					
+					<td colspan="4"><?php _e( 'No record found!', 'hrm' ); ?></td>
 				</tr>
 			</tbody>
 		</table>

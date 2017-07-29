@@ -109,9 +109,11 @@ class Hrm_Scripts {
         self::admin_localize( 'hrm-vue' );
         wp_enqueue_script( 'hrm-common-mixin' );
         
+        wp_enqueue_script( 'hrm-attendance-header', HRM_URL . '/asset/js/components/attendance/attendance-header.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/asset/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-user-search', HRM_URL . '/asset/js/components/attendance/attendance-user-search.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-records', HRM_URL . '/asset/js/components/attendance/attendance-records.js', array(), false, true);
+        wp_enqueue_script( 'hrm-attendance-configuration', HRM_URL . '/asset/js/components/attendance/attendance-configuration.js', array(), false, true);
 
         
         wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/attendance/attendance-vue-store.js', array(), false, true );

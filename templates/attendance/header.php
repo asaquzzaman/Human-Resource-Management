@@ -10,8 +10,9 @@ $menu = hrm_page();
         }
 
         $active = ( $tab == $key ) ? 'nav-tab-active' : '';
-        $url = hrm_tab_menu_url( $key, $page );
-        printf( '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>',$url, $tab_event['id'], $tab_event['title'], $active );
+        $url = empty( $tab_event['url'] ) ? '/' : $tab_event['url'];
+        
+        printf( '<router-link to="%s">Go to Bar</router-link>', $url );
     }
 
     ?>

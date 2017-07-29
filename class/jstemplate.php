@@ -79,9 +79,11 @@ class Hrm_JsTemplate {
      * @return voide
      */
     public static function attendance() {
+        hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-header.php', 'hrm-attendance-header' );
         hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-punch-in-out-btn.php', 'hrm-attendance-punch-in-out-btn' );
         hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-user-search.php', 'hrm-attendance-user-search' );
         hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-records.php', 'hrm-attendance-records' );
+        hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-configuration.php', 'hrm-attendance-configuration' );
   
     }
 }

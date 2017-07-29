@@ -2,19 +2,25 @@ var HRM_Attendance_Routes_Property = {
 
 	routes: [
 	    { 
-        	path: '/', 
-        	components: { 'attendance_records': hrm_attendace_records }, 
+        	path: '/attendance', 
+        	components: { 'hrm-attendace-records': hrm_attendace_records }, 
         	name: 'attendance_records',
 
         	children: [
                 { 
-                	path: '/search/', 
+                	path: '/attendance/search/', 
                 	components: { 'attendance_search': hrm_attendace_user_search } , 
                 	name: 'attendance_search' 
                 },
             ]   
 
     	},
+
+    	{
+    		path: '/attendance/configuration', 
+        	components: { 'hrm-attendance-configuration': hrm_attendace_configuration }, 
+        	name: 'attendance_configuration',
+    	}
 	]
 };
 
@@ -32,6 +38,8 @@ var HRM_Attendance = new Vue({
 	
 	components: {
 	    'hrm-attendace-records': hrm_attendace_records,
+	    'hrm-attendance-configuration': hrm_attendace_configuration,
+        'hrm-attendance-header': hrm_attendance_header
 	 }
 
 }).$mount('.hrm-content-wrap');

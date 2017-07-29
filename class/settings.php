@@ -173,6 +173,43 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function new_text_field( $element ) {
+        $id           = isset( $element['field_elements']['id'] ) ? esc_attr( $element['field_elements']['id'] ) : '';
+        $label        = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $required     = ( isset( $element['required'] ) &&  ( $element['required'] === true ) ) ? '*' : '';
+        $desc         = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $wrap_class   = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag     = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+
+        $html         = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html        .= sprintf( '<input type="text" %s />', $elements );
+        $html        .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap         = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close   = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+        return ob_get_clean();
+    }
+
     function text_field( $name = '', $element ) {
         if( empty( $name ) ) {
             return;
@@ -239,7 +276,7 @@ class Hrm_Settings {
 
         if( is_array( $extra ) && count( $extra ) ) {
             foreach( $extra as $key => $action ) {
-                $extra_field .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
             }
         }
 
@@ -252,6 +289,59 @@ class Hrm_Settings {
             echo $html;
             echo '</div>';
         return ob_get_clean();
+    }
+
+    function new_radio_field( $element ) {
+        
+        $required   = ( isset( $element['required'] ) &&  ( $element['required'] == 'required' ) ) ? '*' : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';     
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
+        
+        $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
+        $html      .= '<span class="hrm-radio-wrap">';
+
+        foreach( $fields as $field ) {
+            
+            $value      = isset( $field['elements']['value'] ) ? esc_attr( $field['elements']['value'] ) : '';
+            $id         = isset( $field['elements']['id'] ) ? esc_attr( $field['elements']['id'] ) : '';
+            $label      = isset( $field['label'] ) ? esc_attr( $field['label'] ) : '';
+            $checked    = isset( $field['checked'] ) ? esc_attr( $field['checked'] ) : '';
+            $eles       = isset( $field['elements'] ) ? $field['elements'] : array(); 
+            $elements   = array();
+           
+
+            foreach ( $eles as $key => $ele ) {
+                if ( is_int( $key ) ) {
+                    $elements[] = ' '. esc_attr( $ele ) .' ';
+                } else {
+                    $elements[] = esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+                }
+            }
+
+            $elements = implode( ' ', $elements );
+
+            $html .= sprintf( '<input type="radio" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
+            $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
+
+        }
+
+        $html      .= '</span>';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $html      .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+
     }
 
     function radio_field( $name = '', $element ) {
@@ -306,6 +396,60 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+
+    function new_checkbox_field( $element ) {
+        
+        $required   = ( isset( $element['required'] ) &&  ( $element['required'] == 'required' ) ) ? '*' : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';     
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
+        
+        $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
+        $html      .= '<span class="hrm-checkbox-wrap">';
+
+        foreach( $fields as $field ) {
+            
+            $value      = isset( $field['elements']['value'] ) ? esc_attr( $field['elements']['value'] ) : '';
+            $id         = isset( $field['elements']['id'] ) ? esc_attr( $field['elements']['id'] ) : '';
+            $label      = isset( $field['label'] ) ? esc_attr( $field['label'] ) : '';
+            $checked    = isset( $field['checked'] ) ? esc_attr( $field['checked'] ) : '';
+            $eles       = isset( $field['elements'] ) ? $field['elements'] : array(); 
+            $elements   = array();
+           
+
+            foreach( $eles as $key => $ele ) {
+                if ( is_int( $key ) ) {
+                    $elements[] = ' '. esc_attr( $ele ) .' ';
+                } else {
+                    $elements[] = esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+                }
+            }
+
+            $elements = implode( ' ', $elements );
+
+            $html .= sprintf( '<input type="checkbox" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
+            $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
+
+        }
+
+        $html      .= '</span>';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $html      .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+
+    }
+
     function checkbox_field( $name = '', $element ) {
         if( empty( $name ) ) {
             return;
@@ -332,7 +476,13 @@ class Hrm_Settings {
 
             if( is_array( $extra ) && count( $extra ) ) {
                 foreach( $extra as $key => $action ) {
-                    $extra_attr .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                     if ( is_int( $key ) ) {
+
+                        $extra_field .= ' '. esc_attr( $action ) .' ';
+
+                    } else {
+                        $extra_attr .= ' '. esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                    }
                 }
             }
 

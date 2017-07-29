@@ -124,7 +124,7 @@ var HRM_Admin = {
                 jQuery( ".hrm-date-time-picker-to" ).datetimepicker( "option", "minDate", selectedDate );
             },
             onSelect: function(dateText) {
-                
+                vnodeContext.$emit( 'hrm_date_picker', { field: 'datetimepicker_from', date_time: dateText } );
             }
         });
 
@@ -137,7 +137,7 @@ var HRM_Admin = {
                 jQuery( ".hrm-date-time-picker-from" ).datetimepicker( "option", "maxDate", selectedDate );
             },
             onSelect: function(dateText) {
-               
+               vnodeContext.$emit( 'hrm_date_picker', { field: 'datetimepicker_to', date_time: dateText } );
             }
         });
     },

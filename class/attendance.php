@@ -552,6 +552,68 @@ class Hrm_Attendance {
         return $token;
     }
 
+    function update_attendance_configuration( $postdata ) {
+        
+        global $wpdb;
 
+        $table  = $wpdb->prefix . 'hrm_office_time';
+        $closed = $postdata['office_closed'];
+
+        if ( empty( $postdata['office_start'] ) ) {
+            return new WP_Error( 'office_start', __( 'Required office start time', 'hrm' ) );
+        }
+
+        if ( ! hrm_validateDate( $postdata['office_start'], 'Y-m-d H:i' ) ) {
+            return new WP_Error( 'office_start', __( 'Invalid office start time', 'hrm' ) );
+        }
+
+        if ( empty( $closed ) ) {
+            $closed = current_time( 'mysql' );
+        }
+
+        if ( ! hrm_validateDate( $closed, 'Y-m-d H:i' ) ) {
+            $closed = current_time( 'mysql' );
+        }
+
+        if ( isset( $postdata['hrm_is_multi_attendance'] ) && $postdata['hrm_is_multi_attendance'] == 'true' ) {
+            $is_multi = 1;
+        } else {
+            $is_multi = 0;
+        }
+
+        $data = array(
+            'start'    => $postdata['office_start'],
+            'end'      => $closed,
+            'is_multi' => $is_multi
+        );
+
+
+        $format = array( '%s', '%s', '%d' );
+        $update = $wpdb->insert( $table, $data, $format );
+
+        if ( $update ) {
+            return $wpdb->insert_id;
+        }
+
+        return new WP_Error( 'office_start', __( 'Unknown error!', 'hrm' ) );
+
+    }
+
+    public static function ajax_attendance_configuration() {
+        check_ajax_referer('hrm_nonce');
+        $postdata = $_POST;
+        $configuration = Hrm_Attendance::getInstance()->update_attendance_configuration( $postdata );
+        
+        if ( is_wp_error( $configuration ) ) {
+            wp_send_json_error( array( 'error' => $configuration->get_error_messages() ) );
+        }
+
+        wp_send_json_success(array(
+            'success'  => __( 'Successfully update attendance configuration', 'hrm' ),
+            'start'    => $postdata['office_start'],
+            'end'      => $postdata['closed'],
+            'is_multi' => $postdata['closed']
+        ));
+    }
 }
 

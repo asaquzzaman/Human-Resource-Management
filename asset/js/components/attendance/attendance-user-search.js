@@ -88,7 +88,7 @@ var hrm_attendace_user_search = {
 				});
 			} else {
 				this.$router.push({ 
-					path: 'search/', 
+					path: '/attendance/search/', 
 					query: { 
 						punch_in: this.$store.state.punch_in_date,
 						punch_out: this.$store.state.punch_out_date,

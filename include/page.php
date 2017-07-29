@@ -184,23 +184,25 @@ function hrm_attendance_page_items( $path, $hrm_time, $exclude ) {
     $time['punch'] = array(
         'id'        => 'hrm-time-punch',
         'title'     => __( 'My Punch In/Out', 'hrm' ),
-        'file_slug' => 'attendance/punch',
+        'url'       => '/attendance',
+        'name'      => 'attendance_records',
         'file_path' => $path . '/attendance/attendance.php',
         'role'      => array(
             'edit' => __( 'Edit', 'hrm' ),
         )
     );
 
-    $time['employee_employer_records'] = array(
-        'id'        => 'hrm-time-my-records',
-        'title'     => __( 'Employee Punch In/Out History', 'hrm' ),
-        'file_slug' => 'attendance/employee-employer',
-        'file_path' => $path . '/attendance/employee-employer.php',
-    );
+    // $time['employee_employer_records'] = array(
+    //     'id'        => 'hrm-time-my-records',
+    //     'title'     => __( 'Employee Punch In/Out History', 'hrm' ),
+    //     'file_slug' => 'attendance/employee-employer',
+    //     'file_path' => $path . '/attendance/employee-employer.php',
+    // );
     $time['config'] = array(
         'id'        => 'hrm-time-config',
         'title'     => __( 'Configuration', 'hrm' ),
-        'file_slug' => 'attendance/config',
+        'url'       => '/attendance/configuration/',
+        'name'      => 'attendance_configuration',
         'file_path' => $path . '/attendance/config.php',
     );
 

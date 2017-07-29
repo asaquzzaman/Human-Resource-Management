@@ -374,7 +374,7 @@ function hrm_get_js_template( $file_path, $id ) {
     }
 }
 
-function validateDate($date, $format = 'Y-m-d H:i:s') {
+function hrm_validateDate($date, $format = 'Y-m-d H:i:s') {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }

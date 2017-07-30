@@ -21,16 +21,53 @@ class Hrm_Attendance {
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');
         
-        $punch_in = self::getInstance()->punch_in_status();
-        
+        $punch_in    = self::getInstance()->punch_in_status();
+        $office_time = self::getInstance()->get_office_time();
+
+
+
+        $office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
+        $office_closed_with_date = date( 'Y-m-d 06:00', strtotime( current_time('mysql') ) );
+
+        // Attendance default configuration saved
+        if ( empty( $office_time ) ) {
+            $args = array(
+                'hrm_is_multi_attendance' => false,
+                'office_start'            => $office_start_with_date,
+                'office_closed'           => $office_closed_with_date
+            );
+
+            self::getInstance()->update_attendance_configuration( $args );
+        }
+
+        $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
+        $office_start            = empty( $office_time->start ) ? '10:00 am' : hrm_get_time( $office_time->start );
+        $office_closed           = empty( $office_time->end ) ? '06:00 pm' : hrm_get_time( $office_time->end );
+        $office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d H:i', strtotime( $office_time->start ) );
+        $office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d H:i', strtotime( $office_time->end ) );
+
+
         wp_send_json_success(array(
-            'punch_in'                => $punch_in,
-            'punch_in_date'           => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
-            'punch_out_date'          => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-            'punch_in_formated_date'  => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
-            'punch_out_formated_date' => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
-            'search_user_id'          => get_current_user_id()
+            'punch_in'                     => $punch_in,
+            'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
+            'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+            'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
+            'punch_out_formated_date'      => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
+            'search_user_id'               => get_current_user_id(),
+            'hrm_is_multi_attendance'      => $multi_attend,
+            'office_start'                 => $office_start,
+            'office_closed'                => $office_closed,
+            'office_start_with_date_time'  => $office_start_with_date,
+            'office_closed_with_date_time' => $office_closed_with_date
         ));
+    }
+
+    function get_office_time() {
+        global $wpdb;
+        $table    = $wpdb->prefix . 'hrm_office_time';
+        $office_time = $wpdb->get_row( "SELECT * FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        
+        return $office_time;
     }
 
     function punch_in_status( $user_id = false ) {
@@ -58,9 +95,36 @@ class Hrm_Attendance {
         return $punch_in_status;
     }
 
+    function office_start() {
+        global $wpdb;
+        $table    = $wpdb->prefix . 'hrm_office_time';
+        $start = $wpdb->get_var( "SELECT `start` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        
+        return $start;
+    }
+
+    function office_closed() {
+        global $wpdb;
+        $table    = $wpdb->prefix . 'hrm_office_time';
+        $end = $wpdb->get_var( "SELECT `end` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        
+        return $end;
+    }
+
+    function get_config_last_id() {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'hrm_office_time';
+        $id = $wpdb->get_var( "SELECT `id` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        
+        return $id;
+    }
+
     function is_multi_attendance() {
-        $is_multi_attendance = get_option( 'hrm_is_multi_attendance', false );
-        return true; //$is_multi_attendance;
+        global $wpdb;
+        $table    = $wpdb->prefix . 'hrm_office_time';
+        $is_multi = $wpdb->get_var( "SELECT `is_multi` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        
+        return $is_multi;
     }
 
     public static function ajax_punch_in() {
@@ -93,9 +157,10 @@ class Hrm_Attendance {
         $user_id = $user_id ? absint( $user_id ) : get_current_user_id();
         $table    = $wpdb->prefix . 'hrm_attendance';
         $data    = array(
-            'user_id'  => $user_id,
-            'date'     => current_time( 'mysql' ),
-            'punch_in' => current_time( 'mysql' ),
+            'user_id'   => $user_id,
+            'date'      => current_time( 'mysql' ),
+            'punch_in'  => current_time( 'mysql' ),
+            'config_id' => $this->get_config_last_id()
         );
         $format = array( '%d', '%s', '%s' );
 

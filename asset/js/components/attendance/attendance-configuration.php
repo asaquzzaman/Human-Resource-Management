@@ -30,7 +30,7 @@
 						'label' =>  __( 'Office start time', 'hrm' ),
 						'field_elements' => array(
 							'v-hrm-datepicker',
-							':value' => 'office_start',
+							':value' => 'office_start_with_date_time',
 							'class'  => 'hrm-date-time-picker-from',
 							'id'     => 'hrm-office-start-date-field',
 						)
@@ -42,7 +42,7 @@
 						'label' =>  __( 'Office closing time', 'hrm' ),
 						'field_elements' => array(
 							'v-hrm-datepicker',
-							':value' => 'office_closed',
+							':value' => 'office_closed_with_date_time',
 							'class'  => 'hrm-date-time-picker-to',
 							'id'     => 'hrm-office-closed-date-field',
 						)

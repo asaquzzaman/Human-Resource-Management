@@ -5,7 +5,7 @@ class Hrm_Scripts {
 
     public static function getInstance() {
         if ( !self::$_instance ) {
-            self::$_instance = new Hrm_Admin();
+            self::$_instance = new Hrm_Scripts();
         }
 
         return self::$_instance;
@@ -50,7 +50,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
         self::admin_localize( 'hrm-vue' );
-        wp_enqueue_script( 'hrm-common-mixin' );
+        wp_enqueue_script( 'hrm-root-mixin' );
         
         wp_enqueue_script( 'hrm-department-edit-btn', HRM_URL . '/asset/js/components/department/department-edit-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/asset/js/components/department/department-add-btn.js', array(), false, true);
@@ -103,12 +103,9 @@ class Hrm_Scripts {
      */
     public static function attendance_scripts() {
         self::admin_default();
-        wp_enqueue_script( 'hrm-vue' );
-        wp_enqueue_script( 'hrm-vuex' );
-        wp_enqueue_script( 'hrm-vue-router' );
         self::admin_localize( 'hrm-vue' );
-        wp_enqueue_script( 'hrm-common-mixin' );
-        
+
+        wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/components/attendance/attendance-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-attendance-header', HRM_URL . '/asset/js/components/attendance/attendance-header.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/asset/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-user-search', HRM_URL . '/asset/js/components/attendance/attendance-user-search.js', array(), false, true);
@@ -116,10 +113,48 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-attendance-configuration', HRM_URL . '/asset/js/components/attendance/attendance-configuration.js', array(), false, true);
 
         
-        wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/attendance/attendance-vue-store.js', array(), false, true );
-        wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/asset/js/attendance/attendance-vue.js', array(), false, true );
+        wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/asset/js/components/attendance/attendance.js', array(), false, true );
 
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+    }
+
+    public static function hrm_vue_scripts() {
+
+        wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), true );
+        wp_enqueue_script( 'hrm-directive', HRM_URL . '/asset/js/hrm-directive.js', array(), time(), true);
+        wp_enqueue_script( 'hrm-root-vue', HRM_URL . '/asset/js/hrm-vue.js', false, time(), true);
+    }
+
+    public static function init_scripts() {
+        wp_enqueue_media();
+        wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
+        
+        wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.js', array( 'jquery' ), time(), true );
+        wp_enqueue_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.js', array( 
+            'jquery',
+            'hrm-vue', 
+        ), time(), true );
+
+        wp_enqueue_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.js', array( 
+            'jquery',
+            'hrm-vue',
+        ), time(), true );
+
+        //Should be loaded inside the hader tag
+        wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-mixin.js', array(), time(), false );
+        wp_enqueue_script( 'hrm-root-store', HRM_URL . '/asset/js/hrm-store.js', array(), time(), false );
+        
+
+        wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
+        wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
+
+        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/asset/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
+    }
+
+    public static function footer_tag() {
+        self::attendance_scripts();
+        self::hrm_vue_scripts();
     }
 }
 

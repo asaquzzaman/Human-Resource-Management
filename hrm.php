@@ -162,34 +162,12 @@ class WP_Hrm {
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
         add_action( 'admin_notices', array($this, 'fornt_end') );
-        add_action( 'wp_enqueue_scripts', array($this, 'register_scripts') );
-        add_action( 'admin_enqueue_scripts', array($this, 'register_scripts') );
+        add_action( 'wp_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
+        add_action( 'admin_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
         add_action( 'init', array( $this, 'init' ) );
+        add_action( 'wp_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
+        add_action( 'admin_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
     }
-
-    function register_scripts() {
-        wp_enqueue_media();
-        wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
-        
-        wp_register_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.js', array( 'jquery' ), time(), true );
-        wp_register_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.js', array( 
-            'jquery',
-            'hrm-vue', 
-        ), time(), true );
-
-        wp_register_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.js', array( 
-            'jquery',
-            'hrm-vue',
-        ), time(), true );
-
-        wp_register_script( 'hrm-common-mixin', HRM_URL . '/asset/js/hrm-common-mixin.js', array(), time(), true );
-        wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
-        wp_register_script( 'hrm-admin-vue', HRM_URL . '/asset/js/admin/admin-vue.js', array(), time(), true );
-
-        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
-        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/asset/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
-    }
-
 
     static function admin_scripts() {
         global $hrm_is_admin;
@@ -373,12 +351,19 @@ class WP_Hrm {
         $tab        = $query_args['tab'];
         $subtab     = $query_args['subtab'];
 
+
         echo '<div class="hrm wrap hrm-content-wrap" id="hrm">';
-        if ( $tab === false ) {
-            Hrm_Settings::getInstance()->show_page( $page );
+        if ( 'hrm_attendance' == $page  ) {
+
+            echo '<hrm-attendance></hrm-attendance>';
         } else {
-            Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+            if ( $tab === false ) {
+                Hrm_Settings::getInstance()->show_page( $page );
+            } else {
+                Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+            }
         }
+
 
         echo '</div>';
     }

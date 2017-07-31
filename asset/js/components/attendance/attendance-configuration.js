@@ -1,7 +1,7 @@
 var hrm_attendace_configuration = {
 	template: '#tmpl-hrm-attendance-configuration',
 	
-	mixins: [HRM_Common_Mixin],
+	mixins: [HRM_Mixin],
 	
 	data: function() {
 		return {
@@ -90,7 +90,6 @@ var hrm_attendace_configuration = {
                     });
                 }
             });
-			console.log( this.hrm_is_multi_attendance, this.office_start, this.office_closed );
 		}
 	}
 };

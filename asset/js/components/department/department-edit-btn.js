@@ -2,7 +2,7 @@ Vue.component('department-edit-btn', {
 	template: '#tmpl-hrm-department-edit-btn',
 	props: ['department_id'],
 
-	mixins: [HRM_Common_Mixin],
+	mixins: [HRM_Mixin],
 
 	methods: {
 		departmentEdit: function() {

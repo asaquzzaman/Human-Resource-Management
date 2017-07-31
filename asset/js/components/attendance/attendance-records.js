@@ -1,11 +1,11 @@
 var hrm_attendace_records = {
 	
 	template: '#tmpl-hrm-attendance-records',
-	mixins: [HRM_Common_Mixin],
+	mixins: [HRM_Mixin],
 	
 	components: {
 	    'hrm-attendace-punch-in-out-btn': hrm_attendace_punch_in_out_btn,
-	    'hrm-attendace-user-search': hrm_attendace_user_search
+	    'hrm-attendace-user-search': hrm_attendace_user_search,
 	},
 	
 	data: function() {

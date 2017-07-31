@@ -201,7 +201,7 @@ function hrm_attendance_page_items( $path, $hrm_time, $exclude ) {
     $time['config'] = array(
         'id'        => 'hrm-time-config',
         'title'     => __( 'Configuration', 'hrm' ),
-        'url'       => '/attendance/configuration/',
+        'url'       => '/attendance-configuration/',
         'name'      => 'attendance_configuration',
         'file_path' => $path . '/attendance/config.php',
     );

@@ -92,10 +92,20 @@ class Hrm_JsTemplate {
   
     }
 
+    /**
+     * Leave js templaate
+     * 
+     * @return voide
+     */
     public static function leave() {
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-records.php', 'hrm-leave-records' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-configuration.php', 'hrm-leave-configuration' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave.php', 'hrm-leave' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-header.php', 'hrm-leave-header' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-holidays.php', 'hrm-leave-holidays' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-work-week.php', 'hrm-leave-work-week' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type.php', 'hrm-leave-type' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-form.php', 'hrm-leave-type-form' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-records.php', 'hrm-leave-type-records' );
     }
 }

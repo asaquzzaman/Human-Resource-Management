@@ -17,19 +17,19 @@ HRM_Router.routes.push(
         children: [
             {
                 path: '/leave-configuration/type', 
-                components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
+                components: { 'hrm-leave-type': Hrm_Leave_Type }, 
                 name: 'leave_type',
             },
 
             {
                 path: '/leave-configuration/week', 
-                components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
+                components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week }, 
                 name: 'leave_week',
             },
 
             {
                 path: '/leave-configuration/holidays', 
-                components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
+                components: { 'hrm-leave-holidays': Hrm_Leave_Holidays }, 
                 name: 'leave_holidays',
             }
           ]

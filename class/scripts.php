@@ -131,7 +131,11 @@ class Hrm_Scripts {
 
         wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
-
+        wp_enqueue_script( 'hrm-leave-type-form', HRM_URL . '/asset/js/components/leave/leave-type-form.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-type-records', HRM_URL . '/asset/js/components/leave/leave-type-records.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-holidays', HRM_URL . '/asset/js/components/leave/leave-holidays.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-work-week', HRM_URL . '/asset/js/components/leave/leave-work-week.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-type', HRM_URL . '/asset/js/components/leave/leave-type.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-records', HRM_URL . '/asset/js/components/leave/leave-records.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-configuration', HRM_URL . '/asset/js/components/leave/leave-configuration.js', array(), false, true);
 

@@ -14,7 +14,8 @@ var HRM_Vue = new Vue({
 	mixin: [HRM_Mixin],
 	
 	components: {
-		'hrm-attendance': hrm_attendance,	
+		'hrm-leave': ( typeof Hrm_Leave != 'undefined' ) ? Hrm_Leave : '',
+		'hrm-attendance': ( typeof hrm_attendance != 'undefined' ) ? hrm_attendance : '',	
 	}
 
 //hrm-content-wrap class should be wraper for all pages

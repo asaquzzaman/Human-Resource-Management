@@ -112,19 +112,52 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-attendance-records', HRM_URL . '/asset/js/components/attendance/attendance-records.js', array(), false, true);
         wp_enqueue_script( 'hrm-attendance-configuration', HRM_URL . '/asset/js/components/attendance/attendance-configuration.js', array(), false, true);
 
-        
+        wp_enqueue_script( 'hrm-attendance-router', HRM_URL . '/asset/js/components/attendance/attendance-router.js', array(), false, true );
         wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/asset/js/components/attendance/attendance.js', array(), false, true );
 
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+
+        self::hrm_vue_scripts();
     }
 
+    /**
+     * Leave scripts
+     * 
+     * @return void
+     */
+    public static function leave_scripts() {
+
+        self::admin_default();
+
+        wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
+        wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
+
+        wp_enqueue_script( 'hrm-leave-records', HRM_URL . '/asset/js/components/leave/leave-records.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-configuration', HRM_URL . '/asset/js/components/leave/leave-configuration.js', array(), false, true);
+
+        wp_enqueue_script( 'hrm-leave-router', HRM_URL . '/asset/js/components/leave/leave-router.js', array(), false, true );
+        wp_enqueue_script( 'hrm-leave-vue', HRM_URL . '/asset/js/components/leave/leave.js', array(), false, true );
+        wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+
+        self::hrm_vue_scripts();
+    }
+
+    /**
+     * Common scripts
+     * 
+     * @return void
+     */
     public static function hrm_vue_scripts() {
 
-        wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), true );
         wp_enqueue_script( 'hrm-directive', HRM_URL . '/asset/js/hrm-directive.js', array(), time(), true);
         wp_enqueue_script( 'hrm-root-vue', HRM_URL . '/asset/js/hrm-vue.js', false, time(), true);
     }
 
+    /**
+     * Header scripts
+     * 
+     * @return void
+     */
     public static function init_scripts() {
         wp_enqueue_media();
         wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
@@ -141,6 +174,7 @@ class Hrm_Scripts {
         ), time(), true );
 
         //Should be loaded inside the hader tag
+        wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), false );
         wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-mixin.js', array(), time(), false );
         wp_enqueue_script( 'hrm-root-store', HRM_URL . '/asset/js/hrm-store.js', array(), time(), false );
         
@@ -153,8 +187,7 @@ class Hrm_Scripts {
     }
 
     public static function footer_tag() {
-        self::attendance_scripts();
-        self::hrm_vue_scripts();
+        //self::attendance_scripts();
     }
 }
 

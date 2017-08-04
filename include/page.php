@@ -216,42 +216,51 @@ function hrm_attendance_page_items( $path, $hrm_time, $exclude ) {
 function hrm_leave_page_items( $path, $hrm_leave, $exclude ) {
 
     $leave = array();
-    $leave['configure'] = array(
+    
+    $leave['leave_summary'] = array(
+        'id'        => 'hrm-employee-leave_summary',
+        'name'      => 'leave_records',
+        'title'     => __( 'Leave', 'hrm' ),
+        'url'       => '/leave',
+        'file_path' => $path . '/leave/leave-summary.php',
+        'role' => array(
+            'leave_summary_action' => __( 'Can manage leave action', 'hrm' ),
+        ),
+
+    );
+
+    $leave['leave_configuration'] = array(
         'id'        => 'hrm-employee-configure',
         'title'     => __( 'Configure', 'hrm' ),
-        'file_slug' => 'leave/configure',
+        'name'      => 'leave_configuration',
+        'url'       => '/leave-configuration',
         'file_path' => $path . '/leave/configure.php',
         'submenu' => array(
             'leave_type' => array(
                 'id'        => 'hrm-leave-type',
                 'title'     => __( 'Leave Type', 'hrm' ),
-                'file_slug' => 'leave/leave-type',
+                'url'       => '/leave-configure/type',
                 'file_path' => $path . '/leave/leave-type.php',
+                'name'      => 'leave_type',
             ),
             'leave_week' => array(
                 'id'        => 'hrm-leave-week',
                 'title'     => __( 'Work Week', 'hrm' ),
-                'file_slug' => 'leave/leave-week',
+                'url'       => '/leave-configure/week',
                 'file_path' => $path . '/leave/leave-week.php',
+                'name'      => 'leave_week',
             ),
             'leave_holidays' => array(
                 'id'        => 'hrm-leave-holidays',
                 'title'     => __( 'Holidays', 'hrm' ),
-                'file_slug' => 'leave/leave-holidays',
+                'url'       => '/leave-configure/holidays',
                 'file_path' => $path . '/leave/leave-holidays.php',
+                'name'      => 'leave_holidays',
             ),
         ),
     );
 
-    $leave['leave_summary'] = array(
-        'id'        => 'hrm-employee-leave_summary',
-        'title'     => __( 'Leave Summary', 'hrm' ),
-        'file_slug' => 'leave/leave-summary',
-        'file_path' => $path . '/leave/leave-summary.php',
-        'role' => array(
-            'leave_summary_action' => __( 'Can manage leave action', 'hrm' ),
-        )
-    );
+
 
     if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
         return $leave;

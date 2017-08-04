@@ -301,7 +301,7 @@ class WP_Hrm {
         }
 
         if( isset( $style_slug[hrm_leave_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( $this, 'leave_scripts') );
+            add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( 'Hrm_Scripts', 'leave_scripts') );
         }
 
         if( isset( $style_slug[hrm_attendance_page()] ) ) {
@@ -356,6 +356,8 @@ class WP_Hrm {
         if ( 'hrm_attendance' == $page  ) {
 
             echo '<hrm-attendance></hrm-attendance>';
+        } else if ( hrm_leave_page() == $page ) {
+            echo '<hrm-leave></hrm-leave>';
         } else {
             if ( $tab === false ) {
                 Hrm_Settings::getInstance()->show_page( $page );

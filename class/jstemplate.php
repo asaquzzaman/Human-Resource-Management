@@ -26,6 +26,10 @@ class Hrm_JsTemplate {
             case hrm_attendance_page():
                 self::attendance();
                 break;
+
+            case hrm_leave_page():
+                self::leave();
+                break;
     		
     		default:
     			# code...
@@ -86,5 +90,12 @@ class Hrm_JsTemplate {
         hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-records.php', 'hrm-attendance-records' );
         hrm_get_js_template( HRM_COMP_PATH . '/attendance/attendance-configuration.php', 'hrm-attendance-configuration' );
   
+    }
+
+    public static function leave() {
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-records.php', 'hrm-leave-records' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-configuration.php', 'hrm-leave-configuration' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave.php', 'hrm-leave' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-header.php', 'hrm-leave-header' );
     }
 }

@@ -940,5 +940,12 @@ class Hrm_Leave {
         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
         return $results;
     }
+
+    public static function ajax_leave_header() {
+        $menu = hrm_page();
+        $leave = $menu[hrm_leave_page()];
+        
+        wp_send_json_success( array( 'header' => $leave ) );
+    }
 }
 

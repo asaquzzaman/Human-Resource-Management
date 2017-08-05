@@ -89,6 +89,8 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_attendance', array( 'Hrm_Attendance', 'ajax_get_attendance' ) );
         add_action( 'wp_ajax_attendance_configuration', array( 'Hrm_Attendance', 'ajax_attendance_configuration' ) );
         add_action( 'wp_ajax_leave_header', array( 'Hrm_Leave', 'ajax_leave_header' ) );
+        add_action( 'wp_ajax_create_new_leave_type', array( 'Hrm_Leave', 'ajax_create_new_leave_type' ) );
+        add_action( 'wp_ajax_get_leave_type', array( 'Hrm_Leave', 'ajax_get_leave_type' ) );
     }
 
     function partial_payment_delete() {

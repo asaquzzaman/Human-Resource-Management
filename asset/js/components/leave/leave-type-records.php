@@ -1,6 +1,5 @@
 <div>
 	<div class="metabox-holder hrm-leave-type-records-wrap">
-
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<th><?php _e( 'Leave Type', 'cpm' ); ?></th>
@@ -10,14 +9,14 @@
 
 			</thead>
 			<tbody>
-				<tr >
+				<tr v-for="record in records">
 					
-					<td>whfaslkjfhsd</td>
-					<td>ahkjshgdjghdjkfhgf</td>
-					<td>ldfhvkdjfhvkjfh</td>
-					<td>skjhvlzkjhz</td>
+					<td>{{ record.leave_type_name }}</td>
+					<td>{{ record.entitlement }}</td>
+					<td>{{ record.entitle_from }}</td>
+					<td>{{ record.entitle_to }}</td>
 				</tr>
-				<tr>
+				<tr v-if="!records.length">
 					
 					<td colspan="4"><?php _e( 'No record found!', 'hrm' ); ?></td>
 				</tr>

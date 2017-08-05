@@ -107,5 +107,6 @@ class Hrm_JsTemplate {
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type.php', 'hrm-leave-type' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-form.php', 'hrm-leave-type-form' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-records.php', 'hrm-leave-type-records' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-add-btn.php', 'hrm-leave-type-add-btn' );
     }
 }

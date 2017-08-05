@@ -947,5 +947,78 @@ class Hrm_Leave {
         
         wp_send_json_success( array( 'header' => $leave ) );
     }
+
+    public function new_leave_type( $postdata ) {
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'hrm_leave_type';
+        $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
+
+        $data = array(
+            'leave_type_name' => $postdata['leave_type'],
+            'entitlement'     => $postdata['entitlement'],
+            'entitle_from'    => $postdata['entitle_from'],
+            'entitle_to'      => $postdata['entitle_to']
+        );
+
+        $format = array( '%s', '%d', '%s', '%s' );
+
+        if ( $id ) {
+            $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
+            $date['id'] = $id;
+
+        } else {
+            $result     = $wpdb->insert( $table, $data, $format );
+            $date['id'] = $wpdb->insert_id;
+        }
+
+        if ( $result ) {
+            return array( 'leave_type_id' => $date['id'], 'leave_type' => $data );
+        }
+
+        return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
+
+    }
+
+    public static function ajax_create_new_leave_type() {
+        check_ajax_referer('hrm_nonce');
+        $postdata = $_POST;
+
+        $leave_type = self::getInstance()->new_leave_type( $postdata );
+
+        if ( is_wp_error( $leave_type ) ) {
+            wp_send_json_error( array( 'error' => $department->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 
+                'leave_type'  => $leave_type, 
+                'success'     => __( 'Leave type has been created successfully', 'hrm' ) 
+            ) );
+        }
+    }
+
+    function ajax_get_leave_type() {
+        check_ajax_referer('hrm_nonce');
+        
+        $leave_types = self::getInstance()->get_leave_type();
+
+        wp_send_json_success(array( 
+            'leave_types'  => $leave_types, 
+        ));
+    }
+
+    function get_leave_type( $args = array() ) {
+        global $wpdb;
+
+        $id    = empty( $args['id'] ) ? false : absint( $args['id'] );
+        $table = $wpdb->prefix . 'hrm_leave_type';
+
+        if ( $id ) {
+            $items = $wpdb->get_row( "SELECT * FROM {$table} WHERE id=$id" );
+        } else {
+           $items = $wpdb->get_results( "SELECT * FROM {$table}" ); 
+        }
+        
+        return $items;
+    }
 }
 

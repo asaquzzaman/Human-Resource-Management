@@ -7,15 +7,17 @@
 
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-				<form action="">
+				<form action="" @submit.prevent="createNewLeaveType()">
 					<?php
 						        //hidden form
 					        $field_obj = array(
 					            'label' =>  __( 'Leave Type', 'hrm' ),
+					            'required' =>  true,
 					            'field_elements' => array(
-									'value'   => '',
-									'id' => 'hrm-leave-type-text-field',
-									'required' => 'required'
+									'id'       => 'hrm-leave-type-text-field',
+									'required' => 'required',
+									'v-model'  => 'leave_type',
+									'name'     => 'leave_type',
 					            )
 					        );
 
@@ -23,10 +25,12 @@
 
 					        $field_obj = array(
 					            'label' =>  __( 'Entitlement ', 'hrm' ),
+					            'required' =>  true,
 					            'field_elements' => array(
-					            	'value' => '',
-					            	'id' => 'hrm-leave-entitlement-text-field',
-					            	'required' => 'required'
+									'id'       => 'hrm-leave-entitlement-text-field',
+									'required' => 'required',
+									'v-model'  => 'entitlement',
+									'name'     => 'entitlement',
 					            ),
 					        );
 
@@ -34,12 +38,14 @@
 
 					        $field_obj = array(
 					            'label' =>  __( 'Entitle from', 'hrm' ),
+					            'required' =>  true,
 					            'field_elements' => array(
 									'v-hrm-datepicker',
-									'class'  => 'hrm-date-picker-from',
-									'value' => '',
-									'id' => 'hrm-leave-entitlement-from-text-field',
-									'required' => 'required'
+									'class'    => 'hrm-date-picker-from',
+									'id'       => 'hrm-leave-entitlement-from-text-field',
+									'required' => 'required',
+									':value'   => 'entitle_from',
+									'name'     => 'entitle_from',
 					            ),
 					        );
 
@@ -47,19 +53,21 @@
 
 					        $field_obj = array(
 								'label' =>  __( 'Entitle to', 'hrm' ),
+								'required' =>  true,
 					            'field_elements' => array(
 									'v-hrm-datepicker',
-									'class'  => 'hrm-date-picker-to',
-									'value' => '',
-									'id' => 'hrm-leave-entitlement-to-text-field',
-									'required' => 'required'
+									'class'    => 'hrm-date-picker-to',
+									'id'       => 'hrm-leave-entitlement-to-text-field',
+									'required' => 'required',
+									'name'     => 'entitle_to',
+									':value'   => 'entitle_to'
 					            ),
 					        );
 
 					        echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
 					?>
 					<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="<?php _e( 'Save changes', 'hrm' ); ?>">
-					<input  type="submit" class="button hrm-submit-button button-secondary" name="requst" value="<?php _e( 'Cancel', 'hrm' ); ?>">
+					<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-form-cancel"><?php _e( 'Cancel', 'hrm' ); ?></a>
 				</form>
 			</div>
 

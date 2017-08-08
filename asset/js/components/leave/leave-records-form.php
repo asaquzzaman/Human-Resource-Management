@@ -8,6 +8,37 @@
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 				<form action="" @submit.prevent="createNewHolidays()">
+					<div  class="cpm-multiselect cpm-multiselect-single-task">
+
+				        <hrm-multiselect 
+				            v-model="employee" 
+				            :options="employees" 
+				            :multiple="false" 
+				            :close-on-select="true"
+				            :clear-on-select="true"
+				            :hide-selected="false"
+				            :show-labels="true"
+				            placeholder="<?php _e( 'Select User', 'cpm' ); ?>"
+				            select-label=""
+				            selected-label="selected"
+				            deselect-label=""
+				            :taggable="true"
+				            label="name"
+				            track-by="id"
+				            :allow-empty="true">
+
+				            <template  slot="option" scope="props">
+				                <div>
+				                    <img height="16" width="16" class="option__image" :src="props.option.img" alt="<?php _e( 'No Man’s Sky', 'cpm' ); ?>">
+				                    <div class="option__desc">
+				                        <span class="option__title">{{ props.option.title }}</span>
+				                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
+				                    </div>
+				                </div>
+				            </template>
+				                
+				        </hrm-multiselect>               
+				    </div>
 					<?php
 						        //hidden form
 					        $field_obj = array(

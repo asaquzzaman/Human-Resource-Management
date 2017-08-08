@@ -6,6 +6,9 @@ var HRM_Store_Properties = new Vuex.Store(HRM_Store);
  */
 var HRM_Router_Properties = new VueRouter(HRM_Router);
 
+// Global multiselect
+Vue.component('hrm-multiselect', VueMultiselect.default);
+
 var HRM_Vue = new Vue({
 	store: HRM_Store_Properties,
 

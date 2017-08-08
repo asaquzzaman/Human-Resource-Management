@@ -131,6 +131,9 @@ class Hrm_Scripts {
 
         wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
+        wp_enqueue_script( 'hrm-vue-multi', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
+
+        wp_enqueue_script( 'hrm-vue-multiselect' );
 
         wp_enqueue_script( 'hrm-leave-records-form', HRM_URL . '/asset/js/components/leave/leave-records-form.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-records-add-btn', HRM_URL . '/asset/js/components/leave/leave-records-add-btn.js', array(), false, true);
@@ -152,6 +155,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-leave-router', HRM_URL . '/asset/js/components/leave/leave-router.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-vue', HRM_URL . '/asset/js/components/leave/leave.js', array(), false, true );
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-vue-multiselect' );
 
         self::hrm_vue_scripts();
     }
@@ -191,6 +195,8 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), false );
         wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-mixin.js', array(), time(), false );
         wp_enqueue_script( 'hrm-root-store', HRM_URL . '/asset/js/hrm-store.js', array(), time(), false );
+
+        wp_register_script( 'hrm-vue-multiselect', HRM_URL . '/asset/js/vue-multiselect/vue-multiselect.min.js', array(), time(), true );
         
 
         wp_register_script( 'hrm-admin-vue-store', HRM_URL . '/asset/js/admin/admin-vue-store.js', array(), time(), true );
@@ -198,6 +204,7 @@ class Hrm_Scripts {
 
         wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/asset/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
+        wp_register_style( 'hrm-vue-multiselect', HRM_URL . '/asset/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
     }
 
     public static function footer_tag() {

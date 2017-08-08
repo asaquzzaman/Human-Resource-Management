@@ -999,14 +999,14 @@ class Hrm_Leave {
     function ajax_get_leave_type() {
         check_ajax_referer('hrm_nonce');
         
-        $leave_types = self::getInstance()->get_leave_type();
+        $leave_types = self::getInstance()->get_leave_types();
 
         wp_send_json_success(array( 
             'leave_types'  => $leave_types, 
         ));
     }
 
-    function get_leave_type( $args = array() ) {
+    function get_leave_types( $args = array() ) {
         global $wpdb;
 
         $id    = empty( $args['id'] ) ? false : absint( $args['id'] );
@@ -1143,6 +1143,14 @@ class Hrm_Leave {
 
     public static function get_work_week() {
        return get_option( 'hrm_work_week' );
+    }
+
+    public static function get_leave_records_init_data() {
+        check_ajax_referer('hrm_nonce');
+        $employees   = Hrm_Employeelist::getInstance()->get_employee();
+        $leave_types = self::getInstance()->get_leave_types();
+
+        var_dump($employees->results, $leave_types ); die();
     }
 }
 

@@ -102,6 +102,8 @@ class Hrm_JsTemplate {
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-configuration.php', 'hrm-leave-configuration' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave.php', 'hrm-leave' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-header.php', 'hrm-leave-header' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-records-form.php', 'hrm-leave-records-form' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-records-add-btn.php', 'hrm-leave-records-add-btn' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-holidays.php', 'hrm-leave-holidays' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-work-week.php', 'hrm-leave-work-week' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type.php', 'hrm-leave-type' );

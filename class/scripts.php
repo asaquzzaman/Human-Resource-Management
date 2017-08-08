@@ -132,6 +132,9 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
 
+        wp_enqueue_script( 'hrm-leave-records-form', HRM_URL . '/asset/js/components/leave/leave-records-form.js', array(), false, true);
+        wp_enqueue_script( 'hrm-leave-records-add-btn', HRM_URL . '/asset/js/components/leave/leave-records-add-btn.js', array(), false, true);
+
         wp_enqueue_script( 'hrm-leave-holidays-add-btn', HRM_URL . '/asset/js/components/leave/leave-holidays-add-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-holidays-form', HRM_URL . '/asset/js/components/leave/leave-holidays-form.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-holidays-record', HRM_URL . '/asset/js/components/leave/leave-holidays-record.js', array(), false, true);

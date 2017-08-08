@@ -3,6 +3,6 @@
 		<hrm-leave-header></hrm-leave-header>
 		<router-view name="hrm-leave-records"></router-view>
 		<router-view name="hrm-leave-configuration"></router-view>
-		<router-view name="hrm-leave-work-week"></router-view> 
+		<router-view name="hrm-leave-work-week"></router-view>
 	</div>
 </div>

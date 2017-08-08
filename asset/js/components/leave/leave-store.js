@@ -2,6 +2,7 @@ var HRM_Leave_Store = new Vuex.Store({
 	state: {
 		header: {},
 		is_new_leave_type_form_visible: false,
+		is_new_leave_records_form_visible: false,
 	},
 
 	mutations: {
@@ -11,5 +12,8 @@ var HRM_Leave_Store = new Vuex.Store({
 		isNewLeaveTypeFormVisible: function(state, is_visible) {
 			state.is_new_leave_type_form_visible = is_visible.is_visible;
 		},
+		isNewLeaveRecordsFormVisible: function( state, is_visible ) {
+			state.is_new_leave_records_form_visible = is_visible.is_visible;
+		}
 	}
 });

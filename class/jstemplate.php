@@ -108,5 +108,9 @@ class Hrm_JsTemplate {
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-form.php', 'hrm-leave-type-form' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-records.php', 'hrm-leave-type-records' );
         hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-type-add-btn.php', 'hrm-leave-type-add-btn' );
+
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-holidays-form.php', 'hrm-leave-holidays-form' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-holidays-record.php', 'hrm-leave-holidays-record' );
+        hrm_get_js_template( HRM_COMP_PATH . '/leave/leave-holidays-add-btn.php', 'hrm-leave-holidays-add-btn' );
     }
 }

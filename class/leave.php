@@ -987,7 +987,7 @@ class Hrm_Leave {
         $leave_type = self::getInstance()->new_leave_type( $postdata );
 
         if ( is_wp_error( $leave_type ) ) {
-            wp_send_json_error( array( 'error' => $department->get_error_messages() ) ); 
+            wp_send_json_error( array( 'error' => $leave_type->get_error_messages() ) ); 
         } else {
             wp_send_json_success( array( 
                 'leave_type'  => $leave_type, 
@@ -1019,6 +1019,130 @@ class Hrm_Leave {
         }
         
         return $items;
+    }
+
+    public static function ajax_create_new_holidays() {
+        check_ajax_referer('hrm_nonce');
+        $postdata = $_POST;
+
+        $holidays = self::getInstance()->create_new_holidays( $postdata );
+
+        if ( is_wp_error( $holidays ) ) {
+            wp_send_json_error( array( 'error' => $holidays->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 
+                'holidays'  => $holidays, 
+                'success'     => __( 'Leave type has been created successfully', 'hrm' ) 
+            ) );
+        }
+    }
+
+    function create_new_holidays( $postdata ) {
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'hrm_holiday';
+        $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
+
+        $data = array(
+            'name'        => $postdata['name'],
+            'from'        => $postdata['from'],
+            'to'          => $postdata['to'],
+            'description' => $postdata['description']
+        );
+
+        $format = array( '%s', '%s', '%s', '%s' );
+
+        if ( $id ) {
+            $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
+            $date['id'] = $id;
+
+        } else {
+            $result     = $wpdb->insert( $table, $data, $format );
+            $date['id'] = $wpdb->insert_id;
+        }
+
+        if ( $result ) {
+            return array( 'leave_type_id' => $date['id'], 'leave_type' => $data );
+        }
+
+        return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
+
+    }
+
+    function ajax_get_holidays() {
+        check_ajax_referer('hrm_nonce');
+        
+        $holidays = self::getInstance()->get_holidays();
+
+        wp_send_json_success(array( 
+            'holidays'  => $holidays, 
+        ));
+    }
+
+    function get_holidays( $args = array() ) {
+        global $wpdb;
+
+        $id    = empty( $args['id'] ) ? false : absint( $args['id'] );
+        $table = $wpdb->prefix . 'hrm_holiday';
+
+        if ( $id ) {
+            $items = $wpdb->get_row( "SELECT * FROM {$table} WHERE id=$id" );
+        } else {
+           $items = $wpdb->get_results( "SELECT * FROM {$table}" ); 
+        }
+        
+        return $items;
+    }
+
+    public static function ajax_save_work_week() {
+        check_ajax_referer('hrm_nonce');
+        $postdata = $_POST;
+        $work_week = self::getInstance()->save_work_week( $postdata );
+
+        wp_send_json_success(array( 
+            'work_week'  => $work_week, 
+        ));
+    }
+
+    public function save_work_week( $postdata ) {
+        $prev_work_week = get_option( 'hrm_work_week' );
+        
+        if ( empty( $prev_work_week ) ) {
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : $postdata['saturday'];
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : $postdata['sunday'];
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : $postdata['monday'];
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : $postdata['tuesday'];
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : $postdata['wednesday'];
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : $postdata['thursday'];
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : $postdata['friday'];
+        
+        } else {
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : $postdata['saturday'];
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : $postdata['sunday'];
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : $postdata['monday'];
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : $postdata['tuesday'];
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : $postdata['wednesday'];
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : $postdata['thursday'];
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : $postdata['friday'];
+        }
+
+        update_option( 'hrm_work_week', $prev_work_week );
+
+        return $prev_work_week;
+    }
+
+    public static function ajax_get_work_week() {
+        check_ajax_referer('hrm_nonce');
+      
+        $work_week = self::get_work_week();
+
+        wp_send_json_success(array( 
+            'work_week'  => $work_week, 
+        ));
+    }
+
+    public static function get_work_week() {
+       return get_option( 'hrm_work_week' );
     }
 }
 

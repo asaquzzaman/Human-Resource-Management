@@ -79,6 +79,8 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_partial_payment_cancel', array( $this, 'partial_payment_cancel' ) );
         add_action( 'wp_ajax_partial_payment_delete', array( $this, 'partial_payment_delete' ) );
         
+
+
         add_action( 'wp_ajax_create_new_department', array( 'Hrm_Admin', 'ajax_update_department' ) );
         add_action( 'wp_ajax_get_departments', array( 'Hrm_Admin', 'ajax_get_departments' ) );
         add_action( 'wp_ajax_delete_department', array( 'Hrm_Admin', 'ajax_delete_department' ) );
@@ -91,6 +93,10 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_leave_header', array( 'Hrm_Leave', 'ajax_leave_header' ) );
         add_action( 'wp_ajax_create_new_leave_type', array( 'Hrm_Leave', 'ajax_create_new_leave_type' ) );
         add_action( 'wp_ajax_get_leave_type', array( 'Hrm_Leave', 'ajax_get_leave_type' ) );
+        add_action( 'wp_ajax_create_new_holidays', array( 'Hrm_Leave', 'ajax_create_new_holidays' ) );
+        add_action( 'wp_ajax_get_holidays', array( 'Hrm_Leave', 'ajax_get_holidays' ) );
+        add_action( 'wp_ajax_save_work_week', array( 'Hrm_Leave', 'ajax_save_work_week' ) );
+        add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
     }
 
     function partial_payment_delete() {

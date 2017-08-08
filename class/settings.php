@@ -85,6 +85,53 @@ class Hrm_Settings {
         }
     }
 
+    function new_select_field( $element ) {
+
+        $id           = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
+        $label        = isset( $element['label'] ) ? $element['label'] : '';
+        $required     = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
+        $desc         = isset( $element['desc'] ) ? $element['desc'] : '';
+        $wrap_class   = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag     = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $selected     = isset( $element['selected'] ) ? $element['selected'] : '';
+        $option       = isset( $element['option'] ) ? $element['option'] : array();
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+        $html  = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html .= sprintf( '<select %s>', $elements );
+
+        foreach ( $option as $key => $label ) {
+            $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
+        }
+
+        $html .= sprintf( '</select>' );
+        $html .= sprintf( '<span class="hrm-clear"></span><span class="description"> %s</span>', $desc );
+
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+    }
+
     function select_field( $name, $element ) {
 
         $extra_field = '';

@@ -283,6 +283,19 @@ label em {
   position: relative;
   width: 100%;
 }
+#hrm-hidden-form .hrm-form-field .hrm-multiselect,
+#hrm-visible-form .hrm-form-field .hrm-multiselect {
+  float: left;
+  width: 65%;
+}
+#hrm-hidden-form .hrm-form-field .multiselect,
+#hrm-visible-form .hrm-form-field .multiselect {
+  width: 46%;
+}
+#hrm-hidden-form .hrm-form-field .multiselect__content,
+#hrm-visible-form .hrm-form-field .multiselect__content {
+  margin-top: 31px;
+}
 #hrm-hidden-form .hrm-child-field label:first-child,
 #hrm-visible-form .hrm-child-field label:first-child {
   margin-left: 2%;
@@ -854,4 +867,36 @@ label em {
 }
 .hrm-attendance .hrm-clock-wrap time {
   margin-right: 10px;
+}
+.hrm-multiselect .multiselect {
+  width: 30%;
+}
+.hrm-multiselect .multiselect .multiselect__input {
+  width: 100% !important;
+  min-height: 30px;
+  border-radius: 0;
+}
+.hrm-multiselect .multiselect .multiselect__tags {
+  border-radius: 0;
+  min-height: 0px;
+  display: block;
+  padding: 0;
+  border-radius: 0px;
+  border: 0px solid #e8e8e8;
+}
+.hrm-multiselect .multiselect .multi-img-wrap {
+  width: 10%;
+}
+.hrm-multiselect .multiselect .multi-img-wrap,
+.hrm-multiselect .multiselect .option__desc {
+  float: left;
+}
+.hrm-multiselect .multiselect .multiselect__option--highlight {
+  background: #f1f1f1;
+  color: #000;
+}
+.hrm-multiselect .multiselect .multiselect__option--selected:after {
+  content: "\2713 ";
+  background: #f1f1f1;
+  color: #000;
 }

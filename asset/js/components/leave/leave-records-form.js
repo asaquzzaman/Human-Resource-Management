@@ -7,50 +7,16 @@ var Hrm_Leave_Records_Form = {
 	
 	data: function() {
 		return {
-			employee: '',
-			employees: [
-				{
-					"id": 1,
-					"email": "joy.mishu@gmail.com",
-					"name": "admin",
-					"login_name": "admin",
-					"role": "manager",
-					"avatar": "<img alt='' src='//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=96&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=96&#038;r=g&#038;d=mm 2x' class='avatar avatar-96 photo' height='96' width='96' />",
-					"avatar_url": "//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=96&#038;r=g&#038;d=mm",
-					"user_url": "<a href=\"http://localhost/test/wp-admin/admin.php?page=cpm_task&user_id=1\" title=\"admin\"><img alt='admin' src='//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=48&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=48&#038;r=g&#038;d=mm 2x' class='avatar avatar-48 photo' height='48' width='48' /></a>",
-					"title": "admin",
-					"img": "//www.gravatar.com/avatar/873b98cc2b8493be36707ba58929dfec?s=96&#038;r=g&#038;d=mm"
-				},
-				{
-					"id": 2,
-					"email": "rana@mishubd.com",
-					"name": "rana rana",
-					"login_name": "rana",
-					"role": "co_worker",
-					"avatar": "<img alt='' src='//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=96&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=96&#038;r=g&#038;d=mm 2x' class='avatar avatar-96 photo' height='96' width='96' />",
-					"avatar_url": "//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=96&#038;r=g&#038;d=mm",
-					"user_url": "<a href=\"http://localhost/test/wp-admin/admin.php?page=cpm_task&user_id=2\" title=\"rana rana\"><img alt='rana rana' src='//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=48&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=48&#038;r=g&#038;d=mm 2x' class='avatar avatar-48 photo' height='48' width='48' /></a>",
-					"title": "rana rana",
-					"img": "//www.gravatar.com/avatar/999568978bef1c88d658ea3eab72e6ad?s=96&#038;r=g&#038;d=mm"
-				},
-				{
-					"id": 3,
-					"email": "rocky@mishubd.com",
-					"name": "rocky rocky",
-					"login_name": "rocky",
-					"role": "co_worker",
-					"avatar": "<img alt='' src='//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=96&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=96&#038;r=g&#038;d=mm 2x' class='avatar avatar-96 photo' height='96' width='96' />",
-					"avatar_url": "//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=96&#038;r=g&#038;d=mm",
-					"user_url": "<a href=\"http://localhost/test/wp-admin/admin.php?page=cpm_task&user_id=3\" title=\"rocky rocky\"><img alt='rocky rocky' src='//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=48&#038;r=g&#038;d=mm' srcset='//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=48&#038;r=g&#038;d=mm 2x' class='avatar avatar-48 photo' height='48' width='48' /></a>",
-					"title": "rocky rocky",
-					"img": "//www.gravatar.com/avatar/03338b02362ae31dd6b999fdf7770207?s=96&#038;r=g&#038;d=mm"
-				}
-			],
-			name: '',
-			from: '',
-			to: '',
-			description: '',
-			records: []
+			employees: [],
+			emp_id: '',
+			apply_to: '',
+			leave_type_id: '',
+			leave_types: [],
+			administrators: [],
+			leave_status: '',
+			start_time: '',
+			end_time: '',
+			leave_comments: ''
 		}
 	},
 
@@ -66,13 +32,16 @@ var Hrm_Leave_Records_Form = {
 		getInitialData: function() {
 			var request_data = {
                 _wpnonce: hrm_ajax_data.nonce,
-            };
+            },
+            self = this;
 
 			wp.ajax.send('get_leave_records_init_data', {
                 data: request_data,
                 
                 success: function(res) {
- 
+					self.leave_types     = res.leave_types;
+					self.employees      = res.employess;
+					self.administrators = res.apply_to;
                 },
 
                 error: function(res) {

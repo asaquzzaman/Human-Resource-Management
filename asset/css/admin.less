@@ -280,6 +280,17 @@ label em {
         margin-bottom: 6px;
         position: relative;
         width: 100%;
+
+        .hrm-multiselect {
+            float: left;
+            width: 65%;
+        }
+        .multiselect {
+            width: 46%;
+        }
+        .multiselect__content {
+            margin-top: 31px;
+        }
     }
     .hrm-parent-field {
 
@@ -858,6 +869,43 @@ label em {
 
         time {
             margin-right: 10px;
+        }
+    }
+}
+.hrm-multiselect {
+    .multiselect {
+        width: 30%;
+
+        .multiselect__input {
+            width: 100% !important;
+            min-height: 30px;
+            border-radius: 0;
+        }
+        .multiselect__tags {
+            border-radius: 0;
+            min-height: 0px; 
+            display: block; 
+            padding: 0; 
+            border-radius: 0px; 
+            border: 0px solid #e8e8e8; 
+           // background: #fff;
+        }
+
+        .multi-img-wrap {
+            width: 10%;
+        }
+
+        .multi-img-wrap, .option__desc {
+            float: left;
+        }
+        .multiselect__option--highlight {
+            background: #f1f1f1;
+            color: #000;
+        }
+        .multiselect__option--selected:after {
+            content: "\2713 ";
+            background: #f1f1f1;
+            color: #000;
         }
     }
 }

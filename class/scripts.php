@@ -166,7 +166,8 @@ class Hrm_Scripts {
      * @return void
      */
     public static function hrm_vue_scripts() {
-
+        wp_enqueue_script( 'hrm-vue-multiselect' );
+        wp_enqueue_style( 'hrm-vue-multiselect' );
         wp_enqueue_script( 'hrm-directive', HRM_URL . '/asset/js/hrm-directive.js', array(), time(), true);
         wp_enqueue_script( 'hrm-root-vue', HRM_URL . '/asset/js/hrm-vue.js', false, time(), true);
     }

@@ -1144,13 +1144,38 @@ class Hrm_Leave {
     public static function get_work_week() {
        return get_option( 'hrm_work_week' );
     }
-
+ 
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
+
         $employees   = Hrm_Employeelist::getInstance()->get_employee();
         $leave_types = self::getInstance()->get_leave_types();
+        $apply_to = new WP_User_Query( array(
+            'role'   => 'administrator',
+        ) );
 
-        var_dump($employees->results, $leave_types ); die();
+        $send_employess = array();
+        $send_administrators = array();
+
+        foreach ( $employees->results as $key => $employee ) {
+            $employee->avatar     = get_avatar( $employee->ID, 96, 'mm' );
+            $employee->avatar_url = get_avatar_url( $employee->ID, ['default' => 'mm'] );
+
+            $send_employess[] = $employee->data;
+        }
+
+        foreach ( $apply_to->results as $key => $apply ) {
+            $apply->avatar     = get_avatar( $apply->ID, 96, 'mm' );
+            $apply->avatar_url = get_avatar_url( $apply->ID, ['default' => 'mm'] );
+
+            $send_administrators[] = $apply->data;
+        }
+
+        wp_send_json_success( array(
+            'employess' => $send_employess,
+            'apply_to' => $send_administrators,
+            'leave_types' => $leave_types
+        ));
     }
 }
 

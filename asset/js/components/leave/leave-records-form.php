@@ -8,51 +8,141 @@
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 				<form action="" @submit.prevent="createNewHolidays()">
-					<div  class="cpm-multiselect cpm-multiselect-single-task">
+					<div class="hrm-form-field">
+						<label>
+							<?php _e( 'Employee', 'hrm' ); ?>
+							<em>*</em>
+						</label>
+						<div class="hrm-multiselect">
 
-				        <hrm-multiselect 
-				            v-model="employee" 
-				            :options="employees" 
-				            :multiple="false" 
-				            :close-on-select="true"
-				            :clear-on-select="true"
-				            :hide-selected="false"
-				            :show-labels="true"
-				            placeholder="<?php _e( 'Select User', 'cpm' ); ?>"
-				            select-label=""
-				            selected-label="selected"
-				            deselect-label=""
-				            :taggable="true"
-				            label="name"
-				            track-by="id"
-				            :allow-empty="true">
+					        <hrm-multiselect 
+					            v-model="emp_id" 
+					            :options="employees" 
+					            :multiple="false" 
+					            :close-on-select="true"
+					            :clear-on-select="true"
+					            :hide-selected="false"
+					            :show-labels="true"
+					            placeholder="<?php _e( 'Select employee', 'cpm' ); ?>"
+					            select-label=""
+					            selected-label="selected"
+					            deselect-label=""
+					            :taggable="false"
+					            label="display_name"
+					            track-by="ID"
+					            :allow-empty="true">
 
-				            <template  slot="option" scope="props">
-				                <div>
-				                    <img height="16" width="16" class="option__image" :src="props.option.img" alt="<?php _e( 'No Man’s Sky', 'cpm' ); ?>">
-				                    <div class="option__desc">
-				                        <span class="option__title">{{ props.option.title }}</span>
-				                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
-				                    </div>
-				                </div>
-				            </template>
-				                
-				        </hrm-multiselect>               
-				    </div>
+					            <template  slot="option" scope="props">
+					                <div>
+					                	<div class="multi-img-wrap">
+					                    	<img height="16" width="16" class="option__image" :src="props.option.avatar_url" alt="<?php _e( '', 'cpm' ); ?>">
+					                    </div>
+					                    <div class="option__descΩ">
+					                        <span class="option__title">{{ props.option.display_name }}</span>
+					                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
+					                    </div>
+					                    <div class="hrm-clear"></div>
+					                </div>
+					            </template>
+					                
+					        </hrm-multiselect>               
+					    </div>
+					    <div class="hrm-clear"></div>
+					</div>
+					
+					<div class="hrm-form-field">
+						<label>
+							<?php _e( 'Leave Type', 'hrm' ); ?>
+							<em>*</em>
+						</label>
+						<div class="hrm-multiselect">
+
+					        <hrm-multiselect 
+					            v-model="leave_type_id" 
+					            :options="leave_types" 
+					            :multiple="false" 
+					            :close-on-select="true"
+					            :clear-on-select="true"
+					            :hide-selected="false"
+					            :show-labels="true"
+					            placeholder="<?php _e( 'Select leave type', 'cpm' ); ?>"
+					            select-label=""
+					            selected-label="selected"
+					            deselect-label=""
+					            :taggable="false"
+					            label="leave_type_name"
+					            track-by="id"
+					            :allow-empty="true">
+
+					        </hrm-multiselect>               
+					    </div>
+					    <div class="hrm-clear"></div>
+					</div>
+
+					<div class="hrm-form-field">
+						<label>
+							<?php _e( 'Apply to', 'hrm' ); ?>
+							<em>*</em>
+						</label>
+						<div class="hrm-multiselect">
+
+					        <hrm-multiselect 
+					            v-model="apply_to" 
+					            :options="administrators" 
+					            :multiple="true" 
+					            :close-on-select="true"
+					            :clear-on-select="true"
+					            :hide-selected="false"
+					            :show-labels="true"
+					            placeholder="<?php _e( 'Select administrators', 'cpm' ); ?>"
+					            select-label=""
+					            selected-label="selected"
+					            deselect-label=""
+					            :taggable="false"
+					            label="display_name"
+					            track-by="ID"
+					            :allow-empty="true">
+
+					            <template  slot="option" scope="props">
+					                <div>
+					                	<div class="multi-img-wrap">
+					                    	<img height="16" width="16" class="option__image" :src="props.option.avatar_url" alt="<?php _e( 'kkk', 'cpm' ); ?>">
+					                    </div>
+					                    <div class="option__descΩ">
+					                        <span class="option__title">{{ props.option.display_name }}</span>
+					                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
+					                    </div>
+					                    <div class="hrm-clear"></div>
+					                </div>
+					            </template>
+					                
+					        </hrm-multiselect>               
+					    </div>
+					    <div class="hrm-clear"></div>
+					</div>
+
 					<?php
-						        //hidden form
-					        $field_obj = array(
-								'label'    =>  __( 'Name', 'hrm' ),
-								'required' =>  true,
-					            'field_elements' => array(
-									'id'       => 'hrm-leave-type-text-field',
-									'required' => 'required',
-									'v-model'  => 'name',
-									'name'     => 'name',
-					            )
-					        );
+					    //hidden form
+				        $field_obj = array(
+							'label'    =>  __( 'Status', 'hrm' ),
+							'required' =>  true,
+							'option'  => array( 
+								'1' => __( 'Approved', 'hrm' ), 
+								'2' => __( 'Pending', 'hrm' ),
+								'0' => __( 'Cancel', 'hrm' ) 
+							),
+				            'field_elements' => array(
+								'id'       => 'hrm-leave-type-select-field',
+								'required' => 'required',
+								'v-model'  => 'leave_status',
+								'name'     => 'leave_status',
+				            )
+				        );
 
-							echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
+						echo Hrm_Settings::getInstance()->new_select_field( $field_obj );
+					?>
+
+					<?php
 
 					        $field_obj = array(
 								'label'    =>  __( 'From ', 'hrm' ),
@@ -62,8 +152,8 @@
 									'class'    => 'hrm-date-picker-from',
 									'id'       => 'hrm-leave-holidays-from-text-field',
 									'required' => 'required',
-									':value'  => 'from',
-									'name'     => 'from',
+									':value'  => 'start_time',
+									'name'     => 'start_time',
 					            ),
 					        );
 
@@ -77,8 +167,8 @@
 									'class'    => 'hrm-date-picker-to',
 									'id'       => 'hrm-leave-holidays-to-text-field',
 									'required' => 'required',
-									':value'   => 'to',
-									'name'     => 'to',
+									':value'   => 'end_time',
+									'name'     => 'end_time',
 					            ),
 					        );
 
@@ -91,8 +181,8 @@
 									'class'    => '',
 									'id'       => 'hrm-leave-description-textarea-field',
 									'required' => 'required',
-									'name'     => 'description',
-									'v-model'  => 'description'
+									'name'     => 'leave_comments',
+									'v-model'  => 'leave_comments'
 					            ),
 					        );
 

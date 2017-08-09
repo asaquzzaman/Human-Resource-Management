@@ -87,7 +87,7 @@ class Hrm_Settings {
 
     function new_select_field( $element ) {
 
-        $id           = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
+        $id           = isset( $element['field_elements']['id'] ) ? esc_attr( $element['field_elements']['id'] ) : '';
         $label        = isset( $element['label'] ) ? $element['label'] : '';
         $required     = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
         $desc         = isset( $element['desc'] ) ? $element['desc'] : '';

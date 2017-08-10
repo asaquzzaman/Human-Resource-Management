@@ -900,3 +900,8 @@ label em {
   background: #f1f1f1;
   color: #000;
 }
+.hrm-leave .hrm-leave-jquery-fullcalendar {
+  width: 60%;
+  margin-left: 21%;
+  margin-bottom: 15px;
+}

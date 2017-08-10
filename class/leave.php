@@ -1082,13 +1082,46 @@ class Hrm_Leave {
     function get_holidays( $args = array() ) {
         global $wpdb;
 
-        $id    = empty( $args['id'] ) ? false : absint( $args['id'] );
-        $table = $wpdb->prefix . 'hrm_holiday';
+        $defaults = array(
+            'from' => date( 'Y-01-01 00:00:00' ),
+            'to'   => date( 'Y-12-31 24:59:59' )
+        );
 
-        if ( $id ) {
-            $items = $wpdb->get_row( "SELECT * FROM {$table} WHERE id=$id" );
-        } else {
-           $items = $wpdb->get_results( "SELECT * FROM {$table}" ); 
+        $args = wp_parse_args( $args, $defaults );
+
+        $cache_key  = 'hrm-get-holidays' . md5( serialize( $args ) );
+        $items      = wp_cache_get( $cache_key, 'erp' );
+        $query_args = array( 'relation' => 'AND' );
+
+        if ( false === $items ) { 
+            foreach ( $args as $key => $arg ) {
+                switch ( $key ) {
+
+                    case 'from':
+                        $query_args[] = array(
+                            'field'     => 'from',
+                            'value'     => $arg,
+                            'condition' => '>='
+                        );
+                        break;
+
+                    case 'to':
+                        $query_args[] = array(
+                            'field'     => 'to',
+                            'value'     => $arg,
+                            'condition' => '<='
+                        );
+                }
+
+            }
+
+            $query = Hrm_Attendance::getInstance()->generate_query( $query_args );
+
+            $table = $wpdb->prefix . 'hrm_holiday';
+
+            $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
+            
+            wp_cache_set( $cache_key, $items, 'hrm' );
         }
         
         return $items;
@@ -1171,10 +1204,16 @@ class Hrm_Leave {
             $send_administrators[] = $apply->data;
         }
 
+        $holidays_from = date('Y-m-01 00:00:00');
+        $holidays_to   = date('Y-m-31 24:59:59');
+        $holidays      = self::getInstance()->get_holidays(array( 'from' => $holidays_from, 'to' => $holidays_to ));
+
         wp_send_json_success( array(
-            'employess' => $send_employess,
-            'apply_to' => $send_administrators,
-            'leave_types' => $leave_types
+            'employess'   => $send_employess,
+            'apply_to'    => $send_administrators,
+            'leave_types' => $leave_types,
+            'work_week'   => self::get_work_week(),
+            'holidays'    => $holidays
         ));
     }
 }

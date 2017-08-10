@@ -303,7 +303,7 @@ class Hrm_Attendance {
             'punch_out' => date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) )
         );
 
-        $args       = wp_parse_args( $args, $defaults );
+        $args = wp_parse_args( $args, $defaults );
 
         if ( $args['punch_in'] > $args['punch_out'] ) {
             return false;
@@ -353,7 +353,7 @@ class Hrm_Attendance {
                 $items = $this->get_attendance_meta( $items );
             }
             
-            wp_cache_set( $cache_key, $items, 'erp' );
+            wp_cache_set( $cache_key, $items, 'hrm' );
         }        
         
         return $items;
@@ -566,7 +566,7 @@ class Hrm_Attendance {
                 $args[$key]['parent_id'] = $parent_id;
 
             } else  {
-                $args[$key] =  $element['field'] ." ". $element['condition'] ." '". $element['value'] ."'";
+                $args[$key] =  "`". $element['field'] ."` ". $element['condition'] ." '". $element['value'] ."'";
                 $depth = 0;
 
             }

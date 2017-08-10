@@ -129,6 +129,9 @@ class Hrm_Scripts {
 
         self::admin_default();
 
+        wp_enqueue_script( 'hrm-jquery-fullcalendar' );
+        wp_enqueue_style( 'hrm-jquery-fullcalendar' );
+
         wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
         wp_enqueue_script( 'hrm-vue-multi', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
@@ -151,6 +154,8 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-leave-work-week', HRM_URL . '/asset/js/components/leave/leave-work-week.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-records', HRM_URL . '/asset/js/components/leave/leave-records.js', array(), false, true);
         wp_enqueue_script( 'hrm-leave-configuration', HRM_URL . '/asset/js/components/leave/leave-configuration.js', array(), false, true);
+
+        wp_enqueue_script( 'hrm-leave-directive', HRM_URL . '/asset/js/components/leave/leave-directive.js', array(), false, true);
 
         wp_enqueue_script( 'hrm-leave-router', HRM_URL . '/asset/js/components/leave/leave-router.js', array(), false, true );
         wp_enqueue_script( 'hrm-leave-vue', HRM_URL . '/asset/js/components/leave/leave.js', array(), false, true );
@@ -179,6 +184,10 @@ class Hrm_Scripts {
      */
     public static function init_scripts() {
         wp_enqueue_media();
+        
+        wp_register_script( 'hrm-moment', HRM_URL . '/asset/js/moment/moment.min.js', array(), time(), true );
+        wp_register_script( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/js/jquery-fullcalendar/fullcalendar.min.js', array( 'hrm-moment' ), time(), true );
+        
         wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
         
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.js', array( 'jquery' ), time(), true );
@@ -206,6 +215,7 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-toastr', HRM_URL . '/asset/css/toastr/toastr.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/asset/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
         wp_register_style( 'hrm-vue-multiselect', HRM_URL . '/asset/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
+        wp_register_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
     }
 
     public static function footer_tag() {

@@ -116,153 +116,6 @@ class Hrm_Leave {
         return $total;
     }
 
-    function leave_type_form( $field_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_value !== null ) {
-            $leave_hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-        //hidden form
-        $leave_hidden_form['leave_type'] = array(
-            'label' =>  __( 'Leave Type', 'hrm' ),
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'value' => isset( $field_value['leave_type'] ) ? $field_value['leave_type'] : '',
-        );
-
-        $leave_hidden_form['entitlement'] = array(
-            'label' =>  __( 'Entitlement ', 'hrm' ),
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_integer' => true,
-                'data-hrm_integer_error_msg'=> __( 'Your inserted value is not integer', 'hrm' ),
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'value' => isset( $field_value['entitlement'] ) ? $field_value['entitlement'] : '',
-        );
-
-        $leave_hidden_form['entitle_from'] = array(
-            'label' =>  __( 'Entitle from', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker-from',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'value' => isset( $field_value['entitle_from'] ) ? hrm_get_date2mysql( $field_value['entitle_from'] ) : '',
-        );
-
-        $leave_hidden_form['entitle_to'] = array(
-            'label' =>  __( 'Entitle to', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker-to',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'value' => isset( $field_value['entitle_to'] ) ? hrm_get_date2mysql( $field_value['entitle_to'] ) : '',
-        );
-
-        $leave_hidden_form['action'] = 'ajax_referer_insert';
-        $leave_hidden_form['table_option'] = 'hrm_leave_type';
-        $leave_hidden_form['header'] = 'Leave Type';
-        $leave_hidden_form['url'] = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $leave_hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function holiday( $field_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_value !== null ) {
-            $holiday['id'] = array(
-                'type'  => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-
-
-        $holiday['name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type'  => 'text',
-            'value' => isset( $field_value['name'] ) ? $field_value['name'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $holiday['from'] = array(
-            'label' =>  __( 'From', 'hrm' ),
-            'class' => 'hrm-datepicker-from',
-            'type'  => 'text',
-            'value' => isset( $field_value['from'] ) ? hrm_get_date2mysql( $field_value['from'] ) : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $holiday['to'] = array(
-            'label' =>  __( 'To', 'hrm' ),
-            'class' => 'hrm-datepicker-to',
-            'type'  => 'text',
-            'value' => isset( $field_value['to'] ) ? hrm_get_date2mysql( $field_value['to'] ) : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $holiday['description'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'class' => 'hrm-leave-discription',
-            'type'  => 'textarea',
-            'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
-        );
-
-        $holiday['length'] = array(
-            'label' =>  __( 'Full Day/Half Day', 'hrm' ),
-            'type'  => 'select',
-            'option' => array(
-                'full' => 'Full Day',
-                'half' => 'Half Day'
-            ),
-            'selected' => isset( $field_value['length'] ) ? $field_value['length'] : '',
-        );
-
-        $holiday['action']       = 'ajax_referer_insert';
-        $holiday['table_option'] = 'hrm_holiday';
-        $holiday['header']       = 'Add Holiday';
-        $holiday['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $holiday );
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
     function is_leave_take_prev( $emp_id, $post_from, $post_to ) {
         global $wpdb;
         $table = $wpdb->prefix . 'hrm_leave';
@@ -587,148 +440,6 @@ class Hrm_Leave {
         $field['header']       = __( 'Apply Leave', 'hrm' );
         $field['action']       = 'insert_leave';
         $field['table_option'] = 'hrm_leave';
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $field );
-
-        $return_value = array(
-            'append_data' => ob_get_clean()
-        );
-
-        return $return_value;
-    }
-
-
-    function assign( $field_value = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        $user_id = isset( $_POST['hrm_dataAttr']['employee_id'] ) && !empty( $_POST['hrm_dataAttr']['employee_id'] ) ? trim( $_POST['hrm_dataAttr']['employee_id'] ) : false;
-        $users = get_users();
-        $apply_to_users = array();
-        foreach ( $users as $key => $user ) {
-            //if ( reset( $user->roles ) != 'hrm_employee' ) {
-                $apply_to_users[$user->ID] = $user->display_name;
-            //}
-        }
-        if ( $user_id ) {
-
-            unset( $apply_to_users[$user_id] );
-            $field['name'] = array(
-                'type'   => 'hidden',
-                'value'  => $user_id
-            );
-            $field['employee_id'] = array(
-                'type'   => 'hidden',
-                'value'  => $user_id
-            );
-        } else {
-            $field['name'] = array(
-                'label'  => __( 'Employee Name', 'hrm' ),
-                'required' => 'required',
-                'extra' => array(
-                    'data-hrm_validation' => true,
-                    'data-hrm_required' => true,
-                    'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-                ),
-                'class'  => 'hrm-chosen',
-                'type'   => 'select',
-                'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['user_info'] ) ),
-
-            );
-        }
-
-        if ( $field_value !== null ) {
-
-            $field['id'] = array(
-                'type'  => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-
-        $field['type_id'] = array(
-            'label'    => __( 'Leave Type', 'hrm' ),
-            'type'     => 'select',
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'option'   => json_decode( stripcslashes( $_POST['hrm_dataAttr']['leave_cat'] ) ),
-            'selected' => isset( $field_value['type_id'] ) ? $field_value['type_id'] : ''
-
-        );
-
-        $field['apply_to[]'] = array(
-            'label'    => __( 'Apply To', 'hrm' ),
-            'type'     => 'multiple',
-            'class'    => 'hrm-chosen',
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'option'   => $apply_to_users
-        );
-
-        if ( $user_id ) {
-            $field['leave_status'] = array(
-                'type'  => 'hidden',
-                'value' => '1'
-            );
-
-        } else {
-            $field['leave_status'] = array(
-                'label'    => __( 'Status', 'hrm' ),
-                'type'     => 'select',
-                'required' => 'required',
-                'extra' => array(
-                    'data-hrm_validation' => true,
-                    'data-hrm_required' => true,
-                    'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-                ),
-                'option'   => $this->leave_status(),
-                'selected' => isset( $field_value['leave_status'] ) ? $field_value['leave_status'] : '2',
-            );
-        }
-
-        $field['from'] = array(
-            'label' => __( 'From Date', 'hrm' ),
-            'class' => 'hrm-datepicker-from',
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'type'  => 'text',
-            'value' => isset( $field_value['from'] ) ? hrm_get_date2mysql( $field_value['from'] ) : ''
-        );
-
-        $field['to'] = array(
-            'label' => __( 'To Date', 'hrm' ),
-            'class' => 'hrm-datepicker-to',
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'type'  => 'text',
-            'value' => isset( $field_value['to'] ) ? hrm_get_date2mysql( $field_value['to'] ) : ''
-        );
-
-        $field['comment'] = array(
-            'label' => __( 'Comment', 'hrm' ),
-            'type'  => 'textarea',
-            'value' => isset( $field_value['comment'] ) ? $field_value['comment'] : ''
-        );
-
-        $field['header']       = __( 'Apply Leave', 'hrm' );
-        $field['action']       = 'insert_leave';
-        $field['table_option'] = 'hrm_leave';
-        $field['url'] = $redirect;
 
         ob_start();
         echo hrm_Settings::getInstance()->hidden_form_generator( $field );
@@ -1090,7 +801,7 @@ class Hrm_Leave {
         $args = wp_parse_args( $args, $defaults );
 
         $cache_key  = 'hrm-get-holidays' . md5( serialize( $args ) );
-        $items      = wp_cache_get( $cache_key, 'erp' );
+        $items      = wp_cache_get( $cache_key, 'hrm' );
         $query_args = array( 'relation' => 'AND' );
 
         if ( false === $items ) { 
@@ -1177,13 +888,110 @@ class Hrm_Leave {
     public static function get_work_week() {
        return get_option( 'hrm_work_week' );
     }
+
+    public static function get_empoyee_leave( $args = array() ) {
+        global $wpdb;
+
+        $defaults = array(
+            'start_time' => date( 'Y-01-01 00:00:00' ),
+            'end_time'   => date( 'Y-12-31 24:59:59' ),
+            'emp_id'     => get_current_user_id()
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $cache_key  = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
+        $items      = wp_cache_get( $cache_key, 'hrm' );
+        $query_args = array( 'relation' => 'AND' );
+
+        if ( false === $items ) { 
+            foreach ( $args as $key => $arg ) {
+                switch ( $key ) {
+
+                    case 'start_time':
+                        $query_args[] = array(
+                            'field'     => 'start_time',
+                            'value'     => $arg,
+                            'condition' => '>='
+                        );
+                        break;
+
+                    case 'end_time':
+                        $query_args[] = array(
+                            'field'     => 'end_time',
+                            'value'     => $arg,
+                            'condition' => '<='
+                        );
+                        break;
+
+                    case 'emp_id':
+                        $query_args[] = array(
+                            'field'     => 'emp_id',
+                            'value'     => $arg,
+                            'condition' => '='
+                        );
+                }
+
+            }
+
+            $query = Hrm_Attendance::getInstance()->generate_query( $query_args );
+
+            $table = $wpdb->prefix . 'hrm_leave';
+
+            $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
+            
+            wp_cache_set( $cache_key, $items, 'hrm' );
+        }
+        
+        return $items;
+    }
+
+    public static function holiday_get_by_index() {
+        $holidays_from = date('Y-m-01 00:00:00');
+        $holidays_to   = date('Y-m-31 24:59:59');
+        $holidays      = self::getInstance()->get_holidays(array( 'from' => $holidays_from, 'to' => $holidays_to ));
+        $index         = array();
+        $index_by_name = array();
+
+        foreach ( $holidays as $key => $holiday ) {
+            $start = date( 'Y-m-d', strtotime( $holiday->from ) );
+            $end   = date( 'Y-m-d', strtotime( $holiday->to ) );
+
+            while( $start <= $end ) {
+                $index[$start] = $start;
+                $index_by_name[$holiday->name][] = $start;
+                $start   = date('Y-m-d', strtotime( $start . ' +1 day') );
+            }
+        }
+
+        return array(
+            'date_index' => $index,
+            'name_index' => $index_by_name
+        );
+    }
+
+    public static function get_empoyee_leave_with_lave_type_record( $args = array() ) {
+        $get_emp_leaves = self::get_empoyee_leave( $args );
+        
+        foreach ( $get_emp_leaves as $key => $leave ) {
+            $get_leave_type = self::get_leave_types( array( 'id' => $leave->leave_type_id ) );
+            
+            $leave->type_id      = $get_leave_type->id;
+            $leave->type_name    = $get_leave_type->leave_type_name;
+            $leave->entitlement  = $get_leave_type->entitlement;
+            $leave->entitle_from = $get_leave_type->entitle_from;
+            $leave->entitle_to   = $get_leave_type->entitle_to;
+        }
+
+        return $get_emp_leaves;
+    }
  
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
 
         $employees   = Hrm_Employeelist::getInstance()->get_employee();
         $leave_types = self::getInstance()->get_leave_types();
-        $apply_to = new WP_User_Query( array(
+        $apply_to    = new WP_User_Query( array(
             'role'   => 'administrator',
         ) );
 
@@ -1204,16 +1012,15 @@ class Hrm_Leave {
             $send_administrators[] = $apply->data;
         }
 
-        $holidays_from = date('Y-m-01 00:00:00');
-        $holidays_to   = date('Y-m-31 24:59:59');
-        $holidays      = self::getInstance()->get_holidays(array( 'from' => $holidays_from, 'to' => $holidays_to ));
+        $emp_leave_with_type_record = self::get_empoyee_leave_with_lave_type_record();
 
         wp_send_json_success( array(
             'employess'   => $send_employess,
             'apply_to'    => $send_administrators,
             'leave_types' => $leave_types,
             'work_week'   => self::get_work_week(),
-            'holidays'    => $holidays
+            'emp_leave_with_type_record'  => $emp_leave_with_type_record,
+            //'holiday_name_index'    => $holidays['name_index'],
         ));
     }
 }

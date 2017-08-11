@@ -17,7 +17,7 @@ var Hrm_Leave_Records_Form = {
 			start_time: '',
 			end_time: '',
 			leave_comments: '',
-			holidays: [],
+			emp_leave_with_type_record: [],
 			work_week: []
 		}
 	},
@@ -44,7 +44,8 @@ var Hrm_Leave_Records_Form = {
 					self.leave_types    = res.leave_types;
 					self.employees      = res.employess;
 					self.administrators = res.apply_to;
-					self.holidays       = res.holidays;
+					self.emp_leave_with_type_record  = res.emp_leave_with_type_record;
+					//self.holiday_name_index       = res.holiday_name_index;
 					self.work_week      = res.work_week;
                 },
 

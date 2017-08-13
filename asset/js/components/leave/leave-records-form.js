@@ -8,9 +8,9 @@ var Hrm_Leave_Records_Form = {
 	data: function() {
 		return {
 			employees: [],
-			emp_id: '',
+			emp: '',
 			apply_to: '',
-			leave_type_id: '',
+			leave_type: '',
 			leave_types: [],
 			administrators: [],
 			leave_status: '',
@@ -18,7 +18,8 @@ var Hrm_Leave_Records_Form = {
 			end_time: '',
 			leave_comments: '',
 			emp_leave_with_type_record: [],
-			work_week: []
+			work_week: [],
+			leave_entitlements: []
 		}
 	},
 
@@ -45,7 +46,7 @@ var Hrm_Leave_Records_Form = {
 					self.employees      = res.employess;
 					self.administrators = res.apply_to;
 					self.emp_leave_with_type_record  = res.emp_leave_with_type_record;
-					//self.holiday_name_index       = res.holiday_name_index;
+					self.leave_entitlements     = res.leave_entitlements;
 					self.work_week      = res.work_week;
                 },
 

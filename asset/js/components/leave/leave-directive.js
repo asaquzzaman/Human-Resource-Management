@@ -1,5 +1,6 @@
 var HRM_Leave_jQuery_Fullcalendar = {
 	calendar: function(el, vnode_context) {
+
 		var $ = jQuery(),
 			work_week = this.work_week_convert_numeric( vnode_context.work_week ),
 			emp_leave_with_type_record = vnode_context.emp_leave_with_type_record;
@@ -11,72 +12,116 @@ var HRM_Leave_jQuery_Fullcalendar = {
 				right: 'prev,next'
 			},
 			navLinks: false, // can click day/week names to navigate views
-			editable: true,
+			editable: false,
 			eventLimit: true, // allow "more" link when too many events
-			dayClick: function(date, jsEvent, view) {
+			fixedWeekCount: false, //remove others month days for current month
+			showNonCurrentDates: false,
+			displayEventTime: false,
+			allDay: true,
+			dayClick: function(date, jsEvent, view) {  
+				var has_leave = HRM_Leave_jQuery_Fullcalendar.has_leave_in_this_day( date, jsEvent, view );
+				
+ 	        	if (has_leave.length) {
+					// Display a success toast, with a title
+		            toastr.error('Leave alrady exist');
+		            return;
+				}
 
-		       
-				//console.log( date, jsEvent, view );
+				var is_leave_type = HRM_Leave_jQuery_Fullcalendar.leave_type_condition(date, jsEvent, view, vnode_context);
+				
 		    },
 		    viewRender: function(view, element) {
         		//console.log(view.start,view.end);
    			},
    			dayRender: function (date, cell) {
-   				return;
-   				var self = HRM_Leave_jQuery_Fullcalendar,
-   					cell_date = new Date(date._d),
-   					cell_day  = cell_date.getDay(),
-   					cell_time = self.get_time(date._d);
-
-   				jQuery.each(emp_leave_with_type_record, function(key, val) {
-   					var start_time = self.get_time(val.start_time),
-   						end_time   = self.get_time(val.end_time);
-   					
-   					if ( start_time <= cell_time && end_time >= cell_time ) {
-
-   						cell.css({
-			        		'background-color': '#e08989',
-			        		'text-align': 'center'
-			        	});
-   						
-			        	jQuery(cell).append(val.type_name);
-   					}
-   				});
-
-		        if ( work_week.indexOf(cell_day) != '-1'  ) {
-		        	cell.css({
-		        		'background-color': '#e08989',
-		        		'text-align': 'center'
-		        	});
-
-		        	jQuery(cell).append('Holiday');
-		        }
 
 		    },
 
 		    events: function(start, end, timezone, callback) {
-		    	var events = HRM_Leave_jQuery_Fullcalendar.events_render( emp_leave_with_type_record );
 
-		    	jQuery.each(work_week, function(key, val) {
-		    		var days_in_month = HRM_Leave_jQuery_Fullcalendar.weekend_in_month( start._d, end._d, val );
+		    	var request_data = {
+	                _wpnonce: hrm_ajax_data.nonce,
+	                start: HRM_Leave_jQuery_Fullcalendar.get_date(start._d),
+	                end: HRM_Leave_jQuery_Fullcalendar.get_date(end._d)
+	            },
+	            events = [];
 
-		    		jQuery.each( days_in_month, function( index, date ) {
-		    			var new_obj = {
-		    				title: 'Weekend',
-							start: date,
-							end: date,
-							backgroundColor: '#e08989',
-							borderColor: '#e08989'
-		    			}
+				wp.ajax.send('get_leave_record_events', {
+	                data: request_data,
+	                
+	                success: function(res) {
 
-		    			events.push(new_obj);
-		    		});
-		    	});
+						events = HRM_Leave_jQuery_Fullcalendar.leave_records_render( res.records );
+						var render_weekend = HRM_Leave_jQuery_Fullcalendar.render_weekend(start._d, end._d, res.work_week);
+						events = events.concat( render_weekend );
 
-		    	callback(events);
-		    	
-		    }//HRM_Leave_jQuery_Fullcalendar.events_render( emp_leave_with_type_record, work_week ),
+				    	callback(events);
+	                },
+
+	                error: function(res) {
+	 
+	                }
+	            });	
+		    }
 		});
+	},
+
+	leave_type_condition: function(date, jsEvent, view, context) {
+		var types = context.leave_types,
+			entitlements = context.leave_entitlements,
+			type = context.leave_type;
+
+		if (type != '') {
+			var target = context.getIndex( entitlements, type.id, 'leave_type_id' ),
+				emp_get_leave = entitlements[target].total;
+
+				console.log(emp_get_leave);
+		}
+
+		
+	},
+
+	render_weekend: function(start, end, work_week) {
+		var work_week = HRM_Leave_jQuery_Fullcalendar.work_week_convert_numeric(work_week),
+			events = [];
+
+		jQuery.each(work_week, function(key, val) {
+
+    		var days_in_month = HRM_Leave_jQuery_Fullcalendar.weekend_in_month( start, end, val );
+    		
+    		jQuery.each( days_in_month, function( index, date ) {
+    			var new_obj = {
+    				title: 'Weekend',
+					start: moment(date).format('YYYY-MM-DD'),
+					end: moment(date).add(1, 'days').format('YYYY-MM-DD'),
+					backgroundColor: '#e08989',
+					borderColor: '#e08989',
+					allDay: true,
+    			}
+
+    			events.push(new_obj);
+    		});
+    	});
+
+    	return events;
+	},
+
+	has_leave_in_this_day: function(date, jsEvent, view) {
+		var cell_date = moment(date._d).format('YYYY-MM-DD'),
+		    events = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('clientEvents'),
+		    has_leave = [];
+
+		jQuery.each(events, function(key, val) {
+			var start = moment(val.start._d).format('YYYY-MM-DD'),
+				end   = moment(val.end._d).subtract(1, 'days').format('YYYY-MM-DD'); 
+			
+			
+			if ( moment(cell_date).isBetween(start, end, null, '[]') ) {
+				has_leave.push(val.title);
+			}
+		});
+			
+		return has_leave;
 	},
 
 	weekend_in_month: function( start, end, day ) {
@@ -88,7 +133,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 
 	    while (date < end) {
 	        if (date.getDay() === day ) { 
-	        	var setDate = HRM_Leave_jQuery_Fullcalendar.get_date(date);
+	        	var setDate = moment(date).format('YYYY-MM-DD'); //HRM_Leave_jQuery_Fullcalendar.get_date(date);
 	        	dates.push(setDate);
 	        }
 	        date.setDate( date.getDate() + 1 );
@@ -97,25 +142,24 @@ var HRM_Leave_jQuery_Fullcalendar = {
 	    return dates;
 	},
 
-	events_render: function( events ) {
+	leave_records_render: function( events ) {
 		var evt = [],
 			self = HRM_Leave_jQuery_Fullcalendar;
 
 		jQuery.each(events, function(key, val) {
-			var date = new Date(val.end_time);
-				end_date = date.setDate(date.getDate() + 1);
-			
+
 			var obj = {
 				title: val.type_name,
-				start: self.get_date(val.start_time),
-				end: self.get_date(end_date),
+				start: moment(val.start_time).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+				end: moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 				backgroundColor: '#e08989',
-				borderColor: '#e08989'
+				borderColor: '#e08989',
+				allDay: true,
 			};
 
 			evt.push(obj);
 		});
-
+		
 		return evt;
 	},
 
@@ -168,8 +212,6 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		return d.getFullYear() +'-'+ ("0" + (d.getMonth() + 1)).slice(-2) +'-'+ ("0" + d.getDate()).slice(-2);
 	}
 }
-
-
 
 
 

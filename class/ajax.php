@@ -98,6 +98,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_save_work_week', array( 'Hrm_Leave', 'ajax_save_work_week' ) );
         add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
         add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );
+        add_action( 'wp_ajax_get_leave_record_events', array( 'Hrm_Leave', 'ajax_get_leave_record_events' ) );
     }
 
     function partial_payment_delete() {

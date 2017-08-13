@@ -16,7 +16,7 @@
 						<div class="hrm-multiselect">
 
 					        <hrm-multiselect 
-					            v-model="emp_id" 
+					            v-model="emp" 
 					            :options="employees" 
 					            :multiple="false" 
 					            :close-on-select="true"
@@ -58,7 +58,7 @@
 						<div class="hrm-multiselect">
 
 					        <hrm-multiselect 
-					            v-model="leave_type_id" 
+					            v-model="leave_type" 
 					            :options="leave_types" 
 					            :multiple="false" 
 					            :close-on-select="true"

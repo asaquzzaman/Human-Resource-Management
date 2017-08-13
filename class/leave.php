@@ -993,7 +993,7 @@ class Hrm_Leave {
         $leave_types = self::getInstance()->get_leave_types();
         $apply_to    = new WP_User_Query( array(
             'role'   => 'administrator',
-        ) );
+        ));
 
         $send_employess = array();
         $send_administrators = array();
@@ -1012,16 +1012,64 @@ class Hrm_Leave {
             $send_administrators[] = $apply->data;
         }
 
-        $emp_leave_with_type_record = self::get_empoyee_leave_with_lave_type_record();
+        $entitlement = self::get_employee_leave_entitlement();
 
         wp_send_json_success( array(
             'employess'   => $send_employess,
             'apply_to'    => $send_administrators,
             'leave_types' => $leave_types,
-            'work_week'   => self::get_work_week(),
-            'emp_leave_with_type_record'  => $emp_leave_with_type_record,
-            //'holiday_name_index'    => $holidays['name_index'],
+            'leave_entitlements' => $entitlement
         ));
+    }
+
+    public static function ajax_get_leave_record_events() {
+        check_ajax_referer('hrm_nonce');
+        $start = date( 'Y-m-d', strtotime( $_POST['start'] ) );
+        $end = date( 'Y-m-d', strtotime( $_POST['end'] ) );
+
+        $records = self::get_empoyee_leave_with_lave_type_record( array(
+            'start_time' => $start,
+            'end_time'   => $end
+        ) );
+
+        wp_send_json_success(array(
+            'records' => $records,
+            'work_week' => self::get_work_week()
+        ));
+    }
+
+    public static function get_employee_leave_entitlement( $emp_id = false ) {
+        $start        = date( 'Y-01-00' );
+        $end          = date( 'Y-12-31' );
+        $emp_id       = $emp_id ? absint( $emp_id ) : get_current_user_id();
+        $leave_units  = array();
+        $leave_counts = array();
+
+        $leaves = self::get_empoyee_leave(array(
+            'start_time' => $start,
+            'end_time'   => $end,
+            'emp_id'     => $emp_id
+        ));
+
+        foreach ( $leaves as $key => $leave) {
+            $date1 = new DateTime($leave->start_time);
+            $date2 = new DateTime($leave->end_time);
+
+            $diff = $date2->diff($date1)->format("%a");
+            $leave->total = $diff + 1;
+
+            $leave_units[$leave->leave_type_id][] = $leave;
+        }
+
+        foreach ( $leave_units as $type_id => $leave_unit ) {
+            $type_leave             = wp_list_pluck( $leave_unit, 'total' );
+            $total_leave            = array_sum( $type_leave );
+            $leave_unit[0]->total   = $total_leave;
+            
+            $leave_counts[] = $leave_unit[0];
+        }
+
+        return $leave_counts;
     }
 }
 

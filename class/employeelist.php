@@ -413,7 +413,7 @@ class Hrm_Employeelist {
 
     function get_employee() {
         $employees = new WP_User_Query( array(
-            'role'   => 'hrm_employee',
+            'role__in'   => array( 'administrator', 'hrm_employee' ),
         ) );
 
         return $employees;

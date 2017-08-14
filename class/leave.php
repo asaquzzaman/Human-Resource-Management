@@ -988,6 +988,11 @@ class Hrm_Leave {
  
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
+        
+        global $current_user;
+
+        $current_user->avatar     = get_avatar( $current_user->ID, 96, 'mm' );
+        $current_user->avatar_url = get_avatar_url( $apply->ID, ['default' => 'mm'] );
 
         $employees   = Hrm_Employeelist::getInstance()->get_employee();
         $leave_types = self::getInstance()->get_leave_types();
@@ -1018,7 +1023,8 @@ class Hrm_Leave {
             'employess'   => $send_employess,
             'apply_to'    => $send_administrators,
             'leave_types' => $leave_types,
-            'leave_entitlements' => $entitlement
+            'leave_entitlements' => $entitlement,
+            'current_user' => $current_user->data
         ));
     }
 
@@ -1070,6 +1076,17 @@ class Hrm_Leave {
         }
 
         return $leave_counts;
+    }
+
+    public static function ajax_create_new_leave() {
+        check_ajax_referer('hrm_nonce');
+        $postdata = $_POST;
+        $new_leave = self::getInstance()->create_new_leave( $postdata );
+        wp_send_json_success();
+    }
+
+    public function create_new_leave( $postdata ) {
+        var_dump( $postdata ); die();
     }
 }
 

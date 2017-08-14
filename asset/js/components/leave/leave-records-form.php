@@ -7,7 +7,7 @@
 
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-				<form action="" @submit.prevent="createNewHolidays()">
+				<form action="" @submit.prevent="createNewLeave()">
 					<div class="hrm-form-field">
 						<label>
 							<?php _e( 'Employee', 'hrm' ); ?>
@@ -126,11 +126,7 @@
 				        $field_obj = array(
 							'label'    =>  __( 'Status', 'hrm' ),
 							'required' =>  true,
-							'option'  => array( 
-								'1' => __( 'Approved', 'hrm' ), 
-								'2' => __( 'Pending', 'hrm' ),
-								'0' => __( 'Cancel', 'hrm' ) 
-							),
+							'option'  => Hrm_Leave::getInstance()->leave_status(),
 				            'field_elements' => array(
 								'id'       => 'hrm-leave-type-select-field',
 								'required' => 'required',

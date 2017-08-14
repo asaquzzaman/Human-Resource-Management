@@ -19,7 +19,9 @@ var Hrm_Leave_Records_Form = {
 			leave_comments: '',
 			emp_leave_with_type_record: [],
 			work_week: [],
-			leave_entitlements: []
+			leave_entitlements: [],
+			apply_leave_date: [],
+			calendar_evt_id: []
 		}
 	},
 
@@ -48,6 +50,8 @@ var Hrm_Leave_Records_Form = {
 					self.emp_leave_with_type_record  = res.emp_leave_with_type_record;
 					self.leave_entitlements     = res.leave_entitlements;
 					self.work_week      = res.work_week;
+					self.emp = res.current_user;
+					self.leave_status = 1;
                 },
 
                 error: function(res) {
@@ -73,14 +77,15 @@ var Hrm_Leave_Records_Form = {
 						
 		},
 
-		createNewHolidays: function() {
+		createNewLeave: function() {
 			
 		    var request_data = {
                 _wpnonce: hrm_ajax_data.nonce,
-                name: this.name,
-                from: this.from,
-                to: this.to,
-                description: this.description,
+                leave_status: this.leave_status,
+                leave_comments: this.leave_comments,
+                leave_type_id: this.leave_type.id,
+                emp_id: this.emp.ID,
+                time: this.apply_leave_date
             },
             
             // is_update  = parseInt( this.department_id ) ? true : false,
@@ -93,7 +98,7 @@ var Hrm_Leave_Records_Form = {
 
             this.show_spinner = true;
 
-            wp.ajax.send('create_new_holidays', {
+            wp.ajax.send('create_new_leave', {
                 data: request_data,
                 
                 success: function(res) {

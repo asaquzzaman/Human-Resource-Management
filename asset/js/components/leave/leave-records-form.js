@@ -21,7 +21,8 @@ var Hrm_Leave_Records_Form = {
 			work_week: [],
 			leave_entitlements: [],
 			apply_leave_date: [],
-			calendar_evt_id: []
+			calendar_evt_id: [],
+			disable_leave_type: false
 		}
 	},
 
@@ -85,7 +86,8 @@ var Hrm_Leave_Records_Form = {
                 leave_comments: this.leave_comments,
                 leave_type_id: this.leave_type.id,
                 emp_id: this.emp.ID,
-                time: this.apply_leave_date
+                time: this.apply_leave_date,
+                disable_leave_type: this.disable_leave_type
             },
             
             // is_update  = parseInt( this.department_id ) ? true : false,
@@ -122,6 +124,15 @@ var Hrm_Leave_Records_Form = {
                     });
                 }
             });
+		},
+
+		change_leve_type_statue: function() {
+			jQuery.each(this.calendar_evt_id, function(index, event_id) {
+				jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', event_id);
+			});
+			
+			this.calendar_evt_id  = [];
+        	this.apply_leave_date = [];
 		}
 	}
 };

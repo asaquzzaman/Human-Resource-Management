@@ -28,38 +28,15 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		            toastr.error('Leave alrady exist');
 		            return;
 				}
-
+				var is_disable_leave_type = context.disable_leave_type;
+				if ( is_disable_leave_type === true ) {
+					HRM_Leave_jQuery_Fullcalendar.inseret_leave_when_leave_type_is_not_exist(context, date, jsEvent, view);
+					return;
+				}
 				var is_leave_type = HRM_Leave_jQuery_Fullcalendar.leave_type_condition(date, jsEvent, view, context);
-
+				
 				if (is_leave_type) {
-					var slct_lv_type    = context.leave_type,
-						lv_types        = context.leave_types,
-						get_type        = context.getIndex(lv_types, slct_lv_type.id, 'id'),
-						get_type        = lv_types[get_type],
-						emp_lv_records  = context.leave_entitlements,
-						target          = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
-						emp_entitlement = emp_lv_records[target].total;
-
-						context.leave_entitlements[target].total = context.leave_entitlements[target].total + 1;
-
-					var newEvent = {
-						title: get_type.leave_type_name,
-						start: moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
-						end: moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
-						backgroundColor: '#e08989',
-						borderColor: '#e08989',
-						allDay: true,
-					};
-
-					var evt = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'renderEvent', newEvent , true);
-					
-					if (evt.length) {
-						jQuery.each(evt, function(indev, val) {
-							var start = moment(val.start._d).format('YYYY-MM-DD');
-							context.calendar_evt_id.push(val._id);
-							context.apply_leave_date.push(start);
-						});
-					}
+					HRM_Leave_jQuery_Fullcalendar.inseret_leave_when_leave_type_exist(context, date, jsEvent, view);
 				}
 				
 		    },
@@ -92,29 +69,111 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		    },
 
 		    eventClick: function(calEvent, jsEvent, view) {
-		    	var in_collect = context.calendar_evt_id.indexOf(calEvent._id);
-				if ( in_collect == '-1' ) {
-					return;
+
+
+				var is_disable_leave_type = context.disable_leave_type;
+
+				if ( is_disable_leave_type ) {
+					HRM_Leave_jQuery_Fullcalendar.remove_event_when_leave_type_is_not_exist(context, calEvent, jsEvent, view);
+				} else {
+					HRM_Leave_jQuery_Fullcalendar.remove_event_when_leave_type_exist(context, calEvent, jsEvent, view);
 				}
- 				
-		    	var slct_lv_type      = context.leave_type,
-					lv_types          = context.leave_types,
-					get_type          = context.getIndex(lv_types, slct_lv_type.id, 'id'),
-					get_type          = lv_types[get_type],
-					emp_lv_records    = context.leave_entitlements,
-					target            = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
-					emp_entitlement   = emp_lv_records[target].total,
-					leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
-					collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
-					
-					context.leave_entitlements[target].total = context.leave_entitlements[target].total - 1;
 
-		        jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
-
-		        context.calendar_evt_id.splice( in_collect, 1 );
-		        context.apply_leave_date.splice( collected_lv_st_d, 1 );
 		    }
 		});
+	},
+
+	remove_event_when_leave_type_exist: function(context, calEvent, jsEvent, view) {
+		var in_collect = context.calendar_evt_id.indexOf(calEvent._id);
+		if ( in_collect == '-1' ) {
+			return;
+		}
+
+		var slct_lv_type      = context.leave_type,
+			lv_types          = context.leave_types,
+			get_type          = context.getIndex(lv_types, slct_lv_type.id, 'id'),
+			get_type          = lv_types[get_type],
+			emp_lv_records    = context.leave_entitlements,
+			target            = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
+			emp_entitlement   = emp_lv_records[target].total,
+			leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
+			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
+			
+			context.leave_entitlements[target].total = context.leave_entitlements[target].total - 1;
+
+        jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
+
+        context.calendar_evt_id.splice( in_collect, 1 );
+        context.apply_leave_date.splice( collected_lv_st_d, 1 );
+	},
+
+	remove_event_when_leave_type_is_not_exist: function(context, calEvent, jsEvent, view) {
+		var in_collect = context.calendar_evt_id.indexOf(calEvent._id);
+		if ( in_collect == '-1' ) {
+			return;
+		}
+
+		var leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
+			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
+
+
+        jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
+
+        context.calendar_evt_id.splice( in_collect, 1 );
+        context.apply_leave_date.splice( collected_lv_st_d, 1 );
+	},
+
+	inseret_leave_when_leave_type_exist: function(context, date, jsEvent, view) {
+		var slct_lv_type    = context.leave_type,
+			lv_types        = context.leave_types,
+			get_type        = context.getIndex(lv_types, slct_lv_type.id, 'id'),
+			get_type        = lv_types[get_type],
+			emp_lv_records  = context.leave_entitlements,
+			target          = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
+			emp_entitlement = emp_lv_records[target].total;
+
+			context.leave_entitlements[target].total = context.leave_entitlements[target].total + 1;
+
+		var newEvent = {
+			title: get_type.leave_type_name,
+			start: moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+			end: moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
+			backgroundColor: '#e08989',
+			borderColor: '#e08989',
+			allDay: true,
+		};
+
+		var evt = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'renderEvent', newEvent , true);
+		
+		if (evt.length) {
+			jQuery.each(evt, function(indev, val) {
+				var start = moment(val.start._d).format('YYYY-MM-DD');
+				context.calendar_evt_id.push(val._id);
+				context.apply_leave_date.push(start);
+			});
+		}
+	},
+
+	inseret_leave_when_leave_type_is_not_exist: function(context, date, jsEvent, view) {
+
+		var newEvent = {
+			title: 'Extra',
+			start: moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+			end: moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
+			backgroundColor: '#e08989',
+			borderColor: '#e08989',
+			allDay: true,
+		};
+
+		var evt = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'renderEvent', newEvent , true);
+		
+		if (evt.length) {
+			jQuery.each(evt, function(indev, val) {
+				var start = moment(val.start._d).format('YYYY-MM-DD');
+				context.calendar_evt_id.push(val._id);
+				context.apply_leave_date.push(start);
+			});
+		}
 	},
 
 	leave_type_condition: function(date, jsEvent, view, context) {
@@ -209,7 +268,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		jQuery.each(events, function(key, val) {
 
 			var obj = {
-				title: val.type_name,
+				title: val.leave_type_id == '0' ? 'Extra' : val.type_name,
 				start: moment(val.start_time).format('YYYY-MM-DD'), //self.get_date(val.start_time),
 				end: moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 				backgroundColor: '#e08989',

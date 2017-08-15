@@ -96,6 +96,7 @@ class Hrm_Settings {
         $selected     = isset( $element['selected'] ) ? $element['selected'] : '';
         $option       = isset( $element['option'] ) ? $element['option'] : array();
         $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $is_vue       = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
         $elements     = array();
 
         foreach ( $field_elemts as $key => $ele ) {
@@ -113,7 +114,12 @@ class Hrm_Settings {
         $html .= sprintf( '<select %s>', $elements );
 
         foreach ( $option as $key => $label ) {
-            $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
+            if ( $is_vue ) {
+                $html .= sprintf( '<option value="%1$s">%2$s</option>', esc_attr( $key ), esc_attr( $label ) ); 
+            } else {
+                $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
+            }
+            
         }
 
         $html .= sprintf( '</select>' );

@@ -1086,7 +1086,31 @@ class Hrm_Leave {
     }
 
     public function create_new_leave( $postdata ) {
-        var_dump( $postdata ); die();
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'hrm_leave';
+
+        $leve_status    = empty( $postdata['leave_status'] ) ? 1 : $postdata['leave_status'];
+        $leave_comments = empty( $postdata['leave_comments'] ) ? __('No comment', 'hrm') : $postdata['leave_comments'];
+        $leave_type_id  = empty( $postdata['leave_type_id'] ) ? 0 : $postdata['leave_type_id'];
+        $emp_id         = empty( $postdata['emp_id'] ) ? get_current_user_id() : absint( $postdata['emp_id'] ); 
+        $times          = empty( $postdata['time'] ) ? array() : $postdata['time'];
+        $disable_leave_type = empty( $postdata['disable_leave_type'] ) ? false : $postdata['disable_leave_type'];
+
+        foreach ( $times as $key => $time ) {
+            $data = array(
+                'leave_status'   => $leve_status,
+                'leave_comments' => $leave_comments,
+                'leave_type_id'  => $disable_leave_type === true ? 0 : $leave_type_id,
+                'emp_id'         => $emp_id,
+                'start_time'     => date( 'Y-m-d', strtotime( $time ) ),
+                'end_time'       => date( 'Y-m-d', strtotime( $time ) )
+            );
+
+            $format = array( '%d', '%s', '%d', '%d', '%s', '%s');
+
+            $wpdb->insert( $table, $data, $format );
+        }
     }
 }
 

@@ -79,6 +79,27 @@
 					    <div class="hrm-clear"></div>
 					</div>
 
+					<?php
+					$field = array(
+			            'label' => __( 'Disable leave type', 'hrm' ),
+			            //'desc' => __( 'Disable leave type', 'hrm' ),
+			            'fields' => array(
+			                array(
+			                    'label'   => __( 'Disable', 'hrm' ),
+			                    'checked' => '',
+			                    'elements' => array(
+			                    	'id'      => 'hrm-disable-leave-type-checkbox',
+			                    	'v-model' => 'disable_leave_type',
+			                    	"@change" => 'change_leve_type_statue()'
+			                    )
+			                )
+			            ),
+			        );
+
+			        echo Hrm_Settings::getInstance()->new_checkbox_field( $field );
+
+			        ?>
+
 					<div class="hrm-form-field">
 						<label>
 							<?php _e( 'Apply to', 'hrm' ); ?>
@@ -126,6 +147,7 @@
 				        $field_obj = array(
 							'label'    =>  __( 'Status', 'hrm' ),
 							'required' =>  true,
+							'is_vue' => true,
 							'option'  => Hrm_Leave::getInstance()->leave_status(),
 				            'field_elements' => array(
 								'id'       => 'hrm-leave-type-select-field',
@@ -144,35 +166,7 @@
 
 					<?php
 
-					   //      $field_obj = array(
-								// 'label'    =>  __( 'From ', 'hrm' ),
-								// 'required' =>  true,
-					   //          'field_elements' => array(
-					   //          	'v-hrm-datepicker',
-								// 	'class'    => 'hrm-date-picker-from',
-								// 	'id'       => 'hrm-leave-holidays-from-text-field',
-								// 	'required' => 'required',
-								// 	':value'  => 'start_time',
-								// 	'name'     => 'start_time',
-					   //          ),
-					   //      );
 
-					   //      echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
-
-					   //      $field_obj = array(
-					   //          'label' =>  __( 'To', 'hrm' ),
-					   //          'required' =>  true,
-					   //          'field_elements' => array(
-								// 	'v-hrm-datepicker',
-								// 	'class'    => 'hrm-date-picker-to',
-								// 	'id'       => 'hrm-leave-holidays-to-text-field',
-								// 	'required' => 'required',
-								// 	':value'   => 'end_time',
-								// 	'name'     => 'end_time',
-					   //          ),
-					   //      );
-
-					   //       echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
 
 					        $field_obj = array(
 								'label' =>  __( 'Description', 'hrm' ),

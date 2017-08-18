@@ -95,12 +95,13 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			get_type          = lv_types[get_type],
 			emp_lv_records    = context.leave_entitlements,
 			target            = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
-			emp_entitlement   = emp_lv_records[target].total,
 			leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
 			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
 			
-			context.leave_entitlements[target].total = context.leave_entitlements[target].total - 1;
-
+			if ( context.leave_entitlements.length ) {
+				context.leave_entitlements[target].total = context.leave_entitlements[target].total - 1;
+			}
+			
         jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
 
         context.calendar_evt_id.splice( in_collect, 1 );
@@ -129,10 +130,11 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			get_type        = context.getIndex(lv_types, slct_lv_type.id, 'id'),
 			get_type        = lv_types[get_type],
 			emp_lv_records  = context.leave_entitlements,
-			target          = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' ),
-			emp_entitlement = emp_lv_records[target].total;
+			target          = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' );
 
-			context.leave_entitlements[target].total = context.leave_entitlements[target].total + 1;
+			if ( context.leave_entitlements.length ) {
+				context.leave_entitlements[target].total = context.leave_entitlements[target].total + 1;
+			}
 
 		var newEvent = {
 			title: get_type.leave_type_name,
@@ -184,14 +186,19 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		if (selected_leave_type != '') {
 			var target = context.getIndex( emp_lv_records, selected_leave_type.id, 'leave_type_id' ),
 				get_type          = context.getIndex(leave_types, selected_leave_type.id, 'id'),
-				get_type          = leave_types[get_type];
+				get_type          = leave_types[get_type],
 				slct_lv_typ_entit = get_type.entitlement;
-				emp_entitlement   = emp_lv_records[target].total;
 
-				if (slct_lv_typ_entit <= emp_entitlement) {
-					alert('Excid entitlement');
-					return false;
-				}
+			if ( emp_lv_records.length ) {
+				var emp_entitlement   = emp_lv_records[target].total;
+			} else {
+				var emp_entitlement   = 0;
+			}
+
+			if (slct_lv_typ_entit <= emp_entitlement) {
+				alert('Excid entitlement');
+				return false;
+			}
 		} else {
 			alert('Please select leave type');
 			return false;

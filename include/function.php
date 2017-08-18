@@ -1,4 +1,8 @@
 <?php
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+
 function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access_point = null, $user_id = null ) {
     if( ! apply_filters( 'hrm_free_permission', false ) ) {
         return true;
@@ -377,5 +381,20 @@ function hrm_get_js_template( $file_path, $id ) {
 function hrm_validateDate($date, $format = 'Y-m-d H:i:s') {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
+}
+
+function hrm_load_orm() {
+    $capsule = new Capsule;
+   
+    $status = $capsule->addConnection( config('db') );
+
+    // Setup eloquent model events
+    $capsule->setEventDispatcher(new Dispatcher(new Container));
+
+    // Make this Capsule instance available globally via static methods... (optional)
+    $capsule->setAsGlobal();
+
+    // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
+    $capsule->bootEloquent();
 }
 

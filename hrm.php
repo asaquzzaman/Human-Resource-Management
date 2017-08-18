@@ -59,20 +59,19 @@ class WP_Hrm {
     }
 
     function __construct() {
-        $this->initial();
+        $this->define_constants();
+        $this->include();
 
         $this->instantiate();
         $this->init_action();
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
-    function initial() {
-        $this->define_constants();
+    function include() {
+        
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
+        require_once dirname (__FILE__) . '/vendor/autoload.php';
 
-        require_once dirname (__FILE__) . '/include/function.php';
-        require_once dirname (__FILE__) . '/include/urls.php';
-        require_once dirname (__FILE__) . '/include/page.php';
     }
 
     function autoload( $class ) {

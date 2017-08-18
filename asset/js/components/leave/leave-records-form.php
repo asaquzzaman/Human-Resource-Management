@@ -50,7 +50,7 @@
 					    <div class="hrm-clear"></div>
 					</div>
 					
-					<div class="hrm-form-field">
+					<div class="hrm-form-field" v-if="!disable_leave_type">
 						<label>
 							<?php _e( 'Leave Type', 'hrm' ); ?>
 							<em>*</em>
@@ -82,7 +82,7 @@
 					<?php
 					$field = array(
 			            'label' => __( 'Disable leave type', 'hrm' ),
-			            //'desc' => __( 'Disable leave type', 'hrm' ),
+			            'is_vue' => true,
 			            'fields' => array(
 			                array(
 			                    'label'   => __( 'Disable', 'hrm' ),
@@ -158,30 +158,23 @@
 				        );
 
 						echo Hrm_Settings::getInstance()->new_select_field( $field_obj );
+
+				        $field_obj = array(
+							'label' =>  __( 'Description', 'hrm' ),
+							'id'       => 'hrm-leave-description-textarea-field',
+				            'field_elements' => array(
+								'v-model'  => 'leave_comments'
+				            ),
+				        );
+
+					    echo Hrm_Settings::getInstance()->new_textarea_field( $field_obj );
 					?>
 					<div class="hrm-form-field">
 						<label><?php _e( 'Leave Duration', 'hrm' ); ?><em>*</em></label>
 						<div v-hrm-leave-jquery-fullcalendar class="hrm-leave-jquery-fullcalendar"></div>
 					</div>
 
-					<?php
-
-
-
-					        $field_obj = array(
-								'label' =>  __( 'Description', 'hrm' ),
-								'required' =>  true,
-					            'field_elements' => array(
-									'class'    => '',
-									'id'       => 'hrm-leave-description-textarea-field',
-									'required' => 'required',
-									'name'     => 'leave_comments',
-									'v-model'  => 'leave_comments'
-					            ),
-					        );
-
-					        echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
-					?>
+					
 					<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="<?php _e( 'Save changes', 'hrm' ); ?>">
 					<a @click.prevent="show_hide_new_leave_records_form($event)" target="_blank" href="#" class="button hrm-form-cancel"><?php _e( 'Cancel', 'hrm' ); ?></a>
 				</form>

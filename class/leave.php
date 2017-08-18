@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+use HRM\Src\Leave\Models\Leave;
+
 class Hrm_Leave {
 
 	private static $_instance;
@@ -1081,11 +1084,21 @@ class Hrm_Leave {
     public static function ajax_create_new_leave() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-        $new_leave = self::getInstance()->create_new_leave( $postdata );
+        $new_leave = self::getInstance()
+                        ->update_leave_validation( $postdata )
+                        ->create_new_leave( $postdata );
+        
         wp_send_json_success();
     }
 
+    public function update_leave_validation( $postdata ) {
+       return $this;
+
+        //return new WP_Error( '78', 'this is error', 200 );
+    }
+
     public function create_new_leave( $postdata ) {
+
         global $wpdb;
 
         $table = $wpdb->prefix . 'hrm_leave';
@@ -1106,10 +1119,7 @@ class Hrm_Leave {
                 'start_time'     => date( 'Y-m-d', strtotime( $time ) ),
                 'end_time'       => date( 'Y-m-d', strtotime( $time ) )
             );
-
-            $format = array( '%d', '%s', '%d', '%d', '%s', '%s');
-
-            $wpdb->insert( $table, $data, $format );
+            Leave::create( $postdata );
         }
     }
 }

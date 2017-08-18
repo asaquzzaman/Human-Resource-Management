@@ -351,7 +351,7 @@ class Hrm_Settings {
         $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
         $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
         $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
-        
+        $is_vue     = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
         $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
         $html      .= '<span class="hrm-radio-wrap">';
 
@@ -375,7 +375,12 @@ class Hrm_Settings {
 
             $elements = implode( ' ', $elements );
 
-            $html .= sprintf( '<input type="radio" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
+            if ( $is_vue ) {
+                $html .= sprintf( '<input type="radio" %1$s/>', $elements );
+            } else {
+                $html .= sprintf( '<input type="radio" %1$s %2$s />', $elements, checked( $value, $checked, false ) );   
+            }
+            
             $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
 
         }
@@ -457,6 +462,7 @@ class Hrm_Settings {
         $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
         $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
         $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
+        $is_vue     = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
         
         $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
         $html      .= '<span class="hrm-checkbox-wrap">';
@@ -480,8 +486,13 @@ class Hrm_Settings {
             }
 
             $elements = implode( ' ', $elements );
+            
+            if ( $is_vue ) {
+                $html .= sprintf( '<input type="checkbox" %1$s/>', $elements );
+            } else {
+                $html .= sprintf( '<input type="checkbox" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
 
-            $html .= sprintf( '<input type="checkbox" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
+            }
             $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
 
         }
@@ -559,6 +570,47 @@ class Hrm_Settings {
             echo $this->multiple_field_inside_this_wrap_close( $element );
         return ob_get_clean();
     }
+
+    function new_textarea_field( $element ) {
+
+        $id         = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $required   = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $value      = isset( $element['value'] ) ? esc_attr( $element['value'] ) : '';
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+        $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html .= sprintf( '<textarea %1$s>%2$s</textarea>', $elements, $value );
+        $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+    }
+
 
     function textarea_field( $name = '', $element ) {
         if( empty( $name ) ) {

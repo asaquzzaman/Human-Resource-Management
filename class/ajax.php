@@ -2,6 +2,8 @@
 class Hrm_Ajax {
     private static $instance;
 
+    public static $crud;
+
     public static function getInstance() {
         if( ! self::$instance ) {
             self::$instance = new hrm_Ajax();
@@ -11,6 +13,12 @@ class Hrm_Ajax {
     }
 
     function __construct() {
+        add_action( 'init', array( $this, 'action' ), 11 );
+    }
+
+    function action() {
+        self::$crud = new HRM\Core\Crud\Crud();
+
         add_action( 'wp_ajax_ajax_referer_insert', array( $this, 'add_new_data' ) );
         add_action( 'wp_ajax_hrm_form_edit', array( $this, 'edit' ) );
         add_action( 'wp_ajax_single_form', array( $this, 'singel_form_add' ) );
@@ -99,7 +107,10 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
         add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );
         add_action( 'wp_ajax_get_leave_record_events', array( 'Hrm_Leave', 'ajax_get_leave_record_events' ) );
-        add_action( 'wp_ajax_create_new_leave', array( 'Hrm_Leave', 'ajax_create_new_leave' ) );
+        //array( 'Hrm_Leave', 'ajax_create_new_leave' )
+        
+        add_action( 'wp_ajax_create_new_leave', array( self::$crud, 'ajax_data_process' ) );
+
     }
 
     function partial_payment_delete() {

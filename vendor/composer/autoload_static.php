@@ -35,7 +35,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         ),
         'H' => 
         array (
-            'HRM\\Src\\' => 8,
+            'HRM\\Models\\' => 11,
             'HRM\\Include\\' => 12,
             'HRM\\Core\\' => 9,
         ),
@@ -82,9 +82,9 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
-        'HRM\\Src\\' => 
+        'HRM\\Models\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/models',
         ),
         'HRM\\Include\\' => 
         array (
@@ -110,8 +110,11 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'HRM\\Core\\Config\\Config' => __DIR__ . '/../..' . '/core/Config/Config.php',
+        'HRM\\Core\\Crud\\Action' => __DIR__ . '/../..' . '/core/Crud/Action.php',
+        'HRM\\Core\\Crud\\Crud' => __DIR__ . '/../..' . '/core/Crud/Crud.php',
+        'HRM\\Core\\Crud\\Pattern' => __DIR__ . '/../..' . '/core/Crud/Pattern.php',
         'HRM\\Core\\Singletonable' => __DIR__ . '/../..' . '/core/Singletonable.php',
-        'HRM\\Src\\Leave\\Models\\Leave' => __DIR__ . '/../..' . '/src/Leave/Models/leave.php',
+        'HRM\\Models\\Leave' => __DIR__ . '/../..' . '/models/leave.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
         'Illuminate\\Container\\ContextualBindingBuilder' => __DIR__ . '/..' . '/illuminate/container/ContextualBindingBuilder.php',

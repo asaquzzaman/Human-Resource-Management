@@ -19,7 +19,7 @@
         "psr-4": {
             "HRM\\Core\\": "core/",
             "HRM\\Include\\": "include/",
-            "HRM\\Src\\": "src/"
+            "HRM\\Models\\": "models/"
         },
         "files": [
             "include/loaders.php",

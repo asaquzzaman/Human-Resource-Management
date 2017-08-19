@@ -1,7 +1,5 @@
 <?php
-
 use Illuminate\Database\Capsule\Manager as Capsule;
-use HRM\Src\Leave\Models\Leave;
 
 class Hrm_Leave {
 
@@ -1098,6 +1096,7 @@ class Hrm_Leave {
     }
 
     public function create_new_leave( $postdata ) {
+        $leave_model = new HRM\Src\Leave\Models\Leave();
 
         global $wpdb;
 
@@ -1119,7 +1118,7 @@ class Hrm_Leave {
                 'start_time'     => date( 'Y-m-d', strtotime( $time ) ),
                 'end_time'       => date( 'Y-m-d', strtotime( $time ) )
             );
-            Leave::create( $postdata );
+            $leave_model::create( $postdata );
         }
     }
 }

@@ -87,7 +87,9 @@ var Hrm_Leave_Records_Form = {
                 leave_type_id: this.leave_type.id,
                 emp_id: this.emp.ID,
                 time: this.apply_leave_date,
-                disable_leave_type: this.disable_leave_type
+                disable_leave_type: this.disable_leave_type,
+                class: 'Leave',
+                method: 'create'
             },
             
             // is_update  = parseInt( this.department_id ) ? true : false,

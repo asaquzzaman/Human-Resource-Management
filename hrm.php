@@ -70,7 +70,10 @@ class WP_Hrm {
     function include() {
         
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
-        require_once dirname (__FILE__) . '/vendor/autoload.php';
+        
+        add_action( 'init', function() {
+            require_once dirname (__FILE__) . '/vendor/autoload.php';   
+        });
 
     }
 

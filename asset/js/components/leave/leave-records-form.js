@@ -112,7 +112,7 @@ var Hrm_Leave_Records_Form = {
                     toastr.success(res.success);
                     
                     self.slideUp(jQuery('.hrm-form-cancel'), function() {
-                    	self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+                    	//self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
                     });
 
                     

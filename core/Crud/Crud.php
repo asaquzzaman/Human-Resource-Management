@@ -75,27 +75,32 @@ class Crud extends Action {
 	}
 
 
-	public function get_message() {
-		return $this->error;
-	}
-
 	public static function ajax_data_process() {
 		check_ajax_referer('hrm_nonce');
 
-		$class  = isset( $_POST['class'] ) ? $_POST['class'] : '';
-		$method = isset( $_POST['method'] ) ? $_POST['method'] : '';
+		$success = self::data_process( $_POST );
+
+		if ( is_wp_error( $success ) ) {
+			wp_send_json_error( array(
+				'error' => $success->get_error_messages()
+			));
+		}
+
+		wp_send_json_success(array(
+			'success' => __( 'Successfully updated', 'hrm' )
+		));
+	}
+
+	public static function data_process( $postdata ) {
+
+		$class  = isset( $postdata['class'] ) ? $postdata['class'] : '';
+		$method = isset( $postdata['method'] ) ? $postdata['method'] : '';
 		$self   = self::getInstance();
 
-		$self->set_post_data( $_POST );
+		$self->set_post_data( $postdata );
 		$self->set_class( $class );
 		$self->set_method( $method );
 		
-		$self->$method();
-
-		$message = $self->get_message();
-		var_dump( $message ); die();
-		wp_send_json_success( array(
-			'error' => $message
-		) );
+		return $self->$method();
 	}
 }

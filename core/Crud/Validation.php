@@ -8,7 +8,7 @@ trait Validation {
 	private $default_message;
 	private $value;
 	private $name;
-
+	private $postdata = array();
 
 	/**
 	 * Initial function of this object
@@ -20,9 +20,10 @@ trait Validation {
 	 * @return  void 
 	 */
 	public function get_rules( $postdata, $field_name, $rules ) {
-		$this->value = isset( $postdata[$field_name] ) ? trim( $postdata[$field_name] ) : '';
-		$this->default_message = $rules['message'];
-		$this->name = $field_name;
+		$this->value           = isset( $postdata[$field_name] ) ? trim( $postdata[$field_name] ) : '';
+		$this->default_message = empty( $rules['message'] ) ? '' : $rules['message'];
+		$this->name            = $field_name;
+		$this->postdata        = $postdata;
 
 		$types = explode( '|', $rules['type'] ); 
 
@@ -55,12 +56,13 @@ trait Validation {
 	 * @return  voie
 	 */
 	function call_method( $method, $key ) {
-		$find = strpos( $method, ':' );
-		
-		if ( $find === false ) {
-			$this->$method();
-		} else {
+		$find     = strpos( $method, ':' );
+
+		if ( $find !== false  ) {
 			$this->param_vaidation( $method );
+		
+		} else {
+			$this->$method();
 		}
 	}
 
@@ -97,5 +99,25 @@ trait Validation {
 		
 	}
 
+	function default( $arg ) {
+		$value 			 = array_shift( $arg );
+		$postdata        = $this->postdata;
+		$name            = $this->name;
+		$postdata[$name] = empty( $postdata[$name] ) ? $value : $postdata[$name];
+		$this->postdata  = $postdata;
+	}
 
+	function relational_required( $args ) {
+		$field       = $args[0];
+		$compare_val = $args[1];
+
+		if ( 
+			isset( $this->postdata[$field] ) 
+			&& 
+			( $this->postdata[$field] === $compare_val )
+		) {
+			$this->required();
+		}  
+	}
 }
+

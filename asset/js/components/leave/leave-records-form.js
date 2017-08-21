@@ -84,10 +84,11 @@ var Hrm_Leave_Records_Form = {
                 _wpnonce: hrm_ajax_data.nonce,
                 leave_status: this.leave_status,
                 leave_comments: this.leave_comments,
-                leave_type_id: this.leave_type.id,
-                emp_id: this.emp.ID,
+                leave_type_id: ! this.leave_type ? '' : this.leave_type.id,
+                emp_id: ! this.emp ? '' : this.emp.ID,
                 time: this.apply_leave_date,
                 disable_leave_type: this.disable_leave_type,
+                apply_to: this.apply_to.length ? true : '',
                 class: 'Leave',
                 method: 'create'
             },

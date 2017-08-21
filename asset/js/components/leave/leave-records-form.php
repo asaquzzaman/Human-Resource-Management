@@ -151,7 +151,7 @@
 							'option'  => Hrm_Leave::getInstance()->leave_status(),
 				            'field_elements' => array(
 								'id'       => 'hrm-leave-type-select-field',
-								'required' => 'required',
+								//'required' => 'required',
 								'v-model'  => 'leave_status',
 								'name'     => 'leave_status',
 				            )

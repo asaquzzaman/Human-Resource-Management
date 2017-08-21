@@ -92,7 +92,6 @@ class Crud extends Action {
 	}
 
 	public static function data_process( $postdata ) {
-
 		$class  = isset( $postdata['class'] ) ? $postdata['class'] : '';
 		$method = isset( $postdata['method'] ) ? $postdata['method'] : '';
 		$self   = self::getInstance();

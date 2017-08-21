@@ -32,7 +32,7 @@ abstract class Action implements Pattern {
 		$model 		= $this->get_model();
 		$postdata   = $this->get_post_data();	
 		
-		$model::create( $postdata );
+		return $model::create( $postdata );
 	}
 
 	public function create_validation() {
@@ -46,6 +46,9 @@ abstract class Action implements Pattern {
 
 		//Trait init method for individual field validation
 		$this->get_rules( $postdata, $name, $rules );
+
+		//set default data for individual field
+		$this->set_post_data( $this->postdata );
 	}
 
 	private function get_model() {

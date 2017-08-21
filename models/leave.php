@@ -5,11 +5,18 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Leave extends Eloquent {
 
-    public $create_rules = array (
+    public $create_rules =  array (
         'start_time' => array (
             'type' => 'required',
             'message' => array(
                 'required'  =>  'Start time is required',
+            )
+        ),
+
+        'apply_to' => array (
+            'type' => 'required',
+            'message' => array(
+                'required'  =>  'Manager is not define',
             )
         ),
 
@@ -20,9 +27,13 @@ class Leave extends Eloquent {
             )
         ),
 
-
+        'leave_type_id' => array (
+            'type' => 'relational_required:disable_leave_type,false',
+            'message' => array(
+                'required'  =>  'Leave type is required',
+            )
+        )
     );
-
 
     protected $primaryKey = 'id';
     protected $table      = 'hrm_leave';
@@ -36,4 +47,20 @@ class Leave extends Eloquent {
 		'start_time',
 		'end_time',
     ];
+
+    public function setEmpIdAttribute( $value ) {
+         $this->attributes['emp_id'] = absint( $value ) > 0 ? $value : get_current_user_id();
+    }
+
+    public function setLeaveCommentsAttribute( $value ) {
+         $this->attributes['leave_comments'] =  ! trim( $value )  ? __( 'No comment', 'hrm' ) : $value;
+    }
+
+    public function setLeaveStatusAttribute( $value ) {
+         $this->attributes['leave_status'] =  absint( $value ) <= 0 ? 1 : $value;
+    }
+
+    public function setLeaveTypeIdAttribute( $value ) {
+         $this->attributes['leave_type_id'] =  absint( $value ) <= 0 ? 0 : $value;
+    }
 }

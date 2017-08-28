@@ -3,4 +3,5 @@
 		<hrm-leave-records-form></hrm-leave-records-form>
 	</div>
 	<hrm-leave-records-add-btn></hrm-leave-records-add-btn>
+	<hrm-leave-records-render></hrm-leave-records-render>
 </div>

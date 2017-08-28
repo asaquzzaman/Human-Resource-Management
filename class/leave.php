@@ -1,5 +1,10 @@
 <?php
+
 use Illuminate\Database\Capsule\Manager as Capsule;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal\Resource\Collection as Collection;
+use HRM\Core\Transformer_Manager;
+use HRM\Core\Leave\Leave_Transformer;
 
 class Hrm_Leave {
 
@@ -1104,6 +1109,29 @@ class Hrm_Leave {
         wp_send_json_success(array(
             'success' => __( 'Successfully updated', 'hrm' )
         ));
+    }
+
+    public static function ajax_get_leave_records() {
+        check_ajax_referer('hrm_nonce');
+        return self::getInstance()->get_leave_records();
+    }
+
+    public function get_leave_records() {
+        $leave_model = new HRM\Models\leave();
+        $transformer = new Transformer_Manager();
+
+
+
+        $leaves           = $leave_model::paginate();
+        $leave_collection = $leaves->getCollection();
+        $resource           = new Collection( $leave_collection, new Leave_Transformer   );
+        
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
+
+
+        $response = $transformer->get_response( $resource );
+
+        echo '<pre>'; print_r( $response ); echo '</pre>'; die();
     }
 
 }

@@ -24,6 +24,10 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Translation\\' => 30,
         ),
+        'L' => 
+        array (
+            'League\\Fractal\\' => 15,
+        ),
         'I' => 
         array (
             'Illuminate\\Support\\' => 19,
@@ -57,6 +61,10 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'League\\Fractal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/fractal/src',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -105,6 +113,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
     );
 
     public static $classMap = array (
+        'CPM_Proect' => __DIR__ . '/../..' . '/class/test.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
@@ -114,9 +123,28 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'HRM\\Core\\Crud\\Crud' => __DIR__ . '/../..' . '/core/Crud/Crud.php',
         'HRM\\Core\\Crud\\Pattern' => __DIR__ . '/../..' . '/core/Crud/Pattern.php',
         'HRM\\Core\\Crud\\Validation' => __DIR__ . '/../..' . '/core/Crud/Validation.php',
+        'HRM\\Core\\Leave\\Leave_Transformer' => __DIR__ . '/../..' . '/core/Leave/Leave_Transform.php',
         'HRM\\Core\\Singletonable' => __DIR__ . '/../..' . '/core/Singletonable.php',
+        'HRM\\Core\\Transformer_Manager' => __DIR__ . '/../..' . '/core/Transformer_Manager.php',
         'HRM\\Models\\Leave' => __DIR__ . '/../..' . '/models/Leave.php',
-        'HRM\\Models\\Leave_Default' => __DIR__ . '/../..' . '/models/Leave_Default.php',
+        'HRM_Client' => __DIR__ . '/../..' . '/class/client.php',
+        'HRM_File' => __DIR__ . '/../..' . '/class/file.php',
+        'HRM_Upgrade' => __DIR__ . '/../..' . '/class/upgrade.php',
+        'Hrm_Admin' => __DIR__ . '/../..' . '/class/admin.php',
+        'Hrm_Ajax' => __DIR__ . '/../..' . '/class/ajax.php',
+        'Hrm_Attendance' => __DIR__ . '/../..' . '/class/attendance.php',
+        'Hrm_Db' => __DIR__ . '/../..' . '/class/db.php',
+        'Hrm_Employee' => __DIR__ . '/../..' . '/class/employee.php',
+        'Hrm_Employeelist' => __DIR__ . '/../..' . '/class/employeelist.php',
+        'Hrm_Evaluation' => __DIR__ . '/../..' . '/class/evaluation.php',
+        'Hrm_Init' => __DIR__ . '/../..' . '/class/init.php',
+        'Hrm_JsTemplate' => __DIR__ . '/../..' . '/class/jstemplate.php',
+        'Hrm_Leave' => __DIR__ . '/../..' . '/class/leave.php',
+        'Hrm_Pim' => __DIR__ . '/../..' . '/class/pim.php',
+        'Hrm_Scripts' => __DIR__ . '/../..' . '/class/scripts.php',
+        'Hrm_Settings' => __DIR__ . '/../..' . '/class/settings.php',
+        'Hrm_Time' => __DIR__ . '/../..' . '/class/time.php',
+        'Hrm_Update' => __DIR__ . '/../..' . '/class/update.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
         'Illuminate\\Container\\ContextualBindingBuilder' => __DIR__ . '/..' . '/illuminate/container/ContextualBindingBuilder.php',
@@ -375,6 +403,31 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'Illuminate\\Support\\Traits\\CapsuleManagerTrait' => __DIR__ . '/..' . '/illuminate/support/Traits/CapsuleManagerTrait.php',
         'Illuminate\\Support\\Traits\\Macroable' => __DIR__ . '/..' . '/illuminate/support/Traits/Macroable.php',
         'Illuminate\\Support\\ViewErrorBag' => __DIR__ . '/..' . '/illuminate/support/ViewErrorBag.php',
+        'League\\Fractal\\Manager' => __DIR__ . '/..' . '/league/fractal/src/Manager.php',
+        'League\\Fractal\\Pagination\\Cursor' => __DIR__ . '/..' . '/league/fractal/src/Pagination/Cursor.php',
+        'League\\Fractal\\Pagination\\CursorInterface' => __DIR__ . '/..' . '/league/fractal/src/Pagination/CursorInterface.php',
+        'League\\Fractal\\Pagination\\DoctrinePaginatorAdapter' => __DIR__ . '/..' . '/league/fractal/src/Pagination/DoctrinePaginatorAdapter.php',
+        'League\\Fractal\\Pagination\\IlluminatePaginatorAdapter' => __DIR__ . '/..' . '/league/fractal/src/Pagination/IlluminatePaginatorAdapter.php',
+        'League\\Fractal\\Pagination\\PagerfantaPaginatorAdapter' => __DIR__ . '/..' . '/league/fractal/src/Pagination/PagerfantaPaginatorAdapter.php',
+        'League\\Fractal\\Pagination\\PaginatorInterface' => __DIR__ . '/..' . '/league/fractal/src/Pagination/PaginatorInterface.php',
+        'League\\Fractal\\Pagination\\PhalconFrameworkPaginatorAdapter' => __DIR__ . '/..' . '/league/fractal/src/Pagination/PhalconFrameworkPaginatorAdapter.php',
+        'League\\Fractal\\Pagination\\ZendFrameworkPaginatorAdapter' => __DIR__ . '/..' . '/league/fractal/src/Pagination/ZendFrameworkPaginatorAdapter.php',
+        'League\\Fractal\\ParamBag' => __DIR__ . '/..' . '/league/fractal/src/ParamBag.php',
+        'League\\Fractal\\Resource\\Collection' => __DIR__ . '/..' . '/league/fractal/src/Resource/Collection.php',
+        'League\\Fractal\\Resource\\Item' => __DIR__ . '/..' . '/league/fractal/src/Resource/Item.php',
+        'League\\Fractal\\Resource\\NullResource' => __DIR__ . '/..' . '/league/fractal/src/Resource/NullResource.php',
+        'League\\Fractal\\Resource\\Primitive' => __DIR__ . '/..' . '/league/fractal/src/Resource/Primitive.php',
+        'League\\Fractal\\Resource\\ResourceAbstract' => __DIR__ . '/..' . '/league/fractal/src/Resource/ResourceAbstract.php',
+        'League\\Fractal\\Resource\\ResourceInterface' => __DIR__ . '/..' . '/league/fractal/src/Resource/ResourceInterface.php',
+        'League\\Fractal\\Scope' => __DIR__ . '/..' . '/league/fractal/src/Scope.php',
+        'League\\Fractal\\ScopeFactory' => __DIR__ . '/..' . '/league/fractal/src/ScopeFactory.php',
+        'League\\Fractal\\ScopeFactoryInterface' => __DIR__ . '/..' . '/league/fractal/src/ScopeFactoryInterface.php',
+        'League\\Fractal\\Serializer\\ArraySerializer' => __DIR__ . '/..' . '/league/fractal/src/Serializer/ArraySerializer.php',
+        'League\\Fractal\\Serializer\\DataArraySerializer' => __DIR__ . '/..' . '/league/fractal/src/Serializer/DataArraySerializer.php',
+        'League\\Fractal\\Serializer\\JsonApiSerializer' => __DIR__ . '/..' . '/league/fractal/src/Serializer/JsonApiSerializer.php',
+        'League\\Fractal\\Serializer\\Serializer' => __DIR__ . '/..' . '/league/fractal/src/Serializer/Serializer.php',
+        'League\\Fractal\\Serializer\\SerializerAbstract' => __DIR__ . '/..' . '/league/fractal/src/Serializer/SerializerAbstract.php',
+        'League\\Fractal\\TransformerAbstract' => __DIR__ . '/..' . '/league/fractal/src/TransformerAbstract.php',
         'Symfony\\Component\\Translation\\Catalogue\\AbstractOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/AbstractOperation.php',
         'Symfony\\Component\\Translation\\Catalogue\\MergeOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/MergeOperation.php',
         'Symfony\\Component\\Translation\\Catalogue\\OperationInterface' => __DIR__ . '/..' . '/symfony/translation/Catalogue/OperationInterface.php',

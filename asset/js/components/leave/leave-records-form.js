@@ -130,12 +130,13 @@ var Hrm_Leave_Records_Form = {
 		},
 
 		change_leve_type_statue: function() {
+			
 			jQuery.each(this.calendar_evt_id, function(index, event_id) {
 				jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', event_id);
 			});
 			
 			this.calendar_evt_id  = [];
         	this.apply_leave_date = [];
-		}
+		},
 	}
 };

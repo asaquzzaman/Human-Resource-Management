@@ -1,18 +1,11 @@
 
-var HRM_Store_Properties = new Vuex.Store(HRM_Store);
-
-/**
- * Todo list router
- */
-var HRM_Router_Properties = new VueRouter(HRM_Router);
-
 // Global multiselect
 Vue.component('hrm-multiselect', VueMultiselect.default);
-
+console.log(HRM_Router);
 var HRM_Vue = new Vue({
-	store: HRM_Store_Properties,
+	store: new Vuex.Store(HRM_Store),
 
-	router: HRM_Router_Properties,
+	router: new VueRouter(HRM_Router),
 	
 	mixin: [HRM_Mixin],
 	

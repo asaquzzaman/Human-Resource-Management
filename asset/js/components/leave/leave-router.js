@@ -32,6 +32,6 @@ HRM_Router.routes.push(
                 components: { 'hrm-leave-holidays': Hrm_Leave_Holidays }, 
                 name: 'leave_holidays',
             }
-          ]
+        ]
     }
 );

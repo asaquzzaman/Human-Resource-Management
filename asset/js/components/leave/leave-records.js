@@ -5,7 +5,8 @@ var Hrm_Leave_Records = {
 	
 	components: {
 		'hrm-leave-records-form': Hrm_Leave_Records_Form,
-		'hrm-leave-records-add-btn': HRM_Leave_Records_Add_Btn
+		'hrm-leave-records-add-btn': HRM_Leave_Records_Add_Btn,
+		'hrm-leave-records-render': HRM_Leave_Records_Render
 	},
 	
 	data: function() {

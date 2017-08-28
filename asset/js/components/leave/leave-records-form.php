@@ -72,7 +72,8 @@
 					            :taggable="false"
 					            label="leave_type_name"
 					            track-by="id"
-					            :allow-empty="true">
+					            :allow-empty="true"
+					            @input="change_leve_type_statue()">
 
 					        </hrm-multiselect>               
 					    </div>

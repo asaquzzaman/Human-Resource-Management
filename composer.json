@@ -13,9 +13,13 @@
     "require": {
         "illuminate/database": "^5.4",
         "illuminate/pagination": "^5.4",
-        "illuminate/events": "^5.4"
+        "illuminate/events": "^5.4",
+        "league/fractal": "^0.17.0"
     },
     "autoload": {
+        "classmap": [
+            "class"
+        ],
         "psr-4": {
             "HRM\\Core\\": "core/",
             "HRM\\Include\\": "include/",

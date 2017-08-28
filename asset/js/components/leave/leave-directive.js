@@ -98,7 +98,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
 			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
 			
-			if ( context.leave_entitlements.length ) {
+			if ( typeof context.leave_entitlements[target] != 'undefined' ) {
 				context.leave_entitlements[target].total = context.leave_entitlements[target].total - 1;
 			}
 			
@@ -132,7 +132,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			emp_lv_records  = context.leave_entitlements,
 			target          = context.getIndex( emp_lv_records, slct_lv_type.id, 'leave_type_id' );
 
-			if ( context.leave_entitlements.length ) {
+			if ( typeof context.leave_entitlements[target] != 'undefined' ) {
 				context.leave_entitlements[target].total = context.leave_entitlements[target].total + 1;
 			}
 
@@ -189,7 +189,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 				get_type          = leave_types[get_type],
 				slct_lv_typ_entit = get_type.entitlement;
 
-			if ( emp_lv_records.length ) {
+			if ( typeof emp_lv_records[target] != 'undefined' ) {
 				var emp_entitlement   = emp_lv_records[target].total;
 			} else {
 				var emp_entitlement   = 0;

@@ -110,6 +110,7 @@ class Hrm_Ajax {
         //array( 'Hrm_Leave', 'ajax_create_new_leave' )
         
         add_action( 'wp_ajax_create_new_leave', array( 'Hrm_Leave', 'ajax_create_new_leave' ) );
+        add_action( 'wp_ajax_get_leave_records', array( 'Hrm_Leave', 'ajax_get_leave_records' ) );
 
     }
 

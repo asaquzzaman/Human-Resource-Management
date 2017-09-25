@@ -212,7 +212,10 @@ class Hrm_Scripts {
 
     public static function footer_tag() {
         wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_register_script( 'hrm-moment', HRM_URL . '/asset/js/moment/moment.min.js', array(), time(), true );
+        wp_enqueue_script( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/js/jquery-fullcalendar/fullcalendar.min.js', array( 'hrm-moment' ), time(), true );
         wp_enqueue_script( 'hrm-datetimepicker', HRM_URL . '/asset/js/jquery-ui-timepicker.js', array( 'jquery' ), false, true);
+        wp_enqueue_style( 'hrm-vue-multiselect', HRM_URL . '/asset/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', array('jquery','jquery-ui-datepicker', 'hrm-datetimepicker'), false, true );
 
         wp_localize_script( 'hrm-vue', 'HRM_Vars', array(
@@ -224,6 +227,7 @@ class Hrm_Scripts {
             'success_msg' => __( 'Changed Successfully', 'hrm' )
         ));
 
+        wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-chosen', HRM_URL . '/asset/css/chosen.min.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/asset/css/jquery-ui.css', false, false, 'all' );

@@ -10,4 +10,8 @@
     import mixin from './leave-mixin';
     import directive from './leave-directive';
 
+    export default {
+        store,
+    }
+
 </script>

@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		6: 0
+/******/ 		5: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -10417,7 +10417,8 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 	state: {
 		header: {},
 		is_new_leave_type_form_visible: false,
-		is_new_leave_records_form_visible: false
+		is_new_leave_records_form_visible: false,
+		is_leave_form_active: false
 	},
 
 	mutations: {
@@ -10429,6 +10430,14 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		},
 		isNewLeaveRecordsFormVisible: function (state, is_visible) {
 			state.is_new_leave_records_form_visible = is_visible.is_visible;
+		},
+
+		showHideleaveForm: function (state, status) {
+			if (status === 'toggle') {
+				state.is_leave_form_active = state.is_leave_form_active ? false : true;
+			} else {
+				state.is_leave_form_active = status;
+			}
 		}
 	}
 });
@@ -10447,7 +10456,7 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 var HRM_Leave_jQuery_Fullcalendar = {
 	calendar: function (el, context) {
 
-		var $ = jQuery(),
+		var $ = jQuery,
 		    work_week = this.work_week_convert_numeric(context.work_week),
 		    emp_leave_with_type_record = context.emp_leave_with_type_record;
 
@@ -10489,7 +10498,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			events: function (start, end, timezone, callback) {
 
 				var request_data = {
-					_wpnonce: hrm_ajax_data.nonce,
+					_wpnonce: HRM_Vars.nonce,
 					start: HRM_Leave_jQuery_Fullcalendar.get_date(start._d),
 					end: HRM_Leave_jQuery_Fullcalendar.get_date(end._d)
 				},
@@ -10779,7 +10788,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 
 	// Register a global custom directive called v-cpm-datepicker
 };__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-fullcalendar', {
-	update: function (el, binding, vnode) {
+	inserted: function (el, binding, vnode) {
 		HRM_Leave_jQuery_Fullcalendar.calendar(el, vnode.context);
 	}
 });
@@ -10791,9 +10800,31 @@ var HRM_Leave_jQuery_Fullcalendar = {
 /* 12 */,
 /* 13 */,
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
 
 
+/* unused harmony default export */ var _unused_webpack_default_export = (__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.mixin({
+	methods: {
+		showHideLeaveRecordsForm(status, leave) {
+			var leave = leave || false,
+			    leave = jQuery.isEmptyObject(leave) ? false : leave;
+
+			if (leave) {
+				if (status === 'toggle') {
+					leave.edit_mode = leave.edit_mode ? false : true;
+				} else {
+					leave.edit_mode = status;
+				}
+			} else {
+				this.$store.commit('showHideleaveForm', status);
+			}
+		}
+	}
+}));
 
 /***/ }),
 /* 15 */
@@ -10825,7 +10856,7 @@ const Hrm_Leave_Configuration = resolve => {
 };
 const Hrm_Leave_Type = resolve => {
 
-    __webpack_require__.e/* require.ensure */(2).then((() => {
+    __webpack_require__.e/* require.ensure */(1).then((() => {
         resolve(__webpack_require__(12));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10837,7 +10868,7 @@ const Hrm_Leave_Work_Week = resolve => {
 };
 const Hrm_Leave_Holidays = resolve => {
 
-    __webpack_require__.e/* require.ensure */(1).then((() => {
+    __webpack_require__.e/* require.ensure */(2).then((() => {
         resolve(__webpack_require__(10));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -13264,7 +13295,6 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_store__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__leave_mixin__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_directive__ = __webpack_require__(8);
 //
 //
@@ -13277,6 +13307,10 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 
 
 
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    store: __WEBPACK_IMPORTED_MODULE_0__leave_store__["a" /* default */]
+});
 
 /***/ }),
 /* 20 */
@@ -13298,7 +13332,7 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__["default"],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__["a" /* default */],
   __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_27daaec6_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_index_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,

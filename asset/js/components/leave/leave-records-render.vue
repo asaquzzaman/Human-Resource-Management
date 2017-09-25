@@ -3,10 +3,10 @@
 		<div class="metabox-holder hrm-leave-type-records-wrap">
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
-					<th><?php _e( 'Leave Type', 'cpm' ); ?></th>
-					<th><?php _e( 'Days', 'cpm' ); ?></th>
-					<th><?php _e( 'Start', 'cpm' ); ?></th>
-					<th><?php _e( 'End', 'cpm' ); ?></th>
+					<th>Leave Type</th>
+					<th>Days</th>
+					<th>Start</th>
+					<th>End</th>
 
 				</thead>
 				<tbody>
@@ -19,7 +19,7 @@
 					</tr>
 					<tr v-if="!records.length">
 						
-						<td colspan="4"><?php _e( 'No record found!', 'hrm' ); ?></td>
+						<td colspan="4">No record found!</td>
 					</tr>
 				</tbody>
 			</table>

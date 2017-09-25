@@ -3,7 +3,7 @@ import Vue from './../../vue/vue';
 var HRM_Leave_jQuery_Fullcalendar = {
 	calendar: function(el, context) {
 
-		var $ = jQuery(),
+		var $ = jQuery,
 			work_week = this.work_week_convert_numeric( context.work_week ),
 			emp_leave_with_type_record = context.emp_leave_with_type_record;
 
@@ -46,7 +46,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 		    events: function(start, end, timezone, callback) {
 
 		    	var request_data = {
-	                _wpnonce: hrm_ajax_data.nonce,
+	                _wpnonce: HRM_Vars.nonce,
 	                start: HRM_Leave_jQuery_Fullcalendar.get_date(start._d),
 	                end: HRM_Leave_jQuery_Fullcalendar.get_date(end._d)
 	            },
@@ -345,7 +345,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 
 // Register a global custom directive called v-cpm-datepicker
 Vue.directive('hrm-leave-jquery-fullcalendar', {
-    update: function (el, binding, vnode) {
+    inserted: function (el, binding, vnode) {
         HRM_Leave_jQuery_Fullcalendar.calendar( el, vnode.context );
     }
 });

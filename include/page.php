@@ -559,7 +559,7 @@ function hrm_admin_page_items( $path, $hrm_management, $exclude ) {
 }
 
 function hrm_admin_page() {
-    return apply_filters( 'hrm_admin_page_slug', 'hrm_management' );
+    return apply_filters( 'hrm_admin_page_slug', 'hr_management' );
 }
 
 function hrm_pim_page() {

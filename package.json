@@ -1,23 +1,55 @@
 {
   "name": "HRM",
-  "version": "1.1.0",
-  "description": "Wordpress human resource",
-  "author": "Asaquzzaman",
-  "license": "GPL",
+  "version": "2.0.0",
+  "description": "Human resourcee management",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "hrm": "webpack",
+    "build": "webpack-dev-server",
+    "watch": "webpack --progress --colors --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weDevsOfficial/wp-project-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weDevsOfficial/wp-project-manager/issues"
+  },
+  "homepage": "https://github.com/weDevsOfficial/wp-project-manager#readme",
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-compress": "^1.4.1",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-less": "^1.4.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-ssh": "^0.12.9",
-    "grunt-wp-i18n": "^1.0.0",
-    "partialify": "^3.1.6"
+    "ajv": "^5.2.2",
+    "ajv-keywords": "^2.1.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "coffee-loader": "^0.8.0",
+    "coffeescript": "^1.12.7",
+    "css-loader": "^0.28.5",
+    "es6-promise": "^4.1.1",
+    "eslint": "^4.5.0",
+    "eslint-loader": "^1.9.0",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.5.3",
+    "pug": "^2.0.0-rc.3",
+    "react": "^15.6.1",
+    "rimraf": "^2.6.1",
+    "sass-loader": "^6.0.6",
+    "uglify-js": "^3.0.28",
+    "vue-loader": "^13.0.4",
+    "vue-template-compiler": "^2.4.2",
+    "watch": "^1.0.2",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "grunt-browserify": "^5.0.0"
+    "code-split-component": "^2.0.0-alpha.5",
+    "nprogress": "^0.2.0",
+    "proposal": "^3.0.0"
   }
 }

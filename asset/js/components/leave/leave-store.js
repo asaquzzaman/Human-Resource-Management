@@ -1,3 +1,11 @@
+import Vue from './../../vue/vue';
+import Vuex from './../../vue/vuex';
+
+/**
+ * Make sure to call Vue.use(Vuex) first if using a vuex module system
+ */
+Vue.use(Vuex);
+
 var HRM_Leave_Store = new Vuex.Store({
 	state: {
 		header: {},
@@ -17,3 +25,6 @@ var HRM_Leave_Store = new Vuex.Store({
 		}
 	}
 });
+
+
+export default HRM_Leave_Store;

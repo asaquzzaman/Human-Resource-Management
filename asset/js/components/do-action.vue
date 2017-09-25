@@ -1,0 +1,49 @@
+<script>
+
+	import mixin from './../mixin';
+	
+	function HRMGetComponents() {
+		var components = {};
+		
+		window.HRM_Components.map(function(obj, key) {
+			if (obj.property.mixins) {
+				obj.property.mixins.push(mixin);
+			} else {
+				obj.property.mixins = [mixin];
+			}
+
+			components[obj.component] = obj.property;
+		});
+
+		return components;
+	}
+
+	var action = {
+		props: ['hook'],
+
+		components: HRMGetComponents(),
+
+		render (h) {
+			var components = [],
+				self = this;
+
+			window.HRM_Components.map(function(obj, key) {
+				if (obj.hook == self.hook) {
+					components.push(h(obj.component));
+				}
+			});
+
+			return h('span', {}, components);
+		}
+	}
+
+	export default action;
+
+</script>
+
+<!-- <template>
+	<div>
+		<cpm-test-component></cpm-test-component>
+		<cpm-again-component></cpm-again-component>
+	</div>
+</template> -->

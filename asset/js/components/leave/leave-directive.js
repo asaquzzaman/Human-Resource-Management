@@ -1,3 +1,5 @@
+import Vue from './../../vue/vue';
+
 var HRM_Leave_jQuery_Fullcalendar = {
 	calendar: function(el, context) {
 

@@ -46,7 +46,6 @@ class Hrm_Scripts {
 
     public static function department() {
         self::admin_default();
-    	wp_enqueue_script( 'hrm-vue' );
         wp_enqueue_script( 'hrm-vuex' );
         wp_enqueue_script( 'hrm-vue-router' );
         self::admin_localize( 'hrm-vue' );
@@ -103,7 +102,7 @@ class Hrm_Scripts {
      */
     public static function attendance_scripts() {
         self::admin_default();
-        self::admin_localize( 'hrm-vue' );
+        
 
         wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/asset/js/components/attendance/attendance-store.js', array(), false, true );
         wp_enqueue_script( 'hrm-attendance-header', HRM_URL . '/asset/js/components/attendance/attendance-header.js', array(), false, true);
@@ -127,43 +126,45 @@ class Hrm_Scripts {
      */
     public static function leave_scripts() {
 
-        self::admin_default();
+        //wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', false, false, true );
 
-        wp_enqueue_script( 'hrm-jquery-fullcalendar' );
-        wp_enqueue_style( 'hrm-jquery-fullcalendar' );
+        // self::admin_default();
 
-        wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
-        wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
-        wp_enqueue_script( 'hrm-vue-multi', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-jquery-fullcalendar' );
+        // wp_enqueue_style( 'hrm-jquery-fullcalendar' );
 
-        wp_enqueue_script( 'hrm-vue-multiselect' );
+        // wp_enqueue_script( 'hrm-leave-vue-store', HRM_URL . '/asset/js/components/leave/leave-store.js', array(), false, true );
+        // wp_enqueue_script( 'hrm-leave-header', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-vue-multi', HRM_URL . '/asset/js/components/leave/leave-header.js', array(), false, true);
 
-        wp_enqueue_script( 'hrm-leave-records-form', HRM_URL . '/asset/js/components/leave/leave-records-form.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-records-add-btn', HRM_URL . '/asset/js/components/leave/leave-records-add-btn.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-records-render', HRM_URL . '/asset/js/components/leave/leave-records-render.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-vue-multiselect' );
 
-        wp_enqueue_script( 'hrm-leave-holidays-add-btn', HRM_URL . '/asset/js/components/leave/leave-holidays-add-btn.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-holidays-form', HRM_URL . '/asset/js/components/leave/leave-holidays-form.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-holidays-record', HRM_URL . '/asset/js/components/leave/leave-holidays-record.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-holidays', HRM_URL . '/asset/js/components/leave/leave-holidays.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-records-form', HRM_URL . '/asset/js/components/leave/leave-records-form.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-records-add-btn', HRM_URL . '/asset/js/components/leave/leave-records-add-btn.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-records-render', HRM_URL . '/asset/js/components/leave/leave-records-render.js', array(), false, true);
 
-        wp_enqueue_script( 'hrm-leave-type-add-btn', HRM_URL . '/asset/js/components/leave/leave-type-add-btn.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-type-form', HRM_URL . '/asset/js/components/leave/leave-type-form.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-type-records', HRM_URL . '/asset/js/components/leave/leave-type-records.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-type', HRM_URL . '/asset/js/components/leave/leave-type.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-holidays-add-btn', HRM_URL . '/asset/js/components/leave/leave-holidays-add-btn.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-holidays-form', HRM_URL . '/asset/js/components/leave/leave-holidays-form.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-holidays-record', HRM_URL . '/asset/js/components/leave/leave-holidays-record.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-holidays', HRM_URL . '/asset/js/components/leave/leave-holidays.js', array(), false, true);
+
+        // wp_enqueue_script( 'hrm-leave-type-add-btn', HRM_URL . '/asset/js/components/leave/leave-type-add-btn.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-type-form', HRM_URL . '/asset/js/components/leave/leave-type-form.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-type-records', HRM_URL . '/asset/js/components/leave/leave-type-records.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-type', HRM_URL . '/asset/js/components/leave/leave-type.js', array(), false, true);
         
-        wp_enqueue_script( 'hrm-leave-work-week', HRM_URL . '/asset/js/components/leave/leave-work-week.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-records', HRM_URL . '/asset/js/components/leave/leave-records.js', array(), false, true);
-        wp_enqueue_script( 'hrm-leave-configuration', HRM_URL . '/asset/js/components/leave/leave-configuration.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-work-week', HRM_URL . '/asset/js/components/leave/leave-work-week.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-records', HRM_URL . '/asset/js/components/leave/leave-records.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-configuration', HRM_URL . '/asset/js/components/leave/leave-configuration.js', array(), false, true);
 
-        wp_enqueue_script( 'hrm-leave-directive', HRM_URL . '/asset/js/components/leave/leave-directive.js', array(), false, true);
+        // wp_enqueue_script( 'hrm-leave-directive', HRM_URL . '/asset/js/components/leave/leave-directive.js', array(), false, true);
 
-        wp_enqueue_script( 'hrm-leave-router', HRM_URL . '/asset/js/components/leave/leave-router.js', array(), false, true );
-        wp_enqueue_script( 'hrm-leave-vue', HRM_URL . '/asset/js/components/leave/leave.js', array(), false, true );
-        wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
-        wp_enqueue_style( 'hrm-vue-multiselect' );
+        // wp_enqueue_script( 'hrm-leave-router', HRM_URL . '/asset/js/components/leave/leave-router.js', array(), false, true );
+        // wp_enqueue_script( 'hrm-leave-vue', HRM_URL . '/asset/js/components/leave/leave.js', array(), false, true );
+        // wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+        // wp_enqueue_style( 'hrm-vue-multiselect' );
 
-        self::hrm_vue_scripts();
+        // self::hrm_vue_scripts();
     }
 
     /**
@@ -185,27 +186,17 @@ class Hrm_Scripts {
      */
     public static function init_scripts() {
         wp_enqueue_media();
+        wp_enqueue_script( 'hrm-config', HRM_URL . '/asset/js/config.js', false, false, false );
         
         wp_register_script( 'hrm-moment', HRM_URL . '/asset/js/moment/moment.min.js', array(), time(), true );
         wp_register_script( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/js/jquery-fullcalendar/fullcalendar.min.js', array( 'hrm-moment' ), time(), true );
         
         wp_enqueue_script( 'hrm-toastr', HRM_URL . '/asset/js/toastr/toastr.min.js', array(), time(), true );
-        
-        wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/vue/vue.js', array( 'jquery' ), time(), true );
-        wp_enqueue_script( 'hrm-vuex', HRM_URL . '/asset/js/vue/vuex.js', array( 
-            'jquery',
-            'hrm-vue', 
-        ), time(), true );
-
-        wp_enqueue_script( 'hrm-vue-router', HRM_URL . '/asset/js/vue/vue-router.js', array( 
-            'jquery',
-            'hrm-vue',
-        ), time(), true );
 
         //Should be loaded inside the hader tag
-        wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), false );
-        wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-mixin.js', array(), time(), false );
-        wp_enqueue_script( 'hrm-root-store', HRM_URL . '/asset/js/hrm-store.js', array(), time(), false );
+        // wp_enqueue_script( 'hrm-root-router', HRM_URL . '/asset/js/hrm-router.js', array(), time(), false );
+        // wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-mixin.js', array(), time(), false );
+        // wp_enqueue_script( 'hrm-root-store', HRM_URL . '/asset/js/hrm-store.js', array(), time(), false );
 
         wp_register_script( 'hrm-vue-multiselect', HRM_URL . '/asset/js/vue-multiselect/vue-multiselect.min.js', array(), time(), true );
         
@@ -220,7 +211,23 @@ class Hrm_Scripts {
     }
 
     public static function footer_tag() {
-        //self::attendance_scripts();
+        wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_script( 'hrm-datetimepicker', HRM_URL . '/asset/js/jquery-ui-timepicker.js', array( 'jquery' ), false, true);
+        wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', array('jquery','jquery-ui-datepicker', 'hrm-datetimepicker'), false, true );
+
+        wp_localize_script( 'hrm-vue', 'HRM_Vars', array(
+            'ajax_url'    => admin_url( 'admin-ajax.php' ),
+            'nonce'       => wp_create_nonce( 'hrm_nonce' ),
+            //'is_admin'    => $hrm_is_admin,
+            'message'     => hrm_message(),
+            'confirm_msg' => __( 'Are you sure!', 'hrm'),
+            'success_msg' => __( 'Changed Successfully', 'hrm' )
+        ));
+
+        wp_enqueue_style( 'hrm-admin', HRM_URL . '/asset/css/admin.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-chosen', HRM_URL . '/asset/css/chosen.min.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/asset/css/jquery-ui.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/asset/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
     }
 }
 

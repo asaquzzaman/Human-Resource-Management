@@ -1,3 +1,5 @@
+import Vue from './vue/vue';
+
 /**
  * Required jQuery methods 
  * 
@@ -9,7 +11,7 @@ var HRM_Admin = {
     },
 
     datepicker: function( el, vnodeContext ) {
-    	
+
         jQuery( '.hrm-date-field').datepicker({
             dateFormat: 'yy-mm-dd',
             changeMonth: true,

@@ -354,22 +354,9 @@ class WP_Hrm {
         $subtab     = $query_args['subtab'];
 
 
-        echo '<div class="hrm wrap hrm-content-wrap" id="hrm">';
-        if ( 'hrm_attendance' == $page  ) {
-
-            echo '<hrm-attendance></hrm-attendance>';
-        } else if ( hrm_leave_page() == $page ) {
-            echo '<hrm-leave></hrm-leave>';
-        } else {
-            if ( $tab === false ) {
-                Hrm_Settings::getInstance()->show_page( $page );
-            } else {
-                Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
-            }
-        }
-
-
-        echo '</div>';
+     
+        require_once HRM_PATH . '/templates/index.html';
+     
     }
 }
 

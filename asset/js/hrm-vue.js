@@ -1,19 +1,22 @@
+__webpack_public_path__ = 'http://localhost/hrm/wp-content/plugins/Human-Resource-Management/asset/js/';
 
-// Global multiselect
-Vue.component('hrm-multiselect', VueMultiselect.default);
-console.log(HRM_Router);
-var HRM_Vue = new Vue({
-	store: new Vuex.Store(HRM_Store),
+import Vue from './vue/vue';
+import store from './store';
+import router from './router';
+import mixin from './mixin';
+import controller from './components/controller.vue';
 
-	router: new VueRouter(HRM_Router),
-	
-	mixin: [HRM_Mixin],
-	
-	components: {
-		'hrm-leave': ( typeof Hrm_Leave != 'undefined' ) ? Hrm_Leave : '',
-		'hrm-attendance': ( typeof hrm_attendance != 'undefined' ) ? hrm_attendance : '',	
-	}
+var wpspear_hrm = {
+	el: '#wpspear-hrm',
+	store,
+	router,
+	render: h => h(controller)
+}
 
-//hrm-content-wrap class should be wraper for all pages
-}).$mount('.hrm-content-wrap');
+new Vue(wpspear_hrm);	
+
+
+
+
+
 

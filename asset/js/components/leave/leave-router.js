@@ -1,14 +1,49 @@
-HRM_Router.routes.push(
+const Hrm_Leave_Records = resolve => {
+
+    require.ensure(['./leave-records.vue'], () => {
+        resolve(require('./leave-records.vue'));
+    });
+}
+
+//import Hrm_Leave_Records from './leave-records.vue';
+
+HRM_Routes.push (
 	{ 
     	path: '/leave', 
-    	components: { 'hrm-leave-records': Hrm_Leave_Records }, 
+    	components: { 
+    		'hrm-leave-records': Hrm_Leave_Records 
+    	}, 
     	name: 'leave_records',
 
 	}
 
 );
+const Hrm_Leave_Configuration = resolve => {
 
-HRM_Router.routes.push(
+    require.ensure(['./leave-configuration.vue'], () => {
+        resolve(require('./leave-configuration.vue'));
+    });
+}
+const Hrm_Leave_Type = resolve => {
+
+    require.ensure(['./leave-type.vue'], () => {
+        resolve(require('./leave-type.vue'));
+    });
+}
+const Hrm_Leave_Work_Week = resolve => {
+
+    require.ensure(['./leave-work-week.vue'], () => {
+        resolve(require('./leave-work-week.vue'));
+    });
+}
+const Hrm_Leave_Holidays = resolve => {
+
+    require.ensure(['./leave-holidays.vue'], () => {
+        resolve(require('./leave-holidays.vue'));
+    });
+}
+
+HRM_Routes.push(
     {
         path: '/leave-configuration', 
         components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
@@ -22,7 +57,7 @@ HRM_Router.routes.push(
             },
 
             {
-                path: '/leave-configuration/week', 
+                path: '/leave-configuration/work-week', 
                 components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week }, 
                 name: 'leave_week',
             },
@@ -35,3 +70,5 @@ HRM_Router.routes.push(
         ]
     }
 );
+
+export default HRM_Routes;

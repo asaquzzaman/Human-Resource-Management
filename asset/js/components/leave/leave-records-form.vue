@@ -87,7 +87,7 @@
 							<em></em>
 						</label>
 						<span class="hrm-checkbox-wrap">
-							<input type="checkbox" id="hrm-disable-leave-type-checkbox">
+							<input @change="onOff('disable_leave_type')" type="checkbox" id="hrm-disable-leave-type-checkbox">
 							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio">Disable</label>
 						</span>
 						<span class="hrm-clear"></span>
@@ -96,7 +96,7 @@
 
 					<div class="hrm-form-field">
 						<label>
-							Apply to
+							Request to
 							<em>*</em>
 						</label>
 						<div class="hrm-multiselect">
@@ -304,6 +304,7 @@
 				this.calendar_evt_id  = [];
 	        	this.apply_leave_date = [];
 			},
+
 		}
 	}
 </script>

@@ -196,7 +196,7 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			} else {
 				var emp_entitlement   = 0;
 			}
-
+			
 			if (slct_lv_typ_entit <= emp_entitlement) {
 				alert('Excid entitlement');
 				return false;

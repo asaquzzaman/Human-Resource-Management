@@ -398,3 +398,7 @@ function hrm_load_orm() {
     $capsule->bootEloquent();
 }
 
+function pr($data) {
+    echo '<pre>'; print_r($data); '</pre>';
+}
+

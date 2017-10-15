@@ -2,6 +2,7 @@
 namespace HRM\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Models\Leave_Type;
 
 class Leave extends Eloquent {
 
@@ -49,18 +50,23 @@ class Leave extends Eloquent {
     ];
 
     public function setEmpIdAttribute( $value ) {
-         $this->attributes['emp_id'] = absint( $value ) > 0 ? $value : get_current_user_id();
+        $this->attributes['emp_id'] = absint( $value ) > 0 ? $value : get_current_user_id();
     }
 
     public function setLeaveCommentsAttribute( $value ) {
-         $this->attributes['leave_comments'] =  ! trim( $value )  ? __( 'No comment', 'hrm' ) : $value;
+        $this->attributes['leave_comments'] =  ! trim( $value )  ? __( 'No comment', 'hrm' ) : $value;
     }
 
     public function setLeaveStatusAttribute( $value ) {
-         $this->attributes['leave_status'] =  absint( $value ) <= 0 ? 1 : $value;
+        $this->attributes['leave_status'] =  absint( $value ) <= 0 ? 1 : $value;
     }
 
     public function setLeaveTypeIdAttribute( $value ) {
-         $this->attributes['leave_type_id'] =  absint( $value ) <= 0 ? 0 : $value;
+        $this->attributes['leave_type_id'] =  absint( $value ) <= 0 ? 0 : $value;
+    }
+
+    public function leaveType() {
+        return $this->hasOne( Leave_Type::class, 'id', 'leave_type_id' );
     }
 }
+

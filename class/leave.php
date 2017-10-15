@@ -5,6 +5,10 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection as Collection;
 use HRM\Core\Transformer_Manager;
 use HRM\Core\Leave\Leave_Transformer;
+use HRM\Models\Leave;
+use HRM\Models\User;
+use HRM\Models\Leave_Type;
+use HRM\Models\Meta;
 
 class Hrm_Leave {
 
@@ -20,6 +24,57 @@ class Hrm_Leave {
 
     function __construct() {
         add_filter( 'hrm_change_data', array( $this, 'update_holiday_data' ), 10, 5 );
+    }
+
+    public function get_empoyee_leave( $args = array() ) {
+
+        global $wpdb;
+        $transformer = new Transformer_Manager();
+
+        $defaults = array(
+            'start_time' => date( 'Y-01-01 00:00:00' ),
+            'end_time'   => date( 'Y-12-31 24:59:59' ),
+            'emp_id'     => get_current_user_id(),
+            'per_page'   => 15,  
+            'page'       => 1    
+        );
+
+        $args      = wp_parse_args( $args, $defaults );
+        $cache_key = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
+        $items     = wp_cache_get( $cache_key, 'hrm' );
+        
+        if ( false === $items ) { 
+            $leaves = Leave::with('leaveType')
+                ->where('emp_id', $args['emp_id'])
+                ->paginate( $args['per_page'], ['*'], $args['page'] );
+
+            $leave_collection = $leaves->getCollection();
+            $resource = new Collection( $leave_collection, new Leave_Transformer );
+            $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
+
+            $leave_type_count = $this->employee_leave_count( $args['emp_id'] );
+            $resource->setMeta(['types' => $leave_type_count]);
+            $items = $transformer->get_response( $resource );
+
+            wp_cache_set( $cache_key, $items, 'hrm' );
+        }
+        
+        return $items;
+    }
+
+    function employee_leave_count($emp_id = false) {
+        $emp_id = $emp_id ? absint( $emp_id ) : get_current_user_id();
+        
+        $user  = User::find( $emp_id );
+        $types = Leave_Type::all();
+
+        $leave_type_count = [];
+
+        foreach( $types as $type ) {
+            $leave_type_count[$type->id] = $user->leave_types->where('id', $type->id)->count();
+        }
+
+        return $leave_type_count;
     }
 
     function update_holiday_data( $data, $table, $format, $update_status, $post ) {
@@ -895,62 +950,6 @@ class Hrm_Leave {
        return get_option( 'hrm_work_week' );
     }
 
-    public static function get_empoyee_leave( $args = array() ) {
-        global $wpdb;
-
-        $defaults = array(
-            'start_time' => date( 'Y-01-01 00:00:00' ),
-            'end_time'   => date( 'Y-12-31 24:59:59' ),
-            'emp_id'     => get_current_user_id()
-        );
-
-        $args = wp_parse_args( $args, $defaults );
-
-        $cache_key  = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
-        $items      = wp_cache_get( $cache_key, 'hrm' );
-        $query_args = array( 'relation' => 'AND' );
-
-        if ( false === $items ) { 
-            foreach ( $args as $key => $arg ) {
-                switch ( $key ) {
-
-                    case 'start_time':
-                        $query_args[] = array(
-                            'field'     => 'start_time',
-                            'value'     => $arg,
-                            'condition' => '>='
-                        );
-                        break;
-
-                    case 'end_time':
-                        $query_args[] = array(
-                            'field'     => 'end_time',
-                            'value'     => $arg,
-                            'condition' => '<='
-                        );
-                        break;
-
-                    case 'emp_id':
-                        $query_args[] = array(
-                            'field'     => 'emp_id',
-                            'value'     => $arg,
-                            'condition' => '='
-                        );
-                }
-
-            }
-
-            $query = Hrm_Attendance::getInstance()->generate_query( $query_args );
-
-            $table = $wpdb->prefix . 'hrm_leave';
-
-            $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
-            
-            wp_cache_set( $cache_key, $items, 'hrm' );
-        }
-        
-        return $items;
-    }
 
     public static function holiday_get_by_index() {
         $holidays_from = date('Y-m-01 00:00:00');
@@ -977,7 +976,7 @@ class Hrm_Leave {
     }
 
     public static function get_empoyee_leave_with_lave_type_record( $args = array() ) {
-        $get_emp_leaves = self::get_empoyee_leave( $args );
+        $get_emp_leaves = self::getInstance()->get_empoyee_leave( $args );
         
         foreach ( $get_emp_leaves as $key => $leave ) {
             $get_leave_type = self::get_leave_types( array( 'id' => $leave->leave_type_id ) );
@@ -1113,25 +1112,22 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_records() {
         check_ajax_referer('hrm_nonce');
-        return self::getInstance()->get_leave_records();
+        wp_send_json_success(self::getInstance()->get_empoyee_leave());
     }
 
     public function get_leave_records() {
         $leave_model = new HRM\Models\leave();
         $transformer = new Transformer_Manager();
 
-
-
         $leaves           = $leave_model::paginate();
         $leave_collection = $leaves->getCollection();
-        $resource           = new Collection( $leave_collection, new Leave_Transformer   );
+        $resource         = new Collection( $leave_collection, new Leave_Transformer );
         
         $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
-
-
+ 
         $response = $transformer->get_response( $resource );
 
-        echo '<pre>'; print_r( $response ); echo '</pre>'; die();
+        return $response;
     }
 
 }

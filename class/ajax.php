@@ -25,7 +25,8 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_hrm_delete', array( $this, 'delete' ) );
         add_action( 'wp_ajax_hrm_autocomplete', array( $this, 'hrm_autocomplete_action' ) );
         add_action( 'wp_ajax_user_create', array( $this, 'create_user' ) );
-        add_action( 'wp_ajax_admin_autocomplete', array( $this, 'search_admin' ) );
+        add_action( 'wp_ajax_search_users', array( $this, 'search_users' ) );
+        add_action( 'wp_ajax_search_emp_leave_records', array( 'Hrm_Leave', 'search_emp_leave_records' ) );
         add_action( 'wp_ajax_get_role', array( $this, 'get_user_role' ) );
         add_action( 'wp_ajax_hrm_user_delete', array( $this, 'user_delete' ) );
         add_action( 'wp_ajax_update_user_role', array( $this, 'user_role_update' ) );
@@ -729,31 +730,31 @@ class Hrm_Ajax {
         }
     }
 
-    function find_project_worker() {
-        $users = get_users( array(
-            'search' => '*' . $_POST['search_admin'] . '*',
-            'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-        ) );
-        $data = array();
-        foreach( $users as $user) {
-            $data[] = array(
-                'label' => $user->display_name,
-                '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
-            );
-        }
-        if( count($data) ) {
-            $user_info = json_encode( $data );
-        } else {
-            $data[] = array(
-                'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
-                'value' => 'hrm_create_user',
-                '_user_meta' =>'',
-            );
-            $user_info = json_encode( $data );
-        }
+    // function find_project_worker() {
+    //     $users = get_users( array(
+    //         'search' => '*' . $_POST['search_admin'] . '*',
+    //         'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
+    //     ) );
+    //     $data = array();
+    //     foreach( $users as $user) {
+    //         $data[] = array(
+    //             'label' => $user->display_name,
+    //             '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
+    //         );
+    //     }
+    //     if( count($data) ) {
+    //         $user_info = json_encode( $data );
+    //     } else {
+    //         $data[] = array(
+    //             'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
+    //             'value' => 'hrm_create_user',
+    //             '_user_meta' =>'',
+    //         );
+    //         $user_info = json_encode( $data );
+    //     }
 
-        wp_send_json_success( $user_info );
-    }
+    //     wp_send_json_success( $user_info );
+    // }
 
     function insert_sub_task() {
         check_ajax_referer('hrm_nonce');
@@ -1107,33 +1108,19 @@ class Hrm_Ajax {
         wp_send_json_success( array( 'append_data' => $data ) );
     }
 
-    function search_admin() {
+    function search_users() {
+        check_ajax_referer('hrm_nonce');
+        $send = [];
         $users = get_users( array(
-            'search' => '*' . $_POST['search_admin'] . '*',
+            'search' => '*' . $_POST['user'] . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-        ) );
-
-        $data = array();
-        $super_admin = get_option( 'hrm_admin');
-        foreach( $users as $user) {
-            if ( $user->ID == $super_admin ) continue;
-            $data[] = array(
-                'label' => $user->display_name,
-                '_user_meta' => Hrm_Admin::getInstance()->create_user_meta( $user->display_name, $user->ID ),
-            );
+        ));
+        
+        foreach( $users as $user ) {
+            $send[] = $user->data;
         }
-        if( count($data) ) {
-            $user_info = json_encode( $data );
-        } else {
-            $data[] = array(
-                'label' => '<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
-                'value' => 'hrm_create_user',
-                '_user_meta' =>'',
-            );
-            $user_info = json_encode( $data );
-        }
-
-        wp_send_json_success( $user_info );
+        
+        wp_send_json_success( $send );
     }
 
 

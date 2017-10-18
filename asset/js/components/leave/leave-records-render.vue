@@ -12,10 +12,10 @@
 				<tbody>
 					<tr v-for="record in records">
 						
-						<td>{{ record.leave_type_name }}</td>
-						<td>{{ record.entitlement }}</td>
-						<td>{{ record.entitle_from }}</td>
-						<td>{{ record.entitle_to }}</td>
+						<td>{{ record.leave_type.name }}</td>
+						<td>1</td>
+						<td>{{ dateFormat(record.start_time) }}</td>
+						<td>{{ dateFormat(record.end_time) }}</td>
 					</tr>
 					<tr v-if="!records.length">
 						
@@ -30,41 +30,14 @@
 
 <script>
 	export default {
-
-		//store: HRM_Leave_Store,
-		
-		data: function() {
-			return {
-				records: []
+		computed: {
+			records () {
+				return this.$store.state.leave_records;
 			}
 		},
 
-		computed: {
-
-		},
-
-		created: function() {
+		created () {
 			this.getLeaveRecords();
 		},
-		methods: {
-			getLeaveRecords: function() {
-				var request_data = {
-	                _wpnonce: HRM_Vars.nonce,
-	            },
-	            self = this;
-
-	            wp.ajax.send('get_leave_records', {
-	                data: request_data,
-	                success: function(res) {
-	                	
-	                    self.records = res.leave_types;
-	                },
-
-	                error: function(res) {
-	                    
-	                }
-	            });
-			}
-		}
 	}
 </script>

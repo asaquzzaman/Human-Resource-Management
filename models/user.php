@@ -17,10 +17,4 @@ class User extends Eloquent {
     public function leave_types() {
         return $this->belongsToMany( Leave_Type::class, 'hrm_leave', 'emp_id', 'leave_type_id' );
     }
-
-    public function phone() {
-        return $this->belongsTo( Meta::class, 'ID', 'user_id' );
-    }
-
-
 }

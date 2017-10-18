@@ -15,38 +15,32 @@
 							<em>*</em>
 						</label>
 						<div class="hrm-multiselect">
-
-					        <hrm-multiselect 
-					            v-model="emp" 
-					            :options="employees" 
-					            :multiple="false" 
-					            :close-on-select="true"
-					            :clear-on-select="true"
-					            :hide-selected="false"
-					            :show-labels="true"
-					            placeholder="Select employee"
+							<hrm-multiselect 
+ 
 					            select-label=""
 					            selected-label="selected"
 					            deselect-label=""
-					            :taggable="false"
-					            label="display_name"
-					            track-by="ID"
-					            :allow-empty="true">
+								v-model="selectedEmployee" 
+								id="ajax" 
+								label="display_name" 
+								track-by="ID" 
+								placeholder="Type to search" 
+								open-direction="bottom" 
+								:options="employees" 
+								:multiple="false" 
+								:searchable="true" 
+								@search-change="asyncFind">
 
-					            <template  slot="option" scope="props">
-					                <div>
-					                	<div class="multi-img-wrap">
-					                    	<img height="16" width="16" class="option__image" :src="props.option.avatar_url" alt="<?php _e( '', 'cpm' ); ?>">
-					                    </div>
-					                    <div class="option__descΩ">
-					                        <span class="option__title">{{ props.option.display_name }}</span>
-					                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
-					                    </div>
-					                    <div class="hrm-clear"></div>
-					                </div>
-					            </template>
-					                
-					        </hrm-multiselect>               
+									<template slot="clear" scope="props">
+										<div class="multiselect__clear" 
+											v-if="selectedEmployee.length" 
+											@mousedown.prevent.stop="clearAll(props.search)">
+											
+										</div>
+									</template><span slot="noResult">No user found.</span>
+
+							</hrm-multiselect>
+             
 					    </div>
 					    <div class="hrm-clear"></div>
 					</div>
@@ -71,7 +65,7 @@
 					            selected-label="selected"
 					            deselect-label=""
 					            :taggable="false"
-					            label="leave_type_name"
+					            label="name"
 					            track-by="id"
 					            :allow-empty="true"
 					            @input="change_leve_type_statue()">
@@ -188,7 +182,10 @@
 				leave_entitlements: [],
 				apply_leave_date: [],
 				calendar_evt_id: [],
-				disable_leave_type: false
+				disable_leave_type: false,
+
+				selectedEmployee: [],
+				isLoading: false
 			}
 		},
 
@@ -211,14 +208,8 @@
 	                data: request_data,
 	                
 	                success: function(res) {
-						self.leave_types                = res.leave_types;
-						self.employees                  = res.employess;
-						self.administrators             = res.apply_to;
-						self.emp_leave_with_type_record = res.emp_leave_with_type_record;
-						self.leave_entitlements         = res.leave_entitlements;
-						self.work_week                  = res.work_week;
-						self.emp                        = res.current_user;
-						self.leave_status               = 1;
+						self.leave_types    = res.leave_types.data;
+						self.administrators = res.apply_to;
 	                },
 
 	                error: function(res) {
@@ -304,6 +295,37 @@
 				this.calendar_evt_id  = [];
 	        	this.apply_leave_date = [];
 			},
+
+		    limitText (count) {
+				return `and ${count} other countries`
+		    },
+		    asyncFind (query) {
+		    	var self = this;
+		    	if (query.length < 3) {
+		    		return [];
+		    	}
+		    	var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
+		    	var start = moment(start._d).format('YYYY-MM-DD');
+		    	var end = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
+		    	var end = moment(end._d).format('YYYY-MM-DD');
+		    	
+		    	var http_data = {
+		    		data: {
+		    			user: query,
+		    			start: start,
+		    			end: end
+		    		},
+		    		type: 'POST',
+		    		success (res) {
+		    			self.employees = res;
+		    		}
+		    	};
+
+		    	self.httpRequest('search_emp_leave_records', http_data);
+		    },
+		    clearAll () {
+				this.selectedEmployee = []
+		    }
 
 		}
 	}

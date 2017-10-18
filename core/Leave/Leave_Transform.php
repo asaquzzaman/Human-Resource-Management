@@ -28,7 +28,7 @@ class Leave_Transformer extends TransformerAbstract
     public function includeLeaveType( Leave $item ) {
         $leave_type = $item->leaveType;
         $leave_type_transform = new Leave_Type_Transform();
-        
+ 
         return $leave_type_transform->transform($leave_type);
         
     }

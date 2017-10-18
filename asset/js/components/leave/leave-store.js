@@ -11,26 +11,31 @@ var HRM_Leave_Store = new Vuex.Store({
 		header: {},
 		is_new_leave_type_form_visible: false,
 		is_new_leave_records_form_visible: false,
-		is_leave_form_active: false
+		is_leave_form_active: false,
+		leave_records: []
 	},
 
 	mutations: {
-		header: function(state, header) {
+		header (state, header) {
 			state.header = header.header;
 		},
-		isNewLeaveTypeFormVisible: function(state, is_visible) {
+		isNewLeaveTypeFormVisible (state, is_visible) {
 			state.is_new_leave_type_form_visible = is_visible.is_visible;
 		},
-		isNewLeaveRecordsFormVisible: function( state, is_visible ) {
+		isNewLeaveRecordsFormVisible ( state, is_visible ) {
 			state.is_new_leave_records_form_visible = is_visible.is_visible;
 		},
 
-		showHideleaveForm: function (state, status) {
+		showHideleaveForm  (state, status) {
 			if ( status === 'toggle' ) {
                 state.is_leave_form_active = state.is_leave_form_active ? false : true;
             } else {
                 state.is_leave_form_active = status;
             }
+		},
+
+		getLeaveRecords (state, leave_records) {
+			state.leave_records = leave_records;
 		}
 	}
 });

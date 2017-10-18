@@ -725,12 +725,6 @@ if (false) {
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -752,7 +746,10 @@ if (false) {
 			leave_entitlements: [],
 			apply_leave_date: [],
 			calendar_evt_id: [],
-			disable_leave_type: false
+			disable_leave_type: false,
+
+			selectedEmployee: [],
+			isLoading: false
 		};
 	},
 
@@ -775,14 +772,8 @@ if (false) {
 				data: request_data,
 
 				success: function (res) {
-					self.leave_types = res.leave_types;
-					self.employees = res.employess;
+					self.leave_types = res.leave_types.data;
 					self.administrators = res.apply_to;
-					self.emp_leave_with_type_record = res.emp_leave_with_type_record;
-					self.leave_entitlements = res.leave_entitlements;
-					self.work_week = res.work_week;
-					self.emp = res.current_user;
-					self.leave_status = 1;
 				},
 
 				error: function (res) {}
@@ -863,6 +854,37 @@ if (false) {
 
 			this.calendar_evt_id = [];
 			this.apply_leave_date = [];
+		},
+
+		limitText(count) {
+			return `and ${count} other countries`;
+		},
+		asyncFind(query) {
+			var self = this;
+			if (query.length < 3) {
+				return [];
+			}
+			var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
+			var start = moment(start._d).format('YYYY-MM-DD');
+			var end = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
+			var end = moment(end._d).format('YYYY-MM-DD');
+
+			var http_data = {
+				data: {
+					user: query,
+					start: start,
+					end: end
+				},
+				type: 'POST',
+				success(res) {
+					self.employees = res;
+				}
+			};
+
+			self.httpRequest('search_emp_leave_records', http_data);
+		},
+		clearAll() {
+			this.selectedEmployee = [];
 		}
 
 	}
@@ -906,37 +928,14 @@ if (false) {
 //
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-
-	//store: HRM_Leave_Store,
-
-	data: function () {
-		return {
-			records: []
-		};
-	},
-
-	computed: {},
-
-	created: function () {
-		this.getLeaveRecords();
-	},
-	methods: {
-		getLeaveRecords: function () {
-			var request_data = {
-				_wpnonce: HRM_Vars.nonce
-			},
-			    self = this;
-
-			wp.ajax.send('get_leave_records', {
-				data: request_data,
-				success: function (res) {
-
-					self.records = res.leave_types;
-				},
-
-				error: function (res) {}
-			});
+	computed: {
+		records() {
+			return this.$store.state.leave_records;
 		}
+	},
+
+	created() {
+		this.getLeaveRecords();
 	}
 });
 
@@ -1171,51 +1170,46 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "hrm-multiselect"
   }, [_c('hrm-multiselect', {
     attrs: {
-      "options": _vm.employees,
-      "multiple": false,
-      "close-on-select": true,
-      "clear-on-select": true,
-      "hide-selected": false,
-      "show-labels": true,
-      "placeholder": "Select employee",
       "select-label": "",
       "selected-label": "selected",
       "deselect-label": "",
-      "taggable": false,
+      "id": "ajax",
       "label": "display_name",
       "track-by": "ID",
-      "allow-empty": true
+      "placeholder": "Type to search",
+      "open-direction": "bottom",
+      "options": _vm.employees,
+      "multiple": false,
+      "searchable": true
+    },
+    on: {
+      "search-change": _vm.asyncFind
     },
     scopedSlots: _vm._u([{
-      key: "option",
+      key: "clear",
       fn: function(props) {
-        return [_c('div', [_c('div', {
-          staticClass: "multi-img-wrap"
-        }, [_c('img', {
-          staticClass: "option__image",
-          attrs: {
-            "height": "16",
-            "width": "16",
-            "src": props.option.avatar_url,
-            "alt": "<?php _e( '', 'cpm' ); ?>"
+        return [(_vm.selectedEmployee.length) ? _c('div', {
+          staticClass: "multiselect__clear",
+          on: {
+            "mousedown": function($event) {
+              $event.preventDefault();
+              $event.stopPropagation();
+              _vm.clearAll(props.search)
+            }
           }
-        })]), _vm._v(" "), _c('div', {
-          staticClass: "option__descΩ"
-        }, [_c('span', {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.display_name))])]), _vm._v(" "), _c('div', {
-          staticClass: "hrm-clear"
-        })])]
+        }) : _vm._e()]
       }
     }]),
     model: {
-      value: (_vm.emp),
+      value: (_vm.selectedEmployee),
       callback: function($$v) {
-        _vm.emp = $$v
+        _vm.selectedEmployee = $$v
       },
-      expression: "emp"
+      expression: "selectedEmployee"
     }
-  })], 1), _vm._v(" "), _c('div', {
+  }, [_c('span', {
+    slot: "noResult"
+  }, [_vm._v("No user found.")])])], 1), _vm._v(" "), _c('div', {
     staticClass: "hrm-clear"
   })]), _vm._v(" "), (!_vm.disable_leave_type) ? _c('div', {
     staticClass: "hrm-form-field"
@@ -1234,7 +1228,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "selected-label": "selected",
       "deselect-label": "",
       "taggable": false,
-      "label": "leave_type_name",
+      "label": "name",
       "track-by": "id",
       "allow-empty": true
     },
@@ -1494,7 +1488,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('table', {
     staticClass: "wp-list-table widefat fixed striped"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', [_vm._l((_vm.records), function(record) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(record.leave_type_name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(record.entitlement))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(record.entitle_from))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(record.entitle_to))])])
+    return _c('tr', [_c('td', [_vm._v(_vm._s(record.leave_type.name))]), _vm._v(" "), _c('td', [_vm._v("1")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.dateFormat(record.start_time)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.dateFormat(record.end_time)))])])
   }), _vm._v(" "), (!_vm.records.length) ? _c('tr', [_c('td', {
     attrs: {
       "colspan": "4"

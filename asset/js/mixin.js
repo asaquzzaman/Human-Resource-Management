@@ -2,15 +2,16 @@ import Vue from './vue/vue';
 
 export default Vue.mixin({
 	methods: {
-		httpRequest (property) {
+		httpRequest (hook, property) {
 			var before = function( xhr ) {
 			    xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
 			    xhr.setRequestHeader("Authorization_password", btoa(12345678)); //atob js decode base64_decode
 			};
 
 			property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
+			property.data._wpnonce = HRM_Vars.nonce;
 
-			jQuery.ajax(property);
+			wp.ajax.send(hook, property);
 		},
 		slideUp (target_el, callback) {
 			var node = jQuery(target_el).closest('.hrm-slide-up');
@@ -63,6 +64,38 @@ export default Vue.mixin({
                 }
             });
 		},
+		/**
+         * WP settings date format convert to moment date format with time zone
+         * 
+         * @param  string date 
+         * 
+         * @return string      
+         */
+        dateFormat: function( date ) {
+            if ( !date ) {
+                return;
+            }
+
+            moment.tz.add(HRM_Vars.time_zones);
+            moment.tz.link(HRM_Vars.time_links);
+
+            date = new Date(date);
+            date = moment(date).format('YYYY-MM-DD');
+            
+            var format = 'MMMM DD YYYY';
+            
+            if ( HRM_Vars.wp_date_format == 'Y-m-d' ) {
+                format = 'YYYY-MM-DD';
+            
+            } else if ( HRM_Vars.wp_date_format == 'm/d/Y' ) {
+                format = 'MM/DD/YYYY';
+            
+            } else if ( HRM_Vars.wp_date_format == 'd/m/Y' ) {
+                format = 'DD/MM/YYYY';
+            } 
+
+            return moment.tz( date, HRM_Vars.wp_time_zone ).format(format);
+        },
 		onOff (key, status) {
 			var status = status || 'no';
 

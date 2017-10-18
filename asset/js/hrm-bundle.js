@@ -9419,15 +9419,16 @@ module.exports = function normalizeComponent (
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.mixin({
 	methods: {
-		httpRequest(property) {
+		httpRequest(hook, property) {
 			var before = function (xhr) {
 				xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
 				xhr.setRequestHeader("Authorization_password", btoa(12345678)); //atob js decode base64_decode
 			};
 
 			property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
+			property.data._wpnonce = HRM_Vars.nonce;
 
-			jQuery.ajax(property);
+			wp.ajax.send(hook, property);
 		},
 		slideUp(target_el, callback) {
 			var node = jQuery(target_el).closest('.hrm-slide-up');
@@ -9477,6 +9478,36 @@ module.exports = function normalizeComponent (
 
 				error(res) {}
 			});
+		},
+		/**
+         * WP settings date format convert to moment date format with time zone
+         * 
+         * @param  string date 
+         * 
+         * @return string      
+         */
+		dateFormat: function (date) {
+			if (!date) {
+				return;
+			}
+
+			moment.tz.add(HRM_Vars.time_zones);
+			moment.tz.link(HRM_Vars.time_links);
+
+			date = new Date(date);
+			date = moment(date).format('YYYY-MM-DD');
+
+			var format = 'MMMM DD YYYY';
+
+			if (HRM_Vars.wp_date_format == 'Y-m-d') {
+				format = 'YYYY-MM-DD';
+			} else if (HRM_Vars.wp_date_format == 'm/d/Y') {
+				format = 'MM/DD/YYYY';
+			} else if (HRM_Vars.wp_date_format == 'd/m/Y') {
+				format = 'DD/MM/YYYY';
+			}
+
+			return moment.tz(date, HRM_Vars.wp_time_zone).format(format);
 		},
 		onOff(key, status) {
 			var status = status || 'no';
@@ -10437,26 +10468,31 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		header: {},
 		is_new_leave_type_form_visible: false,
 		is_new_leave_records_form_visible: false,
-		is_leave_form_active: false
+		is_leave_form_active: false,
+		leave_records: []
 	},
 
 	mutations: {
-		header: function (state, header) {
+		header(state, header) {
 			state.header = header.header;
 		},
-		isNewLeaveTypeFormVisible: function (state, is_visible) {
+		isNewLeaveTypeFormVisible(state, is_visible) {
 			state.is_new_leave_type_form_visible = is_visible.is_visible;
 		},
-		isNewLeaveRecordsFormVisible: function (state, is_visible) {
+		isNewLeaveRecordsFormVisible(state, is_visible) {
 			state.is_new_leave_records_form_visible = is_visible.is_visible;
 		},
 
-		showHideleaveForm: function (state, status) {
+		showHideleaveForm(state, status) {
 			if (status === 'toggle') {
 				state.is_leave_form_active = state.is_leave_form_active ? false : true;
 			} else {
 				state.is_leave_form_active = status;
 			}
+		},
+
+		getLeaveRecords(state, leave_records) {
+			state.leave_records = leave_records;
 		}
 	}
 });
@@ -10841,6 +10877,31 @@ var HRM_Leave_jQuery_Fullcalendar = {
 			} else {
 				this.$store.commit('showHideleaveForm', status);
 			}
+		},
+
+		getLeaveRecords(args) {
+			var self = this;
+			var pre_define = {
+				data: {},
+				callback: false
+			};
+
+			var args = jQuery.extend(true, pre_define, args);
+
+			var request_data = {
+				data: args,
+				success(res) {
+					self.$store.commit('getLeaveRecords', res.data);
+
+					if (typeof pre_define === 'function') {
+						args.callback(res.data);
+					}
+				},
+
+				error(res) {}
+			};
+
+			self.httpRequest('get_leave_records', request_data);
 		}
 	}
 }));

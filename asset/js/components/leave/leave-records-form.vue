@@ -9,7 +9,7 @@
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 				<form action="" @submit.prevent="createNewLeave()">
-					<div class="hrm-form-field">
+					<div v-if="leave_proxy" class="hrm-form-field">
 						<label>
 							Employee
 							<em>*</em>
@@ -29,6 +29,7 @@
 								:options="employees" 
 								:multiple="false" 
 								:searchable="true" 
+								@input="changeEmployee"
 								@search-change="asyncFind">
 
 									<template slot="clear" scope="props">
@@ -43,6 +44,19 @@
              
 					    </div>
 					    <div class="hrm-clear"></div>
+					</div>
+
+					<div class="hrm-form-field ">
+						<label for="">
+							Apply for others leave
+							<em></em>
+						</label>
+						<span class="hrm-checkbox-wrap">
+							<input v-model="leave_proxy"  type="checkbox" id="hrm-disable-leave-proxy-checkbox">
+							<label for="hrm-disable-leave-proxy-checkbox" class="hrm-radio"></label>
+						</span>
+						<span class="hrm-clear"></span>
+						<span class="description"></span>
 					</div>
 					
 					<div class="hrm-form-field" v-if="!disable_leave_type">
@@ -82,7 +96,7 @@
 						</label>
 						<span class="hrm-checkbox-wrap">
 							<input @change="onOff('disable_leave_type')" type="checkbox" id="hrm-disable-leave-type-checkbox">
-							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio">Disable</label>
+							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio"></label>
 						</span>
 						<span class="hrm-clear"></span>
 						<span class="description"></span>
@@ -183,9 +197,17 @@
 				apply_leave_date: [],
 				calendar_evt_id: [],
 				disable_leave_type: false,
+				selectedEmployee: false,
+				isLoading: false,
+				leave_proxy: false,
+				apply_emp_lev_records: []
+			}
+		},
 
-				selectedEmployee: [],
-				isLoading: false
+		watch: {
+			leave_proxy (proxy) {
+				this.refresh();
+				this.change_leve_type_statue();
 			}
 		},
 
@@ -198,6 +220,13 @@
 			this.getInitialData();
 		},
 		methods: {
+			changeEmployee: function() {
+				this.refresh();
+				this.change_leve_type_statue();
+			},
+			refresh () {
+				jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'refetchEvents' );
+			},
 			getInitialData: function() {
 				var request_data = {
 	                _wpnonce: HRM_Vars.nonce,
@@ -287,7 +316,6 @@
 			},
 
 			change_leve_type_statue: function() {
-				
 				jQuery.each(this.calendar_evt_id, function(index, event_id) {
 					jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', event_id);
 				});
@@ -296,9 +324,6 @@
 	        	this.apply_leave_date = [];
 			},
 
-		    limitText (count) {
-				return `and ${count} other countries`
-		    },
 		    asyncFind (query) {
 		    	var self = this;
 		    	if (query.length < 3) {
@@ -325,7 +350,7 @@
 		    },
 		    clearAll () {
 				this.selectedEmployee = []
-		    }
+		    },
 
 		}
 	}

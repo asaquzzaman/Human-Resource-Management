@@ -6,7 +6,6 @@ use League\Fractal\TransformerAbstract;
 
 class Leave_Type_Transform extends TransformerAbstract {
 	public function transform( Leave_Type $item ) {
-		
 		return [
 			'id'           => $item->id,
 			'name'         => $item->leave_type_name,

@@ -725,6 +725,20 @@ if (false) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -747,10 +761,18 @@ if (false) {
 			apply_leave_date: [],
 			calendar_evt_id: [],
 			disable_leave_type: false,
-
-			selectedEmployee: [],
-			isLoading: false
+			selectedEmployee: false,
+			isLoading: false,
+			leave_proxy: false,
+			apply_emp_lev_records: []
 		};
+	},
+
+	watch: {
+		leave_proxy(proxy) {
+			this.refresh();
+			this.change_leve_type_statue();
+		}
 	},
 
 	components: {
@@ -762,6 +784,13 @@ if (false) {
 		this.getInitialData();
 	},
 	methods: {
+		changeEmployee: function () {
+			this.refresh();
+			this.change_leve_type_statue();
+		},
+		refresh() {
+			jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('refetchEvents');
+		},
 		getInitialData: function () {
 			var request_data = {
 				_wpnonce: HRM_Vars.nonce
@@ -847,7 +876,6 @@ if (false) {
 		},
 
 		change_leve_type_statue: function () {
-
 			jQuery.each(this.calendar_evt_id, function (index, event_id) {
 				jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', event_id);
 			});
@@ -856,9 +884,6 @@ if (false) {
 			this.apply_leave_date = [];
 		},
 
-		limitText(count) {
-			return `and ${count} other countries`;
-		},
 		asyncFind(query) {
 			var self = this;
 			if (query.length < 3) {
@@ -1164,7 +1189,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.createNewLeave()
       }
     }
-  }, [_c('div', {
+  }, [(_vm.leave_proxy) ? _c('div', {
     staticClass: "hrm-form-field"
   }, [_vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "hrm-multiselect"
@@ -1183,6 +1208,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "searchable": true
     },
     on: {
+      "input": _vm.changeEmployee,
       "search-change": _vm.asyncFind
     },
     scopedSlots: _vm._u([{
@@ -1211,9 +1237,54 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     slot: "noResult"
   }, [_vm._v("No user found.")])])], 1), _vm._v(" "), _c('div', {
     staticClass: "hrm-clear"
+  })]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "hrm-form-field "
+  }, [_vm._m(2), _vm._v(" "), _c('span', {
+    staticClass: "hrm-checkbox-wrap"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.leave_proxy),
+      expression: "leave_proxy"
+    }],
+    attrs: {
+      "type": "checkbox",
+      "id": "hrm-disable-leave-proxy-checkbox"
+    },
+    domProps: {
+      "checked": Array.isArray(_vm.leave_proxy) ? _vm._i(_vm.leave_proxy, null) > -1 : (_vm.leave_proxy)
+    },
+    on: {
+      "__c": function($event) {
+        var $$a = _vm.leave_proxy,
+          $$el = $event.target,
+          $$c = $$el.checked ? (true) : (false);
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.leave_proxy = $$a.concat($$v))
+          } else {
+            $$i > -1 && (_vm.leave_proxy = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+          }
+        } else {
+          _vm.leave_proxy = $$c
+        }
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    staticClass: "hrm-radio",
+    attrs: {
+      "for": "hrm-disable-leave-proxy-checkbox"
+    }
+  })]), _vm._v(" "), _c('span', {
+    staticClass: "hrm-clear"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "description"
   })]), _vm._v(" "), (!_vm.disable_leave_type) ? _c('div', {
     staticClass: "hrm-form-field"
-  }, [_vm._m(2), _vm._v(" "), _c('div', {
+  }, [_vm._m(3), _vm._v(" "), _c('div', {
     staticClass: "hrm-multiselect"
   }, [_c('hrm-multiselect', {
     attrs: {
@@ -1248,7 +1319,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "hrm-clear"
   })]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "hrm-form-field "
-  }, [_vm._m(3), _vm._v(" "), _c('span', {
+  }, [_vm._m(4), _vm._v(" "), _c('span', {
     staticClass: "hrm-checkbox-wrap"
   }, [_c('input', {
     attrs: {
@@ -1265,13 +1336,13 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "for": "hrm-disable-leave-type-checkbox"
     }
-  }, [_vm._v("Disable")])]), _vm._v(" "), _c('span', {
+  })]), _vm._v(" "), _c('span', {
     staticClass: "hrm-clear"
   }), _vm._v(" "), _c('span', {
     staticClass: "description"
   })]), _vm._v(" "), _c('div', {
     staticClass: "hrm-form-field"
-  }, [_vm._m(4), _vm._v(" "), _c('div', {
+  }, [_vm._m(5), _vm._v(" "), _c('div', {
     staticClass: "hrm-multiselect"
   }, [_c('hrm-multiselect', {
     attrs: {
@@ -1321,9 +1392,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   })], 1), _vm._v(" "), _c('div', {
     staticClass: "hrm-clear"
-  })]), _vm._v(" "), _vm._m(5), _vm._v(" "), _c('div', {
+  })]), _vm._v(" "), _vm._m(6), _vm._v(" "), _c('div', {
     staticClass: "hrm-form-field"
-  }, [_vm._m(6), _vm._v(" "), _c('div', {
+  }, [_vm._m(7), _vm._v(" "), _c('div', {
     directives: [{
       name: "hrm-leave-jquery-fullcalendar",
       rawName: "v-hrm-leave-jquery-fullcalendar"
@@ -1356,6 +1427,12 @@ var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _
   }, [_c('span', [_vm._v("Leave Records")])])
 },function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', [_vm._v("\n\t\t\t\t\t\t\tEmployee\n\t\t\t\t\t\t\t"), _c('em', [_vm._v("*")])])
+},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('label', {
+    attrs: {
+      "for": ""
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t\tApply for others leave\n\t\t\t\t\t\t\t"), _c('em')])
 },function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', [_vm._v("\n\t\t\t\t\t\t\tLeave Type\n\t\t\t\t\t\t\t"), _c('em', [_vm._v("*")])])
 },function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

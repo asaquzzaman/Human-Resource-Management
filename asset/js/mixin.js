@@ -104,6 +104,8 @@ export default Vue.mixin({
 			} else {
 				this[key] = status;
 			}
+
+			this.change_leve_type_statue();
 		}
 	},
 });

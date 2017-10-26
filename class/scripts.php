@@ -235,7 +235,8 @@ class Hrm_Scripts {
             'wp_time_format' => get_option( 'time_format' ),
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' )
+            'success_msg' => __( 'Changed Successfully', 'hrm' ),
+            'current_user' => wp_get_current_user()
         ));
 
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );

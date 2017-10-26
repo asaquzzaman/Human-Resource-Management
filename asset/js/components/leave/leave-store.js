@@ -12,7 +12,8 @@ var HRM_Leave_Store = new Vuex.Store({
 		is_new_leave_type_form_visible: false,
 		is_new_leave_records_form_visible: false,
 		is_leave_form_active: false,
-		leave_records: []
+		leave_records: [],
+		current_emp_current_month_leaves: []
 	},
 
 	mutations: {

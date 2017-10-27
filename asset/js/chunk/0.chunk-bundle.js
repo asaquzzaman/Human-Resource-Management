@@ -739,6 +739,19 @@ if (false) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -746,7 +759,6 @@ if (false) {
 	data: function () {
 		return {
 			employees: [],
-			emp: '',
 			apply_to: '',
 			leave_type: '',
 			leave_types: [],
@@ -764,7 +776,8 @@ if (false) {
 			selectedEmployee: false,
 			isLoading: false,
 			leave_proxy: false,
-			apply_emp_lev_records: []
+			apply_emp_lev_records: [],
+			is_leave_btn_disable: false
 		};
 	},
 
@@ -827,32 +840,36 @@ if (false) {
 
 		createNewLeave: function () {
 
+			if (this.is_leave_btn_disable) {
+				return false;
+			}
+
+			if (!this.apply_leave_date.length) {
+				// Display a success toast, with a title
+				toastr.error('Please select your leave date');
+				return false;
+			}
+
+			var self = this;
+
 			var request_data = {
-				_wpnonce: hrm_ajax_data.nonce,
-				leave_status: this.leave_status,
 				leave_comments: this.leave_comments,
 				leave_type_id: !this.leave_type ? '' : this.leave_type.id,
-				emp_id: !this.emp ? '' : this.emp.ID,
+				emp_id: !this.selectedEmployee ? false : this.selectedEmployee.ID,
 				time: this.apply_leave_date,
 				disable_leave_type: this.disable_leave_type,
-				apply_to: this.apply_to.length ? true : '',
 				class: 'Leave',
 				method: 'create'
-			},
-
-
-			// is_update  = parseInt( this.department_id ) ? true : false,
-
-			// target_index = is_update ? this.getIndex(
-			//     this.$store.state.departments, this.department_id, 'id'
-			// ) : false,
-
-			self = this;
+			};
 
 			this.show_spinner = true;
 
-			wp.ajax.send('create_new_leave', {
+			var form_data = {
 				data: request_data,
+
+				beforSend: function (xhr) {
+					self.is_leave_btn_disable = true;
+				},
 
 				success: function (res) {
 					self.show_spinner = false;
@@ -872,7 +889,9 @@ if (false) {
 						toastr.error(value);
 					});
 				}
-			});
+			};
+
+			this.httpRequest('create_new_leave', form_data);
 		},
 
 		change_leve_type_statue: function () {
@@ -1278,7 +1297,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "for": "hrm-disable-leave-proxy-checkbox"
     }
-  })]), _vm._v(" "), _c('span', {
+  }, [_vm._v("Enable/Disable")])]), _vm._v(" "), _c('span', {
     staticClass: "hrm-clear"
   }), _vm._v(" "), _c('span', {
     staticClass: "description"
@@ -1336,65 +1355,42 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "for": "hrm-disable-leave-type-checkbox"
     }
+  }, [_vm._v("Enable/Disable")])]), _vm._v(" "), _c('span', {
+    staticClass: "hrm-clear"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "description"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "hrm-form-field "
+  }, [_vm._m(5), _vm._v(" "), _c('span', {
+    staticClass: "hrm-checkbox-wrap"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.leave_comments),
+      expression: "leave_comments"
+    }],
+    domProps: {
+      "value": (_vm.leave_comments)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.leave_comments = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    staticClass: "hrm-radio",
+    attrs: {
+      "for": "hrm-disable-leave-type-checkbox"
+    }
   })]), _vm._v(" "), _c('span', {
     staticClass: "hrm-clear"
   }), _vm._v(" "), _c('span', {
     staticClass: "description"
   })]), _vm._v(" "), _c('div', {
     staticClass: "hrm-form-field"
-  }, [_vm._m(5), _vm._v(" "), _c('div', {
-    staticClass: "hrm-multiselect"
-  }, [_c('hrm-multiselect', {
-    attrs: {
-      "options": _vm.administrators,
-      "multiple": true,
-      "close-on-select": true,
-      "clear-on-select": true,
-      "hide-selected": false,
-      "show-labels": true,
-      "placeholder": "Select administrators",
-      "select-label": "",
-      "selected-label": "selected",
-      "deselect-label": "",
-      "taggable": false,
-      "label": "display_name",
-      "track-by": "ID",
-      "allow-empty": true
-    },
-    scopedSlots: _vm._u([{
-      key: "option",
-      fn: function(props) {
-        return [_c('div', [_c('div', {
-          staticClass: "multi-img-wrap"
-        }, [_c('img', {
-          staticClass: "option__image",
-          attrs: {
-            "height": "16",
-            "width": "16",
-            "src": props.option.avatar_url,
-            "alt": "<?php _e( 'kkk', 'cpm' ); ?>"
-          }
-        })]), _vm._v(" "), _c('div', {
-          staticClass: "option__descΩ"
-        }, [_c('span', {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.display_name))])]), _vm._v(" "), _c('div', {
-          staticClass: "hrm-clear"
-        })])]
-      }
-    }]),
-    model: {
-      value: (_vm.apply_to),
-      callback: function($$v) {
-        _vm.apply_to = $$v
-      },
-      expression: "apply_to"
-    }
-  })], 1), _vm._v(" "), _c('div', {
-    staticClass: "hrm-clear"
-  })]), _vm._v(" "), _vm._m(6), _vm._v(" "), _c('div', {
-    staticClass: "hrm-form-field"
-  }, [_vm._m(7), _vm._v(" "), _c('div', {
+  }, [_vm._m(6), _vm._v(" "), _c('div', {
     directives: [{
       name: "hrm-leave-jquery-fullcalendar",
       rawName: "v-hrm-leave-jquery-fullcalendar"
@@ -1440,42 +1436,13 @@ var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _
     attrs: {
       "for": ""
     }
-  }, [_vm._v("\n\t\t\t\t\t\t\tDisable leave type\n\t\t\t\t\t\t\t"), _c('em')])
+  }, [_vm._v("\n\t\t\t\t\t\t\tLeave type\n\t\t\t\t\t\t\t"), _c('em')])
 },function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('label', [_vm._v("\n\t\t\t\t\t\t\tRequest to\n\t\t\t\t\t\t\t"), _c('em', [_vm._v("*")])])
-},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "hrm-form-field "
-  }, [_c('label', {
+  return _c('label', {
     attrs: {
-      "for": "hrm-leave-type-select-field"
+      "for": ""
     }
-  }, [_vm._v("\n\t\t\t\t\t\t\tStatus\n\t\t\t\t\t\t\t"), _c('em')]), _vm._v(" "), _c('select', {
-    attrs: {
-      "id": "hrm-leave-type-select-field",
-      "name": "leave_status"
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("- Select -")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Pending")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "2"
-    }
-  }, [_vm._v("Approve")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "3"
-    }
-  }, [_vm._v("Cancel")])]), _vm._v(" "), _c('span', {
-    staticClass: "hrm-clear"
-  }), _vm._v(" "), _c('span', {
-    staticClass: "description"
-  })])
+  }, [_vm._v("\n\t\t\t\t\t\t\tComments\n\t\t\t\t\t\t\t"), _c('em')])
 },function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', [_vm._v("Leave Duration"), _c('em', [_vm._v("*")])])
 }]

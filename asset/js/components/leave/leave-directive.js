@@ -46,14 +46,14 @@ var HRM_Leave_Apply_Calendar = {
 				}
 
 				if (!context.leave_type) {
-					alert('Please select leave type');
+					toastr.error('Please select leave type');
 					return false;
 				}
 
 				var has_entitlement = HRM_Leave_Apply_Calendar.has_entitlement(date, jsEvent, view, context);
 
 				if (!has_entitlement) {
-					alert('Leave entitlement exist');
+					toastr.error('Leave entitlement exist');
 					return false;
 				}
 				

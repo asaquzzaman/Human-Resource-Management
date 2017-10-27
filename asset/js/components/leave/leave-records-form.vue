@@ -53,7 +53,7 @@
 						</label>
 						<span class="hrm-checkbox-wrap">
 							<input v-model="leave_proxy"  type="checkbox" id="hrm-disable-leave-proxy-checkbox">
-							<label for="hrm-disable-leave-proxy-checkbox" class="hrm-radio"></label>
+							<label for="hrm-disable-leave-proxy-checkbox" class="hrm-radio">Enable/Disable</label>
 						</span>
 						<span class="hrm-clear"></span>
 						<span class="description"></span>
@@ -91,17 +91,17 @@
 
 					<div class="hrm-form-field ">
 						<label for="">
-							Disable leave type
+							Leave type
 							<em></em>
 						</label>
 						<span class="hrm-checkbox-wrap">
 							<input @change="onOff('disable_leave_type')" type="checkbox" id="hrm-disable-leave-type-checkbox">
-							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio"></label>
+							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio">Enable/Disable</label>
 						</span>
 						<span class="hrm-clear"></span>
 						<span class="description"></span>
 					</div>
-
+<!-- 
 					<div class="hrm-form-field">
 						<label>
 							Request to
@@ -133,7 +133,7 @@
 					                    </div>
 					                    <div class="option__descΩ">
 					                        <span class="option__title">{{ props.option.display_name }}</span>
-					                        <!-- <span class="option__small">{{ props.option.desc }}</span> -->
+					                        
 					                    </div>
 					                    <div class="hrm-clear"></div>
 					                </div>
@@ -143,8 +143,8 @@
 					    </div>
 					    <div class="hrm-clear"></div>
 					</div>
-
-					<div class="hrm-form-field ">
+ -->
+					<!-- <div class="hrm-form-field ">
 						<label for="hrm-leave-type-select-field">
 							Status
 							<em></em>
@@ -155,6 +155,19 @@
 							<option value="2">Approve</option>
 							<option value="3">Cancel</option>
 						</select>
+						<span class="hrm-clear"></span>
+						<span class="description"></span>
+					</div> -->
+
+					<div class="hrm-form-field ">
+						<label for="">
+							Comments
+							<em></em>
+						</label>
+						<span class="hrm-checkbox-wrap">
+							<textarea v-model="leave_comments"></textarea>
+							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio"></label>
+						</span>
 						<span class="hrm-clear"></span>
 						<span class="description"></span>
 					</div>
@@ -182,7 +195,6 @@
 		data: function() {
 			return {
 				employees: [],
-				emp: '',
 				apply_to: '',
 				leave_type: '',
 				leave_types: [],
@@ -200,7 +212,8 @@
 				selectedEmployee: false,
 				isLoading: false,
 				leave_proxy: false,
-				apply_emp_lev_records: []
+				apply_emp_lev_records: [],
+				is_leave_btn_disable: false
 			}
 		},
 
@@ -265,32 +278,37 @@
 			},
 
 			createNewLeave: function() {
+
+				if( this.is_leave_btn_disable ) {
+					return false;
+				}
+
+				if (!this.apply_leave_date.length) {
+					// Display a success toast, with a title
+		            toastr.error('Please select your leave date');
+					return false;
+				}
+
+				var self = this;
 				
 			    var request_data = {
-	                _wpnonce: hrm_ajax_data.nonce,
-	                leave_status: this.leave_status,
 	                leave_comments: this.leave_comments,
 	                leave_type_id: ! this.leave_type ? '' : this.leave_type.id,
-	                emp_id: ! this.emp ? '' : this.emp.ID,
+	                emp_id: ! this.selectedEmployee ? false : this.selectedEmployee.ID,
 	                time: this.apply_leave_date,
 	                disable_leave_type: this.disable_leave_type,
-	                apply_to: this.apply_to.length ? true : '',
 	                class: 'Leave',
 	                method: 'create'
-	            },
-	            
-	            // is_update  = parseInt( this.department_id ) ? true : false,
-	            
-	            // target_index = is_update ? this.getIndex(
-	            //     this.$store.state.departments, this.department_id, 'id'
-	            // ) : false,
-
-	            self = this;
+	            };
 
 	            this.show_spinner = true;
 
-	            wp.ajax.send('create_new_leave', {
+	            var form_data = {
 	                data: request_data,
+
+	                beforSend: function(xhr) {
+	                	self.is_leave_btn_disable = true;
+	                },
 	                
 	                success: function(res) {
 	                	self.show_spinner = false;
@@ -312,7 +330,9 @@
 	                        toastr.error(value);
 	                    });
 	                }
-	            });
+	            };
+
+	            this.httpRequest('create_new_leave', form_data);
 			},
 
 			change_leve_type_statue: function() {

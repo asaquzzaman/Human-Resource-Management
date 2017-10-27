@@ -858,6 +858,7 @@ if (false) {
 				emp_id: !this.selectedEmployee ? false : this.selectedEmployee.ID,
 				time: this.apply_leave_date,
 				disable_leave_type: this.disable_leave_type,
+				leave_status: 1,
 				class: 'Leave',
 				method: 'create'
 			};

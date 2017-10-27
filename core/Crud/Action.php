@@ -38,7 +38,7 @@ abstract class Action implements Pattern {
 	public function create_validation() {
 		$class = $this->get_model();
 		
-		array_walk( $class->create_rules, array( $this, 'filter_post_data' ) );
+		array_walk( $class->validation_rules, array( $this, 'filter_post_data' ) );
 	}
 
 	public function filter_post_data( $rules, $name ) {

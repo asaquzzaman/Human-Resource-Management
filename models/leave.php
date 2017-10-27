@@ -6,7 +6,7 @@ use HRM\Models\Leave_Type;
 
 class Leave extends Eloquent {
 
-    public $create_rules =  array (
+    public $validation_rules =  array (
         'start_time' => array (
             'type' => 'required',
             'message' => array(
@@ -14,17 +14,17 @@ class Leave extends Eloquent {
             )
         ),
 
-        'apply_to' => array (
-            'type' => 'required',
-            'message' => array(
-                'required'  =>  'Manager is not define',
-            )
-        ),
-
         'end_time' => array (
             'type' => 'required',
             'message' => array(
                 'required'  =>  'End time is required',
+            )
+        ),
+
+        'emp_id' => array (
+            'type' => 'required',
+            'message' => array(
+                'required'  =>  'Please select employee',
             )
         ),
 
@@ -38,7 +38,7 @@ class Leave extends Eloquent {
 
     protected $primaryKey = 'id';
     protected $table      = 'hrm_leave';
-    public $timestamps    = false;
+    public $timestamps    = true;
 
     protected $fillable = [
 		'leave_status',
@@ -58,7 +58,7 @@ class Leave extends Eloquent {
     }
 
     public function setLeaveStatusAttribute( $value ) {
-        $this->attributes['leave_status'] =  absint( $value ) <= 0 ? 1 : $value;
+        $this->attributes['leave_status'] =  absint( $value ) ? 1 : $value;
     }
 
     public function setLeaveTypeIdAttribute( $value ) {

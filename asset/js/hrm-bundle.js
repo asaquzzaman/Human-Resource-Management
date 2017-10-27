@@ -9517,7 +9517,7 @@ module.exports = function normalizeComponent (
 			} else {
 				this[key] = status;
 			}
-
+			this.leave_type = '';
 			this.change_leve_type_statue();
 		}
 	}

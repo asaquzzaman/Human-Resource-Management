@@ -340,7 +340,7 @@ function hrm_message() {
     return apply_filters( 'hrm_message', $message );
 }
 
-function hrm_get_role() {
+function hrm_get_roles() {
     global $wp_roles;
 
     if ( !$wp_roles ) {

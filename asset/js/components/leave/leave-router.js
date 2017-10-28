@@ -43,6 +43,13 @@ const Hrm_Leave_Holidays = resolve => {
     });
 }
 
+const Hrm_Leave_form_settings = resolve => {
+
+    require.ensure(['./leave-form-settings.vue'], () => {
+        resolve(require('./leave-form-settings.vue'));
+    });
+}
+
 HRM_Routes.push(
     {
         path: '/leave-configuration', 
@@ -66,6 +73,68 @@ HRM_Routes.push(
                 path: '/leave-configuration/holidays', 
                 components: { 'hrm-leave-holidays': Hrm_Leave_Holidays }, 
                 name: 'leave_holidays',
+            },
+
+            {
+                path: '/leave-configuration/form', 
+                components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings }, 
+                name: 'leave_form_settings',
+            }
+        ]
+    }
+);
+
+const Hrm_Leave_Requests = resolve => {
+
+    require.ensure(['./leave-requests.vue'], () => {
+        resolve(require('./leave-requests.vue'));
+    });
+}
+
+const Hrm_Leave_Pending = resolve => {
+
+    require.ensure(['./leave-pending.vue'], () => {
+        resolve(require('./leave-pending.vue'));
+    });
+}
+
+const Hrm_Leave_Cancel = resolve => {
+
+    require.ensure(['./leave-cancel.vue'], () => {
+        resolve(require('./leave-cancel.vue'));
+    });
+}
+
+const Hrm_Leave_Approve = resolve => {
+
+    require.ensure(['./leave-approve.vue'], () => {
+        resolve(require('./leave-approve.vue'));
+    });
+}
+
+HRM_Routes.push(
+    {
+        path: '/leave-requests', 
+        components: { 'hrm-leave-requests': Hrm_Leave_Requests }, 
+        name: 'leave_requests',
+
+        children: [
+            {
+                path: '/leave-requests/pending', 
+                components: { 'hrm-leave-pending': Hrm_Leave_Pending }, 
+                name: 'leave_pending',
+            },
+
+            {
+                path: '/leave-requests/approve', 
+                components: { 'hrm-leave-approve': Hrm_Leave_Approve }, 
+                name: 'leave_approve',
+            },
+
+            {
+                path: '/leave-requests/cancel', 
+                components: { 'hrm-leave-cancel': Hrm_Leave_Cancel }, 
+                name: 'leave_cancel',
             }
         ]
     }

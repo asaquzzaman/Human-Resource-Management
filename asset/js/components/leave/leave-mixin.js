@@ -41,7 +41,7 @@ export default Vue.mixin({
                 }
             };
 
-            self.httpRequest('get_leave_records', request_data);
+            self.httpRequest('get_leaves', request_data);
 		}
 	},
 });

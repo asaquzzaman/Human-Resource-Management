@@ -257,6 +257,44 @@ function hrm_leave_page_items( $path, $hrm_leave, $exclude ) {
                 'file_path' => $path . '/leave/leave-holidays.php',
                 'name'      => 'leave_holidays',
             ),
+            'leave_form' => array(
+                'id'        => 'hrm-leave-form',
+                'title'     => __( 'Leave Form', 'hrm' ),
+                'url'       => '/leave-configure/form',
+                'file_path' => $path . '/leave/leave-holidays.php',
+                'name'      => 'leave_form_settings',
+            ),
+        ),
+    );
+
+    $leave['leave_requests'] = array(
+        'id'        => 'hrm-leave-requests',
+        'title'     => __( 'Requested Leave', 'hrm' ),
+        'name'      => 'leave_requests',
+        'url'       => '/leave-requests',
+        'file_path' => $path . '/leave/configure.php',
+        'submenu' => array(
+            'pending' => array(
+                'id'        => 'hrm-leave-pending',
+                'title'     => __( 'Pending', 'hrm' ),
+                'url'       => '/leave-requests/pending',
+                'file_path' => $path . '/leave/leave-type.php',
+                'name'      => 'leave_pending',
+            ),
+            'approve' => array(
+                'id'        => 'hrm-leave-approve',
+                'title'     => __( 'Approve', 'hrm' ),
+                'url'       => '/leave-requests/approve',
+                'file_path' => $path . '/leave/leave-week.php',
+                'name'      => 'leave_approve',
+            ),
+            'cancel' => array(
+                'id'        => 'hrm-leave-cancel',
+                'title'     => __( 'Cancel', 'hrm' ),
+                'url'       => '/leave-requests/cancel',
+                'file_path' => $path . '/leave/leave-holidays.php',
+                'name'      => 'leave_cancel',
+            ),
         ),
     );
 

@@ -43,14 +43,14 @@ class Hrm_Leave {
         
         foreach( $users as $user ) {
             $args['emp_id'] = $user->ID;
-            $user->leave_records = Hrm_Leave::getInstance()->get_empoyee_leave( $args );
+            $user->leave_records = Hrm_Leave::getInstance()->get_leaves( $args );
             $send[] = $user->data;
         }
 
         wp_send_json_success( $send );
     }
 
-    public function get_empoyee_leave( $args = array() ) {
+    public function get_leaves( $args = array() ) {
 
         global $wpdb;
         $transformer = new Transformer_Manager();
@@ -58,8 +58,7 @@ class Hrm_Leave {
         $defaults = array(
             'start_time' => date( 'Y-01-01 00:00:00' ),
             'end_time'   => date( 'Y-12-31 24:59:59' ),
-            'emp_id'     => get_current_user_id(),
-            'per_page'   => 31,  
+            'per_page'   => 50,  
             'page'       => 1    
         );
 
@@ -69,13 +68,28 @@ class Hrm_Leave {
         
         if ( false === $items ) { 
 
-            $leaves = Leave::with('leaveType')
-                ->where( 'emp_id', $args['emp_id'] )
-                ->where( 'start_time', '>=', $args['start_time'] )
-                ->where( 'end_time', '<=', $args['end_time'] )
-                ->paginate( $args['per_page'], ['*'], $args['page'] );
+            $leaves = Leave::with('leaveType');
+
+            if ( !empty( $args['emp_id'] ) ) {
+                $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+            }
+
+            if ( !empty( $args['start_time'] ) ) {
+                $leaves = $leaves->where( 'start_time', '>=', $args['start_time'] );
+            }
+
+            if ( !empty( $args['end_time'] ) ) {
+                $leaves = $leaves->where( 'end_time', '<=', $args['end_time'] );
+            }
+
+            if ( !empty( $args['status'] ) ) {
+                $leaves = $leaves->where( 'status', $args['status'] );
+            }
+                
+            $leaves = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
 
             $leave_collection = $leaves->getCollection();
+            
             $resource = new Collection( $leave_collection, new Leave_Transformer );
             $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
 
@@ -725,7 +739,7 @@ class Hrm_Leave {
         $end = date( 'Y-m-d', strtotime( $_POST['end'] ) );
         $emp_id = empty( $_POST['emp_id'] ) ? get_current_user_id() : intval( $_POST['emp_id'] );
 
-        $records = self::getInstance()->get_empoyee_leave( array(
+        $records = self::getInstance()->get_leaves( array(
             'start_time' => $start,
             'end_time'   => $end,
             'emp_id'     => $emp_id
@@ -764,24 +778,59 @@ class Hrm_Leave {
         ));
     }
 
-    public static function ajax_get_leave_records() {
+    public static function ajax_get_leaves() {
         check_ajax_referer('hrm_nonce');
-        wp_send_json_success(self::getInstance()->get_empoyee_leave());
+        wp_send_json_success(self::getInstance()->get_leaves([
+            'emp_id' => $_POST['emp_id']
+        ]));
     }
 
-    public function get_leave_records() {
-        $leave_model = new HRM\Models\leave();
-        $transformer = new Transformer_Manager();
+    // public function get_leave_records() {
+    //     $leave_model = new HRM\Models\leave();
+    //     $transformer = new Transformer_Manager();
 
-        $leaves           = $leave_model::paginate();
-        $leave_collection = $leaves->getCollection();
-        $resource         = new Collection( $leave_collection, new Leave_Transformer );
+    //     $leaves           = $leave_model::paginate();
+    //     $leave_collection = $leaves->getCollection();
+    //     $resource         = new Collection( $leave_collection, new Leave_Transformer );
         
-        $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
+    //     $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
  
-        $response = $transformer->get_response( $resource );
+    //     $response = $transformer->get_response( $resource );
 
-        return $response;
+    //     return $response;
+    // }
+
+    public function get_leave_form_settings() {
+        return get_option( 'hrm_leave_form_settings', false );
+    }
+
+    public static function ajax_get_leave_form_settings() {
+        check_ajax_referer('hrm_nonce');
+
+        $settings = [
+            'roles'   => hrm_get_roles(),
+            'settings' => self::getInstance()->get_leave_form_settings()
+        ];
+        
+        wp_send_json_success( $settings );
+    }
+
+    public static function ajax_save_leave_form_settings() {
+        check_ajax_referer('hrm_nonce');
+
+        $settings = [
+            'others_employee_leave' => wp_list_pluck( $_POST['others_employee_leave'], 'id' ),
+            'leave_types'           => wp_list_pluck( $_POST['leave_types'], 'id' ),
+            'apply_to'         => wp_list_pluck( $_POST['apply_to'], 'id' )
+        ];
+        
+        self::getInstance()->save_leave_form_settings( $settings );
+
+        wp_send_json_success();
+    }
+
+    public function save_leave_form_settings( $settings ) {
+        update_option('hrm_leave_form_settings', $settings);
     }
 
 }

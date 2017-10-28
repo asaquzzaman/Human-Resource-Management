@@ -1,4 +1,4 @@
-webpackJsonp([0],{
+webpackJsonp([10],{
 
 /***/ 12:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -980,7 +980,9 @@ if (false) {
 	},
 
 	created() {
-		this.getLeaveRecords();
+		this.getLeaveRecords({
+			'emp_id': HRM_Vars.current_user.data.ID
+		});
 	}
 });
 

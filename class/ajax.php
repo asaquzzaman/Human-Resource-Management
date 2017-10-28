@@ -108,10 +108,12 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
         add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );
         add_action( 'wp_ajax_get_leave_record_events', array( 'Hrm_Leave', 'ajax_get_leave_record_events' ) );
-        //array( 'Hrm_Leave', 'ajax_create_new_leave' )
+        //array( 'Hrm_Leave', 'save_leave_form_settings' )
         
         add_action( 'wp_ajax_create_new_leave', array( 'Hrm_Leave', 'ajax_create_new_leave' ) );
-        add_action( 'wp_ajax_get_leave_records', array( 'Hrm_Leave', 'ajax_get_leave_records' ) );
+        add_action( 'wp_ajax_get_leaves', array( 'Hrm_Leave', 'ajax_get_leaves' ) );
+        add_action( 'wp_ajax_get_leave_form_settings', array( 'Hrm_Leave', 'ajax_get_leave_form_settings' ) );
+        add_action( 'wp_ajax_save_leave_form_settings', array( 'Hrm_Leave', 'ajax_save_leave_form_settings' ) );
 
     }
 

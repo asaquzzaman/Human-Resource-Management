@@ -26,6 +26,12 @@ class Leave_Transformer extends TransformerAbstract
     }
 
     public function includeLeaveType( Leave $item ) {
+        if ( $item->leave_type_id === '0' ) {
+            return [
+                'name' => 'Extra'
+            ];
+        }
+
         $leave_type = $item->leaveType;
         $leave_type_transform = new Leave_Type_Transform();
  

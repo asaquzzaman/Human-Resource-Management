@@ -3,7 +3,7 @@
 	<div class="postbox">
 
 		<h2 class="hndle ui-sortable-handle">
-			<span>Leave Records</span>
+			<span>Leave Form</span>
 		</h2>
 
 		<div class="inside">
@@ -48,7 +48,7 @@
 
 					<div class="hrm-form-field ">
 						<label for="">
-							Apply for others leave
+							Others employee
 							<em></em>
 						</label>
 						<span class="hrm-checkbox-wrap">
@@ -56,7 +56,7 @@
 							<label for="hrm-disable-leave-proxy-checkbox" class="hrm-radio">Enable/Disable</label>
 						</span>
 						<span class="hrm-clear"></span>
-						<span class="description"></span>
+						<span class="description">you can apply on behalf of others employee leave</span>
 					</div>
 					
 					<div class="hrm-form-field" v-if="!disable_leave_type">

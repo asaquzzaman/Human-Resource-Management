@@ -4,7 +4,7 @@
 		<!-- <div class="hrm-slide-up" v-hrm-slide-down style="display: none;" v-if="is_new_leave_records_form_visible"> -->
 			<hrm-leave-records-form v-if="is_leave_form_active"></hrm-leave-records-form>
 		<!-- </div> -->
-		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="button button-primary hrm-add-button">Add</a>
+		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="button button-primary hrm-add-button">Apply Leave</a>
 		<hrm-leave-records-render></hrm-leave-records-render> 
 	</div>
 </template>

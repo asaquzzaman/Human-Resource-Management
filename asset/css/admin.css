@@ -877,12 +877,12 @@ label em {
   border-radius: 0;
 }
 .hrm-multiselect .multiselect .multiselect__tags {
-  border-radius: 0;
+ /* border-radius: 0;
   min-height: 0px;
   display: block;
   padding: 0;
   border-radius: 0px;
-  border: 0px solid #e8e8e8;
+  border: 0px solid #e8e8e8;*/
 }
 .hrm-multiselect .multiselect .multi-img-wrap {
   width: 10%;

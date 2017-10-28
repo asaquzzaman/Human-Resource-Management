@@ -37,7 +37,9 @@
 		},
 
 		created () {
-			this.getLeaveRecords();
+			this.getLeaveRecords({
+				'emp_id': HRM_Vars.current_user.data.ID
+			});
 		},
 	}
 </script>

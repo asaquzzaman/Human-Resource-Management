@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		5: 0
+/******/ 		6: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -145,7 +145,7 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9309,7 +9309,7 @@
 
   return Vue$3;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))
 
 /***/ }),
 /* 1 */
@@ -10358,9 +10358,9 @@ module.exports = function normalizeComponent (
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vue_vue_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__ = __webpack_require__(16);
 
 
 
@@ -10404,8 +10404,8 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_controller_vue__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3a3ac16e_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_controller_vue__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_controller_vue__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3a3ac16e_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_controller_vue__ = __webpack_require__(23);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -10864,7 +10864,8 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
+/* 14 */,
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10911,20 +10912,20 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 				error(res) {}
 			};
 
-			self.httpRequest('get_leave_records', request_data);
+			self.httpRequest('get_leaves', request_data);
 		}
 	}
 }));
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 const Hrm_Leave_Records = resolve => {
 
-    __webpack_require__.e/* require.ensure */(0).then((() => {
-        resolve(__webpack_require__(11));
+    __webpack_require__.e/* require.ensure */(10).then((() => {
+        resolve(__webpack_require__(12));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -10940,25 +10941,32 @@ HRM_Routes.push({
 });
 const Hrm_Leave_Configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(3).then((() => {
+    __webpack_require__.e/* require.ensure */(15).then((() => {
         resolve(__webpack_require__(9));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 const Hrm_Leave_Type = resolve => {
 
-    __webpack_require__.e/* require.ensure */(1).then((() => {
-        resolve(__webpack_require__(12));
+    __webpack_require__.e/* require.ensure */(11).then((() => {
+        resolve(__webpack_require__(13));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 const Hrm_Leave_Work_Week = resolve => {
 
-    __webpack_require__.e/* require.ensure */(4).then((() => {
-        resolve(__webpack_require__(13));
+    __webpack_require__.e/* require.ensure */(16).then((() => {
+        resolve(__webpack_require__(14));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 const Hrm_Leave_Holidays = resolve => {
 
-    __webpack_require__.e/* require.ensure */(2).then((() => {
+    __webpack_require__.e/* require.ensure */(12).then((() => {
+        resolve(__webpack_require__(11));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_form_settings = resolve => {
+
+    __webpack_require__.e/* require.ensure */(13).then((() => {
         resolve(__webpack_require__(10));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10980,13 +10988,65 @@ HRM_Routes.push({
         path: '/leave-configuration/holidays',
         components: { 'hrm-leave-holidays': Hrm_Leave_Holidays },
         name: 'leave_holidays'
+    }, {
+        path: '/leave-configuration/form',
+        components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings },
+        name: 'leave_form_settings'
+    }]
+});
+
+const Hrm_Leave_Requests = resolve => {
+
+    __webpack_require__.e/* require.ensure */(14).then((() => {
+        resolve(__webpack_require__(77));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Pending = resolve => {
+
+    __webpack_require__.e/* require.ensure */(17).then((() => {
+        resolve(__webpack_require__(80));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Cancel = resolve => {
+
+    __webpack_require__.e/* require.ensure */(18).then((() => {
+        resolve(__webpack_require__(81));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Approve = resolve => {
+
+    __webpack_require__.e/* require.ensure */(19).then((() => {
+        resolve(__webpack_require__(84));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+HRM_Routes.push({
+    path: '/leave-requests',
+    components: { 'hrm-leave-requests': Hrm_Leave_Requests },
+    name: 'leave_requests',
+
+    children: [{
+        path: '/leave-requests/pending',
+        components: { 'hrm-leave-pending': Hrm_Leave_Pending },
+        name: 'leave_pending'
+    }, {
+        path: '/leave-requests/approve',
+        components: { 'hrm-leave-approve': Hrm_Leave_Approve },
+        name: 'leave_approve'
+    }, {
+        path: '/leave-requests/cancel',
+        components: { 'hrm-leave-cancel': Hrm_Leave_Cancel },
+        name: 'leave_cancel'
     }]
 });
 
 /* unused harmony default export */ var _unused_webpack_default_export = (HRM_Routes);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11015,7 +11075,7 @@ var wpspear_hrm = {
 new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -13357,11 +13417,11 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 });
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__ = __webpack_require__(21);
 //
 //
 //
@@ -13379,13 +13439,14 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 });
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_store__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_directive__ = __webpack_require__(8);
+//
 //
 //
 //
@@ -13403,12 +13464,12 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 });
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_27daaec6_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_27daaec6_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(22);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -13452,7 +13513,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13464,6 +13525,10 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }), _vm._v(" "), _c('router-view', {
     attrs: {
       "name": "hrm-leave-configuration"
+    }
+  }), _vm._v(" "), _c('router-view', {
+    attrs: {
+      "name": "hrm-leave-requests"
     }
   })], 1)
 }
@@ -13479,7 +13544,7 @@ if (false) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13498,7 +13563,7 @@ if (false) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 var g;

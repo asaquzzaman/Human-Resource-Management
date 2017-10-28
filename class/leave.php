@@ -86,6 +86,10 @@ class Hrm_Leave {
             if ( !empty( $args['status'] ) ) {
                 $leaves = $leaves->where( 'status', $args['status'] );
             }
+
+            if ( !empty( $args['id'] ) ) {
+                $leaves = $leaves->where( 'id', $args['id'] );
+            }
                 
             $leaves = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
 
@@ -722,13 +726,20 @@ class Hrm_Leave {
     public static function ajax_update_leave() {
         check_ajax_referer('hrm_nonce');
 
-        self::getInstance()->update_leave( $settings );
+        $postdata = $_POST;
 
-        wp_send_json_success();
+        $update = self::getInstance()->update_leave( $postdata );
+
+        if ( $update ) {
+           $update = self::getInstance()->get_leaves(['id' => $postdata['id']]); 
+           wp_send_json_success($update);
+        }
+        
+        wp_send_json_error();
     }
 
-    public function update_leave() {
-        $update  = Crud::data_process( $_POST );
+    public function update_leave( $postdata ) {
+        return Crud::data_process( $postdata );
     }
 }
 

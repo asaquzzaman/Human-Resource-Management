@@ -52,7 +52,25 @@ abstract class Action implements Pattern {
 	}
 
 	public function update() {
+		$model       = $this->get_model();
+		$postdata    = $this->get_post_data();	
+		$fillable    = $model->getFillable();
+		$update_data = [];
+		$record      = $model::where( 'id', $postdata['id'] )->first();
+
+		if ( $record ) {
+			foreach ( $postdata as $key => $value ) {
+	            if ( in_array( $key, $fillable ) ) {
+	                $update_data[$key] = $value;
+	            }
+	        }
+
+			$record->update( $update_data );
+
+			return $model::find( $postdata['id'] )->toArray();
+		}
 		
+		return false;
 	}
 
 	private function get_model() {

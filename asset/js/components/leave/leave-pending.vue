@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<pre>{{ pendingLeaves }}</pre>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<th>Employee</th>

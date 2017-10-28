@@ -41,7 +41,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_add_task', array( $this, 'insert_task' ) );
         add_action( 'wp_ajax_add_sub_task', array( $this, 'insert_sub_task' ) );
         add_action( 'wp_ajax_insert_leave', array( $this, 'new_leave' ) );
-        add_action( 'wp_ajax_change_leave_status', array( $this, 'update_leave_status' ) );
+        add_action( 'wp_ajax_change_status', array( $this, 'update_status' ) );
         add_action( 'wp_ajax_new_employer', array( $this, 'add_employer' ) );
         add_action( 'wp_ajax_employer_edit', array( $this, 'edit_employer' ) );
         add_action( 'wp_ajax_update_my_info', array( $this, 'edit_my_info' ) );
@@ -88,8 +88,6 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_partial_payment_cancel', array( $this, 'partial_payment_cancel' ) );
         add_action( 'wp_ajax_partial_payment_delete', array( $this, 'partial_payment_delete' ) );
         
-
-
         add_action( 'wp_ajax_create_new_department', array( 'Hrm_Admin', 'ajax_update_department' ) );
         add_action( 'wp_ajax_get_departments', array( 'Hrm_Admin', 'ajax_get_departments' ) );
         add_action( 'wp_ajax_delete_department', array( 'Hrm_Admin', 'ajax_delete_department' ) );
@@ -108,12 +106,13 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
         add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );
         add_action( 'wp_ajax_get_leave_record_events', array( 'Hrm_Leave', 'ajax_get_leave_record_events' ) );
-        //array( 'Hrm_Leave', 'save_leave_form_settings' )
+        //array( 'Hrm_Leave', 'update_leave' )
         
         add_action( 'wp_ajax_create_new_leave', array( 'Hrm_Leave', 'ajax_create_new_leave' ) );
         add_action( 'wp_ajax_get_leaves', array( 'Hrm_Leave', 'ajax_get_leaves' ) );
         add_action( 'wp_ajax_get_leave_form_settings', array( 'Hrm_Leave', 'ajax_get_leave_form_settings' ) );
         add_action( 'wp_ajax_save_leave_form_settings', array( 'Hrm_Leave', 'ajax_save_leave_form_settings' ) );
+        add_action( 'wp_ajax_update_leave', array( 'Hrm_Leave', 'ajax_update_leave' ) );
 
     }
 
@@ -695,10 +694,10 @@ class Hrm_Ajax {
         }
     }
 
-    function update_leave_status() {
+    function update_status() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-        $update = hrm_Leave::getInstance()->update_leave_status( $postdata );
+        $update = hrm_Leave::getInstance()->update_status( $postdata );
         if ( $update ) {
             wp_send_json_success( array( 'success_msg' => __( 'Successfully update leave status', 'hrm' ) ) );
         } else {
@@ -722,7 +721,7 @@ class Hrm_Ajax {
             $_POST['emp_id'] = $_POST['name'];
             $_POST['type_id'] = $_POST['type_id'];*/
 
-            //unset( $_POST['from'], $_POST['to'], $_POST['leave_status'], $_POST['leave_comments'] );
+            //unset( $_POST['from'], $_POST['to'], $_POST['status'], $_POST['comments'] );
 
             ob_start();
                 require_once $req_frm;

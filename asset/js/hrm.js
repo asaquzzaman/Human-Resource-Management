@@ -764,7 +764,7 @@
 
             var self = $(this),
                 data = {
-                    action: 'change_leave_status',
+                    action: 'change_status',
                     _wpnonce: hrm_ajax_data.nonce,
                     status: self.val(),
                     leave_id: self.data('leave_id')

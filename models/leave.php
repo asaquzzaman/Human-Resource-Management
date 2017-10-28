@@ -3,6 +3,7 @@ namespace HRM\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use HRM\Models\Leave_Type;
+use HRM\Models\User;
 
 class Leave extends Eloquent {
 
@@ -28,7 +29,7 @@ class Leave extends Eloquent {
             )
         ),
 
-        'leave_type_id' => array (
+        'type' => array (
             'type' => 'relational_required:disable_leave_type,false',
             'message' => array(
                 'required'  =>  'Leave type is required',
@@ -41,9 +42,9 @@ class Leave extends Eloquent {
     public $timestamps    = true;
 
     protected $fillable = [
-		'leave_status',
-		'leave_comments',
-		'leave_type_id',
+		'status',
+		'comments',
+		'type',
 		'emp_id',
 		'start_time',
 		'end_time',
@@ -54,19 +55,23 @@ class Leave extends Eloquent {
     }
 
     public function setLeaveCommentsAttribute( $value ) {
-        $this->attributes['leave_comments'] =  ! trim( $value )  ? __( 'No comment', 'hrm' ) : $value;
+        $this->attributes['comments'] =  ! trim( $value )  ? __( 'No comment', 'hrm' ) : $value;
     }
 
     public function setLeaveStatusAttribute( $value ) {
-        $this->attributes['leave_status'] =  absint( $value ) ? 1 : $value;
+        $this->attributes['status'] =  absint( $value ) ? 1 : $value;
     }
 
     public function setLeaveTypeIdAttribute( $value ) {
-        $this->attributes['leave_type_id'] =  absint( $value ) <= 0 ? 0 : $value;
+        $this->attributes['type'] =  absint( $value ) <= 0 ? 0 : $value;
     }
 
     public function leaveType() {
-        return $this->hasOne( Leave_Type::class, 'id', 'leave_type_id' );
+        return $this->hasOne( Leave_Type::class, 'id', 'type' );
+    }
+
+    public function user() {
+        return $this->hasOne( User::class, 'ID', 'emp_id' );
     }
 }
 

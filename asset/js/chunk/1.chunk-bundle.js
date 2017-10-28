@@ -1,12 +1,12 @@
 webpackJsonp([1],{
 
-/***/ 13:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_vue__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_023b6e56_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_vue__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_vue__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_023b6e56_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_vue__ = __webpack_require__(65);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -51,7 +51,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 25:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -155,7 +155,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-slide-down', {
 
 /***/ }),
 
-/***/ 30:
+/***/ 34:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -203,12 +203,12 @@ var action = {
 
 /***/ }),
 
-/***/ 41:
+/***/ 47:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hrm_directive__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hrm_directive__ = __webpack_require__(32);
 //
 //
 //
@@ -234,7 +234,7 @@ var HRM_Leave_Type_Add_Btn = {
 
 /***/ }),
 
-/***/ 42:
+/***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -392,7 +392,7 @@ var Hrm_Leave_Type_Form = {
 
 /***/ }),
 
-/***/ 43:
+/***/ 49:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -474,16 +474,16 @@ var Hrm_Leave_Type_Records = {
 
 /***/ }),
 
-/***/ 44:
+/***/ 50:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_store__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_type_form_vue__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_type_records_vue__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__leave_type_add_btn_vue__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__do_action_vue__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_type_form_vue__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_type_records_vue__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__leave_type_add_btn_vue__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__do_action_vue__ = __webpack_require__(54);
 //
 //
 //
@@ -537,11 +537,11 @@ var Hrm_Leave_Type = {
 
 /***/ }),
 
-/***/ 48:
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__ = __webpack_require__(34);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -585,12 +585,12 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 55:
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_add_btn_vue__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_47802e90_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_add_btn_vue__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_add_btn_vue__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_47802e90_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_add_btn_vue__ = __webpack_require__(73);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -635,12 +635,12 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 56:
+/***/ 62:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_form_vue__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_134c086c_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_form_vue__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_form_vue__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_134c086c_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_form_vue__ = __webpack_require__(67);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -685,12 +685,12 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 57:
+/***/ 63:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_records_vue__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1adefaca_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_records_vue__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_type_records_vue__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1adefaca_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_type_records_vue__ = __webpack_require__(68);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -735,7 +735,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 59:
+/***/ 65:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -768,7 +768,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 60:
+/***/ 67:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -954,7 +954,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 61:
+/***/ 68:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -986,7 +986,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 65:
+/***/ 73:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

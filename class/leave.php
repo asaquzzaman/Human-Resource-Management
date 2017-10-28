@@ -10,6 +10,7 @@ use HRM\Models\User;
 use HRM\Models\Leave_Type;
 use HRM\Core\Leave\Leave_Type_Transform as Leave_Type_Transform;
 use HRM\Models\Meta;
+use HRM\Core\Crud\Crud;
 
 class Hrm_Leave {
 
@@ -54,6 +55,7 @@ class Hrm_Leave {
 
         global $wpdb;
         $transformer = new Transformer_Manager();
+        
 
         $defaults = array(
             'start_time' => date( 'Y-01-01 00:00:00' ),
@@ -65,7 +67,6 @@ class Hrm_Leave {
         $args      = wp_parse_args( $args, $defaults );
         $cache_key = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
         $items     = wp_cache_get( $cache_key, 'hrm' );
-        
         if ( false === $items ) { 
 
             $leaves = Leave::with('leaveType');
@@ -93,8 +94,11 @@ class Hrm_Leave {
             $resource = new Collection( $leave_collection, new Leave_Transformer );
             $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
 
-            $leave_type_count = $this->employee_leave_count( $args['emp_id'] );
-            $resource->setMeta(['types' => $leave_type_count]);
+            if ( !empty( $args['emp_id'] ) ) {
+                $leave_type_count = $this->employee_leave_count( $args['emp_id'] );
+                $resource->setMeta(['types' => $leave_type_count]);
+            }
+            
             $items = $transformer->get_response( $resource );
 
             wp_cache_set( $cache_key, $items, 'hrm' );
@@ -194,7 +198,7 @@ class Hrm_Leave {
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $get_duration['leave_type_name']; ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post_from;  _e( ' to ', 'hrm' ); echo $post_to; ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post['comment']; ?></td>
-                    <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->leave_status( $post['leave_status'] );; ?></td>
+                    <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->status( $post['status'] );; ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post['apply_leave_total'];  _e( ' days', 'hrm' ); ?></td>
                 <tr>
                 </table>
@@ -234,7 +238,7 @@ class Hrm_Leave {
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $get_duration['leave_type_name']; ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post_from; _e( ' to ', 'hrm' ); echo $post_to; ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post['comment']; ?></td>
-                    <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->leave_status( $post['leave_status'] ); ?></td>
+                    <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->status( $post['status'] ); ?></td>
                     <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post['apply_leave_total']; _e( ' days', 'hrm' ); ?></td>
                 </tr>
                 </table>
@@ -243,7 +247,7 @@ class Hrm_Leave {
         return ob_get_clean();
     }
 
-    function leave_status( $status = null ) {
+    function status( $status = null ) {
         $leave = array(
             ''  => __( '- Select -', 'hrm'),
             '1' => __( 'Pending', 'hrm' ),
@@ -258,38 +262,8 @@ class Hrm_Leave {
         }
     }
 
-    function leave_employer_status( $status = null ) {
-        $leave = array(
-            ''  => __( '- Select -', 'hrm'),
-            '2' => __( 'Cancel', 'hrm' ),
-        );
 
-        if ( $status == null ) {
-            return $leave;
-        } else {
-            return $leave[$status];
-        }
-    }
-
-    function update_leave_status( $postdata ) {
-        global $wpdb;
-
-        $table  = $wpdb->prefix . 'hrm_leave';
-        $data   = array( 'leave_status' => $postdata['status'] );
-        $where  = array( 'id' => $postdata['leave_id'] );
-        $format = array( '%d' );
-        $prev_leave_row = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', '*', array( 'id' => $postdata['leave_id'] ), true );
-
-        $update = $wpdb->update( $table, $data, $where, $format, $where_format = null );
-
-        if ( $update ) {
-            $this->leave_status_update_message( $postdata, $prev_leave_row );
-            return $update;
-        }
-        return false;
-    }
-
-    function leave_status_update_message( $postdata, $prev_leave_row ) {
+    function status_update_message( $postdata, $prev_leave_row ) {
         global $wpdb;
         $table  = $wpdb->prefix . 'hrm_leave';
         $get_apply_leave = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', '*', array( 'id' => $postdata['leave_id'] ), true );
@@ -299,17 +273,17 @@ class Hrm_Leave {
         $to = $leave_owner->user_email;
         $subject = __( 'Human Resource Management - Leave status changes', 'hrm' );
         $sender_id = get_current_user_id();
-        $message = $this->leave_status_update_message_body( $get_apply_leave, $leave_owner, $postdata['status'], $prev_leave_row );
+        $message = $this->status_update_message_body( $get_apply_leave, $leave_owner, $postdata['status'], $prev_leave_row );
 
         Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender_id );
     }
 
-    function leave_status_update_message_body( $get_apply_leave, $leave_owner, $status, $prev_leave_row ) {
-        $prev_leave_satus = $this->leave_status( $prev_leave_row->leave_status );
-        $present_leave_satatus = $this->leave_status( $status );
+    function status_update_message_body( $get_apply_leave, $leave_owner, $status, $prev_leave_row ) {
+        $prev_leave_satus = $this->status( $prev_leave_row->status );
+        $present_leave_satatus = $this->status( $status );
         $post_from     = hrm_get_date2mysql( $get_apply_leave->start_time );
         $post_to       = hrm_get_date2mysql( $get_apply_leave->end_time );
-        $leave_type    = Hrm_Settings::getInstance()->edit_query( 'hrm_leave_type', $get_apply_leave->leave_type_id );
+        $leave_type    = Hrm_Settings::getInstance()->edit_query( 'hrm_leave_type', $get_apply_leave->type );
         $work_in_week  = get_option( 'hrm_work_week' );
         $holidays      = Hrm_Settings::getInstance()->hrm_query('hrm_holiday');
         $holiday_index = array();
@@ -350,98 +324,13 @@ class Hrm_Leave {
                 <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $leave_owner->display_name; ?></td>
                 <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $leave_type['leave_type_name']; ?></td>
                 <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $post_from; _e( ' to ', 'hrm' ); echo $post_to; ?></td>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $get_apply_leave->leave_comments; ?></td>
+                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $get_apply_leave->comments; ?></td>
                 <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $present_leave_satatus; ?></td>
                 <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $leave_count;  _e( ' days', 'hrm' ); ?></td>
             <tr>
             </table>
         <?php
         return ob_get_clean();
-    }
-
-    function leave_emp_search_query( $post, $limit, $pagenum ) {
-
-        $search_arg = array();
-        $type_id    = ( isset( $post['type_id'] ) && $post['type_id'] != '-1' ) ? $post['type_id'] : 0;
-        $emp_id     = ( isset( $post['emp_id'] ) && $post['emp_id'] != '-1' ) ? $post['emp_id'] : '';
-        $start_time = isset( $post['start_time'] ) && $post['start_time'] ? $post['start_time'] : '';
-        $end_time   = isset( $post['end_time'] ) && $post['end_time'] ? $post['end_time'] : '';
-
-        $where = array();
-
-        if ( $type_id ) {
-            $where[] = "leave_type_id = '$type_id'";
-        }
-
-        if ( $emp_id ) {
-            $where[] = "emp_id = '$emp_id'";
-        }
-
-        if ( $start_time ) {
-            $where[] = "start_time >= '$start_time'";
-        }
-
-        if ( $end_time ) {
-            $where[] = "end_time <= '$end_time'";
-        }
-
-        $where = implode( ' AND ', $where );
-
-        if ( ! $where ) {
-            $get_leave_users = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', array( 'DISTINCT emp_id' ), array(), false, $limit, $pagenum );
-            return $get_leave_users;
-        }
-
-        global $wpdb;
-        $table = $wpdb->prefix . 'hrm_leave';
-        $offset = ( $pagenum - 1 ) * $limit;
-       // echo "SELECT SQL_CALC_FOUND_ROWS DISTINCT emp_id FROM $table WHERE $where ORDER BY id desc LIMIT $offset,$limit"; die();
-        $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS DISTINCT emp_id FROM $table WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-        return $results;
-    }
-
-    function leave_search_query( $post, $users_id ) {
-        $search_arg = array();
-        $type_id    = ( isset( $post['type_id'] ) && $post['type_id'] != '-1' ) ? $post['type_id'] : '';
-        $emp_id     = ( isset( $post['emp_id'] ) && $post['emp_id'] != '-1' ) ? $post['emp_id'] : '';
-        $start_time = isset( $post['start_time'] ) && $post['start_time'] ? $post['start_time'] : '';
-        $end_time   = isset( $post['end_time'] ) && $post['end_time'] ? $post['end_time'] : '';
-
-        $where = array();
-        $in = $users_id ? implode( ',' , $users_id ) : false;
-
-        if ( $emp_id && $in ) {
-            $where[] = "emp_id IN ( $in )";
-        }
-
-        if ( $type_id ) {
-            $where[] = "leave_type_id = '$type_id'";
-        }
-
-
-        if ( $start_time ) {
-            $where[] = "start_time >= '$start_time'";
-        }
-
-        if ( $end_time ) {
-            $where[] = "end_time <= '$end_time'";
-        }
-
-        $where = implode( ' AND ', $where );
-
-        if ( ! $where ) {
-            $results  = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', '*', array( 'emp_id' => $users_id ) );
-            return $results;
-        }
-
-        global $wpdb;
-        $table = $wpdb->prefix . 'hrm_leave';
-
-        $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE $where ORDER BY id desc " );
-
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-        return $results;
     }
 
     public static function ajax_leave_header() {
@@ -476,7 +365,7 @@ class Hrm_Leave {
         }
 
         if ( $result ) {
-            return array( 'leave_type_id' => $date['id'], 'leave_type' => $data );
+            return array( 'type' => $date['id'], 'leave_type' => $data );
         }
 
         return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
@@ -568,7 +457,7 @@ class Hrm_Leave {
         }
 
         if ( $result ) {
-            return array( 'leave_type_id' => $date['id'], 'leave_type' => $data );
+            return array( 'type' => $date['id'], 'leave_type' => $data );
         }
 
         return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
@@ -755,7 +644,6 @@ class Hrm_Leave {
         check_ajax_referer('hrm_nonce');
         
         $postdata    = $_POST;
-        $leave_model = new HRM\Core\Crud\Crud();
         $times       = empty( $postdata['time'] ) ? array() : $postdata['time'];
         $leave       = array();
         
@@ -764,7 +652,7 @@ class Hrm_Leave {
             $postdata['start_time'] = date( 'Y-m-d', strtotime( $time ) );
             $postdata['end_time']   = date( 'Y-m-d', strtotime( $time ) );
             
-            $leave  = $leave_model::data_process( $postdata );
+            $leave  = Crud::data_process( $postdata );
         }
         
         if ( is_wp_error( $leave ) ) {
@@ -780,9 +668,7 @@ class Hrm_Leave {
 
     public static function ajax_get_leaves() {
         check_ajax_referer('hrm_nonce');
-        wp_send_json_success(self::getInstance()->get_leaves([
-            'emp_id' => $_POST['emp_id']
-        ]));
+        wp_send_json_success( self::getInstance()->get_leaves( $_POST ) );
     }
 
     // public function get_leave_records() {
@@ -833,5 +719,16 @@ class Hrm_Leave {
         update_option('hrm_leave_form_settings', $settings);
     }
 
+    public static function ajax_update_leave() {
+        check_ajax_referer('hrm_nonce');
+
+        self::getInstance()->update_leave( $settings );
+
+        wp_send_json_success();
+    }
+
+    public function update_leave() {
+        $update  = Crud::data_process( $_POST );
+    }
 }
 

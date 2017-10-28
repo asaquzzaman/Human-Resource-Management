@@ -143,7 +143,7 @@ if ( ( isset( $_GET['action_search'] ) && $_GET['action_search'] ) )  {
     unset( $results['total_row'] );
 
     foreach ( $results as $leave_record ) {
-        $leaves[$leave_record->leave_type_id][] = $leave_record;
+        $leaves[$leave_record->type][] = $leave_record;
     }
 
     if ( ! count( $leaves ) ) {
@@ -219,12 +219,12 @@ if ( ( isset( $_GET['action_search'] ) && $_GET['action_search'] ) )  {
                         'extra'    => array(
                             'data-leave_id' => $leave_obj->id,
                         ),
-                        'option'   => hrm_Leave::getInstance()->leave_status(),
-                        'selected' => $leave_obj->leave_status
+                        'option'   => hrm_Leave::getInstance()->status(),
+                        'selected' => $leave_obj->status
                     );
                     $leave_action = Hrm_Settings::getInstance()->select_field( 'leave_action', $leave_action_dropdown, $holiday_index );
                 } else {
-                    $leave_action = hrm_Leave::getInstance()->leave_status( $leave_obj->leave_status );
+                    $leave_action = hrm_Leave::getInstance()->status( $leave_obj->status );
                 }
 
 
@@ -276,11 +276,11 @@ if ( ( isset( $_GET['action_search'] ) && $_GET['action_search'] ) )  {
                             </tr>
                             <tr>
                                 <th><?php _e( 'Status', 'hrm' ); ?></th>
-                                <td><?php echo hrm_Leave::getInstance()->leave_status( $leave_obj->leave_status ); ?></td>
+                                <td><?php echo hrm_Leave::getInstance()->status( $leave_obj->status ); ?></td>
                             </tr>
                             <tr>
                                 <th><?php _e( 'Comments', 'hrm' ); ?></th>
-                                <td><?php echo $leave_obj->leave_comments; ?></td>
+                                <td><?php echo $leave_obj->comments; ?></td>
                             </tr>
                             <tr>
                                 <th><?php _e( 'Leave <div class="hrm-head-notice">(include holiday and leave week)</div>', 'hrm' ); ?></th>

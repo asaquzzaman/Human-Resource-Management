@@ -13,7 +13,8 @@ var HRM_Leave_Store = new Vuex.Store({
 		is_new_leave_records_form_visible: false,
 		is_leave_form_active: false,
 		leave_records: [],
-		current_emp_current_month_leaves: []
+		current_emp_current_month_leaves: [],
+		pending_leaves: []
 	},
 
 	mutations: {
@@ -37,6 +38,10 @@ var HRM_Leave_Store = new Vuex.Store({
 
 		getLeaveRecords (state, leave_records) {
 			state.leave_records = leave_records;
+		},
+
+		setPendingLeaves (state, pending_leaves) {
+			state.pending_leaves = pending_leaves;
 		}
 	}
 });

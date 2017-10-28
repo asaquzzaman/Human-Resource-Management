@@ -406,9 +406,9 @@ class Hrm_Db {
         $table_name = $wpdb->prefix . 'hrm_leave';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
           `id` int(11) NOT NULL AUTO_INCREMENT,
-          `leave_status` smallint(6) DEFAULT NULL,
-          `leave_comments` varchar(256) DEFAULT NULL,
-          `leave_type_id` varchar(13) NOT NULL,
+          `status` smallint(6) DEFAULT NULL,
+          `comments` varchar(256) DEFAULT NULL,
+          `type` varchar(13) NOT NULL,
           `emp_id` int(7) NOT NULL,
           `start_time` timestamp NULL DEFAULT NULL,
           `end_time` timestamp NULL DEFAULT NULL,
@@ -423,10 +423,10 @@ class Hrm_Db {
         $table_option['table_option'] = array(
             'start_time'     => 'from',
             'end_time'       => 'to',
-            'leave_comments' => 'comment',
-            'leave_type_id'  => 'type_id',
+            'comments' => 'comment',
+            'type'  => 'type_id',
             'emp_id'         => 'emp_id',
-            'leave_status'   => 'leave_status'
+            'status'   => 'status'
         );
         $table_option_name = 'hrm_leave';
 

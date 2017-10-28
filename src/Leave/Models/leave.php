@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Leave extends Eloquent {
 
     protected $rules = array (
-        'leave_status' => array (
+        'status' => array (
             
             'type' => 'required|email|maxLenght(10)',
             
@@ -24,9 +24,9 @@ class Leave extends Eloquent {
     public $timestamps = false;
 
     protected $fillable = [
-		'leave_status',
-		'leave_comments',
-		'leave_type_id',
+		'status',
+		'comments',
+		'type',
 		'emp_id',
 		'start_time',
 		'end_time',

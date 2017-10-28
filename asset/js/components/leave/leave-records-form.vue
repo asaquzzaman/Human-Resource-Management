@@ -149,7 +149,7 @@
 							Status
 							<em></em>
 						</label>
-						<select id="hrm-leave-type-select-field" name="leave_status">
+						<select id="hrm-leave-type-select-field" name="status">
 							<option value="">- Select -</option>
 							<option value="1">Pending</option>
 							<option value="2">Approve</option>
@@ -165,7 +165,7 @@
 							<em></em>
 						</label>
 						<span class="hrm-checkbox-wrap">
-							<textarea v-model="leave_comments"></textarea>
+							<textarea v-model="comments"></textarea>
 							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio"></label>
 						</span>
 						<span class="hrm-clear"></span>
@@ -199,10 +199,10 @@
 				leave_type: '',
 				leave_types: [],
 				administrators: [],
-				leave_status: '',
+				status: '',
 				start_time: '',
 				end_time: '',
-				leave_comments: '',
+				comments: '',
 				emp_leave_with_type_record: [],
 				work_week: [],
 				leave_entitlements: [],
@@ -292,12 +292,12 @@
 				var self = this;
 				
 			    var request_data = {
-	                leave_comments: this.leave_comments,
-	                leave_type_id: ! this.leave_type ? '' : this.leave_type.id,
+	                comments: this.comments,
+	                type: ! this.leave_type ? '' : this.leave_type.id,
 	                emp_id: ! this.selectedEmployee ? false : this.selectedEmployee.ID,
 	                time: this.apply_leave_date,
 	                disable_leave_type: this.disable_leave_type,
-	                leave_status: 1,
+	                status: 1,
 	                class: 'Leave',
 	                method: 'create'
 	            };

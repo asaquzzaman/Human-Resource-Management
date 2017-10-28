@@ -7,26 +7,32 @@ use HRM\Models\Leave;
 use HRM\Core\Leave\Leave_Type_Transform;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Core\Transformer_Manager;
+use HRM\Core\Common\Resource_Editors;
     
 class Leave_Transformer extends TransformerAbstract
 {
+    use Resource_Editors;
+
+    protected $defaultIncludes = [
+        'employee'
+    ];
 
     public function transform( Leave $item )
     {
         return [
-            'id'             => (int) $item->id,
-            'status'         => $item->status,
-            'leave_comments' => $item->leave_comments,
-            'leave_type'     => $this->includeLeaveType( $item ), //$item->leaveType,
-            'emp_id'         => $item->emp_id,
-            'start_time'     => $item->start_time,
-            'end_time'       => $item->end_time,
+            'id'         => (int) $item->id,
+            'status'     => $item->status,
+            'comments'   => $item->comments,
+            'leave_type' => $this->includeLeaveType( $item ), //$item->leaveType,
+            'emp_id'     => $item->emp_id,
+            'start_time' => $item->start_time,
+            'end_time'   => $item->end_time,
         ];
 
     }
 
     public function includeLeaveType( Leave $item ) {
-        if ( $item->leave_type_id === '0' ) {
+        if ( $item->type === '0' ) {
             return [
                 'name' => 'Extra'
             ];

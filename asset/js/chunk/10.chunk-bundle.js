@@ -763,10 +763,10 @@ if (false) {
 			leave_type: '',
 			leave_types: [],
 			administrators: [],
-			leave_status: '',
+			status: '',
 			start_time: '',
 			end_time: '',
-			leave_comments: '',
+			comments: '',
 			emp_leave_with_type_record: [],
 			work_week: [],
 			leave_entitlements: [],
@@ -853,12 +853,12 @@ if (false) {
 			var self = this;
 
 			var request_data = {
-				leave_comments: this.leave_comments,
-				leave_type_id: !this.leave_type ? '' : this.leave_type.id,
+				comments: this.comments,
+				type: !this.leave_type ? '' : this.leave_type.id,
 				emp_id: !this.selectedEmployee ? false : this.selectedEmployee.ID,
 				time: this.apply_leave_date,
 				disable_leave_type: this.disable_leave_type,
-				leave_status: 1,
+				status: 1,
 				class: 'Leave',
 				method: 'create'
 			};
@@ -1370,16 +1370,16 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.leave_comments),
-      expression: "leave_comments"
+      value: (_vm.comments),
+      expression: "comments"
     }],
     domProps: {
-      "value": (_vm.leave_comments)
+      "value": (_vm.comments)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.leave_comments = $event.target.value
+        _vm.comments = $event.target.value
       }
     }
   }), _vm._v(" "), _c('label', {

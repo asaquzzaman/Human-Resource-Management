@@ -268,7 +268,7 @@ var HRM_Leave_Apply_Calendar = {
 
 			var obj = {
 				id: val.id,
-				title: val.leave_type_id == '0' ? 'Extra' : val.leave_type.name,
+				title: val.type == '0' ? 'Extra' : val.leave_type.name,
 				start: moment(val.start_time).format('YYYY-MM-DD'), //self.get_date(val.start_time),
 				end: moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 				backgroundColor: '#e08989',

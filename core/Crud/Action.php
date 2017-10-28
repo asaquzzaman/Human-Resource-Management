@@ -51,6 +51,10 @@ abstract class Action implements Pattern {
 		$this->set_post_data( $this->postdata );
 	}
 
+	public function update() {
+		
+	}
+
 	private function get_model() {
 		$class_name = $this->get_class();
 		$use        = "HRM\Models\\$class_name";

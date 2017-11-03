@@ -1,11 +1,16 @@
 <template>
-	<div>
+	<div class="wrap">
+		<h1 class="wp-heading-inline">Leaves</h1>
+		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="page-title-action">
+			Add New
+		</a>
+		
 		<leave-header></leave-header>
-		<!-- <div class="hrm-slide-up" v-hrm-slide-down style="display: none;" v-if="is_new_leave_records_form_visible"> -->
-			<hrm-leave-records-form v-if="is_leave_form_active"></hrm-leave-records-form>
-		<!-- </div> -->
-		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="button button-primary hrm-add-button">Apply Leave</a>
-		<hrm-leave-records-render></hrm-leave-records-render> 
+		
+		<hrm-leave-records-form v-if="is_leave_form_active"></hrm-leave-records-form>
+		
+		<!-- <div v-employee-leave-records class="hrm-employee-leave-records"></div> -->
+		<hrm-leave-records-render></hrm-leave-records-render>
 	</div>
 </template>
 
@@ -16,7 +21,7 @@ import leave_record_add_btn from './leave-records-add-btn.vue';
 import leave_records_form from './leave-records-form.vue';
 import leave_records_render from './leave-records-render.vue';
 import store from './leave-store';
-import './leave-directive';
+
 
 export default {
 
@@ -34,6 +39,12 @@ export default {
 }
 
 </script>
+
+<style>
+	.hrm-employee-leave-records {
+		width: 50%;
+	}
+</style>
 
 
 

@@ -13,8 +13,20 @@ var HRM_Leave_Store = new Vuex.Store({
 		is_new_leave_records_form_visible: false,
 		is_leave_form_active: false,
 		leave_records: [],
+		leave_meta: {},
 		current_emp_current_month_leaves: [],
-		pending_leaves: []
+		pending_leaves: [],
+		getIndex: function ( itemList, id, slug) {
+            var index = false;
+
+            itemList.forEach(function(item, key) {
+                if (item[slug] == id) {
+                    index = key;
+                }
+            });
+
+            return index;
+        },
 	},
 
 	mutations: {
@@ -37,11 +49,17 @@ var HRM_Leave_Store = new Vuex.Store({
 		},
 
 		getLeaveRecords (state, leave_records) {
-			state.leave_records = leave_records;
+			state.leave_records = leave_records.data;
+			state.leave_meta = leave_records.meta;
 		},
 
 		setPendingLeaves (state, pending_leaves) {
 			state.pending_leaves = pending_leaves;
+		},
+
+		afterDeleteLeave (state, id) {
+			var index = state.getIndex(state.leave_records, id, 'id');
+			state.leave_records.splice( index, 1 );
 		}
 	}
 });

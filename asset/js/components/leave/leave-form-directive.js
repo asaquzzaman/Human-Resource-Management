@@ -13,7 +13,7 @@ var HRM_Leave_Apply_Calendar = {
 				center: 'title',
 				right: 'prev,next'
 			},
-			
+			height: 400,
 			navLinks: false, // can click day/week names to navigate views
 			editable: false,
 			eventLimit: true, // allow "more" link when too many events
@@ -80,12 +80,35 @@ var HRM_Leave_Apply_Calendar = {
 
             	wp.ajax.send('get_leave_record_events', {
 	                data: request_data,
+
+	               	beforeSend () {
+		    			jQuery('.hrm-leave-records-form').preloader({
+
+						  // loading text
+						  text: '', 
+
+						  // from 0 to 100 
+						  percent: '', 
+
+						  // duration in ms
+						  duration: '', 
+
+						  // z-index property
+						  zIndex: '9999', 
+
+						  // sets relative position to preloader's parent
+						  setRelative: false 
+						  
+						});
+		    		},
 	                
 	                success: function(res) {
 						var events  = HRM_Leave_Apply_Calendar.leave_records_render( res.records.data, context );
 						var weekend = HRM_Leave_Apply_Calendar.render_weekend(start._d, end._d, res.work_week);
-						events      = events.concat( weekend );
+						var holidays = HRM_Leave_Apply_Calendar.render_holidays(start._d, end._d, res.holidays);
+						events      = events.concat( weekend, holidays );
 						context.apply_emp_lev_records = res.records;
+						jQuery('.hrm-leave-records-form').preloader('remove');
 
 				    	callback(events);
 	                },
@@ -220,6 +243,26 @@ var HRM_Leave_Apply_Calendar = {
 
     			events.push(new_obj);
     		});
+    	});
+
+    	return events;
+	},
+
+	render_holidays: function(start, end, holidays) {
+
+		var events = [];
+
+		jQuery.each(holidays, function(key, holiday) {
+			var new_obj = {
+				title: holiday.name + ' (Holidays)',
+				start: moment(holiday.from).format('YYYY-MM-DD'),
+				end: moment(holiday.to).add(1, 'days').format('YYYY-MM-DD'),
+				backgroundColor: '#e08989',
+				borderColor: '#e08989',
+				allDay: true,
+			}
+
+			events.push(new_obj);
     	});
 
     	return events;

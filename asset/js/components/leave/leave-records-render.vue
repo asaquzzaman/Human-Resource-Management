@@ -1,45 +1,212 @@
 <template>
 	<div>
-		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<table class="wp-list-table widefat fixed striped">
-				<thead>
-					<th>Leave Type</th>
-					<th>Days</th>
-					<th>Start</th>
-					<th>End</th>
+		<span class="page-title-action">Your leave records</span>
+		<span class="page-title-action">From Jan 1st 17 to Dec 31 17 </span>
+		<div class="metabox-holder">
+			<div class="postbox">
+				<h2 class="hndle ui-sortable-handle">
+					<span>Summery</span>
+				</h2>
+				<div class="inside metabox-holder hrm-leave-type-records-wrap">
+					<table class="wp-list-table widefat fixed striped">
+						<thead>
+							<th>Leave Type</th>
+							<th>Entitlement</th>
+							<th>Taken Leave</th>
+							<th>Remain</th>
+						</thead>
+						<tbody>
+							<tr v-for="type in meta.types">
+								
+								<td>{{ type.leave_type_name }}</td>
+								<td v-if="type.id === 1">&#8211;</td>
+								<td v-else>{{ type.entitlement }}</td>
+								<td>{{ type.count }}</td>
+								<td v-if="type.id === 1">&#8211;</td>
+								<td v-else>{{ type.entitlement - type.count }}</td>
 
-				</thead>
-				<tbody>
-					<tr v-for="record in records">
-						
-						<td>{{ record.leave_type.name }}</td>
-						<td>1</td>
-						<td>{{ dateFormat(record.start_time) }}</td>
-						<td>{{ dateFormat(record.end_time) }}</td>
-					</tr>
-					<tr v-if="!records.length">
-						
-						<td colspan="4">No record found!</td>
-					</tr>
-				</tbody>
-			</table>
+							
+							</tr>
+							<tr>
+								<td><strong>Total</strong></td>
+								<td><strong>{{ total.entitlement }}</strong></td>
+								<td><strong>{{ total.taken_leave }}</strong></td>
+								<td><strong>{{ total.remain_leave }}</strong></td>
+							</tr>
+						</tbody>
+					</table>
 
+				</div>
+			</div>
+			
+			<div class="postbox" v-for="record in records">
+				<h2 class="hndle ui-sortable-handle">
+					<span>{{ selfDateFormat(record.date) }}</span>
+				</h2>
+				<div class="inside metabox-holder hrm-leave-type-records-wrap">
+					<table class="wp-list-table widefat fixed striped">
+						<thead>
+							<th>Leave Type</th>
+							<th>Duration</th>
+							<th>Start</th>
+							<th>End</th>
+							<th>Status</th>
+							<th>Action</th>
+
+						</thead>
+						<tbody>
+							<tr v-for="leave in record.activities">
+								
+								<td>{{ leave.leave_type.name }}</td>
+								<td>1</td>
+								<td>{{ dateFormat(leave.start_time) }}</td>
+								<td>{{ dateFormat(leave.end_time) }}</td>
+								<td>{{ status[leave.status] }}</td>
+								<td>
+									<button @click.prevent="selfLeaveDelete(leave.id)" v-if="leave.status === 1 || leave.status === 3">Delete</button>
+									<div v-else>Not available</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
 	export default {
+		data() {
+			return {
+				status: {
+					1: 'Pending', 
+					2: 'Approve', 
+					3: 'Cancel'
+				}
+			}
+		},
 		computed: {
 			records () {
-				return this.$store.state.leave_records;
+				var self = this;
+				var records = this.$store.state.leave_records;
+				var records = _.chain(records)
+                    .groupBy(self.occurrenceDay)
+                    .map(self.groupToDay)
+                    .sortBy('month')
+                    .value();
+
+                return records;
+			},
+
+			meta () {
+				return this.$store.state.leave_meta;
+			},
+
+			total () {
+				if(!this.$store.state.leave_meta.types) {
+					return [];
+				}
+
+				var types = this.$store.state.leave_meta.types,
+					total_extra = 0;
+
+				var total = {
+					entitlement: 0,
+					taken_leave: 0,
+					remain_leave: 0
+				};
+
+				types.forEach(function(type, index) {
+					total.entitlement = parseInt(type.entitlement) + total.entitlement;
+					total.taken_leave = parseInt(type.count) + total.taken_leave;
+
+					if ( type.id === 1) {
+						total_extra = total_extra + parseInt(type.count);
+					}
+				});
+
+				total.remain_leave = (total.entitlement - total.taken_leave) + total_extra;
+
+				return total;
 			}
 		},
 
 		created () {
 			this.getLeaveRecords({
-				'emp_id': HRM_Vars.current_user.data.ID
+				data: {
+					'emp_id': HRM_Vars.current_user.data.ID
+				}
 			});
 		},
+
+		methods: {
+			occurrenceDay (occurrence){
+                var date = new Date(occurrence.start_time);
+                var date = moment(date).format('YYYY-MM-DD');
+
+                return moment(date).startOf('month').format('YYYY-MM-DD');
+            },
+
+            groupToDay(group, day){
+                return {
+                    date: day,
+                    activities: group
+                }
+            },
+            selfDateFormat (date) {
+            	return moment(date).format('MMMM');
+            },
+
+            selfLeaveDelete (id) {
+            	var args = {
+            		data: {
+            			leave_id: id
+            		},
+
+            		callback: function() {
+
+            		}
+            	}
+
+            	this.deleteLeave(args);
+            }
+		}
 	}
 </script>
+
+<style>
+	.page-title-action {
+		margin-top: 14px;
+	    padding: 4px 8px;
+	    position: relative;
+	    text-decoration: none;
+	    border: none;
+	    border: 1px solid #ccc;
+	    -webkit-border-radius: 2px;
+	    border-radius: 2px;
+	    background: #f7f7f7;
+	    text-shadow: none;
+	    font-weight: 600;
+	    font-size: 13px;
+	    line-height: normal;
+	    color: #0073aa;
+	    cursor: pointer;
+	    outline: 0;
+	    display: inline-block;
+	}
+
+	.ui-sortable-handle {
+		border: none !important;
+	}
+	.postbox .inside {
+		margin: 0 !important;
+	}
+	#wpbody-content .metabox-holder {
+		padding-top: 0 !important;
+	}
+	.metabox-holder {
+		margin-top: 8px;
+	}
+</style>

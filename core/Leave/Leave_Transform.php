@@ -19,6 +19,7 @@ class Leave_Transformer extends TransformerAbstract
 
     public function transform( Leave $item )
     {
+    
         return [
             'id'         => (int) $item->id,
             'status'     => $item->status,
@@ -27,6 +28,7 @@ class Leave_Transformer extends TransformerAbstract
             'emp_id'     => $item->emp_id,
             'start_time' => $item->start_time,
             'end_time'   => $item->end_time,
+            'apply_at'   => $item->created_at
         ];
 
     }

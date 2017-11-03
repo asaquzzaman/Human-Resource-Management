@@ -9,7 +9,8 @@
 <script>
 	import store from './leave-store';
     import mixin from './leave-mixin';
-    import directive from './leave-directive';
+    import form_directive from './leave-form-directive';
+    import records_directive from './leave-records-directive';
 
     export default {
         store,

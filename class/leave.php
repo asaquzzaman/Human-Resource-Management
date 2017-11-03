@@ -606,6 +606,8 @@ class Hrm_Leave {
         check_ajax_referer('hrm_nonce');
         
         $leave_types = self::getInstance()->get_leave_types();
+        $holidays = self::getInstance()->get_holidays();
+        $work_week = self::getInstance()->get_work_week();
         $apply_to    = new WP_User_Query( array(
             'role'   => 'administrator',
         ));
@@ -623,6 +625,8 @@ class Hrm_Leave {
         wp_send_json_success( array(
             'apply_to'    => $send_administrators,
             'leave_types' => $leave_types,
+            'holidays'    => $holidays,
+            'work_week'   => $work_week
         ));
     }
 
@@ -640,7 +644,8 @@ class Hrm_Leave {
 
         wp_send_json_success(array(
             'records' => $records,
-            'work_week' => self::get_work_week()
+            'work_week' => self::get_work_week(),
+            'holidays'  => self::getInstance()->get_holidays()
         ));
     }
 
@@ -740,6 +745,19 @@ class Hrm_Leave {
 
     public function update_leave( $postdata ) {
         return Crud::data_process( $postdata );
+    }
+
+    public static function ajax_delete_leave() {
+        check_ajax_referer('hrm_nonce');
+        $leave_id = intval( $_POST['leave_id'] );
+        self::getInstance()->delete_leave($leave_id);
+        wp_send_json_success();
+    }
+
+    public function delete_leave($leave_id) {
+        if ( $leave_id ) {
+            Leave::find( $leave_id )->delete();
+        }
     }
 }
 

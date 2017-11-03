@@ -1,12 +1,12 @@
 webpackJsonp([7],{
 
-/***/ 14:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_pending_vue__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_47cc41cc_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_pending_vue__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_pending_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_47cc41cc_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leave_pending_vue__ = __webpack_require__(80);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -51,10 +51,26 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 41:
+/***/ 45:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -120,14 +136,14 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 74:
+/***/ 80:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_c('div', {
     staticClass: "metabox-holder hrm-leave-type-records-wrap"
-  }, [_c('pre', [_vm._v(_vm._s(_vm.pendingLeaves))]), _vm._v(" "), _c('table', {
+  }, [_c('table', {
     staticClass: "wp-list-table widefat fixed striped"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.pendingLeaves), function(pendingLeave) {
     return _c('tr', [_c('td', [_c('img', {
@@ -136,7 +152,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "height": "32",
         "width": "32"
       }
-    }), _vm._v("\n\t\t\t\t\t\t" + _vm._s(pendingLeave.employee.data.display_name) + "\n\t\t\t\t\t")]), _vm._v(" "), _c('td', [_c('button', {
+    }), _vm._v("\n\t\t\t\t\t\t" + _vm._s(pendingLeave.employee.data.display_name) + "\n\t\t\t\t\t")]), _vm._v(" "), _c('td', [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_vm.dateFormat(pendingLeave.apply_at.date)) + "\n\t\t\t\t\t")]), _vm._v(" "), _c('td', [_vm._v("1 day")]), _vm._v(" "), _c('td', {
+      domProps: {
+        "innerHTML": _vm._s(pendingLeave.comments)
+      }
+    }), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.dateFormat(pendingLeave.start_time)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.dateFormat(pendingLeave.end_time)))]), _vm._v(" "), _c('td', [_c('button', {
       staticClass: "button button-secondary",
       on: {
         "click": function($event) {
@@ -156,7 +176,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }))])])])
 }
 var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('th', [_vm._v("Employee")]), _vm._v(" "), _c('th', [_vm._v("Action")])])
+  return _c('thead', [_c('th', [_vm._v("Employee")]), _vm._v(" "), _c('th', [_vm._v("Apply Date")]), _vm._v(" "), _c('th', [_vm._v("Leave Duration")]), _vm._v(" "), _c('th', [_vm._v("Comment")]), _vm._v(" "), _c('th', [_vm._v("Start")]), _vm._v(" "), _c('th', [_vm._v("End")]), _vm._v(" "), _c('th', [_vm._v("Action")])])
 }]
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }

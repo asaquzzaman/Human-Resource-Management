@@ -26,7 +26,7 @@ export default Vue.mixin({
             var request_data = {
                 data: data,
                 success (res) {
-                    self.$store.commit('getLeaveRecords', res.data);
+                    self.$store.commit('getLeaveRecords', res);
 
                     if (typeof args.callback === 'function') {
                     	args.callback(res);
@@ -94,6 +94,28 @@ export default Vue.mixin({
             };
 
             self.updateLeave(request_data);
-		}
+		},
+
+        deleteLeave (args) {
+            if ( ! confirm( 'Are you sure' ) ) {
+                return;
+            }
+            var self = this;
+       
+            var request_data = {
+                data: {
+                    leave_id: args.data.leave_id,
+                },  
+                success: function(res) {
+                    self.$store.commit('afterDeleteLeave', args.data.leave_id);
+
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    } 
+                }
+            }
+            
+            self.httpRequest('delete_leave', request_data);
+        },
 	},
 });

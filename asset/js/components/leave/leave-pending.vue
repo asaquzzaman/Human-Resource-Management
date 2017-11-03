@@ -4,6 +4,11 @@
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<th>Employee</th>
+					<th>Apply Date</th>
+					<th>Leave Duration</th>
+					<th>Comment</th>
+					<th>Start</th>
+					<th>End</th>
 					<th>Action</th>
 
 				</thead>
@@ -14,6 +19,18 @@
 							<img :src="pendingLeave.employee.data.avatar_url" height="32" width="32">
 							{{ pendingLeave.employee.data.display_name }}
 						</td>
+						<td>
+							{{ dateFormat(pendingLeave.apply_at.date) }}
+						</td>
+						<td>1 day</td>
+
+						<td v-html="pendingLeave.comments">
+
+						</td>
+
+						<td>{{ dateFormat(pendingLeave.start_time) }}</td>
+
+						<td>{{ dateFormat(pendingLeave.end_time) }}</td>
 
 						<td>
 							<button @click.prevent="updateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>

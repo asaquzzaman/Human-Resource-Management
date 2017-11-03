@@ -1,5 +1,5 @@
 <template>
-<div class="metabox-holder hrm-punch-in-out-wrap">
+<div class="metabox-holder hrm-leave-records-form-warp">
 	<div class="postbox">
 
 		<h2 class="hndle ui-sortable-handle">
@@ -8,15 +8,14 @@
 
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-				<form action="" @submit.prevent="createNewLeave()">
-					<div v-if="leave_proxy" class="hrm-form-field">
+				<form class="hrm-leave-records-form" action="" @submit.prevent="createNewLeave()">
+					<div v-if="leave_proxy" class="hrm-form-field hrm-leave-employee-search-wrap">
 						<label>
 							Employee
 							<em>*</em>
 						</label>
 						<div class="hrm-multiselect">
 							<hrm-multiselect 
- 
 					            select-label=""
 					            selected-label="selected"
 					            deselect-label=""
@@ -59,7 +58,7 @@
 						<span class="description">you can apply on behalf of others employee leave</span>
 					</div>
 					
-					<div class="hrm-form-field" v-if="!disable_leave_type">
+					<div class="hrm-form-field hrm-leave-type-wrap" v-if="!disable_leave_type">
 						<label>
 							Leave Type
 							<em>*</em>
@@ -101,63 +100,6 @@
 						<span class="hrm-clear"></span>
 						<span class="description"></span>
 					</div>
-<!-- 
-					<div class="hrm-form-field">
-						<label>
-							Request to
-							<em>*</em>
-						</label>
-						<div class="hrm-multiselect">
-
-					        <hrm-multiselect 
-					            v-model="apply_to" 
-					            :options="administrators" 
-					            :multiple="true" 
-					            :close-on-select="true"
-					            :clear-on-select="true"
-					            :hide-selected="false"
-					            :show-labels="true"
-					            placeholder="Select administrators"
-					            select-label=""
-					            selected-label="selected"
-					            deselect-label=""
-					            :taggable="false"
-					            label="display_name"
-					            track-by="ID"
-					            :allow-empty="true">
-
-					            <template  slot="option" scope="props">
-					                <div>
-					                	<div class="multi-img-wrap">
-					                    	<img height="16" width="16" class="option__image" :src="props.option.avatar_url" alt="<?php _e( 'kkk', 'cpm' ); ?>">
-					                    </div>
-					                    <div class="option__descΩ">
-					                        <span class="option__title">{{ props.option.display_name }}</span>
-					                        
-					                    </div>
-					                    <div class="hrm-clear"></div>
-					                </div>
-					            </template>
-					                
-					        </hrm-multiselect>               
-					    </div>
-					    <div class="hrm-clear"></div>
-					</div>
- -->
-					<!-- <div class="hrm-form-field ">
-						<label for="hrm-leave-type-select-field">
-							Status
-							<em></em>
-						</label>
-						<select id="hrm-leave-type-select-field" name="status">
-							<option value="">- Select -</option>
-							<option value="1">Pending</option>
-							<option value="2">Approve</option>
-							<option value="3">Cancel</option>
-						</select>
-						<span class="hrm-clear"></span>
-						<span class="description"></span>
-					</div> -->
 
 					<div class="hrm-form-field ">
 						<label for="">
@@ -213,7 +155,8 @@
 				isLoading: false,
 				leave_proxy: false,
 				apply_emp_lev_records: [],
-				is_leave_btn_disable: false
+				is_leave_btn_disable: false,
+				holidays: []
 			}
 		},
 
@@ -252,6 +195,7 @@
 	                success: function(res) {
 						self.leave_types    = res.leave_types.data;
 						self.administrators = res.apply_to;
+						self.holidays = res.holidays;
 	                },
 
 	                error: function(res) {
@@ -376,3 +320,30 @@
 		}
 	}
 </script>
+
+<style>
+	.hrm-leave-employee-search-wrap .multiselect__input, 
+	.hrm-leave-employee-search-wrap .multiselect__input:focus,
+	.hrm-leave-type-wrap .multiselect__input,
+	.hrm-leave-type-wrap .multiselect__input:focus {
+		top: -5px;
+		border: none;
+		box-shadow: none;
+	}
+
+	.hrm-leave-employee-search-wrap .multiselect__content,
+	.hrm-leave-type-wrap .multiselect__content {
+		margin-top: 0 !important;
+		z-index: 99999 !important;
+	}
+
+	.hrm-leave-jquery-fullcalendar {
+		margin-left: 21%;
+		width: 50%;
+	}
+	.fc-center h2 {
+		font-size: 14px !important;
+		font-weight: 600 !important;
+	}
+</style>
+

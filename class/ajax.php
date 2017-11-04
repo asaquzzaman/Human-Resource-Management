@@ -114,6 +114,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_save_leave_form_settings', array( 'Hrm_Leave', 'ajax_save_leave_form_settings' ) );
         add_action( 'wp_ajax_update_leave', array( 'Hrm_Leave', 'ajax_update_leave' ) );
         add_action( 'wp_ajax_delete_leave', array( 'Hrm_Leave', 'ajax_delete_leave' ) );
+        add_action( 'wp_ajax_update_settings', array( 'Hrm_Settings', 'ajax_update_settings' ) );
 
     }
 

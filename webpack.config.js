@@ -8,7 +8,8 @@ module.exports = {
 		path: path.resolve( __dirname, 'asset/js'),
 		filename: 'hrm-bundle.js',
 		publicPath: 'asset/js',
-		chunkFilename: 'chunk/[id].chunk-bundle.js',
+		chunkFilename: 'chunk/[chunkhash].chunk-bundle.js',
+		jsonpFunction: 'wpSperaHrm',
 	},
 
 	module: {

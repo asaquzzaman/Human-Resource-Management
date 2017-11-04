@@ -9,6 +9,7 @@
 <script>
 	import store from './leave-store';
     import mixin from './leave-mixin';
+    import router from './leave-router';
     import form_directive from './leave-form-directive';
     import records_directive from './leave-records-directive';
 

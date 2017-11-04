@@ -1,7 +1,7 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// install a JSONP callback for chunk loading
-/******/ 	var parentJsonpFunction = window["webpackJsonp"];
-/******/ 	window["webpackJsonp"] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
+/******/ 	var parentJsonpFunction = window["wpSperaHrm"];
+/******/ 	window["wpSperaHrm"] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
 /******/ 		// add "moreModules" to the modules object,
 /******/ 		// then flag all "chunkIds" as loaded and fire callback
 /******/ 		var moduleId, chunkId, i = 0, resolves = [], result;
@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		10: 0
+/******/ 		11: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + chunkId + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"223aa015a2a700a5bbbc","1":"63f1a85bb762892f6667","2":"9e298816aa3315594c00","3":"1ca9a9abd8a084745d5e","4":"974237455dc2637553bc","5":"6127c8c083e569882e36","6":"0b0148d63d8fd32b3d4d","7":"584ef2845662f6e1e65a","8":"9ccd04be83646cdf9d3d","9":"ed8472b8e18b48e22380","10":"b5df5cfe43ebec07107d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -145,7 +145,7 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9309,7 +9309,7 @@
 
   return Vue$3;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)))
 
 /***/ }),
 /* 1 */
@@ -9410,148 +9410,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.mixin({
-    methods: {
-        httpRequest(hook, property) {
-            var before = function (xhr) {
-                xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
-                xhr.setRequestHeader("Authorization_password", btoa(12345678)); //atob js decode base64_decode
-            };
-
-            property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
-            property.data._wpnonce = HRM_Vars.nonce;
-
-            wp.ajax.send(hook, property);
-        },
-        slideUp(target_el, callback) {
-            var node = jQuery(target_el).closest('.hrm-slide-up');
-
-            node.slideUp(400, function () {
-                callback();
-            });
-        },
-
-        /**
-            * Get index from array object element
-            * 
-            * @param   array 
-            * @param   id    
-            * 
-            * @return  int      
-            */
-        getIndex(array, id, slug) {
-            var target = false;
-
-            array.map(function (content, index) {
-                if (content[slug] == id) {
-                    target = index;
-                }
-            });
-
-            return target;
-        },
-
-        getDepartments() {
-
-            var request_data = {
-                _wpnonce: HRM_Vars.nonce,
-                page_number: this.$route.params.page_number
-            },
-                self = this;
-
-            wp.ajax.send('get_departments', {
-                data: request_data,
-                success(res) {
-                    self.$store.commit('setDepartments', {
-                        departments: res.departments,
-                        'total_dept': res.total_dept,
-                        'dept_drop_down': res.dept_drop_down
-                    });
-                },
-
-                error(res) {}
-            });
-        },
-        /**
-               * WP settings date format convert to moment date format with time zone
-               * 
-               * @param  string date 
-               * 
-               * @return string      
-               */
-        dateFormat: function (date) {
-            if (!date) {
-                return;
-            }
-
-            moment.tz.add(HRM_Vars.time_zones);
-            moment.tz.link(HRM_Vars.time_links);
-
-            date = new Date(date);
-            date = moment(date).format('YYYY-MM-DD');
-
-            var format = 'MMMM DD YYYY';
-
-            if (HRM_Vars.wp_date_format == 'Y-m-d') {
-                format = 'YYYY-MM-DD';
-            } else if (HRM_Vars.wp_date_format == 'm/d/Y') {
-                format = 'MM/DD/YYYY';
-            } else if (HRM_Vars.wp_date_format == 'd/m/Y') {
-                format = 'DD/MM/YYYY';
-            }
-
-            return moment.tz(date, HRM_Vars.wp_time_zone).format(format);
-        },
-        onOff(key, status) {
-            var status = status || 'no';
-
-            if (status === 'no') {
-                this[key] = this[key] ? false : true;
-            } else {
-                this[key] = status;
-            }
-            this.leave_type = '';
-            this.change_leve_type_statue();
-        },
-
-        loadingStart(id, args) {
-            var pre_define = {
-                // loading text
-                text: '',
-
-                // from 0 to 100 
-                percent: '',
-
-                // duration in ms
-                duration: '',
-
-                // z-index property
-                zIndex: '',
-
-                // sets relative position to preloader's parent
-                setRelative: false
-
-            };
-            var args = jQuery.extend(true, pre_define, args);
-
-            jQuery('#' + id).preloader(args);
-        },
-
-        loadingStop(id) {
-            jQuery('#' + id).preloader('remove');
-        }
-    }
-}));
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -10379,19 +10237,323 @@ module.exports = function normalizeComponent (
 });
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router__ = __webpack_require__(23);
+
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.mixin({
+    methods: {
+        httpRequest(hook, property) {
+            var before = function (xhr) {
+                xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
+                xhr.setRequestHeader("Authorization_password", btoa(12345678)); //atob js decode base64_decode
+            };
+
+            property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
+            property.data._wpnonce = HRM_Vars.nonce;
+
+            wp.ajax.send(hook, property);
+        },
+        slideUp(target_el, callback) {
+            var node = jQuery(target_el).closest('.hrm-slide-up');
+
+            node.slideUp(400, function () {
+                callback();
+            });
+        },
+
+        /**
+            * Get index from array object element
+            * 
+            * @param   array 
+            * @param   id    
+            * 
+            * @return  int      
+            */
+        getIndex(array, id, slug) {
+            var target = false;
+
+            array.map(function (content, index) {
+                if (content[slug] == id) {
+                    target = index;
+                }
+            });
+
+            return target;
+        },
+
+        getDepartments() {
+
+            var request_data = {
+                _wpnonce: HRM_Vars.nonce,
+                page_number: this.$route.params.page_number
+            },
+                self = this;
+
+            wp.ajax.send('get_departments', {
+                data: request_data,
+                success(res) {
+                    self.$store.commit('setDepartments', {
+                        departments: res.departments,
+                        'total_dept': res.total_dept,
+                        'dept_drop_down': res.dept_drop_down
+                    });
+                },
+
+                error(res) {}
+            });
+        },
+        /**
+               * WP settings date format convert to moment date format with time zone
+               * 
+               * @param  string date 
+               * 
+               * @return string      
+               */
+        dateFormat: function (date) {
+            if (!date) {
+                return;
+            }
+
+            moment.tz.add(HRM_Vars.time_zones);
+            moment.tz.link(HRM_Vars.time_links);
+
+            date = new Date(date);
+            date = moment(date).format('YYYY-MM-DD');
+
+            var format = 'MMMM DD YYYY';
+
+            if (HRM_Vars.wp_date_format == 'Y-m-d') {
+                format = 'YYYY-MM-DD';
+            } else if (HRM_Vars.wp_date_format == 'm/d/Y') {
+                format = 'MM/DD/YYYY';
+            } else if (HRM_Vars.wp_date_format == 'd/m/Y') {
+                format = 'DD/MM/YYYY';
+            }
+
+            return moment.tz(date, HRM_Vars.wp_time_zone).format(format);
+        },
+        onOff(key, status) {
+            var status = status || 'no';
+
+            if (status === 'no') {
+                this[key] = this[key] ? false : true;
+            } else {
+                this[key] = status;
+            }
+            this.leave_type = '';
+            this.change_leve_type_statue();
+        },
+
+        loadingStart(id, args) {
+            var pre_define = {
+                // loading text
+                text: '',
+
+                // from 0 to 100 
+                percent: '',
+
+                // duration in ms
+                duration: '',
+
+                // z-index property
+                zIndex: '',
+
+                // sets relative position to preloader's parent
+                setRelative: false
+
+            };
+            var args = jQuery.extend(true, pre_define, args);
+
+            jQuery('#' + id).preloader(args);
+        },
+
+        loadingStop(id) {
+            jQuery('#' + id).preloader('remove');
+        }
+    }
+}));
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return leave; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return configuration; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return requested; });
+const Hrm_Leave_Records = resolve => {
+
+    __webpack_require__.e/* require.ensure */(0).then((() => {
+        resolve(__webpack_require__(16));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+//import Hrm_Leave_Records from './leave-records.vue';
+
+
+var leave = {
+    path: '/leave',
+    components: {
+        'hrm-leave-records': Hrm_Leave_Records
+    },
+    name: 'leave_records'
+};
+
+const Hrm_Leave_Configuration = resolve => {
+
+    __webpack_require__.e/* require.ensure */(5).then((() => {
+        resolve(__webpack_require__(12));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+const Hrm_Leave_Type = resolve => {
+
+    __webpack_require__.e/* require.ensure */(1).then((() => {
+        resolve(__webpack_require__(18));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+const Hrm_Leave_Work_Week = resolve => {
+
+    __webpack_require__.e/* require.ensure */(6).then((() => {
+        resolve(__webpack_require__(19));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+const Hrm_Leave_Holidays = resolve => {
+
+    __webpack_require__.e/* require.ensure */(2).then((() => {
+        resolve(__webpack_require__(14));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_form_settings = resolve => {
+
+    __webpack_require__.e/* require.ensure */(3).then((() => {
+        resolve(__webpack_require__(13));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+var configuration = {
+    path: '/leave-configuration',
+    components: { 'hrm-leave-configuration': Hrm_Leave_Configuration },
+    name: 'leave_configuration',
+
+    children: [{
+        path: '/leave-configuration/type',
+        components: { 'hrm-leave-type': Hrm_Leave_Type },
+        name: 'leave_type'
+    }, {
+        path: '/leave-configuration/work-week',
+        components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week },
+        name: 'leave_week'
+    }, {
+        path: '/leave-configuration/holidays',
+        components: { 'hrm-leave-holidays': Hrm_Leave_Holidays },
+        name: 'leave_holidays'
+    }, {
+        path: '/leave-configuration/form',
+        components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings },
+        name: 'leave_form_settings'
+    }]
+};
+
+const Hrm_Leave_Requests = resolve => {
+
+    __webpack_require__.e/* require.ensure */(4).then((() => {
+        resolve(__webpack_require__(17));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Pending = resolve => {
+
+    __webpack_require__.e/* require.ensure */(7).then((() => {
+        resolve(__webpack_require__(15));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Cancel = resolve => {
+
+    __webpack_require__.e/* require.ensure */(9).then((() => {
+        resolve(__webpack_require__(11));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+const Hrm_Leave_Approve = resolve => {
+
+    __webpack_require__.e/* require.ensure */(10).then((() => {
+        resolve(__webpack_require__(10));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+var requested = {
+    path: '/leave-requests',
+    components: { 'hrm-leave-requests': Hrm_Leave_Requests },
+    name: 'leave_requests',
+
+    children: [{
+        path: '/leave-requests/pending',
+        components: { 'hrm-leave-pending': Hrm_Leave_Pending },
+        name: 'leave_pending'
+    }, {
+        path: '/leave-requests/approve',
+        components: { 'hrm-leave-approve': Hrm_Leave_Approve },
+        name: 'leave_approve'
+    }, {
+        path: '/leave-requests/cancel',
+        components: { 'hrm-leave-cancel': Hrm_Leave_Cancel },
+        name: 'leave_cancel'
+    }]
+};
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const Hrm_Settings = resolve => {
+
+	__webpack_require__.e/* require.ensure */(8).then((() => {
+		resolve(__webpack_require__(20));
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+//import Hrm_Leave_Records from './settings.vue';
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	path: '/settings',
+	components: {
+		'hrm-settings': Hrm_Settings
+	},
+	name: 'hrm_settings'
+
+});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vue_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vue_vue_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_settings_router__ = __webpack_require__(5);
 
 
 
 
+
+
+HRM_Routes.push(__WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__["a" /* leave */]);
+HRM_Routes.push(__WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__["b" /* configuration */]);
+HRM_Routes.push(__WEBPACK_IMPORTED_MODULE_2__components_leave_leave_router__["c" /* requested */]);
+HRM_Routes.push(__WEBPACK_IMPORTED_MODULE_3__components_settings_router__["a" /* default */]);
 
 __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1__vue_vue_router___default.a);
 
@@ -10402,13 +10564,13 @@ var router = new __WEBPACK_IMPORTED_MODULE_1__vue_vue_router___default.a({
 /* harmony default export */ __webpack_exports__["a"] = (router);
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vue_vuex__);
 
 
@@ -10427,12 +10589,12 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1
 }));
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_controller_vue__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3a3ac16e_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_controller_vue__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_controller_vue__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3a3ac16e_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_controller_vue__ = __webpack_require__(35);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -10476,13 +10638,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vue_vuex__);
 
 
@@ -10553,8 +10715,6 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 /* harmony default export */ __webpack_exports__["a"] = (HRM_Leave_Store);
 
 /***/ }),
-/* 8 */,
-/* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
@@ -10563,7 +10723,10 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10962,7 +11125,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 });
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11088,7 +11251,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 }));
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11172,145 +11335,70 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('employee-leave-recor
 });
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Hrm_Leave_Records = resolve => {
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
 
-    __webpack_require__.e/* require.ensure */(0).then((() => {
-        resolve(__webpack_require__(14));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
 
-//import Hrm_Leave_Records from './leave-records.vue';
+/* unused harmony default export */ var _unused_webpack_default_export = (__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.mixin({
+	methods: {
+		updateSettings(args) {
+			var request = {
+				data: args.data,
+				success(res) {
+					if (typeof args.callback === 'function') {
+						args.callback(res);
+					}
+				}
+			};
 
-HRM_Routes.push({
-    path: '/leave',
-    components: {
-        'hrm-leave-records': Hrm_Leave_Records
-    },
-    name: 'leave_records'
+			this.httpRequest('update_settings', request);
+		},
 
-});
-const Hrm_Leave_Configuration = resolve => {
+		getSettings(key, pre_define) {
+			var pre_define = pre_define || false,
+			    settings = HRM_Vars.settings;
 
-    __webpack_require__.e/* require.ensure */(5).then((() => {
-        resolve(__webpack_require__(10));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-const Hrm_Leave_Type = resolve => {
+			if (!HRM_Vars.settings[key]) {
+				return pre_define;
+			}
 
-    __webpack_require__.e/* require.ensure */(1).then((() => {
-        resolve(__webpack_require__(16));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-const Hrm_Leave_Work_Week = resolve => {
-
-    __webpack_require__.e/* require.ensure */(6).then((() => {
-        resolve(__webpack_require__(17));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-const Hrm_Leave_Holidays = resolve => {
-
-    __webpack_require__.e/* require.ensure */(2).then((() => {
-        resolve(__webpack_require__(12));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-const Hrm_Leave_form_settings = resolve => {
-
-    __webpack_require__.e/* require.ensure */(3).then((() => {
-        resolve(__webpack_require__(11));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-HRM_Routes.push({
-    path: '/leave-configuration',
-    components: { 'hrm-leave-configuration': Hrm_Leave_Configuration },
-    name: 'leave_configuration',
-
-    children: [{
-        path: '/leave-configuration/type',
-        components: { 'hrm-leave-type': Hrm_Leave_Type },
-        name: 'leave_type'
-    }, {
-        path: '/leave-configuration/work-week',
-        components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week },
-        name: 'leave_week'
-    }, {
-        path: '/leave-configuration/holidays',
-        components: { 'hrm-leave-holidays': Hrm_Leave_Holidays },
-        name: 'leave_holidays'
-    }, {
-        path: '/leave-configuration/form',
-        components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings },
-        name: 'leave_form_settings'
-    }]
-});
-
-const Hrm_Leave_Requests = resolve => {
-
-    __webpack_require__.e/* require.ensure */(4).then((() => {
-        resolve(__webpack_require__(15));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-const Hrm_Leave_Pending = resolve => {
-
-    __webpack_require__.e/* require.ensure */(7).then((() => {
-        resolve(__webpack_require__(13));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-const Hrm_Leave_Cancel = resolve => {
-
-    __webpack_require__.e/* require.ensure */(8).then((() => {
-        resolve(__webpack_require__(9));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-const Hrm_Leave_Approve = resolve => {
-
-    __webpack_require__.e/* require.ensure */(9).then((() => {
-        resolve(__webpack_require__(8));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-HRM_Routes.push({
-    path: '/leave-requests',
-    components: { 'hrm-leave-requests': Hrm_Leave_Requests },
-    name: 'leave_requests',
-
-    children: [{
-        path: '/leave-requests/pending',
-        components: { 'hrm-leave-pending': Hrm_Leave_Pending },
-        name: 'leave_pending'
-    }, {
-        path: '/leave-requests/approve',
-        components: { 'hrm-leave-approve': Hrm_Leave_Approve },
-        name: 'leave_approve'
-    }, {
-        path: '/leave-requests/cancel',
-        components: { 'hrm-leave-cancel': Hrm_Leave_Cancel },
-        name: 'leave_cancel'
-    }]
-});
-
-/* unused harmony default export */ var _unused_webpack_default_export = (HRM_Routes);
+			return HRM_Vars.settings[key];
+		}
+	}
+}));
 
 /***/ }),
-/* 22 */
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vue_vuex__);
+
+
+
+__WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a);
+
+/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Store({}));
+
+/***/ }),
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixin__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_controller_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixin__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_controller_vue__ = __webpack_require__(8);
 __webpack_require__.p = 'http://localhost/hrm/wp-content/plugins/Human-Resource-Management/asset/js/';
 
 
@@ -11329,7 +11417,7 @@ var wpspear_hrm = {
 new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -13671,11 +13759,12 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 });
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_start_vue__ = __webpack_require__(32);
 //
 //
 //
@@ -13683,24 +13772,28 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 //
 //
 //
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	components: {
-		'hrm-leave': __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__["a" /* default */]
+		'hrm-leave': __WEBPACK_IMPORTED_MODULE_0__leave_index_vue__["a" /* default */],
+		'hrm-settings': __WEBPACK_IMPORTED_MODULE_1__settings_start_vue__["a" /* default */]
 	}
 });
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_store__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_form_directive__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_records_directive__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_store__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_mixin__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_router__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_form_directive__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__leave_records_directive__ = __webpack_require__(23);
 //
 //
 //
@@ -13709,6 +13802,7 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 //
 //
 //
+
 
 
 
@@ -13720,12 +13814,35 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 });
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_27daaec6_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(5);
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	store: __WEBPACK_IMPORTED_MODULE_0__store__["a" /* default */]
+});
+
+/***/ }),
+/* 31 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_27daaec6_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(34);
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
@@ -13769,7 +13886,79 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 27 */
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_start_vue__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0fbce8ba_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_start_vue__ = __webpack_require__(33);
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+
+/* template */
+
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_start_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0fbce8ba_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_start_vue__["a" /* default */],
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "asset/js/components/settings/start.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] start.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0fbce8ba", Component.options)
+  } else {
+    hotAPI.reload("data-v-0fbce8ba", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('router-view', {
+    attrs: {
+      "name": "hrm-settings"
+    }
+  })], 1)
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-0fbce8ba", esExports)
+  }
+}
+
+/***/ }),
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13800,12 +13989,12 @@ if (false) {
 }
 
 /***/ }),
-/* 28 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('hrm-leave')], 1)
+  return _c('div', [_c('hrm-leave'), _vm._v(" "), _c('hrm-settings')], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -13819,7 +14008,7 @@ if (false) {
 }
 
 /***/ }),
-/* 29 */
+/* 36 */
 /***/ (function(module, exports) {
 
 var g;

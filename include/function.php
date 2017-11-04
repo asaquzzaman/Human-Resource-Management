@@ -325,7 +325,7 @@ function hrm_result_limit() {
 
 function hrm_log( $type = '', $msg = '' ) {
 
-    $msg = sprintf( "[%s][%s] %s\n", date( 'd.m.Y h:i:s' ), $type, $msg );
+    $msg = sprintf( "[%s][%s] %s\n", date( 'd.m.Y H:i:s' ), $type, $msg );
     error_log( $msg, 3, dirname( __FILE__ ) . '/log.txt' );
 
 }
@@ -494,4 +494,59 @@ function hrm_get_wp_timezone() {
 
     return $tzstring;
 }
+
+/**
+ * Get Company financial start date
+ *
+ * @since  0.1
+ *
+ * @return string date
+ */
+function hrm_financial_start_date() {
+    return HRM_Settings::getInstance()->get_financial_year();
+    return date( 'Y-m-d H:i:s', mktime( 0, 0, 0,  erp_get_option( 'gen_financial_month', 'erp_settings_general', 1 ), 1 ) );
+}
+
+/**
+ * Get Company financial end date
+ *
+ * @since  0.1
+ *
+ * @return string date
+ */
+function hrm_financial_end_date() {
+    $start_date = hrm_financial_start_date();
+    return  date( 'Y-m-t H:i:s', strtotime( '+11 month', strtotime( $start_date ) ) );
+}
+
+function hrm_load_schema() {
+    $contents = [];
+    $files = glob( __DIR__ . "/../db/migrations/*.php" );
+
+    if ( $files === false ) {
+        throw new RuntimeException( "Failed to glob for migration files" );
+    }
+
+    foreach ( $files as $file ) {
+        $contents[basename( $file, '.php' )] = file_get_contents( $file );
+    }
+
+    unset( $file );
+    unset( $files );
+
+    return $contents;
+}
+
+function hrm_check_financial_year() {    
+    $start_date = new DateTime( hrm_financial_start_date() );
+    $last_date  = new DateTime( hrm_financial_end_date() ); 
+ 
+    $diff = $last_date->diff( $start_date );
+
+    //As of PHP 5.2.2, DateTime objects can be compared using comparison operators.
+    if ( $diff->y > 0 ) {
+        Hrm_Settings::getInstance()->insert_financial_year( current_time( 'mysql' ) );
+    } 
+}
+
 

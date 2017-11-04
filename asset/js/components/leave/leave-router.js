@@ -7,17 +7,16 @@ const Hrm_Leave_Records = resolve => {
 
 //import Hrm_Leave_Records from './leave-records.vue';
 
-HRM_Routes.push (
-	{ 
-    	path: '/leave', 
-    	components: { 
-    		'hrm-leave-records': Hrm_Leave_Records 
-    	}, 
-    	name: 'leave_records',
 
-	}
+var leave = { 
+	path: '/leave', 
+	components: { 
+		'hrm-leave-records': Hrm_Leave_Records 
+	}, 
+	name: 'leave_records',
+}
 
-);
+
 const Hrm_Leave_Configuration = resolve => {
 
     require.ensure(['./leave-configuration.vue'], () => {
@@ -50,39 +49,38 @@ const Hrm_Leave_form_settings = resolve => {
     });
 }
 
-HRM_Routes.push(
-    {
-        path: '/leave-configuration', 
-        components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
-        name: 'leave_configuration',
 
-        children: [
-            {
-                path: '/leave-configuration/type', 
-                components: { 'hrm-leave-type': Hrm_Leave_Type }, 
-                name: 'leave_type',
-            },
+var configuration = {
+    path: '/leave-configuration', 
+    components: { 'hrm-leave-configuration': Hrm_Leave_Configuration }, 
+    name: 'leave_configuration',
 
-            {
-                path: '/leave-configuration/work-week', 
-                components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week }, 
-                name: 'leave_week',
-            },
+    children: [
+        {
+            path: '/leave-configuration/type', 
+            components: { 'hrm-leave-type': Hrm_Leave_Type }, 
+            name: 'leave_type',
+        },
 
-            {
-                path: '/leave-configuration/holidays', 
-                components: { 'hrm-leave-holidays': Hrm_Leave_Holidays }, 
-                name: 'leave_holidays',
-            },
+        {
+            path: '/leave-configuration/work-week', 
+            components: { 'hrm-leave-work-week': Hrm_Leave_Work_Week }, 
+            name: 'leave_week',
+        },
 
-            {
-                path: '/leave-configuration/form', 
-                components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings }, 
-                name: 'leave_form_settings',
-            }
-        ]
-    }
-);
+        {
+            path: '/leave-configuration/holidays', 
+            components: { 'hrm-leave-holidays': Hrm_Leave_Holidays }, 
+            name: 'leave_holidays',
+        },
+
+        {
+            path: '/leave-configuration/form', 
+            components: { 'hrm-leave-form-settings': Hrm_Leave_form_settings }, 
+            name: 'leave_form_settings',
+        }
+    ]
+}
 
 const Hrm_Leave_Requests = resolve => {
 
@@ -112,32 +110,31 @@ const Hrm_Leave_Approve = resolve => {
     });
 }
 
-HRM_Routes.push(
-    {
-        path: '/leave-requests', 
-        components: { 'hrm-leave-requests': Hrm_Leave_Requests }, 
-        name: 'leave_requests',
+var requested = {
+    path: '/leave-requests', 
+    components: { 'hrm-leave-requests': Hrm_Leave_Requests }, 
+    name: 'leave_requests',
 
-        children: [
-            {
-                path: '/leave-requests/pending', 
-                components: { 'hrm-leave-pending': Hrm_Leave_Pending }, 
-                name: 'leave_pending',
-            },
+    children: [
+        {
+            path: '/leave-requests/pending', 
+            components: { 'hrm-leave-pending': Hrm_Leave_Pending }, 
+            name: 'leave_pending',
+        },
 
-            {
-                path: '/leave-requests/approve', 
-                components: { 'hrm-leave-approve': Hrm_Leave_Approve }, 
-                name: 'leave_approve',
-            },
+        {
+            path: '/leave-requests/approve', 
+            components: { 'hrm-leave-approve': Hrm_Leave_Approve }, 
+            name: 'leave_approve',
+        },
 
-            {
-                path: '/leave-requests/cancel', 
-                components: { 'hrm-leave-cancel': Hrm_Leave_Cancel }, 
-                name: 'leave_cancel',
-            }
-        ]
-    }
-);
+        {
+            path: '/leave-requests/cancel', 
+            components: { 'hrm-leave-cancel': Hrm_Leave_Cancel }, 
+            name: 'leave_cancel',
+        }
+    ]
+}
 
-export default HRM_Routes;
+
+export {leave,configuration,requested};

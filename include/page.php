@@ -16,6 +16,9 @@ function hrm_page( $exclude = true ) {
     $hrm_leave             = hrm_leave_page();
     $page[$hrm_leave]      = hrm_leave_page_items( $path, $hrm_leave, $exclude );
 
+    $hrm_settings             = hrm_settings_page();
+    $page[$hrm_settings]      = hrm_settings_page_items( $path, $hrm_settings, $exclude );
+
     $hrm_time              = hrm_attendance_page();
     $page[$hrm_time]       = hrm_attendance_page_items( $path, $hrm_time, $exclude );
 
@@ -305,6 +308,24 @@ function hrm_leave_page_items( $path, $hrm_leave, $exclude ) {
     }
     
     return apply_filters( 'hrm_leave_page_items', $leave, $path, $hrm_leave );
+}
+
+function hrm_settings_page_items( $path, $hrm_leave, $exclude ) {
+
+    $leave = array();
+    
+    $leave['leave_summary'] = array(
+        'id'        => 'hrm-settings',
+        'name'      => 'settings',
+        'title'     => __( 'Settings', 'hrm' ),
+        'url'       => '/settings',
+    );
+
+    if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
+        return $leave;
+    }
+    
+    return apply_filters( 'hrm_settings_page_items', $leave, $path, $hrm_leave );
 }
 
 function hrm_file_page_items( $path, $hrm_file, $exclude ) {
@@ -607,7 +628,9 @@ function hrm_pim_page() {
 function hrm_leave_page() {
     return apply_filters( 'hrm_leave_page_slug', 'hrm_leave' );
 }
-
+function hrm_settings_page() {
+    return apply_filters( 'hrm_settings_page_slug', 'hrm_settings' );
+}
 function hrm_attendance_page() {
     return apply_filters( 'hrm_attendance_page_slug', 'hrm_attendance' );
 }
@@ -649,6 +672,7 @@ function hrm_menu_label() {
         hrm_pim_page()        => __( 'Employee', 'hrm' ),
         hrm_leave_page()      => __( 'Leave', 'hrm' ),
         hrm_attendance_page()       => __( 'Attendance', 'hrm' ),
+        hrm_settings_page() => __('Settings'),
        // hrm_evaluation_page() => __( 'Evaluation', 'hrm' ),
         hrm_file_page()       => __( 'File', 'hrm' ),
         hrm_project_page()    => __( 'Project', 'hrm' ),

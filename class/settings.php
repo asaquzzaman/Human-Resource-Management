@@ -1,4 +1,6 @@
 <?php
+use HRM\Models\Financial_Year;
+
 class Hrm_Settings {
     private static $_instance;
 
@@ -1596,6 +1598,71 @@ class Hrm_Settings {
         }
 
         return $selected ? $year[$selected] : $year;
+    }
+
+    public static function ajax_update_settings() {
+        check_ajax_referer('hrm_nonce');
+        self::getInstance()->update_settings($_POST);
+
+        wp_send_json_success();
+    }
+
+    public function update_settings( $settings ) {
+        if ( empty( $settings['hrm_financial_year'] ) ) {
+            $current_date = current_time( 'mysql' );
+        } else {
+            $current_date = $settings['hrm_financial_year'];
+        }
+        
+        $this->update_financial_year( $current_date );
+    }
+
+    function update_financial_year( $date ) {
+        $hrm_financial_year = date('Y-m-d H:i:s', strtotime( $date ) );
+        $count = Financial_Year::count();
+        
+        if ( $count > 0 ) {
+            
+            $last_row = Financial_Year::orderBy('id', 'desc')->first();
+            
+            Financial_Year::where('id', $last_row->id)->update([
+                'start' => $hrm_financial_year
+            ]);
+            
+        } else {
+            Financial_Year::create(array(
+                'start' => $hrm_financial_year
+            ));
+        }
+    }
+
+    function insert_financial_year( $date ) {
+        $hrm_financial_year = date('Y-m-d H:i:s', strtotime( $date ) );
+       
+        Financial_Year::create(array(
+            'start' => $hrm_financial_year
+        ));
+       
+    }
+
+    public function get_settings() {
+
+        return array(
+            'hrm_financial_year' => $this->get_financial_year()
+        );
+    }
+
+    public function get_financial_year() {
+        $count = Financial_Year::count();
+
+        if ( $count > 0 ) {
+            $last_row = Financial_Year::orderBy('id', 'desc')->first();
+            return date('Y-m-d', strtotime( $last_row->start ) );
+        } else {
+            
+            return date('Y-01-01', strtotime( current_time( 'mysql' ) ) );
+
+        }
     }
 
 }

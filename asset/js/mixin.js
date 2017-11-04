@@ -133,6 +133,6 @@ export default Vue.mixin({
 
         loadingStop (id) {
             jQuery('#'+id).preloader('remove');
-        }
+        },
 	},
 });

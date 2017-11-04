@@ -200,7 +200,9 @@ class Hrm_Scripts {
             'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
             'success_msg' => __( 'Changed Successfully', 'hrm' ),
-            'current_user' => wp_get_current_user()
+            'current_user' => wp_get_current_user(),
+            'settings'    => Hrm_Settings::getInstance()->get_settings(),
+            'current_date' => current_time( 'mysql' ),
         ));
 
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );

@@ -35,6 +35,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  * **********************************************************************
  */
+require_once dirname (__FILE__) . '/vendor/autoload.php';
 class WP_Hrm {
 
     /**
@@ -64,17 +65,22 @@ class WP_Hrm {
 
         $this->instantiate();
         $this->init_action();
+        
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
     function include() {
-        
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
-        
-        add_action( 'init', function() {
-            require_once dirname (__FILE__) . '/vendor/autoload.php';   
-        });
 
+        $this->migrate_db();
+    
+    }
+
+    function migrate_db() {
+        $migrater = new \HRM\Core\Database\Migrater();
+
+        $migrater->create_migrations_table();
+        $migrater->build_schema();
     }
 
     function autoload( $class ) {
@@ -157,6 +163,7 @@ class WP_Hrm {
                 $hrm_is_admin = $_REQUEST['is_admin'];
             }
         }
+        hrm_check_financial_year();
         Hrm_Init::getInstance()->register_post_type();
     }
 
@@ -221,6 +228,10 @@ class WP_Hrm {
         update_option( 'hrm_admin', $logged_in_user_id );
         update_option( 'hrm_version', HRM_VERSION );
         update_option( 'hrm_db_version', HRM_DB_VERSION );
+
+        Hrm_Settings::getInstance()->update_financial_year( 
+            date( 'Y-01-01 H:i:s', strtotime( current_time('mysql') ) ) 
+        );
     }
 
     function pim_scripts() {

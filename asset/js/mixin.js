@@ -76,8 +76,8 @@ export default Vue.mixin({
                 return;
             }
 
-            moment.tz.add(HRM_Vars.time_zones);
-            moment.tz.link(HRM_Vars.time_links);
+           // moment.tz.add(HRM_Vars.time_zones);
+           // moment.tz.link(HRM_Vars.time_links);
 
             date = new Date(date);
             date = moment(date).format('YYYY-MM-DD');
@@ -94,8 +94,13 @@ export default Vue.mixin({
                 format = 'DD/MM/YYYY';
             } 
 
-            return moment.tz( date, HRM_Vars.wp_time_zone ).format(format);
+            return moment( date ).format(format);
         },
+
+        pad(d) {
+            return (d < 10) ? '0' + d.toString() : d.toString();
+        },
+        
 		onOff (key, status) {
 			var status = status || 'no';
 

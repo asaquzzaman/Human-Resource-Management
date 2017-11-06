@@ -516,7 +516,7 @@ function hrm_financial_start_date() {
  */
 function hrm_financial_end_date() {
     $start_date = hrm_financial_start_date();
-    return  date( 'Y-m-t H:i:s', strtotime( '+11 month', strtotime( $start_date ) ) );
+    return  date( 'Y-m-t', strtotime( '+11 month', strtotime( $start_date ) ) );
 }
 
 function hrm_load_schema() {

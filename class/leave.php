@@ -58,8 +58,8 @@ class Hrm_Leave {
         
 
         $defaults = array(
-            'start_time' => date( 'Y-01-01 00:00:00' ),
-            'end_time'   => date( 'Y-12-31 24:59:59' ),
+            'start_time' => hrm_financial_start_date(),
+            'end_time'   => hrm_financial_end_date(),
             'per_page'   => 50,  
             'page'       => 1    
         );
@@ -115,13 +115,33 @@ class Hrm_Leave {
         $emp_id = $emp_id ? absint( $emp_id ) : get_current_user_id();
         $user  = User::find( $emp_id );
         $types = Leave_Type::all();
-       // $leave_type_count = [];
-
+    
         foreach( $types as $type ) {
             $type->count = $user->leave_types->where('id', $type->id)->count();
         }
 
-        return $types->toArray();
+        $meta = $types->toArray();
+
+        $count_extra_leave = $this->employee_extra_leave( $emp_id );
+
+        $meta[] = array(
+            'id'              => 0,
+            'leave_type_name' => 'Extra',
+            'entitle_from'    => '',
+            'entitle_to'      => '',
+            'entitlement'     => 0,
+            'count'           => $count_extra_leave
+        );
+
+        return $meta;
+    }
+
+    function employee_extra_leave($emp_id = false) {
+        $emp_id = $emp_id ? $emp_id : get_current_user_id();
+        
+        return Leave::where('type', '0')
+                ->where('emp_id', $emp_id)
+                ->count();
     }
 
     function update_holiday_data( $data, $table, $format, $update_status, $post ) {

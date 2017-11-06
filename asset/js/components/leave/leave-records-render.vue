@@ -1,7 +1,13 @@
 <template>
 	<div>
 		<span class="page-title-action">Your leave records</span>
-		<span class="page-title-action">From Jan 1st 17 to Dec 31 17 </span>
+		<span class="page-title-action">
+			From 
+			<span class="hrm-start-date">{{ dateFormat(financialStart) }}</span>
+			to 
+			<span class="hrm-end-date">{{ dateFormat(financialEnd) }}</span>
+
+		</span>
 		<div class="metabox-holder">
 			<div class="postbox">
 				<h2 class="hndle ui-sortable-handle">
@@ -20,18 +26,17 @@
 								
 								<td>{{ type.leave_type_name }}</td>
 								<td v-if="type.id === 1">&#8211;</td>
-								<td v-else>{{ type.entitlement }}</td>
-								<td>{{ type.count }}</td>
-								<td v-if="type.id === 1">&#8211;</td>
-								<td v-else>{{ type.entitlement - type.count }}</td>
+								<td v-else>{{ pad(type.entitlement) }}</td>
+								<td>{{ pad(type.count) }}</td>
+								<td v-if="type.id === 0">&#8211;</td>
+								<td v-else>{{ pad(type.entitlement - type.count) }}</td>
 
-							
 							</tr>
 							<tr>
 								<td><strong>Total</strong></td>
-								<td><strong>{{ total.entitlement }}</strong></td>
-								<td><strong>{{ total.taken_leave }}</strong></td>
-								<td><strong>{{ total.remain_leave }}</strong></td>
+								<td><strong>{{ pad(total.entitlement) }}</strong></td>
+								<td><strong>{{ pad(total.taken_leave) }}</strong></td>
+								<td><strong>{{ pad(total.remain_leave) }}</strong></td>
 							</tr>
 						</tbody>
 					</table>
@@ -84,7 +89,9 @@
 					1: 'Pending', 
 					2: 'Approve', 
 					3: 'Cancel'
-				}
+				},
+				financialStart: HRM_Vars.financial_start,
+				financialEnd: HRM_Vars.financial_end
 			}
 		},
 		computed: {
@@ -177,6 +184,11 @@
 </script>
 
 <style>
+	.hrm-start-date, .hrm-end-date {
+		font-size: 11px;
+		color: #333;
+		font-weight: 800;
+	}
 	.page-title-action {
 		margin-top: 14px;
 	    padding: 4px 8px;

@@ -1660,7 +1660,7 @@ class Hrm_Settings {
             return date('Y-m-d', strtotime( $last_row->start ) );
         } else {
             
-            return date('Y-01-01', strtotime( current_time( 'mysql' ) ) );
+            return date('Y-07-01', strtotime( current_time( 'mysql' ) ) );
 
         }
     }

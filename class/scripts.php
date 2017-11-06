@@ -190,19 +190,21 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', array('jquery','jquery-ui-datepicker', 'hrm-datetimepicker', 'hrm-moment-time-zone'), false, true );
 
         wp_localize_script( 'hrm-vue', 'HRM_Vars', array(
-            'time_zones'  => $json_time_zone_string['zones'],
-            'time_links'  => $json_time_zone_string['links'],
-            'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            'nonce'       => wp_create_nonce( 'hrm_nonce' ),
-            'time_zone'   => hrm_get_wp_timezone(),
-            'wp_date_format' => get_option( 'date_format' ),
-            'wp_time_format' => get_option( 'time_format' ),
-            'message'     => hrm_message(),
-            'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' ),
-            'current_user' => wp_get_current_user(),
-            'settings'    => Hrm_Settings::getInstance()->get_settings(),
-            'current_date' => current_time( 'mysql' ),
+            //'time_zones'      => $json_time_zone_string['zones'],
+            //'time_links'      => $json_time_zone_string['links'],
+            'ajax_url'        => admin_url( 'admin-ajax.php' ),
+            'nonce'           => wp_create_nonce( 'hrm_nonce' ),
+            'time_zone'       => hrm_get_wp_timezone(),
+            'wp_date_format'  => get_option( 'date_format' ),
+            'wp_time_format'  => get_option( 'time_format' ),
+            'message'         => hrm_message(),
+            'confirm_msg'     => __( 'Are you sure!', 'hrm'),
+            'success_msg'     => __( 'Changed Successfully', 'hrm' ),
+            'current_user'    => wp_get_current_user(),
+            'settings'        => Hrm_Settings::getInstance()->get_settings(),
+            'current_date'    => current_time( 'mysql' ),
+            'financial_start' => hrm_financial_start_date(),
+            'financial_end'   => hrm_financial_end_date()
         ));
 
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );

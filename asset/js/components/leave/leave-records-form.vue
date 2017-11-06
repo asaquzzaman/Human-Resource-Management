@@ -237,7 +237,7 @@
 				
 			    var request_data = {
 	                comments: this.comments,
-	                type: ! this.leave_type ? '' : this.leave_type.id,
+	                type: ! this.leave_type ? '0' : this.leave_type.id,
 	                emp_id: ! this.selectedEmployee ? false : this.selectedEmployee.ID,
 	                time: this.apply_leave_date,
 	                disable_leave_type: this.disable_leave_type,

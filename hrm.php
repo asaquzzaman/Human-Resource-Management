@@ -230,7 +230,7 @@ class WP_Hrm {
         update_option( 'hrm_db_version', HRM_DB_VERSION );
 
         Hrm_Settings::getInstance()->update_financial_year( 
-            date( 'Y-01-01 H:i:s', strtotime( current_time('mysql') ) ) 
+            date( 'Y-07-01 H:i:s', strtotime( current_time('mysql') ) ) 
         );
     }
 

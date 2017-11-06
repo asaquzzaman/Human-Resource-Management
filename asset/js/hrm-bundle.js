@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"223aa015a2a700a5bbbc","1":"63f1a85bb762892f6667","2":"9e298816aa3315594c00","3":"1ca9a9abd8a084745d5e","4":"974237455dc2637553bc","5":"6127c8c083e569882e36","6":"0b0148d63d8fd32b3d4d","7":"584ef2845662f6e1e65a","8":"9ccd04be83646cdf9d3d","9":"ed8472b8e18b48e22380","10":"b5df5cfe43ebec07107d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"1aab8578af4e1355edd7","1":"f6ad5823dd07e9b50d28","2":"eec31ef5be0f9622d272","3":"1fd16a4e1dd52976fef0","4":"0ba4e8bf300c24d59c95","5":"b42685e153830152ca9e","6":"d80d0816b2291cc03de8","7":"257480e4704cfd4847b9","8":"0a6f5bf37b05d78671fe","9":"f1809750bb0faf27c802","10":"4fe35275da18072291d5"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10319,8 +10319,8 @@ module.exports = function normalizeComponent (
                 return;
             }
 
-            moment.tz.add(HRM_Vars.time_zones);
-            moment.tz.link(HRM_Vars.time_links);
+            // moment.tz.add(HRM_Vars.time_zones);
+            // moment.tz.link(HRM_Vars.time_links);
 
             date = new Date(date);
             date = moment(date).format('YYYY-MM-DD');
@@ -10335,8 +10335,13 @@ module.exports = function normalizeComponent (
                 format = 'DD/MM/YYYY';
             }
 
-            return moment.tz(date, HRM_Vars.wp_time_zone).format(format);
+            return moment(date).format(format);
         },
+
+        pad(d) {
+            return d < 10 ? '0' + d.toString() : d.toString();
+        },
+
         onOff(key, status) {
             var status = status || 'no';
 
@@ -10406,7 +10411,7 @@ var leave = {
 
 const Hrm_Leave_Configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(5).then((() => {
+    __webpack_require__.e/* require.ensure */(6).then((() => {
         resolve(__webpack_require__(12));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10418,7 +10423,7 @@ const Hrm_Leave_Type = resolve => {
 };
 const Hrm_Leave_Work_Week = resolve => {
 
-    __webpack_require__.e/* require.ensure */(6).then((() => {
+    __webpack_require__.e/* require.ensure */(7).then((() => {
         resolve(__webpack_require__(19));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10462,14 +10467,14 @@ var configuration = {
 
 const Hrm_Leave_Requests = resolve => {
 
-    __webpack_require__.e/* require.ensure */(4).then((() => {
+    __webpack_require__.e/* require.ensure */(5).then((() => {
         resolve(__webpack_require__(17));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 const Hrm_Leave_Pending = resolve => {
 
-    __webpack_require__.e/* require.ensure */(7).then((() => {
+    __webpack_require__.e/* require.ensure */(8).then((() => {
         resolve(__webpack_require__(15));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10517,7 +10522,7 @@ var requested = {
 "use strict";
 const Hrm_Settings = resolve => {
 
-	__webpack_require__.e/* require.ensure */(8).then((() => {
+	__webpack_require__.e/* require.ensure */(4).then((() => {
 		resolve(__webpack_require__(20));
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };

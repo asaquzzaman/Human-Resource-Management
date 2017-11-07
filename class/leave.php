@@ -366,18 +366,22 @@ class Hrm_Leave {
 
     public function new_leave_type( $postdata ) {
         global $wpdb;
-
+        
         $table = $wpdb->prefix . 'hrm_leave_type';
         $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
 
         $data = array(
             'leave_type_name' => $postdata['leave_type'],
             'entitlement'     => $postdata['entitlement'],
-            'entitle_from'    => $postdata['entitle_from'],
-            'entitle_to'      => $postdata['entitle_to']
+            'entitle_from'    => hrm_financial_start_date(),
+            'entitle_to'      => hrm_financial_end_date(),
+            'carry'           => $postdata['nextYear'] ? 1 : 0,
+            'f_year'          => $postdata['nextYear']
+                                ? hrm_get_current_financial_id()
+                                : 0
         );
 
-        $format = array( '%s', '%d', '%s', '%s' );
+        $format = array( '%s', '%d', '%s', '%s', '%d' );
 
         if ( $id ) {
             $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
@@ -412,7 +416,7 @@ class Hrm_Leave {
         }
     }
 
-    function ajax_get_leave_type() {
+    public static function ajax_get_leave_type() {
         check_ajax_referer('hrm_nonce');
         
         $leave_types = self::getInstance()->get_leave_types();
@@ -423,19 +427,45 @@ class Hrm_Leave {
     }
 
     function get_leave_types( $args = array() ) {
-        $id = empty( $args['id'] ) ? false : absint( $args['id'] );
+        $defaults = array(
+            'start_time' => hrm_financial_start_date(),
+            'end_time'   => hrm_financial_end_date(),
+        );
 
-        if ( $id ) {
-            $leave_types = Leave_Type::where( 'id', $id )->get();
-        } else {
-            $leave_types = Leave_Type::all();
+        $args      = wp_parse_args( $args, $defaults );
+        $cache_key = 'hrm-leave-types' . md5( serialize( $args ) ) . get_current_user_id();
+        $send     = wp_cache_get( $cache_key, 'hrm' );
+        
+        if ( false === $send ) { 
+
+            $leave_types = new Leave_Type();
+
+            $leave_types = $leave_types->where(function($q) use($args) {
+                if ( !empty( $args['id'] ) ) {
+                    $q->where( 'id', $args['id'] );
+                }
+
+                if ( !empty( $args['start_time'] ) ) {
+                    $q->where( 'entitle_from', '>=', $args['start_time'] );
+                }
+
+                if ( !empty( $args['end_time'] ) ) {
+                    $q->where( 'entitle_to', '<=', $args['end_time'] );
+                }
+            });
+
+            $leave_types = $leave_types->orWhere( 'carry', 1 );
+
+            $leave_types = $leave_types->get();
+
+            $leave_types = new Collection( $leave_types, new Leave_Type_Transform );
+            $transform = new Transformer_Manager();
+
+            $send = $transform->get_response( $leave_types );
+
+            wp_cache_set( $cache_key, $send, 'hrm' );
+
         }
-
-
-        $leave_types = new Collection( $leave_types, new Leave_Type_Transform );
-        $transform = new Transformer_Manager();
-
-        $send = $transform->get_response( $leave_types );
 
         return $send;
     }

@@ -549,4 +549,10 @@ function hrm_check_financial_year() {
     } 
 }
 
+function hrm_get_current_financial_id() {
+    return HRM\Models\Financial_Year::orderBy('id', 'desc')
+            ->first()
+            ->id;
+}
+
 

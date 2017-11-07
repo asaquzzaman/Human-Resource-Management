@@ -11,4 +11,9 @@ build
 secret.json
 .netbeans.xml
 npm-debug.log
+/node_modules/
+/vendor/
+/asset/js/chunk/
+/asset/js/hrm-bundle.js
+
 

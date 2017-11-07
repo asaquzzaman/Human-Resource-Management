@@ -35,7 +35,20 @@
 							<input type="text"  v-hrm-datepicker  class="hrm-date-picker-to"  id="hrm-leave-entitlement-to-text-field"  required="required"  name="entitle_to"  :value="entitle_to"  />
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
-						</div>					
+						</div>		
+
+						<div class="hrm-form-field ">
+							<label for="">
+								Next Year
+								<em></em>
+							</label>
+							<span class="hrm-checkbox-wrap">
+								<input v-model="nextYear"  type="checkbox" id="hrm-next-year">
+								<label for="hrm-next-year" class="hrm-radio">Enable/Disable</label>
+							</span>
+							<span class="hrm-clear"></span>
+							<span class="description">Carry to next financial year.</span>
+						</div>				
 
 						<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Save changes">
 						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
@@ -65,7 +78,8 @@ var Hrm_Leave_Type_Form = {
 			entitle_from: '',
 			entitle_to: '',
 			leave_type: '',
-			entitlement: ''
+			entitlement: '',
+			nextYear: false
 		}
 	},
 
@@ -99,14 +113,9 @@ var Hrm_Leave_Type_Form = {
                 leave_type: this.leave_type,
                 entitle_from: this.entitle_from,
                 entitle_to: this.entitle_to,
+                nextYear: this.nextYear
             },
             
-            //is_update  = parseInt( this.department_id ) ? true : false,
-            
-            // target_index = is_update ? this.getIndex(
-            //     this.$store.state.departments, this.department_id, 'id'
-            // ) : false,
-
             self = this;
 
             this.show_spinner = true;

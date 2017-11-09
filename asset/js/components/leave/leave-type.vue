@@ -6,7 +6,6 @@
 		<leave-type-add-btn></leave-type-add-btn>
 		<leave-type-records></leave-type-records>
 
-		<my-action hook="hrm-after-leave-type"></my-action>
 	</div>
 
 </template>
@@ -15,12 +14,6 @@
 	import HRM_Mixin from './../../mixin';
 	import HRM_Leave_Store from './leave-store';
 
-	// const Hrm_Leave_Type_Records = (resolve) => {
- //        require.ensure(['./leave-type-records.vue'], () => {
- //            resolve(require('./leave-type-records.vue'));
- //        });
- //    };
-	
 	import Hrm_Leave_Type_Form from './leave-type-form.vue';
 	import Hrm_Leave_Type_Records from './leave-type-records.vue';
 	import HRM_Leave_Type_Add_Btn from './leave-type-add-btn.vue';

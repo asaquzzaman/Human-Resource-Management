@@ -7,15 +7,22 @@
 					<th>Days</th>
 					<th>Start</th>
 					<th>End</th>
+					<th>Carry to next year</th>
 
 				</thead>
 				<tbody>
 					<tr v-for="record in records">
 						
-						<td>{{ record.leave_type_name }}</td>
+						<td>{{ record.name }}</td>
 						<td>{{ record.entitlement }}</td>
-						<td>{{ record.entitle_from }}</td>
-						<td>{{ record.entitle_to }}</td>
+
+						<td v-if="record.next_year === 1">&#x000AF;&#x000AF;</td>
+						<td v-else>{{ dateFormat(record.entitle_from) }}</td>
+
+						<td v-if="record.next_year === 1">&#x000AF;&#x000AF;</td>
+						<td v-else>{{ dateFormat(record.entitle_to) }}</td>
+
+						<td>{{ carryStatus(record.next_year) }}</td>
 					</tr>
 					<tr v-if="!records.length">
 						
@@ -63,14 +70,17 @@
 	            wp.ajax.send('get_leave_type', {
 	                data: request_data,
 	                success: function(res) {
-	                	
-	                    self.records = res.leave_types;
+	                    self.records = res.data;
 	                },
 
 	                error: function(res) {
 	                    
 	                }
 	            });
+			},
+
+			carryStatus (next_year) {
+				return parseInt(next_year) ? 'Enable' : 'Disable'; 
 			}
 		}
 	};

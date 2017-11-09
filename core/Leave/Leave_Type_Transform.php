@@ -12,7 +12,8 @@ class Leave_Type_Transform extends TransformerAbstract {
 			'entitlement'  => $item->entitlement,
 			'entitle_from' => $item->entitle_from,
 			'entitle_to'   => $item->entitle_to,
-
+			'financial_id' => $item->f_year,
+			'next_year'    => $item->carry
 		];
 	}
 }

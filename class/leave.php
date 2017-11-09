@@ -369,14 +369,14 @@ class Hrm_Leave {
         
         $table = $wpdb->prefix . 'hrm_leave_type';
         $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
-
+        $next_year = filter_var( $postdata['nextYear'], FILTER_VALIDATE_BOOLEAN);
         $data = array(
             'leave_type_name' => $postdata['leave_type'],
             'entitlement'     => $postdata['entitlement'],
             'entitle_from'    => hrm_financial_start_date(),
             'entitle_to'      => hrm_financial_end_date(),
-            'carry'           => $postdata['nextYear'] ? 1 : 0,
-            'f_year'          => $postdata['nextYear']
+            'carry'           => $next_year ? 1 : 0,
+            'f_year'          => $next_year
                                 ? hrm_get_current_financial_id()
                                 : 0
         );
@@ -392,12 +392,33 @@ class Hrm_Leave {
             $date['id'] = $wpdb->insert_id;
         }
 
+        $departments = array();
+
+        foreach ( $postdata['departments'] as $key => $dept ) {
+            $departments[$dept['id']] = $date['id'];
+        };
+        
+        $this->add_relation( 'leave_type', $departments );
+
         if ( $result ) {
             return array( 'type' => $date['id'], 'leave_type' => $data );
         }
 
         return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
 
+    }
+
+    function add_relation( $type, $relations ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'hrm_relation';
+
+        foreach( $relations as $from => $to ) {
+            $wpdb->insert( $table, array(
+                'type' => $type,
+                'from' => $from,
+                'to'   => $to
+            ));
+        }
     }
 
     public static function ajax_create_new_leave_type() {
@@ -421,9 +442,7 @@ class Hrm_Leave {
         
         $leave_types = self::getInstance()->get_leave_types();
 
-        wp_send_json_success(array( 
-            'leave_types'  => $leave_types, 
-        ));
+        wp_send_json_success( $leave_types );
     }
 
     function get_leave_types( $args = array() ) {

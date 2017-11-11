@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"1aab8578af4e1355edd7","1":"ff3ddcd2fa14adaa5ce0","2":"eec31ef5be0f9622d272","3":"1fd16a4e1dd52976fef0","4":"0ba4e8bf300c24d59c95","5":"b42685e153830152ca9e","6":"d80d0816b2291cc03de8","7":"257480e4704cfd4847b9","8":"0a6f5bf37b05d78671fe","9":"f1809750bb0faf27c802","10":"4fe35275da18072291d5"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"712d3228e28863aab809","1":"8b1d0b068e36f985b3db","2":"4109f20dd28d9e09c61a","3":"02224eed1439f29a70b8","4":"1164d945c457e2b3e82d","5":"877d17fd858bffc9e6e1","6":"062d56e9e78e21663037","7":"1be42bc6a6e646dea989","8":"a5025d5a017b7cfeead2","9":"b8dcdebd19fecbbe43fb","10":"e9be4d2f69689e8bc819"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10669,6 +10669,7 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		leave_meta: {},
 		current_emp_current_month_leaves: [],
 		pending_leaves: [],
+		departmentDropDown: [],
 		getIndex: function (itemList, id, slug) {
 			var index = false;
 
@@ -10713,6 +10714,9 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		afterDeleteLeave(state, id) {
 			var index = state.getIndex(state.leave_records, id, 'id');
 			state.leave_records.splice(index, 1);
+		},
+		setDepartment(state, dropDown) {
+			state.departmentDropDown = dropDown;
 		}
 	}
 });
@@ -11155,6 +11159,19 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
             }
         },
 
+        showHideLeaveTypeUpdateForm(status, type) {
+            var type = type || false,
+                type = jQuery.isEmptyObject(type) ? false : type;
+
+            if (type) {
+                if (status === 'toggle') {
+                    type.editMode = type.editMode ? false : true;
+                } else {
+                    type.editMode = status;
+                }
+            }
+        },
+
         getLeaveRecords(args) {
             var self = this;
             var pre_define = {};
@@ -11164,6 +11181,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
             var request_data = {
                 data: data,
                 success(res) {
+
                     self.$store.commit('getLeaveRecords', res);
 
                     if (typeof args.callback === 'function') {
@@ -11251,6 +11269,54 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
             };
 
             self.httpRequest('delete_leave', request_data);
+        },
+
+        updateLeaveType(args) {
+            // Exit from this function, If submit button disabled 
+            if (this.submit_disabled) {
+                //return;
+            }
+
+            var self = this;
+            var pre_define = {};
+            var args = jQuery.extend(true, pre_define, args);
+
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: args.data,
+                success(res) {
+                    self.show_spinner = false;
+                    // Display a success toast, with a title
+                    pm.Toastr.success(res.data.success);
+                    self.addLeaveTypeMeta(res.data);
+                    self.submit_disabled = false;
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res.data);
+                    }
+                },
+
+                error(res) {
+                    self.show_spinner = false;
+
+                    // Showing error
+                    res.data.error.map(function (value, index) {
+                        pm.Toastr.error(value);
+                    });
+                    self.submit_disabled = false;
+                }
+            };
+
+            self.httpRequest('create_new_leave_type', request_data);
+        },
+
+        addLeaveTypeMeta(type) {
+            type.editMode = false;
         }
     }
 }));

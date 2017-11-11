@@ -17,6 +17,19 @@ export default Vue.mixin({
 			}
 		},
 
+        showHideLeaveTypeUpdateForm (status, type) {
+            var type   = type || false,
+                type   = jQuery.isEmptyObject(type) ? false : type;
+            
+            if ( type ) {
+                if ( status === 'toggle' ) {
+                    type.editMode = type.editMode ? false : true;
+                } else {
+                    type.editMode = status;
+                }
+            }
+        },
+
 		getLeaveRecords (args) {
 			var self = this;
 			var pre_define = {};
@@ -26,6 +39,7 @@ export default Vue.mixin({
             var request_data = {
                 data: data,
                 success (res) {
+
                     self.$store.commit('getLeaveRecords', res);
 
                     if (typeof args.callback === 'function') {
@@ -116,6 +130,55 @@ export default Vue.mixin({
             }
             
             self.httpRequest('delete_leave', request_data);
+        },
+
+        updateLeaveType (args) {
+            // Exit from this function, If submit button disabled 
+            if ( this.submit_disabled ) {
+                //return;
+            }
+
+            var self = this;
+            var pre_define = {};
+            var args = jQuery.extend(true, pre_define, args );
+            
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: args.data,
+                success (res) {
+                    self.show_spinner = false;
+                    // Display a success toast, with a title
+                    pm.Toastr.success(res.data.success);
+                    self.addLeaveTypeMeta(res.data);
+                    self.submit_disabled = false;
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res.data);
+                    }
+                },
+
+                error (res) {
+                    self.show_spinner = false;
+                    
+                    // Showing error
+                    res.data.error.map( function( value, index ) {
+                        pm.Toastr.error(value);
+                    });
+                    self.submit_disabled = false;
+                }
+            }
+
+            self.httpRequest('create_new_leave_type', request_data);
+            
+        },
+
+        addLeaveTypeMeta (type) {
+            type.editMode = false;
         },
 	},
 });

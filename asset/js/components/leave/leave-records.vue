@@ -35,7 +35,7 @@ export default {
 		'hrm-leave-records-add-btn': leave_record_add_btn,
 		'hrm-leave-records-form': leave_records_form,
 		'hrm-leave-records-render': leave_records_render
-	}
+	},
 }
 
 </script>

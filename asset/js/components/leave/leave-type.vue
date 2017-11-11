@@ -38,6 +38,23 @@
 			}
 		},
 
+		created () {
+			this.getDepartments();
+		},
+
+		methods: {
+			getDepartments () {
+				var self = this;
+				var request_data = {
+					data: {},
+					success (res) {
+						self.$store.commit('setDepartment', res.dept_drop_down);
+					}
+				}
+				this.httpRequest('get_departments', request_data);
+			},
+		}
+
 	};
 
 	export default Hrm_Leave_Type;

@@ -3,6 +3,8 @@ namespace HRM\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use HRM\Models\Leave;
+use HRM\Models\Relation;
+use HRM\Models\Department;
 
 class Leave_Type extends Eloquent {
 
@@ -17,5 +19,9 @@ class Leave_Type extends Eloquent {
 		'entitle_from',
 		'entitle_to',
     ];
+
+    public function departments() {
+    	return $this->belongsToMany( Department::class, 'hrm_relation', 'to', 'from' );
+    }
 
 }

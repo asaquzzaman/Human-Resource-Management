@@ -110,13 +110,18 @@ var Hrm_Leave_Type_Form = {
 			financial_start: HRM_Vars.financial_start,
 			financial_end: HRM_Vars.financial_end,
 			departments: [],
-			departmentDropDown: []
 		}
 	},
 
 	created: function() {
 		this.getDepartments();
 		this.$on('hrm_date_picker', this.setDateTime);
+	},
+
+	computed: {
+		departmentDropDown () {
+			return this.$store.state.departmentDropDown;
+		}
 	},
 
 	components: {
@@ -140,17 +145,6 @@ var Hrm_Leave_Type_Form = {
 				self.$store.commit('isNewLeaveTypeFormVisible', {is_visible: false});
 			});
 						
-		},
-
-		getDepartments () {
-			var self = this;
-			var request_data = {
-				data: {},
-				success (res) {
-					self.departmentDropDown = res.dept_drop_down;
-				}
-			}
-			this.httpRequest('get_departments', request_data);
 		},
 
 		filterDepartmentName (department) {

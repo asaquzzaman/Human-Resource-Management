@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Capsule\Manager as DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection as Collection;
 use HRM\Core\Transformer_Manager;
@@ -11,6 +11,8 @@ use HRM\Models\Leave_Type;
 use HRM\Core\Leave\Leave_Type_Transform as Leave_Type_Transform;
 use HRM\Models\Meta;
 use HRM\Core\Crud\Crud;
+use HRM\Models\Relation;
+
 
 class Hrm_Leave {
 
@@ -366,28 +368,37 @@ class Hrm_Leave {
 
     public function new_leave_type( $postdata ) {
         global $wpdb;
-        
-        $table = $wpdb->prefix . 'hrm_leave_type';
-        $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
+     
+        $table     = $wpdb->prefix . 'hrm_leave_type';
+        $id        = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
         $next_year = filter_var( $postdata['nextYear'], FILTER_VALIDATE_BOOLEAN);
-        $data = array(
-            'leave_type_name' => $postdata['leave_type'],
-            'entitlement'     => $postdata['entitlement'],
-            'entitle_from'    => hrm_financial_start_date(),
-            'entitle_to'      => hrm_financial_end_date(),
-            'carry'           => $next_year ? 1 : 0,
-            'f_year'          => $next_year
-                                ? hrm_get_current_financial_id()
-                                : 0
-        );
 
-        $format = array( '%s', '%d', '%s', '%s', '%d' );
 
         if ( $id ) {
+            $format = array( '%s', '%d' );
+            $data = array(
+                'leave_type_name' => $postdata['leave_type'],
+                'carry'           => $next_year ? 1 : 0,
+            );
+
             $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
             $date['id'] = $id;
 
         } else {
+
+            $data = array(
+                'leave_type_name' => $postdata['leave_type'],
+                'entitlement'     => $postdata['entitlement'],
+                'entitle_from'    => hrm_financial_start_date(),
+                'entitle_to'      => hrm_financial_end_date(),
+                'carry'           => $next_year ? 1 : 0,
+                'f_year'          => $next_year
+                                    ? hrm_get_current_financial_id()
+                                    : 0
+            );
+
+            $format = array( '%s', '%d', '%s', '%s', '%d' );
+
             $result     = $wpdb->insert( $table, $data, $format );
             $date['id'] = $wpdb->insert_id;
         }
@@ -398,7 +409,7 @@ class Hrm_Leave {
             $departments[$dept['id']] = $date['id'];
         };
         
-        $this->add_relation( 'leave_type', $departments );
+        $this->add_relation( 'leave_type', $departments, $id );
 
         if ( $result ) {
             return array( 'type' => $date['id'], 'leave_type' => $data );
@@ -408,18 +419,50 @@ class Hrm_Leave {
 
     }
 
-    function add_relation( $type, $relations ) {
-        global $wpdb;
-        $table = $wpdb->prefix . 'hrm_relation';
+    function add_relation( $type, $relations, $is_update ) {
+       
 
+        if ( $is_update ) {
+            
+            $db_relation = Relation::where('to', $is_update)
+                ->pluck('from')
+                ->toArray();
+            
+
+            $delete = array_filter( $db_relation, function( $dept_id ) use( $relations ) {
+                return array_key_exists($dept_id, $relations) ? false : true;         
+            });
+
+            $new = array_filter( $relations, function( $dept_id ) use( $db_relation ) {
+                return in_array( $dept_id, $db_relation ) ? false : true;      
+            }, ARRAY_FILTER_USE_KEY);
+
+            if ( $new ) {
+                $this->create_relation( 'leave_type', $new );
+            }
+            
+            if ( $delete ) {
+                Relation::whereIn('from', $delete)
+                    ->where('to', $is_update)
+                    ->delete();
+            }
+            
+        } else {
+            $this->create_relation( 'leave_type', $relations );
+        }
+    }
+
+    function create_relation( $type, $relations ) {
         foreach( $relations as $from => $to ) {
-            $wpdb->insert( $table, array(
+
+            Relation::create(array(
                 'type' => $type,
                 'from' => $from,
                 'to'   => $to
             ));
         }
     }
+
 
     public static function ajax_create_new_leave_type() {
         check_ajax_referer('hrm_nonce');

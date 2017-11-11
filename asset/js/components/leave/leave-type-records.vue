@@ -11,18 +11,38 @@
 
 				</thead>
 				<tbody>
-					<tr v-for="record in records">
+					<tr v-for="record in records" class="inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor">
 						
-						<td>{{ record.name }}</td>
-						<td>{{ record.entitlement }}</td>
+						<td v-if="!record.editMode" class="hrm-td">
+							<div class="hrm-td-content">
+								{{ record.name }}
+								<div class="row-actions">
+									<span class="edit">
+										<a @click.prevent="showHideLeaveTypeUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
+											Edit
+										</a> 
+									</span>
+								</div>
+							</div>
 
-						<td v-if="record.next_year === 1">&#x000AF;&#x000AF;</td>
-						<td v-else>{{ dateFormat(record.entitle_from) }}</td>
+						</td>
+						<td v-if="!record.editMode" class="hrm-td">{{ record.entitlement }}</td>
 
-						<td v-if="record.next_year === 1">&#x000AF;&#x000AF;</td>
-						<td v-else>{{ dateFormat(record.entitle_to) }}</td>
+						<td class="hrm-td" v-if="!record.editMode">
+							<span v-if="record.next_year === 1">&#x000AF;&#x000AF;</span>
+							<span v-else>{{ dateFormat(record.entitle_from) }}</span>
+						</td>
 
-						<td>{{ carryStatus(record.next_year) }}</td>
+						<td class="hrm-td" v-if="!record.editMode">
+							<span v-if="record.next_year === 1">&#x000AF;&#x000AF;</span>
+							<span v-else>{{ dateFormat(record.entitle_to) }}</span>
+						</td>
+
+						<td v-if="!record.editMode" class="hrm-td">{{ carryStatus(record.next_year) }}</td>
+
+						<td v-if="record.editMode" colspan="5">
+							<leave-type-edit-form :leaveType="record"></leave-type-edit-form>
+						</td>
 					</tr>
 					<tr v-if="!records.length">
 						
@@ -36,9 +56,20 @@
 
 </template>
 
+<style>
+	.hrm-td-editble-wrap .inline-edit-legend {
+		margin: 0;
+	    padding: 0.2em 0.5em 0;
+	    line-height: 2.5;
+	    font-weight: 600;
+	}
+
+</style>
+
 <script>
 	import HRM_Mixin from './../../mixin';
 	import HRM_Leave_Store from './leave-store';
+	import Edit from './leave-type-edit-form.vue';
 	
 	var Hrm_Leave_Type_Records = {
 
@@ -53,8 +84,8 @@
 			}
 		},
 
-		computed: {
-
+		components: {
+			'leave-type-edit-form': Edit
 		},
 
 		created: function() {
@@ -70,6 +101,9 @@
 	            wp.ajax.send('get_leave_type', {
 	                data: request_data,
 	                success: function(res) {
+	                	res.data.forEach(function(type, index) {
+	                		self.addLeaveTypeMeta(type);
+	                	});
 	                    self.records = res.data;
 	                },
 
@@ -81,7 +115,10 @@
 
 			carryStatus (next_year) {
 				return parseInt(next_year) ? 'Enable' : 'Disable'; 
-			}
+			},
+			showHideLeaveTypeEditForm (status, type) {
+				this.$store.commit();
+			},
 		}
 	};
 

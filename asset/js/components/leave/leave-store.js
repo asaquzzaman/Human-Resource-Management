@@ -16,6 +16,7 @@ var HRM_Leave_Store = new Vuex.Store({
 		leave_meta: {},
 		current_emp_current_month_leaves: [],
 		pending_leaves: [],
+		departmentDropDown: [],
 		getIndex: function ( itemList, id, slug) {
             var index = false;
 
@@ -60,6 +61,9 @@ var HRM_Leave_Store = new Vuex.Store({
 		afterDeleteLeave (state, id) {
 			var index = state.getIndex(state.leave_records, id, 'id');
 			state.leave_records.splice( index, 1 );
+		},
+		setDepartment (state, dropDown) {
+			state.departmentDropDown = dropDown;
 		}
 	}
 });

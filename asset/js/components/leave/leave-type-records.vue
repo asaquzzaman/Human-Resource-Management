@@ -22,6 +22,12 @@
 											Edit
 										</a> 
 									</span>
+									|
+									<span class="edit">
+										<a @click.prevent="selfDeleteLeaveType(record)" href="#" aria-label="Edit “Hello world!”">
+											Delete
+										</a> 
+									</span>
 								</div>
 							</div>
 
@@ -119,6 +125,16 @@
 			showHideLeaveTypeEditForm (status, type) {
 				this.$store.commit();
 			},
+			selfDeleteLeaveType (record) {
+				var data = {
+					id: record.id,
+					callback: function () {
+
+					}
+				}
+
+				this.deleteLeaveType(data);
+			}
 		}
 	};
 

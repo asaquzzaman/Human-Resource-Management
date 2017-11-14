@@ -167,7 +167,7 @@ export default Vue.mixin({
                     
                     // Showing error
                     res.data.error.map( function( value, index ) {
-                        pm.Toastr.error(value);
+                        toastr.error(value);
                     });
                     self.submit_disabled = false;
                 }
@@ -180,5 +180,43 @@ export default Vue.mixin({
         addLeaveTypeMeta (type) {
             type.editMode = false;
         },
+
+        deleteLeaveType (args) {
+
+        
+            if ( ! confirm( 'Are you sure' ) ) {
+                return;
+            }
+            var self = this;
+            var pre_define = {
+                    id: false,
+                    callback: false
+                };
+
+            var args = jQuery.extend(true, pre_define, args );
+
+            var request_data = {
+                data: {
+                    'id': args.id
+                },
+                success: function() {
+                    
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    } 
+                },
+                error: function(res) {
+  
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map( function( value, index ) {
+                        toastr.error(value);
+                    });
+                }
+            }
+            
+            self.httpRequest('delete_leave_type', request_data);
+        
+        }
 	},
 });

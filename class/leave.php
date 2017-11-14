@@ -867,9 +867,43 @@ class Hrm_Leave {
     }
 
     public function delete_leave($leave_id) {
-        if ( $leave_id ) {
-            Leave::find( $leave_id )->delete();
+        
+        $leave = Leave::find( $leave_id );
+
+        if ( $leave ) {
+            $leave->delete();
         }
+        
+    }
+
+    public static function ajax_delete_leave_type() {
+        $id = absint( $_POST['id'] );
+        
+        $delete = self::delete_leave_type( $id );
+        
+        if ( is_wp_error( $delete ) ) {
+            wp_send_json_error( array( 'error' => $delete->get_error_messages() ) );
+        } else {
+            wp_send_json_success();
+        }
+    }
+
+    public function delete_leave_type( $leave_type_id ) {
+
+        $has_leave = Leave::where( 'type', $leave_type_id )->get()->toArray();
+
+        if ( $has_leave ) {
+            return new WP_Error( 'error', __( 'Some employee are taken leave from this leave type', 'hrm' ) );
+        }
+
+        $leave_type = Leave_Type::find($leave_type_id);
+
+        if ( $leave_type ) {
+            return $leave_type->delete();
+        }
+
+        return false;
+
     }
 }
 

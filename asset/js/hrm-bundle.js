@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"712d3228e28863aab809","1":"8b1d0b068e36f985b3db","2":"4109f20dd28d9e09c61a","3":"02224eed1439f29a70b8","4":"1164d945c457e2b3e82d","5":"877d17fd858bffc9e6e1","6":"062d56e9e78e21663037","7":"1be42bc6a6e646dea989","8":"a5025d5a017b7cfeead2","9":"b8dcdebd19fecbbe43fb","10":"e9be4d2f69689e8bc819"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"712d3228e28863aab809","1":"c44d3f412df81c8b199e","2":"4109f20dd28d9e09c61a","3":"02224eed1439f29a70b8","4":"1164d945c457e2b3e82d","5":"877d17fd858bffc9e6e1","6":"062d56e9e78e21663037","7":"1be42bc6a6e646dea989","8":"a5025d5a017b7cfeead2","9":"b8dcdebd19fecbbe43fb","10":"e9be4d2f69689e8bc819"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -11306,7 +11306,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 
                     // Showing error
                     res.data.error.map(function (value, index) {
-                        pm.Toastr.error(value);
+                        toastr.error(value);
                     });
                     self.submit_disabled = false;
                 }
@@ -11317,6 +11317,42 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 
         addLeaveTypeMeta(type) {
             type.editMode = false;
+        },
+
+        deleteLeaveType(args) {
+
+            if (!confirm('Are you sure')) {
+                return;
+            }
+            var self = this;
+            var pre_define = {
+                id: false,
+                callback: false
+            };
+
+            var args = jQuery.extend(true, pre_define, args);
+
+            var request_data = {
+                data: {
+                    'id': args.id
+                },
+                success: function () {
+
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    }
+                },
+                error: function (res) {
+
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map(function (value, index) {
+                        toastr.error(value);
+                    });
+                }
+            };
+
+            self.httpRequest('delete_leave_type', request_data);
         }
     }
 }));

@@ -31,7 +31,7 @@ return array(
     'HRM\\Models\\Department' => $baseDir . '/models/Department.php',
     'HRM\\Models\\Financial_Year' => $baseDir . '/models/Financial_Year.php',
     'HRM\\Models\\Leave' => $baseDir . '/models/Leave.php',
-    'HRM\\Models\\Leave_Type' => $baseDir . '/models/leave-type.php',
+    'HRM\\Models\\Leave_Type' => $baseDir . '/models/Holiday.php',
     'HRM\\Models\\Meta' => $baseDir . '/models/meta.php',
     'HRM\\Models\\Relation' => $baseDir . '/models/Relation.php',
     'HRM\\Models\\User' => $baseDir . '/models/user.php',

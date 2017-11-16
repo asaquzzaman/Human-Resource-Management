@@ -102,6 +102,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_leave_type', array( 'Hrm_Leave', 'ajax_get_leave_type' ) );
         add_action( 'wp_ajax_create_new_holidays', array( 'Hrm_Leave', 'ajax_create_new_holidays' ) );
         add_action( 'wp_ajax_get_holidays', array( 'Hrm_Leave', 'ajax_get_holidays' ) );
+        add_action( 'wp_ajax_delete_holiday', array( 'Hrm_Leave', 'ajax_delete_holiday' ) );
         add_action( 'wp_ajax_save_work_week', array( 'Hrm_Leave', 'ajax_save_work_week' ) );
         add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
         add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );

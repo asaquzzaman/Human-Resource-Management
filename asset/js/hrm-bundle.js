@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"712d3228e28863aab809","1":"c44d3f412df81c8b199e","2":"4109f20dd28d9e09c61a","3":"02224eed1439f29a70b8","4":"1164d945c457e2b3e82d","5":"877d17fd858bffc9e6e1","6":"062d56e9e78e21663037","7":"1be42bc6a6e646dea989","8":"a5025d5a017b7cfeead2","9":"b8dcdebd19fecbbe43fb","10":"e9be4d2f69689e8bc819"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"dbd709a6b7df91fc9ad8","1":"4c02d9e5713be91a1c4b","2":"84f55754ad11d8fdb0fd","3":"62e226b01077669677e8","4":"f2e0b637a3557aab1672","5":"d93c0440ddc134f05c29","6":"19ffb9f04aac8b08336c","7":"a76cfdb719d95f0b9d12","8":"14d35b30cd9dfe083ea1","9":"872fa1a0d5e3007d6c15","10":"eb7d2d79da091b7f0884"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10393,7 +10393,7 @@ module.exports = function normalizeComponent (
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return requested; });
 const Hrm_Leave_Records = resolve => {
 
-    __webpack_require__.e/* require.ensure */(0).then((() => {
+    __webpack_require__.e/* require.ensure */(1).then((() => {
         resolve(__webpack_require__(16));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10417,7 +10417,7 @@ const Hrm_Leave_Configuration = resolve => {
 };
 const Hrm_Leave_Type = resolve => {
 
-    __webpack_require__.e/* require.ensure */(1).then((() => {
+    __webpack_require__.e/* require.ensure */(0).then((() => {
         resolve(__webpack_require__(18));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10670,6 +10670,7 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		current_emp_current_month_leaves: [],
 		pending_leaves: [],
 		departmentDropDown: [],
+		holidays: [],
 		getIndex: function (itemList, id, slug) {
 			var index = false;
 
@@ -10717,6 +10718,20 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		},
 		setDepartment(state, dropDown) {
 			state.departmentDropDown = dropDown;
+		},
+		setHoliday(state, holidays) {
+			state.holidays = holidays;
+		},
+		updateHolidays(state, holidays) {
+			state.holidays.push(holidays);
+		},
+		afterUpdateHoliday(state, holiday) {
+			var index = state.getIndex(state.holidays, holiday.id, 'id');
+			state.holidays.splice(index, 1, holiday);
+		},
+		afterDeleteHoliday(state, id) {
+			var index = state.getIndex(state.holidays, id, 'id');
+			state.holidays.splice(index, 1);
 		}
 	}
 });
@@ -11172,6 +11187,19 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
             }
         },
 
+        showHideHolidayUpdateForm(status, holiday) {
+            var holiday = holiday || false,
+                holiday = jQuery.isEmptyObject(holiday) ? false : holiday;
+
+            if (holiday) {
+                if (status === 'toggle') {
+                    holiday.editMode = holiday.editMode ? false : true;
+                } else {
+                    holiday.editMode = status;
+                }
+            }
+        },
+
         getLeaveRecords(args) {
             var self = this;
             var pre_define = {};
@@ -11292,7 +11320,7 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
                 success(res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
-                    pm.Toastr.success(res.data.success);
+                    toastr.success(res.data.success);
                     self.addLeaveTypeMeta(res.data);
                     self.submit_disabled = false;
 
@@ -11317,6 +11345,10 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
 
         addLeaveTypeMeta(type) {
             type.editMode = false;
+        },
+
+        addHolidayMeta(holiday) {
+            holiday.editMode = false;
         },
 
         deleteLeaveType(args) {
@@ -11353,6 +11385,93 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
             };
 
             self.httpRequest('delete_leave_type', request_data);
+        },
+        updateHoliday(args) {
+            // Exit from this function, If submit button disabled 
+            if (this.submit_disabled) {
+                return;
+            }
+
+            var self = this;
+            var pre_define = {};
+            var args = jQuery.extend(true, pre_define, args);
+
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: args.data,
+                success(res) {
+                    self.show_spinner = false;
+                    // Display a success toast, with a title
+                    toastr.success(res.success);
+                    self.addHolidayMeta(res.holiday);
+                    self.submit_disabled = false;
+
+                    self.$store.commit('afterUpdateHoliday', res.holiday);
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res.data);
+                    }
+                },
+
+                error(res) {
+                    self.show_spinner = false;
+
+                    // Showing error
+                    res.data.error.map(function (value, index) {
+                        toastr.error(value);
+                    });
+                    self.submit_disabled = false;
+                }
+            };
+
+            self.httpRequest('create_new_holidays', request_data);
+        },
+
+        deleteHoliday(args) {
+            if (!confirm('Are you sure')) {
+                return;
+            }
+            // Exit from this function, If submit button disabled 
+            if (this.submit_disabled) {
+                return;
+            }
+
+            let self = this;
+            let pre_define = {};
+            args = jQuery.extend(true, pre_define, args);
+
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: {
+                    'id': args.id
+                },
+                success: function (res) {
+                    self.$store.commit('afterDeleteHoliday', args.id);
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    }
+                },
+                error: function (res) {
+
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map(function (value, index) {
+                        toastr.error(value);
+                    });
+                }
+            };
+
+            self.httpRequest('delete_holiday', request_data);
         }
     }
 }));

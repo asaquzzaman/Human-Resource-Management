@@ -30,6 +30,19 @@ export default Vue.mixin({
             }
         },
 
+        showHideHolidayUpdateForm (status, holiday) {
+            var holiday   = holiday || false,
+                holiday   = jQuery.isEmptyObject(holiday) ? false : holiday;
+            
+            if ( holiday ) {
+                if ( status === 'toggle' ) {
+                    holiday.editMode = holiday.editMode ? false : true;
+                } else {
+                    holiday.editMode = status;
+                }
+            }
+        },
+
 		getLeaveRecords (args) {
 			var self = this;
 			var pre_define = {};
@@ -153,7 +166,7 @@ export default Vue.mixin({
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
-                    pm.Toastr.success(res.data.success);
+                    toastr.success(res.data.success);
                     self.addLeaveTypeMeta(res.data);
                     self.submit_disabled = false;
 
@@ -181,8 +194,11 @@ export default Vue.mixin({
             type.editMode = false;
         },
 
-        deleteLeaveType (args) {
+        addHolidayMeta (holiday) {
+            holiday.editMode = false;
+        },
 
+        deleteLeaveType (args) {
         
             if ( ! confirm( 'Are you sure' ) ) {
                 return;
@@ -217,6 +233,93 @@ export default Vue.mixin({
             
             self.httpRequest('delete_leave_type', request_data);
         
+        },
+        updateHoliday (args) {
+            // Exit from this function, If submit button disabled 
+            if ( this.submit_disabled ) {
+                return;
+            }
+
+            var self = this;
+            var pre_define = {};
+            var args = jQuery.extend(true, pre_define, args );
+            
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: args.data,
+                success (res) {
+                    self.show_spinner = false;
+                    // Display a success toast, with a title
+                    toastr.success(res.success);
+                    self.addHolidayMeta(res.holiday);
+                    self.submit_disabled = false;
+                    
+                    self.$store.commit('afterUpdateHoliday', res.holiday);
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res.data);
+                    }
+                },
+
+                error (res) {
+                    self.show_spinner = false;
+                    
+                    // Showing error
+                    res.data.error.map( function( value, index ) {
+                        toastr.error(value);
+                    });
+                    self.submit_disabled = false;
+                }
+            }
+
+            self.httpRequest('create_new_holidays', request_data);
+        },
+
+        deleteHoliday (args) {
+            if ( ! confirm( 'Are you sure' ) ) {
+                return;
+            }
+            // Exit from this function, If submit button disabled 
+            if ( this.submit_disabled ) {
+                return;
+            }
+
+            let self = this;
+            let pre_define = {};
+            args = jQuery.extend(true, pre_define, args );
+            
+            // Disable submit button for preventing multiple click
+            this.submit_disabled = true;
+
+            // Showing loading option 
+            this.show_spinner = true;
+
+            var request_data = {
+                data: {
+                    'id': args.id
+                },
+                success: function(res) {
+                    self.$store.commit('afterDeleteHoliday', args.id);
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    } 
+                },
+                error: function(res) {
+  
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map( function( value, index ) {
+                        toastr.error(value);
+                    });
+                }
+            }
+            
+            self.httpRequest('delete_holiday', request_data);
         }
 	},
 });

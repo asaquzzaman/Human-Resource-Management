@@ -17,6 +17,7 @@ var HRM_Leave_Store = new Vuex.Store({
 		current_emp_current_month_leaves: [],
 		pending_leaves: [],
 		departmentDropDown: [],
+		holidays: [],
 		getIndex: function ( itemList, id, slug) {
             var index = false;
 
@@ -64,6 +65,20 @@ var HRM_Leave_Store = new Vuex.Store({
 		},
 		setDepartment (state, dropDown) {
 			state.departmentDropDown = dropDown;
+		},
+		setHoliday (state, holidays) {
+			state.holidays = holidays;
+		},
+		updateHolidays (state, holidays) {
+			state.holidays.push(holidays);
+		},
+		afterUpdateHoliday (state, holiday) {
+			var index = state.getIndex(state.holidays, holiday.id, 'id');
+			state.holidays.splice( index, 1, holiday );
+		},
+		afterDeleteHoliday (state, id) {
+			var index = state.getIndex(state.holidays, id, 'id');
+			state.holidays.splice( index, 1 );
 		}
 	}
 });

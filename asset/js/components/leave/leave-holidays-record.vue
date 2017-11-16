@@ -12,10 +12,29 @@
 				<tbody>
 					<tr v-for="record in records">
 						
-						<td>{{ record.name }}</td>
-						<td>{{ record.from }}</td>
-						<td>{{ record.to }}</td>
-						<td>{{ record.description }}</td>
+						<td v-if="!record.editMode">
+							{{ record.name }}
+							<div class="row-actions">
+								<span class="edit">
+									<a @click.prevent="showHideHolidayUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
+										Edit
+									</a> 
+								</span>
+								|
+								<span class="edit">
+									<a @click.prevent="selfDeleteHoliday(record)" href="#" aria-label="Edit “Hello world!”">
+										Delete
+									</a> 
+								</span>
+							</div>
+						</td>
+						<td v-if="!record.editMode">{{ dateFormat(record.from) }}</td>
+						<td v-if="!record.editMode">{{ dateFormat(record.to) }}</td>
+						<td v-if="!record.editMode">{{ record.description }}</td>
+
+						<td v-if="record.editMode" colspan="4">
+							<holiday-edit-form :holiday="record"></holiday-edit-form>
+						</td>
 					</tr>
 					<tr v-if="!records.length">
 						
@@ -30,6 +49,7 @@
 
 <script>
 	import HRM_Mixin from './../../mixin';
+	import EditForm from './holiday-edit-form.vue';
 
 	export default {
 
@@ -39,18 +59,34 @@
 		
 		data: function() {
 			return {
-				records: []
+				
 			}
 		},
 
-		computed: {
+		components: {
+			'holiday-edit-form': EditForm,
+		},
 
+		computed: {
+			records () {
+				return this.$store.state.holidays;
+			}
 		},
 
 		created: function() {
 			this.getHolidays();
 		},
 		methods: {
+			selfDeleteHoliday (holiday) {
+				let formData = {
+					id: holiday.id,
+					callback () {
+
+					}
+				}
+
+				this.deleteHoliday(formData);
+			},
 			getHolidays: function() {
 				var request_data = {
 	                _wpnonce: HRM_Vars.nonce,
@@ -60,8 +96,11 @@
 	            wp.ajax.send('get_holidays', {
 	                data: request_data,
 	                success: function(res) {
-	                	
-	                    self.records = res.holidays;
+	                	res.holidays.forEach(function(holiday) {
+	                		self.addHolidayMeta(holiday);
+	                	});
+
+	                    self.$store.commit('setHoliday', res.holidays);
 	                },
 
 	                error: function(res) {

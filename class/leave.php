@@ -12,6 +12,7 @@ use HRM\Core\Leave\Leave_Type_Transform as Leave_Type_Transform;
 use HRM\Models\Meta;
 use HRM\Core\Crud\Crud;
 use HRM\Models\Relation;
+use HRM\Models\Holiday;
 
 
 class Hrm_Leave {
@@ -536,14 +537,14 @@ class Hrm_Leave {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
 
-        $holidays = self::getInstance()->create_new_holidays( $postdata );
+        $holiday = self::getInstance()->create_new_holidays( $postdata );
 
-        if ( is_wp_error( $holidays ) ) {
-            wp_send_json_error( array( 'error' => $holidays->get_error_messages() ) ); 
+        if ( is_wp_error( $holiday ) ) {
+            wp_send_json_error( array( 'error' => $holiday->get_error_messages() ) ); 
         } else {
             wp_send_json_success( array( 
-                'holidays'  => $holidays, 
-                'success'     => __( 'Leave type has been created successfully', 'hrm' ) 
+                'holiday'  => $holiday, 
+                'success'     => __( 'Holiday has been created successfully', 'hrm' ) 
             ) );
         }
     }
@@ -554,33 +555,39 @@ class Hrm_Leave {
         $table = $wpdb->prefix . 'hrm_holiday';
         $id = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
 
-        $data = array(
-            'name'        => $postdata['name'],
-            'from'        => $postdata['from'],
-            'to'          => $postdata['to'],
-            'description' => $postdata['description']
-        );
-
-        $format = array( '%s', '%s', '%s', '%s' );
-
         if ( $id ) {
+            $data = array(
+                'name'        => $postdata['name'],
+                'description' => $postdata['description']
+            );
+            $format = array( '%s', '%s' );
             $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
-            $date['id'] = $id;
+            $data['id'] = $id;
+            $data = $this->get_holidays(array('id' => $data['id']));
+
+            $data = $data ? $data[0] : array();
 
         } else {
+            $data = array(
+                'name'        => $postdata['name'],
+                'from'        => $postdata['from'],
+                'to'          => $postdata['to'],
+                'description' => $postdata['description']
+            );
+            $format = array( '%s', '%s', '%s', '%s' );
             $result     = $wpdb->insert( $table, $data, $format );
-            $date['id'] = $wpdb->insert_id;
+            $data['id'] = $wpdb->insert_id;
         }
-
-        if ( $result ) {
-            return array( 'type' => $date['id'], 'leave_type' => $data );
-        }
+        
+       
+        return $data;
+        
 
         return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
 
     }
 
-    function ajax_get_holidays() {
+    public static function ajax_get_holidays() {
         check_ajax_referer('hrm_nonce');
         
         $holidays = self::getInstance()->get_holidays();
@@ -594,8 +601,8 @@ class Hrm_Leave {
         global $wpdb;
 
         $defaults = array(
-            'from' => date( 'Y-01-01 00:00:00' ),
-            'to'   => date( 'Y-12-31 24:59:59' )
+            'from' => hrm_financial_start_date(),
+            'to'   => hrm_financial_end_date()
         );
 
         $args = wp_parse_args( $args, $defaults );
@@ -622,6 +629,15 @@ class Hrm_Leave {
                             'value'     => $arg,
                             'condition' => '<='
                         );
+                        break;
+                    case 'id':
+                        $query_args[] = array(
+                            'field'     => 'id',
+                            'value'     => $arg,
+                            'condition' => '='
+                        );
+                        break;
+
                 }
 
             }
@@ -904,6 +920,24 @@ class Hrm_Leave {
 
         return false;
 
+    }
+
+    public static function ajax_delete_holiday() {
+        check_ajax_referer('hrm_nonce');
+        $holiday_id = intval( $_POST['id'] );
+        self::getInstance()->delete_holiday($holiday_id);
+        wp_send_json_success();
+    }
+
+    public function delete_holiday( $holiday_id ) {
+        
+        $holiday = Holiday::find($holiday_id);
+
+        if ( $holiday ) {
+            return $holiday->delete();
+        }
+
+        return false;
     }
 }
 

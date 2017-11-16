@@ -18,20 +18,9 @@
 							<span class="description"></span>
 						</div>
 
-						<div class="hrm-form-field ">
-							<label for="hrm-leave-holidays-from-text-field">
-								From <em>  *</em>
-							</label>
-							<input type="text" v-hrm-datepicker="" class="hrm-date-picker-from" id="hrm-leave-holidays-from-text-field" required="required" :value="from" name="from">
-							<span class="hrm-clear"></span>
-							<span class="description"></span>
-						</div>
-
-						<div class="hrm-form-field ">
-							<label for="hrm-leave-holidays-to-text-field">
-								To<em>  *</em>
-							</label>
-							<input type="text" v-hrm-datepicker="" class="hrm-date-picker-to" id="hrm-leave-holidays-to-text-field" required="required" :value="to" name="to">
+						<div  class="hrm-form-field">
+							<label for="hrm-leave-entitlement-text-field">Duration</label>
+							<div>From <strong>{{ dateFormat(financial_start) }}</strong> to <strong>{{ dateFormat(financial_end) }}</strong></div>
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>
@@ -56,7 +45,7 @@
 
 <script>
 	import HRM_Mixin from './../../mixin';
-	console.log(HRM_Mixin);
+	
 	export default {
 		
 		mixins: [HRM_Mixin],
@@ -65,6 +54,8 @@
 		
 		data: function() {
 			return {
+				financial_start: HRM_Vars.financial_start,
+				financial_end: HRM_Vars.financial_end,
 				name: '',
 				from: '',
 				to: '',
@@ -98,10 +89,10 @@
 			createNewHolidays: function() {
 				
 			    var request_data = {
-	                _wpnonce: hrm_ajax_data.nonce,
+	                _wpnonce: HRM_Vars.nonce,
 	                name: this.name,
-	                from: this.from,
-	                to: this.to,
+	                from: this.financial_start,
+	                to: this.financial_end,
 	                description: this.description,
 	            },
 	            
@@ -120,12 +111,16 @@
 	                
 	                success: function(res) {
 	                	self.show_spinner = false;
+
+	                	self.addHolidayMeta(res.holiday);
+
+	                	self.$store.commit('updateHolidays', res.holiday);
 	                    
 	                    // Display a success toast, with a title
 	                    toastr.success(res.success);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-	                    	self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+	                    	//self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
 	                    });
 
 	                    

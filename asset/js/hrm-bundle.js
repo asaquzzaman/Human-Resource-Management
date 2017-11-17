@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"dbd709a6b7df91fc9ad8","1":"4c02d9e5713be91a1c4b","2":"82119c849910d99518f2","3":"62e226b01077669677e8","4":"f2e0b637a3557aab1672","5":"d93c0440ddc134f05c29","6":"19ffb9f04aac8b08336c","7":"a76cfdb719d95f0b9d12","8":"14d35b30cd9dfe083ea1","9":"872fa1a0d5e3007d6c15","10":"eb7d2d79da091b7f0884"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"af3fd5452896b233fb77","1":"4c02d9e5713be91a1c4b","2":"82119c849910d99518f2","3":"62e226b01077669677e8","4":"f2e0b637a3557aab1672","5":"d93c0440ddc134f05c29","6":"19ffb9f04aac8b08336c","7":"75b85d063c55ea486767","8":"14d35b30cd9dfe083ea1","9":"872fa1a0d5e3007d6c15","10":"eb7d2d79da091b7f0884"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10674,6 +10674,7 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		pending_leaves: [],
 		departmentDropDown: [],
 		holidays: [],
+		leaveTypes: [],
 		getIndex: function (itemList, id, slug) {
 			var index = false;
 
@@ -10735,6 +10736,17 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		afterDeleteHoliday(state, id) {
 			var index = state.getIndex(state.holidays, id, 'id');
 			state.holidays.splice(index, 1);
+		},
+		setLeaveTypes(state, leaveTypes) {
+			state.leaveTypes = leaveTypes;
+		},
+		setNewLeaveType(state, leaveType) {
+			state.leaveTypes.push(leaveType);
+		},
+
+		afterDeleteLeaveType(state, id) {
+			var index = state.getIndex(state.leaveTypes, id, 'id');
+			state.leaveTypes.splice(index, 1);
 		}
 	}
 });
@@ -11412,6 +11424,8 @@ __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a.directive('hrm-leave-jquery-ful
                     'id': args.id
                 },
                 success: function () {
+
+                    self.$store.commit('afterDeleteLeaveType', args.id);
 
                     if (typeof args.callback === 'function') {
                         args.callback();

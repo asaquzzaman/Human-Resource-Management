@@ -39,11 +39,11 @@
 		},
 
 		created () {
-			this.getDepartments();
+			this.getSelfDepartments();
 		},
 
 		methods: {
-			getDepartments () {
+			getSelfDepartments () {
 				var self = this;
 				var request_data = {
 					data: {},

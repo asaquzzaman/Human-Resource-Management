@@ -86,7 +86,12 @@
 		
 		data: function() {
 			return {
-				records: []
+			}
+		},
+
+		computed: {
+			records () {
+				return this.$store.state.leaveTypes;
 			}
 		},
 
@@ -110,7 +115,8 @@
 	                	res.data.forEach(function(type, index) {
 	                		self.addLeaveTypeMeta(type);
 	                	});
-	                    self.records = res.data;
+	                    
+	                    self.$store.commit('setLeaveTypes', res.data);
 	                },
 
 	                error: function(res) {

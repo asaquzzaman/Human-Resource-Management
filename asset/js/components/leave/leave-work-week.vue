@@ -139,19 +139,17 @@
 	                data: request_data,
 	                
 	                success: function(res) {
-	                	console.log(res);
+	                
 	                    // Display a success toast, with a title
 	                    //toastr.success(res.success);
 	                    
-						self.saturday  = res.work_week.saturday;
-						self.sunday    = res.work_week.sunday;
-						self.monday    = 'full';
-						self.tuesday   = res.work_week.tuesday;
-						self.wednesday = res.work_week.wednesday;
-						self.thursday  = res.work_week.thursday;
-						self.friday    =  res.work_week.friday;
-
-						console.log(self.monday);
+						self.saturday  = res.work_week.saturday ? res.work_week.saturday : 'full';
+						self.sunday    = res.work_week.sunday ? res.work_week.sunday : 'full';
+						self.monday    = res.work_week.monday ? res.work_week.monday : 'full';
+						self.tuesday   = res.work_week.tuesday ? res.work_week.tuesday : 'full';
+						self.wednesday = res.work_week.wednesday ? res.work_week.wednesday : 'full';
+						self.thursday  = res.work_week.thursday ? res.work_week.thursday : 'full';
+						self.friday    = res.work_week.friday ? res.work_week.friday : 'full';
 					
 	                },
 

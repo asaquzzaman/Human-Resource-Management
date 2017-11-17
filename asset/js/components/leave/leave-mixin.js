@@ -216,6 +216,8 @@ export default Vue.mixin({
                     'id': args.id
                 },
                 success: function() {
+
+                    self.$store.commit('afterDeleteLeaveType', args.id);
                     
                     if (typeof args.callback === 'function') {
                         args.callback();

@@ -9,7 +9,7 @@ class Leave_Type_Transform extends TransformerAbstract {
  //        'departments'
  //    ];
 
-	public function transform( Leave_Type $item ) {
+	public function transform( $item ) {
 		return [
 			'id'           => $item->id,
 			'name'         => $item->leave_type_name,

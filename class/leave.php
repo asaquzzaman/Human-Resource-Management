@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Capsule\Manager as DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal;
 use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Resource\Item;
 use HRM\Core\Transformer_Manager;
 use HRM\Core\Leave\Leave_Transformer;
 use HRM\Models\Leave;
@@ -367,59 +369,6 @@ class Hrm_Leave {
         wp_send_json_success( array( 'header' => $leave ) );
     }
 
-    public function new_leave_type( $postdata ) {
-        global $wpdb;
-     
-        $table     = $wpdb->prefix . 'hrm_leave_type';
-        $id        = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
-        $next_year = filter_var( $postdata['nextYear'], FILTER_VALIDATE_BOOLEAN);
-
-
-        if ( $id ) {
-            $format = array( '%s', '%d' );
-            $data = array(
-                'leave_type_name' => $postdata['leave_type'],
-                'carry'           => $next_year ? 1 : 0,
-            );
-
-            $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
-            $date['id'] = $id;
-
-        } else {
-
-            $data = array(
-                'leave_type_name' => $postdata['leave_type'],
-                'entitlement'     => $postdata['entitlement'],
-                'entitle_from'    => hrm_financial_start_date(),
-                'entitle_to'      => hrm_financial_end_date(),
-                'carry'           => $next_year ? 1 : 0,
-                'f_year'          => $next_year
-                                    ? hrm_get_current_financial_id()
-                                    : 0
-            );
-
-            $format = array( '%s', '%d', '%s', '%s', '%d' );
-
-            $result     = $wpdb->insert( $table, $data, $format );
-            $date['id'] = $wpdb->insert_id;
-        }
-
-        $departments = array();
-
-        foreach ( $postdata['departments'] as $key => $dept ) {
-            $departments[$dept['id']] = $date['id'];
-        };
-        
-        $this->add_relation( 'leave_type', $departments, $id );
-
-        if ( $result ) {
-            return array( 'type' => $date['id'], 'leave_type' => $data );
-        }
-
-        return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
-
-    }
-
     function add_relation( $type, $relations, $is_update ) {
        
 
@@ -479,6 +428,65 @@ class Hrm_Leave {
                 'success'     => __( 'Leave type has been created successfully', 'hrm' ) 
             ) );
         }
+    }
+
+    public function new_leave_type( $postdata ) {
+        global $wpdb;
+     
+        $table     = $wpdb->prefix . 'hrm_leave_type';
+        $id        = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
+        $next_year = filter_var( $postdata['nextYear'], FILTER_VALIDATE_BOOLEAN);
+
+
+        if ( $id ) {
+            $format = array( '%s', '%d' );
+            $data = array(
+                'leave_type_name' => $postdata['leave_type'],
+                'carry'           => $next_year ? 1 : 0,
+            );
+
+            $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
+            $data['id'] = $id;
+
+        } else {
+
+            $data = array(
+                'leave_type_name' => $postdata['leave_type'],
+                'entitlement'     => $postdata['entitlement'],
+                'entitle_from'    => hrm_financial_start_date(),
+                'entitle_to'      => hrm_financial_end_date(),
+                'carry'           => $next_year ? 1 : 0,
+                'f_year'          => $next_year
+                                    ? hrm_get_current_financial_id()
+                                    : 0
+            );
+
+            $format = array( '%s', '%d', '%s', '%s', '%d' );
+
+            $result     = $wpdb->insert( $table, $data, $format );
+            $data['id'] = $wpdb->insert_id;
+        }
+
+        $departments = array();
+
+        foreach ( $postdata['departments'] as $key => $dept ) {
+            $departments[$dept['id']] = $data['id'];
+        };
+        
+        $this->add_relation( 'leave_type', $departments, $id );
+
+        $resource = new Item( (object) $data, new Leave_Type_Transform ); 
+        $transform = new Transformer_Manager();
+
+        $send = $transform->get_response( $resource );
+
+
+        if ( $result ) {
+            return $send;
+        }
+
+        return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
+
     }
 
     public static function ajax_get_leave_type() {

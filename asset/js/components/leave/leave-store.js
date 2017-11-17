@@ -18,6 +18,7 @@ var HRM_Leave_Store = new Vuex.Store({
 		pending_leaves: [],
 		departmentDropDown: [],
 		holidays: [],
+		leaveTypes: [],
 		getIndex: function ( itemList, id, slug) {
             var index = false;
 
@@ -79,6 +80,17 @@ var HRM_Leave_Store = new Vuex.Store({
 		afterDeleteHoliday (state, id) {
 			var index = state.getIndex(state.holidays, id, 'id');
 			state.holidays.splice( index, 1 );
+		},
+		setLeaveTypes (state, leaveTypes) {
+			state.leaveTypes = leaveTypes;
+		},
+		setNewLeaveType (state, leaveType) {
+			state.leaveTypes.push(leaveType);
+		},
+
+		afterDeleteLeaveType (state, id) {
+			var index = state.getIndex(state.leaveTypes, id, 'id');
+			state.leaveTypes.splice( index, 1 );
 		}
 	}
 });

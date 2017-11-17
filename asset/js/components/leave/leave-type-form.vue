@@ -114,7 +114,7 @@ var Hrm_Leave_Type_Form = {
 	},
 
 	created: function() {
-		this.getDepartments();
+		//this.getDepartments();
 		this.$on('hrm_date_picker', this.setDateTime);
 	},
 
@@ -174,20 +174,23 @@ var Hrm_Leave_Type_Form = {
                 
                 success: function(res) {
                 	self.show_spinner = false;
-                    
+                	
+                    self.addLeaveTypeMeta(res.leave_type.data);
                     // Display a success toast, with a title
                     toastr.success(res.success);
 
                     self.show_hide_new_leave_type_form({target: '.hrm-form-cancel'});
 
 
-                    self.$store.commit('updateDepartment', {
-                        is_update: is_update, 
-                        dept_id: self.department_id,
-                        target_index: target_index,
-                        departments: res.departments,
-                        dept_drop_down: res.dept_drop_down
-                    });
+                    // self.$store.commit('updateDepartment', {
+                    //     is_update: is_update, 
+                    //     dept_id: self.department_id,
+                    //     target_index: target_index,
+                    //     departments: res.departments,
+                    //     dept_drop_down: res.dept_drop_down
+                    // });
+
+                    self.$store.commit('setNewLeaveType', res.leave_type.data);
                 },
 
                 error: function(res) {

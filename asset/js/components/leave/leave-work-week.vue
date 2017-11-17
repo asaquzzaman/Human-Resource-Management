@@ -139,16 +139,19 @@
 	                data: request_data,
 	                
 	                success: function(res) {
+	                	console.log(res);
 	                    // Display a success toast, with a title
 	                    //toastr.success(res.success);
 	                    
 						self.saturday  = res.work_week.saturday;
 						self.sunday    = res.work_week.sunday;
-						self.monday    = res.work_week.monday;
+						self.monday    = 'full';
 						self.tuesday   = res.work_week.tuesday;
 						self.wednesday = res.work_week.wednesday;
 						self.thursday  = res.work_week.thursday;
 						self.friday    =  res.work_week.friday;
+
+						console.log(self.monday);
 					
 	                },
 

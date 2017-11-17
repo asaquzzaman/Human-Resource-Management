@@ -387,9 +387,48 @@ var HRM_Leave_Apply_Calendar = {
         }
 
         return emp_id;
-	}
+	},
+
+	holidayDatePicker (el, vnodeContext) {
+
+	    jQuery( ".hrm-date-picker-from" ).datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: HRM_Vars.financial_start,
+            maxDate: HRM_Vars.financial_end,
+            onClose: function( selectedDate ) {
+                jQuery( ".hrm-date-picker-to" ).datepicker( "option", "minDate", selectedDate );
+            },
+            onSelect: function(dateText) {
+                vnodeContext.$emit( 'hrm_date_picker', { field: 'datepicker_from', date: dateText, self: this } );
+            }
+        });
+
+        jQuery( ".hrm-date-picker-to" ).datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 1,
+            minDate: HRM_Vars.financial_start,
+            maxDate: HRM_Vars.financial_end,
+            onClose: function( selectedDate ) {
+                jQuery( ".hrm-date-picker-from" ).datepicker( "option", "maxDate", selectedDate );
+            },
+            onSelect: function(dateText) {
+                vnodeContext.$emit( 'hrm_date_picker', { field: 'datepicker_to', date: dateText } );
+            }
+        });
+    }
 }
 
+// Register a global custom directive called v-cpm-datepicker
+Vue.directive('hrm-holiday-datepicker', {
+    inserted: function (el, binding, vnode) {
+        HRM_Leave_Apply_Calendar.holidayDatePicker( el, vnode.context );
+    }
+});
 
 
 // Register a global custom directive called v-cpm-datepicker

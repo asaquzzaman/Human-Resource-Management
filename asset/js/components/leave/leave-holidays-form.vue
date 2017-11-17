@@ -18,8 +18,26 @@
 							<span class="description"></span>
 						</div>
 
+						<div class="hrm-form-field ">
+							<label for="hrm-leave-holidays-from-text-field">
+								From <em>  *</em>
+							</label>
+							<input type="text" v-hrm-holiday-datepicker class="hrm-date-picker-from" id="hrm-leave-holidays-from-text-field" required="required" :value="from" name="from">
+							<span class="hrm-clear"></span>
+							<span class="description"></span>
+						</div>
+
+						<div class="hrm-form-field ">
+							<label for="hrm-leave-holidays-to-text-field">
+								To<em>  *</em>
+							</label>
+							<input type="text" v-hrm-holiday-datepicker class="hrm-date-picker-to" id="hrm-leave-holidays-to-text-field" required="required" :value="to" name="to">
+							<span class="hrm-clear"></span>
+							<span class="description"></span>
+						</div>
+
 						<div  class="hrm-form-field">
-							<label for="hrm-leave-entitlement-text-field">Duration</label>
+							<label for="hrm-leave-entitlement-text-field">Validaty</label>
 							<div>From <strong>{{ dateFormat(financial_start) }}</strong> to <strong>{{ dateFormat(financial_end) }}</strong></div>
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
@@ -91,8 +109,8 @@
 			    var request_data = {
 	                _wpnonce: HRM_Vars.nonce,
 	                name: this.name,
-	                from: this.financial_start,
-	                to: this.financial_end,
+	                from: this.from,
+	                to: this.to,
 	                description: this.description,
 	            },
 	            

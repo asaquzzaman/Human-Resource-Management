@@ -572,7 +572,8 @@ class Hrm_Leave {
                 'name'        => $postdata['name'],
                 'from'        => $postdata['from'],
                 'to'          => $postdata['to'],
-                'description' => $postdata['description']
+                'description' => $postdata['description'],
+                'f_year'      => hrm_get_current_financial_id()
             );
             $format = array( '%s', '%s', '%s', '%s' );
             $result     = $wpdb->insert( $table, $data, $format );

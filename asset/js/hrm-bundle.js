@@ -10339,6 +10339,9 @@ module.exports = function normalizeComponent (
         },
 
         pad(d) {
+            if (typeof d === 'undefined') {
+                return d;
+            }
             return d < 10 ? '0' + d.toString() : d.toString();
         },
 

@@ -34,7 +34,7 @@
 
 						<td>
 							<button @click.prevent="updateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>
-							<button @click.prevent="updateLeaveStatus(pendingLeave, 3)" class="button secondary">Cancel</button>
+							<button @click.prevent="selfLeaveDelete(pendingLeave.id)">Delete</button>
 						</td>
 
 					</tr>
@@ -74,6 +74,20 @@
 
 				this.getLeaveRecords(records);
 			},
+
+			selfLeaveDelete (id) {
+            	var args = {
+            		data: {
+            			leave_id: id
+            		},
+
+            		callback: function() {
+
+            		}
+            	}
+
+            	this.deleteLeave(args);
+            }
 		}
 	}
 </script>

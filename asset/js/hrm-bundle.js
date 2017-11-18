@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"af3fd5452896b233fb77","1":"4c02d9e5713be91a1c4b","2":"82119c849910d99518f2","3":"62e226b01077669677e8","4":"f2e0b637a3557aab1672","5":"d93c0440ddc134f05c29","6":"19ffb9f04aac8b08336c","7":"75b85d063c55ea486767","8":"14d35b30cd9dfe083ea1","9":"872fa1a0d5e3007d6c15","10":"eb7d2d79da091b7f0884"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"951e2f0bfb8917aba9ad","1":"9411f09c170df4cbc113","2":"6dd5e126b2f4caa154dd","3":"353c1d5bab8bbf178253","4":"2c6e45f1f7ad809bd087","5":"ea80232d901b46d9cd1a","6":"a3bc3b008e65a6c93fa2","7":"2cf6bfbf7e4187133ab7","8":"688491d9de4756d7953c","9":"d6eb444e7d8a37aa7352","10":"c1887f7e9157f71c7868"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10484,14 +10484,14 @@ const Hrm_Leave_Pending = resolve => {
 
 const Hrm_Leave_Cancel = resolve => {
 
-    __webpack_require__.e/* require.ensure */(9).then((() => {
+    __webpack_require__.e/* require.ensure */(10).then((() => {
         resolve(__webpack_require__(11));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 const Hrm_Leave_Approve = resolve => {
 
-    __webpack_require__.e/* require.ensure */(10).then((() => {
+    __webpack_require__.e/* require.ensure */(9).then((() => {
         resolve(__webpack_require__(10));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10675,6 +10675,8 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 		departmentDropDown: [],
 		holidays: [],
 		leaveTypes: [],
+		approvedLeaves: [],
+		cancelLeaves: [],
 		getIndex: function (itemList, id, slug) {
 			var index = false;
 
@@ -10689,6 +10691,12 @@ var HRM_Leave_Store = new __WEBPACK_IMPORTED_MODULE_1__vue_vuex___default.a.Stor
 	},
 
 	mutations: {
+		setCancelLeaves(state, calcelLeaves) {
+			state.cancelLeaves = calcelLeaves;
+		},
+		setApprovalLeaves(state, approvedLeaves) {
+			state.approvedLeaves = approvedLeaves;
+		},
 		header(state, header) {
 			state.header = header.header;
 		},

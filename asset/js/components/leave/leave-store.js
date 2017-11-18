@@ -19,6 +19,8 @@ var HRM_Leave_Store = new Vuex.Store({
 		departmentDropDown: [],
 		holidays: [],
 		leaveTypes: [],
+		approvedLeaves: [],
+		cancelLeaves: [],
 		getIndex: function ( itemList, id, slug) {
             var index = false;
 
@@ -33,6 +35,12 @@ var HRM_Leave_Store = new Vuex.Store({
 	},
 
 	mutations: {
+		setCancelLeaves (state, calcelLeaves) {
+			state.cancelLeaves = calcelLeaves;
+		},
+		setApprovalLeaves (state, approvedLeaves) {
+			state.approvedLeaves = approvedLeaves;
+		},
 		header (state, header) {
 			state.header = header.header;
 		},

@@ -1,6 +1,6 @@
 var hrm_attendace_punch_in_out_btn = {
 	template: '#tmpl-hrm-attendance-punch-in-out-btn',
-	mixins: [HRM_Mixin],
+	mixins: [HRM_Common_Mixin],
 	data: function() {
 		return {
 			press_punch_in_btn: false,

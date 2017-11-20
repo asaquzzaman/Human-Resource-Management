@@ -1,7 +1,7 @@
 var hrm_attendace_configuration = {
 	template: '#tmpl-hrm-attendance-configuration',
 	
-	mixins: [HRM_Mixin],
+	mixins: [HRM_Common_Mixin],
 	
 	data: function() {
 		return {
@@ -29,6 +29,7 @@ var hrm_attendace_configuration = {
 	},
 
 	created: function() {
+		
 		this.attendanceInit();
 		this.$on('hrm_date_picker', this.setDateTime);
 	},

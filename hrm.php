@@ -345,6 +345,34 @@ class WP_Hrm {
 
     }
 
+    //     function admin_page_handler() {
+    //     if( !is_user_logged_in() ) {
+    //         sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
+    //         return;
+    //     }
+    //     $current_user_id = get_current_user_id();
+    //     $user_status = get_user_meta( $current_user_id, '_status', true );
+
+    //     if ( $user_status == 'no' ) {
+    //         _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
+    //         return;
+    //     }
+
+    //     $query_args = hrm_get_query_args();
+    //     $page       = $query_args['page'];
+    //     $tab        = $query_args['tab'];
+    //     $subtab     = $query_args['subtab'];
+
+    //     echo '<div class="hrm wrap" id="hrm">';
+    //     if ( $tab === false ) {
+    //         Hrm_Settings::getInstance()->show_page( $page );
+    //     } else {
+    //         Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+    //     }
+
+    //     echo '</div>';
+    // }
+
 
     function admin_page_handler() {
         if( !is_user_logged_in() ) {
@@ -365,8 +393,19 @@ class WP_Hrm {
         $subtab     = $query_args['subtab'];
 
 
-     
-        require_once HRM_PATH . '/templates/index.html';
+        if ( $page == 'hrm_leave' ) {
+
+            require_once HRM_PATH . '/templates/index.html';
+        } else {
+            echo '<div class="hrm wrap" id="hrm">';
+            if ( $tab === false ) {
+                Hrm_Settings::getInstance()->show_page( $page );
+            } else {
+                Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+            }
+
+            echo '</div>';
+        }
      
     }
 }

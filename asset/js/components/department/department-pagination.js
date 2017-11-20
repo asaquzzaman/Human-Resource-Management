@@ -1,6 +1,6 @@
 var HRM_Department_pagination = {
 	template: "<span></span>",
-	mixins: [HRM_Mixin],
+	mixins: [HRM_Common_Mixin],
 	
 	created: function() {
 		this.getDepartments();

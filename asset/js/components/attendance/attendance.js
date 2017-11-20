@@ -1,7 +1,7 @@
 var hrm_attendance = {
 	template: '#tmpl-hrm-attendance',
 	
-	mixins: [HRM_Mixin],
+	mixins: [HRM_Common_Mixin],
 
 	store: HRM_Attendance_Store,
 	
@@ -71,7 +71,7 @@ var hrm_attendance = {
 
 // 	router: HRM_Attendance_Router,
 	
-// 	mixin: [HRM_Mixin],
+// 	mixin: [HRM_Common_Mixin],
 	
 // 	components: {
 // 	    'hrm-attendace-records': hrm_attendace_records,

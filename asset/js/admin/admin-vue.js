@@ -17,7 +17,7 @@ var HRM_Department = new Vue({
 
 	router: HRM_Admin_Router,
 	
-	mixin: [HRM_Mixin],
+	mixin: [HRM_Common_Mixin],
 
 	computed: {
 		is_new_department_form_visible: function() {

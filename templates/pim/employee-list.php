@@ -20,10 +20,10 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
 
     $role_names   = $wp_roles->get_names();
 
-    $employers = get_users(); //hrm_Employeelist::getInstance()->get_employee();
+    $employers = hrm_Employeelist::getInstance()->get_employee();
 
     if ( !$employers ) {
-        return;
+        //return;
     }
 
     //$total             = $employers->total_users;
@@ -41,6 +41,16 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
     };
     foreach ( $employers as $key => $employer ) {
         $admin_url = hrm_employee_profile_url( hrm_pim_page(), $pim_single_tab, $employer->ID );
+        $image_id        = get_user_meta( $employer->ID, '_hrm_user_image_id', true );
+        $image_attchment = Hrm_Employeelist::getInstance()->get_image( $image_id );
+
+        if ( $image_attchment ) {
+            $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" width="30" height="30" /></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name']) );
+
+            $emp_image =  '<div class="hrm-uploaded-item">' . $file_url .'</div>';
+        } else {
+            $emp_image = get_avatar( $employer->ID, 30 );
+        }
 
         if ( $delete_permission ) {
             $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$employer->ID.']" value="" type="checkbox">';
@@ -83,7 +93,10 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         }*/
 
         $status = ( get_user_meta( $employer->ID, '_status', true ) == 'yes' ) ? 'Enable' : 'Disable';
-
+        
+        $department = get_user_meta( $employer->ID, '_job_category', true );
+        $department = Hrm_Admin::getInstance()->get_departments( $department );
+        $department_name = $department ? $department->name : '';
 
         $role_display_name = reset( $employer->roles );
         $role_display_name = isset( $role_names[$role_display_name] ) ? $role_names[$role_display_name] : '';
@@ -91,20 +104,20 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         if ( $delete_permission ) {
             $body[] = apply_filters( 'hrm_employess_list_row', array(
                 $del_checkbox,
-                $name_id,
+                $emp_image . $name_id,
                 get_user_meta( $employer->ID, 'first_name', true ),
                 get_user_meta( $employer->ID, 'last_name', true ),
-                $role_display_name,
+                $department_name,
                 $status,
                 get_user_meta( $employer->ID, '_mob_number', true ),
                 hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
             ), $employer );
         } else {
             $body[] = apply_filters( 'hrm_employess_list_row', array(
-                $name_id,
+                $emp_image . $name_id,
                 get_user_meta( $employer->ID, 'last_name', true ),
                 get_user_meta( $employer->ID, 'first_name', true ),
-                $role_display_name,
+                $department_name,
                 $status,
                 get_user_meta( $employer->ID, '_mob_number', true ),
                 hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
@@ -120,7 +133,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
+            __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),
@@ -130,7 +143,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
+            __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
             __( 'Joined Date', 'hrm' ),
@@ -213,12 +226,12 @@ jQuery(function($) {
                 container : 'hrm-upload-file-container',
                 file_data_name: 'hrm_attachment',
                 multi_selection: false,
-                max_file_size : '1mb',
+                max_file_size : '10mb',
                 url : hrm_ajax_data.ajax_url,
                 multipart_params: {
                     action: 'hrm_ajax_upload',
                     employee_id: '0',
-                    _wpnonce: hrm_ajax_data._wpnonce
+                    _wpnonce: HRM_Vars.nonce
                 },
                 filters : [
                     {title : "Image files", extensions : 'jpg,JPEG,png'},
@@ -248,10 +261,10 @@ jQuery(function($) {
             });
 
             uploader.bind('Error', function(up, err) {
-
+                
                 $('#art-filelist').append(
                     '<div class="art-error">'+
-                    'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under '+art_image.max_file_size+'.<br>'+
+                    'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under 1mb<br>'+
                     'Try again or manage your artwork'+
                     '</div>'
                 );

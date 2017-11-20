@@ -25,6 +25,7 @@
     <?php
     if ( ! $subtab ) {
        if( !isset( $menu[$page][$tab]['submenu'] ) ) {
+            echo '</div>';
             return;
         }
 

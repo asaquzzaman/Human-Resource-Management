@@ -257,7 +257,7 @@ jQuery(function($) {
             });
 
             uploader.bind('Error', function(up, err) {
-
+                
                 $('#art-filelist').append(
                     '<div class="art-error">'+
                     'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under '+art_image.max_file_size+'.<br>'+

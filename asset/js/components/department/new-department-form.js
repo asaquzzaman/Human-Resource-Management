@@ -1,7 +1,7 @@
 Vue.component('new-department-form', {
 	template: '#tmpl-hrm-new-department-form',
 
-	mixins: [HRM_Mixin],
+	mixins: [HRM_Common_Mixin],
 
 	data: function() {
 		return {
@@ -12,7 +12,7 @@ Vue.component('new-department-form', {
             department_id: false,
 			show_spinner: false,
 		}
-	},
+    },
 
     created: function() {
         this.defaultFormValu(this.$store.state.department_id);

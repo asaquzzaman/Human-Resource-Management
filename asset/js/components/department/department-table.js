@@ -1,6 +1,6 @@
 Vue.component('department-table', {
 	template: '#tmpl-hrm-department-table',
-    mixins: [HRM_Mixin],
+    mixins: [HRM_Common_Mixin],
 
     data: function() {
         return {

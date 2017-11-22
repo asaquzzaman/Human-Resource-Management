@@ -24,7 +24,7 @@ var hrm_attendace_punch_in_out_btn = {
 			this.press_punch_in_btn = true;
 
 			var request_data = {
-					_wpnonce: hrm_ajax_data.nonce,
+					_wpnonce: HRM_Vars.nonce,
 				},
 				self = this;
 			
@@ -65,7 +65,7 @@ var hrm_attendace_punch_in_out_btn = {
 			this.press_punch_our_btn = true;
 
 			var request_data = {
-					_wpnonce: hrm_ajax_data.nonce,
+					_wpnonce: HRM_Vars.nonce,
 				},
 				self = this;
 

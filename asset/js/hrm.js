@@ -185,10 +185,10 @@
                     action: 'partial_payment_delete',
                     id: self.data('id'),
                     table: self.data('table_option'),
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                 }
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('.hrm-payment-details-dialog').html( res.data.content );
                     $('#hrm-prarial-li-wrap-'+res.data.project_id).find('.hrm-paratial-client-summary').html(res.data.summary);
@@ -235,10 +235,10 @@
                     description: wrap.find( 'textarea[name="description"]' ).val(),
                     date: wrap.find( 'input[name="date"]' ).val(),
                     amount: wrap.find( 'input[name="amount"]' ).val(),
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                 }
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('.hrm-payment-details-dialog').html( res.data.content );
                     $('#hrm-prarial-li-wrap-'+res.data.project_id).find('.hrm-paratial-client-summary').html(res.data.summary);
@@ -255,10 +255,10 @@
                     action: 'partial_payment_cancel',
                     id: self.data('id'),
                     table: self.data('table_option'),
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                 }
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('.hrm-payment-details-dialog').html( res.data.content );
                 }
@@ -270,14 +270,14 @@
                 data = {
                     client_id: self.val(),
                     action: 'get_clients_project',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                 };
             if( self.val() === '' || self.val() === null ) {
                 $('.hrm-client-project-dropdown').remove();
                 return;
             }
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     $('.hrm-client-project-dropdown').remove();
                     self.closest('.hrm-form-field ').after(res.data.field);
@@ -323,7 +323,7 @@
 
         deleteIndividulaElement: function(e) {
             e.preventDefault();
-            if ( !confirm( hrm_ajax_data.confirm_msg ) ) {
+            if ( !confirm( HRM_Vars.confirm_msg ) ) {
                 return;
             }
 
@@ -339,9 +339,9 @@
                 data = {
                     status: self.is(":checked") ? 'yes' : 0,
                     action: 'punch_form_status',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                 };
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     hrmGeneral.scrollTop( '.hrm-update-notification' );
                     hrmGeneral.updateNotification( res.data.success_msg );
@@ -362,7 +362,7 @@
                 return false;
             }
             btn.show();
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 btn.hide();
                 if( res.success ) {
                     if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
@@ -391,9 +391,9 @@
             if ( hrm_dataAttr.search_status ) {
                 var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&limit='+limit+'&pagenum='+pagenum;
             } else {
-                var data = 'action=view_pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+                var data = 'action=view_pagination&pagenum='+pagenum+'&_wpnonce='+HRM_Vars.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
             }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if( res.success ) {
                     if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
                         $('#hrm-subtab-wrap').html( res.data.content );
@@ -422,10 +422,10 @@
             if ( hrm_dataAttr.search_status ) {
                 var data = $('#hrm-search-form').serialize()+'&'+$.param(hrm_dataAttr)+'&pagenum='+pagenum+'&limit='+limit;
             } else {
-                var data = 'action=pagination&pagenum='+pagenum+'&_wpnonce='+hrm_ajax_data.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
+                var data = 'action=pagination&pagenum='+pagenum+'&_wpnonce='+HRM_Vars.nonce+'&'+$.param(hrm_dataAttr)+'&limit='+limit;
             }
             self.addClass('hrm-spinner');
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.removeClass('hrm-spinner');
                     if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
@@ -451,10 +451,10 @@
             var self = $(this),
                 data = {
                     action: 'edit_file',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     post_id: self.data('id'),
                 };
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     $('#hrm-file-form-wrap').html( res.data.append_data )
                         .find('#hrm-hidden-form-warp').slideDown('slow').show();
@@ -469,10 +469,10 @@
                     container : 'hrm-upload-file-container',
                     file_data_name: 'hrm_attachment',
                     max_file_size : '1mb',
-                    url : hrm_ajax_data.ajax_url,
+                    url : HRM_Vars.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
-                        _wpnonce: hrm_ajax_data.nonce
+                        _wpnonce: HRM_Vars.nonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg, JPEG,png'},
@@ -571,29 +571,29 @@
             var self = $(this),
                 wrap = self.closest('.hrm-task-wrap'),
                 data = self.serialize();
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if( res.success ) {
                     self.attr( 'value', res.data.btn_text );
                     wrap.find('.hrm-post_id').val(res.data.post_id);
-                    alert( hrm_ajax_data.success_msg );
+                    alert( HRM_Vars.success_msg );
                 }
             });
         },
 
         deleteTask: function() {
-            if( !confirm( hrm_ajax_data.confirm_msg) ) {
+            if( !confirm( HRM_Vars.confirm_msg) ) {
                 return;
             }
             var self = $(this),
                 data = {
                     action: 'delete_task',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     project_id: self.data('project_id'),
                     task_id : self.data('task_id'),
                     assing_to: self.data('task_assign')
                 };
             self.addClass('hrm-spinner');
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('.hrm-task-wrap').fadeOut(1000);
                 }
@@ -605,11 +605,11 @@
             var self = $(this),
                 data = {
                     action: 'user_task_rating_content',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     project_id: self.data('project_id'),
                     user_id : self.val(),
                 }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     $('.hrm-evaluation-task-wrap').html(res.data.append_data);
                     $.each( res.data.slider_value, function( key, slider_obj ) {
@@ -659,12 +659,12 @@
             var self = $(this),
             data = {
                 action: 'edit_attendance',
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
                 post_id: self.data('post_id'),
                 hrm_dataAttr : hrm_dataAttr,
             }
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     $('#hrm-attendance').html( res.data.content )
                         .find('#hrm-hidden-form-warp').slideDown('slow').show();
@@ -677,20 +677,20 @@
 
         changeAdminStatus: function(e) {
             e.preventDefault();
-            if ( !confirm( hrm_ajax_data.confirm_msg ) ) {
+            if ( !confirm( HRM_Vars.confirm_msg ) ) {
                 return;
             }
 
             var self = $(this),
                 data = {
                     action: 'change_admin_status',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     status: self.val(),
                     user_id: self.data('user_id')
                 }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
-                    alert( hrm_ajax_data.success_msg );
+                    alert( HRM_Vars.success_msg );
                 }
             });
         },
@@ -736,10 +736,10 @@
             var self = $(this),
                 data = {
                     action: 'tast_complete',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     task_id: self.val(),
                 }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('div').remove();
                 }
@@ -750,10 +750,10 @@
             var self = $(this),
                 data = {
                     action: 'tast_incomplete',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     task_id: self.val(),
                 }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     self.closest('div').remove();
                 }
@@ -765,11 +765,11 @@
             var self = $(this),
                 data = {
                     action: 'change_status',
-                    _wpnonce: hrm_ajax_data.nonce,
+                    _wpnonce: HRM_Vars.nonce,
                     status: self.val(),
                     leave_id: self.data('leave_id')
                 }
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     $('.hrm-error-notification')
                         .removeClass('error')
@@ -786,7 +786,7 @@
         removeUserMeta: function(e) {
             e.preventDefault();
             var self = $(this);
-            if( confirm(hrm_ajax_data.confirm_msg) ) {
+            if( confirm(HRM_Vars.confirm_msg) ) {
                 self.closest('.select-field').remove();
             }
         },
@@ -796,7 +796,7 @@
             var self = $(this);
             var data = {
                 action : hrm_dataAttr.add_form_generator_action,
-                _wpnonce : hrm_ajax_data.nonce,
+                _wpnonce : HRM_Vars.nonce,
                 class_name : hrm_dataAttr.class_name,
                 function_name : hrm_dataAttr.function_name,
                 hrm_dataAttr : hrm_dataAttr
@@ -806,7 +806,7 @@
 
             self.addClass('hrm-spinner');
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 self.removeClass('hrm-spinner');
                 var form_wrap = $('#'+hrm_dataAttr.add_form_apppend_wrap);
                 if( res.success ) {
@@ -835,10 +835,10 @@
                     var data = {
                         action: self.data('action'),
                         search_admin: request.term,
-                        _wpnonce : hrm_ajax_data.nonce,
+                        _wpnonce : HRM_Vars.nonce,
                     };
 
-                    $.post( hrm_ajax_data.ajax_url, data, function( resp ) {
+                    $.post( HRM_Vars.ajax_url, data, function( resp ) {
                         self.removeClass( 'ui-autocomplete-loading' );
                         if( resp.success ) {
                             response( eval( resp.data ) );
@@ -881,7 +881,7 @@
                     data: self.serialize(),
                 };
 
-            $.post( hrm_ajax_data.ajax_url, data, function( resp ) {
+            $.post( HRM_Vars.ajax_url, data, function( resp ) {
 
                 self.attr('disabled', false );
                 spinner.removeClass('hrm-spinner');
@@ -925,7 +925,7 @@
             form.find('.hrm-spinner').show();
             submit_button.attr('disabled', true );
 
-            $.post( hrm_ajax_data.ajax_url, data, function(res) {
+            $.post( HRM_Vars.ajax_url, data, function(res) {
 
                 hrmGeneral.scrollTop( '.hrm-update-notification' );
                 form.find('.hrm-spinner').hide();
@@ -1078,7 +1078,7 @@
             spinner.show();
             submit.attr( 'disabled', true );
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 hrmGeneral.scrollTop();
                 spinner.hide();
                 submit.attr( 'disabled', false );
@@ -1130,7 +1130,7 @@
 
             btn.addClass('hrm-spinner');
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 btn.removeClass('hrm-spinner');
                 if ( res.success ) {
                     if ( typeof hrm_dataAttr.subtab !== 'undefined' && hrm_dataAttr.subtab ) {
@@ -1162,7 +1162,7 @@
             var self = $(this),
                 data = {
                     action : ( typeof self.data('action') !== 'undefined' ) ? self.data('action') : 'hrm_form_edit',
-                    _wpnonce : hrm_ajax_data.nonce,
+                    _wpnonce : HRM_Vars.nonce,
                     id : self.data('id'),
                     table_option : self.data('table_option'),
                     class_name : hrm_dataAttr.class_name,
@@ -1173,7 +1173,7 @@
 
             $('#hrm').trigger( 'before_send_edit', [self, data] );
             self.addClass('hrm-spinner');
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 var form_wrap = $('#'+hrm_dataAttr.add_form_apppend_wrap);
                 if( res.success ) {
                     self.removeClass('hrm-spinner');
@@ -1199,11 +1199,11 @@
             }
             var data = {
                 action: 'rating_task',
-                _wpnonce : hrm_ajax_data.nonce,
+                _wpnonce : HRM_Vars.nonce,
                 project_id : value.selected,
             };
 
-            $.post( hrm_ajax_data.ajax_url, data, function( res ) {
+            $.post( HRM_Vars.ajax_url, data, function( res ) {
                 if ( res.success ) {
                     var form = $('#hrm-search-form'),
                         user_exist = form.find('.hrm-task-rating-user');
@@ -1227,7 +1227,7 @@
                         search_admin: request.term,
                     };
 
-                    $.post( hrm_ajax_data.ajax_url, data, function( resp ) {
+                    $.post( HRM_Vars.ajax_url, data, function( resp ) {
                         self.removeClass( 'ui-autocomplete-loading' );
                         if( resp.success ) {
                             response( eval( resp.data ) );
@@ -1330,13 +1330,13 @@
             }
 
             $('#'+$id).DataTable({
-                aLengthMenu: [[10, 20, 50, 100, -1], [hrm_ajax_data.message.datatable_pagination, 20, 50, 100, hrm_ajax_data.message.dtb_pag_all]],
+                aLengthMenu: [[10, 20, 50, 100, -1], [HRM_Vars.message.datatable_pagination, 20, 50, 100, HRM_Vars.message.dtb_pag_all]],
                 //iDisplayLength: 2,
                 bInfo: false,
                 language: {
                     lengthMenu: '_MENU_',
                     search: '',
-                    searchPlaceholder: hrm_ajax_data.message.searchPlaceholder
+                    searchPlaceholder: HRM_Vars.message.searchPlaceholder
                 },
                 columnDefs: [ {
                     targets: '0',
@@ -1384,7 +1384,7 @@
                 search_field: self.data( 'search_field' ),
             };
 
-            $.post( hrm_ajax_data.ajax_url, data, function( resp ) {
+            $.post( HRM_Vars.ajax_url, data, function( resp ) {
                 self.removeClass( 'ui-autocomplete-loading' );
                 if( resp.success ) {
                     response( eval( resp.data ) );

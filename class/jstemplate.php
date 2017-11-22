@@ -30,6 +30,10 @@ class Hrm_JsTemplate {
             case hrm_leave_page():
                 self::leave();
                 break;
+
+            case hrm_department_page():
+                self::department();
+                break;
     		
     		default:
     			# code...

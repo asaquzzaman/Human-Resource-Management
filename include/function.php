@@ -555,4 +555,22 @@ function hrm_get_current_financial_id() {
             ->id;
 }
 
+function hrm_can_load_footer_tag() {
+    $query_args = hrm_get_query_args();
+    $page       = $query_args['page'];
+    $tab        = $query_args['tab'];
+    $subtab     = $query_args['subtab'];
+
+
+    if ( 
+        $page == 'hrm_leave'
+        ||
+        $page == 'hrm_settings'
+    ) { 
+        return true;
+    }
+
+    return false;
+}
+
 

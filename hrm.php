@@ -191,13 +191,21 @@ class WP_Hrm {
         wp_enqueue_script( 'hrm-jquery.dataTables', plugins_url( '/asset/js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
 
-        wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
-            'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            'nonce'    => wp_create_nonce( 'hrm_nonce' ),
+        wp_localize_script( 'hrm_admin', 'HRM_Vars', array(
             'is_admin'    => $hrm_is_admin,
-            'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' )
+            'success_msg' => __( 'Changed Successfully', 'hrm' ),
+            'ajax_url'        => admin_url( 'admin-ajax.php' ),
+            'nonce'           => wp_create_nonce( 'hrm_nonce' ),
+            'time_zone'       => hrm_get_wp_timezone(),
+            'wp_date_format'  => get_option( 'date_format' ),
+            'wp_time_format'  => get_option( 'time_format' ),
+            'message'         => hrm_message(),
+            'current_user'    => wp_get_current_user(),
+            'settings'        => Hrm_Settings::getInstance()->get_settings(),
+            'current_date'    => current_time( 'mysql' ),
+            'financial_start' => hrm_financial_start_date(),
+            'financial_end'   => hrm_financial_end_date()
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', plugins_url( '/asset/css/jquery.dataTables.css', __FILE__ ), false, false, 'all' );
@@ -297,6 +305,14 @@ class WP_Hrm {
             }
         }
 
+        if( isset( $style_slug[hrm_organization_page()] ) ) {
+            add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );
+        }
+
+        if( isset( $style_slug[hrm_department_page()] ) ) {
+            add_action( 'admin_print_styles-' . $style_slug[hrm_department_page()], array( 'Hrm_Scripts', 'department') );
+        }
+
         if( isset( $style_slug[hrm_admin_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_admin_page()], array( 'Hrm_Scripts', 'admin') );
         }
@@ -393,7 +409,11 @@ class WP_Hrm {
         $subtab     = $query_args['subtab'];
 
 
-        if ( $page == 'hrm_leave' ) {
+        if ( 
+            $page == 'hrm_leave'
+            ||
+            $page == 'hrm_settings'
+         ) {
 
             require_once HRM_PATH . '/templates/index.html';
         } else {

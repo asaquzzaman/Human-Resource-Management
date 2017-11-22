@@ -16,10 +16,10 @@ jQuery(function($) {
                     container : 'hrm-upload-file-container',
                     file_data_name: 'hrm_attachment',
                     max_file_size : '1mb',
-                    url : hrm_ajax_data.ajax_url,
+                    url : HRM_Vars.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
-                        _wpnonce: hrm_ajax_data._wpnonce
+                        _wpnonce: HRM_Vars._wpnonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg, JPEG,png'},
@@ -107,7 +107,7 @@ jQuery(function($) {
             var slef = $(this),
                 data = slef.serialize();
 
-            $.post(hrm_ajax_data.ajax_url, data, function(res) {
+            $.post(HRM_Vars.ajax_url, data, function(res) {
                if ( res.success ) {
 
                 }
@@ -117,15 +117,15 @@ jQuery(function($) {
         deleteFile: function(e) {
             e.preventDefault();
 
-            if(confirm( hrm_ajax_data.confirm_msg )) {
+            if(confirm( HRM_Vars.confirm_msg )) {
                 var that = $(this),
                     data = {
                         file_id: that.data('id'),
                         action: 'hrm_delete_file',
-                        _wpnonce: hrm_ajax_data._wpnonce
+                        _wpnonce: HRM_Vars._wpnonce
                     };
 
-                $.post(hrm_ajax_data.ajax_url, data, function( res ) {
+                $.post(HRM_Vars.ajax_url, data, function( res ) {
                     if( res.success ) {
                         that.closest('.hrm-single-progress').fadeOut(function(){
                             $(this).remove();

@@ -4,11 +4,22 @@ function hrm_page( $exclude = true ) {
     $path                  = dirname(__FILE__) . '/../templates';
     $page                  = array();
 
-    $hrm_management        = hrm_admin_page();
-    $page[$hrm_management] = hrm_admin_page_items( $path, $hrm_management, $exclude );
-
     $hrm_pim               = hrm_pim_page();
     $page[$hrm_pim]        = hrm_pim_page_items( $path, $hrm_pim, $exclude );
+
+    $employee              = hrm_employee_page();
+    $page[$employee]       = hrm_employee_page_items( $path, $employee, $page[$hrm_pim], $exclude );
+
+    // $hrm_management        = hrm_admin_page();
+    // $page[$hrm_management] = hrm_admin_page_items( $path, $hrm_management, $exclude );
+
+    $hrm_organization        = hrm_organization_page();
+    $page[$hrm_organization] = hrm_organization_page_items( $path, $hrm_organization, $exclude );
+
+    $hrm_department        = hrm_department_page();
+    $page[$hrm_department] = hrm_department_page_items( $path, $hrm_organization, $exclude );
+
+
 
     // $hrm_file              = hrm_file_page();
     // $page[$hrm_file]       = hrm_file_page_items( $path, $hrm_file, $exclude );
@@ -19,8 +30,8 @@ function hrm_page( $exclude = true ) {
     $hrm_settings             = hrm_settings_page();
     $page[$hrm_settings]      = hrm_settings_page_items( $path, $hrm_settings, $exclude );
 
-    // $hrm_time              = hrm_attendance_page();
-    // $page[$hrm_time]       = hrm_attendance_page_items( $path, $hrm_time, $exclude );
+    $hrm_time              = hrm_attendance_page();
+    $page[$hrm_time]       = hrm_attendance_page_items( $path, $hrm_time, $exclude );
 
     // $hrm_evaluation        = hrm_evaluation_page();
     // $page[$hrm_evaluation] = hrm_evaluation_page_items( $path, $hrm_evaluation, $exclude );
@@ -39,10 +50,47 @@ function hrm_page( $exclude = true ) {
     // $hrm_salary            = hrm_salary_page();
     // $page[$hrm_salary]     = hrm_salary_page_items( $path, $hrm_salary, $exclude );
 
-    $employee              = hrm_employee_page();
-    $page[$employee]       = hrm_employee_page_items( $path, $employee, $page[$hrm_pim], $exclude );
+
 
     return apply_filters( 'hrm_menu_items', $page, $exclude );
+}
+
+function hrm_department_page_items( $path, $hrm_organization, $exclude ) {
+    $admin['department'] = array(
+        'id'        => 'hrm-department',
+        'title'     => __( 'Department', 'hrm' ),
+        'file_slug' => 'department/department',
+        'file_path' => $path . '/department/department.php',
+    );
+
+    return $admin;
+}
+
+function hrm_organization_page_items( $path, $hrm_organization, $exclude ) {
+
+    $admin = array (
+        'general_info' => array(
+            'id'        => 'hrm-organization-sub-genral_info',
+            'title'     => __( 'General Information', 'hrm' ),
+            'file_slug' => 'organization/general_info',
+            'file_path' => $path . '/organization/general_info.php',
+        ),
+
+        'location' => array(
+            'id'        => 'hrm-organization-sub-location',
+            'title'     => __( 'Location', 'hrm' ),
+            'file_slug' => 'organization/location',
+            'file_path' => $path . '/organization/location.php',
+        ),
+        'notice' => array(
+            'id'        => 'hrm-organization-notice',
+            'title'     => __( 'Notice', 'hrm' ),
+            'file_slug' => 'organization/notice',
+            'file_path' => $path . '/organization/notice.php',
+        ),
+    );
+
+    return $admin;
 }
 
 function hrm_employee_page_items( $path, $employee, $hrm_pim, $exclude ) {
@@ -617,6 +665,14 @@ function hrm_admin_page_items( $path, $hrm_management, $exclude ) {
     return apply_filters( 'hrm_admin_section_items', $admin, $path, $hrm_management );
 }
 
+function hrm_organization_page() {
+    return apply_filters( 'hrm_organization_page_slug', 'hr_organization' );
+}
+
+function hrm_department_page() {
+    return apply_filters( 'hrm_department_page_slug', 'hr_department' );
+}
+
 function hrm_admin_page() {
     return apply_filters( 'hrm_admin_page_slug', 'hr_management' );
 }
@@ -668,15 +724,18 @@ function hrm_updates_page() {
 
 function hrm_menu_label() {
     $labels = array(
-        hrm_admin_page()      => __( 'Admin', 'hrm' ),
-        hrm_pim_page()        => __( 'Employee', 'hrm' ),
-        hrm_leave_page()      => __( 'Leave', 'hrm' ),
-        hrm_attendance_page()       => __( 'Attendance', 'hrm' ),
-        hrm_settings_page() => __('Settings'),
+        hrm_employee_page()   => __( 'Profile', 'hrm' ),
+        hrm_organization_page() => __( 'Organization', 'hrm' ),
+        hrm_department_page()   => __( 'Department', 'hrm' ),
+        //hrm_admin_page()        => __( 'Admin', 'hrm' ),
+        hrm_pim_page()          => __( 'Employee', 'hrm' ),
+        hrm_leave_page()        => __( 'Leave', 'hrm' ),
+        hrm_attendance_page()   => __( 'Attendance', 'hrm' ),
+        hrm_settings_page()     => __('Settings'),
        // hrm_evaluation_page() => __( 'Evaluation', 'hrm' ),
         //hrm_file_page()       => __( 'File', 'hrm' ),
        // hrm_project_page()    => __( 'Project', 'hrm' ),
-        hrm_employee_page()   => __( 'My INFO', 'hrm' ),
+        
        // hrm_salary_page()     => __( 'Salary', 'hrm' ),
        // hrm_client_page()     => __( 'Client', 'hrm' ),
        // hrm_permission_page() => __( 'Permission', 'hrm' ),

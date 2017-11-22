@@ -33,7 +33,7 @@ var hrm_attendace_records = {
 	methods: {
 		attendanceInit: function() {
 			var request_data = {
-				_wpnonce: hrm_ajax_data.nonce,
+				_wpnonce: HRM_Vars.nonce,
 			},
 			self  = this;
 
@@ -50,7 +50,7 @@ var hrm_attendace_records = {
 		},
 		getAttendance: function() {
 			var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
             },
             self = this;
 

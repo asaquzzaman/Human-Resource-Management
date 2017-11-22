@@ -36,7 +36,7 @@ var hrm_attendace_configuration = {
 	methods: {
 		attendanceInit: function() {
 			var request_data = {
-				_wpnonce: hrm_ajax_data.nonce,
+				_wpnonce: HRM_Vars.nonce,
 			},
 			self  = this;
 
@@ -65,7 +65,7 @@ var hrm_attendace_configuration = {
 		},
 		saveConfiguration: function() {
 			var request_data = {
-					_wpnonce: hrm_ajax_data.nonce,
+					_wpnonce: HRM_Vars.nonce,
 					hrm_is_multi_attendance: this.hrm_is_multi_attendance,
 					office_start: this.$store.state.office_start_with_date_time,
 					office_closed: this.$store.state.office_closed_with_date_time

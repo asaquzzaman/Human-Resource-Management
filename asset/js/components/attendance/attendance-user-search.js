@@ -42,7 +42,7 @@ var hrm_attendace_user_search = {
 		getAttendance: function() {
 
 			var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
                 search: this.$route.query,
             },
             

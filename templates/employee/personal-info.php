@@ -187,11 +187,11 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
                     file_data_name: 'hrm_attachment',
                     multi_selection: false,
                     max_file_size : '1mb',
-                    url : hrm_ajax_data.ajax_url,
+                    url : HRM_Vars.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
                         employee_id: <?php echo $employee_id; ?>,
-                        _wpnonce: hrm_ajax_data._wpnonce
+                        _wpnonce: HRM_Vars._wpnonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg,JPEG,png'},
@@ -256,17 +256,17 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
         deleteFile: function(e) {
             e.preventDefault();
 
-            if(confirm( hrm_ajax_data.confirm_msg )) {
+            if(confirm( HRM_Vars.confirm_msg )) {
                 $('.hrm-delete-file').addClass('hrm-spinner');
                 var that = $(this),
                     data = {
                         file_id: that.data('id'),
                         action: 'hrm_profile_pic_del',
                         employee_id: <?php echo $employee_id; ?>,
-                        _wpnonce: hrm_ajax_data._wpnonce
+                        _wpnonce: HRM_Vars._wpnonce
                     };
 
-                $.post(hrm_ajax_data.ajax_url, data, function(res) {
+                $.post(HRM_Vars.ajax_url, data, function(res) {
                     if( res.success ) {
                         $('.hrm-delete-file').removeClass('hrm-spinner');
                         that.closest('#hrm-user-image-wrap').html(res.data.content);

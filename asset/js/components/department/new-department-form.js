@@ -58,7 +58,7 @@ Vue.component('new-department-form', {
 
         getDepartments: function() {
             var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
             },
             self = this;
 
@@ -84,7 +84,7 @@ Vue.component('new-department-form', {
 
 		createNewDepartment: function() {
 		    var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
                 title: this.title,
                 description: this.description,
                 status: this.status,

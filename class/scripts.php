@@ -49,6 +49,7 @@ class Hrm_Scripts {
     }
 
     public static function department() {
+
         self::admin_default();
         wp_enqueue_script( 'hrm-main-vue', HRM_URL . '/asset/js/vue/vue.js', array(), false, true);
         wp_enqueue_script( 'hrm-main-vuex', HRM_URL . '/asset/js/vue/vuex.js', array(), false, true);
@@ -56,8 +57,6 @@ class Hrm_Scripts {
         self::admin_localize( 'hrm-main-vue' );
         wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/asset/js/hrm-common-mixin.js', array(), time(), true );
         
-        
-
         
         wp_enqueue_script( 'hrm-department-edit-btn', HRM_URL . '/asset/js/components/department/department-edit-btn.js', array(), false, true);
         wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/asset/js/components/department/department-add-btn.js', array(), false, true);
@@ -86,13 +85,21 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-jquery.dataTables', HRM_URL . '/asset/js/jquery.dataTables.min.js', array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_admin', HRM_URL . '/asset/js/hrm.js', array( 'jquery' ), false, true);
 
-        wp_localize_script( 'hrm_admin', 'hrm_ajax_data', array(
-            'ajax_url'    => admin_url( 'admin-ajax.php' ),
-            'nonce'       => wp_create_nonce( 'hrm_nonce' ),
+        wp_localize_script( 'hrm_admin', 'HRM_Vars', array(
             'is_admin'    => $hrm_is_admin,
-            'message'     => hrm_message(),
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
-            'success_msg' => __( 'Changed Successfully', 'hrm' )
+            'success_msg' => __( 'Changed Successfully', 'hrm' ),
+            'ajax_url'        => admin_url( 'admin-ajax.php' ),
+            'nonce'           => wp_create_nonce( 'hrm_nonce' ),
+            'time_zone'       => hrm_get_wp_timezone(),
+            'wp_date_format'  => get_option( 'date_format' ),
+            'wp_time_format'  => get_option( 'time_format' ),
+            'message'         => hrm_message(),
+            'current_user'    => wp_get_current_user(),
+            'settings'        => Hrm_Settings::getInstance()->get_settings(),
+            'current_date'    => current_time( 'mysql' ),
+            'financial_start' => hrm_financial_start_date(),
+            'financial_end'   => hrm_financial_end_date()
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', HRM_URL . '/asset/css/jquery.dataTables.css', false, false, 'all' );
@@ -182,6 +189,10 @@ class Hrm_Scripts {
     }
 
     public static function footer_tag() {
+
+        if ( ! hrm_can_load_footer_tag() ) {
+            return;
+        }
 
         // ob_start();
         // include HRM_PATH . '/asset/js/moment/latest.json';

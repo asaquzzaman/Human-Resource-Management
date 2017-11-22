@@ -28,7 +28,7 @@ var Hrm_Leave_Work_Week = {
 	methods: {
 		getWorkWeek: function() {
 			var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
             },
             self = this;
 
@@ -61,7 +61,7 @@ var Hrm_Leave_Work_Week = {
 		saveWorkWeek: function() {
 			
 		    var request_data = {
-                _wpnonce: hrm_ajax_data.nonce,
+                _wpnonce: HRM_Vars.nonce,
                 saturday: this.saturday,
 				sunday: this.sunday,
 				monday: this.monday,

@@ -176,6 +176,7 @@ class WP_Hrm {
         add_action( 'init', array( $this, 'init' ) );
         add_action( 'wp_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
         add_action( 'admin_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
+        add_action( 'init', 'hrm_set_capability' );
     }
 
     static function admin_scripts() {

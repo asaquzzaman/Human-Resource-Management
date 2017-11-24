@@ -19,7 +19,7 @@ jQuery(function($) {
                     url : HRM_Vars.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg, JPEG,png'},
@@ -122,7 +122,7 @@ jQuery(function($) {
                     data = {
                         file_id: that.data('id'),
                         action: 'hrm_delete_file',
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     };
 
                 $.post(HRM_Vars.ajax_url, data, function( res ) {

@@ -88,6 +88,24 @@ function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access
     return false;
 }
 
+function hrm_user_can( $cap, $user_id = false) {
+
+    if ( ! $user_id ) {
+        $user_id = get_current_user_id();
+    }
+
+    $current_user = get_user_by( 'id', $user_id );
+    $user_roles   = is_array( $current_user->roles ) ? $current_user->roles : array();
+
+    if ( in_array( 'administrator', $user_roles ) ) {
+        return true;
+    }
+
+    return user_can( $user_id, $cap );
+
+
+}
+
 function hrm_current_user_role() {
     global $current_user;
 
@@ -340,16 +358,6 @@ function hrm_message() {
     return apply_filters( 'hrm_message', $message );
 }
 
-function hrm_get_roles() {
-    global $wp_roles;
-
-    if ( !$wp_roles ) {
-        $wp_roles = new WP_Roles();
-    }
-
-    return $wp_roles->get_names();
-}
-
 function hrm_page_slug() {
     $menu = hrm_menu_label();
     foreach ( $menu as $page_slug => $value ) {
@@ -572,5 +580,49 @@ function hrm_can_load_footer_tag() {
 
     return false;
 }
+
+function hrm_manager_role_key() {
+    return 'hrm_manager';
+}
+
+function hrm_manager_capability() {
+    return array(
+        'manage_employee_profile',
+        'manage_hrm_organization'
+    );
+}
+
+function hrm_employee_role_key() {
+    return 'hrm_employee';
+}
+
+function hrm_get_roles($role = false) {
+    $roles = array(
+        hrm_employee_role_key() => 'Employee',
+        hrm_manager_role_key()  => 'Manager'
+    );
+
+    if ( $role ) {
+        return $roles[$role];
+    }
+
+    return $roles;
+}
+
+function hrm_set_capability() {
+    hrm_set_manager_capability();
+}
+
+function hrm_set_manager_capability() {
+    $role = get_role( hrm_manager_role_key() );
+
+    foreach ( hrm_manager_capability() as $key => $cap ) {
+        $role->add_cap( $cap );
+    }
+}
+
+
+
+
 
 

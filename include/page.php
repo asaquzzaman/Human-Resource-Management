@@ -8,7 +8,7 @@ function hrm_page( $exclude = true ) {
     $page[$hrm_pim]        = hrm_pim_page_items( $path, $hrm_pim, $exclude );
 
     $employee              = hrm_employee_page();
-    $page[$employee]       = hrm_employee_page_items( $path, $employee, $page[$hrm_pim], $exclude );
+    $page[$employee]       = hrm_employee_page_items( $path, $employee, $exclude );
 
     // $hrm_management        = hrm_admin_page();
     // $page[$hrm_management] = hrm_admin_page_items( $path, $hrm_management, $exclude );
@@ -93,19 +93,59 @@ function hrm_organization_page_items( $path, $hrm_organization, $exclude ) {
     return $admin;
 }
 
-function hrm_employee_page_items( $path, $employee, $hrm_pim, $exclude ) {
-    $emp = array();
+function hrm_employee_page_items( $path, $employee, $exclude ) {
 
-    $emp['personal']          = $hrm_pim['personal'];
-    $emp['organization_info'] = $hrm_pim['organization_info'];
-    $emp['my_task']           = $hrm_pim['my_task'];
-    $emp['leave']             = $hrm_pim['leave'];
+    $emp = array(
+
+       'personal_info' => array(
+            'id'        => 'hrm-personal-info',
+            'title'     => __( 'Personal Information', 'hrm' ),
+            'file_slug' => 'employee/personal-info',
+            'file_path' => $path . '/employee/personal-info.php',
+        ),
+        'jobs' => array(
+            'id'        => 'hrm-personal-job',
+            'title'     => __( 'Job Location', 'hrm' ),
+            'file_slug' => 'employee/job',
+            'file_path' => $path . '/employee/job.php',
+        ),
+        // 'ind_salary' => array(
+        //     'id'        => 'hrm-personal-salary',
+        //     'title'     => __( 'Salary', 'hrm' ),
+        //     'file_slug' => 'employee/salary',
+        //     'file_path' => $path . '/employee/salary.php',
+        // ),
+        'work_experiennce' => array(
+            'id'        => 'hrm-personal-work-experience',
+            'title'     => __( 'Work Experience', 'hrm' ),
+            'file_slug' => 'employee/work-experience',
+            'file_path' => $path . '/employee/work-experience.php',
+        ),
+        'ind_education' => array(
+            'id'        => 'hrm-personal-education',
+            'title'     => __( 'Education', 'hrm' ),
+            'file_slug' => 'employee/education',
+            'file_path' => $path . '/employee/education.php',
+        ),
+        'skill' => array(
+            'id'        => 'hrm-personal-skill',
+            'title'     => __( 'Skills', 'hrm' ),
+            'file_slug' => 'employee/skill',
+            'file_path' => $path . '/employee/skill.php',
+        ),
+        // 'ind_language' => array(
+        //     'class'     => 'hrm-personal-language',
+        //     'title'     => __( 'Languages', 'hrm' ),
+        //     'file_slug' => 'employee/language',
+        //     'file_path' => $path . '/employee/language.php',
+        // ),
+    );
 
     if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
         return $emp;
     }
 
-    return apply_filters( 'hrm_employee_page_items', $emp, $path, $employee, $hrm_pim );
+    return apply_filters( 'hrm_employee_page_items', $emp, $path, $employee );
 }
 
 function hrm_salary_page_items( $path, $hrm_salary, $exclude ) {
@@ -418,145 +458,147 @@ function hrm_pim_page_items( $path, $hrm_pim, $exclude ) {
 
     );
 
-    $pim['personal'] = array(
-        //'follow_access_role' => false,
-        'nested_tab' => true,
-        'id'        => 'hrm-employee-personal',
-        'title'     => __( 'Personal', 'hrm' ),
-        'file_slug' => 'employee/personal',
-        'file_path' => $path . '/employee/personal.php',
-        'submenu'   => array(
-            'personal_info' => array(
-                'id'        => 'hrm-personal-info',
-                'title'     => __( 'Personal Information', 'hrm' ),
-                'file_slug' => 'employee/personal-info',
-                'file_path' => $path . '/employee/personal-info.php',
-            ),
-            'jobs' => array(
-                'id'        => 'hrm-personal-job',
-                'title'     => __( 'job', 'hrm' ),
-                'file_slug' => 'employee/job',
-                'file_path' => $path . '/employee/job.php',
-            ),
-            'ind_salary' => array(
-                'id'        => 'hrm-personal-salary',
-                'title'     => __( 'Salary', 'hrm' ),
-                'file_slug' => 'employee/salary',
-                'file_path' => $path . '/employee/salary.php',
-            ),
-            'work_experiennce' => array(
-                'id'        => 'hrm-personal-work-experience',
-                'title'     => __( 'Work Experience', 'hrm' ),
-                'file_slug' => 'employee/work-experience',
-                'file_path' => $path . '/employee/work-experience.php',
-            ),
-            'ind_education' => array(
-                'id'        => 'hrm-personal-education',
-                'title'     => __( 'Education', 'hrm' ),
-                'file_slug' => 'employee/education',
-                'file_path' => $path . '/employee/education.php',
-            ),
-            'skill' => array(
-                'id'        => 'hrm-personal-skill',
-                'title'     => __( 'Skills', 'hrm' ),
-                'file_slug' => 'employee/skill',
-                'file_path' => $path . '/employee/skill.php',
-            ),
-            'ind_language' => array(
-                'class'     => 'hrm-personal-language',
-                'title'     => __( 'Languages', 'hrm' ),
-                'file_slug' => 'employee/language',
-                'file_path' => $path . '/employee/language.php',
-            ),
-        ),
-    );
+    // $pim['personal'] = array(
+    //     //'follow_access_role' => false,
+    //     'nested_tab' => true,
+    //     'id'        => 'hrm-employee-personal',
+    //     'title'     => __( 'Personal', 'hrm' ),
+    //     'file_slug' => 'employee/personal',
+    //     'file_path' => $path . '/employee/personal.php',
+    //     'submenu'   => array(
+        // $pim = array(
 
-    $pim['organization_info'] = array(
-        //'follow_access_role' => false,
-        'nested_tab' => true,
-        'id'        => 'hrm-employee-organization',
-        'title'     => __( 'Pim Organization', 'hrm' ),
-        'file_slug' => 'employee/organization',
-        'file_path' => $path . '/employee/organization.php',
-        'submenu'   => array(
-            'pim_general_info' => array(
-                'id'        => 'hrm-general-info',
-                'title'     => __( 'General Information', 'hrm' ),
-                'file_slug' => 'employee/general-info',
-                'file_path' => $path . '/employee/general-info.php',
-            ),
-            'pim_location' => array(
-                'id'        => 'hrm-location',
-                'title'     => __( 'Location', 'hrm' ),
-                'file_slug' => 'employee/location',
-                'file_path' => $path . '/employee/location.php',
-            ),
-            'pim_notice' => array(
-                'id'        => 'hrm-location',
-                'title'     => __( 'Notice', 'hrm' ),
-                'file_slug' => 'employee/notice',
-                'file_path' => $path . '/employee/notice.php',
-            ),
-        ),
-    );
+        //    'personal_info' => array(
+        //         'id'        => 'hrm-personal-info',
+        //         'title'     => __( 'Personal Information', 'hrm' ),
+        //         'file_slug' => 'employee/personal-info',
+        //         'file_path' => $path . '/employee/personal-info.php',
+        //     ),
+        //     'jobs' => array(
+        //         'id'        => 'hrm-personal-job',
+        //         'title'     => __( 'job', 'hrm' ),
+        //         'file_slug' => 'employee/job',
+        //         'file_path' => $path . '/employee/job.php',
+        //     ),
+        //     'ind_salary' => array(
+        //         'id'        => 'hrm-personal-salary',
+        //         'title'     => __( 'Salary', 'hrm' ),
+        //         'file_slug' => 'employee/salary',
+        //         'file_path' => $path . '/employee/salary.php',
+        //     ),
+        //     'work_experiennce' => array(
+        //         'id'        => 'hrm-personal-work-experience',
+        //         'title'     => __( 'Work Experience', 'hrm' ),
+        //         'file_slug' => 'employee/work-experience',
+        //         'file_path' => $path . '/employee/work-experience.php',
+        //     ),
+        //     'ind_education' => array(
+        //         'id'        => 'hrm-personal-education',
+        //         'title'     => __( 'Education', 'hrm' ),
+        //         'file_slug' => 'employee/education',
+        //         'file_path' => $path . '/employee/education.php',
+        //     ),
+        //     'skill' => array(
+        //         'id'        => 'hrm-personal-skill',
+        //         'title'     => __( 'Skills', 'hrm' ),
+        //         'file_slug' => 'employee/skill',
+        //         'file_path' => $path . '/employee/skill.php',
+        //     ),
+        //     'ind_language' => array(
+        //         'class'     => 'hrm-personal-language',
+        //         'title'     => __( 'Languages', 'hrm' ),
+        //         'file_slug' => 'employee/language',
+        //         'file_path' => $path . '/employee/language.php',
+        //     ),
+        // );
 
-    $pim['my_task'] = array(
-        //'follow_access_role' => false,
-        'nested_tab' => true,
-        'id'         => 'hrm-employee-my-task',
-        'title'      => __( 'My task', 'hrm' ),
-        'file_slug' => 'employee/my-task',
-        'file_path'  => $path . '/employee/my-task.php',
-        'submenu' => array(
-            'current_task' => array(
-                'id'        => 'hrm-current-task',
-                'title'     => __( 'Current Task', 'hrm' ),
-                'file_slug' => 'employee/current-task',
-                'file_path' => $path . '/employee/current-task.php',
-            ),
-            'outstanding_task' => array(
-                'id'        => 'hrm-outstanding-task',
-                'title'     => __( 'Outstanding Task', 'hrm' ),
-                'file_slug' => 'employee/outstanding-task',
-                'file_path' => $path . '/employee/outstanding-task.php',
-            ),
-            'completed_task' => array(
-                'id'        => 'hrm-completed-task',
-                'title'     => __( 'Completed Task', 'hrm' ),
-                'file_slug' => 'employee/completed-task',
-                'file_path' => $path . '/employee/completed-task.php',
-            ),
-        ),
-    );
 
-    $pim['leave'] = array(
-        //'follow_access_role' => false,
-        'nested_tab' => true,
-        'id'         => 'hrm-employee-leave',
-        'title'      => __( 'Leave', 'hrm' ),
-        'file_slug' => 'employee/leave',
-        'file_path'  => $path . '/employee/leave.php',
-        'submenu' => array(
-            'assign' => array(
-                'id'        => 'hrm-leave-assign',
-                'title'     => __( 'Apply', 'hrm' ),
-                'file_slug' => 'employee/assign',
-                'file_path' => $path . '/employee/assign.php',
-            ),
-            'work_in_week' => array(
-                'id'        => 'hrm-work-in-week',
-                'title'     => __( 'Work Week', 'hrm' ),
-                'file_slug' => 'employee/work-week',
-                'file_path' => $path . '/employee/work-week.php',
-            ),
-            'holiday' => array(
-                'id'        => 'hrm-holiday',
-                'title'     => __( 'Holiday', 'hrm' ),
-                'file_slug' => 'employee/holiday',
-                'file_path' => $path . '/employee/holiday.php',
-            ),
-        ),
-    );
+    // $pim['organization_info'] = array(
+    //     //'follow_access_role' => false,
+    //     'nested_tab' => true,
+    //     'id'        => 'hrm-employee-organization',
+    //     'title'     => __( 'Pim Organization', 'hrm' ),
+    //     'file_slug' => 'employee/organization',
+    //     'file_path' => $path . '/employee/organization.php',
+    //     'submenu'   => array(
+    //         'pim_general_info' => array(
+    //             'id'        => 'hrm-general-info',
+    //             'title'     => __( 'General Information', 'hrm' ),
+    //             'file_slug' => 'employee/general-info',
+    //             'file_path' => $path . '/employee/general-info.php',
+    //         ),
+    //         'pim_location' => array(
+    //             'id'        => 'hrm-location',
+    //             'title'     => __( 'Location', 'hrm' ),
+    //             'file_slug' => 'employee/location',
+    //             'file_path' => $path . '/employee/location.php',
+    //         ),
+    //         'pim_notice' => array(
+    //             'id'        => 'hrm-location',
+    //             'title'     => __( 'Notice', 'hrm' ),
+    //             'file_slug' => 'employee/notice',
+    //             'file_path' => $path . '/employee/notice.php',
+    //         ),
+    //     ),
+    // );
+
+    // $pim['my_task'] = array(
+    //     //'follow_access_role' => false,
+    //     'nested_tab' => true,
+    //     'id'         => 'hrm-employee-my-task',
+    //     'title'      => __( 'My task', 'hrm' ),
+    //     'file_slug' => 'employee/my-task',
+    //     'file_path'  => $path . '/employee/my-task.php',
+    //     'submenu' => array(
+    //         'current_task' => array(
+    //             'id'        => 'hrm-current-task',
+    //             'title'     => __( 'Current Task', 'hrm' ),
+    //             'file_slug' => 'employee/current-task',
+    //             'file_path' => $path . '/employee/current-task.php',
+    //         ),
+    //         'outstanding_task' => array(
+    //             'id'        => 'hrm-outstanding-task',
+    //             'title'     => __( 'Outstanding Task', 'hrm' ),
+    //             'file_slug' => 'employee/outstanding-task',
+    //             'file_path' => $path . '/employee/outstanding-task.php',
+    //         ),
+    //         'completed_task' => array(
+    //             'id'        => 'hrm-completed-task',
+    //             'title'     => __( 'Completed Task', 'hrm' ),
+    //             'file_slug' => 'employee/completed-task',
+    //             'file_path' => $path . '/employee/completed-task.php',
+    //         ),
+    //     ),
+    // );
+
+    // $pim['leave'] = array(
+    //     //'follow_access_role' => false,
+    //     'nested_tab' => true,
+    //     'id'         => 'hrm-employee-leave',
+    //     'title'      => __( 'Leave', 'hrm' ),
+    //     'file_slug' => 'employee/leave',
+    //     'file_path'  => $path . '/employee/leave.php',
+    //     'submenu' => array(
+    //         'assign' => array(
+    //             'id'        => 'hrm-leave-assign',
+    //             'title'     => __( 'Apply', 'hrm' ),
+    //             'file_slug' => 'employee/assign',
+    //             'file_path' => $path . '/employee/assign.php',
+    //         ),
+    //         'work_in_week' => array(
+    //             'id'        => 'hrm-work-in-week',
+    //             'title'     => __( 'Work Week', 'hrm' ),
+    //             'file_slug' => 'employee/work-week',
+    //             'file_path' => $path . '/employee/work-week.php',
+    //         ),
+    //         'holiday' => array(
+    //             'id'        => 'hrm-holiday',
+    //             'title'     => __( 'Holiday', 'hrm' ),
+    //             'file_slug' => 'employee/holiday',
+    //             'file_path' => $path . '/employee/holiday.php',
+    //         ),
+    //     ),
+    // );
 
     if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
         return $pim;

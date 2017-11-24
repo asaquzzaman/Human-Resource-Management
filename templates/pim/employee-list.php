@@ -97,7 +97,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         $department = get_user_meta( $employer->ID, '_job_category', true );
         $department = Hrm_Admin::getInstance()->get_departments( $department );
         $department_name = $department ? $department->name : '';
-
+        
         $role_display_name = reset( $employer->roles );
         $role_display_name = isset( $role_names[$role_display_name] ) ? $role_names[$role_display_name] : '';
 
@@ -107,6 +107,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
                 $emp_image . $name_id,
                 get_user_meta( $employer->ID, 'first_name', true ),
                 get_user_meta( $employer->ID, 'last_name', true ),
+                $role_display_name,
                 $department_name,
                 $status,
                 get_user_meta( $employer->ID, '_mob_number', true ),
@@ -117,6 +118,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
                 $emp_image . $name_id,
                 get_user_meta( $employer->ID, 'last_name', true ),
                 get_user_meta( $employer->ID, 'first_name', true ),
+                $role_display_name,
                 $department_name,
                 $status,
                 get_user_meta( $employer->ID, '_mob_number', true ),
@@ -133,6 +135,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
+            __( 'Role', 'hrm' ),
             __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
@@ -143,6 +146,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             __( 'Profile', 'hrm' ),
             __( 'First Name', 'hrm' ),
             __( 'Last Name', 'hrm' ),
+            __( 'Role', 'hrm' ),
             __( 'Department', 'hrm' ),
             __( 'Status', 'hrm' ),
             __( 'Mobile', 'hrm' ),
@@ -314,7 +318,7 @@ jQuery(function($) {
                         file_id: that.data('id'),
                         action: 'hrm_profile_pic_del',
                         employee_id: '0',
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     };
 
                 $.post(HRM_Vars.ajax_url, data, function(res) {

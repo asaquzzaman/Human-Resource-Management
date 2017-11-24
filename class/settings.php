@@ -1004,7 +1004,7 @@ class Hrm_Settings {
 
                     }
 
-                if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
+                if ( $submit_btn ) {
                     ?>
                     <input type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
@@ -1132,8 +1132,8 @@ class Hrm_Settings {
             $datatable = 'hrm-data-table';
         }
 
-        $insert_new = ( hrm_user_can_access( $page, $tab, $subtab, 'add' ) &&  $add_btn_name ) ? true : false;
-        $event_delete = ( hrm_user_can_access( $page,$tab, $subtab, 'delete' ) && $delet_button ) ? true : false;
+        $insert_new = isset( $table['add_btn'] ) ? $table['add_btn'] : true;
+        $event_delete = isset( $table['delete_btn'] ) ? $table['delete_btn'] : true;
         ob_start();
         ?>
 

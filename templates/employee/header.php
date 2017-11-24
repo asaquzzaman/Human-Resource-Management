@@ -6,13 +6,13 @@ $employee_id = hrm_get_employee_id();
     <?php
 
     foreach ( $menu[$page] as $key => $tab_event ) {
-        if ( !isset( $tab_event['nested_tab'] ) ) {
-            continue;
-        }
+        // if ( !isset( $tab_event['nested_tab'] ) ) {
+        //     continue;
+        // }
 
-        if ( !$tab_event['nested_tab'] ) {
-            continue;
-        }
+        // if ( !$tab_event['nested_tab'] ) {
+        //     continue;
+        // }
 
         $active = ( $tab == $key ) ? 'nav-tab-active' : '';
         $url = hrm_employee_menu_url($page, $key, $employee_id); //hrm_tab_menu_url( $key, $page );

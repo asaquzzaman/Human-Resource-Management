@@ -227,7 +227,7 @@ jQuery(function($) {
                 multipart_params: {
                     action: 'hrm_ajax_upload',
                     employee_id: '0',
-                    _wpnonce: HRM_Vars._wpnonce
+                    _wpnonce: HRM_Vars.nonce
                 },
                 filters : [
                     {title : "Image files", extensions : 'jpg,JPEG,png'},
@@ -310,7 +310,7 @@ jQuery(function($) {
                         file_id: that.data('id'),
                         action: 'hrm_profile_pic_del',
                         employee_id: '0',
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     };
 
                 $.post(HRM_Vars.ajax_url, data, function(res) {

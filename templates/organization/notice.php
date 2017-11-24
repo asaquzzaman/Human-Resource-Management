@@ -11,9 +11,8 @@ if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
     return;
 }
 
-?>
+$can_edit = hrm_user_can( 'manage_hrm_organization' );
 
-<?php
 $header_path = dirname(__FILE__) . '/header.php';
 $header_path = apply_filters( 'hrm_header_path', $header_path, 'admin' );
 
@@ -35,19 +34,17 @@ if( isset( $results['total_row'] ) ) {
     $total = 0;
 };
 
-$add_permission    = hrm_user_can_access( $page, $tab, $subtab, 'add' ) ? true : false;
-$delete_permission = hrm_user_can_access( $page, $tab, $subtab, 'delete' ) ? true : false;
 $body              = array();
 $td_attr           = array();
 
 foreach ( $results as $key => $value) {
 
-    if ( $delete_permission ) {
+    if ( $can_edit ) {
         $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
         $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
         $td_attr[][0] = 'class="hrm-table-checkbox"';
     } else {
-        $del_checkbox = '';
+        $del_checkbox = '<input disabled="disabled" class="hrm-single-checked" name="" value="" type="checkbox">';;
         $delete_text  = '';
     }
 
@@ -61,42 +58,33 @@ foreach ( $results as $key => $value) {
 
     $user_info = get_userdata( $value->user_id );
 
-    if ( $delete_permission ) {
-        $body[] = array(
-            $del_checkbox,
-            $name_id,
-            $value->description,
-            $user_info->display_name,
-            hrm_get_date2mysql( $value->date )
-        );
-    } else {
-        $body[] = array(
-            $name_id,
-            $value->description,
-            $user_info->display_name,
-            hrm_get_date2mysql( $value->date )
-        );
-    }
+    $body[] = array(
+        $del_checkbox,
+        $name_id,
+        $value->description,
+        $user_info->display_name,
+        hrm_get_date2mysql( $value->date )
+    );
+
+}
+
+if ( $can_edit ) {
+    $checkbox = '<input class="hrm-all-checked" type="checkbox">';
+} else {
+    $checkbox = '<input disabled="disabled" class="hrm-all-checked" type="checkbox">';
 }
 
 $table = array();
 
-if ( $delete_permission ) {
-    $table['head'] = array(
-        '<input class="hrm-all-checked" type="checkbox">',
-        __( 'Title', 'hrm' ),
-        __( 'Description', 'hrm' ),
-        __( 'Signature', 'hrm' ),
-        __( 'Date', 'hrm' )
-    );
-} else {
-    $table['head'] = array(
-        __( 'Title', 'hrm' ),
-        __( 'Description', 'hrm' ),
-        __( 'Signature', 'hrm' ),
-        __( 'Date', 'hrm' )
-    );
-}
+
+$table['head'] = array(
+    $checkbox,
+    __( 'Title', 'hrm' ),
+    __( 'Description', 'hrm' ),
+    __( 'Signature', 'hrm' ),
+    __( 'Date', 'hrm' )
+);
+
 
 $table['body']       = isset( $body ) ? $body : array();
 
@@ -107,6 +95,8 @@ $table['table_attr'] = array( 'class' => 'widefat' );
 $table['tab']        = $tab;
 $table['subtab']     = $subtab;
 $table['page']       = $page;
+$table['add_btn']     = $can_edit;
+$table['delete_btn']  = $can_edit;
 
 
 echo Hrm_Settings::getInstance()->table( $table );

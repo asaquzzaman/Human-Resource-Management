@@ -1,10 +1,21 @@
+<?php
+$header_path = dirname(__FILE__) . '/header.php';
+$header_path = apply_filters( 'hrm_header_path', $header_path, 'employee' );
+
+if ( file_exists( $header_path ) ) {
+    require_once $header_path;
+}
+
+?>
 <div class="hrm-update-notification"></div>
 <?php
 
 if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {
     $employee_id = intval( $_REQUEST['employee_id'] );
+    $own_profile = false;
 } else {
     $employee_id = get_current_user_id();
+    $own_profile = true;
 }
 
 
@@ -14,26 +25,33 @@ $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
 $image_attchment = Hrm_Employeelist::getInstance()->get_image( $image_id );
 $didplay_status = !$image_attchment ? 'style="display:none;"' : '';
 ob_start();
+
+$can_edit = $own_profile ? $own_profile : hrm_user_can( 'manage_employee_profile' );
+
 ?>
 <div class="hrm-profile-image-wrap">
-    <div class="hrm-employee-display-name"><?php echo  $employee->display_name; ?></div>
+    
     <div class="hrm-employee-pic-text"><strong><?php  _e( 'Profile Picture', 'hrm' ); ?></strong></div>
-    <div id="hrm-upload-file-container" >
-        <div class="hrm-drop-area" id="hrm-drop-files-zone">
-            <a id="hrm-pickfiles" href="#"><?php _e( 'Change', 'hrm' ); ?></a>
-        </div>
+    <div id="hrm-upload-file-container">
+        
+        <?php if ( $can_edit ) { ?>
+            <div class="hrm-drop-area" id="hrm-drop-files-zone">
+                <a id="hrm-pickfiles" href="#"><?php _e( 'Change', 'hrm' ); ?></a>
+            </div>
+        <?php } ?>
+
         <div id="hrm-user-image-wrap">
             <?php
 
             if ( $image_attchment ) {
 
-                $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
+                $delete = $can_edit ? sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) ) : '';
                 $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
-                $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" width="160" height="160" /></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name']) );
+                $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" width="100" height="100" /></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name']) );
 
                 echo '<div class="hrm-uploaded-item">' . $file_url . ' ' . $delete . $hidden . '</div>';
             } else {
-                echo get_avatar( $employee_id, 160 );
+                echo get_avatar( $employee_id, 100 );
             }
             ?>
 
@@ -44,7 +62,50 @@ ob_start();
 <?php
 $profile_pic = ob_get_clean();
 
+ob_start();
+$dept_id = get_user_meta( $employee_id, '_job_category', true );
+$job_category = Hrm_Admin::getInstance()->get_departments( $dept_id );
 
+?>
+    <div class="hrm-descriptive-wrap">
+
+        <div class="hrm-descriptive-label">Department</div>
+        <div class="hrm-descriptive-content"><strong><?php echo $job_category->name; ?></strong></div>
+    </div>
+<?php
+$department = ob_get_clean();
+
+ob_start();
+$role = get_user_meta( $employee_id, 'role', true );
+$designation = hrm_get_roles($role);
+
+?>
+    <div class="hrm-descriptive-wrap">
+
+        <div class="hrm-descriptive-label">Designation</div>
+        <div class="hrm-descriptive-content"><strong><?php echo $designation; ?></strong></div>
+    </div>
+<?php
+$designation = ob_get_clean();
+
+
+$field[] = array(
+    'label' => '',
+    'type'  => 'descriptive',
+    'value' => $profile_pic
+);
+
+$field[] = array(
+    'label' => '',
+    'type'  => 'descriptive',
+    'value' => $department
+);
+
+$field[] = array(
+    'label' => '',
+    'type'  => 'descriptive',
+    'value' => $designation
+);
 
 $field['user_id'] = array(
     'type' => 'hidden',
@@ -61,11 +122,13 @@ $field['gender'] = array(
             'label'   => __( 'Male', 'hrm' ),
             'value'   => 'male',
             'checked' => $this->get_emp_meta( $employee_id, '_gender' ),
+            'disabled' => $can_edit ? false : 'disabled',
         ),
         array(
             'label'   => __( 'Female', 'hrm' ),
             'value'   => 'female',
             'checked' => $this->get_emp_meta( $employee_id, '_gender' ),
+            'disabled' => $can_edit ? false : 'disabled',
         ),
     ),
 );
@@ -74,6 +137,7 @@ $field['marital_status'] = array(
     'label'    => __( 'Marital Status', 'hrm' ),
     'type'     => 'select',
     'selected' => $this->get_emp_meta( $employee_id, '_marital_status' ),
+    'disabled' => $can_edit ? false : 'disabled',
     'option'   => array(
         ''     => __( '--Select--', 'hrm' ),
         'single'  => __( 'Single', 'hrm' ),
@@ -84,7 +148,8 @@ $field['marital_status'] = array(
 $field['national_code'] = array(
     'label'    => __( 'Nationality', 'hrm' ),
     'type'     => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_national_code' )
+    'value' => $this->get_emp_meta( $employee_id, '_national_code' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['birthday'] = array(
@@ -92,37 +157,43 @@ $field['birthday'] = array(
     'type'  => 'text',
     'class' => 'hrm-datepicker',
     'value' => hrm_get_date2mysql( $this->get_emp_meta( $employee_id, '_birthday' ) ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['street1'] = array(
     'label' => __( 'Address Street 1', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_street1' )
+    'value' => $this->get_emp_meta( $employee_id, '_street1' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['street2'] = array(
     'label' => __( 'Address Street 2', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_street2' )
+    'value' => $this->get_emp_meta( $employee_id, '_street2' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['city_code'] = array(
     'label' => __( 'City', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_city_code' )
+    'value' => $this->get_emp_meta( $employee_id, '_city_code' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 
 $field['state'] = array(
     'label' => __( 'State/Province', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_state' )
+    'value' => $this->get_emp_meta( $employee_id, '_state' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['zip'] = array(
     'label' => __( 'Zip/Postal Code', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_zip' )
+    'value' => $this->get_emp_meta( $employee_id, '_zip' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 
@@ -131,13 +202,15 @@ $field['country_code'] = array(
     'type' => 'select',
     'option' => $country,
     'selected' => $this->get_emp_meta( $employee_id, '_country_code' ),
-    'desc' => 'Chose your country'
+    'desc' => 'Chose your country',
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['work_mobile'] = array(
     'label' => __( 'Work Telephone', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_work_mobile' )
+    'value' => $this->get_emp_meta( $employee_id, '_work_mobile' ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['work_email'] = array(
@@ -149,13 +222,10 @@ $field['work_email'] = array(
         'data-hrm_email' => true,
         'data-hrm_email_error_msg'=> __( 'Please enter a valid email', 'hrm' ),
     ),
+    'disabled' => $can_edit ? false : 'disabled',
 );
 
-$field[] = array(
-    'label' => '',
-    'type'  => 'descriptive',
-    'value' => $profile_pic
-);
+
 
 $field['header']       = 'Personal Information';
 $field['action']       = 'update_my_info';
@@ -164,6 +234,9 @@ $field['id']           = isset( $results->id ) ? $results->id : '';
 $field['tab']          = $tab;
 $field['sub_tab']      = $subtab;
 $field['page']         = $page;
+$field['submit_btn']   = $can_edit;
+
+
 
 echo hrm_Settings::getInstance()->visible_form_generator( $field );
 
@@ -186,12 +259,12 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
                     container : 'hrm-upload-file-container',
                     file_data_name: 'hrm_attachment',
                     multi_selection: false,
-                    max_file_size : '1mb',
+                    max_file_size : '10mb',
                     url : HRM_Vars.ajax_url,
                     multipart_params: {
                         action: 'hrm_ajax_upload',
                         employee_id: <?php echo $employee_id; ?>,
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     },
                     filters : [
                         {title : "Image files", extensions : 'jpg,JPEG,png'},
@@ -223,12 +296,12 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
 
                 uploader.bind('Error', function(up, err) {
 
-                    $('#art-filelist').append(
-                        '<div class="art-error">'+
-                        'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under '+art_image.max_file_size+'.<br>'+
-                        'Try again or manage your artwork'+
-                        '</div>'
-                    );
+                    // $('#art-filelist').append(
+                    //     '<div class="art-error">'+
+                    //     'Sorry, there was an error uploading some of your files.<br>Check to make sure they\'re JPG, JPEG, PNG, GIF files under '+art_image.max_file_size+'.<br>'+
+                    //     'Try again or manage your artwork'+
+                    //     '</div>'
+                    // );
 
                     up.refresh(); // Reposition Flash/Silverlight
                 });
@@ -263,7 +336,7 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
                         file_id: that.data('id'),
                         action: 'hrm_profile_pic_del',
                         employee_id: <?php echo $employee_id; ?>,
-                        _wpnonce: HRM_Vars._wpnonce
+                        _wpnonce: HRM_Vars.nonce
                     };
 
                 $.post(HRM_Vars.ajax_url, data, function(res) {
@@ -283,4 +356,35 @@ echo hrm_Settings::getInstance()->visible_form_generator( $field );
 
 </script>
 
+<style>
+    .hrm-delete-file {
+        display: block;
+    }
+    .hrm-profile-image-wrap:after, .hrm-descriptive-wrap:after {
+        content: "";
+        clear: both;
+        display: block;
+    }
+    .hrm-descriptive-wrap:after {
+        margin-bottom: 10px;
+    }
+    .hrm-employee-pic-text {
+        width: 21%;
+    }
+    #hrm-upload-file-container {
+        margin-bottom: 10px; 
+    }
+    .hrm-profile-image-wrap .hrm-employee-pic-text, 
+    #hrm-upload-file-container {
+        float: left;
+    }
+    .hrm-descriptive-content, .hrm-descriptive-label {
+        float: left;
+    }
+    .hrm-descriptive-label {
+        width: 21%;
+        font-size: 14px;
+    }
+
+</style>
 

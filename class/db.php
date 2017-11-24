@@ -271,7 +271,7 @@ class Hrm_Db {
         dbDelta( $sql );
 
         $table_option['table_name'] = 'hrm_personal_skill';
-        $table_option['table_format'] = array( '%d', '%d', '%s', '%s' );
+        $table_option['table_format'] = array( '%d', '%s', '%s', '%s' );
         $table_option['table_option'] = array(
             'emp_id'       => 'emp_id',
             'skill_id'     => 'skill_id',
@@ -306,7 +306,7 @@ class Hrm_Db {
         dbDelta( $sql );
 
         $table_option['table_name'] = 'hrm_personal_education';
-        $table_option['table_format'] = array( '%d', '%d', '%s', '%s', '%s', '%f', '%s', '%s' );
+        $table_option['table_format'] = array( '%d', '%s', '%s', '%s', '%s', '%f', '%s', '%s' );
         $table_option['table_option'] = array(
             'emp_id'       => 'emp_id',
             'education_id' => 'education_id',
@@ -662,8 +662,13 @@ class Hrm_Db {
     }
 
     function employer_role() {
-        $role_name            = 'hrm_employee';
-        $display_name         = __( 'HRM employee', 'hrm' );
+        $role_name            = hrm_employee_role_key();
+        $display_name         = __( 'Employee', 'hrm' );
+        $capabilities['read'] = true;
+        add_role( $role_name, $display_name, $capabilities );
+
+        $role_name            = hrm_manager_role_key();
+        $display_name         = __( 'Manager', 'hrm' );
         $capabilities['read'] = true;
         add_role( $role_name, $display_name, $capabilities );
     }

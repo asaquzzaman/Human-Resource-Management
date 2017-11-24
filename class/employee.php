@@ -304,9 +304,9 @@ class Hrm_Employee {
 
         $hidden_form['education_id'] = array(
             'label' => __( 'Level', 'hrm' ),
-            'type' => 'select',
-            'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['education'] ) ),
-            'selected' => isset( $field_data['education_id'] ) ? $field_data['education_id'] : '',
+            'type' => 'text',
+            //'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['education'] ) ),
+            'value' => isset( $field_data['education_id'] ) ? $field_data['education_id'] : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,
@@ -326,12 +326,12 @@ class Hrm_Employee {
             'value' => isset( $field_data['major'] ) ?  $field_data['major'] : '',
         );
 
-        $hidden_form['year'] = array(
-            'label' =>  __( 'Year', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_data['year'] ) ? hrm_date2mysql( $field_data['year'] ) : '',
-        );
+        // $hidden_form['year'] = array(
+        //     'label' =>  __( 'Year', 'hrm' ),
+        //     'type' => 'text',
+        //     'class' => 'hrm-datepicker',
+        //     'value' => isset( $field_data['year'] ) ? hrm_date2mysql( $field_data['year'] ) : '',
+        // );
 
         $hidden_form['score'] = array(
             'label' =>  __( 'GPA/Score', 'hrm' ),
@@ -382,19 +382,19 @@ class Hrm_Employee {
             'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
-        $hidden_form['company_name'] = array(
-            'label' =>  __( 'Company Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['company_name'] ) ? $field_data['company_name'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
+        // $hidden_form['company_name'] = array(
+        //     'label' =>  __( 'Company Name', 'hrm' ),
+        //     'type' => 'text',
+        //     'value' => isset( $field_data['company_name'] ) ? $field_data['company_name'] : '',
+        //     'extra' => array(
+        //         'data-hrm_validation' => true,
+        //         'data-hrm_required' => true,
+        //         'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+        //     ),
+        // );
 
         $hidden_form['job_title'] = array(
-            'label' =>  __( 'Job Title', 'hrm' ),
+            'label' =>  __( 'Title', 'hrm' ),
             'type' => 'text',
             'value' => isset( $field_data['job_title'] ) ? $field_data['job_title'] : '',
             'extra' => array(
@@ -427,7 +427,7 @@ class Hrm_Employee {
 
         $hidden_form['action'] = 'ajax_referer_insert';
         $hidden_form['table_option'] = 'hrm_work_experience';
-        $hidden_form['header'] = __('Add Work Experience', 'hrm');
+        $hidden_form['header'] = __('Work Experience', 'hrm');
         $hidden_form['url'] = $redirect;
         ob_start();
         echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
@@ -455,9 +455,8 @@ class Hrm_Employee {
 
         $hidden_form['skill_id'] = array(
             'label' => __( 'Level', 'hrm' ),
-            'type' => 'select',
-            'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['skill'] ) ),
-            'selected' => isset( $field_data['skill_id'] ) ? $field_data['skill_id'] : '',
+            'type' => 'text',
+            'value' => isset( $field_data['skill_id'] ) ? $field_data['skill_id'] : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,
@@ -474,7 +473,7 @@ class Hrm_Employee {
 
         $hidden_form['comments'] = array(
             'label' =>  __( 'Comments', 'hrm' ),
-            'type' => 'text',
+            'type' => 'textarea',
             'value' => isset( $field_data['comments'] ) ?  $field_data['comments'] : '',
         );
 

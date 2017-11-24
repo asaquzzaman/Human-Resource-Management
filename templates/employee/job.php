@@ -1,4 +1,15 @@
 <?php
+$header_path = dirname(__FILE__) . '/header.php';
+$header_path = apply_filters( 'hrm_header_path', $header_path, 'employee' );
+
+if ( file_exists( $header_path ) ) {
+    require_once $header_path;
+}
+
+?>
+<div class="hrm-update-notification"></div>
+
+<?php
 if ( isset( $_GET['employee_id'] ) && $_GET['employee_id'] ) {
     $employer_id = intval( $_GET['employee_id'] );
 } else {
@@ -18,7 +29,7 @@ $job_location = hrm_Settings::getInstance()->conditional_query_val( 'hrm_locatio
 
 <div id="hrm-job-info" class="postbox">
     <div class="hrm-search-head">
-        <h3><?php _e( 'Job Information', 'hrm' )?></h3>
+        <h3><?php _e( 'Job Location', 'hrm' )?></h3>
     </div>
     <div class="padding-wrap">
         <?php
@@ -33,76 +44,65 @@ $job_location = hrm_Settings::getInstance()->conditional_query_val( 'hrm_locatio
             }
         ?>
         <?php
-            if ( isset( $job_category[0]->name ) && !empty( $job_category[0]->name ) ) {
-                ?>
-                <p class="job-content-warp">
-                    <strong class="title"><?php _e( 'Category', 'hrm' ); ?></strong>
-                    <span class="content"><?php echo $job_category[0]->name; ?></span>
-                    <spna class="hrm-clear"></span>
-                </p>
-                <?php
-            }
-        ?>
-        <?php
             if ( isset( $job_location[0]->name ) && !empty( $job_location[0]->name ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Name', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->name; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Name', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->name; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->country_code ) && !empty( $job_location[0]->country_code ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Country', 'hrm' ); ?></strong><span class="content"><?php echo $this->get_country_by_code( $job_location[0]->country_code ); ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Country', 'hrm' ); ?></strong><span class="content"><?php echo $this->get_country_by_code( $job_location[0]->country_code ); ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->province ) && !empty( $job_location[0]->province ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Province', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->province; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Province', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->province; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->city ) && !empty( $job_location[0]->city ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location City', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->city; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'City', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->city; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->address ) && !empty( $job_location[0]->address ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Address', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->address; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Address', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->address; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->zip_code ) && !empty( $job_location[0]->zip_code ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location zip code', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->zip_code; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'zip code', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->zip_code; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->phone ) && !empty( $job_location[0]->phone ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Phone', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->phone; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Phone', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->phone; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->fax ) && !empty( $job_location[0]->fax ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Fax', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->fax; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Fax', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->fax; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
         <?php
             if ( isset( $job_location[0]->notes ) && !empty( $job_location[0]->notes ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Location Description', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->notes; ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Description', 'hrm' ); ?></strong><span class="content"><?php echo $job_location[0]->notes; ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>
@@ -151,7 +151,11 @@ $job_location = hrm_Settings::getInstance()->conditional_query_val( 'hrm_locatio
                 <?php
             }
         ?>
-
-        <p class="job-content-warp"><strong class="title"><?php _e( 'Job description', 'hrm' ); ?></strong><span class="content"><?php echo get_user_meta( $employer_id, '_job_desc', true ); ?></span><spna class="hrm-clear"></span></p>
     </div>
 </div>
+
+<style>
+    #hrm-job-info {
+        margin-top: 2%;
+    }
+</style>

@@ -7,7 +7,7 @@ if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
     return;
 }
 
-
+$can_edit = $own_profile ? $own_profile : hrm_user_can( 'manage_hrm_organization' );
 $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location' );
 
 if( isset( $results['total_row'] ) ) {

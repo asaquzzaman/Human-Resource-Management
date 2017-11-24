@@ -1,3 +1,14 @@
+<?php
+$header_path = dirname(__FILE__) . '/header.php';
+$header_path = apply_filters( 'hrm_header_path', $header_path, 'employee' );
+
+if ( file_exists( $header_path ) ) {
+    require_once $header_path;
+}
+
+?>
+
+
 <div class="hrm-update-notification"></div>
 <?php
 if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {

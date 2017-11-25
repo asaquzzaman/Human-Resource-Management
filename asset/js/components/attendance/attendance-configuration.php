@@ -49,6 +49,19 @@
 					);
 
 					echo Hrm_Settings::getInstance()->new_text_field( $field_obj );
+
+					$allow_ip = array(
+						'label' => __( 'Allow IP', 'hrm' ),
+						'desc'  => __( 'Employee can puch in/out only from this IP', 'hrm' ),
+						'field_elements' => array(
+						    'type'  => 'textarea',
+						    'value' => '',
+						    'placeholder' => 'IP seperated by pipe "|"',
+						    'v-model' => 'allow_ip'
+						)
+					);
+
+					echo Hrm_Settings::getInstance()->new_textarea_field( $allow_ip );
 				?>
 				<input @click.prevent="saveConfiguration()" type="submit" class="button hrm-submit-button button-primary" name="requst" value="<?php _e( 'Save changes', 'hrm' ); ?>">
 			</div>

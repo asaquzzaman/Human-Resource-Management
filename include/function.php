@@ -90,20 +90,46 @@ function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access
 
 function hrm_user_can( $cap, $user_id = false) {
 
-    if ( ! $user_id ) {
-        $user_id = get_current_user_id();
+    // check is current user administrator
+    if ( current_user_can('manage_options') ) {
+        return true;
     }
 
-    $current_user = get_user_by( 'id', $user_id );
+    if ( $user_id ) {
+        return current_user_can( $cap, $user_id );
+    }
+
+    return current_user_can( $cap );
+
+}
+
+function hrm_map_meta_cap( $caps, $cap, $user_id, $args ) {
+    switch ( $cap ) {
+        case 'edit_employee':
+            $employee_id = isset( $args[0] ) ? $args[0] : false;
+            
+            if ( $user_id == $employee_id ) {
+                $caps = [$cap];
+            } else {
+                $caps = ['not_allow'];
+            }
+            
+            break;
+    }
+
+    return $caps;
+}
+
+function hrm_is_current_user_administrator() {
+
+    $current_user = wp_get_current_user();
     $user_roles   = is_array( $current_user->roles ) ? $current_user->roles : array();
 
     if ( in_array( 'administrator', $user_roles ) ) {
         return true;
     }
 
-    return user_can( $user_id, $cap );
-
-
+    return false;
 }
 
 function hrm_current_user_role() {
@@ -588,7 +614,15 @@ function hrm_manager_role_key() {
 function hrm_manager_capability() {
     return array(
         'manage_employee_profile',
-        'manage_hrm_organization'
+        'manage_hrm_organization',
+        'manage_employee',
+        'edit_employee',
+    );
+}
+
+function hrm_employee_capability() {
+    return array(
+        'edit_employee',
     );
 }
 
@@ -611,6 +645,7 @@ function hrm_get_roles($role = false) {
 
 function hrm_set_capability() {
     hrm_set_manager_capability();
+    hrm_set_employee_capability();
 }
 
 function hrm_set_manager_capability() {
@@ -620,6 +655,38 @@ function hrm_set_manager_capability() {
         $role->add_cap( $cap );
     }
 }
+
+function hrm_set_employee_capability() {
+    $role = get_role( hrm_employee_role_key() );
+
+    foreach ( hrm_employee_capability() as $key => $cap ) {
+        $role->add_cap( $cap );
+    }
+}
+
+function hrm_get_client_ip() {
+    $ipaddress = '';
+
+    if ( isset($_SERVER['HTTP_CLIENT_IP'] ) ) {
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    } else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else if ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+    } else if ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
+        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+    } else if ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
+        $ipaddress = $_SERVER['HTTP_FORWARDED'];
+    } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $ipaddress = 'UNKNOWN';
+    }
+
+    return $ipaddress;
+}
+
+
 
 
 

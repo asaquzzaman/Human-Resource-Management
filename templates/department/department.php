@@ -44,3 +44,9 @@
     </div>
 </div>
 
+<style>
+    .hrm-tbl-action-btn-sibling {
+        margin-right: 10px;
+    }
+</style>
+

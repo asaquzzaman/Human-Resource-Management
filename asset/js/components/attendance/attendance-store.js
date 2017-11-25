@@ -12,7 +12,8 @@ var HRM_Attendance_Store = new Vuex.Store({
 		office_start: '',
 		office_closed: '',
 		office_start_with_date_time: '',
-		office_closed_with_date_time: ''
+		office_closed_with_date_time: '',
+		allwo_ip: ''
 	},
 
 	mutations: {
@@ -28,6 +29,7 @@ var HRM_Attendance_Store = new Vuex.Store({
 			state.office_closed                = res.office_closed;
 			state.office_start_with_date_time  = res.office_start_with_date_time;
 			state.office_closed_with_date_time = res.office_closed_with_date_time;
+			state.allwo_ip                     = res.allwo_ip
 		},
 		setAttendance: function(state, records) {
 			state.attendance = records.records; 
@@ -64,6 +66,6 @@ var HRM_Attendance_Store = new Vuex.Store({
 		},
 		punch_in: function(state, status) {
 			state.punch_in_status = status.status;
-		}
+		},
 	}
 });

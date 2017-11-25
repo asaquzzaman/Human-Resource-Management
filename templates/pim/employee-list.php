@@ -7,6 +7,12 @@ if ( file_exists( $header_path ) ) {
     //require_once $header_path;
 }
 
+
+$can_manage = hrm_user_can( 'manage_employee' );
+$can_edit = hrm_user_can( 'edit_employee' );
+
+
+
 $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab );
 ?>
 <div id="hrm-eployee-list"></div>
@@ -26,10 +32,6 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         //return;
     }
 
-    //$total             = $employers->total_users;
-    //$employers         = $employers->results;
-    $add_permission    = hrm_user_can_access( $page, $tab, null, 'add' ) ? true : false;
-    $delete_permission = hrm_user_can_access( $page, $tab, null, 'delete' ) ? true : false;
     $hrm_menu = hrm_page();
 
     $menu_pim_page = isset( $menu[hrm_pim_page()] ) ? $menu[hrm_pim_page()] : array();
@@ -40,7 +42,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         }
     };
     foreach ( $employers as $key => $employer ) {
-        $admin_url = hrm_employee_profile_url( hrm_pim_page(), $pim_single_tab, $employer->ID );
+        $admin_url = hrm_employee_profile_url( hrm_employee_page(), $pim_single_tab, $employer->ID );
         $image_id        = get_user_meta( $employer->ID, '_hrm_user_image_id', true );
         $image_attchment = Hrm_Employeelist::getInstance()->get_image( $image_id );
 
@@ -52,45 +54,47 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
             $emp_image = get_avatar( $employer->ID, 30 );
         }
 
-        if ( $delete_permission ) {
+        if ( $can_manage ) {
             $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$employer->ID.']" value="" type="checkbox">';
             $delete_text  = '<a href="#" class="hrm-delete" data-id='.$employer->ID.'>'.__( 'Delete', 'hrm' ).'</a>';
             $td_attr[][0] = 'class="hrm-table-checkbox"';
         } else {
-            $del_checkbox = '';
+            $del_checkbox = '<input class="hrm-single-checked" disabled="disabled" value="" type="checkbox">';
             $delete_text  = '';
         }
 
-        if ( $add_permission ) {
+        
+
+        if ( $can_manage ) {
             $name_id = '<div class="hrm-title-wrap">
             <a href="'.$admin_url.'" class="hrm-title"  data-table_option="" data-id='.$employer->ID.'>'
                 .$employer->display_name.
             '</a>
             <div class="hrm-title-action">
-                <a href="'.$admin_url.'" class="hrm-edit">'
-                    .__( 'Profile', 'hrm' ).
-                '</a>
                 <a href="#" class="hrm-editable hrm-edit" data-action="employer_edit" data-table_option="hrm_notice" data-id='.$employer->ID.'>'
                     .__( 'Edit', 'hrm' ).
                 '</a>'
 
                 .$delete_text.
-            '</div>';
+            '</div></div>';
+        } else if ( hrm_user_can( 'edit_employee', $employer->ID ) ) {
+            $name_id = '<div class="hrm-title-wrap">
+                <a href="'.$admin_url.'" class="hrm-title"  data-table_option="" data-id='.$employer->ID.'>'
+                    .$employer->display_name.
+                '</a>
+                <div class="hrm-title-action">
+                    <a href="#" class="hrm-editable hrm-edit" data-action="employer_edit" data-table_option="hrm_notice" data-id='.$employer->ID.'>'
+                        .__( 'Edit', 'hrm' ).
+                    '</a>
+                </div></div>';
         } else {
-            $name_id = $employer->display_name;
+            $name_id = '<div class="hrm-title-wrap">
+                <a href="'.$admin_url.'" class="hrm-title"  data-table_option="" data-id='.$employer->ID.'>'
+                    .$employer->display_name.
+                '</a></div>';
         }
 
-        /*if ( $delete_permission ) {
-            $del_checkbox = '<input name="hrm_check['.$employer->ID.']" value="'.$employer->ID.'" type="checkbox">';
-        } else {
-            $del_checkbox = '';
-        }
 
-        if ( $add_permission ) {
-            $name_id = '<a href="#" class="hrm-editable" data-action="employer_edit" data-table_option="" data-id='.$employer->ID.'>'.get_user_meta( $employer->ID, 'first_name', true ).'<a>';
-        } else {
-            $name_id = get_user_meta( $employer->ID, 'first_name', true );
-        }*/
 
         $status = ( get_user_meta( $employer->ID, '_status', true ) == 'yes' ) ? 'Enable' : 'Disable';
         
@@ -101,58 +105,42 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
         $role_display_name = reset( $employer->roles );
         $role_display_name = isset( $role_names[$role_display_name] ) ? $role_names[$role_display_name] : '';
 
-        if ( $delete_permission ) {
-            $body[] = apply_filters( 'hrm_employess_list_row', array(
-                $del_checkbox,
-                $emp_image . $name_id,
-                get_user_meta( $employer->ID, 'first_name', true ),
-                get_user_meta( $employer->ID, 'last_name', true ),
-                $role_display_name,
-                $department_name,
-                $status,
-                get_user_meta( $employer->ID, '_mob_number', true ),
-                hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
-            ), $employer );
-        } else {
-            $body[] = apply_filters( 'hrm_employess_list_row', array(
-                $emp_image . $name_id,
-                get_user_meta( $employer->ID, 'last_name', true ),
-                get_user_meta( $employer->ID, 'first_name', true ),
-                $role_display_name,
-                $department_name,
-                $status,
-                get_user_meta( $employer->ID, '_mob_number', true ),
-                hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
-            ), $employer );
-        }
+       
+        $body[] = apply_filters( 'hrm_employess_list_row', array(
+            $del_checkbox,
+            $emp_image . $name_id,
+            get_user_meta( $employer->ID, 'first_name', true ),
+            get_user_meta( $employer->ID, 'last_name', true ),
+            $role_display_name,
+            $department_name,
+            $status,
+            get_user_meta( $employer->ID, '_mob_number', true ),
+            hrm_get_date2mysql( get_user_meta( $employer->ID, '_joined_date', true ) ),
+        ), $employer );
+
     }
 
     $table = array();
 
-    if ( $delete_permission ) {
-        $table['head'] = array(
-            '<input class="hrm-all-checked" type="checkbox">',
-            __( 'Profile', 'hrm' ),
-            __( 'First Name', 'hrm' ),
-            __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
-            __( 'Department', 'hrm' ),
-            __( 'Status', 'hrm' ),
-            __( 'Mobile', 'hrm' ),
-            __( 'Joined Date', 'hrm' ),
-        );
+    if ( $can_manage ) {
+        $checkbox = '<input class="hrm-all-checked" type="checkbox">';
     } else {
-        $table['head'] = array(
-            __( 'Profile', 'hrm' ),
-            __( 'First Name', 'hrm' ),
-            __( 'Last Name', 'hrm' ),
-            __( 'Role', 'hrm' ),
-            __( 'Department', 'hrm' ),
-            __( 'Status', 'hrm' ),
-            __( 'Mobile', 'hrm' ),
-            __( 'Joined Date', 'hrm' ),
-        );
+        $checkbox = '<input disabled="disabled" class="hrm-all-checked" type="checkbox">';
     }
+
+    
+    $table['head'] = array(
+        $checkbox,
+        __( 'Profile', 'hrm' ),
+        __( 'First Name', 'hrm' ),
+        __( 'Last Name', 'hrm' ),
+        __( 'Role', 'hrm' ),
+        __( 'Department', 'hrm' ),
+        __( 'Status', 'hrm' ),
+        __( 'Mobile', 'hrm' ),
+        __( 'Joined Date', 'hrm' ),
+    );
+    
 
     $table['body']       = isset( $body ) ? $body : '';
     $table['td_attr']    = isset( $td_attr ) ?$td_attr : '';
@@ -162,6 +150,8 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
     $table['page']       = $page;
     $table['action']     = 'employee_delete';
     $table['table_attr'] = array( 'class' => 'widefat' );
+    $table['add_btn']     = $can_manage;
+    $table['delete_btn']  = $can_manage;
 
     echo hrm_Settings::getInstance()->table( $table );
     //table

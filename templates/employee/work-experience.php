@@ -12,13 +12,11 @@ if ( file_exists( $header_path ) ) {
 <?php
 if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {
     $employer_id = intval( $_REQUEST['employee_id'] );
-    $own_profile = false;
 } else {
     $employer_id = get_current_user_id();
-    $own_profile = true;
 }
 
-$can_edit = $own_profile ? $own_profile : hrm_user_can( 'manage_employee_profile' );
+$can_edit = hrm_user_can( 'edit_employee', $employer_id );
 ?>
 
 <div id="hrm-employee-work-experience"></div>

@@ -23,9 +23,7 @@ class Hrm_Attendance {
         
         $punch_in    = self::getInstance()->punch_in_status();
         $office_time = self::getInstance()->get_office_time();
-
-
-
+        
         $office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
         $office_closed_with_date = date( 'Y-m-d 06:00', strtotime( current_time('mysql') ) );
 
@@ -58,8 +56,16 @@ class Hrm_Attendance {
             'office_start'                 => $office_start,
             'office_closed'                => $office_closed,
             'office_start_with_date_time'  => $office_start_with_date,
-            'office_closed_with_date_time' => $office_closed_with_date
+            'office_closed_with_date_time' => $office_closed_with_date,
+            'allow_ip'                     => self::getInstance()->process_ip( $office_time->ip )
         ));
+    }
+
+    function process_ip( $ip ) {
+        $ip = maybe_unserialize( $ip );
+        $ip = implode( '|', $ip );
+
+        return $ip;
     }
 
     function get_office_time() {
@@ -132,8 +138,8 @@ class Hrm_Attendance {
         
         $punch_id = self::getInstance()->punch_in();
 
-        if ( ! $punch_id ) {
-            wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
+        if ( is_wp_error( $punch_id ) ) {
+            wp_send_json_error( array( 'error' => $punch_id->get_error_messages() ) );
         }
         
         wp_send_json_success( array(
@@ -144,12 +150,34 @@ class Hrm_Attendance {
         ) );
     }
 
+    function punch_validator() {
+        $office_time = $this->get_office_time();
+        $ip          = $this->process_ip( $office_time->ip );
+        $client_ip   = hrm_get_client_ip();
+
+        if ( empty( $ip ) ) {
+            return true;
+        }
+
+        if ( in_array( $client_ip, $ip ) ) {
+            return true;
+        }
+
+        return new WP_Error('ip_not_match', __( 'Your ip is not allowed', 'hrm' ) );
+    }
+
 
     function punch_in( $user_id = false ) {
+        $validator = $this->punch_validator();
+
+        if ( is_wp_error( $validator ) ) {
+            return $validator;
+        }
+
         $punch_in_status = $this->punch_in_status();
         
         if ( $punch_in_status == 'disable' ) {
-            return false;
+            return new WP_Error('punch_in_disabled', __( 'You have punch in before punch out', 'hrm' ) );
         }
 
         global $wpdb;
@@ -170,7 +198,7 @@ class Hrm_Attendance {
             return $wpdb->insert_id;
         }
 
-        return false;
+        return new WP_Error('punch_in_disabled', __( 'Unknonw error', 'hrm' ) );
 
     }
 
@@ -646,14 +674,22 @@ class Hrm_Attendance {
             $is_multi = 0;
         }
 
+        $ip       = $postdata['allow_ip'];
+        $string   = str_replace(' ', '', $ip);
+        $allow_ip = explode('|', $string);
+        $allow_ip = array_filter( $allow_ip, function( $ip ) {
+            return filter_var($ip, FILTER_VALIDATE_IP);
+        } );
+
         $data = array(
             'start'    => $postdata['office_start'],
             'end'      => $closed,
-            'is_multi' => $is_multi
+            'is_multi' => $is_multi,
+            'ip'       => maybe_serialize( $allow_ip )
         );
 
 
-        $format = array( '%s', '%s', '%d' );
+        $format = array( '%s', '%s', '%d', '%s' );
         $update = $wpdb->insert( $table, $data, $format );
 
         if ( $update ) {
@@ -677,7 +713,7 @@ class Hrm_Attendance {
             'success'  => __( 'Successfully update attendance configuration', 'hrm' ),
             'start'    => $postdata['office_start'],
             'end'      => $postdata['closed'],
-            'is_multi' => $postdata['closed']
+            'is_multi' => $postdata['closed'],
         ));
     }
 }

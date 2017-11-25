@@ -186,7 +186,7 @@ class Hrm_Employeelist {
             $wp_roles = new WP_Roles();
         }
 
-        
+        $can_edit = hrm_user_can( 'edit_employee' );
 
         $job_title    = json_decode( stripcslashes( $_POST['hrm_dataAttr']['job_title'] ) );
         $job_category = json_decode( stripcslashes( $_POST['hrm_dataAttr']['job_category'] ) );
@@ -247,71 +247,67 @@ class Hrm_Employeelist {
             ),
         );
 
-        // $new_role_url = hrm_new_role_url();
-        $hidden_form['emp_role'] = array(
-            'label'    => __( 'Role', 'hrm' ),
-            'type'     => 'select',
-            'option'   => hrm_get_roles(),
-            'selected' => isset( $user->roles ) ? reset( $user->roles ) : 'hrm_employee',
-            //'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_role_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
+        if ( $can_edit ) {
+            // $new_role_url = hrm_new_role_url();
+            $hidden_form['emp_role'] = array(
+                'label'    => __( 'Role', 'hrm' ),
+                'type'     => 'select',
+                'option'   => hrm_get_roles(),
+                'selected' => isset( $user->roles ) ? reset( $user->roles ) : 'hrm_employee',
+                //'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_role_url,  __( 'Create New', 'hrm' ) ),
+                'extra' => array(
+                    'data-hrm_validation'         => true,
+                    'data-hrm_required'           => true,
+                    'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
+                ),
+            );
 
-        // $new_job_title_url = hrm_job_title();
-        // $hidden_form['emp_job_title'] = array(
-        //     'label' => __( 'Job Title', 'hrm' ),
-        //     'type' => 'select',
-        //     'option' => $job_title,
-        //     'selected' => get_user_meta( $employer_id, '_job_title', true ),
-        //     'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_job_title_url,  __( 'Create New', 'hrm' ) ),
-        //     'extra' => array(
-        //         'data-hrm_validation' => true,
-        //         'data-hrm_required' => true,
-        //         'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-        //     ),
-        // );
+        }
 
-        $category_url = hrm_job_category();
-        $hidden_form['emp_job_category'] = array(
-            'label' => __( 'Department', 'hrm' ),
-            'type' => 'select',
-            'option' => $job_category,
-            'selected' => get_user_meta( $employer_id, '_job_category', true ),
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $category_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
+        if ( $can_edit ) {
+            $category_url = hrm_job_category();
+            $hidden_form['emp_job_category'] = array(
+                'label' => __( 'Department', 'hrm' ),
+                'type' => 'select',
+                'option' => $job_category,
+                'selected' => get_user_meta( $employer_id, '_job_category', true ),
+                'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $category_url,  __( 'Create New', 'hrm' ) ),
+                'extra' => array(
+                    'data-hrm_validation' => true,
+                    'data-hrm_required' => true,
+                    'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                ),
+            );
+        }
 
-        $location_url = hrm_job_location();
-        $hidden_form['emp_location'] = array(
-            'label' => __( 'Location', 'hrm' ),
-            'type' => 'select',
-            'option' => $location,
-            'selected' => get_user_meta( $employer_id, '_location', true ),
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $location_url,  __( 'Create New', 'hrm' ) ),
-            // 'extra' => array(
-            //     'data-hrm_validation' => true,
-            //     'data-hrm_required' => true,
-            //     'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            // ),
-        );
+        if ( $can_edit ) {
+            $location_url = hrm_job_location();
+            $hidden_form['emp_location'] = array(
+                'label' => __( 'Location', 'hrm' ),
+                'type' => 'select',
+                'option' => $location,
+                'selected' => get_user_meta( $employer_id, '_location', true ),
+                'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $location_url,  __( 'Create New', 'hrm' ) ),
+                // 'extra' => array(
+                //     'data-hrm_validation' => true,
+                //     'data-hrm_required' => true,
+                //     'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+                // ),
+            );
+        }
 
-        $hidden_form['status'] = array(
-            'label' =>  __( 'status', 'hrm' ),
-            'type'  => 'select',
-            'option' => array(
-                'yes' => 'Enable',
-                'no' => 'Disable'
-            ),
-            'selected' => get_user_meta( $employer_id, '_status', true )
-        );
+        if ( $can_edit ) {
+
+            $hidden_form['status'] = array(
+                'label' =>  __( 'status', 'hrm' ),
+                'type'  => 'select',
+                'option' => array(
+                    'yes' => 'Enable',
+                    'no' => 'Disable'
+                ),
+                'selected' => get_user_meta( $employer_id, '_status', true )
+            );
+        }
 
         $hidden_form['gender'] = array(
             'label' =>  __( 'Gender', 'hrm' ),
@@ -335,12 +331,14 @@ class Hrm_Employeelist {
             $join_date = date('Y-m-d', strtotime( current_time( 'mysql' ) ) );
         }
 
-        $hidden_form['joined_date'] = array(
-            'label' =>  __( 'Joined Date', 'hrm' ),
-            'type'  => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => $join_date
-        );
+        if ( $can_edit ) {
+            $hidden_form['joined_date'] = array(
+                'label' =>  __( 'Joining Date', 'hrm' ),
+                'type'  => 'text',
+                'class' => 'hrm-datepicker',
+                'value' => $join_date
+            );
+        }
 
         $hidden_form['job_desc'] = array(
             'label' =>  __( 'Description', 'hrm' ),
@@ -425,7 +423,7 @@ class Hrm_Employeelist {
             '-1' => __( '-Select-', 'hrm' )
         );
 
-        foreach ( $employees->results as $key => $employee ) {
+        foreach ( $employees as $key => $employee ) {
             $emp_lists[$employee->ID] = $employee->display_name;
         }
 

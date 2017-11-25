@@ -65,6 +65,14 @@ $search['to_date'] = array(
     'value' => $search_status ? $search_post['to_date'] : '',
 );
 
+$search['allow_ip'] = array(
+    'label' => __( 'Allow IP', 'hrm' ),
+    'type'  => 'textarea',
+    'desc'  => __( 'Employee can puch in/out only from this IP', 'hrm' ),
+    'value' => '',
+    'placeholder' => 'IP seperated by |',
+);
+
 $search['visibility']   = $search_status ? true : true;
 $search['action']       = 'hrm_search';
 $search['table_option'] = 'hrm_attendance_record_both';

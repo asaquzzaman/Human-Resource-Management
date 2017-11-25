@@ -12,21 +12,19 @@ if ( file_exists( $header_path ) ) {
 
 if ( isset( $_REQUEST['employee_id'] ) && $_REQUEST['employee_id'] ) {
     $employee_id = intval( $_REQUEST['employee_id'] );
-    $own_profile = false;
 } else {
     $employee_id = get_current_user_id();
-    $own_profile = true;
 }
 
 
-$employee = get_user_by( 'id', $employee_id );
-$country = hrm_Settings::getInstance()->country_list();
+$employee        = get_user_by( 'id', $employee_id );
+$country         = hrm_Settings::getInstance()->country_list();
 $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
 $image_attchment = Hrm_Employeelist::getInstance()->get_image( $image_id );
-$didplay_status = !$image_attchment ? 'style="display:none;"' : '';
+$didplay_status  = !$image_attchment ? 'style="display:none;"' : '';
 ob_start();
 
-$can_edit = $own_profile ? $own_profile : hrm_user_can( 'manage_employee_profile' );
+$can_edit = hrm_user_can( 'edit_employee', $employee_id );
 
 ?>
 <div class="hrm-profile-image-wrap">

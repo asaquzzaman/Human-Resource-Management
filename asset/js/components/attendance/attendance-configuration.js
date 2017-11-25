@@ -25,6 +25,16 @@ var hrm_attendace_configuration = {
 			set: function(val) {
 				this.$store.commit('setMultiAttendance', val);
 			}
+		},
+
+		allow_ip: {
+			get: function() {
+				return this.$store.state.allow_ip;
+			},
+			
+			set: function(val) {
+				this.$store.commit('setAllowIP', val);
+			}
 		}
 	},
 
@@ -68,13 +78,14 @@ var hrm_attendace_configuration = {
 					_wpnonce: HRM_Vars.nonce,
 					hrm_is_multi_attendance: this.hrm_is_multi_attendance,
 					office_start: this.$store.state.office_start_with_date_time,
-					office_closed: this.$store.state.office_closed_with_date_time
+					office_closed: this.$store.state.office_closed_with_date_time,
+					allow_ip: this.$store.state.allow_ip
 
 				},
 				self = this;
 			
 			this.punch_in = 'disable';
-
+			
 			wp.ajax.send('attendance_configuration', {
                 data: request_data,
                 success: function(res) {

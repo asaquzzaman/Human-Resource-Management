@@ -65,6 +65,7 @@ class WP_Hrm {
 
         $this->instantiate();
         $this->init_action();
+        $this->init_filter();
         
         register_activation_hook( __FILE__, array($this, 'install') );
     }
@@ -177,6 +178,10 @@ class WP_Hrm {
         add_action( 'wp_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
         add_action( 'admin_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
         add_action( 'init', 'hrm_set_capability' );
+    }
+
+    function init_filter() {
+        add_action( 'map_meta_cap', 'hrm_map_meta_cap', 10, 4 );
     }
 
     static function admin_scripts() {

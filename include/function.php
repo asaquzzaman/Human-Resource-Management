@@ -594,12 +594,11 @@ function hrm_can_load_footer_tag() {
     $page       = $query_args['page'];
     $tab        = $query_args['tab'];
     $subtab     = $query_args['subtab'];
+    $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
 
 
     if ( 
-        $page == 'hrm_leave'
-        ||
-        $page == 'hrm_settings'
+        $page == 'hr_management' && $vue
     ) { 
         return true;
     }

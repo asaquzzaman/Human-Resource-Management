@@ -1,4 +1,6 @@
-export default pm.Vue.mixin({
+import Vue from './../../vue/vue';
+
+export default Vue.mixin({
 	methods: {
 		updateSettings (args) {
 			var request = {

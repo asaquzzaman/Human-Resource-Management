@@ -24,7 +24,6 @@ import store from './leave-store';
 
 
 export default {
-
 	computed: {
 		is_leave_form_active: function() {
 			return this.$store.state.is_leave_form_active;

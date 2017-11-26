@@ -295,6 +295,7 @@ class WP_Hrm {
 
 
     function admin_menu() {
+        global $submenu;
         $capability    = 'read'; //minimum level: subscriber
         $label         = hrm_menu_label();
         $hrm_page_slug = hrm_page_slug();
@@ -310,6 +311,9 @@ class WP_Hrm {
                 $style_slug[$page_slug] = add_submenu_page( $hrm_page_slug, $page_label, $page_label, $capability, $page_slug, array($this, 'admin_page_handler') );
             }
         }
+
+        $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/leave' ];
+        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/settings' ];
 
         if( isset( $style_slug[hrm_organization_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );
@@ -335,9 +339,9 @@ class WP_Hrm {
             add_action( 'admin_print_styles-' . $style_slug[hrm_project_page()], array( $this, 'admin_scripts') );
         }
 
-        if( isset( $style_slug[hrm_leave_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( 'Hrm_Scripts', 'leave_scripts') );
-        }
+        // if( isset( $style_slug[hrm_leave_page()] ) ) {
+        //     add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( 'Hrm_Scripts', 'leave_scripts') );
+        // }
 
         if( isset( $style_slug[hrm_attendance_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_attendance_page()], array( 'Hrm_Scripts', 'attendance_scripts') );
@@ -413,14 +417,9 @@ class WP_Hrm {
         $page       = $query_args['page'];
         $tab        = $query_args['tab'];
         $subtab     = $query_args['subtab'];
+        $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
 
-
-        if ( 
-            $page == 'hrm_leave'
-            ||
-            $page == 'hrm_settings'
-         ) {
-
+        if ( $page == 'hr_management' && $vue ) {
             require_once HRM_PATH . '/templates/index.html';
         } else {
             echo '<div class="hrm wrap" id="hrm">';

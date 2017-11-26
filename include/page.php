@@ -727,7 +727,7 @@ function hrm_leave_page() {
     return apply_filters( 'hrm_leave_page_slug', 'hrm_leave' );
 }
 function hrm_settings_page() {
-    return apply_filters( 'hrm_settings_page_slug', 'hrm_settings' );
+    return apply_filters( 'hrm_settings_page_slug', 'hrm_settings#/settings' );
 }
 function hrm_attendance_page() {
     return apply_filters( 'hrm_attendance_page_slug', 'hrm_attendance' );
@@ -745,7 +745,7 @@ function hrm_project_page() {
 }
 
 function hrm_employee_page() {
-    return apply_filters( 'hrm_employee_page_slug', 'hrm_employee' );
+    return apply_filters( 'hrm_employee_page_slug', 'hr_management' );
 }
 
 function hrm_salary_page() {
@@ -771,9 +771,9 @@ function hrm_menu_label() {
         hrm_department_page()   => __( 'Department', 'hrm' ),
         //hrm_admin_page()        => __( 'Admin', 'hrm' ),
         hrm_pim_page()          => __( 'Employee', 'hrm' ),
-        hrm_leave_page()        => __( 'Leave', 'hrm' ),
+        //hrm_leave_page()        => __( 'Leave', 'hrm' ),
         hrm_attendance_page()   => __( 'Attendance', 'hrm' ),
-        hrm_settings_page()     => __('Settings'),
+        //hrm_settings_page()     => __('Settings'),
        // hrm_evaluation_page() => __( 'Evaluation', 'hrm' ),
         //hrm_file_page()       => __( 'File', 'hrm' ),
        // hrm_project_page()    => __( 'Project', 'hrm' ),

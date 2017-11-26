@@ -16,6 +16,16 @@
 		components: {
 			'leave-header': leave_header
 		},
+
+		created () {
+			if ( this.$route.path == '/leave-requests' ) {
+				this.$router.push(
+					{
+						name: 'leave_pending'
+					}
+				);
+			}
+		}
 		
 	};
 

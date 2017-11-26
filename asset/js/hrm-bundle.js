@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"a0e0aa6bc73e1387619a","1":"af23bea5ca3637396b1b","2":"1ae5f546be1d1801237f","3":"abe4a84f381eb69bdf79","4":"68c3e017d15e5b371feb","5":"8e5a0dc2c6ca864c382a","6":"dfd8d39d093885bc5b93","7":"c3a6f0d9bafa6800cb83","8":"65db03b040b50fda5c57","9":"0adfc2474b50f0a7bc41","10":"9842007600ef68ed9fc7"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"a0e0aa6bc73e1387619a","1":"09a8e450f80fc2c8e46f","2":"1ae5f546be1d1801237f","3":"abe4a84f381eb69bdf79","4":"68c3e017d15e5b371feb","5":"0215203743bdc5196cc3","6":"dfd8d39d093885bc5b93","7":"c3a6f0d9bafa6800cb83","8":"65db03b040b50fda5c57","9":"0adfc2474b50f0a7bc41","10":"9842007600ef68ed9fc7"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -14101,7 +14101,15 @@ new __WEBPACK_IMPORTED_MODULE_0__vue_vue___default.a(wpspear_hrm);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    store: __WEBPACK_IMPORTED_MODULE_0__leave_store__["a" /* default */]
+    store: __WEBPACK_IMPORTED_MODULE_0__leave_store__["a" /* default */],
+
+    created() {
+        // if (this.$route.path === '/') {
+        //     this.$router.push({
+        //         name: 'leave_records'
+        //     });
+        // }
+    }
 });
 
 /***/ }),

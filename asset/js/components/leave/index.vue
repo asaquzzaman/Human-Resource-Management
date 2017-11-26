@@ -15,6 +15,14 @@
 
     export default {
         store,
+
+        created () {
+            // if (this.$route.path === '/') {
+            //     this.$router.push({
+            //         name: 'leave_records'
+            //     });
+            // }
+        },
     }
 
 </script>

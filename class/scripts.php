@@ -142,7 +142,7 @@ class Hrm_Scripts {
      * @return void
      */
     public static function leave_scripts() {
-        //self::footer_tag();
+        self::footer_tag();
     }
 
     /**

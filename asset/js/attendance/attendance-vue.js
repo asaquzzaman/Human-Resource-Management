@@ -35,6 +35,12 @@ var HRM_Attendance = new Vue({
 	router: HRM_Attendance_Router,
 	
 	mixin: [HRM_Common_Mixin],
+
+    created: function() {
+        if (this.$route.path === '/') {
+            this.$router.push({ name: 'attendance_records' });
+        }
+    },
 	
 	components: {
 	    'hrm-attendace-records': hrm_attendace_records,

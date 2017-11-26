@@ -207,8 +207,8 @@ class Hrm_Attendance {
 
         $update = self::getInstance()->punch_out();
 
-        if ( ! $update ) {
-            wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
+        if ( is_wp_error( $update ) ) {
+            wp_send_json_error( array( 'error' => $update->get_error_messages() ) );
         }
         
         wp_send_json_success( array(
@@ -219,6 +219,12 @@ class Hrm_Attendance {
     }
 
     function punch_out( $punch_id = false, $user_id = false ) {
+        $validator = $this->punch_validator();
+
+        if ( is_wp_error( $validator ) ) {
+            return $validator;
+        }
+
         global $wpdb;
         
         $user_id    = $user_id ? absint( $user_id ) : get_current_user_id();
@@ -230,7 +236,7 @@ class Hrm_Attendance {
         $punch_in_row = $wpdb->get_row( "SELECT * FROM $table WHERE date >= '$today_date' AND user_id = $user_id ORDER BY id DESC LIMIT 1" );
 
         if ( ! $punch_in_row ) {
-            return false;
+            return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
         }
 
         $punch_in   = $punch_in_row->punch_in;
@@ -256,7 +262,7 @@ class Hrm_Attendance {
             return true;
         }
 
-        return false;
+        return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
     }
 
     public static function ajax_get_attendance() {

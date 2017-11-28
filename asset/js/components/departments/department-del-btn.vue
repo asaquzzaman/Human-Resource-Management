@@ -5,15 +5,15 @@
     </div>
 </template>
 <script>
-
+    
     export default {
     	props: ['type', 'department_id'],
 
-    	mixins: [HRM_Common_Mixin],
+    	mixins: [HRMMixin.departments],
 
     	methods: {
     		departmentGroupDelete: function() {
-    			this.deleteDepartment(this.$store.state.del_dept);
+    			this.deleteDepartment(this.$store.state.departments.del_dept);
     		},
 
     		departmentDelete: function() {
@@ -24,7 +24,7 @@
     		deleteDepartment: function(dept_id) {
                 var is_continue = true;
 
-                this.$store.state.departments.forEach(function(department) {
+                this.$store.state.departments.departments.forEach(function(department) {
 
                     if ( dept_id.includes(department.id) ) {
                         if ( parseInt(department.number_of_employee) > 0 && is_continue ) {
@@ -50,12 +50,12 @@
                     	// Display a success toast, with a title
                         toastr.success(res.success);
                         
-                        self.$store.commit('departmentDelId', {del_dept: []});
+                        self.$store.commit('departments/departmentDelId', {del_dept: []});
 
                         res.deleted_dept.map(function(deleted_id) {
-                        	var index = self.getIndex(self.$store.state.departments, deleted_id, 'id');
+                        	var index = self.getIndex(self.$store.state.departments.departments, deleted_id, 'id');
                         	
-                        	self.$store.commit('afterDeleteDept', {target_del_dept: index, dept_drop_down: res.dept_drop_down});
+                        	self.$store.commit('departments/afterDeleteDept', {target_del_dept: index, dept_drop_down: res.dept_drop_down});
                         });
                         
                     },

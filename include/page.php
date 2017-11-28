@@ -768,11 +768,11 @@ function hrm_menu_label() {
     $labels = array(
         hrm_employee_page()   => __( 'Profile', 'hrm' ),
         hrm_organization_page() => __( 'Organization', 'hrm' ),
-        hrm_department_page()   => __( 'Department', 'hrm' ),
+        //hrm_department_page()   => __( 'Department', 'hrm' ),
         //hrm_admin_page()        => __( 'Admin', 'hrm' ),
         hrm_pim_page()          => __( 'Employee', 'hrm' ),
         //hrm_leave_page()        => __( 'Leave', 'hrm' ),
-        hrm_attendance_page()   => __( 'Attendance', 'hrm' ),
+        //hrm_attendance_page()   => __( 'Attendance', 'hrm' ),
         //hrm_settings_page()     => __('Settings'),
        // hrm_evaluation_page() => __( 'Evaluation', 'hrm' ),
         //hrm_file_page()       => __( 'File', 'hrm' ),

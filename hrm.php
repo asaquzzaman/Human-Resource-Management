@@ -312,6 +312,8 @@ class WP_Hrm {
             }
         }
 
+        $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/departments' ];
+        $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/attendance' ];
         $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/leave' ];
         $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/settings' ];
 
@@ -319,9 +321,9 @@ class WP_Hrm {
             add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );
         }
 
-        if( isset( $style_slug[hrm_department_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_department_page()], array( 'Hrm_Scripts', 'department') );
-        }
+        // if( isset( $style_slug[hrm_department_page()] ) ) {
+        //     add_action( 'admin_print_styles-' . $style_slug[hrm_department_page()], array( 'Hrm_Scripts', 'department') );
+        // }
 
         if( isset( $style_slug[hrm_admin_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_admin_page()], array( 'Hrm_Scripts', 'admin') );

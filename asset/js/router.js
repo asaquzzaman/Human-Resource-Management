@@ -3,16 +3,27 @@ import Router from './vue/vue-router';
 
 import {leave,configuration,requested} from './components/leave/leave-router';
 import settings from './components/settings/router';
+import departments from './components/departments/router';
 
-HRM_Routes.push(leave);
-HRM_Routes.push(configuration);
-HRM_Routes.push(requested);
-HRM_Routes.push(settings);
+import Empty from './components/common/empty.vue';
+
+HRM_Routers.push(leave);
+HRM_Routers.push(configuration);
+HRM_Routers.push(requested);
+HRM_Routers.push(settings);
+
+HRM_Routers.push({
+	path: '/', 
+    component:  Empty,
+    name: 'hrm_root',
+
+	children: HRMGetRegisterChildrenRoute('hrm_root')
+});
 
 Vue.use(Router);
 
 var router = new Router({
-	routes: HRM_Routes,
+	routes: HRM_Routers,
 });
 
 export default router;

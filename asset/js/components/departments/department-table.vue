@@ -7,16 +7,16 @@
                     <input @change.prevent="delAllDept()" class="hrm-all-checked" v-model="del_all_dept" type="checkbox">
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
-                    <?php _e( 'Department Title', 'hrm' ); ?>
+                    Department Title
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Description: activate to sort column ascending" style="width: 304px;">
-                    <?php _e( 'Department Description', 'hrm' ); ?>
+                    Department Description
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
-                    <?php _e( 'Status', 'hrm' ); ?>
+                    Status
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
-                    <?php _e( 'No. of Employee', 'hrm' ); ?>
+                    No. of Employee
                 </th>
             </tr>
         </thead>
@@ -57,8 +57,11 @@
     </table>
 </template>
 <script>
+    import EditBtn from './department-edit-btn.vue';
+    import DelBtn from './department-del-btn.vue';
+
     export default {
-        mixins: [HRM_Common_Mixin],
+        mixins: [HRMMixin.departments],
 
         data: function() {
             return {
@@ -69,17 +72,39 @@
 
         created: function() {
             if ( !this.$store.state.departments.length ) {
-                this.getDepartments();
+                this.departmentQuery();
             }
         },
 
         computed: {
             departments: function() {
-                return this.$store.state.departments;
+                return this.$store.state.departments.departments;
             }
         },
 
+        components: {
+            'department-edit-btn': EditBtn,
+            'department-del-btn': DelBtn
+        },
+
         methods: {
+            departmentQuery () {
+                var self = this;
+                
+                var conditions = {
+                    show_all: true
+                };
+
+                var args = {
+                    data: conditions,
+                    callback: function(res){
+                        
+                    
+                    }  
+                }
+
+                this.getDepartments(args);
+            },
             delAllDept: function() {
                 if (this.del_all_dept) {
                     var depts_id = [];
@@ -94,13 +119,13 @@
                     this.del_dept = [];
                 }
 
-                this.$store.commit('departmentDelId', {del_dept: this.del_dept});
+                this.$store.commit('departments/departmentDelId', {del_dept: this.del_dept});
             },
 
             delDept: function() {
                 var depts_id = [];
 
-                this.$store.state.departments.map(function(department) {
+                this.$store.state.departments.departments.map(function(department) {
                     depts_id.push(department.id);
                 });
 
@@ -112,7 +137,7 @@
                     this.del_all_dept = false;
                 }
                 
-                this.$store.commit('departmentDelId', {del_dept: this.del_dept});
+                this.$store.commit('departments/departmentDelId', {del_dept: this.del_dept});
             },
 
             departmentActivity: function(department) {
@@ -142,7 +167,7 @@
 
     computed: {
         departments: function() {
-            return this.$store.state.departments;
+            return this.$store.state.departments.;
         }
     },
 
@@ -161,7 +186,7 @@
                 this.del_dept = [];
             }
 
-            this.$store.commit('departmentDelId', {del_dept: this.del_dept});
+            this.$store.commit('departments/departmentDelId', {del_dept: this.del_dept});
         },
 
         delDept: function() {
@@ -179,7 +204,7 @@
                 this.del_all_dept = false;
             }
             
-            this.$store.commit('departmentDelId', {del_dept: this.del_dept});
+            this.$store.commit('departments/departmentDelId', {del_dept: this.del_dept});
         },
 
         departmentActivity: function(department) {

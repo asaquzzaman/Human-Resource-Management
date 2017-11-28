@@ -2,6 +2,25 @@ import Vue from './vue/vue';
 
 export default Vue.mixin({
 	methods: {
+        registerStore (module_name, store) {
+            if (typeof store === 'undefined') {
+                return false;
+            }
+            
+            var self = this;
+            if( typeof store !== 'undefined' ) {
+                var mutations = store.mutations || {}; //self.$options.mutations;
+                var state = store.state || {}; //self.$options.state;
+            }
+            
+            // register a module `myModule`
+
+            self.$store.registerModule(module_name, {
+                namespaced: true,
+                state,
+                mutations,
+            });
+        },
 		httpRequest (hook, property) {
 			var before = function( xhr ) {
 			    xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
@@ -41,22 +60,27 @@ export default Vue.mixin({
 	        return target;
 	    },
 
-	    getDepartments () {
-	    	
-			var request_data = {
+	    getDepartments (args) {
+	    	var self = this;
+            var pre_define = {
                 _wpnonce: HRM_Vars.nonce,
                 page_number: this.$route.params.page_number
-            },
-            self = this;
+            };
+
+            var request_data  = jQuery.extend(true, pre_define, args.data);
 
             wp.ajax.send('get_departments', {
                 data: request_data,
                 success (res) {
-                    self.$store.commit( 'setDepartments', { 
-                    	departments: res.departments, 
-                    	'total_dept': res.total_dept,
-                    	'dept_drop_down': res.dept_drop_down
+                    self.$store.commit( 'departments/setDepartments', { 
+                        departments: res.departments, 
+                        'total_dept': res.total_dept,
+                        'dept_drop_down': res.dept_drop_down
                     });
+                    
+                    if ( typeof args.callback === 'function') {
+                        args.callback(res);
+                    }
                 },
 
                 error (res) {

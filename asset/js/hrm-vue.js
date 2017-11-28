@@ -4,6 +4,7 @@ import Vue from './vue/vue';
 import store from './store';
 import router from './router';
 import mixin from './mixin';
+import directive from './hrm-directive';
 import controller from './components/controller.vue';
 
 var wpspear_hrm = {

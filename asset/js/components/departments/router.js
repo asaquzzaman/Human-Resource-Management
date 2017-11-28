@@ -18,7 +18,7 @@ let pagination = resolve => {
 HRMRegisterChildrenRoute ('hrm_root', 
     [
     	{
-            path: '/departments', 
+            path: 'departments', 
         	component: departments, 
         	name: 'departments',
 

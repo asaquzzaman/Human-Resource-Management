@@ -107,6 +107,8 @@
 	export default {
 		props: ['leaveType'],
 
+		mixins: [HRMMixin.leave],
+
 		data () {
 			return {
 				//departments: []
@@ -115,7 +117,7 @@
 
 		computed: {
 			departmentDropDown () {
-				return this.$store.state.departmentDropDown;
+				return this.$store.state.leave.departmentDropDown;
 			}
 		},
 

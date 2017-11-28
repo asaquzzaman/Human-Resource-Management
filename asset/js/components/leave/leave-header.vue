@@ -18,10 +18,9 @@
 </template>
 
 <script>
-    //import HRM_Mixin from './../../mixin';
-    
     var Hrm_Leave_Header = {
-        
+        mixins: [HRMMixin.leave],
+
         data: function() {
             return {
                 header: []
@@ -33,7 +32,7 @@
 
         // computed: {
         //     header: function() {
-        //         return this.$store.state.header;
+        //         return this.$store.state.leave.header;
         //     },
 
         // },
@@ -47,8 +46,9 @@
             has_child_menu: function() {
                 var path = this.$route.path,
                     has_submenu = false;
-                
+                console.log(this.$route);
                 jQuery.each( this.header, function(key, val ) {
+                    
                     if (val.url == path) {
                         if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
                             has_submenu = true;

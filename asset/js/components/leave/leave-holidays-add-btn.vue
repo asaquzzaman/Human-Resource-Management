@@ -7,9 +7,11 @@
 
 <script>
 	export default {
+		mixins: [HRMMixin.leave],
+		
 		methods: {
 			showHideNewLeaveTypeForm: function() {
-				this.$store.commit('isNewLeaveTypeFormVisible', {is_visible: true});
+				this.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: true});
 			}
 		}
 	};

@@ -1,10 +1,7 @@
 <template>
 	<div>
 		<leave-header></leave-header>
-		<router-view name="hrm-leave-type"></router-view>
-		<router-view name="hrm-leave-work-week"></router-view>
-		<router-view name="hrm-leave-holidays"></router-view>
-		<router-view name="hrm-leave-form-settings"></router-view>
+		<router-view></router-view>
 	</div>
 </template>
 
@@ -13,7 +10,7 @@
 	import leave_header from './leave-header.vue';
 	
 	var Hrm_Leave_Configuration = {
-		
+		mixins: [HRMMixin.leave],
 		components: {
 			'leave-header': leave_header
 		},

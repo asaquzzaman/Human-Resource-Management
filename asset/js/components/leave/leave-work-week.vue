@@ -106,7 +106,7 @@
 	
 	var Hrm_Leave_Work_Week = {
 
-		mixins: [HRM_Mixin],
+		mixins: [HRMMixin.leave],
 		
 		data: function() {
 			return {

@@ -11,10 +11,10 @@
 	import leave_directive from './../../hrm-directive';
 
 	var HRM_Leave_Type_Add_Btn = {
-		mixins: [HRM_Mixin],
+		mixins: [HRMMixin.leave],
 		methods: {
 			showHideNewLeaveTypeForm: function() {
-				this.$store.commit('isNewLeaveTypeFormVisible', {is_visible: true});
+				this.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: true});
 			}
 		}
 	};

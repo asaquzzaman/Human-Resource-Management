@@ -132,6 +132,7 @@
 
 <script>
 	import Multiselect from './../../vue-multiselect/vue-multiselect.min';
+	import directive from './leave-form-directive';
 
 	export default {
 		data: function() {
@@ -166,6 +167,8 @@
 				this.change_leve_type_statue();
 			}
 		},
+
+		mixins: [HRMMixin.leave],
 
 		components: {
 			'hrm-multiselect': Multiselect
@@ -216,7 +219,7 @@
 				var self = this;
 
 				this.slideUp(el.target, function() {
-					self.$store.commit('isNewLeaveRecordsFormVisible', {is_visible: false});
+					self.$store.commit('leave/isNewLeaveRecordsFormVisible', {is_visible: false});
 				});
 							
 			},
@@ -262,7 +265,7 @@
 	                    toastr.success(res.success);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-	                    	//self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+	                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
 	                    });
 
 	                    

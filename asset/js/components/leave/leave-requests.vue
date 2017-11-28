@@ -12,6 +12,7 @@
 	import leave_header from './leave-header.vue';
 	
 	var Hrm_Leave_Request = {
+		mixins: [HRMMixin.leave],
 		
 		components: {
 			'leave-header': leave_header

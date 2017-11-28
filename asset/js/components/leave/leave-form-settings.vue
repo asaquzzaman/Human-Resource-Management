@@ -140,7 +140,7 @@
 				roles: []
 			}
 		},
-
+		mixins: [HRMMixin.leave],
 		components: {
 			'hrm-multiselect': Multiselect
 		},

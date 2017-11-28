@@ -20,13 +20,15 @@ import header from './leave-header.vue';
 import leave_record_add_btn from './leave-records-add-btn.vue';
 import leave_records_form from './leave-records-form.vue';
 import leave_records_render from './leave-records-render.vue';
-import store from './leave-store';
+
 
 
 export default {
+	mixins: [HRMMixin.leave],
+	
 	computed: {
 		is_leave_form_active: function() {
-			return this.$store.state.is_leave_form_active;
+			return this.$store.state.leave.is_leave_form_active;
 		}
 	},
 	components: {

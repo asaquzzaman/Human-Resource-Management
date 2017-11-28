@@ -1,6 +1,4 @@
-import Vue from './../../vue/vue';
-
-export default Vue.mixin({
+export default {
 	methods: {
 		showHideLeaveRecordsForm (status, leave) {
 			var leave   = leave || false,
@@ -13,7 +11,7 @@ export default Vue.mixin({
 			        leave.edit_mode = status;
 			    }
 			} else {
-			    this.$store.commit('showHideleaveForm', status);
+			    this.$store.commit('leave/showHideleaveForm', status);
 			}
 		},
 
@@ -53,7 +51,7 @@ export default Vue.mixin({
                 data: data,
                 success (res) {
 
-                    self.$store.commit('getLeaveRecords', res);
+                    self.$store.commit('leave/getLeaveRecords', res);
 
                     if (typeof args.callback === 'function') {
                     	args.callback(res);
@@ -87,7 +85,7 @@ export default Vue.mixin({
                     toastr.success(res.success);
                     
                     self.slideUp(jQuery('.hrm-form-cancel'), function() {
-                    	//self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
                     });
 
                     if (args.callback === 'function') {
@@ -134,7 +132,7 @@ export default Vue.mixin({
                     leave_id: args.data.leave_id,
                 },  
                 success: function(res) {
-                    self.$store.commit('afterDeleteLeave', args.data.leave_id);
+                    self.$store.commit('leave/afterDeleteLeave', args.data.leave_id);
 
                     if (typeof args.callback === 'function') {
                         args.callback();
@@ -217,7 +215,7 @@ export default Vue.mixin({
                 },
                 success: function() {
 
-                    self.$store.commit('afterDeleteLeaveType', args.id);
+                    self.$store.commit('leave/afterDeleteLeaveType', args.id);
                     
                     if (typeof args.callback === 'function') {
                         args.callback();
@@ -261,7 +259,7 @@ export default Vue.mixin({
                     self.addHolidayMeta(res.holiday);
                     self.submit_disabled = false;
                     
-                    self.$store.commit('afterUpdateHoliday', res.holiday);
+                    self.$store.commit('leave/afterUpdateHoliday', res.holiday);
 
                     if (typeof args.callback === 'function') {
                         args.callback(res.data);
@@ -306,7 +304,7 @@ export default Vue.mixin({
                     'id': args.id
                 },
                 success: function(res) {
-                    self.$store.commit('afterDeleteHoliday', args.id);
+                    self.$store.commit('leave/afterDeleteHoliday', args.id);
                     if (typeof args.callback === 'function') {
                         args.callback();
                     } 
@@ -324,4 +322,4 @@ export default Vue.mixin({
             self.httpRequest('delete_holiday', request_data);
         }
 	},
-});
+};

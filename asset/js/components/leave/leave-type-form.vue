@@ -91,15 +91,11 @@
 <script>
 import Multiselect from './../../vue-multiselect/vue-multiselect.min';
 import HRM_Mixin from './../../mixin';
-import HRM_Leave_Store from './leave-store';
 
 var Hrm_Leave_Type_Form = {
 	
-	mixins: [HRM_Mixin],
+	mixins: [HRMMixin.leave],
 
-	store: HRM_Leave_Store,
-	
-	
 	data: function() {
 		return {
 			entitle_from: '',
@@ -120,7 +116,7 @@ var Hrm_Leave_Type_Form = {
 
 	computed: {
 		departmentDropDown () {
-			return this.$store.state.departmentDropDown;
+			return this.$store.state.leave.departmentDropDown;
 		}
 	},
 
@@ -142,7 +138,7 @@ var Hrm_Leave_Type_Form = {
 			var node = jQuery(el.target).closest('.hrm-slide-up');
 
 			node.slideUp(400, function() {
-				self.$store.commit('isNewLeaveTypeFormVisible', {is_visible: false});
+				self.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: false});
 			});
 						
 		},
@@ -182,7 +178,7 @@ var Hrm_Leave_Type_Form = {
                     self.show_hide_new_leave_type_form({target: '.hrm-form-cancel'});
 
 
-                    // self.$store.commit('updateDepartment', {
+                    // self.$store.commit('leave/updateDepartment', {
                     //     is_update: is_update, 
                     //     dept_id: self.department_id,
                     //     target_index: target_index,
@@ -190,7 +186,7 @@ var Hrm_Leave_Type_Form = {
                     //     dept_drop_down: res.dept_drop_down
                     // });
 
-                    self.$store.commit('setNewLeaveType', res.leave_type.data);
+                    self.$store.commit('leave/setNewLeaveType', res.leave_type.data);
                 },
 
                 error: function(res) {

@@ -73,16 +73,12 @@
 </style>
 
 <script>
-	import HRM_Mixin from './../../mixin';
-	import HRM_Leave_Store from './leave-store';
 	import Edit from './leave-type-edit-form.vue';
 	
 	var Hrm_Leave_Type_Records = {
 
 		
-		mixins: [HRM_Mixin],
-
-		store: HRM_Leave_Store,
+		mixins: [HRMMixin.leave],
 		
 		data: function() {
 			return {
@@ -91,7 +87,7 @@
 
 		computed: {
 			records () {
-				return this.$store.state.leaveTypes;
+				return this.$store.state.leave.leaveTypes;
 			}
 		},
 
@@ -116,7 +112,7 @@
 	                		self.addLeaveTypeMeta(type);
 	                	});
 	                    
-	                    self.$store.commit('setLeaveTypes', res.data);
+	                    self.$store.commit('leave/setLeaveTypes', res.data);
 	                },
 
 	                error: function(res) {
@@ -129,7 +125,7 @@
 				return parseInt(next_year) ? 'Enable' : 'Disable'; 
 			},
 			showHideLeaveTypeEditForm (status, type) {
-				this.$store.commit();
+				
 			},
 			selfDeleteLeaveType (record) {
 				var data = {

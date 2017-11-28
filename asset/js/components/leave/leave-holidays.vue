@@ -11,7 +11,6 @@
 
 <script>
 	import HRM_Mixin from './../../mixin';
-	import HRM_Leave_Store from './leave-store';
 	import directive from './../../hrm-directive';
 
 	import Hrm_Leave_Holidays_Form from './leave-holidays-form.vue';
@@ -20,7 +19,7 @@
 	
 	var Hrm_Leave_Holidays = {
 
-		mixins: [HRM_Mixin],
+		mixins: [HRMMixin.leave],
 
 		store: HRM_Leave_Store,
 		
@@ -38,7 +37,7 @@
 
 		computed: {
 			is_new_leave_type_form_visible: function() {
-				return this.$store.state.is_new_leave_type_form_visible;
+				return this.$store.state.leave.is_new_leave_type_form_visible;
 			}
 		},
 	};

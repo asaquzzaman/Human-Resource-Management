@@ -53,9 +53,11 @@
 			});
 		},
 
+		mixins: [HRMMixin.leave],
+
 		computed: {
 			pendingLeaves () {
-				return this.$store.state.pending_leaves;
+				return this.$store.state.leave.pending_leaves;
 			}
 		},
 
@@ -68,7 +70,7 @@
 						'status': 1
 					},
 					callback: function(res) {
-						self.$store.commit('setPendingLeaves', res.data);
+						self.$store.commit('leave/setPendingLeaves', res.data);
 					}
 				}
 

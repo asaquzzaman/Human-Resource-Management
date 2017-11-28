@@ -52,10 +52,10 @@
 				vm.getSelfLeaveRecords();
 			});
 		},
-
+		mixins: [HRMMixin.leave],
 		computed: {
 			pendingLeaves () {
-				return this.$store.state.cancelLeaves;
+				return this.$store.state.leave.cancelLeaves;
 			}
 		},
 
@@ -68,7 +68,7 @@
 						'status': 3
 					},
 					callback: function(res) {
-						self.$store.commit('setCancelLeaves', res.data);
+						self.$store.commit('leave/setCancelLeaves', res.data);
 					}
 				}
 

@@ -66,9 +66,7 @@
 	
 	export default {
 		
-		mixins: [HRM_Mixin],
-
-		//store: HRM_Leave_Store,
+		mixins: [HRMMixin.leave],
 		
 		data: function() {
 			return {
@@ -99,7 +97,7 @@
 				var self = this;
 
 				this.slideUp(el.target, function() {
-					self.$store.commit('isNewLeaveTypeFormVisible', {is_visible: false});
+					self.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: false});
 				});
 							
 			},
@@ -117,7 +115,7 @@
 	            // is_update  = parseInt( this.department_id ) ? true : false,
 	            
 	            // target_index = is_update ? this.getIndex(
-	            //     this.$store.state.departments, this.department_id, 'id'
+	            //     this.$store.state.leave.departments, this.department_id, 'id'
 	            // ) : false,
 
 	            self = this;
@@ -132,13 +130,13 @@
 
 	                	self.addHolidayMeta(res.holiday);
 
-	                	self.$store.commit('updateHolidays', res.holiday);
+	                	self.$store.commit('leave/updateHolidays', res.holiday);
 	                    
 	                    // Display a success toast, with a title
 	                    toastr.success(res.success);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-	                    	//self.$store.commit('isNewDepartmentForVisible', {is_visible: false});
+	                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
 	                    });
 
 	                    

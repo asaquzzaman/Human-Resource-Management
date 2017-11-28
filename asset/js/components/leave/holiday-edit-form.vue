@@ -40,7 +40,7 @@
 
 	export default {
 		props: ['holiday'],
-
+		mixins: [HRMMixin.leave],
 		methods: {
 			updateSelfHoliday () {
 				var args = {

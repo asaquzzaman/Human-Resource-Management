@@ -4,8 +4,8 @@
 	
 	function HRMGetComponents() {
 		var components = {};
-		
-		window.HRM_Components.map(function(obj, key) {
+
+		HRM_Components.map(function(obj, key) {
 			if (obj.property.mixins) {
 				obj.property.mixins.push(mixin);
 			} else {
@@ -27,7 +27,7 @@
 			var components = [],
 				self = this;
 
-			window.HRM_Components.map(function(obj, key) {
+			HRM_Components.map(function(obj, key) {
 				if (obj.hook == self.hook) {
 					components.push(h(obj.component));
 				}
@@ -41,9 +41,3 @@
 
 </script>
 
-<!-- <template>
-	<div>
-		<cpm-test-component></cpm-test-component>
-		<cpm-again-component></cpm-again-component>
-	</div>
-</template> -->

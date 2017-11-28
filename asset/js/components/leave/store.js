@@ -1,12 +1,4 @@
-import Vue from './../../vue/vue';
-import Vuex from './../../vue/vuex';
-
-/**
- * Make sure to call Vue.use(Vuex) first if using a vuex module system
- */
-Vue.use(Vuex);
-
-var HRM_Leave_Store = new Vuex.Store({
+let HRM_Leave_Store = {
 	state: {
 		header: {},
 		is_new_leave_type_form_visible: false,
@@ -101,7 +93,7 @@ var HRM_Leave_Store = new Vuex.Store({
 			state.leaveTypes.splice( index, 1 );
 		}
 	}
-});
+};
 
 
 export default HRM_Leave_Store;

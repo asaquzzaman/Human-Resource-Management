@@ -53,9 +53,7 @@
 
 	export default {
 
-		mixins: [HRM_Mixin],
-
-		//store: HRM_Leave_Store,
+		mixins: [HRMMixin.leave],
 		
 		data: function() {
 			return {
@@ -69,7 +67,7 @@
 
 		computed: {
 			records () {
-				return this.$store.state.holidays;
+				return this.$store.state.leave.holidays;
 			}
 		},
 
@@ -100,7 +98,7 @@
 	                		self.addHolidayMeta(holiday);
 	                	});
 
-	                    self.$store.commit('setHoliday', res.holidays);
+	                    self.$store.commit('leave/setHoliday', res.holidays);
 	                },
 
 	                error: function(res) {

@@ -1,7 +1,7 @@
 var Hrm_Leave_Work_Week = {
 	template: '#tmpl-hrm-leave-work-week',
 	
-	mixins: [HRM_Mixin],
+	mixins: [HRMMixin.leave],
 
 	store: HRM_Leave_Store,
 	

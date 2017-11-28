@@ -1,4 +1,4 @@
-<template>
+ <template>
 	<div>
 		<span class="page-title-action">Your leave records</span>
 		<span class="page-title-action">
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+	
 	export default {
 		data() {
 			return {
@@ -94,10 +95,11 @@
 				financialEnd: HRM_Vars.financial_end
 			}
 		},
+		mixins: [HRMMixin.leave],
 		computed: {
 			records () {
 				var self = this;
-				var records = this.$store.state.leave_records;
+				var records = this.$store.state.leave.leave_records;
 				var records = _.chain(records)
                     .groupBy(self.occurrenceDay)
                     .map(self.groupToDay)
@@ -108,15 +110,15 @@
 			},
 
 			meta () {
-				return this.$store.state.leave_meta;
+				return this.$store.state.leave.leave_meta;
 			},
 
 			total () {
-				if(!this.$store.state.leave_meta.types) {
+				if(!this.$store.state.leave.leave_meta.types) {
 					return [];
 				}
 
-				var types = this.$store.state.leave_meta.types,
+				var types = this.$store.state.leave.leave_meta.types,
 					total_extra = 0;
 
 				var total = {

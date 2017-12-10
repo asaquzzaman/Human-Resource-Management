@@ -16,7 +16,7 @@
 	import Hrm_Leave_Type_Records from './leave-type-records.vue';
 	import HRM_Leave_Type_Add_Btn from './leave-type-add-btn.vue';
 	
-	var Hrm_Leave_Type = {
+	export default {
 
 		mixins: [HRMMixin.leave],
 		
@@ -51,5 +51,4 @@
 
 	};
 
-	export default Hrm_Leave_Type;
 </script>

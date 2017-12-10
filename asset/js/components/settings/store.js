@@ -1,8 +1,11 @@
-import Vue from './../../vue/vue';
-import Vuex from './../../vue/vuex';
+let HRM_Settings_Store = {
+	state: {
 
-Vue.use(Vuex);
+	},
 
-export default new Vuex.Store({
+	mutations: {
 
-});
+	}
+};
+
+export default HRM_Settings_Store;

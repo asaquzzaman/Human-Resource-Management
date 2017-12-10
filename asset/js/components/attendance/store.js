@@ -1,4 +1,4 @@
-var HRM_Attendance_Store = new Vuex.Store({
+export default {
 	state: {
 		attendance: [],
 		search_mode: false,
@@ -68,4 +68,4 @@ var HRM_Attendance_Store = new Vuex.Store({
 			state.punch_in_status = status.status;
 		},
 	}
-});
+};

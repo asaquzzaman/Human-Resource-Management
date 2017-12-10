@@ -1,6 +1,5 @@
-import Vue from './../../vue/vue';
 
-export default Vue.mixin({
+export default {
 	methods: {
 		updateSettings (args) {
 			var request = {
@@ -26,4 +25,4 @@ export default Vue.mixin({
             return HRM_Vars.settings[key];
         }
 	}
-});
+};

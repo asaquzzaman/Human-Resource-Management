@@ -48,10 +48,10 @@ export default Vue.mixin({
 	     * 
 	     * @return  int      
 	     */
-	    getIndex  ( array,  id, slug) {
+	    getIndex (array,  id, slug) {
 	        var target = false;
 
-	        array.map(function(content, index) {
+	        array.forEach(function(content, index) {
 	            if ( content[slug] == id ) {
 	                target = index;
 	            }

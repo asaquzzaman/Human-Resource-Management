@@ -3,52 +3,46 @@
 		<div class="postbox">
 
 			<h2 class="hndle ui-sortable-handle">
-				<span><?php _e( 'Search', 'hrm' ); ?></span>
+				<span>Search</span>
 			</h2>
 
 			<div class="inside">
 				<div class="main hrm-attendance-user-searach-main">
-					<?php 
+					<div class="hrm-form-field ">
+						<label for="punch_in">
+							From
+							<em>   </em>
+						</label>
+						<input type="text" name="punch_in" value="" placeholder="" class="hrm-date-picker-from" id="punch_in" v-hrm-datepicker="" :value="punch_in_date">
+						<span class="hrm-clear"></span>
+						<span class="description"></span>
+					</div>
 
-						$field_obj = array(
-							'label' =>  __( 'From', 'hrm' ),
-							'type'  => 'text',
-							'value' => '',
-							'class' => 'hrm-date-picker-from',
-							'extra' => array(
-								'v-hrm-datepicker',
-								':value' => 'punch_in_date'
-							)
-						);
+					<div class="hrm-form-field ">
+						<label for="punch_out">
+							to
+							<em>   </em>
+						</label>
+						<input type="text" name="punch_out" value="" placeholder="" class="hrm-date-picker-to" id="punch_out" v-hrm-datepicker="" :value="punch_out_date">
+						<span class="hrm-clear"></span>
+						<span class="description"></span>
+					</div>
 
-						echo Hrm_Settings::getInstance()->text_field( 'punch_in', $field_obj );
+					<div class="hrm-form-field ">
+						<label for="user_id">
+							Users
+							<em>   </em>
+						</label>
+						<select class="user_id" name="user_id" id="user_id" v-model="search_user_id" data-placeholder="-- Chose --">
+							<option value="-1">-Select-</option>
+							<option value="470">mmmmm hhhhhhh</option>
+							<option value="469">xxxxx zzzzz</option>
+						</select>
+						<span class="hrm-clear"></span>
+						<span class="description"> </span>
+					</div>
 
-						$field_obj = array(
-							'label' =>  __( 'to', 'hrm' ),
-							'type'  => 'text',
-							'value' => '',
-							'class' => 'hrm-date-picker-to',
-							'extra' => array(
-								'v-hrm-datepicker',
-								':value' => 'punch_out_date'
-							)
-						);
-
-						echo Hrm_Settings::getInstance()->text_field( 'punch_out', $field_obj );
-
-						$field_obj = array(
-							'label' =>  __( 'Users', 'hrm' ),
-							'type'  => 'select',
-							'option' => Hrm_Employeelist::getInstance()->get_employee_drop_down(),
-							'extra' => array(
-								'v-model' => 'search_user_id'
-							)
-						);
-
-						echo Hrm_Settings::getInstance()->select_field( 'user_id', $field_obj );
-
-					?>
-					<button @click.prevent="search()" class="button button-primary"><?php _e( 'Search', 'hrm' ); ?></button>
+					<button @click.prevent="search()" class="button button-primary">Search</button>
 					<div class="hrm-clear"></div>
 				</div>
 			</div>
@@ -58,7 +52,7 @@
 
 <script>
 	export default {
-		mixins: [HRM_Common_Mixin],
+		mixins: [HRMMixin.attendance],
 		
 		data: function() {
 			return {
@@ -70,16 +64,16 @@
 
 		computed: {
 			punch_in_date: function() {
-				return this.$store.state.punch_in_date;
+				return this.$store.state.attendance.punch_in_date;
 			},
 
 			punch_out_date: function() {
-				return this.$store.state.punch_out_date;
+				return this.$store.state.attendance.punch_out_date;
 			},
 
 			search_user_id: {
 				get: function() {
-					this.$store.state.search_user_id;
+					this.$store.state.attendance.search_user_id;
 				},
 
 				set: function(val) {
@@ -90,7 +84,7 @@
 
 		created: function() {
 			this.$on( 'hrm_date_picker', this.setdate );
-			this.$store.commit( 'searchMode', {status: true} );
+			this.$store.commit( 'attendance/searchMode', {status: true} );
 
 
 			this.getAttendance();
@@ -109,7 +103,7 @@
 	                data: request_data,
 	                success: function(res) {
 	                	
-	                    self.$store.commit( 'setAttendance', {
+	                    self.$store.commit( 'attendance/setAttendance', {
 	                    	records: res.attendance, 
 	                    	punch_in_formated_date: res.punch_in_formated_date,
 	                    	punch_out_formated_date: res.punch_out_formated_date,
@@ -138,18 +132,18 @@
 				if( this.$route.name == 'attendance_search') {
 					this.$router.push({ 
 						query: { 
-							punch_in: this.$store.state.punch_in_date,
-							punch_out: this.$store.state.punch_out_date,
-							user_id: this.$store.state.search_user_id
+							punch_in: this.$store.state.attendance.punch_in_date,
+							punch_out: this.$store.state.attendance.punch_out_date,
+							user_id: this.$store.state.attendance.search_user_id
 						}
 					});
 				} else {
 					this.$router.push({ 
 						path: '/attendance/search/', 
 						query: { 
-							punch_in: this.$store.state.punch_in_date,
-							punch_out: this.$store.state.punch_out_date,
-							user_id: this.$store.state.search_user_id
+							punch_in: this.$store.state.attendance.punch_in_date,
+							punch_out: this.$store.state.attendance.punch_out_date,
+							user_id: this.$store.state.attendance.search_user_id
 						}
 					});
 				}
@@ -175,16 +169,16 @@ var hrm_attendace_user_search = {
 
 	computed: {
 		punch_in_date: function() {
-			return this.$store.state.punch_in_date;
+			return this.$store.state.attendance.punch_in_date;
 		},
 
 		punch_out_date: function() {
-			return this.$store.state.punch_out_date;
+			return this.$store.state.attendance.punch_out_date;
 		},
 
 		search_user_id: {
 			get: function() {
-				this.$store.state.search_user_id;
+				this.$store.state.attendance.search_user_id;
 			},
 
 			set: function(val) {
@@ -243,18 +237,18 @@ var hrm_attendace_user_search = {
 			if( this.$route.name == 'attendance_search') {
 				this.$router.push({ 
 					query: { 
-						punch_in: this.$store.state.punch_in_date,
-						punch_out: this.$store.state.punch_out_date,
-						user_id: this.$store.state.search_user_id
+						punch_in: this.$store.state.attendance.punch_in_date,
+						punch_out: this.$store.state.attendance.punch_out_date,
+						user_id: this.$store.state.attendance.search_user_id
 					}
 				});
 			} else {
 				this.$router.push({ 
 					path: '/attendance/search/', 
 					query: { 
-						punch_in: this.$store.state.punch_in_date,
-						punch_out: this.$store.state.punch_out_date,
-						user_id: this.$store.state.search_user_id
+						punch_in: this.$store.state.attendance.punch_in_date,
+						punch_out: this.$store.state.attendance.punch_out_date,
+						user_id: this.$store.state.attendance.search_user_id
 					}
 				});
 			}

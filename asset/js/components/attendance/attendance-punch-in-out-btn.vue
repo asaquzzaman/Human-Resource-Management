@@ -3,7 +3,7 @@
 		<div class="postbox">
 
 			<h2 class="hndle ui-sortable-handle">
-				<span><?php _e( 'Punch in/out', 'hrm' ); ?></span>
+				<span>Punch in/out</span>
 			</h2>
 
 			<div class="inside">
@@ -13,8 +13,8 @@
 						<strong><time><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date( 'g:i a', strtotime( current_time( 'mysql' ) ) ); ?></time></strong>
 					</div>
 					
-					<button :disabled="isDisabled()" class="button button-primary" @click.prevent="punchIn()"><?php _e( 'Punch In', 'hrm' ); ?></button>
-					<button :disabled="punch_out_disable" class="button button-secondary" @click.prevent="punchOut()"><?php _e( 'Punch Out', 'hrm' ); ?></button>
+					<button :disabled="isDisabled()" class="button button-primary" @click.prevent="punchIn()">Punch In</button>
+					<button :disabled="punch_out_disable" class="button button-secondary" @click.prevent="punchOut()">Punch Out</button>
 				</div>
 			</div>
 		</div>
@@ -23,7 +23,7 @@
 
 <script>
 	export default {
-		mixins: [HRM_Common_Mixin],
+		mixins: [HRMMixin.attendance],
 		data: function() {
 			return {
 				press_punch_in_btn: false,
@@ -33,7 +33,7 @@
 			}
 		},
 		created: function() {
-			//this.punch_in = this.$store.state.punch_in_status;
+			//this.punch_in = this.$store.state.attendance.punch_in_status;
 		},
 		methods: {
 			punchIn: function() {
@@ -59,8 +59,8 @@
 	                    //self.punch_id = res.punch_id;
 	                    //self.punch_id = res.punch_in_status;
 
-	                    self.$store.commit( 'setAttendance', {records: res.attendance} );
-	                    self.$store.commit( 'punch_in', { status: 'disable' } );
+	                    self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
+	                    self.$store.commit( 'attendance/punch_in', { status: 'disable' } );
 
 	                    //for preventing multipule submit
 	                    self.press_punch_in_btn = false;
@@ -101,8 +101,8 @@
 	                    toastr.success(res.success);
 						self.punch_out_disable = false;
 
-						self.$store.commit( 'setAttendance', {records: res.attendance} );
-	                    self.$store.commit( 'punch_in', { status: res.punch_in_status } );
+						self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
+	                    self.$store.commit( 'attendance/punch_in', { status: res.punch_in_status } );
 
 	                    //for preventing multipule submit
 						self.press_punch_our_btn = false;
@@ -122,7 +122,7 @@
 			},
 
 			isDisabled: function() {
-				if ( this.$store.state.punch_in_status == 'enable' ) {
+				if ( this.$store.state.attendance.punch_in_status == 'enable' ) {
 					return false;
 				}
 
@@ -144,7 +144,7 @@ var hrm_attendace_punch_in_out_btn = {
 		}
 	},
 	created: function() {
-		//this.punch_in = this.$store.state.punch_in_status;
+		//this.punch_in = this.$store.state.attendance.punch_in_status;
 	},
 	methods: {
 		punchIn: function() {
@@ -233,7 +233,7 @@ var hrm_attendace_punch_in_out_btn = {
 		},
 
 		isDisabled: function() {
-			if ( this.$store.state.punch_in_status == 'enable' ) {
+			if ( this.$store.state.attendance.punch_in_status == 'enable' ) {
 				return false;
 			}
 

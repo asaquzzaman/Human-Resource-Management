@@ -1,94 +1,104 @@
 <template>
-	<div>
-	    <?php
-	    $query_args = hrm_get_query_args();
-	    $page       = $query_args['page'];
-	    $tab        = $query_args['tab'];
-	    $subtab     = $query_args['subtab'];
-	    $menu = hrm_page();
-	    ?>
-	    <h2 class="nav-tab-wrapper">
-	        <?php
+    <div>
+        <h2 class="nav-tab-wrapper">
+            <router-link v-for="item in menu" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+        </h2>
 
-	        foreach ( $menu[$page] as $key => $tab_event ) {
-	            if ( isset( $tab_event['nested_tab'] ) && $tab_event['nested_tab'] === true ) {
-	                continue;
-	            }
+        <h3 class="hrm-sub-nav">
+            <ul class="hrm-subsubsub">
 
-	            $active = ( $tab == $key ) ? 'nav-tab-active' : '';
-	            $url = empty( $tab_event['url'] ) ? '/' : $tab_event['url'];
-	            
-	            printf( '<router-link class="nav-tab" to="%s">%s</router-link>', $url, $tab_event['title'] );
-	        }
+                <li v-for="children in childrens()" v-if="children.meta.label">
+                    <router-link  :to="{name: children.name}">{{ children.meta.label }}</router-link> |&nbsp; 
+                </li> 
+              
+            </ul>
+        </h3>
 
-	        ?>
-	    </h2>
-	    <?php
-	    if ( ! $subtab ) {
-	       if( !isset( $menu[$page][$tab]['submenu'] ) ) {
-	            echo '</div>';
-	            return;
-	        }
-
-	        if ( !count( $menu[$page][$tab]['submenu'] ) ) {
-	            return;
-	        }
-
-	        $subtab = key( $menu[$page][$tab]['submenu'] );
-	    }
-
-	    if ( ! $subtab ) {
-	        return;
-	    }
-
-	    ?>
-	    <h3 class="hrm-sub-nav">
-	        <ul class="hrm-subsubsub">
-	            <?php
-	                foreach ( $menu[$page][$tab]['submenu'] as $sub_key => $sub_event ) {
-	                    $sub_active = ( $sub_key == $subtab ) ? 'hrm-sub-current' : '';
-	                    $sub_event['id'] = isset( $sub_event['id'] ) ? $sub_event['id'] : '';
-	                    $sub_url = hrm_subtab_menu_url( $tab, $sub_key, $page );
-	                    printf( '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',$sub_url , $sub_event['id'], $sub_event['title'], $sub_active );
-	                }
-	            ?>
-	        </ul>
-	    </h3>
-	</div>
-
+    </div>
 </template>
 
 <script>
-	export default {
-		store: HRM_Attendance_Store,
-		mixins: [HRM_Common_Mixin],
-		data: function() {
-			return {
-				
-			}
-		},
-		created: function() {
-			
-		},
-		methods: {
+    import Menu from './router';
 
-		}
-	}
+    var Hrm_Leave_Header = {
+        mixins: [HRMMixin.attendance],
+
+        data: function() {
+            return {
+                menu: Menu,
+            }
+        },
+
+        methods: {
+            childrens () {
+                let root_menu = this.$route.matched[1].name;
+                let index = this.getIndex(this.menu, root_menu, 'name');
+                
+                if (index === false) {
+                    return [];
+                }
+
+                if (this.menu[index].hasOwnProperty('children')) {
+                    if (this.menu[index].children.length) {
+                        return this.menu[index].children;
+                    }
+                } else {
+                    return [];
+                }
+            },
+            is_it_child: function() {
+
+                if( this.$route.matched.length > 1 ) {
+                    return true;
+                }
+            },
+            has_child_menu: function() {
+                var path = this.$route.path,
+                    has_submenu = false;
+                
+                jQuery.each( this.header, function(key, val ) {
+                    
+                    if (val.url == path) {
+                        if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+                            has_submenu = true;
+                        }
+                    }
+                });
+
+                return has_submenu;
+            },
+            get_child_menu: function() {
+                var path = this.$route.path,
+                    submenu = [];
+
+                if ( this.is_it_child() ) {
+                    var partent_name = this.$route.matched[0].name;
+                    
+                    jQuery.each( this.header, function(key, val ) {
+                        if (val.name == partent_name) {
+                            if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+                                submenu = val.submenu;
+                            }
+                        }
+                    });
+
+                    return submenu;
+                }
+                
+                
+                jQuery.each( this.header, function(key, val ) {
+                    if (val.url == path) {
+                        if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+                            submenu = val.submenu;
+                        }
+                    }
+                });
+
+                return submenu;
+            },
+        }
+    };
+
+    export default Hrm_Leave_Header;
 </script>
 
-<!-- var hrm_attendance_header = {
-	template: '#tmpl-hrm-attendance-header',
-	store: HRM_Attendance_Store,
-	mixins: [HRM_Common_Mixin],
-	data: function() {
-		return {
-			
-		}
-	},
-	created: function() {
-		
-	},
-	methods: {
-
-	}
-}; -->

@@ -1,3 +1,5 @@
+HRMRegisterModule('settings', 'settings');
+
 const Hrm_Settings = resolve => {
 
     require.ensure(['./settings.vue'], () => {
@@ -5,13 +7,18 @@ const Hrm_Settings = resolve => {
     });
 }
 
-//import Hrm_Leave_Records from './settings.vue';
+let settingsMenu = [
+	{ 
+		path: 'settings', 
+		component: Hrm_Settings,
+		name: 'hrm_settings',
+		meta: {
+			label: 'Settings'
+		}
 
-export default { 
-	path: '/settings', 
-	components: { 
-		'hrm-settings': Hrm_Settings 
-	}, 
-	name: 'hrm_settings',
+	}
+];
 
-}
+HRMRegisterChildrenRoute ('hrm_root', settingsMenu);
+
+export default settingsMenu;

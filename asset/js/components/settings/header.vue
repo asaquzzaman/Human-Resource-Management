@@ -1,14 +1,14 @@
 <template>
     <div>
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="head in header" class="nav-tab" :to="head.url">{{ head.title }}</router-link>
+            <router-link v-for="item in menu" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
         </h2>
 
-        <h3 class="hrm-sub-nav" v-if="has_child_menu() || is_it_child()">
+        <h3 class="hrm-sub-nav">
             <ul class="hrm-subsubsub">
 
-                <li v-for="child_menu in get_child_menu()">
-                    <router-link  :to="{name: child_menu.name}">{{ child_menu.title }}</router-link> |&nbsp;
+                <li v-for="children in childrens()" v-if="children.meta.label">
+                    <router-link  :to="{name: children.name}">{{ children.meta.label }}</router-link> |&nbsp; 
                 </li> 
               
             </ul>
@@ -18,26 +18,34 @@
 </template>
 
 <script>
-    //import HRM_Mixin from './../../mixin';
-    
-    var Hrm_Leave_Header = {
-        
+    import Menu from './router';
+
+    var Hrm_Settings_Header = {
+        mixins: [HRMMixin.settings],
+
         data: function() {
             return {
-                header: []
+                menu: Menu,
             }
         },
-        created: function() {
-            this.getHeader();
-        },
 
-        // computed: {
-        //     header: function() {
-        //         return this.$store.state.header;
-        //     },
-
-        // },
         methods: {
+            childrens () {
+                let root_menu = this.$route.matched[1].name;
+                let index = this.getIndex(this.menu, root_menu, 'name');
+                
+                if (index === false) {
+                    return [];
+                }
+
+                if (this.menu[index].hasOwnProperty('children')) {
+                    if (this.menu[index].children.length) {
+                        return this.menu[index].children;
+                    }
+                } else {
+                    return [];
+                }
+            },
             is_it_child: function() {
 
                 if( this.$route.matched.length > 1 ) {
@@ -49,6 +57,7 @@
                     has_submenu = false;
                 
                 jQuery.each( this.header, function(key, val ) {
+                    
                     if (val.url == path) {
                         if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
                             has_submenu = true;
@@ -87,28 +96,9 @@
 
                 return submenu;
             },
-            getHeader: function() {
-                var request_data = {
-                    _wpnonce: HRM_Vars.nonce,
-                },
-                self  = this;
-
-                wp.ajax.send( 'leave_header', {
-                    data: request_data,
-                    success: function(res) {
-                        self.header = res.header;
-                        //self.$store.commit( 'header', {'header': res.header} );
-                    
-                    },
-
-                    error: function(res) {
-                        
-                    }
-                });
-            }
         }
     };
 
-    export default Hrm_Leave_Header;
+    export default Hrm_Settings_Header;
 </script>
 

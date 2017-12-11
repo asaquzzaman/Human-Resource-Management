@@ -419,9 +419,7 @@ class Hrm_Employeelist {
 
     function get_employee_drop_down() {
         $employees = $this->get_employee();
-        $emp_lists = array(
-            '-1' => __( '-Select-', 'hrm' )
-        );
+        $emp_lists = array();
 
         foreach ( $employees as $key => $employee ) {
             $emp_lists[$employee->ID] = $employee->display_name;

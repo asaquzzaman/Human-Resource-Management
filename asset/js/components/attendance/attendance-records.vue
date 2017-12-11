@@ -2,7 +2,7 @@
 	<div class="hrm-attendance">
 		<hrm-attendance-header></hrm-attendance-header>
 		<hrm-attendace-punch-in-out-btn></hrm-attendace-punch-in-out-btn>
-		<hrm-attendace-user-search></hrm-attendace-user-search>
+		<!-- <hrm-attendace-user-search></hrm-attendace-user-search> -->
 
 		<div class="metabox-holder hrm-attendance-records-wrap">
 			<div class="hrm-records-text">
@@ -20,7 +20,7 @@
 				</div>
 				<div class="hrm-clear"></div>
 			</div>
-
+			<hrm-attendace-user-search></hrm-attendace-user-search>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<th>Date</th>
@@ -69,6 +69,7 @@
 		},
 		created: function() {
 			this.attendanceInit();
+
 			if( this.$route.name != 'attendance_search') {
 				this.getAttendance();
 			}

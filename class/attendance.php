@@ -57,7 +57,8 @@ class Hrm_Attendance {
             'office_closed'                => $office_closed,
             'office_start_with_date_time'  => $office_start_with_date,
             'office_closed_with_date_time' => $office_closed_with_date,
-            'allow_ip'                     => self::getInstance()->process_ip( $office_time->ip )
+            'allow_ip'                     => self::getInstance()->process_ip( $office_time->ip ),
+            'employees_dropdown'           => Hrm_Employeelist::getInstance()->get_employee_drop_down()
         ));
     }
 
@@ -273,11 +274,11 @@ class Hrm_Attendance {
         if ( ! empty( $_POST['search'] ) ) {
             $postdata = $_POST['search'];
 
-            if ( ! empty( $postdata['punch_in'] ) && validateDate( $postdata['punch_in'], 'Y-m-d' ) ) {
+            if ( ! empty( $postdata['punch_in'] ) && hrm_validateDate( $postdata['punch_in'], 'Y-m-d' ) ) {
                 $args['punch_in'] = $postdata['punch_in'] .' '. '00:00:00'; 
             }
 
-            if ( ! empty( $postdata['punch_out'] ) && validateDate( $postdata['punch_out'], 'Y-m-d' ) ) {
+            if ( ! empty( $postdata['punch_out'] ) && hrm_validateDate( $postdata['punch_out'], 'Y-m-d' ) ) {
                 $args['punch_out'] = $postdata['punch_out'] .' '. '24:59:59'; 
             }
 
@@ -287,10 +288,6 @@ class Hrm_Attendance {
         }
 
         $attendance = self::getInstance()->get_attendance( $args );
-        
-        if ( ! $attendance ) {
-            //wp_send_json_error( array( 'error' => array( __( 'Something is wrong!', 'hrm' ) ) ) );
-        }
         
         if ( ! empty( $_POST['search'] ) ) {
             wp_send_json_success( array(

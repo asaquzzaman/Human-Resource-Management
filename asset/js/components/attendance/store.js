@@ -4,7 +4,7 @@ export default {
 		search_mode: false,
 		punch_in_date: '',
 		punch_out_date: '',
-		search_user_id: '',
+		search_user_id: '-1',
 		punch_in_status: 'disable',
 		punch_in_formated_date: '',
 		punch_out_formated_date: '',
@@ -13,14 +13,15 @@ export default {
 		office_closed: '',
 		office_start_with_date_time: '',
 		office_closed_with_date_time: '',
-		allwo_ip: ''
+		allow_ip: '',
+		employessDropDown: []
 	},
 
 	mutations: {
 		setInitVal: function(state, res) {
 			state.punch_out_date               = res.punch_out_date;
 			state.punch_in_date                = res.punch_in_date;
-			state.search_user_id               = res.search_user_id;
+			//state.search_user_id               = res.search_user_id;
 			state.punch_in_status              = res.punch_in;
 			state.punch_in_formated_date       = res.punch_in_formated_date;
 			state.punch_out_formated_date      = res.punch_out_formated_date;
@@ -29,7 +30,8 @@ export default {
 			state.office_closed                = res.office_closed;
 			state.office_start_with_date_time  = res.office_start_with_date_time;
 			state.office_closed_with_date_time = res.office_closed_with_date_time;
-			state.allwo_ip                     = res.allwo_ip
+			state.employessDropDown            = res.employees_dropdown;
+			state.allow_ip                     = res.allow_ip;
 		},
 		setAttendance: function(state, records) {
 			state.attendance = records.records; 

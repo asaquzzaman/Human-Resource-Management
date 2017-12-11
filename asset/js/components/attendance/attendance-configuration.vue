@@ -92,7 +92,7 @@
 				},
 
 				set: function(val) {
-					this.$store.commit('setMultiAttendance', val);
+					this.$store.commit('attendance/setMultiAttendance', val);
 				}
 			},
 
@@ -102,7 +102,7 @@
 				},
 				
 				set: function(val) {
-					this.$store.commit('setAllowIP', val);
+					this.$store.commit('attendance/setAllowIP', val);
 				}
 			}
 		},

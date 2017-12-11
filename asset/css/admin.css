@@ -861,6 +861,7 @@ label em {
   text-align: center;
 }
 .hrm-attendance .hrm-clock-wrap {
+  width: 100%;
   background: #eee;
   padding: 10px;
   margin-bottom: 10px;

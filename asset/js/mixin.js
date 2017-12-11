@@ -96,10 +96,10 @@ export default Vue.mixin({
          * @return string      
          */
         dateFormat: function( date ) {
-            if ( !date ) {
-                return;
+            if ( typeof date === 'undefined' ) {
+                date = moment().format();
             }
-
+            
            // moment.tz.add(HRM_Vars.time_zones);
            // moment.tz.link(HRM_Vars.time_links);
 
@@ -119,6 +119,10 @@ export default Vue.mixin({
             } 
 
             return moment( date ).format(format);
+        },
+
+        currentDate () {
+            return this.dateFormat();
         },
 
         pad(d) {

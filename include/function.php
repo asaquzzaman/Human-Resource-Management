@@ -412,11 +412,6 @@ function hrm_get_js_template( $file_path, $id ) {
     }
 }
 
-function hrm_validateDate($date, $format = 'Y-m-d H:i:s') {
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) == $date;
-}
-
 function hrm_load_orm() {
     $capsule = new Capsule;
    
@@ -683,6 +678,12 @@ function hrm_get_client_ip() {
     }
 
     return $ipaddress;
+}
+
+function hrm_validateDate($date, $format = 'Y-m-d H:i:s'){
+    $date = date( $format, strtotime( $date ) );
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
 }
 
 

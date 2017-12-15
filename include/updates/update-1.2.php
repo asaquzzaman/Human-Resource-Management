@@ -10,6 +10,7 @@ function hrm_office_time() {
       `end` datetime NOT NULL,
       `is_multi` INT(3) NOT NULL,
       `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `ip` TINYTEXT NOT NULL,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -52,6 +53,23 @@ function hrm_attendance_table() {
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 }
+
+function hrm_employer_role() {
+    remove_role( 'hrm_manager' );
+    remove_role( 'hrm_employee' );
+
+    $role_name            = hrm_employee_role_key();
+    $display_name         = __( 'HRM Employee', 'hrm' );
+    $capabilities['read'] = true;
+    add_role( $role_name, $display_name, $capabilities );
+
+    $role_name            = hrm_manager_role_key();
+    $display_name         = __( 'HRM Manager', 'hrm' );
+    $capabilities['read'] = true;
+    add_role( $role_name, $display_name, $capabilities );
+}
+
+hrm_employer_role();
 
 hrm_office_time();
 hrm_update_job_category_table();

@@ -117,7 +117,17 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_delete_leave', array( 'Hrm_Leave', 'ajax_delete_leave' ) );
         add_action( 'wp_ajax_update_settings', array( 'Hrm_Settings', 'ajax_update_settings' ) );
         add_action( 'wp_ajax_delete_leave_type', array( 'Hrm_Leave', 'ajax_delete_leave_type' ) );
+        add_action( 'wp_ajax_hrm_user_can', array( $this, 'user_can' ) );
 
+    }
+
+    function user_can() {
+        check_ajax_referer('hrm_nonce');
+        
+        $user_id = $_POST['user_id'];
+        $cap = $_POST['cap'];
+
+        wp_send_json_success( hrm_user_can( $cap, $user_id ) );
     }
 
     function partial_payment_delete() {

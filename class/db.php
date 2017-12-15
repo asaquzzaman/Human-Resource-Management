@@ -28,6 +28,7 @@ class Hrm_Db {
           `end` datetime NOT NULL,
           `is_multi` INT(3) NOT NULL,
           `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `ip` TINYTEXT NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -662,15 +663,7 @@ class Hrm_Db {
     }
 
     function employer_role() {
-        $role_name            = hrm_employee_role_key();
-        $display_name         = __( 'Employee', 'hrm' );
-        $capabilities['read'] = true;
-        add_role( $role_name, $display_name, $capabilities );
-
-        $role_name            = hrm_manager_role_key();
-        $display_name         = __( 'Manager', 'hrm' );
-        $capabilities['read'] = true;
-        add_role( $role_name, $display_name, $capabilities );
+        Hrm_Admin::getInstance()->employer_role();
     }
 
     function organization() {

@@ -14,10 +14,109 @@ class Hrm_Admin {
 
 
     function __construct() {
-
         add_action( 'init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
+
+        $this->setup_actions();
+    }
+
+    /**
+     * Setup the admin hooks, actions and filters
+     *
+     * @return void
+     */
+    function setup_actions() {
+
+        // Bail if in network admin
+        if ( is_network_admin() ) {
+            return;
+        }
+
+        // User profile edit/display actions
+        add_action( 'edit_user_profile', array( $this, 'role_display' ) );
+        add_action( 'show_user_profile', array( $this, 'role_display' ) );
+        add_action( 'profile_update', array( $this, 'profile_update_role' ) );
+    }
+
+    /**
+     * Default interface for setting a HR role
+     *
+     * @param WP_User $profileuser User data
+     *
+     * @return bool Always false
+     */
+    public static function role_display( $profileuser ) {
+        // Bail if current user cannot edit users
+        if ( ! current_user_can( 'edit_user', $profileuser->ID ) || !current_user_can( 'manage_options') ) {
+            return;
+        }
+
+        $checked = in_array( hrm_manager_role_key(), $profileuser->roles ) ? 'checked' : '';
+        
+        ?>
+
+        <h3><?php esc_html_e( 'HRM', 'erp' ); ?></h3>
+
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th><label for="erp-hr-role"><?php esc_html_e( 'HRM Manager', 'erp' ); ?></label></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text"><span>HRM Manager</span></legend>
+                            <label for="hrm-manager">
+                                <input <?php echo $checked; ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
+                                Confirm HRM manager
+                            </label>
+                            <br>
+                        </fieldset>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <?php
+    }
+
+    public static function profile_update_role( $user_id ) {
+
+        $postdata = $_POST;
+        // Bail if no user ID was passed
+        if ( empty( $user_id ) ) {
+            return;
+        }
+
+        // AC role we want the user to have
+        $new_role = isset( $postdata['hrm_manager'] ) ? sanitize_text_field( $postdata['hrm_manager'] ) : false;
+
+
+        // Bail if current user cannot promote the passing user
+        if ( ! current_user_can( 'promote_user', $user_id ) ) {
+            return;
+        }
+
+        // Set the new HRM role
+        $user = get_user_by( 'id', $user_id );
+
+        if ( $new_role ) {
+            $user->add_role( $new_role );
+        } else if ( count( $user->roles ) > 1 ) {
+            $user->remove_role( hrm_manager_role_key() );
+        }
+    }
+
+    function employer_role() {
+        $role_name            = hrm_employee_role_key();
+        $display_name         = __( 'HRM Employee', 'hrm' );
+        $capabilities['read'] = true;
+        add_role( $role_name, $display_name, $capabilities );
+
+        $role_name            = hrm_manager_role_key();
+        $display_name         = __( 'HRM Manager', 'hrm' );
+        $capabilities['read'] = true;
+        add_role( $role_name, $display_name, $capabilities );
     }
 
     function get_employer() {

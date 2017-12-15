@@ -134,12 +134,12 @@
 
 				if( date_time.field == 'datetimepicker_from' ) {
 					//this.office_start = date_time.date_time;
-					this.$store.commit( 'office_start', date_time );
+					this.$store.commit( 'attendance/office_start', date_time );
 				}
 
 				if( date_time.field == 'datetimepicker_to' ) {
 					//this.office_closed = date_time.date_time;
-					this.$store.commit( 'office_closed', date_time );
+					this.$store.commit( 'attendance/office_closed', date_time );
 				}
 			},
 			saveConfiguration: function() {

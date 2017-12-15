@@ -9,7 +9,7 @@ module.exports = {
 		filename: 'hrm-bundle.js',
 		publicPath: 'asset/js',
 		chunkFilename: 'chunk/[chunkhash].chunk-bundle.js',
-		jsonpFunction: 'wpSperaHrm',
+		jsonpFunction: 'wpSpearHrm',
 	},
 
 	module: {
@@ -39,21 +39,6 @@ module.exports = {
 			}
 		]
 	},
-
-    resolve : {
-        alias: {
-            jquery: "./asset/js/jquery.js",
-            date: "./asset/js/date.js"
-        }
-    },
-
-    // plugins: [
-	   //  new webpack.DefinePlugin({
-	   //    'process.env': {
-	   //      NODE_ENV: JSON.stringify('production')
-	   //    }
-	   //  })
-    // ]
 }
 
 

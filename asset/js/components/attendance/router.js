@@ -42,17 +42,21 @@ let menu = [
             },
         ]   
 
-    },
-
-    {
-        path: 'attendance-configuration', 
-        component: hrm_attendace_configuration, 
-        name: 'attendance_configuration',
-        meta: {
-            label: 'Configuration',
-        }
     }
 ];
+
+if ( hrm_user_can('attendance_configuration') ) {
+    menu.push(
+        {
+            path: 'attendance-configuration', 
+            component: hrm_attendace_configuration, 
+            name: 'attendance_configuration',
+            meta: {
+                label: 'Configuration',
+            }
+        }
+    );
+}
 
 HRMRegisterChildrenRoute ('hrm_root', menu);
 

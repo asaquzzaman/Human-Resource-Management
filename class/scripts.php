@@ -85,7 +85,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-jquery.dataTables', HRM_URL . '/asset/js/jquery.dataTables.min.js', array( 'jquery' ), false, true);
         wp_enqueue_script( 'hrm_admin', HRM_URL . '/asset/js/hrm.js', array( 'jquery' ), false, true);
 
-        wp_localize_script( 'hrm_admin', 'HRM_Vars', array(
+        wp_localize_script( 'hrm-config', 'HRM_Vars', array(
             'is_admin'    => $hrm_is_admin,
             'confirm_msg' => __( 'Are you sure!', 'hrm'),
             'success_msg' => __( 'Changed Successfully', 'hrm' ),
@@ -210,7 +210,7 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-vue-multiselect', HRM_URL . '/asset/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', array('jquery','jquery-ui-datepicker', 'hrm-datetimepicker', 'hrm-moment-time-zone'), false, true );
 
-        wp_localize_script( 'hrm-vue', 'HRM_Vars', array(
+        wp_localize_script( 'hrm-config', 'HRM_Vars', array(
             //'time_zones'      => $json_time_zone_string['zones'],
             //'time_links'      => $json_time_zone_string['links'],
             'ajax_url'        => admin_url( 'admin-ajax.php' ),

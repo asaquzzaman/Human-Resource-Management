@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="item in menu" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+            <router-link v-for="(item,  index) in menu" key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
         </h2>
 
         <h3 class="hrm-sub-nav">

@@ -296,7 +296,7 @@ class WP_Hrm {
 
     function admin_menu() {
         global $submenu;
-        $capability    = 'read'; //minimum level: subscriber
+        $capability    = 'hrm_employee'; //minimum level: subscriber
         $label         = hrm_menu_label();
         $hrm_page_slug = hrm_page_slug();
         
@@ -311,11 +311,11 @@ class WP_Hrm {
                 $style_slug[$page_slug] = add_submenu_page( $hrm_page_slug, $page_label, $page_label, $capability, $page_slug, array($this, 'admin_page_handler') );
             }
         }
-
-        $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/departments' ];
-        $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/attendance' ];
-        $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/leave' ];
-        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), 'read', 'admin.php?page=hr_management&active=vue#/settings' ];
+   
+        $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/departments' ];
+        $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/attendance' ];
+        $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/leave' ];
+        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/settings' ];
 
         if( isset( $style_slug[hrm_organization_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );

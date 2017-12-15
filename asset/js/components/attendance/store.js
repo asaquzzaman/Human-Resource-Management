@@ -69,5 +69,8 @@ export default {
 		punch_in: function(state, status) {
 			state.punch_in_status = status.status;
 		},
+		setAllowIP: function(state, ip) {
+			state.allow_ip = ip;
+		}
 	}
 };

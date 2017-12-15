@@ -99,7 +99,7 @@ class Hrm_Update {
             return;
         }
         
-        $last_file_key = array_keys( self::$updates );
+        $last_file_key           = array_keys( self::$updates );
         $latest_version_file_key = end( $last_file_key );
         
         if ( ! is_null( HRM_VERSION ) && version_compare( HRM_VERSION, $latest_version_file_key, '<=' ) ) {

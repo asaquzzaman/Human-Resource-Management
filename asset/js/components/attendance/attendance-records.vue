@@ -54,6 +54,7 @@
 	import hrm_attendance_header from './attendance-header.vue';
 
 	export default {
+
 		mixins: [HRMMixin.attendance],
 		
 		components: {
@@ -79,10 +80,13 @@
 				return this.$store.state.attendance.attendance;
 			},
 			punchInFormatedDate: function() {
-				return this.$store.state.attendance.punch_in_formated_date
+				let date = this.$store.state.attendance.punch_in_formated_date;
+
+				return date ? date : this.firstDay();
 			},
 			punchOutFormatedDate: function() {
-				return this.$store.state.attendance.punch_out_formated_date
+				let date = this.$store.state.attendance.punch_out_formated_date;
+				return date ? date : this.lastDay();
 			}
 		},
 		methods: {
@@ -120,6 +124,54 @@
 	                    
 	                }
 	            });
+			},
+			firstDay () {
+
+				var date = new Date(), 
+					y = date.getFullYear(), 
+					m = date.getMonth();
+
+				var firstDay = new Date(y, m, 1);
+
+	            date = moment(firstDay).format('YYYY-MM-DD');
+	            
+	            var format = 'MMMM DD YYYY';
+	            
+	            if ( HRM_Vars.wp_date_format == 'Y-m-d' ) {
+	                format = 'YYYY-MM-DD';
+	            
+	            } else if ( HRM_Vars.wp_date_format == 'm/d/Y' ) {
+	                format = 'MM/DD/YYYY';
+	            
+	            } else if ( HRM_Vars.wp_date_format == 'd/m/Y' ) {
+	                format = 'DD/MM/YYYY';
+	            } 
+
+	            return moment( date ).format(format);
+			},
+
+			lastDay () {
+				var date = new Date(), 
+					y = date.getFullYear(), 
+					m = date.getMonth();
+
+				var lastDay = new Date(y, m + 1, 0);
+
+	            date = moment(lastDay).format('YYYY-MM-DD');
+	            
+	            var format = 'MMMM DD YYYY';
+	            
+	            if ( HRM_Vars.wp_date_format == 'Y-m-d' ) {
+	                format = 'YYYY-MM-DD';
+	            
+	            } else if ( HRM_Vars.wp_date_format == 'm/d/Y' ) {
+	                format = 'MM/DD/YYYY';
+	            
+	            } else if ( HRM_Vars.wp_date_format == 'd/m/Y' ) {
+	                format = 'DD/MM/YYYY';
+	            } 
+
+	            return moment( date ).format(format);
 			}
 		}	
 	}

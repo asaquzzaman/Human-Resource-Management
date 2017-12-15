@@ -45,6 +45,7 @@
 			'clock': Clock
 		},
 		methods: {
+
 			punchIn: function() {
 
 				//for preventing multipule submit

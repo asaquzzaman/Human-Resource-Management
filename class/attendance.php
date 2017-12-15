@@ -25,7 +25,7 @@ class Hrm_Attendance {
         $office_time = self::getInstance()->get_office_time();
         
         $office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
-        $office_closed_with_date = date( 'Y-m-d 06:00', strtotime( current_time('mysql') ) );
+        $office_closed_with_date = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
 
         // Attendance default configuration saved
         if ( empty( $office_time ) ) {
@@ -41,8 +41,8 @@ class Hrm_Attendance {
         $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
         $office_start            = empty( $office_time->start ) ? '10:00 am' : hrm_get_time( $office_time->start );
         $office_closed           = empty( $office_time->end ) ? '06:00 pm' : hrm_get_time( $office_time->end );
-        $office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d H:i', strtotime( $office_time->start ) );
-        $office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d H:i', strtotime( $office_time->end ) );
+        $office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
+        $office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
 
 
         wp_send_json_success(array(
@@ -85,7 +85,8 @@ class Hrm_Attendance {
         global $wpdb;
         $table = $wpdb->prefix . 'hrm_attendance';
 
-        $punch     = $wpdb->get_row( "SELECT * FROM $table WHERE date >= '$current_time' AND user_id = $user_id ORDER BY id DESC LIMIT 1" );
+        $punch = $wpdb->get_row( "SELECT * FROM $table WHERE `date` >= '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT 1" );
+        
         $punch_in  = isset( $punch->punch_in ) ? $punch->punch_in : 0;
         $punch_out = isset( $punch->punch_out ) ? $punch->punch_out : 0;
         
@@ -96,7 +97,7 @@ class Hrm_Attendance {
         // if multi attendance is enable
         if ( $punch_in_status == 'enable' && !empty( $punch ) ) {
             $is_multi_attendance = $this->is_multi_attendance();
-            $punch_in_status = $is_multi_attendance ? 'enable' : 'disable';
+            $punch_in_status     = $is_multi_attendance ? 'enable' : 'disable';
         }
 
         return $punch_in_status;
@@ -685,8 +686,8 @@ class Hrm_Attendance {
         } );
 
         $data = array(
-            'start'    => $postdata['office_start'],
-            'end'      => $closed,
+            'start'    => date( 'Y-m-d H:i:s', strtotime( $postdata['office_start'] ) ),
+            'end'      => date( 'Y-m-d H:i:s', strtotime( $closed ) ),
             'is_multi' => $is_multi,
             'ip'       => maybe_serialize( $allow_ip )
         );

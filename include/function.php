@@ -90,13 +90,13 @@ function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access
 
 function hrm_user_can( $cap, $user_id = false) {
 
+    if ( $user_id ) {
+        return current_user_can( $cap, $user_id );
+    }
+
     // check is current user administrator
     if ( current_user_can('manage_options') ) {
         return true;
-    }
-
-    if ( $user_id ) {
-        return current_user_can( $cap, $user_id );
     }
 
     return current_user_can( $cap );
@@ -132,13 +132,17 @@ function hrm_is_current_user_administrator() {
     return false;
 }
 
-function hrm_current_user_role() {
-    global $current_user;
-
-    $user_roles = $current_user->roles;
-    $user_role = reset($user_roles);
-
-    return $user_role;
+function hrm_current_user_role( $user_id = false ) {
+    if ( $user_id ) {
+        $current_user = get_user_by( 'id', $user_id );   
+    } else {
+        global $current_user;    
+    }
+    
+    $roles          = hrm_get_roles();
+    $selected_role  = array_intersect_key( $roles, array_flip( $current_user->roles ) );
+    
+    return $selected_role ? key( $selected_role ) : false;
 }
 
 /**
@@ -611,12 +615,15 @@ function hrm_manager_capability() {
         'manage_hrm_organization',
         'manage_employee',
         'edit_employee',
+        'attendance_configuration',
+        'hrm_employee'
     );
 }
 
 function hrm_employee_capability() {
     return array(
         'edit_employee',
+        'hrm_employee'
     );
 }
 
@@ -624,7 +631,7 @@ function hrm_employee_role_key() {
     return 'hrm_employee';
 }
 
-function hrm_get_roles($role = false) {
+function hrm_get_roles( $role = false ) {
     $roles = array(
         hrm_employee_role_key() => 'Employee',
         hrm_manager_role_key()  => 'Manager'
@@ -640,11 +647,17 @@ function hrm_get_roles($role = false) {
 function hrm_set_capability() {
     hrm_set_manager_capability();
     hrm_set_employee_capability();
+    hrm_set_administrator_capability();
 }
 
 function hrm_set_manager_capability() {
     $role = get_role( hrm_manager_role_key() );
-
+    
+    if ( ! $role ) {
+        Hrm_Admin::getInstance()->employer_role();
+        $role = get_role( hrm_manager_role_key() );
+    }
+    
     foreach ( hrm_manager_capability() as $key => $cap ) {
         $role->add_cap( $cap );
     }
@@ -653,7 +666,20 @@ function hrm_set_manager_capability() {
 function hrm_set_employee_capability() {
     $role = get_role( hrm_employee_role_key() );
 
+    if ( ! $role ) {
+        Hrm_Admin::getInstance()->employer_role();
+        $role = get_role( hrm_employee_role_key() );
+    }
+
     foreach ( hrm_employee_capability() as $key => $cap ) {
+        $role->add_cap( $cap );
+    }
+}
+
+function hrm_set_administrator_capability() {
+    $role = get_role( 'administrator' );
+
+    foreach ( hrm_manager_capability() as $key => $cap ) {
         $role->add_cap( $cap );
     }
 }

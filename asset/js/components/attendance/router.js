@@ -45,7 +45,7 @@ let menu = [
     }
 ];
 
-if ( hrm_user_can('attendance_configuration') ) {
+if ( hrm_user_can('manage_attendance') ) {
     menu.push(
         {
             path: 'attendance-configuration', 

@@ -14,7 +14,8 @@ export default {
 		office_start_with_date_time: '',
 		office_closed_with_date_time: '',
 		allow_ip: '',
-		employessDropDown: []
+		employessDropDown: [],
+		totalOfficeTime: 0
 	},
 
 	mutations: {
@@ -34,7 +35,8 @@ export default {
 			state.allow_ip                     = res.allow_ip;
 		},
 		setAttendance: function(state, records) {
-			state.attendance = records.records; 
+			state.attendance      = records.records; 
+			state.totalOfficeTime = records.totalOfficeTime;
 
 			if ( typeof records.punch_in_formated_date != 'undefined' ) {
 				state.punch_in_formated_date  = records.punch_in_formated_date; 

@@ -2,7 +2,6 @@
 	<div class="hrm-attendance">
 		<hrm-attendance-header></hrm-attendance-header>
 		<hrm-attendace-punch-in-out-btn></hrm-attendace-punch-in-out-btn>
-		<!-- <hrm-attendace-user-search></hrm-attendace-user-search> -->
 
 		<div class="metabox-holder hrm-attendance-records-wrap">
 			<div class="hrm-records-text">
@@ -37,6 +36,12 @@
 						<td v-html="attendace.punch_out"></td>
 						<td v-html="attendace.total"></td>
 					</tr>
+					<tr v-if="attendace_records.length">
+						<td><strong>Total Duration</strong></td>
+						<td>&#8211 &#8211</td>
+						<td>&#8211 &#8211</td>
+						<td><strong>{{ totalOfficeTime }}</strong></td>
+					</tr>
 					<tr v-if="!attendace_records.length">
 						
 						<td colspan="4">No record found!</td>
@@ -68,14 +73,16 @@
 				
 			}
 		},
+
 		created: function() {
 			this.attendanceInit();
-
-			if( this.$route.name != 'attendance_search') {
-				this.getAttendance();
-			}
+			this.getAttendance();
 		},
+
 		computed: {
+			totalOfficeTime: function() {
+				return this.$store.state.attendance.totalOfficeTime;
+			},
 			attendace_records: function() {
 				return this.$store.state.attendance.attendance;
 			},
@@ -107,24 +114,7 @@
 	                }
 	            });
 			},
-			getAttendance: function() {
-				var request_data = {
-	                _wpnonce: HRM_Vars.nonce,
-	            },
-	            self = this;
 
-	            wp.ajax.send('get_attendance', {
-	                data: request_data,
-	                success: function(res) {
-	                	
-	                    self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
-	                },
-
-	                error: function(res) {
-	                    
-	                }
-	            });
-			},
 			firstDay () {
 
 				var date = new Date(), 

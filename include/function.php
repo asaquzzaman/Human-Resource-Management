@@ -615,8 +615,8 @@ function hrm_manager_capability() {
         'manage_hrm_organization',
         'manage_employee',
         'edit_employee',
-        'attendance_configuration',
-        'hrm_employee'
+        'manage_attendance',
+        'hrm_employee',
     );
 }
 

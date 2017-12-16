@@ -5,7 +5,7 @@
 
 		<input type="text" placeholder="To" name="punch_out" value="" class="hrm-date-picker-to" id="punch_out" v-hrm-datepicker="" :value="punch_out_date">
 
-		<select class="user_id" name="user_id" id="user_id" v-model="search_user_id">
+		<select v-if="manageAttendance" class="user_id" name="user_id" id="user_id" v-model="search_user_id">
 			<option value="-1">-Select Employee-</option>
 			<option v-for="(employee, id) in employessDropDown" :value="id">{{ employee }}</option>
 			
@@ -31,6 +31,13 @@
 		},
 
 		computed: {
+			manageAttendance () {
+				if( hrm_user_can('manage_attendance') ) {
+					return true;
+				}
+
+				return false;
+			},
 			employessDropDown () {
 				return this.$store.state.attendance.employessDropDown;
 			},
@@ -56,40 +63,11 @@
 		created: function() {
 			this.$on( 'hrm_date_picker', this.setdate );
 			this.$store.commit( 'attendance/searchMode', {status: true} );
-
-			this.search();
 		},
+		
 		methods: {
-			getAttendance: function() {
 
-				var request_data = {
-	                _wpnonce: HRM_Vars.nonce,
-	                search: this.$route.query,
-	            },
-	            
-	            self = this;
-
-	            wp.ajax.send('get_attendance', {
-	                data: request_data,
-	                success: function(res) {
-	                	
-	                    self.$store.commit( 'attendance/setAttendance', {
-	                    	records: res.attendance, 
-	                    	punch_in_formated_date: res.punch_in_formated_date,
-	                    	punch_out_formated_date: res.punch_out_formated_date,
-	                    	punch_in_date: res.punch_in_date,
-	                    	punch_out_date: res.punch_out_date
-
-	                    } );
-	                },
-
-	                error: function(res) {
-	                    
-	                }
-	            });
-			},
 			setdate: function(date) {
-
 				if ( date.field == 'datepicker_from' ) {
 					this.$store.commit( 'attendance/setPunchInDate', { date: date } );
 				}
@@ -99,20 +77,15 @@
 				}
 			},
 			search: function() {
-				
-				if( this.$route.name == 'attendance_search') {
-					this.$router.push({ 
-						query: { 
-							punch_in: this.$store.state.attendance.punch_in_date,
-							punch_out: this.$store.state.attendance.punch_out_date,
-							user_id: this.$store.state.attendance.search_user_id
-						}
-					});
+				this.$router.push({ 
+					query: { 
+						punch_in: this.$store.state.attendance.punch_in_date,
+						punch_out: this.$store.state.attendance.punch_out_date,
+						user_id: this.$store.state.attendance.search_user_id
+					}
+				});
 
-					this.getAttendance();
-				} 
-				
-				
+				this.getAttendance();
 			},
 		}
 	}

@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"f39f6c856cb83619bdb4","1":"53bd0420d73f0ef981e7","2":"67dbb5f21c81a6ba9873","3":"f77219b76e96e5915869","4":"0296e7c121fe9defdd2e","5":"b89bf5e642780182407d","6":"c8be43f9aed4b2d6a124","7":"0aba37e5fb637686810e","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"e0dbcc24a2f4796a8373","12":"0dc47f9236b7455d838a","13":"6574884b344fbf8b5322","14":"1fff6ffe8975e2cf86ea","15":"23a5dc27bb4c32e9b4b6"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"f39f6c856cb83619bdb4","1":"53bd0420d73f0ef981e7","2":"67dbb5f21c81a6ba9873","3":"f77219b76e96e5915869","4":"bd4c0ae0734d5cbbd414","5":"b89bf5e642780182407d","6":"c8be43f9aed4b2d6a124","7":"0aba37e5fb637686810e","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"e0dbcc24a2f4796a8373","12":"0dc47f9236b7455d838a","13":"6574884b344fbf8b5322","14":"1fff6ffe8975e2cf86ea","15":"9970ced206d29425777a"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10027,7 +10027,7 @@ let menu = [{
 
 }];
 
-if (hrm_user_can('attendance_configuration')) {
+if (hrm_user_can('manage_attendance')) {
     menu.push({
         path: 'attendance-configuration',
         component: hrm_attendace_configuration,
@@ -10142,7 +10142,36 @@ webpackContext.id = 27;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+    methods: {
+        getAttendance: function () {
+
+            var request_data = {
+                _wpnonce: HRM_Vars.nonce,
+                search: this.$route.query
+            },
+                self = this;
+
+            wp.ajax.send('get_attendance', {
+                data: request_data,
+                success: function (res) {
+
+                    self.$store.commit('attendance/setAttendance', {
+                        records: res.attendance,
+                        punch_in_formated_date: res.punch_in_formated_date,
+                        punch_out_formated_date: res.punch_out_formated_date,
+                        punch_in_date: res.punch_in_date,
+                        punch_out_date: res.punch_out_date,
+                        totalOfficeTime: res.total_time
+
+                    });
+                },
+
+                error: function (res) {}
+            });
+        }
+    }
+});
 
 /***/ }),
 /* 29 */
@@ -10166,7 +10195,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		office_start_with_date_time: '',
 		office_closed_with_date_time: '',
 		allow_ip: '',
-		employessDropDown: []
+		employessDropDown: [],
+		totalOfficeTime: 0
 	},
 
 	mutations: {
@@ -10187,6 +10217,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		setAttendance: function (state, records) {
 			state.attendance = records.records;
+			state.totalOfficeTime = records.totalOfficeTime;
 
 			if (typeof records.punch_in_formated_date != 'undefined') {
 				state.punch_in_formated_date = records.punch_in_formated_date;

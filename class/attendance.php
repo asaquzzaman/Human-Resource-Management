@@ -154,7 +154,7 @@ class Hrm_Attendance {
 
     function punch_validator() {
         $office_time = $this->get_office_time();
-        $ip          = $this->process_ip( $office_time->ip );
+        $ip          = maybe_unserialize( $office_time->ip );
         $client_ip   = hrm_get_client_ip();
 
         if ( empty( $ip ) ) {
@@ -292,28 +292,46 @@ class Hrm_Attendance {
         
         if ( ! empty( $_POST['search'] ) ) {
             wp_send_json_success( array(
-                'attendance' => $attendance,
-                'punch_in_formated_date' => hrm_get_date( $args['punch_in'] ),
+                'attendance'              => $attendance,
+                'punch_in_formated_date'  => hrm_get_date( $args['punch_in'] ),
                 'punch_out_formated_date' => hrm_get_date( $postdata['punch_out'] ),
-                'punch_in_date' => $postdata['punch_in'],
-                'punch_out_date' => $postdata['punch_out'] 
+                'punch_in_date'           => $postdata['punch_in'],
+                'punch_out_date'          => $postdata['punch_out'],
+                'total_time'              => self::getInstance()->count_office_time($attendance)
             ) );
         }
 
         wp_send_json_success( array(
-            'attendance' => $attendance
+            'attendance' => $attendance,
+            'total_time' => self::getInstance()->count_office_time($attendance)
         ) );
     }
 
+    function count_office_time( $attendance ) {
+        $total_time = 0;
+        foreach ( $attendance as $key => $value ) {
+            $total_time = $value->row_total + $total_time;
+        }
+
+        $total  = hrm_second_to_time( $total_time );
+        $time   = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
+
+        return $time;
+    }
+
     function get_attendance_meta( $attendance ) {
+
         foreach ( $attendance as $key => $attend ) {
-            $attend->date      = hrm_get_date_time( $attend->date, false, true );
-            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, false, true );
-            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, false, true ) : '&#8211 &#8211';
+            $attend->date      = hrm_get_date( $attend->date );
+            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, 'h:i a' );
+            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, 'h:i a' ) : '&#8211 &#8211';
+            
             
             if ( strtotime( $attend->punch_out ) > 0 ) {
-                $total = hrm_second_to_time( $attend->total );
-                $attend->total = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
+                $attend->row_total = $attend->total;
+                $total             = hrm_second_to_time( $attend->total );
+                $attend->total     = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
+                
             } else {
                 $attend->total = '&#8211 &#8211';
             }
@@ -383,9 +401,8 @@ class Hrm_Attendance {
             
             if ( $items ) {
                 $items = $this->get_attendance_meta( $items );
+                wp_cache_set( $cache_key, $items, 'hrm' );
             }
-            
-            wp_cache_set( $cache_key, $items, 'hrm' );
         }        
         
         return $items;
@@ -461,29 +478,6 @@ class Hrm_Attendance {
 
         return $query;
     }
-
-    // function test($args, $depth = 0) {
-    //     foreach ( $args as $key => $value) {
-            
-    //         if ( ! is_array( $value ) ) {
-    //             continue;
-    //         }
-            
-    //         $args['depth'] = $depth;
-            
-    //         if ( $this->has_children($value, $key) ) {
-    //             $depth = $depth + 1;
-    //             $args[$key] = $this->test( $value, $depth );
-    //             $args[$key]['depth'] = $depth;
-    //             $depth = 0;
-    //         } else {
-    //             $args[$key]['depth'] = $depth+1;
-    //         }
-    //     }
-
-    //     return $args;
-    // }
-
 
     function generate_query( $args ) {
     
@@ -582,7 +576,6 @@ class Hrm_Attendance {
 
     function condition_make_micro_query( $args, $parent_id = false ) {
 
-        
         foreach ( $args as $key => $element ) {
             if ( ! is_array( $element )  ) {
                 continue;

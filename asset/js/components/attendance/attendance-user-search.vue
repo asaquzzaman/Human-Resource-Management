@@ -51,7 +51,7 @@
 
 			search_user_id: {
 				get: function() {
-					return this.$store.state.attendance.search_user_id;
+					return this.$route.query.user_id ? this.$route.query.user_id : '-1';
 				},
 
 				set: function(val) {

@@ -38,21 +38,19 @@
 						</td>
 
 					</tr>
+
+					<tr v-if="!pendingLeaves.length">
+						
+						<td colspan="7">No record found!</td>
+					</tr>
 				</tbody>
 			</table>
 
 		</div>
 	</div>
 </template>
-
 <script>
 	export default {
-		beforeRouteEnter (to, from, next) {
-			next (vm => {
-				vm.getSelfLeaveRecords();
-			});
-		},
-
 		mixins: [HRMMixin.leave],
 
 		computed: {
@@ -60,7 +58,9 @@
 				return this.$store.state.leave.pending_leaves;
 			}
 		},
-
+		created () {
+			this.getSelfLeaveRecords();
+		},
 		methods: {
 			getSelfLeaveRecords () {
 				var self = this;

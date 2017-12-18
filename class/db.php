@@ -408,11 +408,13 @@ class Hrm_Db {
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `status` smallint(6) DEFAULT NULL,
-          `comments` varchar(256) DEFAULT NULL,
+          `comments` varchar(256) DEFAULT NULL COMMENT '1 = ''Pending'', 2 = ''Approve'', 3 = ''Cancel''',
           `type` varchar(13) NOT NULL,
           `emp_id` int(7) NOT NULL,
           `start_time` timestamp NULL DEFAULT NULL,
           `end_time` timestamp NULL DEFAULT NULL,
+          `created_at` timestamp NULL DEFAULT NULL,
+          `updated_at` timestamp NULL DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -478,15 +480,16 @@ class Hrm_Db {
     }
 
     function leave_type() {
-
         global $wpdb;
         $table_name = $wpdb->prefix . 'hrm_leave_type';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` bigint(13) NOT NULL AUTO_INCREMENT,
-          `leave_type_name` varchar(50) DEFAULT NULL,
-          `entitlement` smallint(6) DEFAULT NULL,
-          `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+            `id` bigint(13) NOT NULL,
+            `leave_type_name` varchar(50) DEFAULT NULL,
+            `entitlement` smallint(6) DEFAULT '0',
+            `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+            `f_year` int(11) DEFAULT NULL,
+            `carry` int(11) DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 

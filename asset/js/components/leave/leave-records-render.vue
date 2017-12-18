@@ -1,8 +1,7 @@
  <template>
 	<div>
-		<span class="page-title-action">Your leave records</span>
 		<span class="page-title-action">
-			From 
+			Leave records from 
 			<span class="hrm-start-date">{{ dateFormat(financialStart) }}</span>
 			to 
 			<span class="hrm-end-date">{{ dateFormat(financialEnd) }}</span>
@@ -206,9 +205,14 @@
 	    font-size: 13px;
 	    line-height: normal;
 	    color: #0073aa;
-	    cursor: pointer;
 	    outline: 0;
 	    display: inline-block;
+	}
+
+	.wrap .page-title-action:hover {
+		background: #f7f7f7;
+		color: #0073aa;
+		border: 1px solid #ccc;
 	}
 
 	.ui-sortable-handle {

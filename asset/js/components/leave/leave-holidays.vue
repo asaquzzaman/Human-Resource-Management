@@ -21,7 +21,7 @@
 
 		mixins: [HRMMixin.leave],
 
-		store: HRM_Leave_Store,
+		//store: HRM_Leave_Store,
 		
 		data: function() {
 			return {

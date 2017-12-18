@@ -58,7 +58,7 @@ export default {
                     }
                 },
             };
-
+            
             self.httpRequest('get_leaves', request_data);
 		},
 

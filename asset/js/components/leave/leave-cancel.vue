@@ -38,6 +38,12 @@
 						</td>
 
 					</tr>
+
+					
+					<tr v-if="!pendingLeaves.length">
+						
+						<td colspan="7">No record found!</td>
+					</tr>
 				</tbody>
 			</table>
 

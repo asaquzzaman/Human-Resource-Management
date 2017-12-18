@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"f39f6c856cb83619bdb4","1":"53bd0420d73f0ef981e7","2":"67dbb5f21c81a6ba9873","3":"f77219b76e96e5915869","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"c8be43f9aed4b2d6a124","7":"0aba37e5fb637686810e","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"e0dbcc24a2f4796a8373","12":"0dc47f9236b7455d838a","13":"6574884b344fbf8b5322","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"f39f6c856cb83619bdb4","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"3201d861eef111bdc83a","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"c8be43f9aed4b2d6a124","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"d97730858ff579cd75e3","12":"86ecdaa1b98eaf7d7806","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -9905,43 +9905,6 @@ let menu = [{
         label: 'Leave'
     }
 }, {
-    path: 'leave-configuration',
-    component: Hrm_Leave_Configuration,
-    name: 'leave_configuration',
-    meta: {
-        label: 'Configuration'
-    },
-
-    children: [{
-        path: 'type',
-        component: Hrm_Leave_Type,
-        name: 'leave_type',
-        meta: {
-            label: 'Type'
-        }
-    }, {
-        path: 'work-week',
-        component: Hrm_Leave_Work_Week,
-        name: 'leave_week',
-        meta: {
-            label: 'Work Week'
-        }
-    }, {
-        path: 'holidays',
-        component: Hrm_Leave_Holidays,
-        name: 'leave_holidays',
-        meta: {
-            label: 'Holiday'
-        }
-    }, {
-        path: 'form',
-        component: Hrm_Leave_form_settings,
-        name: 'leave_form_settings',
-        meta: {
-            label: 'Leave Form'
-        }
-    }]
-}, {
     path: 'leave-request',
     component: Hrm_Leave_Requests,
     name: 'leave_request',
@@ -9972,6 +9935,47 @@ let menu = [{
         }
     }]
 }];
+
+if (hrm_user_can('manage_leave')) {
+    menu.push({
+        path: 'leave-configuration',
+        component: Hrm_Leave_Configuration,
+        name: 'leave_configuration',
+        meta: {
+            label: 'Configuration'
+        },
+
+        children: [{
+            path: 'type',
+            component: Hrm_Leave_Type,
+            name: 'leave_type',
+            meta: {
+                label: 'Type'
+            }
+        }, {
+            path: 'work-week',
+            component: Hrm_Leave_Work_Week,
+            name: 'leave_week',
+            meta: {
+                label: 'Work Week'
+            }
+        }, {
+            path: 'holidays',
+            component: Hrm_Leave_Holidays,
+            name: 'leave_holidays',
+            meta: {
+                label: 'Holiday'
+            }
+        }, {
+            path: 'form',
+            component: Hrm_Leave_form_settings,
+            name: 'leave_form_settings',
+            meta: {
+                label: 'Leave Form'
+            }
+        }]
+    });
+}
 
 HRMRegisterChildrenRoute('hrm_root', menu);
 

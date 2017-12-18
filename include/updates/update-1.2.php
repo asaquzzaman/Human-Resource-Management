@@ -69,8 +69,53 @@ function hrm_employer_role() {
     add_role( $role_name, $display_name, $capabilities );
 }
 
-hrm_employer_role();
+function hrm_leave_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_leave';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
 
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `status` smallint(6) DEFAULT NULL,
+      `comments` varchar(256) DEFAULT NULL COMMENT '1 = ''Pending'', 2 = ''Approve'', 3 = ''Cancel''',
+      `type` varchar(13) NOT NULL,
+      `emp_id` int(7) NOT NULL,
+      `start_time` timestamp NULL DEFAULT NULL,
+      `end_time` timestamp NULL DEFAULT NULL,
+      `created_at` timestamp NULL DEFAULT NULL,
+      `updated_at` timestamp NULL DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+
+function hrm_leave_type_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_leave_type';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+        `id` bigint(13) NOT NULL,
+        `leave_type_name` varchar(50) DEFAULT NULL,
+        `entitlement` smallint(6) DEFAULT '0',
+        `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `f_year` int(11) DEFAULT NULL,
+        `carry` int(11) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+
+hrm_leave_type_table();
+hrm_leave_table();
+hrm_employer_role();
 hrm_office_time();
 hrm_update_job_category_table();
 hrm_attendance_table();

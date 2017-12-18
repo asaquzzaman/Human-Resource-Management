@@ -76,54 +76,6 @@ let menu = [
             label: 'Leave',
         }
     },
-
-    {
-        path: 'leave-configuration', 
-        component: Hrm_Leave_Configuration, 
-        name: 'leave_configuration',
-        meta: {
-            label: 'Configuration'
-        },
-
-        children: [
-            {
-                path: 'type', 
-                component: Hrm_Leave_Type, 
-                name: 'leave_type',
-                meta: {
-                    label: 'Type'
-                }
-            },
-
-            {
-                path: 'work-week', 
-                component: Hrm_Leave_Work_Week, 
-                name: 'leave_week',
-                meta: {
-                    label: 'Work Week'
-                }
-            },
-
-            {
-                path: 'holidays', 
-                component: Hrm_Leave_Holidays, 
-                name: 'leave_holidays',
-                meta: {
-                    label: 'Holiday'
-                }
-            },
-
-            {
-                path: 'form', 
-                component: Hrm_Leave_form_settings, 
-                name: 'leave_form_settings',
-                meta: {
-                    label: 'Leave Form'
-                }
-            }
-        ]
-    },
-
     {
         path: 'leave-request', 
         component: Hrm_Leave_Requests, 
@@ -163,9 +115,58 @@ let menu = [
     }
 ];
 
+if (hrm_user_can('manage_leave')) {
+    menu.push(
+        {
+            path: 'leave-configuration', 
+            component: Hrm_Leave_Configuration, 
+            name: 'leave_configuration',
+            meta: {
+                label: 'Configuration'
+            },
+
+            children: [
+                {
+                    path: 'type', 
+                    component: Hrm_Leave_Type, 
+                    name: 'leave_type',
+                    meta: {
+                        label: 'Type'
+                    }
+                },
+
+                {
+                    path: 'work-week', 
+                    component: Hrm_Leave_Work_Week, 
+                    name: 'leave_week',
+                    meta: {
+                        label: 'Work Week'
+                    }
+                },
+
+                {
+                    path: 'holidays', 
+                    component: Hrm_Leave_Holidays, 
+                    name: 'leave_holidays',
+                    meta: {
+                        label: 'Holiday'
+                    }
+                },
+
+                {
+                    path: 'form', 
+                    component: Hrm_Leave_form_settings, 
+                    name: 'leave_form_settings',
+                    meta: {
+                        label: 'Leave Form'
+                    }
+                }
+            ]
+        }
+    );
+}
 
 HRMRegisterChildrenRoute ('hrm_root', menu);
-
 
 export default menu;
 

@@ -20,17 +20,17 @@ function hrm_office_time() {
 
 function hrm_update_job_category_table() {
 
-	global $wpdb;
-	$table = $wpdb->prefix . 'hrm_job_category';
-	$cols = $wpdb->get_col( "DESC " . $table );
+    global $wpdb;
+    $table = $wpdb->prefix . 'hrm_job_category';
+    $cols = $wpdb->get_col( "DESC " . $table );
 
-	if ( ! in_array( 'description', $cols ) ) {
-		$wpdb->query( "ALTER TABLE {$table} ADD `description` TEXT NOT NULL AFTER `active`");
-	}
+    if ( ! in_array( 'description', $cols ) ) {
+        $wpdb->query( "ALTER TABLE {$table} ADD `description` TEXT NOT NULL AFTER `active`");
+    }
 
-	if ( ! in_array( 'parent', $cols ) ) {
-		$wpdb->query( "ALTER TABLE {$table} ADD `parent` INT NOT NULL AFTER `description`");
-	}
+    if ( ! in_array( 'parent', $cols ) ) {
+        $wpdb->query( "ALTER TABLE {$table} ADD `parent` INT NOT NULL AFTER `description`");
+    }
 }
 
 
@@ -52,6 +52,13 @@ function hrm_attendance_table() {
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+}
+
+function hrm_department() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_job_category';
+    $wpdb->query( "ALTER TABLE $table_name ADD `description` TINYTEXT NOT NULL" );
+    $wpdb->query( "ALTER TABLE $table_name ADD `parent` INT NOT NULL" );
 }
 
 function hrm_employer_role() {
@@ -98,21 +105,61 @@ function hrm_leave_type_table() {
     $sql = "DROP TABLE IF EXISTS $table_name";
     $wpdb->query($sql);
 
-    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-        `id` bigint(13) NOT NULL,
-        `leave_type_name` varchar(50) DEFAULT NULL,
-        `entitlement` smallint(6) DEFAULT '0',
-        `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `f_year` int(11) DEFAULT NULL,
-        `carry` int(11) DEFAULT NULL,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} ( 
+        `id` int(11) NOT NULL AUTO_INCREMENT, 
+        `leave_type_name` varchar(50) DEFAULT NULL, 
+        `entitlement` smallint(6) DEFAULT '0', 
+        `entitle_from` timestamp NULL DEFAULT NULL, 
+        `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', 
+        `f_year` int(11) DEFAULT NULL, 
+        `carry` int(11) DEFAULT NULL, 
+        PRIMARY KEY (`id`) 
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 }
 
+function hrm_relation() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_relation';
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+      `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `type` varchar(255) DEFAULT NULL,
+      `from` int(11) DEFAULT NULL,
+      `to` int(11) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+
+function hrm_holiday_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_holiday';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+      `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `name` varchar(20) NOT NULL,
+      `description` text,
+      `from` datetime DEFAULT NULL,
+      `to` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+      `f_year` int(11) DEFAULT NULL,
+      `length` varchar(10) NOT NULL,
+      `index_holiday` text NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+
+hrm_holiday_table();
+hrm_relation();
+hrm_department();
 hrm_leave_type_table();
 hrm_leave_table();
 hrm_employer_role();

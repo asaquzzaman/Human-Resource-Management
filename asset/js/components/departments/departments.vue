@@ -21,11 +21,6 @@
 	                        <span class="hrm-clear"></span>
 	                    </div>
 
-	                   <!--  <div class="hrm-right-action">
-	                        <department-paginate-drop-down></department-paginate-drop-down>
-	                        <department-search></department-search>
-	                        <span class="hrm-clear"></span>
-	                    </div> -->
 
 	                    <span class="hrm-clear"></span>
 	                    
@@ -37,7 +32,7 @@
 	                   
 	            	</div>
 	            </form>
-	            <department-pagination></department-pagination>
+	            <!-- <department-pagination></department-pagination> -->
 	        </div>
 	        
 	    </div>

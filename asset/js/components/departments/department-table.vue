@@ -51,6 +51,12 @@
                 <td>{{ department.number_of_employee }}</td>
 
             </tr>
+
+            <tr v-if="!departments.length">
+                <td colspan="5">
+                    No record found!
+                </td>
+            </tr>
             
 
         </tbody>

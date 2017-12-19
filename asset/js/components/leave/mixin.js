@@ -320,6 +320,13 @@ export default {
             }
             
             self.httpRequest('delete_holiday', request_data);
+        },
+        canManamgeLeave () {
+            if (hrm_user_can('manage_leave')) {
+                return true;
+            }
+
+            return false;
         }
 	},
 };

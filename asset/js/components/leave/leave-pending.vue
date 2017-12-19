@@ -33,7 +33,8 @@
 						<td>{{ dateFormat(pendingLeave.end_time) }}</td>
 
 						<td>
-							<button @click.prevent="updateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>
+							<button v-if="canManamgeLeave()" @click.prevent="updateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>
+							<button v-if="canManamgeLeave()" @click.prevent="updateLeaveStatus(pendingLeave, 3)" class="button button-secondary">Cancel</button>
 							<button @click.prevent="selfLeaveDelete(pendingLeave.id)">Delete</button>
 						</td>
 

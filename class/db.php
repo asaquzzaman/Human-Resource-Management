@@ -16,6 +16,22 @@ class Hrm_Db {
         $this->client_partial_payment();
         $this->attendance();
         $this->office_time();
+        $this->relation();
+    }
+
+    function relation() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'hrm_relation';
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+          `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+          `type` varchar(255) DEFAULT NULL,
+          `from` int(11) DEFAULT NULL,
+          `to` int(11) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
     }
 
     function office_time() {
@@ -452,15 +468,16 @@ class Hrm_Db {
         global $wpdb;
         $table_name = $wpdb->prefix . 'hrm_holiday';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
           `name` varchar(20) NOT NULL,
           `description` text,
-          `from` timestamp NULL DEFAULT NULL,
-          `to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `from` datetime DEFAULT NULL,
+          `to` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `f_year` int(11) DEFAULT NULL,
           `length` varchar(10) NOT NULL,
           `index_holiday` text NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
@@ -482,16 +499,16 @@ class Hrm_Db {
     function leave_type() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'hrm_leave_type';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-            `id` bigint(13) NOT NULL,
-            `leave_type_name` varchar(50) DEFAULT NULL,
-            `entitlement` smallint(6) DEFAULT '0',
-            `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-            `f_year` int(11) DEFAULT NULL,
-            `carry` int(11) DEFAULT NULL,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} ( 
+            `id` int(11) NOT NULL AUTO_INCREMENT, 
+            `leave_type_name` varchar(50) DEFAULT NULL, 
+            `entitlement` smallint(6) DEFAULT '0', 
+            `entitle_from` timestamp NULL DEFAULT NULL, 
+            `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', 
+            `f_year` int(11) DEFAULT NULL, 
+            `carry` int(11) DEFAULT NULL, 
+            PRIMARY KEY (`id`) 
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
@@ -598,6 +615,8 @@ class Hrm_Db {
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `name` varchar(60) DEFAULT NULL,
           `active` varchar(4) NOT NULL,
+          `description` TINYTEXT NOT NULL,
+          `parent` INT NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 

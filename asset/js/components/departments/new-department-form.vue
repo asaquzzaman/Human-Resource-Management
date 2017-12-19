@@ -165,7 +165,7 @@
                         toastr.success(res.success);
                         
                         self.slideUp(jQuery('.hrm-form-cancel'), function() {
-                            self.$store.commit('departments/showHideDepartmentForm', true);
+                            self.$store.commit('departments/showHideDepartmentForm', false);
                         });
 
                         self.$store.commit('departments/updateDepartment', {

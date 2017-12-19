@@ -2,6 +2,7 @@ let HRM_Leave_Store = {
 	state: {
 		header: {},
 		is_new_leave_type_form_visible: false,
+		is_new_holiday_form_visible: false,
 		is_new_leave_records_form_visible: false,
 		is_leave_form_active: false,
 		leave_records: [],
@@ -41,6 +42,10 @@ let HRM_Leave_Store = {
 		},
 		isNewLeaveRecordsFormVisible ( state, is_visible ) {
 			state.is_new_leave_records_form_visible = is_visible.is_visible;
+		},
+
+		isNewHolidayFormVisible ( state, is_visible ) {
+			state.is_new_holiday_form_visible = is_visible.is_visible;
 		},
 
 		showHideleaveForm  (state, status) {

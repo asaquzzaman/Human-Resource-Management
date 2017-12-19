@@ -109,7 +109,7 @@
 
 <style>
 	#hrm-hidden-form span {
-		display: inline-block !important;
+		display: block !important;
 	}
 	.multiselect__tags {
 		display: inline-block !important;

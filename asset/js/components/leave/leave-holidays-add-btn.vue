@@ -11,7 +11,7 @@
 		
 		methods: {
 			showHideNewLeaveTypeForm: function() {
-				this.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: true});
+				this.$store.commit('leave/isNewHolidayFormVisible', {is_visible: true});
 			}
 		}
 	};

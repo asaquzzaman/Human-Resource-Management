@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"f39f6c856cb83619bdb4","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"3201d861eef111bdc83a","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"c8be43f9aed4b2d6a124","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"d97730858ff579cd75e3","12":"86ecdaa1b98eaf7d7806","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"cafe7476d49df9768268","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"de4b9599c5703baa295b","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"9e96579ea328f47865ee","12":"7e761ac5b899673079cf","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10701,6 +10701,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             self.httpRequest('delete_holiday', request_data);
+        },
+        canManamgeLeave() {
+            if (hrm_user_can('manage_leave')) {
+                return true;
+            }
+
+            return false;
         }
     }
 });
@@ -10715,6 +10722,7 @@ let HRM_Leave_Store = {
 	state: {
 		header: {},
 		is_new_leave_type_form_visible: false,
+		is_new_holiday_form_visible: false,
 		is_new_leave_records_form_visible: false,
 		is_leave_form_active: false,
 		leave_records: [],
@@ -10754,6 +10762,10 @@ let HRM_Leave_Store = {
 		},
 		isNewLeaveRecordsFormVisible(state, is_visible) {
 			state.is_new_leave_records_form_visible = is_visible.is_visible;
+		},
+
+		isNewHolidayFormVisible(state, is_visible) {
+			state.is_new_holiday_form_visible = is_visible.is_visible;
 		},
 
 		showHideleaveForm(state, status) {

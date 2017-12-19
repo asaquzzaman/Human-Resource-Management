@@ -22,7 +22,7 @@
 							<label for="hrm-leave-holidays-from-text-field">
 								From <em>  *</em>
 							</label>
-							<input type="text" v-hrm-holiday-datepicker class="hrm-date-picker-from" id="hrm-leave-holidays-from-text-field" required="required" :value="from" name="from">
+							<input type="text" v-hrm-datepicker class="hrm-date-picker-from" id="hrm-leave-holidays-from-text-field" required="required" :value="from" name="from">
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>
@@ -31,7 +31,7 @@
 							<label for="hrm-leave-holidays-to-text-field">
 								To<em>  *</em>
 							</label>
-							<input type="text" v-hrm-holiday-datepicker class="hrm-date-picker-to" id="hrm-leave-holidays-to-text-field" required="required" :value="to" name="to">
+							<input type="text" v-hrm-datepicker class="hrm-date-picker-to" id="hrm-leave-holidays-to-text-field" required="required" :value="to" name="to">
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>
@@ -136,7 +136,7 @@
 	                    toastr.success(res.success);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-	                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
+	                    	self.$store.commit('leave/isNewHolidayFormVisible', {is_visible: false});
 	                    });
 
 	                    

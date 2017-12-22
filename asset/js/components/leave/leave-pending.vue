@@ -33,8 +33,8 @@
 						<td>{{ dateFormat(pendingLeave.end_time) }}</td>
 
 						<td>
-							<button v-if="canManamgeLeave()" @click.prevent="updateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>
-							<button v-if="canManamgeLeave()" @click.prevent="updateLeaveStatus(pendingLeave, 3)" class="button button-secondary">Cancel</button>
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 2)" class="button button-secondary">Approve</button>
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 3)" class="button button-secondary">Cancel</button>
 							<button @click.prevent="selfLeaveDelete(pendingLeave.id)">Delete</button>
 						</td>
 
@@ -76,6 +76,29 @@
 				}
 
 				this.getLeaveRecords(records);
+			},
+
+			selfUpdateLeaveStatus (pendingLeave, status) {
+				var self = this;
+				
+				var args = {
+					data: {
+						id: pendingLeave.id,
+		                status: status,
+		                class: 'Leave',
+		                method: 'update',
+					},
+	                callback: function(res) {
+	                	self.$store.commit('leave/afterUpdateStatus', 
+	                		{
+	                			section: 1,
+	                			record: res
+	                		}
+	                	);
+	                }
+	            };
+
+	            self.updateLeave(args);
 			},
 
 			selfLeaveDelete (id) {

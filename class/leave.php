@@ -61,7 +61,6 @@ class Hrm_Leave {
         global $wpdb;
         $transformer = new Transformer_Manager();
         
-
         $defaults = array(
             'start_time' => hrm_financial_start_date(),
             'end_time'   => hrm_financial_end_date(),
@@ -72,6 +71,7 @@ class Hrm_Leave {
         $args      = wp_parse_args( $args, $defaults );
         $cache_key = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
         $items     = wp_cache_get( $cache_key, 'hrm' );
+        
         if ( false === $items ) { 
 
             $leaves = Leave::with('leaveType');
@@ -91,17 +91,18 @@ class Hrm_Leave {
             if ( !empty( $args['status'] ) ) {
                 $leaves = $leaves->where( 'status', $args['status'] );
             }
+  
+            if ( empty( $args['id'] ) ) {
+                $leaves           = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
+                $leave_collection = $leaves->getCollection();
 
-            if ( !empty( $args['id'] ) ) {
-                $leaves = $leaves->where( 'id', $args['id'] );
-            }
-                
-            $leaves = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
-
-            $leave_collection = $leaves->getCollection();
+                $resource         = new Collection( $leave_collection, new Leave_Transformer );
+                $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
             
-            $resource = new Collection( $leave_collection, new Leave_Transformer );
-            $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
+            } else {
+                $leave_collection = Leave::find( $args['id'] );
+                $resource = new Item( $leave_collection, new Leave_Transformer );
+            }
 
             if ( !empty( $args['emp_id'] ) ) {
                 $leave_type_count = $this->employee_leave_count( $args['emp_id'] );
@@ -873,8 +874,9 @@ class Hrm_Leave {
         $update = self::getInstance()->update_leave( $postdata );
 
         if ( $update ) {
-           $update = self::getInstance()->get_leaves(['id' => $postdata['id']]); 
-           wp_send_json_success($update);
+            $update = self::getInstance()->get_leaves(['id' => $postdata['id']]);
+
+            wp_send_json_success($update);
         }
         
         wp_send_json_error();

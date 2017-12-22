@@ -69,9 +69,8 @@ export default {
 
 			var self = this;
 
-
             var form_data = {
-                data: args,
+                data: args.data,
 
                 beforSend: function(xhr) {
                 	self.show_spinner = true;
@@ -80,16 +79,11 @@ export default {
                 
                 success: function(res) {
                 	self.show_spinner = false;
-                    
                     // Display a success toast, with a title
-                    toastr.success(res.success);
-                    
-                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
-                    });
-
-                    if (args.callback === 'function') {
-                    	args.callback(res);
+                    //toastr.success(res.success);
+            
+                    if (typeof args.callback === 'function') {
+                    	args.callback(res.data);
                     }
                 },
 
@@ -108,17 +102,20 @@ export default {
 		updateLeaveStatus (pendingLeave, status) {
 			var self = this;
 			
-			var request_data = {
-				id: pendingLeave.id,
-                status: status,
-                class: 'Leave',
-                method: 'update',
+			var args = {
+                data: {
+                    id: pendingLeave.id,
+                    status: status,
+                    class: 'Leave',
+                    method: 'update',
+                },
+				
                 callback: function(res) {
 
                 }
             };
 
-            self.updateLeave(request_data);
+            self.updateLeave(args);
 		},
 
         deleteLeave (args) {

@@ -96,6 +96,33 @@ let HRM_Leave_Store = {
 		afterDeleteLeaveType (state, id) {
 			var index = state.getIndex(state.leaveTypes, id, 'id');
 			state.leaveTypes.splice( index, 1 );
+		},
+		afterUpdateStatus (state, data) {
+			
+			if ( data.section == 1 ) {
+				let index = state.getIndex(state.pending_leaves, data.record.id, 'id');
+				state.pending_leaves.splice(index, 1);
+			
+			} else if ( data.section == 2 ) {
+				let index = state.getIndex(state.approvedLeaves, data.record.id, 'id');
+				state.approvedLeaves.splice(index, 1);
+			
+			} else if ( data.section == 3 ) {
+				let index = state.getIndex(state.cancelLeaves, data.record.id, 'id');
+				state.cancelLeaves.splice(index, 1);
+			}
+
+			if ( data.record.status == 1 ) {
+				state.pending_leaves.push(data.record);
+			
+			} else if ( data.record.status == 2 ) {
+				state.approvedLeaves.push(data.record);
+			
+			} else if ( data.record.status == 3 ) {
+				state.cancelLeaves.push(data.record);
+			}
+
+
 		}
 	}
 };

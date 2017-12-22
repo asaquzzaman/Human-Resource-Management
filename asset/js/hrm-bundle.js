@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"cafe7476d49df9768268","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"de4b9599c5703baa295b","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"9e96579ea328f47865ee","12":"7e761ac5b899673079cf","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"cafe7476d49df9768268","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"de4b9599c5703baa295b","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"cf62ba8bffd1e65b4e3e","12":"421bf6706a55cb69648b","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10456,7 +10456,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var self = this;
 
             var form_data = {
-                data: args,
+                data: args.data,
 
                 beforSend: function (xhr) {
                     self.show_spinner = true;
@@ -10465,16 +10465,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 success: function (res) {
                     self.show_spinner = false;
-
                     // Display a success toast, with a title
-                    toastr.success(res.success);
+                    //toastr.success(res.success);
 
-                    self.slideUp(jQuery('.hrm-form-cancel'), function () {
-                        //self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
-                    });
-
-                    if (args.callback === 'function') {
-                        args.callback(res);
+                    if (typeof args.callback === 'function') {
+                        args.callback(res.data);
                     }
                 },
 
@@ -10493,15 +10488,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         updateLeaveStatus(pendingLeave, status) {
             var self = this;
 
-            var request_data = {
-                id: pendingLeave.id,
-                status: status,
-                class: 'Leave',
-                method: 'update',
+            var args = {
+                data: {
+                    id: pendingLeave.id,
+                    status: status,
+                    class: 'Leave',
+                    method: 'update'
+                },
+
                 callback: function (res) {}
             };
 
-            self.updateLeave(request_data);
+            self.updateLeave(args);
         },
 
         deleteLeave(args) {
@@ -10816,6 +10814,27 @@ let HRM_Leave_Store = {
 		afterDeleteLeaveType(state, id) {
 			var index = state.getIndex(state.leaveTypes, id, 'id');
 			state.leaveTypes.splice(index, 1);
+		},
+		afterUpdateStatus(state, data) {
+
+			if (data.section == 1) {
+				let index = state.getIndex(state.pending_leaves, data.record.id, 'id');
+				state.pending_leaves.splice(index, 1);
+			} else if (data.section == 2) {
+				let index = state.getIndex(state.approvedLeaves, data.record.id, 'id');
+				state.approvedLeaves.splice(index, 1);
+			} else if (data.section == 3) {
+				let index = state.getIndex(state.cancelLeaves, data.record.id, 'id');
+				state.cancelLeaves.splice(index, 1);
+			}
+
+			if (data.record.status == 1) {
+				state.pending_leaves.push(data.record);
+			} else if (data.record.status == 2) {
+				state.approvedLeaves.push(data.record);
+			} else if (data.record.status == 3) {
+				state.cancelLeaves.push(data.record);
+			}
 		}
 	}
 };

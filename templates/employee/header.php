@@ -1,6 +1,6 @@
 <?php
 $menu = hrm_page();
-$employee_id = hrm_get_employee_id();
+$employee_id = !empty( $_GET['employee_id'] ) ? absint( $_GET['employee_id'] ) : false;
 ?>
 <h2 class="nav-tab-wrapper">
     <?php

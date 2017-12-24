@@ -68,20 +68,25 @@ $job_category = Hrm_Admin::getInstance()->get_departments( $dept_id );
     <div class="hrm-descriptive-wrap">
 
         <div class="hrm-descriptive-label">Department</div>
-        <div class="hrm-descriptive-content"><strong><?php echo $job_category->name; ?></strong></div>
+        <div class="hrm-descriptive-content">
+            <strong>
+                <?php echo empty ( $job_category->name ) ? '&#8211 &#8211' : $job_category->name; ?>
+                    
+            </strong>
+        </div>
     </div>
 <?php
 $department = ob_get_clean();
 
 ob_start();
 $role = get_user_meta( $employee_id, 'role', true );
-$designation = hrm_get_roles($role);
+$designation = hrm_current_user_display_role();
 
 ?>
     <div class="hrm-descriptive-wrap">
 
         <div class="hrm-descriptive-label">Designation</div>
-        <div class="hrm-descriptive-content"><strong><?php echo $designation; ?></strong></div>
+        <div class="hrm-descriptive-content"><strong><?php echo $designation ? $designation : '&#8211 &#8211'; ?></strong></div>
     </div>
 <?php
 $designation = ob_get_clean();
@@ -99,11 +104,11 @@ $field[] = array(
     'value' => $department
 );
 
-$field[] = array(
-    'label' => '',
-    'type'  => 'descriptive',
-    'value' => $designation
-);
+// $field[] = array(
+//     'label' => '',
+//     'type'  => 'descriptive',
+//     'value' => $designation
+// );
 
 $field['user_id'] = array(
     'type' => 'hidden',
@@ -211,16 +216,38 @@ $field['work_mobile'] = array(
     'disabled' => $can_edit ? false : 'disabled',
 );
 
-$field['work_email'] = array(
-    'label' => __( 'Email', 'hrm' ),
-    'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_work_email' ),
-    'extra' => array(
-        'data-hrm_validation' => true,
-        'data-hrm_email' => true,
-        'data-hrm_email_error_msg'=> __( 'Please enter a valid email', 'hrm' ),
-    ),
-    'disabled' => $can_edit ? false : 'disabled',
+// $field['work_email'] = array(
+//     'label' => __( 'Email', 'hrm' ),
+//     'type'  => 'text',
+//     'value' => $this->get_emp_meta( $employee_id, '_work_email' ),
+//     'extra' => array(
+//         'data-hrm_validation' => true,
+//         'data-hrm_email' => true,
+//         'data-hrm_email_error_msg'=> __( 'Please enter a valid email', 'hrm' ),
+//     ),
+//     'disabled' => $can_edit ? false : 'disabled',
+// );
+
+ob_start();
+?>
+    <div class="hrm-descriptive-wrap">
+
+        <div class="hrm-descriptive-label">Email</div>
+        <div class="hrm-descriptive-content">
+            <strong>
+                <?php echo $employee->user_email; ?>
+                    
+            </strong>
+        </div>
+    </div>
+
+<?php
+$email = ob_get_clean();
+
+$field[] = array(
+    'label' => '',
+    'type'  => 'descriptive',
+    'value' => $email
 );
 
 

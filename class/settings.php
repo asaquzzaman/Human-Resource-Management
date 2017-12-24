@@ -1473,6 +1473,7 @@ class Hrm_Settings {
         if ( $row ) {
             return $wpdb->get_row( "SELECT $fields FROM $table WHERE $where" );
         } else {
+           
             $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where $limit" );
 
             $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );

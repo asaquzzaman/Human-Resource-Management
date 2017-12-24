@@ -25,11 +25,11 @@ $can_edit = hrm_user_can( 'edit_employee', $employer_id );
 <?php
 
 $results      = hrm_Settings::getInstance()->conditional_query_val( 'hrm_personal_education', $field = '*', $compare = array( 'emp_id' => $employer_id ) );
-// $education_id = isset( $results['education_id'] ) ? $results['education_id'] : array();
-// $education_id = wp_list_pluck( $education_id, 'education_id' );
+// $education = isset( $results['education'] ) ? $results['education'] : array();
+// $education = wp_list_pluck( $education, 'education' );
 
 // $compare = array(
-//   'id' => $education_id
+//   'id' => $education
 // );
 // $edu_labels = hrm_Settings::getInstance()->hrm_query( 'hrm_education' );
 
@@ -46,9 +46,9 @@ foreach ( $results as $key => $value) {
       continue;
     }
 
-    // if ( !isset( $label[$value->education_id] ) ) {
-    //     continue;
-    // }
+    if ( !isset( $label[$value->education] ) ) {
+        //continue;
+    }
 
     if ( $can_edit ) {
         $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
@@ -62,11 +62,11 @@ foreach ( $results as $key => $value) {
     $td_attr[][0] = 'class="hrm-table-checkbox"';
     
     if ( $can_edit ) {
-        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_education" data-id='.$value->id.'>'.$value->education_id.'</a>
+        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_education" data-id='.$value->id.'>'.$value->education.'</a>
         <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_personal_education" data-emp_id="'.$value->emp_id.'" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
         .$delete_text. '</div></div>';
     } else {
-        $name_id = $value->education_id;
+        $name_id = $value->education;
     }
    
 
@@ -76,9 +76,9 @@ foreach ( $results as $key => $value) {
         $value->institute,
         $value->major,
        // hrm_get_date2mysql( $value->year ),
-        $value->score,
-        hrm_get_date2mysql( $value->start_date ),
-        hrm_get_date2mysql( $value->end_date ),
+        number_format( $value->score, 2 ),
+        $value->start_date > 1 ? hrm_get_date2mysql( $value->start_date ) : '- -',
+        $value->end_date > 1 ? hrm_get_date2mysql( $value->end_date ) : '- -',
     );
 }
 
@@ -125,7 +125,6 @@ global $hrm_is_admin;
             class_name : 'hrm_Employee',
             function_name : 'education',
             redirect : '<?php echo $url; ?>',
-            education: '<?php echo json_encode( $label); ?>',
             employee_id: "<?php echo $employer_id; ?>",
             page: '<?php echo $page; ?>',
             tab: '<?php echo $tab; ?>',

@@ -15,15 +15,15 @@ if ( isset( $_GET['employee_id'] ) && $_GET['employee_id'] ) {
 } else {
     $employer_id = get_current_user_id();
 }
-
 $job_title_id = get_user_meta( $employer_id, '_job_title', true );
-$job_title = hrm_Settings::getInstance()->conditional_query_val( 'hrm_job_title', '*', array( 'id' => $job_title_id ) );
+$job_title    = hrm_Settings::getInstance()->conditional_query_val( 'hrm_job_title', '*', array( 'id' => $job_title_id ) );
 
-$job_cat_id = get_user_meta( $employer_id, '_job_category', true );
+$job_cat_id   = get_user_meta( $employer_id, '_job_category', true );
 $job_category = hrm_Settings::getInstance()->conditional_query_val( 'hrm_job_category', '*', array( 'id' => $job_cat_id ) );
 
 $job_location_id = get_user_meta( $employer_id, '_location', true );
-$job_location = hrm_Settings::getInstance()->conditional_query_val( 'hrm_location', '*', array( 'id' => $job_location_id ) );
+$job_location    = hrm_Settings::getInstance()->conditional_query_val( 'hrm_location', '*', array( 'id' => $job_location_id ) );
+
 
 ?>
 
@@ -31,7 +31,15 @@ $job_location = hrm_Settings::getInstance()->conditional_query_val( 'hrm_locatio
     <div class="hrm-search-head">
         <h3><?php _e( 'Job Location', 'hrm' )?></h3>
     </div>
+
+
     <div class="padding-wrap">
+        <?php
+        if ( !$job_location['total_row'] ) {
+            echo '<p class="job-content-warp">No job location was found!</p>';
+        }
+
+        ?>
         <?php
             if ( isset( $job_title[0]->job_title ) && !empty( $job_title[0]->job_title ) ) {
                 ?>

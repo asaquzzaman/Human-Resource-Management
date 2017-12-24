@@ -33,6 +33,7 @@ $url = hrm_Settings::getInstance()->get_current_page_url( $page, $tab, $subtab )
     }
 
     $hrm_menu = hrm_page();
+    $pim_single_tab = false;
 
     $menu_pim_page = isset( $menu[hrm_pim_page()] ) ? $menu[hrm_pim_page()] : array();
     foreach ( $menu_pim_page as $pim_tab => $pim_tab_item ) {

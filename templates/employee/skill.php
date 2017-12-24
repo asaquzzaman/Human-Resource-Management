@@ -38,7 +38,7 @@ foreach ( $results as $key => $value) {
       continue;
     }
 
-    // if ( !isset( $label[$value->skill_id] ) ) {
+    // if ( !isset( $label[$value->skill] ) ) {
     //     continue;
     // }
 
@@ -54,11 +54,11 @@ foreach ( $results as $key => $value) {
     $td_attr[][0] = 'class="hrm-table-checkbox"';
 
     if ( $can_edit ) {
-        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_skill" data-id='.$value->id.'>'.$value->skill_id.'</a>
+        $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_personal_skill" data-id='.$value->id.'>'.$value->skill.'</a>
         <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_personal_skill" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
         .$delete_text. '</div></div>';
     } else {
-        $name_id = $value->skill_id;
+        $name_id = $value->skill;
     }
 
     $body[] = array(
@@ -108,7 +108,6 @@ global $hrm_is_admin;
            class_name : 'hrm_Employee',
            redirect : '<?php echo $url; ?>',
            function_name : 'personal_skill',
-           skill: '<?php echo json_encode( $label); ?>',
            employee_id: "<?php echo $employer_id; ?>",
            page: '<?php echo $page; ?>',
            tab: '<?php echo $tab; ?>',

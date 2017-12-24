@@ -302,11 +302,11 @@ class Hrm_Employee {
             'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
-        $hidden_form['education_id'] = array(
+        $hidden_form['education'] = array(
             'label' => __( 'Level', 'hrm' ),
             'type' => 'text',
             //'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['education'] ) ),
-            'value' => isset( $field_data['education_id'] ) ? $field_data['education_id'] : '',
+            'value' => isset( $field_data['education'] ) ? $field_data['education'] : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,
@@ -453,10 +453,10 @@ class Hrm_Employee {
             'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
         );
 
-        $hidden_form['skill_id'] = array(
+        $hidden_form['skill'] = array(
             'label' => __( 'Level', 'hrm' ),
             'type' => 'text',
-            'value' => isset( $field_data['skill_id'] ) ? $field_data['skill_id'] : '',
+            'value' => isset( $field_data['skill'] ) ? $field_data['skill'] : '',
             'extra' => array(
                 'data-hrm_validation' => true,
                 'data-hrm_required' => true,

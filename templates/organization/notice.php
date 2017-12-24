@@ -36,6 +36,7 @@ if( isset( $results['total_row'] ) ) {
 
 $body              = array();
 $td_attr           = array();
+$add_permission    = true;
 
 foreach ( $results as $key => $value) {
 

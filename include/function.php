@@ -145,6 +145,16 @@ function hrm_current_user_role( $user_id = false ) {
     return $selected_role ? key( $selected_role ) : false;
 }
 
+function hrm_current_user_display_role() {
+    $role = hrm_current_user_role();
+
+    if ( $role ) {
+        return hrm_get_roles( $role );
+    }
+
+    return false;
+}
+
 /**
  * Helper function for converting a normal date string to unix date/time string
  *

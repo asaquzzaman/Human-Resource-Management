@@ -157,6 +157,77 @@ function hrm_holiday_table() {
     dbDelta( $sql );
 }
 
+function hrm_personal_education_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_personal_education';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `emp_id` int(11) NOT NULL,
+      `education` varchar(255) NOT NULL,
+      `institute` varchar(100) DEFAULT NULL,
+      `major` varchar(100) DEFAULT NULL,
+      `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      `score` varchar(25) DEFAULT NULL,
+      `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
+    $table_option['table_name'] = 'hrm_personal_education';
+    $table_option['table_format'] = array( '%d', '%s', '%s', '%s', '%s', '%f', '%s', '%s' );
+    $table_option['table_option'] = array(
+        'emp_id'       => 'emp_id',
+        'education'    => 'education',
+        'institute'    => 'institute',
+        'major'        => 'major',
+        'year'         => 'year',
+        'score'        => 'score',
+        'start_date'   => 'start_date',
+        'end_date'     => 'end_date',
+    );
+    $table_option_name = 'hrm_personal_education';
+
+    hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+}
+
+function hrm_personal_skill_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_personal_skill';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `emp_id` int(7) NOT NULL DEFAULT '0',
+      `skill` varchar(255) NOT NULL,
+      `years_of_exp` decimal(2,0) DEFAULT NULL,
+      `comments` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
+    $table_option['table_name'] = 'hrm_personal_skill';
+    $table_option['table_format'] = array( '%d', '%s', '%s', '%s' );
+    $table_option['table_option'] = array(
+        'emp_id'       => 'emp_id',
+        'skill'     => 'skill',
+        'years_of_exp' => 'years_of_exp',
+        'comments'     => 'comments',
+    );
+    $table_option_name = 'hrm_personal_skill';
+
+    hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+}
+
+hrm_personal_education_table();
 hrm_holiday_table();
 hrm_relation();
 hrm_department();

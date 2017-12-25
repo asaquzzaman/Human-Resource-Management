@@ -7,7 +7,8 @@ if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
     return;
 }
 
-$can_edit = true;
+$location_manage = hrm_user_can( 'manage_location' );
+
 $results = Hrm_Settings::getInstance()->hrm_query( 'hrm_location' );
 
 if( isset( $results['total_row'] ) ) {
@@ -40,7 +41,7 @@ if ( file_exists( $header_path ) ) {
 
         foreach ( $results as $key => $value) {
 
-            if ( $can_edit ) {
+            if ( $location_manage ) {
                 $del_checkbox = '<input class="hrm-single-checked" name="hrm_check['.$value->id.']" value="" type="checkbox">';
                 $delete_text  = '<a href="#" class="hrm-delete" data-id='.$value->id.'>'.__( 'Delete', 'hrm' ).'</a>';
                 $td_attr[][0] = 'class="hrm-table-checkbox"';
@@ -49,7 +50,7 @@ if ( file_exists( $header_path ) ) {
                 $delete_text  = '';
             }
 
-            if ( $can_edit ) {
+            if ( $location_manage ) {
                 $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable" data-table_option="hrm_location_option" data-id='.$value->id.'>'.$value->name.'</a>
                  <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_location_option" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
                  .$delete_text. '</div></div>';
@@ -69,7 +70,7 @@ if ( file_exists( $header_path ) ) {
 
         $table = array();
 
-        if ( $can_edit ) {
+        if ( $location_manage ) {
             $checkbox = '<input class="hrm-all-checked" type="checkbox">';
         } else {
             $checkbox = '<input disabled="disabled" class="hrm-all-checked" type="checkbox">';
@@ -96,8 +97,8 @@ if ( file_exists( $header_path ) ) {
         $table['subtab']     = $subtab;
         $table['page']       = $page;
         $table['search']     = __( 'Search Mode', 'hrm' );
-        $table['add_btn']     = $can_edit;
-        $table['delete_btn']  = $can_edit;
+        $table['add_btn']     = $location_manage;
+        $table['delete_btn']  = $location_manage;
 
         echo Hrm_Settings::getInstance()->table( $table );
 

@@ -315,7 +315,8 @@ class WP_Hrm {
         $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/departments' ];
         $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/attendance' ];
         $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/leave' ];
-        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/settings' ];
+        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), hrm_user_can( 'manage_settings' ), 'admin.php?page=hr_management&active=vue#/settings' ];
+
 
         if( isset( $style_slug[hrm_organization_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );

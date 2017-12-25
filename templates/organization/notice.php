@@ -11,7 +11,7 @@ if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
     return;
 }
 
-$can_edit = hrm_user_can( 'manage_hrm_organization' );
+$can_edit = hrm_user_can( 'manage_notice' );
 
 $header_path = dirname(__FILE__) . '/header.php';
 $header_path = apply_filters( 'hrm_header_path', $header_path, 'admin' );
@@ -36,7 +36,6 @@ if( isset( $results['total_row'] ) ) {
 
 $body              = array();
 $td_attr           = array();
-$add_permission    = true;
 
 foreach ( $results as $key => $value) {
 
@@ -49,7 +48,7 @@ foreach ( $results as $key => $value) {
         $delete_text  = '';
     }
 
-    if ( $add_permission ) {
+    if ( $can_edit ) {
         $name_id = '<div class="hrm-title-wrap"><a href="#" class="hrm-editable hrm-title" data-table_option="hrm_notice" data-id='.$value->id.'>'.$value->title.'</a>
         <div class="hrm-title-action"><a href="#" class="hrm-editable hrm-edit" data-table_option="hrm_notice" data-id='.$value->id.'>'.__( 'Edit', 'hrm' ).'</a>'
         .$delete_text. '</div></div>';

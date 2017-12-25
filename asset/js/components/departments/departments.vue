@@ -48,6 +48,7 @@
 	import DepartmentPagination from './department-pagination.vue';
 
 	export default {
+		mixins: [HRMMixin.departments],
 		computed: {
 	 		is_new_department_form_visible: function() {
 	 			return this.$store.state.departments.is_department_form_active;

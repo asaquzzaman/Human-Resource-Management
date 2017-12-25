@@ -14,6 +14,10 @@ export default {
                 this.$store.commit( 'departments/showHideDepartmentForm', status);
             }
         },
+
+        manageDepartment() {
+            return hrm_user_can('manage_department');
+        }
 		
 	}	
 }

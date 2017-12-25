@@ -3,7 +3,7 @@
                 
         <thead>
             <tr role="row">
-                <th class="sorting_asc" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending">
+                <th v-if="manageDepartment()" class="sorting_asc" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending">
                     <input @change.prevent="delAllDept()" class="hrm-all-checked" v-model="del_all_dept" type="checkbox">
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
@@ -27,13 +27,13 @@
                                                     
             <tr class="hrm-even odd" role="row" v-for="department in departments">
         
-                <td class="hrm-table-checkbox sorting_1">
+                <td v-if="manageDepartment()" class="hrm-table-checkbox sorting_1">
                     <input @change.prevent="delDept(department)" v-model="del_dept" class="hrm-single-checked" name="" :value="department.id" type="checkbox">
                 </td>
 
         
                 <td>
-                    <div class="hrm-title-wrap">
+                    <div v-if="manageDepartment()" class="hrm-title-wrap">
                         <a href="#" class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></a>
                         <div class="hrm-title-action">
                             <department-edit-btn :department_id="department.id"></department-edit-btn>
@@ -41,6 +41,11 @@
                             <span class="hrm-clear"></span>
                         </div>
                     </div>
+
+                    <div v-else class="hrm-title-wrap">
+                        <span class="hrm-editable hrm-title" v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span>
+                    </div>
+
                 </td>
 
         

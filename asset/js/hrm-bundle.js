@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"cafe7476d49df9768268","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"de4b9599c5703baa295b","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"cf62ba8bffd1e65b4e3e","12":"421bf6706a55cb69648b","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"40e9c06b687445d928b9","1":"b9e34d5ed619ddb12685","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"de4b9599c5703baa295b","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"cf62ba8bffd1e65b4e3e","12":"421bf6706a55cb69648b","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10070,7 +10070,9 @@ let settingsMenu = [{
 
 }];
 
-HRMRegisterChildrenRoute('hrm_root', settingsMenu);
+if (hrm_user_can('manage_settings')) {
+	HRMRegisterChildrenRoute('hrm_root', settingsMenu);
+}
 
 /* harmony default export */ __webpack_exports__["a"] = (settingsMenu);
 
@@ -10281,6 +10283,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.$store.commit('departments/showHideDepartmentForm', status);
             }
+        },
+
+        manageDepartment() {
+            return hrm_user_can('manage_department');
         }
 
     }

@@ -19,6 +19,8 @@ let settingsMenu = [
 	}
 ];
 
-HRMRegisterChildrenRoute ('hrm_root', settingsMenu);
+if (hrm_user_can('manage_settings')) {
+	HRMRegisterChildrenRoute ('hrm_root', settingsMenu);
+}
 
 export default settingsMenu;

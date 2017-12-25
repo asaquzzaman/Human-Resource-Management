@@ -1,5 +1,5 @@
 <template>
-    <div  id="hrm-hidden-form-warp" class="postbox">
+    <div v-if="manageDepartment()"  id="hrm-hidden-form-warp" class="postbox">
         <div class="hrm-search-head">
             <h3>Department</h3>
         </div>

@@ -627,7 +627,11 @@ function hrm_manager_capability() {
         'edit_employee',
         'manage_attendance',
         'hrm_employee',
-        'manage_leave'
+        'manage_leave',
+        'manage_location',
+        'manage_notice',
+        'manage_department',
+        'manage_settings'
     );
 }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="hrm-department-del-btn-wrap hrm-tbl-action-btn-sibling">
+    <div v-if="manageDepartment()" class="hrm-department-del-btn-wrap hrm-tbl-action-btn-sibling">
         <a @click.prevent="departmentGroupDelete()" v-if="type == 'group'" href="#" class="button hrm-delete-button">Delete</a>
         <a @click.prevent="departmentDelete()" v-if="type == 'single'" href="#" class="hrm-delete">Delete</a>
     </div>

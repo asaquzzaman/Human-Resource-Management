@@ -99,7 +99,8 @@ class Hrm_Scripts {
             'settings'        => Hrm_Settings::getInstance()->get_settings(),
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
-            'financial_end'   => hrm_financial_end_date()
+            'financial_end'   => hrm_financial_end_date(),
+            'user_role' => hrm_current_user_role()
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', HRM_URL . '/asset/css/jquery.dataTables.css', false, false, 'all' );
@@ -225,7 +226,8 @@ class Hrm_Scripts {
             'settings'        => Hrm_Settings::getInstance()->get_settings(),
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
-            'financial_end'   => hrm_financial_end_date()
+            'financial_end'   => hrm_financial_end_date(),
+            'user_role' => hrm_current_user_role()
         ));
 
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );

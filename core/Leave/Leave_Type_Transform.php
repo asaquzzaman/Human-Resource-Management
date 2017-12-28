@@ -3,11 +3,17 @@ namespace HRM\Core\Leave;
 
 use HRM\Models\Leave_Type;
 use League\Fractal\TransformerAbstract;
+use League\Fractal\Resource\Collection as Collection;
+use HRM\Core\Department\Department_Transformer;
+use HRM\Core\Transformer_Manager;
+use HRM\Core\Common\Resource_Editors;
 
 class Leave_Type_Transform extends TransformerAbstract {
-	// protected $defaultIncludes = [
- //        'departments'
- //    ];
+	use Transformer_Manager, Resource_Editors;
+
+	protected $defaultIncludes = [
+        'departments'
+    ];
 
 	public function transform( $item ) {
 		return [
@@ -18,13 +24,13 @@ class Leave_Type_Transform extends TransformerAbstract {
 			'entitle_to'   => $item->entitle_to,
 			'financial_id' => $item->f_year,
 			'next_year'    => $item->carry,
-			'departments'  => $item->departments
 		];
 	}
 
-	// public function includeDepartments( Leave_Type $item ) {
-	// 	pr( $item->departments()->get()->toArray() );
+	public function includeDepartments( Leave_Type $item ) {
+		$departments = $item->departments;
+		$resource = new Collection( $departments, new Department_Transformer );
 
-
-	// }
+		return $resource;
+	}
 }

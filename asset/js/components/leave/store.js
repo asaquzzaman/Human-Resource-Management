@@ -123,6 +123,14 @@ let HRM_Leave_Store = {
 			}
 
 
+		},
+
+		afterCreateNewLeave (state, leaves) {
+			leaves.forEach(function(leave) {
+				state.leave_records.push(leave.data);
+			});
+
+			console.log(leaves, state.leave_records);
 		}
 	}
 };

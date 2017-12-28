@@ -31,7 +31,6 @@
                     <input @change.prevent="delDept(department)" v-model="del_dept" class="hrm-single-checked" name="" :value="department.id" type="checkbox">
                 </td>
 
-        
                 <td>
                     <div v-if="manageDepartment()" class="hrm-title-wrap">
                         <a href="#" class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></a>
@@ -48,10 +47,8 @@
 
                 </td>
 
-        
                 <td>{{ department.description }}</td>
 
-        
                 <td>{{ departmentActivity(department) }}</td>
                 <td>{{ department.number_of_employee }}</td>
 
@@ -120,7 +117,7 @@
                 if (this.del_all_dept) {
                     var depts_id = [];
 
-                    this.$store.state.departments.map(function(department) {
+                    this.$store.state.departments.departments.map(function(department) {
                         depts_id.push(department.id);
                     });
 

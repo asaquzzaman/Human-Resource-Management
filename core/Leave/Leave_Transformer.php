@@ -8,10 +8,11 @@ use HRM\Core\Leave\Leave_Type_Transform;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Core\Transformer_Manager;
 use HRM\Core\Common\Resource_Editors;
+use League\Fractal\Resource\Item;
     
 class Leave_Transformer extends TransformerAbstract
 {
-    use Resource_Editors;
+    use Resource_Editors, Transformer_Manager;
 
     protected $defaultIncludes = [
         'employee'
@@ -40,10 +41,10 @@ class Leave_Transformer extends TransformerAbstract
             ];
         }
 
-        $leave_type = $item->leaveType;
-        $leave_type_transform = new Leave_Type_Transform();
+        $leave_type = $item->leaveType->first();
+        $resource   = new Item( $leave_type, new Leave_Type_Transform );
  
-        return $leave_type_transform->transform($leave_type);
+        return $this->get_response( $resource );
         
     }
 }

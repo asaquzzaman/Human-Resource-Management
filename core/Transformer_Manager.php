@@ -6,7 +6,7 @@ use League\Fractal;
 use League\Fractal\Manager as Manager;
 use League\Fractal\Serializer\DataArraySerializer;
 
-class Transformer_Manager {
+trait Transformer_Manager {
     public function get_response( $resource )
     {
         $manager = new Manager();

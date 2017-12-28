@@ -1,5 +1,32 @@
 export default {
 	methods: {
+        processRoles (role_object) {
+            var roles = [];
+            jQuery.each(role_object, function(id, name) {
+                roles.push({
+                    id: id,
+                    name: name
+                });
+            });
+
+            return roles;
+        },
+        processLeaveTypes (settings, roles) {
+            settings.leave_types = settings.leave_types || [];
+
+            var leave_types = [];
+
+            jQuery.each(roles, function(id, name) {
+                if ( settings.leave_types.indexOf(id) !== -1 ) {
+                    leave_types.push({
+                        id: id,
+                        name: name
+                    });
+                }
+            });
+
+            return leave_types;
+        },
 		showHideLeaveRecordsForm (status, leave) {
 			var leave   = leave || false,
 			    leave   = jQuery.isEmptyObject(leave) ? false : leave;

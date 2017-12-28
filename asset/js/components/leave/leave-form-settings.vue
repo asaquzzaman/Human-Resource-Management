@@ -9,7 +9,7 @@
 			<div class="inside">
 				<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 					<form action="" @submit.prevent="saveLeaveFormSettings()">
-						<div class="hrm-form-field">
+						<div v-if="false" class="hrm-form-field">
 							<label>
 								Others employee 
 								<em></em>
@@ -69,7 +69,7 @@
 						    <span class="description">This roles can aplly leave type enable/disable option</span>
 						</div>
 
-						<div class="hrm-form-field">
+						<div v-if="false" class="hrm-form-field">
 							<label>
 								Leave request approve by 
 								<em></em>
@@ -160,25 +160,6 @@
 				this.httpRequest('get_leave_form_settings', request);
 			},
 
-			processLeaveTypes (settings, roles) {
-				if (typeof settings.leave_types === 'undefined') {
-					return [];
-				}
-
-				var leave_types = [];
-
-				jQuery.each(roles, function(id, name) {
-					if ( settings.leave_types.indexOf(id) !== -1 ) {
-						leave_types.push({
-							id: id,
-							name: name
-						});
-					}
-				});
-
-				return leave_types;
-			},
-
 			processApplyTo (settings, roles) {
 				if (typeof settings.apply_to === 'undefined') {
 					return [];
@@ -215,18 +196,6 @@
 				});
 
 				return others_employee_leave;
-			},
-
-			processRoles (role_object) {
-				var roles = [];
-				jQuery.each(role_object, function(id, name) {
-					roles.push({
-						id: id,
-						name: name
-					});
-				});
-
-				return roles;
 			},
 
 			saveLeaveFormSettings () {

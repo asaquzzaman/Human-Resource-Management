@@ -211,7 +211,8 @@ class WP_Hrm {
             'settings'        => Hrm_Settings::getInstance()->get_settings(),
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
-            'financial_end'   => hrm_financial_end_date()
+            'financial_end'   => hrm_financial_end_date(),
+            'user_role' => hrm_current_user_role()
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', plugins_url( '/asset/css/jquery.dataTables.css', __FILE__ ), false, false, 'all' );
@@ -315,8 +316,10 @@ class WP_Hrm {
         $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/departments' ];
         $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/attendance' ];
         $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/leave' ];
-        $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), hrm_user_can( 'manage_settings' ), 'admin.php?page=hr_management&active=vue#/settings' ];
-
+        
+        if ( hrm_user_can( 'manage_settings' ) ) {
+            $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/settings' ];
+        }
 
         if( isset( $style_slug[hrm_organization_page()] ) ) {
             add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );
@@ -373,35 +376,6 @@ class WP_Hrm {
         do_action( 'hrm_admin_menu', $this, $style_slug );
 
     }
-
-    //     function admin_page_handler() {
-    //     if( !is_user_logged_in() ) {
-    //         sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
-    //         return;
-    //     }
-    //     $current_user_id = get_current_user_id();
-    //     $user_status = get_user_meta( $current_user_id, '_status', true );
-
-    //     if ( $user_status == 'no' ) {
-    //         _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
-    //         return;
-    //     }
-
-    //     $query_args = hrm_get_query_args();
-    //     $page       = $query_args['page'];
-    //     $tab        = $query_args['tab'];
-    //     $subtab     = $query_args['subtab'];
-
-    //     echo '<div class="hrm wrap" id="hrm">';
-    //     if ( $tab === false ) {
-    //         Hrm_Settings::getInstance()->show_page( $page );
-    //     } else {
-    //         Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
-    //     }
-
-    //     echo '</div>';
-    // }
-
 
     function admin_page_handler() {
         if( !is_user_logged_in() ) {

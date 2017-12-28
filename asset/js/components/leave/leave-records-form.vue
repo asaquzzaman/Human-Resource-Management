@@ -45,7 +45,7 @@
 					    <div class="hrm-clear"></div>
 					</div>
 
-					<div class="hrm-form-field ">
+					<div v-if="isManager" class="hrm-form-field ">
 						<label for="">
 							Others employee
 							<em></em>
@@ -88,7 +88,7 @@
 					    <div class="hrm-clear"></div>
 					</div>
 
-					<div class="hrm-form-field ">
+					<div v-if="isLeaveTypeEnable" class="hrm-form-field ">
 						<label for="">
 							Leave type
 							<em></em>
@@ -157,7 +157,14 @@
 				leave_proxy: false,
 				apply_emp_lev_records: [],
 				is_leave_btn_disable: false,
-				holidays: []
+				holidays: [],
+				isLeaveTypeEnable: false
+			}
+		},
+
+		computed: {
+			isManager () {
+				return hrm_user_can('manage_leave');
 			}
 		},
 
@@ -176,9 +183,27 @@
 
 		created: function() {
 			this.$on('hrm_date_picker', this.setDateTime);
+			this.getSettings();
 			this.getInitialData();
 		},
 		methods: {
+			getSettings () {
+				var self = this;
+				var request = {
+					data: {},
+					success (res) {
+						let roles = self.processRoles(res.roles);
+						let role = hrm_user_can( 'manage_settings' ) ? 'hrm_manager' : HRM_Vars.user_role;
+
+						res.settings.leave_types = res.settings.leave_types || [];
+						if (res.settings.leave_types.indexOf( role ) != -1) {
+							self.isLeaveTypeEnable = true;
+						}
+					}
+				}
+				this.httpRequest('get_leave_form_settings', request);
+			},
+
 			changeEmployee: function() {
 				this.refresh();
 				this.change_leve_type_statue();
@@ -260,12 +285,14 @@
 	                
 	                success: function(res) {
 	                	self.show_spinner = false;
-	                    
+	                    console.log(res);
 	                    // Display a success toast, with a title
 	                    toastr.success(res.success);
+	                    self.$store.commit('leave/afterCreateNewLeave', res.resource);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
 	                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
+	                    	
 	                    });
 
 	                    

@@ -46,27 +46,7 @@ function HRMProRegisterModule(module, path) {
 }
 
 function hrm_user_can(cap) {
-	// user_id = user_id || false;
 
-	// if ( 
-	// 	user_id 
-	// 	&& 
-	// 	HRM_Vars.current_user.ID != user_id
-	// ) {
-
-	// 	wp.ajax.send('hrm_user_can', {
-	// 		data: {
-	// 			_wpnonce: HRM_Vars.nonce,
-	// 			user_id: user_id,
-	// 			cap: cap
-	// 		},
-
-	// 		success (res) {
-	// 			console.log(res);
-	// 		}
-	// 	});
-
-	// } 
 	if( 
 		HRM_Vars.current_user.allcaps.hasOwnProperty(cap) 
 		&&

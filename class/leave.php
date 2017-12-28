@@ -18,6 +18,7 @@ use HRM\Models\Holiday;
 
 
 class Hrm_Leave {
+    use Transformer_Manager;
 
 	private static $_instance;
 
@@ -59,7 +60,6 @@ class Hrm_Leave {
     public function get_leaves( $args = array() ) {
 
         global $wpdb;
-        $transformer = new Transformer_Manager();
         
         $defaults = array(
             'start_time' => hrm_financial_start_date(),
@@ -109,7 +109,7 @@ class Hrm_Leave {
                 $resource->setMeta(['types' => $leave_type_count]);
             }
             
-            $items = $transformer->get_response( $resource );
+            $items = $this->get_response( $resource );
 
             wp_cache_set( $cache_key, $items, 'hrm' );
         }
@@ -477,9 +477,8 @@ class Hrm_Leave {
         $this->add_relation( 'leave_type', $departments, $id );
 
         $resource = new Item( (object) $data, new Leave_Type_Transform ); 
-        $transform = new Transformer_Manager();
 
-        $send = $transform->get_response( $resource );
+        $send = $this->get_response( $resource );
 
 
         if ( $result ) {
@@ -527,13 +526,9 @@ class Hrm_Leave {
             });
 
             $leave_types = $leave_types->orWhere( 'carry', 1 );
-
             $leave_types = $leave_types->get();
-
             $leave_types = new Collection( $leave_types, new Leave_Type_Transform );
-            $transform = new Transformer_Manager();
-
-            $send = $transform->get_response( $leave_types );
+            $send = $this->get_response( $leave_types );
 
             wp_cache_set( $cache_key, $send, 'hrm' );
 
@@ -793,6 +788,8 @@ class Hrm_Leave {
         $postdata    = $_POST;
         $times       = empty( $postdata['time'] ) ? array() : $postdata['time'];
         $leave       = array();
+        $return_data = array();
+        
         
         foreach ( $times as $key => $time ) {
 
@@ -800,8 +797,11 @@ class Hrm_Leave {
             $postdata['end_time']   = date( 'Y-m-d', strtotime( $time ) );
             
             $leave  = Crud::data_process( $postdata );
+
+            $resource = new Item( $leave, new Leave_Transformer );
+            $return_data[] = self::getInstance()->get_response( $resource );
         }
-        
+
         if ( is_wp_error( $leave ) ) {
             wp_send_json_error( array(
                 'error' => $leave->get_error_messages()
@@ -809,7 +809,8 @@ class Hrm_Leave {
         }
 
         wp_send_json_success(array(
-            'success' => __( 'Successfully updated', 'hrm' )
+            'success' => __( 'Successfully updated', 'hrm' ),
+            'resource' => $return_data
         ));
     }
 
@@ -828,7 +829,7 @@ class Hrm_Leave {
         
     //     $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
  
-    //     $response = $transformer->get_response( $resource );
+    //     $response = $ $this->get_response( $resource );
 
     //     return $response;
     // }

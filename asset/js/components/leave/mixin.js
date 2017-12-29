@@ -1,5 +1,31 @@
 export default {
 	methods: {
+        employeeLeaveSummery (args) {
+            var self = this;
+            var pre_define = {};
+
+            var data = jQuery.extend(true, pre_define, args.data);
+
+            var request_data = {
+                data: { employee_id: data.employee_id },
+                success (res) {
+
+                    self.$store.commit('leave/afterEmployeeLeaveSummery', 
+                        {
+                            res: res,
+                            row_id: data.row_id,
+                            type: data.type
+                        }
+                    );
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res);
+                    }
+                },
+            };
+            
+            self.httpRequest('get_employee_leave_summery', request_data);
+        },
         processRoles (role_object) {
             var roles = [];
             jQuery.each(role_object, function(id, name) {
@@ -77,7 +103,10 @@ export default {
             var request_data = {
                 data: data,
                 success (res) {
-
+                    res.data.forEach( function(leave) {
+                        self.setLeaveRecoredsMeta(leave);
+                    });
+                    
                     self.$store.commit('leave/getLeaveRecords', res);
 
                     if (typeof args.callback === 'function') {
@@ -88,6 +117,11 @@ export default {
             
             self.httpRequest('get_leaves', request_data);
 		},
+
+        setLeaveRecoredsMeta (leave) {
+            leave.metaSummery = [];
+            leave.metaSummeryDisplay = false;
+        },
 
 		updateLeave (args) {
 			if( this.is_leave_btn_disable ) {
@@ -351,6 +385,62 @@ export default {
             }
 
             return false;
-        }
+        },
+
+        totalEntitlement(types) {
+            let total = this.totalSummery(types);
+
+            return total.entitlement
+        },
+
+        totalTakeLeave(types) {
+            let total = this.totalSummery(types);
+
+            return total.taken_leave;
+        },
+
+        totalRemainLeave(types) {
+            let total = this.totalSummery(types);
+
+            return total.remain_leave;
+        },
+
+        totalSummery (types) {
+            var total_extra = 0;
+
+            var total = {
+                entitlement: 0,
+                taken_leave: 0,
+                remain_leave: 0
+            };
+
+            types.forEach(function(type, index) {
+                total.entitlement = parseInt(type.entitlement) + total.entitlement;
+                total.taken_leave = parseInt(type.count) + total.taken_leave;
+
+                if ( type.id === 1) {
+                    total_extra = total_extra + parseInt(type.count);
+                }
+            });
+
+            total.remain_leave = (total.entitlement - total.taken_leave) + total_extra;
+
+            return total;
+        },
+
+        showHideSummery (showHideSummery, type, status) {
+            status = status || 'toggle';
+            this.$store.commit('leave/showHideSummery', 
+                {
+                    id: showHideSummery.id,
+                    status: status,
+                    type: type
+                }
+            );
+        }   
 	},
 };
+
+
+
+

@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"61d9870bf36f2185a6c6","1":"b8dfd368c18d794fdec5","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"529aa1825dc6bcdc67f3","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"cf62ba8bffd1e65b4e3e","12":"421bf6706a55cb69648b","13":"bb8978b7c756fa22330d","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"61d9870bf36f2185a6c6","1":"52d55c95d801d548188c","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"529aa1825dc6bcdc67f3","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"6a591bac484be64ec38c","12":"45f778758317f58f03d1","13":"82ba18f8feea56c52155","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -10392,6 +10392,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     methods: {
+        employeeLeaveSummery(args) {
+            var self = this;
+            var pre_define = {};
+
+            var data = jQuery.extend(true, pre_define, args.data);
+
+            var request_data = {
+                data: { employee_id: data.employee_id },
+                success(res) {
+
+                    self.$store.commit('leave/afterEmployeeLeaveSummery', {
+                        res: res,
+                        row_id: data.row_id,
+                        type: data.type
+                    });
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(res);
+                    }
+                }
+            };
+
+            self.httpRequest('get_employee_leave_summery', request_data);
+        },
         processRoles(role_object) {
             var roles = [];
             jQuery.each(role_object, function (id, name) {
@@ -10469,6 +10493,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var request_data = {
                 data: data,
                 success(res) {
+                    res.data.forEach(function (leave) {
+                        self.setLeaveRecoredsMeta(leave);
+                    });
 
                     self.$store.commit('leave/getLeaveRecords', res);
 
@@ -10479,6 +10506,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             self.httpRequest('get_leaves', request_data);
+        },
+
+        setLeaveRecoredsMeta(leave) {
+            leave.metaSummery = [];
+            leave.metaSummeryDisplay = false;
         },
 
         updateLeave(args) {
@@ -10739,6 +10771,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             return false;
+        },
+
+        totalEntitlement(types) {
+            let total = this.totalSummery(types);
+
+            return total.entitlement;
+        },
+
+        totalTakeLeave(types) {
+            let total = this.totalSummery(types);
+
+            return total.taken_leave;
+        },
+
+        totalRemainLeave(types) {
+            let total = this.totalSummery(types);
+
+            return total.remain_leave;
+        },
+
+        totalSummery(types) {
+            var total_extra = 0;
+
+            var total = {
+                entitlement: 0,
+                taken_leave: 0,
+                remain_leave: 0
+            };
+
+            types.forEach(function (type, index) {
+                total.entitlement = parseInt(type.entitlement) + total.entitlement;
+                total.taken_leave = parseInt(type.count) + total.taken_leave;
+
+                if (type.id === 1) {
+                    total_extra = total_extra + parseInt(type.count);
+                }
+            });
+
+            total.remain_leave = total.entitlement - total.taken_leave + total_extra;
+
+            return total;
+        },
+
+        showHideSummery(showHideSummery, type, status) {
+            status = status || 'toggle';
+            this.$store.commit('leave/showHideSummery', {
+                id: showHideSummery.id,
+                status: status,
+                type: type
+            });
         }
     }
 });
@@ -10779,6 +10861,24 @@ let HRM_Leave_Store = {
 	},
 
 	mutations: {
+		afterEmployeeLeaveSummery(state, data) {
+			if (data.type == 'pending') {
+				let index = state.getIndex(state.pending_leaves, data.row_id, 'id');
+				state.pending_leaves[index].metaSummery = data.res;
+				state.pending_leaves[index].metaSummeryDisplay = true;
+			}
+		},
+		showHideSummery(state, data) {
+			if (data.type == 'pending') {
+				let index = state.getIndex(state.pending_leaves, data.id, 'id');
+
+				if (data.status == 'toggle') {
+					state.pending_leaves[index].metaSummeryDisplay = state.pending_leaves[index].metaSummeryDisplay ? false : true;
+				} else {
+					state.pending_leaves[index].metaSummeryDisplay = status;
+				}
+			}
+		},
 		setCancelLeaves(state, calcelLeaves) {
 			state.cancelLeaves = calcelLeaves;
 		},

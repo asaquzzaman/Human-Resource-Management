@@ -96,7 +96,7 @@ class Hrm_Leave {
                 $leaves           = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
                 $leave_collection = $leaves->getCollection();
 
-                $resource         = new Collection( $leave_collection, new Leave_Transformer );
+                $resource = new Collection( $leave_collection, new Leave_Transformer );
                 $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
             
             } else {
@@ -140,6 +140,15 @@ class Hrm_Leave {
         );
 
         return $meta;
+    }
+
+    public static function ajax_get_employee_leave_summery() {
+        check_ajax_referer('hrm_nonce');
+        $employee_id = $_POST['employee_id'];
+
+        wp_send_json_success(
+            self::getInstance()->employee_leave_count( $employee_id )
+        );
     }
 
     function employee_extra_leave($emp_id = false) {

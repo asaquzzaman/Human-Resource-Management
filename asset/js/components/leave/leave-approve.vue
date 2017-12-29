@@ -4,6 +4,7 @@
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<th>Employee</th>
+					<th>Leave Type</th>
 					<th>Apply Date</th>
 					<th>Leave Duration</th>
 					<th>Comment</th>
@@ -19,6 +20,10 @@
 							<img :src="pendingLeave.employee.data.avatar_url" height="32" width="32">
 							{{ pendingLeave.employee.data.display_name }}
 						</td>
+						<td>
+							{{ pendingLeave.leave_type.data.name }}
+						</td>
+
 						<td>
 							{{ dateFormat(pendingLeave.apply_at.date) }}
 						</td>

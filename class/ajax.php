@@ -118,6 +118,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_update_settings', array( 'Hrm_Settings', 'ajax_update_settings' ) );
         add_action( 'wp_ajax_delete_leave_type', array( 'Hrm_Leave', 'ajax_delete_leave_type' ) );
         add_action( 'wp_ajax_hrm_user_can', array( $this, 'user_can' ) );
+        add_action( 'wp_ajax_get_employee_leave_summery', array( 'Hrm_Leave', 'ajax_get_employee_leave_summery' ) );
 
     }
 

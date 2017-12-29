@@ -61,7 +61,7 @@
 						<tbody>
 							<tr v-for="leave in record.activities">
 								
-								<td>{{ leave.leave_type.name }}</td>
+								<td>{{ leave.leave_type.data.name }}</td>
 								<td>1</td>
 								<td>{{ dateFormat(leave.start_time) }}</td>
 								<td>{{ dateFormat(leave.end_time) }}</td>

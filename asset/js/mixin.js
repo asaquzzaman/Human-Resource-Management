@@ -26,7 +26,7 @@ export default Vue.mixin({
 			    xhr.setRequestHeader("Authorization_name", btoa('asaquzzaman')); //btoa js encoding base64_encode
 			    xhr.setRequestHeader("Authorization_password", btoa(12345678)); //atob js decode base64_decode
 			};
-
+            
 			property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
 			property.data._wpnonce = HRM_Vars.nonce;
 

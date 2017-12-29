@@ -28,6 +28,27 @@ let HRM_Leave_Store = {
 	},
 
 	mutations: {
+		afterEmployeeLeaveSummery(state, data) {
+			if (data.type == 'pending') {
+				let index = state.getIndex( state.pending_leaves, data.row_id, 'id' );
+				state.pending_leaves[index].metaSummery = data.res;
+				state.pending_leaves[index].metaSummeryDisplay = true;
+			}
+		},
+		showHideSummery (state, data) {
+			if (data.type == 'pending') {
+				let index = state.getIndex( state.pending_leaves, data.id, 'id' );
+				
+				if ( data.status == 'toggle' ) {
+					state.pending_leaves[index].metaSummeryDisplay = 
+						state.pending_leaves[index].metaSummeryDisplay
+						? false : true;
+				} else {
+					state.pending_leaves[index].metaSummeryDisplay = status;
+				}
+				
+			}
+		},
 		setCancelLeaves (state, calcelLeaves) {
 			state.cancelLeaves = calcelLeaves;
 		},

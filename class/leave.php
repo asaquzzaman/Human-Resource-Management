@@ -34,6 +34,22 @@ class Hrm_Leave {
         add_filter( 'hrm_change_data', array( $this, 'update_holiday_data' ), 10, 5 );
     }
 
+    public static function ajax_get_employee_dropdown() {
+        check_ajax_referer('hrm_nonce');
+
+        $employees = Hrm_Employeelist::getInstance()->get_employee_drop_down();
+        $dropdown = array();
+
+        foreach ( $employees as $employee_id => $employee ) {
+            $dropdown[] = array(
+                'id' => $employee_id,
+                'name' => $employee
+            );
+        }
+
+        wp_send_json_success( $dropdown );
+    }
+
     public static function search_emp_leave_records() {
         check_ajax_referer('hrm_nonce');
         $send = [];
@@ -55,6 +71,31 @@ class Hrm_Leave {
         }
 
         wp_send_json_success( $send );
+    }
+
+    public static function ajax_get_leaves() {
+        check_ajax_referer('hrm_nonce');
+        
+        $args = array (
+            'start_time' => empty( $_POST['query']['start_time'] ) 
+                ? hrm_financial_start_date() 
+                : $_POST['query']['start_time'],
+
+            'end_time' => empty( $_POST['query']['end_time'] ) 
+                ? hrm_financial_end_date() 
+                : $_POST['query']['end_time'],
+
+            'emp_id' => empty( $_POST['query']['emp_id'] ) 
+                ? $_POST['emp_id'] 
+                : $_POST['query']['emp_id'],
+
+        );
+        
+        if ( ! hrm_user_can( 'manage_leave' ) ) {
+            $args['emp_id'] = $_POST['emp_id'];
+        }
+
+        wp_send_json_success( self::getInstance()->get_leaves( $args ) );
     }
 
     public function get_leaves( $args = array() ) {
@@ -822,26 +863,6 @@ class Hrm_Leave {
             'resource' => $return_data
         ));
     }
-
-    public static function ajax_get_leaves() {
-        check_ajax_referer('hrm_nonce');
-        wp_send_json_success( self::getInstance()->get_leaves( $_POST ) );
-    }
-
-    // public function get_leave_records() {
-    //     $leave_model = new HRM\Models\leave();
-    //     $transformer = new Transformer_Manager();
-
-    //     $leaves           = $leave_model::paginate();
-    //     $leave_collection = $leaves->getCollection();
-    //     $resource         = new Collection( $leave_collection, new Leave_Transformer );
-        
-    //     $resource->setPaginator( new IlluminatePaginatorAdapter( $leaves ) );
- 
-    //     $response = $ $this->get_response( $resource );
-
-    //     return $response;
-    // }
 
     public function get_leave_form_settings() {
         return get_option( 'hrm_leave_form_settings', false );

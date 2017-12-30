@@ -17,8 +17,17 @@
 					<tr v-for="pendingLeave in pendingLeaves">
 						
 						<td>
-							<img :src="pendingLeave.employee.data.avatar_url" height="32" width="32">
-							{{ pendingLeave.employee.data.display_name }}
+
+							<div>
+								<div class="hrm-td-content">
+									<div class="hrm-image">
+										<img :src="pendingLeave.employee.data.avatar_url" height="32" width="32">
+									</div>
+									<span class="hrm-employee-name">{{ pendingLeave.employee.data.display_name }}</span>
+									<div class="hrm-clear"></div>
+								</div>
+			            	</div>
+
 						</td>
 						<td>
 							{{ pendingLeave.leave_type.data.name }}
@@ -37,8 +46,12 @@
 						<td>{{ dateFormat(pendingLeave.end_time) }}</td>
 
 						<td>
-							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 1)" class="button button-secondary">Restore</button>
-							<button v-if="canManamgeLeave()" @click.prevent="selfLeaveDelete(pendingLeave.id)">Delete</button>
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 1)" class="button button-secondary">
+								<i class="fa fa-undo" aria-hidden="true"></i>
+							</button>
+							<button class="button button-secondary" v-if="canManamgeLeave()" @click.prevent="selfLeaveDelete(pendingLeave.id)">
+								<i class="fa fa-trash-o" aria-hidden="true"></i>
+							</button>
 							<div v-if="!canManamgeLeave()">Not available</div>
 						</td>
 
@@ -55,6 +68,37 @@
 		</div>
 	</div>
 </template>
+
+<style>
+	.hrm-image, .hrm-employee-name {
+		float: left;
+	}
+	.hrm-employee-name  {
+		width: 60%;
+    	margin-left: 5px;
+    	margin-top: -3px;
+    	word-wrap: break-word;
+
+	}
+	.hrm-td-content, .leave-action-wrap {
+		display: block;
+	}
+	.leave-action-wrap {
+		height: 5px;
+		margin-top: 5px;
+		margin-bottom: 10px;
+	}
+	.hrm-employee-name {
+		font-weight: 600;
+	}
+	.leave-action {
+		font-size: 12px;
+		display: none;
+	}
+	.leave-action-tr:hover .leave-action {
+		display: block;
+	}
+</style>
 
 <script>
 	export default {

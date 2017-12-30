@@ -14,6 +14,7 @@ let HRM_Leave_Store = {
 		leaveTypes: [],
 		approvedLeaves: [],
 		cancelLeaves: [],
+		employeeDropDown: [],
 		getIndex: function ( itemList, id, slug) {
             var index = false;
 
@@ -150,8 +151,9 @@ let HRM_Leave_Store = {
 			leaves.forEach(function(leave) {
 				state.leave_records.push(leave.data);
 			});
-
-			console.log(leaves, state.leave_records);
+		},
+		setEmployeeDropDown (state, employees) {
+			state.employeeDropDown = employees;
 		}
 	}
 };

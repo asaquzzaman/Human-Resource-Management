@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"61d9870bf36f2185a6c6","1":"52d55c95d801d548188c","2":"67dbb5f21c81a6ba9873","3":"f7088b210a1aae2ec2f7","4":"9b9eb2f9475ef4c62739","5":"b89bf5e642780182407d","6":"529aa1825dc6bcdc67f3","7":"62c93cec063ce07ad860","8":"ce98965a036be275e819","9":"077c8e9f70907a8e7b24","10":"1133c23c25460e98d78b","11":"6a591bac484be64ec38c","12":"45f778758317f58f03d1","13":"82ba18f8feea56c52155","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"be780e39175123644b8b","1":"12bf88972eea98f3d299","2":"0e86f3ffd5f037d20f3a","3":"e1d678d36f931ec6214b","4":"a4a978e9fe83c453da90","5":"643d9ad1f85c765370c7","6":"6ad577c5753b4d4beca8","7":"f3af2201574cada06851","8":"4654dc1d2868c63123d5","9":"58dec5eeddd6f7b5dfc1","10":"9960e07741845add2e78","11":"628be1f9689b76e3a637","12":"e67bfe2b1a33e9b3a534","13":"8f443fc296f2c594ef29","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -9832,14 +9832,14 @@ HRMRegisterModule('leave', 'leave');
 
 let Hrm_Leave_Records = resolve => {
 
-    __webpack_require__.e/* require.ensure */(1).then((() => {
+    __webpack_require__.e/* require.ensure */(0).then((() => {
         resolve(__webpack_require__(21));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(8).then((() => {
+    __webpack_require__.e/* require.ensure */(9).then((() => {
         resolve(__webpack_require__(17));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -9851,7 +9851,7 @@ let Hrm_Leave_Type = resolve => {
 };
 let Hrm_Leave_Work_Week = resolve => {
 
-    __webpack_require__.e/* require.ensure */(10).then((() => {
+    __webpack_require__.e/* require.ensure */(11).then((() => {
         resolve(__webpack_require__(24));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -9871,14 +9871,14 @@ let Hrm_Leave_form_settings = resolve => {
 
 let Hrm_Leave_Requests = resolve => {
 
-    __webpack_require__.e/* require.ensure */(7).then((() => {
+    __webpack_require__.e/* require.ensure */(8).then((() => {
         resolve(__webpack_require__(22));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Pending = resolve => {
 
-    __webpack_require__.e/* require.ensure */(11).then((() => {
+    __webpack_require__.e/* require.ensure */(7).then((() => {
         resolve(__webpack_require__(20));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10007,7 +10007,7 @@ let hrm_attendace_user_search = resolve => {
 
 let hrm_attendace_configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(9).then((() => {
+    __webpack_require__.e/* require.ensure */(10).then((() => {
         resolve(__webpack_require__(12));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10301,7 +10301,7 @@ HRMRegisterModule('departments', 'departments');
 
 let departments = resolve => {
 
-    __webpack_require__.e/* require.ensure */(0).then((() => {
+    __webpack_require__.e/* require.ensure */(1).then((() => {
         resolve(__webpack_require__(14));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10821,6 +10821,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 status: status,
                 type: type
             });
+        },
+
+        getEmployeeDropDown(args) {
+            var self = this;
+            var request_data = {
+                data: {},
+                success: function (res) {
+                    self.$store.commit('leave/setEmployeeDropDown', res);
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    }
+                },
+                error: function (res) {
+
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map(function (value, index) {
+                        toastr.error(value);
+                    });
+                }
+            };
+
+            this.httpRequest('get_employee_dropdown', request_data);
         }
     }
 });
@@ -10847,6 +10870,7 @@ let HRM_Leave_Store = {
 		leaveTypes: [],
 		approvedLeaves: [],
 		cancelLeaves: [],
+		employeeDropDown: [],
 		getIndex: function (itemList, id, slug) {
 			var index = false;
 
@@ -10974,8 +10998,9 @@ let HRM_Leave_Store = {
 			leaves.forEach(function (leave) {
 				state.leave_records.push(leave.data);
 			});
-
-			console.log(leaves, state.leave_records);
+		},
+		setEmployeeDropDown(state, employees) {
+			state.employeeDropDown = employees;
 		}
 	}
 };

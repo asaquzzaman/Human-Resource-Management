@@ -437,6 +437,29 @@ export default {
                     type: type
                 }
             );
+        },
+
+        getEmployeeDropDown (args) {
+            var self = this;
+            var request_data = {
+                data: {},
+                success: function(res) {
+                    self.$store.commit('leave/setEmployeeDropDown', res);
+                    if (typeof args.callback === 'function') {
+                        args.callback();
+                    } 
+                },
+                error: function(res) {
+  
+                    self.show_spinner = false;
+                    // Showing error
+                    res.error.map( function( value, index ) {
+                        toastr.error(value);
+                    });
+                }
+            }
+            
+            this.httpRequest('get_employee_dropdown', request_data);
         }   
 	},
 };

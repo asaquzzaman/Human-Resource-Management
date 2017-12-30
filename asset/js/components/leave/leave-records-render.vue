@@ -1,14 +1,45 @@
  <template>
 	<div>
-		<span class="page-title-action">
+	<!-- 	<span class="page-title-action">
 			Leave records from 
 			<span class="hrm-start-date">{{ dateFormat(financialStart) }}</span>
 			to 
 			<span class="hrm-end-date">{{ dateFormat(financialEnd) }}</span>
 
-		</span>
+		</span> -->
+
+		<!-- <hrm-attendace-user-search></hrm-attendace-user-search> -->
 		<div class="metabox-holder">
-			<div class="postbox">
+
+			<div class="hrm-records-text">
+				<div class="hrm-attendance-records-text-wrap">
+					<h2>Leave Records</h2>
+				</div>
+				<!-- <div  class="hrm-records-from">
+					<h2>From</h2>
+
+					<span>
+						<i aria-hidden="true" class="fa fa-calendar"></i>
+						{{ dateFormat(financialStart) }}
+					</span>
+				</div>
+				<div class="hrm-records-to">
+					<h2>To</h2>
+					<span>
+						<i aria-hidden="true" class="fa fa-calendar"></i>
+						{{ dateFormat(financialEnd) }}
+					</span>
+				</div> -->
+				<!-- <div class="hrm-clear"></div> -->
+			</div>
+
+			<hrm-leave-search></hrm-leave-search>
+
+			<div v-if="!records.length" class="notice notice-success">
+				<p>No leave record found</p>
+			</div>
+
+			<div v-if="records.length" class="postbox">
 				<h2 class="hndle ui-sortable-handle">
 					<span>Summery</span>
 				</h2>
@@ -24,9 +55,12 @@
 							<tr v-for="type in meta.types">
 								
 								<td>{{ type.leave_type_name }}</td>
+								
 								<td v-if="type.id === 1">&#8211;</td>
 								<td v-else>{{ pad(type.entitlement) }}</td>
+								
 								<td>{{ pad(type.count) }}</td>
+								
 								<td v-if="type.id === 0">&#8211;</td>
 								<td v-else>{{ pad(type.entitlement - type.count) }}</td>
 
@@ -81,7 +115,7 @@
 </template>
 
 <script>
-	
+	import LeaveSearch from './leave-search.vue';
 	export default {
 		data() {
 			return {
@@ -89,13 +123,17 @@
 					1: 'Pending', 
 					2: 'Approve', 
 					3: 'Cancel'
-				},
-				financialStart: HRM_Vars.financial_start,
-				financialEnd: HRM_Vars.financial_end
+				}
 			}
 		},
 		mixins: [HRMMixin.leave],
 		computed: {
+			financialStart () {
+				return this.$route.query.start_time || HRM_Vars.financial_start;
+			},
+			financialEnd () {
+				return this.$route.query.start_time || HRM_Vars.financial_end;
+			},
 			records () {
 				var self = this;
 				var records = this.$store.state.leave.leave_records;
@@ -141,10 +179,15 @@
 			}
 		},
 
+		components: {
+			'hrm-leave-search': LeaveSearch
+		},
+
 		created () {
 			this.getLeaveRecords({
 				data: {
-					'emp_id': HRM_Vars.current_user.data.ID
+					'emp_id': HRM_Vars.current_user.data.ID,
+					'query': this.$route.query
 				}
 			});
 		},

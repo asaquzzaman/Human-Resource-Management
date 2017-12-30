@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"be780e39175123644b8b","1":"12bf88972eea98f3d299","2":"0e86f3ffd5f037d20f3a","3":"e1d678d36f931ec6214b","4":"a4a978e9fe83c453da90","5":"643d9ad1f85c765370c7","6":"6ad577c5753b4d4beca8","7":"f3af2201574cada06851","8":"4654dc1d2868c63123d5","9":"58dec5eeddd6f7b5dfc1","10":"9960e07741845add2e78","11":"628be1f9689b76e3a637","12":"e67bfe2b1a33e9b3a534","13":"8f443fc296f2c594ef29","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"c560133d09b11b3c85c0","1":"049d9118a99eeed427cc","2":"beb8ffa6418cf4b8cf6c","3":"ba85f997ce0903803bd7","4":"a69acb93fad5397a5684","5":"9d971f07adfa497a10f4","6":"b65beb88ee43b08e514f","7":"6c99caf78ae9cc70ef59","8":"deda9916138c054356ef","9":"e411a26ba350ea6f7204","10":"876236b80f9b2bcd3623","11":"813f883d5def78a86153","12":"7c027a9741d845adfc56","13":"852ec5f8ade0527fb686","14":"1fff6ffe8975e2cf86ea","15":"24d539c3a3041a71481d"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -9839,7 +9839,7 @@ let Hrm_Leave_Records = resolve => {
 
 let Hrm_Leave_Configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(9).then((() => {
+    __webpack_require__.e/* require.ensure */(11).then((() => {
         resolve(__webpack_require__(17));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -9851,7 +9851,7 @@ let Hrm_Leave_Type = resolve => {
 };
 let Hrm_Leave_Work_Week = resolve => {
 
-    __webpack_require__.e/* require.ensure */(11).then((() => {
+    __webpack_require__.e/* require.ensure */(13).then((() => {
         resolve(__webpack_require__(24));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -9871,7 +9871,7 @@ let Hrm_Leave_form_settings = resolve => {
 
 let Hrm_Leave_Requests = resolve => {
 
-    __webpack_require__.e/* require.ensure */(8).then((() => {
+    __webpack_require__.e/* require.ensure */(10).then((() => {
         resolve(__webpack_require__(22));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -9885,14 +9885,14 @@ let Hrm_Leave_Pending = resolve => {
 
 let Hrm_Leave_Cancel = resolve => {
 
-    __webpack_require__.e/* require.ensure */(12).then((() => {
+    __webpack_require__.e/* require.ensure */(8).then((() => {
         resolve(__webpack_require__(16));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Approve = resolve => {
 
-    __webpack_require__.e/* require.ensure */(13).then((() => {
+    __webpack_require__.e/* require.ensure */(9).then((() => {
         resolve(__webpack_require__(15));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10007,7 +10007,7 @@ let hrm_attendace_user_search = resolve => {
 
 let hrm_attendace_configuration = resolve => {
 
-    __webpack_require__.e/* require.ensure */(10).then((() => {
+    __webpack_require__.e/* require.ensure */(12).then((() => {
         resolve(__webpack_require__(12));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -10222,6 +10222,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			state.allow_ip = res.allow_ip;
 		},
 		setAttendance: function (state, records) {
+
 			state.attendance = records.records;
 			state.totalOfficeTime = records.totalOfficeTime;
 

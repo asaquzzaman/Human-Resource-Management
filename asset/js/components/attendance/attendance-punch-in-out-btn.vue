@@ -69,7 +69,12 @@
 	                    //self.punch_id = res.punch_id;
 	                    //self.punch_id = res.punch_in_status;
 
-	                    self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
+	                    self.$store.commit( 'attendance/setAttendance', 
+	                    	{
+								records: res.attendance,
+								totalOfficeTime: res.total_time
+							} 
+	                    );
 	                    self.$store.commit( 'attendance/punch_in', { status: 'disable' } );
 
 	                    //for preventing multipule submit
@@ -111,7 +116,13 @@
 	                    toastr.success(res.success);
 						self.punch_out_disable = false;
 
-						self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
+						self.$store.commit( 'attendance/setAttendance', 
+							{
+								records: res.attendance,
+								totalOfficeTime: res.total_time
+							} 
+						);
+
 	                    self.$store.commit( 'attendance/punch_in', { status: res.punch_in_status } );
 
 	                    //for preventing multipule submit

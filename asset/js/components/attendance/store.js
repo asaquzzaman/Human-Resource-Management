@@ -35,6 +35,7 @@ export default {
 			state.allow_ip                     = res.allow_ip;
 		},
 		setAttendance: function(state, records) {
+
 			state.attendance      = records.records; 
 			state.totalOfficeTime = records.totalOfficeTime;
 

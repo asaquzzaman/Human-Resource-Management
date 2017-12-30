@@ -15,7 +15,7 @@
 				<div class="hrm-attendance-records-text-wrap">
 					<h2>Leave Records</h2>
 				</div>
-				<!-- <div  class="hrm-records-from">
+				<div  class="hrm-records-from">
 					<h2>From</h2>
 
 					<span>
@@ -29,8 +29,8 @@
 						<i aria-hidden="true" class="fa fa-calendar"></i>
 						{{ dateFormat(financialEnd) }}
 					</span>
-				</div> -->
-				<!-- <div class="hrm-clear"></div> -->
+				</div>
+				<div class="hrm-clear"></div>
 			</div>
 
 			<hrm-leave-search></hrm-leave-search>

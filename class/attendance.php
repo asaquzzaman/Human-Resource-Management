@@ -143,12 +143,15 @@ class Hrm_Attendance {
         if ( is_wp_error( $punch_id ) ) {
             wp_send_json_error( array( 'error' => $punch_id->get_error_messages() ) );
         }
+
+        $attendance = self::getInstance()->get_attendance();
         
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been save successfully', 'hrm' ),
-            'attendance'      => self::getInstance()->get_attendance(),
+            'attendance'      => $attendance,
             'punch_id'        => $punch_id,
-            'punch_in_status' => self::getInstance()->punch_in_status()
+            'punch_in_status' => self::getInstance()->punch_in_status(),
+            'total_time'      => self::getInstance()->count_office_time( $attendance )
         ) );
     }
 
@@ -213,10 +216,13 @@ class Hrm_Attendance {
             wp_send_json_error( array( 'error' => $update->get_error_messages() ) );
         }
         
+        $attendance = self::getInstance()->get_attendance();
+
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been updated successfully', 'hrm' ),
-            'attendance'      => self::getInstance()->get_attendance(),
-            'punch_in_status' => self::getInstance()->punch_in_status()
+            'attendance'      => $attendance,
+            'punch_in_status' => self::getInstance()->punch_in_status(),
+            'total_time'      => self::getInstance()->count_office_time( $attendance )
         ) );
     }
 
@@ -297,7 +303,7 @@ class Hrm_Attendance {
                 'punch_out_formated_date' => hrm_get_date( $postdata['punch_out'] ),
                 'punch_in_date'           => $postdata['punch_in'],
                 'punch_out_date'          => $postdata['punch_out'],
-                'total_time'              => self::getInstance()->count_office_time($attendance)
+                'total_time'              => self::getInstance()->count_office_time( $attendance )
             ) );
         }
 
@@ -305,6 +311,67 @@ class Hrm_Attendance {
             'attendance' => $attendance,
             'total_time' => self::getInstance()->count_office_time($attendance)
         ) );
+    }
+
+    function get_attendance_total( $args = array() ) {
+        
+        global $wpdb;
+
+        $defaults = array(
+            'user_id'   => get_current_user_id(),
+            'punch_in'  => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
+            'punch_out' => date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) )
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $cache_key  = 'hrm-get-attendance-total' . md5( serialize( $args ) );
+        $items      = wp_cache_get( $cache_key, 'erp' );
+        $query_args = array( 'relation' => 'AND' );
+     
+        if ( false === $items ) {
+            $items = $this->generate_query( $args );
+
+            foreach ( $args as $key => $arg ) {
+                switch ( $key ) {
+                    case 'user_id':
+                        $query_args[] = array(
+                            'field'     => 'user_id',
+                            'value'     => $arg,
+                            'condition' => '='
+                        );
+                        break;
+
+                    case 'punch_in':
+                        $query_args[] = array(
+                            'field'     => 'date',
+                            'value'     => $arg,
+                            'condition' => '>='
+                        );
+                        break;
+
+                    case 'punch_out':
+                        $query_args[] = array(
+                            'field'     => 'date',
+                            'value'     => $arg,
+                            'condition' => '<='
+                        );
+                        break;
+                }
+            }
+
+            $query = $this->generate_query( $query_args );
+            $table = $wpdb->prefix . 'hrm_attendance';
+
+            $items = $wpdb->get_var( "SELECT SUM(total) FROM {$table} WHERE 1=1 AND $query" );
+            
+            if ( $items ) {
+                $items = $this->get_attendance_meta( $items );
+                wp_cache_set( $cache_key, $items, 'hrm' );
+            }
+        }        
+        
+        return $items;
     }
 
     function count_office_time( $attendance ) {
@@ -341,7 +408,23 @@ class Hrm_Attendance {
         return $attendance;
     }   
 
+    function get_attendance_summery( $args = array() ) {
+        $defaults = array(
+            'user_id'   => empty( $args['user_id'] ) 
+                ? get_current_user_id() 
+                : $args['user_id'],
+            
+            'punch_in'  => empty( $args['start_date'] ) 
+                ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
+                : $args['start_date'],
 
+            'punch_out' => empty( $args['end_date'] ) 
+                ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
+                : $args['end_date']
+        );
+
+        $attendance = $this->get_attendance( $defaults );
+    }
 
     function get_attendance( $args = array() ) {
         
@@ -665,7 +748,16 @@ class Hrm_Attendance {
             $closed = current_time( 'mysql' );
         }
 
-        if ( isset( $postdata['hrm_is_multi_attendance'] ) && $postdata['hrm_is_multi_attendance'] == 'true' ) {
+        if ( 
+            isset( $postdata['hrm_is_multi_attendance'] ) 
+            &&
+            ( 
+                $postdata['hrm_is_multi_attendance'] == 'true' 
+                || 
+                $postdata['hrm_is_multi_attendance'] == 1 
+            )
+        ) {
+            
             $is_multi = 1;
         } else {
             $is_multi = 0;

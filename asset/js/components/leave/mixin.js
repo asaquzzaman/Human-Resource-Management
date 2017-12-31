@@ -222,12 +222,14 @@ export default {
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
-                    toastr.success(res.data.success);
-                    self.addLeaveTypeMeta(res.data);
+                    toastr.success(res.success);
+                    self.addLeaveTypeMeta(res.leave_type.data);
                     self.submit_disabled = false;
 
+                    self.$store.commit('leave/afterUpdateLeaveType', res.leave_type.data);
+
                     if (typeof args.callback === 'function') {
-                        args.callback(res.data);
+                        args.callback(res);
                     }
                 },
 

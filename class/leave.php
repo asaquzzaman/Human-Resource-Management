@@ -506,10 +506,11 @@ class Hrm_Leave {
                 'entitlement'     => $postdata['entitlement'],
                 'entitle_from'    => hrm_financial_start_date(),
                 'entitle_to'      => hrm_financial_end_date(),
-                'carry'           => $next_year ? 1 : 0,
                 'f_year'          => $next_year
                                     ? hrm_get_current_financial_id()
-                                    : 0
+                                    : 0,
+                'carry'           => $next_year ? 1 : 0
+                
             );
 
             $format = array( '%s', '%d', '%s', '%s', '%d' );
@@ -526,10 +527,11 @@ class Hrm_Leave {
         
         $this->add_relation( 'leave_type', $departments, $id );
 
-        $resource = new Item( (object) $data, new Leave_Type_Transform ); 
+        $leave_type = Leave_Type::find( $data['id'] );
+
+        $resource = new Item( $leave_type, new Leave_Type_Transform ); 
 
         $send = $this->get_response( $resource );
-
 
         if ( $result ) {
             return $send;

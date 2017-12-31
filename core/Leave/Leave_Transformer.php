@@ -37,7 +37,9 @@ class Leave_Transformer extends TransformerAbstract
     public function includeLeaveType( Leave $item ) {
         if ( $item->type === '0' ) {
             return [
-                'name' => 'Extra'
+                'data' => [
+                    'name' => 'Extra'
+                ]
             ];
         }
 

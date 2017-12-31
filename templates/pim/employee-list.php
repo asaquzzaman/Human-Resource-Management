@@ -277,7 +277,7 @@ jQuery(function($) {
 
                     $('#hrm-user-image-wrap').html(res.content);
                     $('.hrm-delete-file').removeClass('button');
-                    $('.hrm-uploaded-item').find('img').attr({ width: 180, height: 180 });
+                    //$('.hrm-uploaded-item').find('img').attr({ width: 180, height: 180 });
 
                 } else {
                     alert(res.error);

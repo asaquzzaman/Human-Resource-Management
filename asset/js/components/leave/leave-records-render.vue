@@ -82,6 +82,7 @@
 					<span>{{ selfDateFormat(record.date) }}</span>
 				</h2>
 				<div class="inside metabox-holder hrm-leave-type-records-wrap">
+
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<th>Leave Type</th>

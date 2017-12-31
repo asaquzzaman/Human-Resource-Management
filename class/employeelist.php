@@ -55,7 +55,7 @@ class Hrm_Employeelist {
                 <?php
                 if ( $image_attchment ) {
                     ?>
-                    <!-- <a href="#" data-id="<?php echo $image_attchment['id']; ?>" class="hrm-delete-file"><?php _e( 'Delete', 'hrm' ); ?></a> -->
+                    
                     <?php
                 }
                 ?>

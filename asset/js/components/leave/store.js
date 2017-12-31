@@ -29,6 +29,11 @@ let HRM_Leave_Store = {
 	},
 
 	mutations: {
+		afterUpdateLeaveType (state, type) {
+			let index = state.getIndex( state.leaveTypes, type.id, 'id' );
+
+			state.leaveTypes.splice(index, 1, type);
+		},
 		afterEmployeeLeaveSummery(state, data) {
 			if (data.type == 'pending') {
 				let index = state.getIndex( state.pending_leaves, data.row_id, 'id' );

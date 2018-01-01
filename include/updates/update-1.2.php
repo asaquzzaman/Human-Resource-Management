@@ -143,7 +143,7 @@ function hrm_holiday_table() {
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
       `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-      `name` varchar(20) NOT NULL,
+      `name` varchar(255) NOT NULL,
       `description` text,
       `from` datetime DEFAULT NULL,
       `to` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

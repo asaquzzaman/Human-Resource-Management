@@ -617,6 +617,7 @@ class Hrm_Leave {
                 'description' => $postdata['description']
             );
             $format = array( '%s', '%s' );
+            
             $result     = $wpdb->update( $table, $data, array( 'id' => $id ), $format, array( '%d' ) );
             $data['id'] = $id;
             $data = $this->get_holidays(array('id' => $data['id']));

@@ -37,7 +37,7 @@
 					<div class="hrm-multiselect hrm-inline-edit-field">
 
 				        <hrm-multiselect 
-				            v-model="leaveType.departments" 
+				            v-model="leaveType.departments.data" 
 				            :options="departmentDropDown" 
 				            :multiple="true" 
 				            :close-on-select="true"

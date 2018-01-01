@@ -20,8 +20,8 @@
                 HRMModules.forEach(function(module) {
                     let mixin = require('./'+module.path+'/mixin.js');
                     let store = require('./'+module.path+'/store.js');
-                    
                     HRMMixin[module.name] = mixin.default;
+
                     self.registerStore(module.name, store.default );
                 });
             }

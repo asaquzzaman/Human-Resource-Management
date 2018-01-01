@@ -1,7 +1,9 @@
 <template>
     <div>
+
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="(item,  index) in menu" key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+            <router-link v-for="(item,  index) in menu[0].children" key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+
         </h2>
 
         <h3 class="hrm-sub-nav">
@@ -19,7 +21,7 @@
 
 <script>
     import Menu from './router';
-
+    
     var Hrm_Settings_Header = {
         mixins: [HRMMixin.settings],
 
@@ -32,15 +34,16 @@
         methods: {
             childrens () {
                 let root_menu = this.$route.matched[1].name;
-                let index = this.getIndex(this.menu, root_menu, 'name');
+
+                let index = this.getIndex(this.menu[0].children, root_menu, 'name');
                 
                 if (index === false) {
                     return [];
                 }
 
-                if (this.menu[index].hasOwnProperty('children')) {
-                    if (this.menu[index].children.length) {
-                        return this.menu[index].children;
+                if (this.menu[0].children[index].hasOwnProperty('children')) {
+                    if (this.menu[0].children[index].children.length) {
+                        return this.menu[0].children[index].children;
                     }
                 } else {
                     return [];

@@ -6,6 +6,7 @@ import router from './router';
 import mixin from './mixin';
 import directive from './hrm-directive';
 import controller from './components/controller.vue';
+import Components from './src/helpers/common-components';
 
 var wpspear_hrm = {
 	el: '#wpspear-hrm',

@@ -1,6 +1,10 @@
 const path = require('path');
 //var webpack = require('webpack');
 
+function resolve (dir) {
+  return path.join(__dirname, './asset/js', dir)
+}
+
 module.exports = {
 	entry: './asset/js/hrm-vue.js',
 
@@ -11,6 +15,14 @@ module.exports = {
 		chunkFilename: 'chunk/[chunkhash].chunk-bundle.js',
 		jsonpFunction: 'wpSpearHrm',
 	},
+
+	resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+          '@components': resolve('components'),
+          '@vue': resolve('vue'),
+        }
+    },
 
 	module: {
 		rules: [

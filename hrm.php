@@ -106,6 +106,7 @@ class WP_Hrm {
         $this->define( 'HRM_VERSION', '1.2' );
         $this->define( 'HRM_DB_VERSION', '0.2' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
+        $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
         $this->define( 'HRM_COMP_PATH', dirname( __FILE__ ) . '/asset/js/components' );
         $this->define( 'HRM_URL', plugins_url( '', __FILE__ ) );
         $this->define( 'HRM_PERMISSION_PURCHASE_URL', 'http://mishubd.com/product/hrm-permission/' );
@@ -383,7 +384,7 @@ class WP_Hrm {
             return;
         }
         $current_user_id = get_current_user_id();
-        $user_status = get_user_meta( $current_user_id, '_status', true );
+        $user_status     = get_user_meta( $current_user_id, '_status', true );
 
         if ( $user_status == 'no' ) {
             _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );

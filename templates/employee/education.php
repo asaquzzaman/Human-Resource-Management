@@ -124,7 +124,7 @@ global $hrm_is_admin;
             add_form_apppend_wrap : 'hrm_personal_education',
             class_name : 'hrm_Employee',
             function_name : 'education',
-            redirect : '<?php echo $url; ?>',
+            //redirect : '<?php echo $url; ?>',
             employee_id: "<?php echo $employer_id; ?>",
             page: '<?php echo $page; ?>',
             tab: '<?php echo $tab; ?>',

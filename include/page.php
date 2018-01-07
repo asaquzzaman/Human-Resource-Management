@@ -5,16 +5,16 @@ function hrm_page( $exclude = true ) {
     $page                  = array();
 
     $hrm_pim               = hrm_pim_page();
-    $page[$hrm_pim]        = hrm_pim_page_items( $path, $hrm_pim, $exclude );
+    $page[$hrm_pim]        = hrm_pim_page_items( $path );
 
     $employee              = hrm_employee_page();
-    $page[$employee]       = hrm_employee_page_items( $path, $employee, $exclude );
+    $page[$employee]       = hrm_employee_page_items( $path );
 
     // $hrm_management        = hrm_admin_page();
     // $page[$hrm_management] = hrm_admin_page_items( $path, $hrm_management, $exclude );
 
     $hrm_organization        = hrm_organization_page();
-    $page[$hrm_organization] = hrm_organization_page_items( $path, $hrm_organization, $exclude );
+    $page[$hrm_organization] = hrm_organization_page_items( $path );
 
     $hrm_department        = hrm_department_page();
     $page[$hrm_department] = hrm_department_page_items( $path, $hrm_organization, $exclude );
@@ -66,7 +66,7 @@ function hrm_department_page_items( $path, $hrm_organization, $exclude ) {
     return $admin;
 }
 
-function hrm_organization_page_items( $path, $hrm_organization, $exclude ) {
+function hrm_organization_page_items( $path ) {
 
     $admin = array (
         'general_info' => array(
@@ -93,7 +93,7 @@ function hrm_organization_page_items( $path, $hrm_organization, $exclude ) {
     return $admin;
 }
 
-function hrm_employee_page_items( $path, $employee, $exclude ) {
+function hrm_employee_page_items( $path ) {
 
     $emp = array(
 
@@ -141,11 +141,7 @@ function hrm_employee_page_items( $path, $employee, $exclude ) {
         // ),
     );
 
-    if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
-        return $emp;
-    }
-
-    return apply_filters( 'hrm_employee_page_items', $emp, $path, $employee );
+    return apply_filters( 'hrm_employee_page_items', $emp, $path );
 }
 
 function hrm_salary_page_items( $path, $hrm_salary, $exclude ) {
@@ -446,7 +442,7 @@ function hrm_file_page_items( $path, $hrm_file, $exclude ) {
     return apply_filters( 'hrm_file_page_items', $file, $path, $hrm_file );
 }
 
-function hrm_pim_page_items( $path, $hrm_pim, $exclude ) {
+function hrm_pim_page_items( $path ) {
 
     $pim = array();
 
@@ -600,11 +596,8 @@ function hrm_pim_page_items( $path, $hrm_pim, $exclude ) {
     //     ),
     // );
 
-    if ( $exclude === false || hrm_current_user_role() == 'administrator' ) {
-        return $pim;
-    }
 
-    return apply_filters( 'hrm_pim_page_items', $pim, $path, $hrm_pim );
+    return apply_filters( 'hrm_pim_page_items', $pim, $path );
 }
 
 function hrm_admin_page_items( $path, $hrm_management, $exclude ) {

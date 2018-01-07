@@ -305,11 +305,11 @@ function hrm_get_employee_id() {
     return $employee_id;
 }
 
-function hrm_get_query_args() {
+function hrm_get_query_args( $page = false ) {
 
-    $menu = hrm_page();
-
-    $page = isset( $_GET['page'] ) && !empty( $_GET['page'] ) ? $_GET['page'] : false;
+    $menu     = hrm_page();
+    $get_page = empty( $_GET['page'] ) ? false : $_GET['page'];
+    $page     = $page ? $page : $get_page;
 
     if ( !$page ) {
         $query = array(

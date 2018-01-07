@@ -4,19 +4,19 @@ import mixin from './mixin';
 
 HRMMixin.settings = mixin;
 
-import Empty from '@components/common/empty.vue';
+import Settings from './settings.vue';
 
 const Hrm_Settings = resolve => {
 
-    require.ensure(['./settings.vue'], () => {
-        resolve(require('./settings.vue'));
+    require.ensure(['./general.vue'], () => {
+        resolve(require('./general.vue'));
     });
 }
 
 let settingsMenu = [
 	{ 
 		path: 'settings',
-		component:  Empty,
+		component:  Settings,
 		name: 'hrm_setting',
 
 		children: HRMGetRegisterChildrenRoute

@@ -94,7 +94,7 @@ global $hrm_is_admin;
         hrm_dataAttr = {
            add_form_generator_action : 'add_form',
            add_form_apppend_wrap : 'hrm-employee-work-experience',
-           redirect : '<?php echo $url; ?>',
+           //redirect : '<?php echo $url; ?>',
            class_name : 'hrm_Employee',
            function_name : 'work_experience',
            employee_id: "<?php echo $employer_id; ?>",

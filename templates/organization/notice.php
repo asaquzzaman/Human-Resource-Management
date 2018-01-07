@@ -111,7 +111,7 @@ global $hrm_is_admin;
             add_form_generator_action : 'add_form',
             add_form_apppend_wrap : 'hrm-admin-notice',
             class_name : 'Hrm_Admin',
-            redirect : '<?php echo $url; ?>',
+            //redirect : '<?php echo $url; ?>',
             function_name : 'admin_notice',
             page: '<?php echo $page; ?>',
             tab: '<?php echo $tab; ?>',

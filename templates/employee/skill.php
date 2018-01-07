@@ -106,7 +106,7 @@ global $hrm_is_admin;
            add_form_generator_action : 'add_form',
            add_form_apppend_wrap : 'hrm_personal_skill',
            class_name : 'hrm_Employee',
-           redirect : '<?php echo $url; ?>',
+           //redirect : '<?php echo $url; ?>',
            function_name : 'personal_skill',
            employee_id: "<?php echo $employer_id; ?>",
            page: '<?php echo $page; ?>',

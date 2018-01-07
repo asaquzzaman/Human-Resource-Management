@@ -29,7 +29,7 @@ $can_edit = hrm_user_can( 'edit_employee', $employee_id );
 ?>
 <div class="hrm-profile-image-wrap">
     
-    <div class="hrm-employee-pic-text"><strong><?php  _e( 'Profile Picture', 'hrm' ); ?></strong></div>
+    <div class="hrm-employee-pic-text"><strong></strong></div>
     <div id="hrm-upload-file-container">
         
         <?php if ( $can_edit ) { ?>
@@ -67,7 +67,7 @@ $job_category = Hrm_Admin::getInstance()->get_departments( $dept_id );
 ?>
     <div class="hrm-descriptive-wrap">
 
-        <div class="hrm-descriptive-label">Department</div>
+        <div class="hrm-descriptive-label"></div>
         <div class="hrm-descriptive-content">
             <strong>
                 <?php echo empty ( $job_category->name ) ? '&#8211 &#8211' : $job_category->name; ?>
@@ -93,13 +93,13 @@ $designation = ob_get_clean();
 
 
 $field[] = array(
-    'label' => '',
+    'label' => 'Profile Picture',
     'type'  => 'descriptive',
     'value' => $profile_pic
 );
 
 $field[] = array(
-    'label' => '',
+    'label' => 'Department',
     'type'  => 'descriptive',
     'value' => $department
 );
@@ -124,13 +124,13 @@ $field['gender'] = array(
         array(
             'label'   => __( 'Male', 'hrm' ),
             'value'   => 'male',
-            'checked' => $this->get_emp_meta( $employee_id, '_gender' ),
+            'checked' => get_user_meta( $employee_id, '_gender', true ),
             'disabled' => $can_edit ? false : 'disabled',
         ),
         array(
             'label'   => __( 'Female', 'hrm' ),
             'value'   => 'female',
-            'checked' => $this->get_emp_meta( $employee_id, '_gender' ),
+            'checked' => get_user_meta( $employee_id, '_gender', true ),
             'disabled' => $can_edit ? false : 'disabled',
         ),
     ),
@@ -139,7 +139,7 @@ $field['gender'] = array(
 $field['marital_status'] = array(
     'label'    => __( 'Marital Status', 'hrm' ),
     'type'     => 'select',
-    'selected' => $this->get_emp_meta( $employee_id, '_marital_status' ),
+    'selected' => get_user_meta( $employee_id, '_marital_status', true ),
     'disabled' => $can_edit ? false : 'disabled',
     'option'   => array(
         ''     => __( '--Select--', 'hrm' ),
@@ -151,7 +151,7 @@ $field['marital_status'] = array(
 $field['national_code'] = array(
     'label'    => __( 'Nationality', 'hrm' ),
     'type'     => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_national_code' ),
+    'value' => get_user_meta( $employee_id, '_national_code', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
@@ -159,28 +159,28 @@ $field['birthday'] = array(
     'label' => __( 'Birthday', 'hrm' ),
     'type'  => 'text',
     'class' => 'hrm-datepicker',
-    'value' => hrm_get_date2mysql( $this->get_emp_meta( $employee_id, '_birthday' ) ),
+    'value' => hrm_get_date2mysql( get_user_meta( $employee_id, '_birthday', true ) ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['street1'] = array(
     'label' => __( 'Address Street 1', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_street1' ),
+    'value' => get_user_meta( $employee_id, '_street1', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['street2'] = array(
     'label' => __( 'Address Street 2', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_street2' ),
+    'value' => get_user_meta( $employee_id, '_street2', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['city_code'] = array(
     'label' => __( 'City', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_city_code' ),
+    'value' => get_user_meta( $employee_id, '_city_code', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
@@ -188,14 +188,14 @@ $field['city_code'] = array(
 $field['state'] = array(
     'label' => __( 'State/Province', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_state' ),
+    'value' => get_user_meta( $employee_id, '_state', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
 $field['zip'] = array(
     'label' => __( 'Zip/Postal Code', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_zip' ),
+    'value' => get_user_meta( $employee_id, '_zip', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
@@ -204,7 +204,7 @@ $field['country_code'] = array(
     'label' => __( 'Country', 'hrm' ),
     'type' => 'select',
     'option' => $country,
-    'selected' => $this->get_emp_meta( $employee_id, '_country_code' ),
+    'selected' => get_user_meta( $employee_id, '_country_code', true ),
     'desc' => 'Chose your country',
     'disabled' => $can_edit ? false : 'disabled',
 );
@@ -212,14 +212,14 @@ $field['country_code'] = array(
 $field['work_mobile'] = array(
     'label' => __( 'Work Telephone', 'hrm' ),
     'type'  => 'text',
-    'value' => $this->get_emp_meta( $employee_id, '_work_mobile' ),
+    'value' => get_user_meta( $employee_id, '_work_mobile', true ),
     'disabled' => $can_edit ? false : 'disabled',
 );
 
 // $field['work_email'] = array(
 //     'label' => __( 'Email', 'hrm' ),
 //     'type'  => 'text',
-//     'value' => $this->get_emp_meta( $employee_id, '_work_email' ),
+//     'value' => get_user_meta( $employee_id, '_work_email' ),
 //     'extra' => array(
 //         'data-hrm_validation' => true,
 //         'data-hrm_email' => true,
@@ -232,7 +232,7 @@ ob_start();
 ?>
     <div class="hrm-descriptive-wrap">
 
-        <div class="hrm-descriptive-label">Email</div>
+        <div class="hrm-descriptive-label"></div>
         <div class="hrm-descriptive-content">
             <strong>
                 <?php echo $employee->user_email; ?>
@@ -245,7 +245,7 @@ ob_start();
 $email = ob_get_clean();
 
 $field[] = array(
-    'label' => '',
+    'label' => 'Email',
     'type'  => 'descriptive',
     'value' => $email
 );

@@ -1,5 +1,9 @@
 const HRM_Routers = [];
 const HRM_Components = [];
+const HRM_Store = [];
+const hrm = {
+	'Multiselect': {}
+};
 
 const HRMMixin = {};
 const HRMProMixin = {};

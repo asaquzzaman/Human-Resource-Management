@@ -98,7 +98,7 @@
 						    <span class="hrm-clear"></span>
 						    <span class="description">This roles can change leave status</span>
 						</div>
-						<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Save changes">
+						<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
 					</form>
 				</div>
 
@@ -152,9 +152,9 @@
 					data: {},
 					success (res) {
 						self.roles = self.processRoles(res.roles);
-						self.others_employee = self.processOthersEmployee(res.settings, res.roles);
+						//self.others_employee = self.processOthersEmployee(res.settings, res.roles);
 						self.leave_types = self.processLeaveTypes(res.settings, res.roles);
-						self.apply_to = self.processApplyTo(res.settings, res.roles);
+						//self.apply_to = self.processApplyTo(res.settings, res.roles);
 					}
 				}
 				this.httpRequest('get_leave_form_settings', request);

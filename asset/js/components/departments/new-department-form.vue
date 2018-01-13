@@ -49,7 +49,7 @@
             </div>
 
             <div class="hrm-action-wrap">
-                <input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Submit">
+                <input  type="submit" class="button  button-primary" name="requst" value="Submit">
 
                 <a @click.prevent="showHideDepartmentForm(false)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
                 <div class="hrm-spinner" v-if="show_spinner">Saving....</div>

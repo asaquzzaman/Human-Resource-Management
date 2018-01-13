@@ -76,7 +76,7 @@
 							<span class="description">Leave type carry to next financial year.</span>
 						</div>				
 
-						<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Save changes">
+						<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
 						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
 					</form>
 				</div>

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="hrm-leave">
 		<div class="metabox-holder hrm-leave-type-records-wrap">
 			<table class="wp-list-table widefat fixed striped">
 				<thead>

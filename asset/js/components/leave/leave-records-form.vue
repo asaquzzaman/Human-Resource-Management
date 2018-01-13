@@ -120,7 +120,7 @@
 					</div>
 
 					
-					<input  type="submit" class="button hrm-submit-button button-primary" name="requst" value="Save changes">
+					<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
 					<a @click.prevent="showHideLeaveRecordsForm(false)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
 				</form>
 			</div>
@@ -195,10 +195,13 @@
 						let roles = self.processRoles(res.roles);
 						let role = hrm_user_can( 'manage_settings' ) ? 'hrm_manager' : HRM_Vars.user_role;
 
-						res.settings.leave_types = res.settings.leave_types || [];
-						if (res.settings.leave_types.indexOf( role ) != -1) {
-							self.isLeaveTypeEnable = true;
+						if ( res.settings ) {
+							res.settings.leave_types = res.settings.leave_types || [];
+							if (res.settings.leave_types.indexOf( role ) != -1) {
+								self.isLeaveTypeEnable = true;
+							}
 						}
+						
 					}
 				}
 				this.httpRequest('get_leave_form_settings', request);
@@ -324,10 +327,10 @@
 		    	if (query.length < 3) {
 		    		return [];
 		    	}
-		    	var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
-		    	var start = moment(start._d).format('YYYY-MM-DD');
-		    	var end = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
-		    	var end = moment(end._d).format('YYYY-MM-DD');
+				var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
+				var start = moment(start._d).format('YYYY-MM-DD');
+				var end   = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
+				var end   = moment(end._d).format('YYYY-MM-DD');
 		    	
 		    	var http_data = {
 		    		data: {

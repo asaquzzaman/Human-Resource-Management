@@ -12,7 +12,7 @@
 		</select>
 		
 
-		<button @click.prevent="search()" class="button button-secondary">Find</button>
+		<button @click.prevent="search()" class="button button-secondary attendance-search-btn">Find</button>
 	
 	</div>
 			

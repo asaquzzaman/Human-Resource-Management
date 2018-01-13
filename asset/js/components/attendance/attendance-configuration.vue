@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="hrm-attendance hrm-attendance-configuration">
 		<hrm-attendance-header></hrm-attendance-header>
 		<div class="metabox-holder hrm-punch-in-out-wrap">
 			<div class="postbox">
@@ -53,7 +53,7 @@
 							<span class="description">Employee can puch in/out only from this IP</span>
 						</div>
 
-						<input @click.prevent="saveConfiguration()" type="submit" class="button hrm-submit-button button-primary" name="requst" value="Save changes">
+						<input @click.prevent="saveConfiguration()" type="submit" class="button  button-primary" name="requst" value="Save changes">
 					</div>
 
 				</div>

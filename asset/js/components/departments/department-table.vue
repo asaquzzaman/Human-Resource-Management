@@ -1,21 +1,21 @@
 <template>
-    <table id="hrm-data-table" class="widefat dataTable no-footer" role="grid">
+    <table id="hrm-data-table" class="widefat">
                 
         <thead>
             <tr role="row">
-                <th v-if="manageDepartment()" class="sorting_asc" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label=": activate to sort column descending">
+                <th v-if="manageDepartment()" class="sorting_asc">
                     <input @change.prevent="delAllDept()" class="hrm-all-checked" v-model="del_all_dept" type="checkbox">
                 </th>
-                <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Title: activate to sort column ascending" style="width: 304px;">
+                <th class="sorting">
                     Department Title
                 </th>
-                <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Job Description: activate to sort column ascending" style="width: 304px;">
+                <th class="sorting" >
                     Department Description
                 </th>
-                <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
+                <th class="sorting">
                     Status
                 </th>
-                <th class="sorting" tabindex="0" aria-controls="hrm-data-table" rowspan="1" colspan="1" aria-label="Note: activate to sort column ascending" style="width: 305px;">
+                <th class="sorting">
                     No. of Employee
                 </th>
             </tr>
@@ -25,7 +25,7 @@
                                     
                                                     
                                                     
-            <tr class="hrm-even odd" role="row" v-for="department in departments">
+            <tr class="hrm-even hrm-tr odd" role="row" v-for="department in departments">
         
                 <td v-if="manageDepartment()" class="hrm-table-checkbox sorting_1">
                     <input @change.prevent="delDept(department)" v-model="del_dept" class="hrm-single-checked" name="" :value="department.id" type="checkbox">
@@ -34,7 +34,7 @@
                 <td>
                     <div v-if="manageDepartment()" class="hrm-title-wrap">
                         <a href="#" class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></a>
-                        <div class="hrm-title-action">
+                        <div class="hrm-title-action row-actions">
                             <department-edit-btn :department_id="department.id"></department-edit-btn>
                             <department-del-btn :department_id="department.id" :type="'single'"></department-del-btn>
                             <span class="hrm-clear"></span>

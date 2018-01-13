@@ -101,7 +101,9 @@ class Hrm_Scripts {
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
             'financial_end'   => hrm_financial_end_date(),
-            'user_role' => hrm_current_user_role()
+            'user_role' => hrm_current_user_role(),
+            'home_url'   => home_url(),
+            'hrm_url'     => HRM_URL
         ));
 
         //wp_enqueue_style( 'hrm-jquery.dataTables-style', HRM_URL . '/asset/css/jquery.dataTables.css', false, false, 'all' );
@@ -209,8 +211,6 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/asset/js/hrm-bundle.js', array('jquery','jquery-ui-datepicker', 'hrm-datetimepicker', 'hrm-moment-time-zone'), false, true );
 
         wp_localize_script( 'hrm-vue', 'HRM_Vars', array(
-            //'time_zones'      => $json_time_zone_string['zones'],
-            //'time_links'      => $json_time_zone_string['links'],
             'ajax_url'        => admin_url( 'admin-ajax.php' ),
             'nonce'           => wp_create_nonce( 'hrm_nonce' ),
             'time_zone'       => hrm_get_wp_timezone(),
@@ -225,7 +225,9 @@ class Hrm_Scripts {
             'financial_start' => hrm_financial_start_date(),
             'financial_end'   => hrm_financial_end_date(),
             'user_role' => hrm_current_user_role(),
-            'permalink' => get_permalink()
+            'permalink' => get_permalink(),
+            'home_url'   => home_url(),
+            'hrm_url'     => HRM_URL
         ));
 
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/asset/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );

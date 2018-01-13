@@ -727,6 +727,22 @@ function hrm_validateDate($date, $format = 'Y-m-d H:i:s'){
     return $d && $d->format($format) == $date;
 }
 
+function hrm_country_list() {
+    $list = include dirname( __FILE__ ) . '/iso_country_codes.php';
+
+    return array_merge( array('' => '- Select -'), $list );
+}
+
+function hrm_get_country_by_code( $code ) {
+    $country_list = hrm_country_list();
+
+    if ( isset($country_list[$code])) {
+        return $country_list[$code];
+    }
+
+    return false;
+}
+
 
 
 

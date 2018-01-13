@@ -10,7 +10,7 @@
 
 				</thead>
 				<tbody>
-					<tr v-for="record in records">
+					<tr class="hrm-tr" v-for="record in records">
 						
 						<td v-if="!record.editMode">
 							{{ record.name }}

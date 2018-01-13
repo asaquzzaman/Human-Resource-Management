@@ -17,8 +17,8 @@
 						</strong>
 					</div>
 					
-					<button :disabled="isDisabled()" class="button button-primary" @click.prevent="punchIn()">Punch In</button>
-					<button :disabled="punch_out_disable" class="button button-secondary" @click.prevent="punchOut()">Punch Out</button>
+					<button :disabled="isDisabled()" class="button button-primary hrm-punch-in-btn" @click.prevent="punchIn()">Punch In</button>
+					<button :disabled="punch_out_disable" class="button button-secondary hrm-punch-out-btn" @click.prevent="punchOut()">Punch Out</button>
 				</div>
 			</div>
 		</div>

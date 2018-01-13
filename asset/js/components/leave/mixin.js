@@ -38,6 +38,9 @@ export default {
             return roles;
         },
         processLeaveTypes (settings, roles) {
+            if ( !settings ) {
+                return [];
+            } 
             settings.leave_types = settings.leave_types || [];
 
             var leave_types = [];

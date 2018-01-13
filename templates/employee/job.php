@@ -61,7 +61,7 @@ $job_location    = hrm_Settings::getInstance()->conditional_query_val( 'hrm_loca
         <?php
             if ( isset( $job_location[0]->country_code ) && !empty( $job_location[0]->country_code ) ) {
                 ?>
-                <p class="job-content-warp"><strong class="title"><?php _e( 'Country', 'hrm' ); ?></strong><span class="content"><?php echo $this->get_country_by_code( $job_location[0]->country_code ); ?></span><spna class="hrm-clear"></span></p>
+                <p class="job-content-warp"><strong class="title"><?php _e( 'Country', 'hrm' ); ?></strong><span class="content"><?php echo hrm_get_country_by_code( $job_location[0]->country_code ); ?></span><spna class="hrm-clear"></span></p>
                 <?php
             }
         ?>

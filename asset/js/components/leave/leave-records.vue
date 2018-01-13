@@ -1,7 +1,7 @@
 <template>
-	<div class="wrap">
+	<div class="wrap hrm-leave">
 		<h1 class="wp-heading-inline">Leaves</h1>
-		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="page-title-action">
+		<a @click.prevent="showHideLeaveRecordsForm('toggle')" href="#" class="page-title-action hrm-btn">
 			Add New
 		</a>
 		

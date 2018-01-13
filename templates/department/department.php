@@ -29,7 +29,7 @@
                     
                 </div>
 
-    			<div id="hrm-data-table_wrapper" class="dataTables_wrapper no-footer">
+    			<div class="">
     				
                     
     				

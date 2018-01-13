@@ -11,11 +11,12 @@
 
 				</thead>
 				<tbody>
-					<tr v-for="record in records" class="inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor">
+					<tr v-for="record in records" class="hrm-tr inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor">
 						
 						<td v-if="!record.editMode" class="hrm-td">
 							<div class="hrm-td-content">
 								{{ record.name }}
+								
 								<div class="row-actions">
 									<span class="edit">
 										<a @click.prevent="showHideLeaveTypeUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">

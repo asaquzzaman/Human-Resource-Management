@@ -1,4 +1,4 @@
-__webpack_public_path__ = 'http://localhost/thrm/wp-content/plugins/hrm/asset/js/';
+__webpack_public_path__ = HRM_Vars.hrm_url+ '/asset/js/';
 
 import Vue from './vue/vue';
 import store from './store';

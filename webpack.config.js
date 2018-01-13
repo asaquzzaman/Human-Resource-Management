@@ -2,16 +2,19 @@ const path = require('path');
 //var webpack = require('webpack');
 
 function resolve (dir) {
-  return path.join(__dirname, './asset/js', dir)
+  return path.join(__dirname, './assets/js/src', dir)
 }
 
 module.exports = {
-	entry: './asset/js/hrm-vue.js',
-
+	entry: {
+        'hrm-bundle': './assets/js/src/start.js',
+        'library': './assets/js/src/helpers/library.js',
+    },
+	
 	output: {
-		path: path.resolve( __dirname, 'asset/js'),
-		filename: 'hrm-bundle.js',
-		publicPath: 'asset/js',
+		path: path.resolve( __dirname, 'assets/js'),
+		filename: '[name].js',
+		publicPath: '',
 		chunkFilename: 'chunk/[chunkhash].chunk-bundle.js',
 		jsonpFunction: 'wpSpearHrm',
 	},
@@ -20,7 +23,11 @@ module.exports = {
         extensions: ['.js', '.vue', '.json'],
         alias: {
           '@components': resolve('components'),
-          '@vue': resolve('vue'),
+          '@directives': resolve('directives'),
+          '@helpers': resolve('helpers'),
+          '@router': resolve('router'),
+          '@store': resolve('store'),
+          '@src': resolve('')
         }
     },
 

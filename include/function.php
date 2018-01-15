@@ -2,6 +2,16 @@
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use HRM\Core\Crud\Crud;
+
+function hrm_ajax_insert_records() {
+    check_ajax_referer('hrm_nonce');
+    hrm_insert_records($_POST);
+}
+
+function hrm_insert_records( $postdata ) {
+    $leave  = Crud::data_process( $postdata );
+}
 
 function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access_point = null, $user_id = null ) {
     if( ! apply_filters( 'hrm_free_permission', false ) ) {

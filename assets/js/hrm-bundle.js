@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"ee04615811c380a4112f","3":"303d5f555a411472ecd6","4":"09db23cf363050394fd6","5":"a814cb5fa583008f4df7","6":"f819b63ce5ad3432b25e","7":"09f1d3f70c9d6570031a","8":"58771167cecf391f9900","9":"25ab2ef8c2c486f414d9","10":"acefee5ded0631ff02e2","11":"cb396e2dd8ba082f8501","12":"fd71cb470c5cab1b8482","13":"e3b17965df26bf715eab","14":"5b487d0c6f1f69fdec19","16":"e29b85b82c323fe909f5","17":"da098c0488db185db3c0","18":"98a402a3461d8a82a47b"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"e78c8fbdeb53812cb0d2","3":"7450dc88db21a7dd1b01","4":"bab92c8371e6cbd83d90","5":"acdbbc0e0cec7a652512","6":"e1d41f6acd118508578f","11":"cb396e2dd8ba082f8501"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -148,8 +148,9 @@
 /******/ 	return __webpack_require__(__webpack_require__.s = 58);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -258,18 +259,8 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
+
+/***/ 12:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -304,7 +295,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 13 */
+
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -348,7 +340,8 @@ if (hrm_user_can('manage_settings')) {
 /* harmony default export */ __webpack_exports__["a"] = (settingsMenu);
 
 /***/ }),
-/* 14 */
+
+/***/ 14:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -396,7 +389,8 @@ if (hrm_user_can('manage_settings')) {
 });
 
 /***/ }),
-/* 15 */
+
+/***/ 15:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -453,7 +447,8 @@ var action = {
 /* harmony default export */ __webpack_exports__["a"] = (action);
 
 /***/ }),
-/* 16 */
+
+/***/ 16:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -465,7 +460,8 @@ var action = {
 /* harmony default export */ __webpack_exports__["a"] = ({});
 
 /***/ }),
-/* 17 */
+
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -576,7 +572,8 @@ var Hrm_Settings_Header = {
 /* harmony default export */ __webpack_exports__["a"] = (Hrm_Settings_Header);
 
 /***/ }),
-/* 18 */
+
+/***/ 18:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -596,7 +593,8 @@ var Hrm_Settings_Header = {
 });
 
 /***/ }),
-/* 19 */
+
+/***/ 19:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -608,7 +606,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__directives_directives__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_common_components__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(61);
-__webpack_require__.p = HRM_Vars.hrm_url + '/asset/js/';
+__webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 
 
@@ -619,255 +617,497 @@ __webpack_require__.p = HRM_Vars.hrm_url + '/asset/js/';
 
 var wpspear_hrm = {
 	el: '#wpspear-hrm',
-	Store: __WEBPACK_IMPORTED_MODULE_0__store_store__["a" /* default */],
-	Router: __WEBPACK_IMPORTED_MODULE_1__router_router__["a" /* default */],
+	store: __WEBPACK_IMPORTED_MODULE_0__store_store__["a" /* default */],
+	router: __WEBPACK_IMPORTED_MODULE_1__router_router__["a" /* default */],
 	render: h => h(__WEBPACK_IMPORTED_MODULE_5__App_vue__["a" /* default */])
 };
 
 new hrm.Vue(wpspear_hrm);
 
 /***/ }),
-/* 20 */,
-/* 21 */
+
+/***/ 208:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-HRMRegisterModule('leave', 'leave');
+//
+//
+//
+//
 
-let Hrm_Leave_Records = resolve => {
+/* harmony default export */ __webpack_exports__["a"] = ({
+    props: ['value', 'dependency'],
+    mounted: function () {
+        var self = this,
+            limit_date = self.dependency == 'pm-datepickter-from' ? "minDate" : "maxDate";
 
-    __webpack_require__.e/* require.ensure */(2).then((() => {
-        resolve(__webpack_require__(36));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
+        jQuery(self.$el).datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function (selectedDate) {
+                jQuery("." + self.dependency).datepicker("option", limit_date, selectedDate);
+            },
+            onSelect: function (dateText) {
+                self.$emit('input', dateText);
+            }
+        });
+    }
+});
 
-let Hrm_Leave_Configuration = resolve => {
+/***/ }),
 
-    __webpack_require__.e/* require.ensure */(13).then((() => {
-        resolve(__webpack_require__(32));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-let Hrm_Leave_Type = resolve => {
+/***/ 254:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_date_picker_vue__ = __webpack_require__(208);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_fbe01182_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_date_picker_vue__ = __webpack_require__(305);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_date_picker_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_fbe01182_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_date_picker_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/js/src/components/common/date-picker.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-fbe01182", Component.options)
+  } else {
+    hotAPI.reload("data-v-fbe01182", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 305:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("input", {
+    attrs: { type: "text" },
+    domProps: { value: _vm.value }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-fbe01182", esExports)
+  }
+}
+
+/***/ }),
+
+/***/ 320:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {},
+
+	mutations: {}
+});
+
+/***/ }),
+
+/***/ 321:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	methods: {}
+});
+
+/***/ }),
+
+/***/ 326:
+/***/ (function(module, exports, __webpack_require__) {
+
+
+HRMRegisterModule('profile', 'profile');
+
+let personalInformation = resolve => {
 
     __webpack_require__.e/* require.ensure */(4).then((() => {
-        resolve(__webpack_require__(38));
+        resolve(__webpack_require__(323));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
-let Hrm_Leave_Work_Week = resolve => {
 
-    __webpack_require__.e/* require.ensure */(16).then((() => {
-        resolve(__webpack_require__(39));
+let jobLocation = resolve => {
+
+    __webpack_require__.e/* require.ensure */(6).then((() => {
+        resolve(__webpack_require__(335));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
-let Hrm_Leave_Holidays = resolve => {
+
+let workExperiance = resolve => {
+
+    __webpack_require__.e/* require.ensure */(2).then((() => {
+        resolve(__webpack_require__(325));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+let education = resolve => {
 
     __webpack_require__.e/* require.ensure */(5).then((() => {
-        resolve(__webpack_require__(34));
+        resolve(__webpack_require__(322));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
-let Hrm_Leave_form_settings = resolve => {
+let skill = resolve => {
 
-    __webpack_require__.e/* require.ensure */(8).then((() => {
-        resolve(__webpack_require__(33));
+    __webpack_require__.e/* require.ensure */(3).then((() => {
+        resolve(__webpack_require__(324));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
-let Hrm_Leave_Requests = resolve => {
-
-    __webpack_require__.e/* require.ensure */(12).then((() => {
-        resolve(__webpack_require__(37));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let Hrm_Leave_Pending = resolve => {
-
-    __webpack_require__.e/* require.ensure */(7).then((() => {
-        resolve(__webpack_require__(35));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let Hrm_Leave_Cancel = resolve => {
-
-    __webpack_require__.e/* require.ensure */(9).then((() => {
-        resolve(__webpack_require__(31));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let Hrm_Leave_Approve = resolve => {
-
-    __webpack_require__.e/* require.ensure */(10).then((() => {
-        resolve(__webpack_require__(30));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let menu = [{
-    path: 'leave',
-    component: Hrm_Leave_Records,
-    name: 'leave_records',
-    meta: {
-        label: 'Leave'
-    }
+HRMRegisterChildrenRoute('hrm_root', [{
+    path: 'personal-information',
+    component: personalInformation,
+    name: 'personal_information'
 }, {
-    path: 'leave-request',
-    component: Hrm_Leave_Requests,
-    name: 'leave_request',
-    meta: {
-        label: 'Requested Leave'
-    },
-
-    children: [{
-        path: 'pending',
-        component: Hrm_Leave_Pending,
-        name: 'leave_pending',
-        meta: {
-            label: 'Pending'
-        }
-    }, {
-        path: 'approve',
-        component: Hrm_Leave_Approve,
-        name: 'leave_approve',
-        meta: {
-            label: 'Approve'
-        }
-    }, {
-        path: 'cancel',
-        component: Hrm_Leave_Cancel,
-        name: 'leave_cancel',
-        meta: {
-            label: 'Cancel'
-        }
-    }]
-}];
-
-if (hrm_user_can('manage_leave')) {
-    menu.push({
-        path: 'leave-configuration',
-        component: Hrm_Leave_Configuration,
-        name: 'leave_configuration',
-        meta: {
-            label: 'Configuration'
-        },
-
-        children: [{
-            path: 'type',
-            component: Hrm_Leave_Type,
-            name: 'leave_type',
-            meta: {
-                label: 'Type'
-            }
-        }, {
-            path: 'work-week',
-            component: Hrm_Leave_Work_Week,
-            name: 'leave_week',
-            meta: {
-                label: 'Work Week'
-            }
-        }, {
-            path: 'holidays',
-            component: Hrm_Leave_Holidays,
-            name: 'leave_holidays',
-            meta: {
-                label: 'Holiday'
-            }
-        }, {
-            path: 'form',
-            component: Hrm_Leave_form_settings,
-            name: 'leave_form_settings',
-            meta: {
-                label: 'Leave Form'
-            }
-        }]
-    });
-}
-
-HRMRegisterChildrenRoute('hrm_root', menu);
-
-/* harmony default export */ __webpack_exports__["a"] = (menu);
+    path: 'job-location',
+    component: jobLocation,
+    name: 'job_location'
+}, {
+    path: 'work-experiance',
+    component: workExperiance,
+    name: 'work_experiance'
+}, {
+    path: 'education',
+    component: education,
+    name: 'education'
+}, {
+    path: 'skill',
+    component: skill,
+    name: 'skill'
+}]);
 
 /***/ }),
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */
+
+/***/ 338:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-HRMRegisterModule('attendance', 'attendance');
-
-let hrm_attendace_records = resolve => {
-
-    __webpack_require__.e/* require.ensure */(6).then((() => {
-        resolve(__webpack_require__(28));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let hrm_attendace_user_search = resolve => {
-
-    __webpack_require__.e/* require.ensure */(18).then((() => {
-        resolve(__webpack_require__(23));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let hrm_attendace_configuration = resolve => {
-
-    __webpack_require__.e/* require.ensure */(14).then((() => {
-        resolve(__webpack_require__(27));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let menu = [{
-    path: 'attendance',
-    component: hrm_attendace_records,
-    name: 'attendance_records',
-    meta: {
-        label: 'Attendance'
-    },
-
-    children: [{
-        path: 'search',
-        component: hrm_attendace_user_search,
-        name: 'attendance_search',
-        meta: {
-            label: false
-        }
-    }]
-
-}];
-
-if (hrm_user_can('manage_attendance')) {
-    menu.push({
-        path: 'attendance-configuration',
-        component: hrm_attendace_configuration,
-        name: 'attendance_configuration',
-        meta: {
-            label: 'Configuration'
-        }
-    });
-}
-
-HRMRegisterChildrenRoute('hrm_root', menu);
-
-/* harmony default export */ __webpack_exports__["a"] = (menu);
+/* harmony default export */ __webpack_exports__["a"] = ({
+	props: {
+		fields: {
+			type: [Array],
+			default() {
+				return [];
+			}
+		}
+	}
+});
 
 /***/ }),
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */
+
+/***/ 339:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_form_fields_vue__ = __webpack_require__(338);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_68925914_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_form_fields_vue__ = __webpack_require__(340);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_form_fields_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_68925914_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_form_fields_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/js/src/components/common/form-fields.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-68925914", Component.options)
+  } else {
+    hotAPI.reload("data-v-68925914", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 340:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.fields, function(field, field_index) {
+      return _c("div", { staticClass: "hrm-form-field " }, [
+        field.type == "text"
+          ? _c("div", [
+              _c("label", { attrs: { for: "title" } }, [
+                _vm._v("\n\t                " + _vm._s(field.label)),
+                _c("em", [_vm._v("*")])
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: field.model,
+                    expression: "field.model"
+                  }
+                ],
+                attrs: { type: "text" },
+                domProps: { value: field.model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(field, "model", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "hrm-clear" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "description" })
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        field.type == "date-picker-from"
+          ? _c(
+              "div",
+              [
+                _c("label", { attrs: { for: "title" } }, [
+                  _vm._v(
+                    "\n\t                " +
+                      _vm._s(field.label) +
+                      "\n\t            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("hrm-date-picker", {
+                  staticClass: "pm-datepickter-to",
+                  attrs: {
+                    placeholder: "From",
+                    dependency: "pm-datepickter-from"
+                  },
+                  model: {
+                    value: field.model,
+                    callback: function($$v) {
+                      _vm.$set(field, "model", $$v)
+                    },
+                    expression: "field.model"
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "hrm-clear" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "description" })
+              ],
+              1
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        field.type == "date-picker-to"
+          ? _c(
+              "div",
+              [
+                _c("label", { attrs: { for: "title" } }, [
+                  _vm._v(
+                    "\n\t                " +
+                      _vm._s(field.label) +
+                      "\n\t            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("hrm-date-picker", {
+                  staticClass: "pm-datepickter-to",
+                  attrs: {
+                    placeholder: "To",
+                    dependency: "pm-datepickter-from"
+                  },
+                  model: {
+                    value: field.model,
+                    callback: function($$v) {
+                      _vm.$set(field, "model", $$v)
+                    },
+                    expression: "field.model"
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "hrm-clear" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "description" })
+              ],
+              1
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        field.type == "textarea"
+          ? _c("div", [
+              _c("label", { attrs: { for: "description" } }, [
+                _vm._v("\n\t\t\t\t\t" + _vm._s(field.label) + "\n\t\t\t\t")
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: field.model,
+                    expression: "field.model"
+                  }
+                ],
+                staticClass: "hrm-des-field",
+                attrs: { name: "description", id: "description" },
+                domProps: { value: field.model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(field, "model", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "hrm-clear" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "description" })
+            ])
+          : _vm._e()
+      ])
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-68925914", esExports)
+  }
+}
+
+/***/ }),
+
+/***/ 41:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -919,14 +1159,15 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 42 */,
-/* 43 */
+
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./attendance/mixin.js": 45,
 	"./departments/mixin.js": 47,
 	"./leave/mixin.js": 50,
+	"./profile/mixin.js": 321,
 	"./settings/mixin.js": 12
 };
 function webpackContext(req) {
@@ -946,13 +1187,15 @@ module.exports = webpackContext;
 webpackContext.id = 43;
 
 /***/ }),
-/* 44 */
+
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./attendance/store.js": 46,
 	"./departments/store.js": 49,
 	"./leave/store.js": 51,
+	"./profile/store.js": 320,
 	"./settings/store.js": 52
 };
 function webpackContext(req) {
@@ -972,7 +1215,8 @@ module.exports = webpackContext;
 webpackContext.id = 44;
 
 /***/ }),
-/* 45 */
+
+/***/ 45:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1009,7 +1253,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 46 */
+
+/***/ 46:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1093,7 +1338,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 47 */
+
+/***/ 47:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1123,40 +1369,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
 
-
-HRMRegisterModule('departments', 'departments');
-
-let departments = resolve => {
-
-    __webpack_require__.e/* require.ensure */(3).then((() => {
-        resolve(__webpack_require__(29));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let pagination = resolve => {
-
-    __webpack_require__.e/* require.ensure */(17).then((() => {
-        resolve(__webpack_require__(24));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-HRMRegisterChildrenRoute('hrm_root', [{
-    path: 'departments',
-    component: departments,
-    name: 'departments',
-
-    children: [{
-        path: 'page/:page_number',
-        component: pagination,
-        name: 'department_pagination'
-    }]
-}]);
-
-/***/ }),
-/* 49 */
+/***/ 49:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1215,7 +1429,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 50 */
+
+/***/ 50:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1684,7 +1899,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 51 */
+
+/***/ 51:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1848,7 +2064,8 @@ let HRM_Leave_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Leave_Store);
 
 /***/ }),
-/* 52 */
+
+/***/ 52:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1862,7 +2079,8 @@ let HRM_Settings_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Settings_Store);
 
 /***/ }),
-/* 53 */
+
+/***/ 53:
 /***/ (function(module, exports) {
 
 /**
@@ -1960,21 +2178,28 @@ hrm.Vue.directive('hrm-slide-down', {
 });
 
 /***/ }),
-/* 54 */
+
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_common_date_picker_vue__ = __webpack_require__(254);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_common_form_fields_vue__ = __webpack_require__(339);
+
+
 
 
 
 hrm.Vue.component('hrm-do-action', __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__["a" /* default */]);
 hrm.Vue.component('hrm-settings-header', __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__["a" /* default */]);
+hrm.Vue.component('hrm-date-picker', __WEBPACK_IMPORTED_MODULE_2__components_common_date_picker_vue__["a" /* default */]);
+hrm.Vue.component('hrm-form-fields', __WEBPACK_IMPORTED_MODULE_3__components_common_form_fields_vue__["a" /* default */]);
 
 /***/ }),
-/* 55 */,
-/* 56 */
+
+/***/ 56:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2148,26 +2373,25 @@ hrm.Vue.component('hrm-settings-header', __WEBPACK_IMPORTED_MODULE_1__components
 }));
 
 /***/ }),
-/* 57 */
+
+/***/ 57:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_leave_router__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_router__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_departments_router__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_departments_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_departments_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_attendance_router__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_common_empty_vue__ = __webpack_require__(63);
-
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router__ = __webpack_require__(326);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_profile_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_common_empty_vue__ = __webpack_require__(63);
+// import leave from '@components/leave/router';
+// import settings from '@components/settings/router';
+// import departments from '@components/departments/router';
+// import Attendance from '@components/attendance/router';
 
 
 
 
 HRM_Routers.push({
 	path: '/',
-	component: __WEBPACK_IMPORTED_MODULE_4__components_common_empty_vue__["a" /* default */],
+	component: __WEBPACK_IMPORTED_MODULE_1__components_common_empty_vue__["a" /* default */],
 	name: 'hrm_root',
 
 	children: HRMGetRegisterChildrenRoute('hrm_root')
@@ -2180,24 +2404,25 @@ var router = new hrm.VueRouter({
 /* harmony default export */ __webpack_exports__["a"] = (router);
 
 /***/ }),
-/* 58 */
+
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__.p = HRM_Vars.hrm_url + '/asset/js/';
+__webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 hrmPromise.then(function (result) {
     __webpack_require__(19);
 });
 
 /***/ }),
-/* 59 */
+
+/***/ 59:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /**
  * Make sure to call Vue.use(Vuex) first if using a vuex module system
  */
-
 /* harmony default export */ __webpack_exports__["a"] = (new hrm.Vuex.Store({
 
 	state: {},
@@ -2207,8 +2432,8 @@ hrmPromise.then(function (result) {
 }));
 
 /***/ }),
-/* 60 */,
-/* 61 */
+
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2260,7 +2485,8 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 62 */
+
+/***/ 62:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2311,7 +2537,8 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 63 */
+
+/***/ 63:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2363,7 +2590,8 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 64 */
+
+/***/ 64:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2415,7 +2643,8 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 65 */
+
+/***/ 65:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2437,7 +2666,8 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */
+
+/***/ 66:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2459,7 +2689,8 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+
+/***/ 67:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2520,7 +2751,8 @@ if (false) {
 }
 
 /***/ }),
-/* 68 */
+
+/***/ 68:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2542,4 +2774,5 @@ if (false) {
 }
 
 /***/ })
-/******/ ]);
+
+/******/ });

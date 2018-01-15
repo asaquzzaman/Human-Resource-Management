@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"3ba5fa5b156d492f2aed","1":"115b25b14678ced730d5","15":"54159b34700c0cb7a052","19":"b42f02eddb5e4d5573ff","20":"ed3e8651337a6c2075f1","21":"593cabba9ac22d7904a8","22":"a9c31a0402b80e4dd8d5","23":"f3351753122ebdfbee12","24":"d422c6fb9abf7be32bce","25":"27903471425ea252362e","26":"a5a6cbf9878a7718a873"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"7":"c684b284bf1a7ef1cad8","8":"4dcfccb3e41881428a88","9":"a6c69d83dae1c628d91b","10":"6d2e1749018fe3b04867","12":"304226a54719c2cb92f0","13":"204b2275fd963c58400b","14":"656b36098111b7b7aab4","16":"27441e365c07d770e236","17":"1707cd1f309ba19904ef","18":"bd2e130f8e6363e23778"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -695,7 +695,7 @@ var scriptsLoaded = {
 };
 
 window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */](function (resolve, reject) {
-	__webpack_require__.e/* require.ensure */(20).then((function (require) {
+	__webpack_require__.e/* require.ensure */(12).then((function (require) {
 		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(10)]; (function (script) {
 			hrm.Vue = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
@@ -704,14 +704,14 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(19).then((function (require) {
+	__webpack_require__.e/* require.ensure */(10).then((function (require) {
 		hrm.Vuex = __webpack_require__(11);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Vuex = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(21).then((function (require) {
+	__webpack_require__.e/* require.ensure */(13).then((function (require) {
 		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(9)]; (function (script) {
 			hrm.VueRouter = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
@@ -720,56 +720,59 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(0).then((function (require) {
+	__webpack_require__.e/* require.ensure */(7).then((function (require) {
 		hrm.Fullcalendar = __webpack_require__(5);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Fullcalendar = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(22).then((function (require) {
+	__webpack_require__.e/* require.ensure */(14).then((function (require) {
 		hrm.Multiselect = __webpack_require__(8);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Multiselect = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(23).then((function (require) {
+	__webpack_require__.e/* require.ensure */(16).then((function (require) {
 		hrm.NProgress = __webpack_require__(6);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.NProgress = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(1).then((function (require) {
+	__webpack_require__.e/* require.ensure */(8).then((function (require) {
 		hrm.Moment = __webpack_require__(1);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Moment = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(15).then((function (require) {
+	__webpack_require__.e/* require.ensure */(9).then((function (require) {
 		hrm.Toastr = __webpack_require__(7);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Toastr = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(25).then((function (require) {
-		hrm.TimePicker = __webpack_require__(3);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.TimePicker = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
+	// require.ensure(
+	// 	['./jquery-ui-timepicker/jquery-ui-timepicker'],
+	// 	function(require) {
+	// 		hrm.TimePicker = require('./jquery-ui-timepicker/jquery-ui-timepicker');
+	// 	}
+	// ).then(function() {
+	// 	scriptsLoaded.TimePicker = true;
+	// 	hrmIsAllScriptsLoaded(resolve, reject);
+	// });
 
-	__webpack_require__.e/* require.ensure */(24).then((function (require) {
+	__webpack_require__.e/* require.ensure */(17).then((function (require) {
 		hrm.Uploader = __webpack_require__(4);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Uploader = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(26).then((function (require) {
+	__webpack_require__.e/* require.ensure */(18).then((function (require) {
 		hrm.Loading = __webpack_require__(2);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Loading = true;

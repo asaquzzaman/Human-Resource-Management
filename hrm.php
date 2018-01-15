@@ -173,8 +173,8 @@ class WP_Hrm {
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
         add_action( 'admin_notices', array($this, 'fornt_end') );
-        add_action( 'wp_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
-        add_action( 'admin_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
+        //add_action( 'wp_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
+        //add_action( 'admin_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
         add_action( 'init', array( $this, 'init' ) );
         //add_action( 'wp_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
         //add_action( 'admin_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
@@ -384,6 +384,9 @@ class WP_Hrm {
     }
 
     function admin_page_handler() {
+        require_once HRM_PATH . '/templates/index.html';
+
+        return;
         if( !is_user_logged_in() ) {
             sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
             return;

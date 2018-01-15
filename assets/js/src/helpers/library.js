@@ -108,15 +108,15 @@ window.hrmPromise = new Promise(function(resolve, reject) {
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	require.ensure(
-		['./jquery-ui-timepicker/jquery-ui-timepicker'],
-		function(require) {
-			hrm.TimePicker = require('./jquery-ui-timepicker/jquery-ui-timepicker');
-		}
-	).then(function() {
-		scriptsLoaded.TimePicker = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
+	// require.ensure(
+	// 	['./jquery-ui-timepicker/jquery-ui-timepicker'],
+	// 	function(require) {
+	// 		hrm.TimePicker = require('./jquery-ui-timepicker/jquery-ui-timepicker');
+	// 	}
+	// ).then(function() {
+	// 	scriptsLoaded.TimePicker = true;
+	// 	hrmIsAllScriptsLoaded(resolve, reject);
+	// });
 
 	require.ensure(
 		['./upload/upload'],

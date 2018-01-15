@@ -13,7 +13,7 @@ secret.json
 npm-debug.log
 /node_modules/
 /vendor/
-/asset/js/chunk/
-/asset/js/hrm-bundle.js
+/assets/js/chunk/
+/assets/js/hrm-bundle.js
 
 

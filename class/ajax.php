@@ -122,6 +122,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_employee_dropdown', array( 'Hrm_Leave', 'ajax_get_employee_dropdown' ) );
 
         add_action( 'wp_ajax_hrm_insert_record', 'hrm_ajax_insert_records' );
+        add_action( 'wp_ajax_hrm_get_records', 'hrm_ajax_get_records' );
 
     }
 

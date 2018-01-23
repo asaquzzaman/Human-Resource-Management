@@ -8,5 +8,7 @@ interface Pattern {
 	public function create_validation();
 
 	public function update();
+
+	public function gets();
 	
 }

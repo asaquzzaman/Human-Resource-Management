@@ -4,9 +4,19 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use HRM\Core\Crud\Crud;
 
+function hrm_ajax_get_records() {
+    check_ajax_referer('hrm_nonce');
+    $records = hrm_get_records( $_POST );
+    wp_send_json_success($records);
+}
+
+function hrm_get_records($postdata) {
+    return Crud::data_process( $postdata );
+}
+
 function hrm_ajax_insert_records() {
     check_ajax_referer('hrm_nonce');
-    hrm_insert_records($_POST);
+    hrm_insert_records( $_POST );
 }
 
 function hrm_insert_records( $postdata ) {

@@ -23,7 +23,8 @@
         "psr-4": {
             "HRM\\Core\\": "core/",
             "HRM\\Include\\": "include/",
-            "HRM\\Models\\": "models/"
+            "HRM\\Models\\": "models/",
+            "HRM\\Transformers\\": "transformers/"
         },
         "files": [
             "include/loaders.php",

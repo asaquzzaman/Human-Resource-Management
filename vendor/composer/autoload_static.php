@@ -43,6 +43,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         ),
         'H' => 
         array (
+            'HRM\\Transformers\\' => 17,
             'HRM\\Models\\' => 11,
             'HRM\\Include\\' => 12,
             'HRM\\Core\\' => 9,
@@ -102,6 +103,10 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
+        'HRM\\Transformers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/transformers',
+        ),
         'HRM\\Models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/models',
@@ -132,6 +137,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'Create_Migrations_Table' => __DIR__ . '/../..' . '/db/migrations/create_migrations_table.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'HRM\\Core\\Common\\Resource_Editors' => __DIR__ . '/../..' . '/core/common/Resource_Editors.php',
+        'HRM\\Core\\Common\\Traits\\Transformer_Manager' => __DIR__ . '/../..' . '/core/common/Traits/Transformer_Manager.php',
         'HRM\\Core\\Config\\Config' => __DIR__ . '/../..' . '/core/Config/Config.php',
         'HRM\\Core\\Crud\\Action' => __DIR__ . '/../..' . '/core/Crud/Action.php',
         'HRM\\Core\\Crud\\Crud' => __DIR__ . '/../..' . '/core/Crud/Crud.php',
@@ -142,6 +148,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'HRM\\Core\\Database\\Migration' => __DIR__ . '/../..' . '/core/Database/Migration.php',
         'HRM\\Core\\Database\\Migration_Model' => __DIR__ . '/../..' . '/core/Database/Migration_Model.php',
         'HRM\\Core\\Database\\Model_Observer' => __DIR__ . '/../..' . '/core/Database/Model_Observer.php',
+        'HRM\\Core\\Department\\Department_Transformer' => __DIR__ . '/../..' . '/core/department/Department_Transformer.php',
         'HRM\\Core\\Leave\\Leave_Transformer' => __DIR__ . '/../..' . '/core/Leave/Leave_Transformer.php',
         'HRM\\Core\\Leave\\Leave_Type_Transform' => __DIR__ . '/../..' . '/core/Leave/Leave_Type_Transform.php',
         'HRM\\Core\\Singletonable' => __DIR__ . '/../..' . '/core/Singletonable.php',
@@ -155,6 +162,8 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'HRM\\Models\\Meta' => __DIR__ . '/../..' . '/models/meta.php',
         'HRM\\Models\\Relation' => __DIR__ . '/../..' . '/models/Relation.php',
         'HRM\\Models\\User' => __DIR__ . '/../..' . '/models/user.php',
+        'HRM\\Models\\Work_Experience' => __DIR__ . '/../..' . '/models/Work_Experience.php',
+        'HRM\\Transformers\\Work_Experiance_Transformer' => __DIR__ . '/../..' . '/transformers/Work_Experience_Transformer.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
         'Illuminate\\Container\\ContextualBindingBuilder' => __DIR__ . '/..' . '/illuminate/container/ContextualBindingBuilder.php',

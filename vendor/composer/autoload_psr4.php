@@ -17,6 +17,7 @@ return array(
     'Illuminate\\Database\\' => array($vendorDir . '/illuminate/database'),
     'Illuminate\\Contracts\\' => array($vendorDir . '/illuminate/contracts'),
     'Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
+    'HRM\\Transformers\\' => array($baseDir . '/transformers'),
     'HRM\\Models\\' => array($baseDir . '/models'),
     'HRM\\Include\\' => array($baseDir . '/include'),
     'HRM\\Core\\' => array($baseDir . '/core'),

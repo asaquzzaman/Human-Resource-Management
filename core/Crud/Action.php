@@ -5,10 +5,14 @@ namespace HRM\Core\Crud;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use HRM\Core\Crud\Pattern;
 use HRM\Core\Crud\Validation;
+use HRM\Core\Common\Traits\Transformer_Manager;
+use League\Fractal;
+use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 abstract class Action implements Pattern {
 
-	use Validation;
+	use Validation, Transformer_Manager;
 
 	private $postdata = array();
 	private $class;
@@ -21,6 +25,24 @@ abstract class Action implements Pattern {
 	abstract protected function set_method( $method );
 	abstract protected function get_method();
 
+	public function gets() {
+		$model        = $this->get_model();
+		$postdata     = $this->get_post_data();
+		$page         = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+		$transformers = $postdata['transformers'];
+		$transformers = "HRM\\Transformers\\$transformers";
+		$per_page     = 15;
+
+		$data = $model::orderBy( 'id', 'DESC' )
+            ->paginate( $per_page, ['*'], 'page', $page );
+
+        $collection = $data->getCollection();
+
+		$resource = new Collection( $collection, new $transformers );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $data ) );
+
+        return $this->get_response( $resource );
+	}
 
 	public function create() {
 		$this->create_validation();
@@ -75,7 +97,7 @@ abstract class Action implements Pattern {
 
 	private function get_model() {
 		$class_name = $this->get_class();
-		$use        = "HRM\Models\\$class_name";
+		$use        = "HRM\\Models\\$class_name";
 		
 		return new $use();
 	}

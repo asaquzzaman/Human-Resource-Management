@@ -24,20 +24,19 @@
 	        
 	    </div>
 
-	    <div class="tablenav top">
-			<div class="alignleft actions bulkactions">
+	    <div class="">
+			<div>
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
-				<select name="action" id="bulk-action-selector-top">
+				<select v-model="bulkAction" name="action" id="bulk-action-selector-top">
 					<option value="-1">Bulk Actions</option>
-					<option value="edit" class="hide-if-no-js">Edit</option>
-					<option value="trash">Move to Trash</option>
+					<option value="trash">Delete</option>
 				</select>
-				<input type="submit" id="doaction" class="button action" value="Apply">
+				<a href="#" class="button button-secondary">Apply</a>
 			</div>
 		</div>
-		
+
 	    <hrm-table></hrm-table>
 
 	</div>
@@ -48,7 +47,9 @@
 
 	export default {
 		data () {
+
 			return {
+				bulkAction: -1,
 				fields: [
 					{
 						type: 'text',

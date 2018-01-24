@@ -5,6 +5,7 @@ export default {
 		getIndex: function ( itemList, id, slug) {
             return itemList.findIndex(x => x[slug]==id);
         },
+        deletedId: []
 	},
 
 	mutations: {
@@ -28,6 +29,10 @@ export default {
 			} else {
 				state.experiance[index].editMode = data.status;
 			}
+		},
+
+		setDeletedId (state, deletedId) {
+			state.deletedId = deletedId;
 		}
 	}
 };

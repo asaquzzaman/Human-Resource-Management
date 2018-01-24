@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                 	<td v-if="deleteCheckbox" id="cb" class="manage-column column-cb check-column">
-                		<input id="cb-select-all-1" type="checkbox">
+                		<input @change.prevent="deleteAll()" v-model="deleteAllStatus" id="cb-select-all-1" type="checkbox">
                 	</td>
                     <th v-for="(header, header_index) in headers" :key="header_index">
                     	{{ header.label }}
@@ -14,7 +14,7 @@
             <tbody>
                 <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
                 	<th v-if="deleteCheckbox" scope="row" class="check-column">			
-						<input id="cb-select-7" type="checkbox" name="post[]" value="7">
+						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
 					
                     <td>
@@ -105,6 +105,8 @@
 
 		data () {
 			return {
+				deleteAllStatus: false,
+				deletedId: [],
 				headers: [
 					{
 						label: 'Title',
@@ -147,6 +149,12 @@
 		computed: {
 			records () {
 				return this.$store.state.profile.experiance;
+			}
+		},
+
+		watch: {
+			deletedId () {
+				this.$store.commit('profile/setDeletedId', this.deletedId);
 			}
 		},
 		methods: {
@@ -203,6 +211,31 @@
 	            };
 
 	            this.httpRequest('hrm_update_record', form_data);
+			},
+
+			deleteAll () {
+				if (this.deleteAllStatus) {
+                    var deleted_id = [];
+
+                    this.$store.state.profile.experiance.map(function(record) {
+                        deleted_id.push(record.id);
+                    });
+
+                    this.deletedId = deleted_id;
+
+                } else {
+                    this.deletedId = [];
+                }
+			},
+
+			actionCheckbox () {
+				let records = this.$store.state.profile.experiance;
+				
+				if ( records.length == this.deletedId.length ) {
+					this.deleteAllStatus = true;
+				} else {
+					this.deleteAllStatus = false;
+				}
 			}
 		}
 		

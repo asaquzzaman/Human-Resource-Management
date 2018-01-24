@@ -17,6 +17,7 @@ class Work_Experiance_Transformer extends TransformerAbstract
     {
     
         return [
+            'id'          => $item->id,
             'title'       => $item->title,
             'start'       => hrm_get_date( $item->start ),
             'end'         => hrm_get_date( $item->end ),

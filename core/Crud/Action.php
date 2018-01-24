@@ -7,6 +7,7 @@ use HRM\Core\Crud\Pattern;
 use HRM\Core\Crud\Validation;
 use HRM\Core\Common\Traits\Transformer_Manager;
 use League\Fractal;
+use League\Fractal\Resource\Item as Item;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
@@ -51,10 +52,19 @@ abstract class Action implements Pattern {
 			return $this->error;
 		}
 
-		$model 		= $this->get_model();
-		$postdata   = $this->get_post_data();	
+		$model        = $this->get_model();
+		$postdata     = $this->get_post_data();	
+		$transformers = $postdata['transformers'];
+		$transformers = "HRM\\Transformers\\$transformers";
 		
-		return $model::create( $postdata );
+		$crated = $model::create( $postdata );
+		$resource  = new Item( $crated, new $transformers );
+
+        $message = [
+            'message' => 'Has been created successfully!'
+        ];
+
+        return $this->get_response( $resource, $message );
 	}
 
 	public function create_validation() {
@@ -77,6 +87,8 @@ abstract class Action implements Pattern {
 		$model       = $this->get_model();
 		$postdata    = $this->get_post_data();	
 		$fillable    = $model->getFillable();
+		$transformers = $postdata['transformers'];
+		$transformers = "HRM\\Transformers\\$transformers";
 		$update_data = [];
 		$record      = $model::where( 'id', $postdata['id'] )->first();
 
@@ -89,7 +101,13 @@ abstract class Action implements Pattern {
 
 			$record->update( $update_data );
 
-			return $model::find( $postdata['id'] )->toArray();
+			$resource = new Item( $record, new $transformers );
+
+	        $message = [
+	            'message' => 'Has been updated successfully!'
+	        ];
+
+	        return $this->get_response( $resource, $message );
 		}
 		
 		return false;

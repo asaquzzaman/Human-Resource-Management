@@ -12,63 +12,78 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="record.editMode">
+                <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
                 	<th v-if="deleteCheckbox" scope="row" class="check-column">			
 						<input id="cb-select-7" type="checkbox" name="post[]" value="7">
 					</th>
 					
-                    <td v-for="(header, header_index) in headers" :key="header_index">
-                    	{{ record[header.key] }}
+                    <td>
+                    	{{ record.title }}
+
+                    	<div class="row-actions">
+                    		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
+	                    	<span class="trash"><a  href="#">Delete</a> </span>
+	                    </div>
+                    </td>
+                    <td>
+                    	{{ record.start }}
+                    </td>
+                    <td>
+                    	{{ record.end }}
+                    </td>
+                    <td>
+                    	{{ record.description }}
                     </td>
                 </tr>
                 
                 <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
                 	<td colspan="5" class="colspanchange">
+                		<form action="" @submit.prevent="selfUpdate(record)">
+							<fieldset class="inline-edit-col-left">
+								<legend class="inline-edit-legend">Quick Edit</legend>
+								<div class="inline-edit-col">
+						
+									<label>
+										<span class="title">Title</span>
+										<span class="input-text-wrap">
+											<input type="text" v-model="record.title" class="ptitle">
+										</span>
+									</label>
 
-						<fieldset class="inline-edit-col-left">
-							<legend class="inline-edit-legend">Quick Edit</legend>
-							<div class="inline-edit-col">
-					
-								<label>
-									<span class="title">Title</span>
-									<span class="input-text-wrap">
-										<input type="text" v-model="record.title" class="ptitle">
-									</span>
-								</label>
+									<label>
+										<span class="title">From</span>
+										<span class="input-text-wrap">
+											<hrm-date-picker placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+										</span>
+									</label>
 
-								<label>
-									<span class="title">From</span>
-									<span class="input-text-wrap">
-										<hrm-date-picker placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-									</span>
-								</label>
+									<label>
+										<span class="title">To</span>
+										<span class="input-text-wrap">
+											<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+										</span>
+									</label>
 
-								<label>
-									<span class="title">To</span>
-									<span class="input-text-wrap">
-										<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-									</span>
-								</label>
+									<label>
+										<span class="title">Comments</span>
+										<span class="input-text-wrap">
+											<textarea v-model="record.description"></textarea>
+										</span>
+									</label>
+								</div>
+							</fieldset>
 
-								<label>
-									<span class="title">Comments</span>
-									<span class="input-text-wrap">
-										<textarea v-model="record.description"></textarea>
-									</span>
-								</label>
+			
+							<fieldset class="inline-edit-col-right">
+								<div class="inline-edit-col"></div>
+							</fieldset>
+
+							<div class="submit inline-edit-save">
+								<button @click.prevent="recordEditForm(record, false)" type="button" class="button cancel alignleft">Cancel</button>
+								<input type="submit" class="button button-primary save alignright" value="Update">
+								<br class="clear">
 							</div>
-						</fieldset>
-
-		
-						<fieldset class="inline-edit-col-right">
-							<div class="inline-edit-col"></div>
-						</fieldset>
-
-						<div class="submit inline-edit-save">
-							<button type="button" class="button cancel alignleft">Cancel</button>
-							<button type="button" class="button button-primary save alignright">Update</button>
-							<br class="clear">
-						</div>
+						</form>
 					</td>
 				</tr>
             </tbody>
@@ -90,23 +105,18 @@
 
 		data () {
 			return {
-				records: [],
 				headers: [
 					{
 						label: 'Title',
-						key: 'title'
 					},
 					{
 						label: 'From',
-						key: 'start'
 					},
 					{
 						label: 'To',
-						key: 'end'
 					}, 
 					{
 						label: 'Comments',
-						key: 'description'
 					}
 				],
 			}
@@ -126,15 +136,73 @@
                 	res.data.forEach(function(work) {
                 		self.workExperianceMeta(work);
                 	});
-                    self.records = res.data;
+                    
+                    self.$store.commit( 'profile/setExperiance', res.data );
                 }
             };
 
             self.httpRequest('hrm_get_records',request_data);
 		},
+
+		computed: {
+			records () {
+				return this.$store.state.profile.experiance;
+			}
+		},
 		methods: {
 			workExperianceMeta (work) {
 				work.editMode = false;
+			},
+
+			recordEditForm (record, status) {
+				status = status || 'toggle';
+				this.$store.commit( 'profile/showHideEditForm', 
+					{
+						id: record.id,
+						status: status
+					} 
+				);
+			},
+
+			selfUpdate (record) {
+				record['class'] = 'Work_Experience';
+				record['method'] = 'update';
+				record['transformers'] = 'Work_Experiance_Transformer';
+				
+				var args = {
+					data: record,
+					callback () {
+
+					}
+				}
+				this.updateRecord(args);
+			},
+
+			updateRecord (args) {
+				var form_data = {
+	                data: args.data,
+
+	                success: function(res) {
+	                	if (typeof args.callback === 'function') {
+	                        args.callback(true, res);
+	                    } 
+	                    
+	                },
+
+	                error: function(res) {
+	                	self.show_spinner = false;
+	                	// Showing error
+	                    res.error.map( function( value, index ) {
+	                        hrm.toastr.error(value);
+	                    });
+
+	                    if (typeof args.callback === 'function') {
+	                        args.callback(false, res);
+	                    } 
+	                }
+	            };
+
+	            this.httpRequest('hrm_update_record', form_data);
 			}
 		}
 		

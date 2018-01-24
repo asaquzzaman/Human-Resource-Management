@@ -1,6 +1,9 @@
 <template>
 	<div>
-		<div id="hrm-hidden-form-warp" class="postbox">
+		<h1 class="wp-heading-inline">Work Experiance</h1>
+		<a @click.prevent="showHideExperianceForm('toggle')" class="page-title-action">Add New</a>
+
+		<div v-if="isExperianceFormActive" id="hrm-hidden-form-warp" class="postbox">
 	        <div class="hrm-search-head">
 	            <h3>Work Experiance</h3>
 	        </div>
@@ -13,7 +16,7 @@
 	            <div class="hrm-action-wrap">
 	                <input  type="submit" class="button  button-primary" name="requst" value="Submit">
 
-	                <a  target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
+	                <a @click.prevent="showHideExperianceForm('toggle')"  target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
 	                <div class="hrm-spinner" v-if="true">Saving....</div>
 	            </div>
 	        </form>
@@ -21,6 +24,20 @@
 	        
 	    </div>
 
+	    <div class="tablenav top">
+			<div class="alignleft actions bulkactions">
+				<label for="bulk-action-selector-top" class="screen-reader-text">
+					Select bulk action
+				</label>
+				<select name="action" id="bulk-action-selector-top">
+					<option value="-1">Bulk Actions</option>
+					<option value="edit" class="hide-if-no-js">Edit</option>
+					<option value="trash">Move to Trash</option>
+				</select>
+				<input type="submit" id="doaction" class="button action" value="Apply">
+			</div>
+		</div>
+		
 	    <hrm-table></hrm-table>
 
 	</div>
@@ -60,8 +77,14 @@
 				]
 			}
 		},
+		mixins: [HRMMixin.profile],
 		created () {
 			
+		},
+		computed: {
+			isExperianceFormActive () {
+				return this.$store.state.profile.isExperianceFormActive;
+			}
 		},
 		components: {
 			'hrm-table': Table

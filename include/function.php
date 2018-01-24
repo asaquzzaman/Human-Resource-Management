@@ -16,11 +16,26 @@ function hrm_get_records($postdata) {
 
 function hrm_ajax_insert_records() {
     check_ajax_referer('hrm_nonce');
-    hrm_insert_records( $_POST );
+    
+    wp_send_json_success(
+        hrm_insert_records( $_POST )
+    );
 }
 
 function hrm_insert_records( $postdata ) {
-    $leave  = Crud::data_process( $postdata );
+    return Crud::data_process( $postdata );
+}
+
+function hrm_ajax_update_records() {
+    check_ajax_referer('hrm_nonce');
+
+    wp_send_json_success(
+        hrm_update_records( $_POST )
+    );
+}
+
+function hrm_update_records($postdata) {
+    return Crud::data_process( $postdata );
 }
 
 function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access_point = null, $user_id = null ) {

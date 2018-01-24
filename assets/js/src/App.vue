@@ -1,5 +1,5 @@
 <template>
-    <div id="hrm">
+    <div id="hrm" class="wrap">
         <router-view></router-view>
         <!-- <hrm-leave></hrm-leave>
         <hrm-settings></hrm-settings> -->

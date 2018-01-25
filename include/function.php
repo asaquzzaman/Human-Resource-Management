@@ -4,6 +4,16 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use HRM\Core\Crud\Crud;
 
+function hrm_ajax_delete_records() {
+    check_ajax_referer('hrm_nonce');
+    $records = hrm_delete_records( $_POST );
+    wp_send_json_success($records);
+}
+
+function hrm_delete_records($postdata) {
+    return Crud::data_process( $postdata );
+}
+
 function hrm_ajax_get_records() {
     check_ajax_referer('hrm_nonce');
     $records = hrm_get_records( $_POST );

@@ -10,5 +10,7 @@ interface Pattern {
 	public function update();
 
 	public function gets();
+
+	public function delete();
 	
 }

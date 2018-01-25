@@ -124,6 +124,9 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_hrm_insert_record', 'hrm_ajax_insert_records' );
         add_action( 'wp_ajax_hrm_update_record', 'hrm_ajax_update_records' );
         add_action( 'wp_ajax_hrm_get_records', 'hrm_ajax_get_records' );
+        add_action( 'wp_ajax_hrm_delete_record', 'hrm_ajax_delete_records' );
+
+        add_action( 'wp_ajax_hrm_experiance_filter', array( 'Hrm_Employee', 'ajax_experiance_filter' ) );
 
     }
 

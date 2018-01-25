@@ -60,7 +60,7 @@
 									<label>
 										<span class="title">To</span>
 										<span class="input-text-wrap">
-											<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+											<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-to"></hrm-date-picker>
 										</span>
 									</label>
 

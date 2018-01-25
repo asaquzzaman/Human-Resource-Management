@@ -1,6 +1,14 @@
 <?php
+use HRM\Core\Common\Traits\Transformer_Manager;
+use League\Fractal;
+use League\Fractal\Resource\Item as Item;
+use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use HRM\Models\Work_Experience;
+use HRM\Transformers\Work_Experiance_Transformer;
 
 class Hrm_Employee {
+    use Transformer_Manager;
 
     function __construct() {
         //add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
@@ -860,5 +868,44 @@ class Hrm_Employee {
             return $account_types[$account_type];
         }
     }
+
+    public static function ajax_experiance_filter() {
+        check_ajax_referer('hrm_nonce');
+        $result = self::getInstance()->experiance_filter( $_POST );
+        wp_send_json_success( $result );
+    }
+
+    function experiance_filter( $postdata ) {
+        $title = $postdata['title'];
+        $from  = $postdata['from'];
+        $to    = $postdata['to'];
+
+        $experiance = Work_Experience::select('*');
+
+        if ( ! empty( $title ) ) {
+            $experiance->where( 'title', 'LIKE', '%' . $title . '%' );
+        }
+        
+        if ( ! empty( $from ) ) {
+            $from = date( 'Y-m-d', strtotime( $from ) );
+            $experiance->where( 'start', '>=', $from);
+        }
+
+        if ( ! empty( $to ) ) {
+            $to = date( 'Y-m-d', strtotime( $to ) );
+            $experiance->where( 'end', '<=', $to);
+        }
+
+        $experiance = $experiance->get();
+        $resource = new Collection( $experiance, new Work_Experiance_Transformer );
+        
+        return $this->get_response( $resource );
+    }
 }
+
+
+
+
+
+
 

@@ -54,6 +54,14 @@ HRMRegisterChildrenRoute ('hrm_root',
             path: 'work-experiance', 
             component: workExperiance, 
             name: 'work_experiance',
+
+            children: [
+                {
+                    path: 'pages/:current_page_number', 
+                    component: workExperiance,
+                    name: 'work_experiance_pagination',
+                },
+            ]
         },
         
         {

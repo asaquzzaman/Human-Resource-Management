@@ -113,6 +113,18 @@ abstract class Action implements Pattern {
 		return false;
 	}
 
+	public function delete() {
+		$model    = $this->get_model();
+		$postdata = $this->get_post_data();
+		$delete   = $postdata['delete'];
+
+		if ( is_array( $delete ) ) {
+	        $model::destroy( $delete );
+	    } else {
+	        $model::findOrFail( $delete )->delete();
+	    }
+	}
+
 	private function get_model() {
 		$class_name = $this->get_class();
 		$use        = "HRM\\Models\\$class_name";

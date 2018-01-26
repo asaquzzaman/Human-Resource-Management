@@ -1,33 +1,37 @@
 export default {
 	state: {
-		isExperianceFormActive: false,
-		experiance: [],
+		isNewRecordFormActive: false,
+		records: [],
 		getIndex: function ( itemList, id, slug) {
             return itemList.findIndex(x => x[slug]==id);
         },
-        deletedId: []
+        deletedId: [],
 	},
 
 	mutations: {
-		showHideExperianceForm  (state, status) {
+		showHideNewRecordForm  (state, status) {
 			if ( status === 'toggle' ) {
-                state.isExperianceFormActive = state.isExperianceFormActive ? false : true;
+                state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
             } else {
-                state.isExperianceFormActive = status;
+                state.isNewRecordFormActive = status;
             }
 		},
 
-		setExperiance (state, experiance) {
-			state.experiance = experiance;
+		setRecords (state, records) {
+			state.records = records;
+		},
+
+		setRecord (state, record) {
+			state.records.push(record);
 		},
 
 		showHideEditForm (state, data) {
-			var index = state.getIndex(state.experiance, data.id, 'id' );
+			var index = state.getIndex(state.records, data.id, 'id' );
 
 			if (data.status == 'toggle') {
-				state.experiance[index].editMode = state.experiance[index].editMode ? false : true;
+				state.records[index].editMode = state.records[index].editMode ? false : true;
 			} else {
-				state.experiance[index].editMode = data.status;
+				state.records[index].editMode = data.status;
 			}
 		},
 

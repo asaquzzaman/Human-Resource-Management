@@ -123,45 +123,23 @@
 				],
 			}
 		},
-
+		mixins: [HRMMixin.profile],
 		created () {
-			
-			var self = this;
-			var postData = {
-				'class': 'Work_Experience',
-				'method': 'gets',
-				'transformers': 'Work_Experiance_Transformer'
-			};
-            var request_data = {
-                data: postData,
-                success: function(res) {
-                	res.data.forEach(function(work) {
-                		self.workExperianceMeta(work);
-                	});
-                    
-                    self.$store.commit( 'profile/setExperiance', res.data );
-                }
-            };
-
-            self.httpRequest('hrm_get_records',request_data);
+			this.getRecords();
 		},
 
 		computed: {
 			records () {
-				return this.$store.state.profile.experiance;
+				return this.$store.state[this.nameSpace].records;
 			}
 		},
 
 		watch: {
 			deletedId () {
-				this.$store.commit('profile/setDeletedId', this.deletedId);
+				this.$store.commit(this.nameSpace + '/setDeletedId', this.deletedId);
 			}
 		},
 		methods: {
-			workExperianceMeta (work) {
-				work.editMode = false;
-			},
-
 			recordEditForm (record, status) {
 				status = status || 'toggle';
 				this.$store.commit( 'profile/showHideEditForm', 
@@ -183,6 +161,7 @@
 
 					}
 				}
+				
 				this.updateRecord(args);
 			},
 

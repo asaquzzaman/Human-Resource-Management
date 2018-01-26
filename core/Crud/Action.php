@@ -61,7 +61,7 @@ abstract class Action implements Pattern {
 		$resource  = new Item( $crated, new $transformers );
 
         $message = [
-            'message' => 'Has been created successfully!'
+            'message' => 'Data has been created successfully!'
         ];
 
         return $this->get_response( $resource, $message );
@@ -69,12 +69,16 @@ abstract class Action implements Pattern {
 
 	public function create_validation() {
 		$class = $this->get_model();
+
+		if ( empty( $class->validation_rules ) ) {
+			return true;
+		}
 		
 		array_walk( $class->validation_rules, array( $this, 'filter_post_data' ) );
 	}
 
 	public function filter_post_data( $rules, $name ) {
-		$postdata   = $this->get_post_data();
+		$postdata = $this->get_post_data();
 
 		//Trait init method for individual field validation
 		$this->get_rules( $postdata, $name, $rules );

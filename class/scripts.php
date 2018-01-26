@@ -210,6 +210,7 @@ class Hrm_Scripts {
             'hrm_url'     => HRM_URL
         ));
 
+        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/assets/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-chosen', HRM_URL . '/assets/css/chosen.min.css', false, false, 'all' );

@@ -1,28 +1,9 @@
 <template>
 	<div>
 		<h1 class="wp-heading-inline">Work Experiance</h1>
-		<a @click.prevent="showHideExperianceForm('toggle')" class="page-title-action">Add New</a>
+		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
-		<div v-if="isExperianceFormActive" id="hrm-hidden-form-warp" class="postbox">
-	        <div class="hrm-search-head">
-	            <h3>Work Experiance</h3>
-	        </div>
-	        <form id="hrm-hidden-form" action="" @submit.prevent="createNewExperiance()">
-	            <div id="hrm-form-field">
-	            	<hrm-form-fields :fields="fields"></hrm-form-fields>
-	                
-	            </div>
-
-	            <div class="hrm-action-wrap">
-	                <input  type="submit" class="button  button-primary" name="requst" value="Submit">
-
-	                <a @click.prevent="showHideExperianceForm('toggle')"  target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
-	                <div class="hrm-spinner" v-if="true">Saving....</div>
-	            </div>
-	        </form>
-
-	        
-	    </div>
+		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="">
 			<div class="hrm-bulk-wrap">
@@ -69,11 +50,13 @@
 
 <script>
 	import Table from './work-experiance-table.vue';
+	import Form from './new-work-experiance-form.vue';
 
 	export default {
 		data () {
 
 			return {
+				current_page_number: 1,
 				search: {
 					filter: 'active',
 					title: '',
@@ -114,8 +97,8 @@
 			
 		},
 		computed: {
-			isExperianceFormActive () {
-				return this.$store.state.profile.isExperianceFormActive;
+			isNewRecordFormActive () {
+				return this.$store.state[this.nameSpace].isNewRecordFormActive;
 			},
 
             total_experiance_page () {
@@ -123,65 +106,11 @@
             }
 		},
 		components: {
-			'hrm-table': Table
+			'hrm-table': Table,
+			'add-new-record-form': Form
 		},
 
 		methods: {
-			createNewExperiance () {
-
-				var postData = this.generateFieldData(this.fields);
-					postData['class'] = 'Work_Experience';
-					postData['method'] = 'create';
-
-
-
-				var args = {
-					data: postData,
-
-					callback (success, res) {
-
-					}
-				}
-
-				this.insertRecords(args);
-			},
-
-			generateFieldData (data) {
-				var formated = {};
-
-				data.forEach(function(val) {
-					formated[val.name] = val.model;
-				});
-
-				return formated;
-			},
-
-			insertRecords (args) {
-				var form_data = {
-	                data: args.data,
-
-	                success: function(res) {
-	                	if (typeof args.callback === 'function') {
-	                        args.callback(true, res);
-	                    } 
-	                    
-	                },
-
-	                error: function(res) {
-	                	self.show_spinner = false;
-	                	// Showing error
-	                    res.error.map( function( value, index ) {
-	                        hrm.toastr.error(value);
-	                    });
-
-	                    if (typeof args.callback === 'function') {
-	                        args.callback(false, res);
-	                    } 
-	                }
-	            };
-
-	            this.httpRequest('hrm_insert_record', form_data);
-			},
 
 			selfBulkAction () {
 				var self = this;

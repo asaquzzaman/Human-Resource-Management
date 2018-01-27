@@ -49,11 +49,12 @@
 
 <script>
     export default {
-        props: ['total_pages', 'current_page_number', 'component_name'],
+        props: ['total_pages', 'component_name'],
 
         data () {
             return {
-                route_query: this.$route.query
+                route_query: this.$route.query,
+                current_page_number: 1
             }
         },
 

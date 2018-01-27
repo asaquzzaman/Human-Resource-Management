@@ -80,10 +80,17 @@
 
 							<div class="submit inline-edit-save">
 								<button @click.prevent="recordEditForm(record, false)" type="button" class="button cancel alignleft">Cancel</button>
-								<input type="submit" class="button button-primary save alignright" value="Update">
+								<input :disabled="!canSubmit" type="submit" class="button button-primary save alignright" value="Update">
+								<div v-if="loading" class="hrm-spinner alignright"></div>
 								<br class="clear">
 							</div>
 						</form>
+					</td>
+				</tr>
+
+				<tr v-if="!records.length">
+					<td colspan="5">
+						No result found!
 					</td>
 				</tr>
             </tbody>
@@ -91,9 +98,19 @@
 	</div>
 </template>
 
+<style>
+	.alignright {
+		float: right;
+	}
+	.hrm-spinner {
+		margin-right: 10px;
+		margin-top: 6px;
+	}
+</style>
 
 <script>
 	export default {
+		mixins: [HRMMixin.profile],
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],
@@ -105,6 +122,8 @@
 
 		data () {
 			return {
+				canSubmit: true,
+				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
 				headers: [
@@ -123,7 +142,7 @@
 				],
 			}
 		},
-		mixins: [HRMMixin.profile],
+		
 		created () {
 			this.getRecords();
 		},
@@ -137,6 +156,9 @@
 		watch: {
 			deletedId () {
 				this.$store.commit(this.nameSpace + '/setDeletedId', this.deletedId);
+			},
+			'$route' (to, from) {
+				this.getRecords();
 			}
 		},
 		methods: {
@@ -151,52 +173,30 @@
 			},
 
 			selfUpdate (record) {
+				var self = this;
 				record['class'] = 'Work_Experience';
 				record['method'] = 'update';
 				record['transformers'] = 'Work_Experiance_Transformer';
+
+				self.canSubmit = false;
+				self.loading = true;
 				
 				var args = {
 					data: record,
 					callback () {
-
+						self.canSubmit = true;
+						self.loading = false;
 					}
 				}
 				
 				this.updateRecord(args);
 			},
 
-			updateRecord (args) {
-				var form_data = {
-	                data: args.data,
-
-	                success: function(res) {
-	                	if (typeof args.callback === 'function') {
-	                        args.callback(true, res);
-	                    } 
-	                    
-	                },
-
-	                error: function(res) {
-	                	self.show_spinner = false;
-	                	// Showing error
-	                    res.error.map( function( value, index ) {
-	                        hrm.toastr.error(value);
-	                    });
-
-	                    if (typeof args.callback === 'function') {
-	                        args.callback(false, res);
-	                    } 
-	                }
-	            };
-
-	            this.httpRequest('hrm_update_record', form_data);
-			},
-
 			deleteAll () {
 				if (this.deleteAllStatus) {
                     var deleted_id = [];
 
-                    this.$store.state.profile.experiance.map(function(record) {
+                    this.$store.state[this.nameSpace].records.map(function(record) {
                         deleted_id.push(record.id);
                     });
 
@@ -208,7 +208,7 @@
 			},
 
 			actionCheckbox () {
-				let records = this.$store.state.profile.experiance;
+				let records = this.$store.state[this.nameSpace].records;
 				
 				if ( records.length == this.deletedId.length ) {
 					this.deleteAllStatus = true;

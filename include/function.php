@@ -788,6 +788,9 @@ function hrm_get_country_by_code( $code ) {
     return false;
 }
 
+function hrm_per_page() {
+    return 1;
+}
 
 
 

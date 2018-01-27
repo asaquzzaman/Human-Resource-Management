@@ -879,26 +879,32 @@ class Hrm_Employee {
         $title = $postdata['title'];
         $from  = $postdata['from'];
         $to    = $postdata['to'];
+        $page  = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page = hrm_per_page();
 
-        $experiance = Work_Experience::select('*');
+        $experiance = Work_Experience::where( function($q) use($title, $from, $to) {
+            if ( ! empty( $title ) ) {
+                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+            }
+            
+            if ( ! empty( $from ) ) {
+                $from = date( 'Y-m-d', strtotime( $from ) );
+                $q->where( 'start', '>=', $from);
+            }
 
-        if ( ! empty( $title ) ) {
-            $experiance->where( 'title', 'LIKE', '%' . $title . '%' );
-        }
-        
-        if ( ! empty( $from ) ) {
-            $from = date( 'Y-m-d', strtotime( $from ) );
-            $experiance->where( 'start', '>=', $from);
-        }
+            if ( ! empty( $to ) ) {
+                $to = date( 'Y-m-d', strtotime( $to ) );
+                $q->where( 'end', '<=', $to);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $experiance->getCollection();
 
-        if ( ! empty( $to ) ) {
-            $to = date( 'Y-m-d', strtotime( $to ) );
-            $experiance->where( 'end', '<=', $to);
-        }
+        $resource = new Collection( $collection, new Work_Experiance_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
 
-        $experiance = $experiance->get();
-        $resource = new Collection( $experiance, new Work_Experiance_Transformer );
-        
         return $this->get_response( $resource );
     }
 }

@@ -1,6 +1,8 @@
 
 HRMRegisterModule('profile', 'profile');
 
+import './work-experience/router';
+
 let personalInformation = resolve => {
 
     require.ensure(['./personal-information.vue'], () => {
@@ -15,12 +17,6 @@ let jobLocation = resolve => {
     });
 }
 
-let workExperiance = resolve => {
-
-    require.ensure(['./work-experiance.vue'], () => {
-        resolve(require('./work-experiance.vue'));
-    });
-}
 
 let education = resolve => {
 
@@ -48,20 +44,6 @@ HRMRegisterChildrenRoute ('hrm_root',
             path: 'job-location', 
             component: jobLocation, 
             name: 'job_location',
-        },
-
-        {
-            path: 'work-experiance', 
-            component: workExperiance, 
-            name: 'work_experiance',
-
-            children: [
-                {
-                    path: 'pages/:current_page_number', 
-                    component: workExperiance,
-                    name: 'work_experiance_pagination',
-                },
-            ]
         },
         
         {

@@ -17,11 +17,12 @@
         methods: {
             registerModule () {
                 let self = this;
-
+                
                 HRMModules.forEach(function(module) {
                     
                     let mixin = require('./components/'+module.path+'/mixin.js');
                     let store = require('./components/'+module.path+'/store.js');
+
                     HRMMixin[module.name] = mixin.default;
 
                     self.registerStore(module.name, store.default );

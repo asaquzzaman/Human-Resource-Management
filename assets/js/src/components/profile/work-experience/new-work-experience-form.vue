@@ -21,7 +21,7 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [HRMMixin.workExperience],
 		props: {
 			fields: {
 				type: [Array]

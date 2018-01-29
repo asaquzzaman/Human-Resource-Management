@@ -904,3 +904,6 @@ label em {
   margin-left: 21%;
   margin-bottom: 15px;
 }
+.hrm-attachment-area {
+  float: left;
+}

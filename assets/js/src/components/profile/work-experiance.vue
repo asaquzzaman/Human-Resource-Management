@@ -34,7 +34,6 @@
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
-
             component_name='work_experiance_pagination'>
             
         </hrm-pagination> 
@@ -75,13 +74,13 @@
 						name: 'title'
 					},
 					{
-						type: 'date-picker-from',
+						type: 'datePickerFrom',
 						model: '',
 						label: 'From',
 						name: 'start'
 					},
 					{
-						type: 'date-picker-to',
+						type: 'datePickerTo',
 						model: '',
 						label: 'To',
 						name: 'end'

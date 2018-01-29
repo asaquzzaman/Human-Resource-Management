@@ -207,7 +207,17 @@ class Hrm_Scripts {
             'user_role' => hrm_current_user_role(),
             'permalink' => get_permalink(),
             'home_url'   => home_url(),
-            'hrm_url'     => HRM_URL
+            'hrm_url'     => HRM_URL,
+            'plupload'      => array(
+                'browse_button'       => 'hrm-upload-pickfiles',
+                'container'           => 'hrm-upload-container',
+                'max_file_size'       => '10485760b',
+                'url'                 => admin_url( 'admin-ajax.php' ) . '?action=hrm_ajax_upload&nonce=' . wp_create_nonce( 'hrm_ajax_upload' ),
+                'flash_swf_url'       => includes_url( 'js/plupload/plupload.flash.swf' ),
+                'silverlight_xap_url' => includes_url( 'js/plupload/plupload.silverlight.xap' ),
+                'filters'             => array( array( 'title' => __( 'Allowed Files' ), 'extensions' => '*' ) ),
+                'resize'              => array( 'width' => ( int ) get_option( 'large_size_w' ), 'height' => ( int ) get_option( 'large_size_h' ), 'quality' => 100 )
+            ),
         ));
 
         wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), time(), 'all' );

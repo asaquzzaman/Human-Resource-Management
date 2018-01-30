@@ -124,7 +124,7 @@ export default {
 			if (self.$route.query.filter == 'active') {
 				self.filter(args);
 			} else {
-				self.getRecords(args);
+				self.fetchRecords(args);
 			}
 		},
 

@@ -95,9 +95,7 @@
 			}
 		},
 		mixins: [HRMMixin.workExperience],
-		created () {
-			
-		},
+	
 
 		computed: {
 			isNewRecordFormActive () {

@@ -110,14 +110,14 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.workExperience],
+		mixins: [HRMMixin.workExperience],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],
 				default () {
 					return true;
 				}
-			}
+			},
 		},
 
 		data () {

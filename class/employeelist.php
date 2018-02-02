@@ -17,6 +17,7 @@ class Hrm_Employeelist {
 
     function get_image( $attachment_id ) {
         $file = get_post( $attachment_id );
+
         if ( $file ) {
             $response = array(
                 'id' => $attachment_id,
@@ -29,6 +30,7 @@ class Hrm_Employeelist {
                 $thumb = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
                 $response['thumb'] = $thumb[0];
                 $response['type'] = 'image';
+
                 return $response;
             }
         }

@@ -2,6 +2,7 @@
     <div class="hrm-attachment-area">
         <div v-hrm-uploader id="hrm-upload-container">
             <div class="hrm-upload-filelist">
+                
                 <div class="hrm-uploaded-item" v-for="file in files" :key="file.id">
                     <a class="hrm-uploaded-img" :href="file.url" target="_blank">
                         <img :style="'height:'+attr.height+'; width:'+attr.width+';'" class="hrm-uploaded-file" :src="file.thumb" :alt="file.name">
@@ -96,7 +97,7 @@
                 }
                 var self = this;
                 var index = self.getIndex(self.files, file_id, 'id');
-
+                
                 if (index !== false) {
                     self.files.splice(index, 1);
                     this.delete.push(file_id);

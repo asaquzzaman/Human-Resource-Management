@@ -87,7 +87,7 @@ export default hrm.Vue.mixin({
             });
 		},
 		/**
-         * WP settings date format convert to moment date format with time zone
+         * WP settings date format convert to hrm.Moment date format with time zone
          * 
          * @param  string date 
          * 
@@ -95,14 +95,14 @@ export default hrm.Vue.mixin({
          */
         dateFormat: function( date ) {
             if ( typeof date === 'undefined' ) {
-                date = moment().format();
+                date = hrm.Moment().format();
             }
             
-           // moment.tz.add(HRM_Vars.time_zones);
-           // moment.tz.link(HRM_Vars.time_links);
+           // hrm.Moment.tz.add(HRM_Vars.time_zones);
+           // hrm.Moment.tz.link(HRM_Vars.time_links);
 
             date = new Date(date);
-            date = moment(date).format('YYYY-MM-DD');
+            date = hrm.Moment(date).format('YYYY-MM-DD');
             
             var format = 'MMMM DD YYYY';
             
@@ -116,7 +116,7 @@ export default hrm.Vue.mixin({
                 format = 'DD/MM/YYYY';
             } 
 
-            return moment( date ).format(format);
+            return hrm.Moment( date ).format(format);
         },
 
         currentDate () {
@@ -167,6 +167,15 @@ export default hrm.Vue.mixin({
 
         loadingStop (id) {
             jQuery('#'+id).preloader('remove');
+        },
+
+        dataURLtoFile (dataurl, filename) {
+            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime});
         },
 	},
 });

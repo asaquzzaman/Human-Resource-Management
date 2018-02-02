@@ -6,6 +6,7 @@ import Pagination from '@components/common/pagination.vue';
 import HRMUploader from '@components/common/file-uploader.vue';
 
 
+
 hrm.Vue.component('hrm-do-action', DoAction);
 hrm.Vue.component('hrm-settings-header', SettingsHeader);
 hrm.Vue.component('hrm-date-picker', DatePicker);

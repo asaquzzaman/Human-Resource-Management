@@ -220,6 +220,7 @@ class Hrm_Scripts {
             ),
         ));
 
+        wp_enqueue_style( 'hrm-vue-multiselect', HRM_URL . '/assets/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/assets/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );

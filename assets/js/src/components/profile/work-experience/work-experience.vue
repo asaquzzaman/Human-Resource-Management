@@ -58,7 +58,6 @@
 		data () {
 
 			return {
-				current_page_number: 1,
 				search: {
 					filter: 'active',
 					title: this.$route.query.title,

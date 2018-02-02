@@ -1485,7 +1485,7 @@ class Hrm_Settings {
     function country_list() {
         $list = include dirname( __FILE__ ) . '/../include/iso_country_codes.php';
 
-        return array_merge( array('' => '- Select -'), $list );
+        return array_merge( $list );
     }
 
     function get_country_by_code( $code ) {

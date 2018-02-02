@@ -872,7 +872,6 @@ label em {
 }
 .hrm-multiselect .multiselect .multiselect__input {
   width: 100% !important;
-  min-height: 30px;
   border-radius: 0;
 }
 .hrm-multiselect .multiselect .multiselect__tags {
@@ -907,3 +906,37 @@ label em {
 .hrm-attachment-area {
   float: left;
 }
+
+.hrm-multiselect .multiselect__input {
+  position: relative !important;
+  float: none !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+
+}
+
+.hrm-multiselect .multiselect__input:focus,
+.hrm-multiselect .multiselect__input:active,
+.hrm-multiselect .multiselect__input:hover,
+.hrm-multiselect .multiselect__input:visited {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none;
+}
+
+.hrm-multiselect .multiselect__tags {
+    min-height: 32px;
+    padding: 5px 40px 0 8px;
+}
+
+.hrm-multiselect .multiselect__select {
+    height: 30px;
+}
+
+
+
+
+
+

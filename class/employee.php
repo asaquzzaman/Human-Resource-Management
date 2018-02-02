@@ -6,6 +6,7 @@ use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Work_Experience;
 use HRM\Transformers\Work_Experiance_Transformer;
+use HRM\Core\File_System\File_System;
 
 class Hrm_Employee {
     use Transformer_Manager;
@@ -906,6 +907,110 @@ class Hrm_Employee {
         $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
 
         return $this->get_response( $resource );
+    }
+
+    public static function ajax_get_personal_info() {
+        check_ajax_referer('hrm_nonce');
+        $user_id = empty( $_POST['user_id'] ) ? get_current_user_id() : intval( $_POST['user_id'] );
+        $result = self::getInstance()->get_personal_info( $user_id );
+        wp_send_json_success( $result );
+    }
+
+    function get_personal_info( $user_id = false ) {
+        $user_id = empty( $user_id ) ? get_current_user_id() : $user_id;
+        $user = get_user_by( 'id', $user_id );
+
+        $country_lists = hrm_Settings::getInstance()->country_list();
+        $lists = [];
+
+        foreach ( $country_lists as $key => $value ) {
+            $lists[] = ['iso' => $key, 'country' => $value];
+        }
+
+        $profile_pic = $this->get_profile_picture( $user_id );
+        $profile_pic = is_array($profile_pic) ? $profile_pic : [];
+
+        return [
+            'country_list'    => $lists,
+            '_hrm_user_image_id' => $profile_pic,
+            'department'      => $this->get_employee_department( $user_id ),
+            '_gender'         => get_user_meta( $user_id, '_gender', true ),
+            '_marital_status' => get_user_meta( $user_id, '_marital_status', true ),
+            '_national_code'  => get_user_meta( $user_id, '_national_code', true ),
+            '_birthday'       => hrm_get_date2mysql( get_user_meta( $user_id, '_birthday', true ) ),
+            '_street1'        => get_user_meta( $user_id, '_street1', true ),
+            '_street2'        => get_user_meta( $user_id, '_street2', true ),
+            '_city_code'      => get_user_meta( $user_id, '_city_code', true ),
+            '_state'          => get_user_meta( $user_id, '_state', true ),
+            '_zip'            => get_user_meta( $user_id, '_zip', true ),
+            '_work_mobile'    => get_user_meta( $user_id, '_work_mobile', true ),
+            'email'           => $user->user_email,
+            '_country_code'   => get_user_meta( $user_id, '_country_code', true ),
+        ];
+    }
+
+    function get_profile_picture( $user_id ) {
+        $image_ids = get_user_meta( $user_id, '_hrm_user_image_id', true );
+        $image_ids = $image_ids ? $image_ids : [];
+        $imaegs = [];
+
+        foreach ( $image_ids as $key => $image_id ) {
+            $imaegs[] = File_System::get_file( $image_id );
+        }
+
+        return $imaegs;
+    }
+
+    function get_employee_department( $employee_id ) {
+        $role = get_user_meta( $employee_id, 'role', true );
+        $designation = hrm_current_user_display_role();
+
+        return $designation ? $designation : '&#8211 &#8211';
+    }
+
+    public static function ajax_save_personal_info() {
+        //check_ajax_referer('hrm_nonce');
+        $user_id = empty( $_POST['user_id'] ) ? get_current_user_id() : intval( $_POST['user_id'] );
+        $result = self::getInstance()->save_personal_info( $_POST, $_FILES, $user_id );
+        wp_send_json_success( $result );
+    }
+
+    function save_personal_info( $postData, $files, $user_id ) {
+        
+        foreach ( $files as $meta_name => $filesObj) {
+            
+            $file_ids = File_System::multiple_upload( $filesObj );
+
+            if ( empty( $postData['is_multiple_file'] ) || $postData['is_multiple_file'] == 'false' ) {
+                
+                update_user_meta( $user_id, $meta_name, $file_ids );
+            } else {
+                $dbids = get_user_meta( $user_id, $meta_name, true );
+                update_user_meta( $user_id, $meta_name, array_merge( $dbids, $file_ids ) );
+            }
+            
+        }
+        
+        if ( $postData['deleted_files'] ) {
+            foreach ( $postData['deleted_files'] as $delted_files) {
+                
+                $files = json_decode( stripslashes( $delted_files ) );
+                $dbids = get_user_meta( $user_id, $files->name, true );
+                $id_diff = array_diff( $dbids, $files->files );
+                
+                foreach (  $files->files as $key => $id ) {
+                    File_System::delete( $file_id );
+                }
+
+                update_user_meta( $user_id, $files->name, $id_diff );
+            }
+        }
+        
+        foreach ( $postData as $key => $value) {
+            update_user_meta( $user_id, $key, json_decode( stripslashes( $value ) ) ); 
+        }
+
+        return $this->get_personal_info($user_id);
     }
 }
 

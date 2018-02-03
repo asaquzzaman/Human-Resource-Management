@@ -79,7 +79,7 @@ class WP_Hrm {
 
     function migrate_db() {
         $migrater = new \HRM\Core\Database\Migrater();
-
+        
         $migrater->create_migrations_table();
         $migrater->build_schema();
     }
@@ -313,7 +313,8 @@ class WP_Hrm {
                 $style_slug[$page_slug] = add_submenu_page( $hrm_page_slug, $page_label, $page_label, $capability, $page_slug, array($this, 'admin_page_handler') );
             }
         }
-   
+    
+        $submenu['hr_management'][] = [ __( 'Designation', 'hrm' ), $capability, 'admin.php?page=hr_management#/designation' ];
         $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/departments' ];
         $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/attendance' ];
         $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/leave' ];

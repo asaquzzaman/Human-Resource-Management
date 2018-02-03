@@ -10,9 +10,9 @@ class Department extends Eloquent {
     public $timestamps    = false;
 
     protected $fillable = [
-		'name',
-		'active',
-		'description',
-		'parent',
+        'name',
+        'active',
+        'description',
+        'parent',
     ];
 }

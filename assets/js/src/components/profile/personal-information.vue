@@ -3,7 +3,7 @@
         <div class="hrm-search-head">
             <h3>Profile Information</h3>
         </div>
-        <!-- <pre>{{ fields }}</pre> -->
+  
         <div class="inside" id="hrm-visible-form">
         	<div class="main">
         		<div v-if="!editMode">

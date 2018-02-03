@@ -1,8 +1,5 @@
-// import leave from '@components/leave/router';
-// import settings from '@components/settings/router';
-// import departments from '@components/departments/router';
-// import Attendance from '@components/attendance/router';
 import Profile from '@components/profile/router';
+import '@components/designation/router';
 
 import Empty from '@components/common/empty.vue';
 

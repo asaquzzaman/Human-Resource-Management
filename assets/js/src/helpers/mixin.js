@@ -62,7 +62,9 @@ export default hrm.Vue.mixin({
 	    	var self = this;
             var pre_define = {
                 _wpnonce: HRM_Vars.nonce,
-                page_number: this.$route.params.page_number
+                page_number: typeof this.$route.params.page_number !== 'undefined' 
+                    ? this.$route.params.page_number
+                    : 1
             };
 
             var request_data  = jQuery.extend(true, pre_define, args.data);

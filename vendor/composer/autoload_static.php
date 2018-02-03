@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
+class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -157,6 +157,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'HRM\\Core\\Transformer_Manager' => __DIR__ . '/../..' . '/core/Transformer_Manager.php',
         'HRM\\Core\\User\\User_Transformer' => __DIR__ . '/../..' . '/core/user/User_Transformer.php',
         'HRM\\Models\\Department' => __DIR__ . '/../..' . '/models/Department.php',
+        'HRM\\Models\\Designation' => __DIR__ . '/../..' . '/models/Designation.php',
         'HRM\\Models\\Financial_Year' => __DIR__ . '/../..' . '/models/Financial_Year.php',
         'HRM\\Models\\Holiday' => __DIR__ . '/../..' . '/models/Holiday.php',
         'HRM\\Models\\Leave' => __DIR__ . '/../..' . '/models/leave.php',
@@ -165,6 +166,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'HRM\\Models\\Relation' => __DIR__ . '/../..' . '/models/Relation.php',
         'HRM\\Models\\User' => __DIR__ . '/../..' . '/models/user.php',
         'HRM\\Models\\Work_Experience' => __DIR__ . '/../..' . '/models/Work_Experience.php',
+        'HRM\\Transformers\\Designation_Transformer' => __DIR__ . '/../..' . '/transformers/Designation_Transformer.php',
         'HRM\\Transformers\\Work_Experiance_Transformer' => __DIR__ . '/../..' . '/transformers/Work_Experience_Transformer.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
@@ -430,6 +432,7 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
         'Illuminate\\Support\\NamespacedItemResolver' => __DIR__ . '/..' . '/illuminate/support/NamespacedItemResolver.php',
         'Illuminate\\Support\\Optional' => __DIR__ . '/..' . '/illuminate/support/Optional.php',
         'Illuminate\\Support\\Pluralizer' => __DIR__ . '/..' . '/illuminate/support/Pluralizer.php',
+        'Illuminate\\Support\\ProcessUtils' => __DIR__ . '/..' . '/illuminate/support/ProcessUtils.php',
         'Illuminate\\Support\\ServiceProvider' => __DIR__ . '/..' . '/illuminate/support/ServiceProvider.php',
         'Illuminate\\Support\\Str' => __DIR__ . '/..' . '/illuminate/support/Str.php',
         'Illuminate\\Support\\Testing\\Fakes\\BusFake' => __DIR__ . '/..' . '/illuminate/support/Testing/Fakes/BusFake.php',
@@ -544,9 +547,9 @@ class ComposerStaticInitb90d6c234cb5b629cca18544348ec96e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb90d6c234cb5b629cca18544348ec96e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb90d6c234cb5b629cca18544348ec96e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb90d6c234cb5b629cca18544348ec96e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$classMap;
 
         }, null, ClassLoader::class);
     }

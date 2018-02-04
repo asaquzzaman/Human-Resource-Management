@@ -42,6 +42,7 @@ return array(
     'HRM\\Models\\Relation' => $baseDir . '/models/Relation.php',
     'HRM\\Models\\User' => $baseDir . '/models/user.php',
     'HRM\\Models\\Work_Experience' => $baseDir . '/models/Work_Experience.php',
+    'HRM\\Transformers\\Department_Transformer' => $baseDir . '/transformers/Department_Transformer.php',
     'HRM\\Transformers\\Designation_Transformer' => $baseDir . '/transformers/Designation_Transformer.php',
     'HRM\\Transformers\\Work_Experiance_Transformer' => $baseDir . '/transformers/Work_Experience_Transformer.php',
     'Illuminate\\Container\\BoundMethod' => $vendorDir . '/illuminate/container/BoundMethod.php',

@@ -154,7 +154,7 @@ export default {
 		},
 
 		recordMeta (record) {
-			record.editMode = false;
+			record['editMode'] = false;
 		},
 
 		filter (callback) {

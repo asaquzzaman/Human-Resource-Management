@@ -30,11 +30,11 @@
 			<div class="hrm-clear"></div>
 		</div>
 		
-	    <hrm-table></hrm-table>
+	    <hrm-table :fields="fields"></hrm-table>
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
-            component_name='work_experiance_pagination'>
+            component_name='designation_pagination'>
             
         </hrm-pagination> 
 
@@ -67,35 +67,78 @@
 					to: this.$route.query.to
 				},
 				bulkAction: -1,
+
 				fields: [
 					{
 						type: 'text',
 						model: '',
 						label: 'Title',
-						name: 'title'
+						name: 'title',
+						tableHead: 'Title',
+						tbRowAction: true,
+						editable: true
 					},
 					{
 						type: 'select',
 						model: '',
 						options: [],
 						label: 'Department',
-						optionLabel: 'country',
+						optionLabel: 'name',
 						placeholder: 'Select Department',
 						name: 'department',
+						tableHead: 'Department',
+						editable: true,
+						//Filter submited new data
+						filterSubmited (val) {
+							return val.id;
+						},
+						//Table print data
+						filterPrintData (val) {
+
+							if (!val) {
+								return '&#8211 &#8211';
+							}
+							return val.data.name;
+						},
+						// Filter edit form field data
+						filterComputedGet (val) {
+
+							if (!val) {
+								return '';
+							}
+							return val.data;
+						},
+						// Filer edit changable data
+						filterComputedSet (val) {
+							return { data: val }
+						},
+						//Filter edit submited data
+						filterEditingData (val) {
+							if (val) {
+								return val.data.id;
+							}
+						}
+						
 					},
 					{
 						type: 'textarea',
 						model: '',
 						label: 'Description',
-						name: 'description'
+						name: 'description',
+						tableHead: 'Description',
+						editable: true
 					}
-				]
+				],
 			}
 		},
 		
 		created () {
-			this.getDepartments(function(department) {
-				console.log(department);
+			var self = this;
+			this.getDepartments({
+				callback (departments) {
+					var index = self.getIndex(self.fields, 'department', 'name');
+					self.fields[index].options = departments.dept_drop_down;
+				}
 			});
 		},
 

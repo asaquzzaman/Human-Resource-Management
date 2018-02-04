@@ -15,6 +15,7 @@ export default {
 		},
 
 		getSettings (key, pre_define ) {
+			
             var pre_define  = pre_define || false,
                 settings  = HRM_Vars.settings;
 

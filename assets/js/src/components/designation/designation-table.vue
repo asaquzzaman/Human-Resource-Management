@@ -6,8 +6,8 @@
                 	<td v-if="deleteCheckbox" id="cb" class="manage-column column-cb check-column">
                 		<input @change.prevent="deleteAll()" v-model="deleteAllStatus" id="cb-select-all-1" type="checkbox">
                 	</td>
-                    <th v-for="(header, header_index) in headers" :key="header_index">
-                    	{{ header.label }}
+                    <th v-for="(header, header_index) in filterHeader(fields)" :key="header_index">
+                    	{{ header.tableHead }}
                     </th>
                 </tr>
             </thead>
@@ -17,22 +17,12 @@
 						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
 					
-                    <td>
-                    	{{ record.title }}
-
-                    	<div class="row-actions">
+                    <td v-for="(field, field_index) in filterHeader(fields)">
+                    	<span v-html="printCellData(record, field)"></span>
+                    	<div v-if="field.tbRowAction" class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
-	                    	<span class="trash"><a  href="#">Delete</a> </span>
+	                    	<span class="trash"><a href="#">Delete</a> </span>
 	                    </div>
-                    </td>
-                    <td>
-                    	{{ record.start }}
-                    </td>
-                    <td>
-                    	{{ record.end }}
-                    </td>
-                    <td>
-                    	{{ record.description }}
                     </td>
                 </tr>
                 
@@ -43,31 +33,11 @@
 								<legend class="inline-edit-legend">Quick Edit</legend>
 								<div class="inline-edit-col">
 						
-									<label>
-										<span class="title">Title</span>
+									<label v-for="(field, field_index) in filterEditField(fields)">
+										<span class="title">{{ field.label }}</span>
 										<span class="input-text-wrap">
-											<input type="text" v-model="record.title" class="ptitle">
-										</span>
-									</label>
-
-									<label>
-										<span class="title">From</span>
-										<span class="input-text-wrap">
-											<hrm-date-picker placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-										</span>
-									</label>
-
-									<label>
-										<span class="title">To</span>
-										<span class="input-text-wrap">
-											<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-to"></hrm-date-picker>
-										</span>
-									</label>
-
-									<label>
-										<span class="title">Comments</span>
-										<span class="input-text-wrap">
-											<textarea v-model="record.description"></textarea>
+											<hrm-edit-field :record="record" :field="field"></hrm-edit-field>
+											<!-- <input type="text" v-model="record[field.name]" class="ptitle"> -->
 										</span>
 									</label>
 								</div>
@@ -118,6 +88,12 @@
 					return true;
 				}
 			},
+			fields: {
+				type: [Array],
+				default () {
+					return []
+				}
+			}
 		},
 
 		data () {
@@ -129,6 +105,9 @@
 				headers: [
 					{
 						label: 'Title',
+					},
+					{
+						label: 'Department',
 					},
 					{
 						label: 'Description',
@@ -156,9 +135,29 @@
 			}
 		},
 		methods: {
+			filterEditField (fields) {
+				return fields.filter(function(field) {
+					return field.editable ? true : false;
+				});
+			},
+			filterHeader (fields) {
+				return fields.filter(function(field) {
+					return typeof field.tableHead === 'undefined' 
+						? false
+						: true;
+				});
+			},
+			printCellData (record, field) {
+				if (typeof field.filterPrintData == 'undefined') {
+					return record[field.name];
+				}
+
+				return field.filterPrintData( record[field.name] );
+			},
+
 			recordEditForm (record, status) {
 				status = status || 'toggle';
-				this.$store.commit( 'profile/showHideEditForm', 
+				this.$store.commit( this.nameSpace + '/showHideEditForm', 
 					{
 						id: record.id,
 						status: status
@@ -167,16 +166,32 @@
 			},
 
 			selfUpdate (record) {
-				var self = this;
-				record['class'] = 'designation';
-				record['method'] = 'update';
-				record['transformers'] = 'designation_Transformer';
+				
+				var self = this,
+					data = {};
+
+				data['class']        = 'designation';
+				data['method']       = 'update';
+				data['transformers'] = 'designation_Transformer';
+				data['id']           = record.id;
 
 				self.canSubmit = false;
 				self.loading = true;
+
+				self.fields.forEach(function(field) {
+					if ( !field.editable ) {
+						return;
+					}
+
+					if (typeof field.filterEditingData != 'undefined') {
+						data[field.name] = field.filterEditingData(record[field.name]);
+					} else {
+						data[field.name] = record[field.name];
+					}
+				});
 				
 				var args = {
-					data: record,
+					data: data,
 					callback () {
 						self.canSubmit = true;
 						self.loading = false;

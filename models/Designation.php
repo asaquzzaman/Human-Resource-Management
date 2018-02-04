@@ -2,6 +2,7 @@
 namespace HRM\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Models\Department;
 
 class Designation extends Eloquent {
 
@@ -16,4 +17,8 @@ class Designation extends Eloquent {
 		'created_by',
         'updated_by',
     ];
+
+    public function department() {
+        return $this->hasOne( Department::class, 'id', 'department' );
+    }
 }

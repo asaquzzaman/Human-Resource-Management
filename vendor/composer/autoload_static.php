@@ -166,6 +166,7 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'HRM\\Models\\Relation' => __DIR__ . '/../..' . '/models/Relation.php',
         'HRM\\Models\\User' => __DIR__ . '/../..' . '/models/user.php',
         'HRM\\Models\\Work_Experience' => __DIR__ . '/../..' . '/models/Work_Experience.php',
+        'HRM\\Transformers\\Department_Transformer' => __DIR__ . '/../..' . '/transformers/Department_Transformer.php',
         'HRM\\Transformers\\Designation_Transformer' => __DIR__ . '/../..' . '/transformers/Designation_Transformer.php',
         'HRM\\Transformers\\Work_Experiance_Transformer' => __DIR__ . '/../..' . '/transformers/Work_Experience_Transformer.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',

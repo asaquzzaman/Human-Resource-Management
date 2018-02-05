@@ -47,9 +47,9 @@
 				self.canSubmit = false;
 
 				var postData = this.generateFieldData(this.fields);
-					postData['class'] = 'Education';
+					postData['class'] = self.modelName;
 					postData['method'] = 'create';
-					postData['transformers'] = 'Education_Transformer';
+					postData['transformers'] = self.modelTransformer;
 
 				var args = {
 					data: postData,
@@ -68,7 +68,12 @@
 				var formated = {};
 
 				data.forEach(function(val) {
-					formated[val.name] = val.model;
+					if (typeof val.filterSubmited !== 'undefined') {
+						formated[val.name] = val.filterSubmited(val.model);
+					} else {
+						formated[val.name] = val.model;
+					}
+					
 				});
 
 				return formated;

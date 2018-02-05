@@ -84,7 +84,7 @@
 						label: 'Institute',
 						name: 'institute',
 						tableHead: 'Institute',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					},
 					{
@@ -93,7 +93,7 @@
 						label: 'Major/Specialization',
 						name: 'major',
 						tableHead: 'Major/Specialization',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					},
 					{
@@ -102,7 +102,7 @@
 						label: 'GPA/Score',
 						name: 'gpa',
 						tableHead: 'GPA/Score',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					},
 					{
@@ -111,7 +111,7 @@
 						label: 'Start Date',
 						name: 'start',
 						tableHead: 'Start Date',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					},
 					{
@@ -120,7 +120,7 @@
 						label: 'End Date',
 						name: 'end',
 						tableHead: 'End Date',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					}
 				],

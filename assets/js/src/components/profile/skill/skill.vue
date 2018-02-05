@@ -84,7 +84,7 @@
 						label: 'Years of experiance',
 						name: 'experiance',
 						tableHead: 'Years of experiance',
-						tbRowAction: true,
+						tbRowAction: false,
 						editable: true
 					},
 					{
@@ -93,6 +93,7 @@
 						label: 'Comments',
 						name: 'comments',
 						tableHead: 'Comments',
+						tbRowAction: false,
 						editable: true
 					}
 				],

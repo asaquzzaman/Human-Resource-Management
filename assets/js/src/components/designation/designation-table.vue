@@ -102,17 +102,6 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
-				headers: [
-					{
-						label: 'Title',
-					},
-					{
-						label: 'Department',
-					},
-					{
-						label: 'Description',
-					},
-				],
 			}
 		},
 		
@@ -170,9 +159,9 @@
 				var self = this,
 					data = {};
 
-				data['class']        = 'designation';
+				data['class']        = self.modelName;
 				data['method']       = 'update';
-				data['transformers'] = 'designation_Transformer';
+				data['transformers'] = self.modelTransformer;
 				data['id']           = record.id;
 
 				self.canSubmit = false;

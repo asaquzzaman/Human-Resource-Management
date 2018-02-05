@@ -47,9 +47,9 @@
 				self.canSubmit = false;
 
 				var postData = this.generateFieldData(this.fields);
-					postData['class'] = 'Designation';
+					postData['class'] = self.modelName;
 					postData['method'] = 'create';
-					postData['transformers'] = 'Designation_Transformer';
+					postData['transformers'] = self.modelTransformer;
 
 				var args = {
 					data: postData,

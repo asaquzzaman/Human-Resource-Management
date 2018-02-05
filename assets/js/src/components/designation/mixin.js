@@ -1,7 +1,9 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'designation'
+			nameSpace: 'designation',
+			modelName: 'Designation',
+			modelTransformer: 'designation_Transformer'
 		}
 	},
 	methods: {
@@ -27,7 +29,7 @@ export default {
 			var form_data = {
 	            data: {
 	            	delete: deletedId,
-	            	class: 'Designation',
+	            	class: self.modelName,
 					method: 'delete'
 	            },
 
@@ -132,9 +134,9 @@ export default {
 			var self = this;
 
 			var postData = {
-				'class': 'Designation',
+				'class': self.modelName,
 				'method': 'gets',
-				'transformers': 'Designation_Transformer',
+				'transformers': self.modelTransformer,
 				'page': this.$route.params.current_page_number
 			};
 			

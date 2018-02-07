@@ -37,7 +37,7 @@ export default {
 	            	
 	            	self.$store.commit(self.nameSpace + '/afterDelete', deletedId);
 	            	if (typeof callback === 'function') {
-	                    callback(deletedId);
+	                    callback.call(self, deletedId);
 	                } 
 	                
 	            },
@@ -66,7 +66,7 @@ export default {
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
 
                 	if (typeof args.callback === 'function') {
-                        args.callback(true, res);
+                        args.callback.call(self, true, res);
                     } 
                     
                 },
@@ -79,7 +79,7 @@ export default {
                     });
 
                     if (typeof args.callback === 'function') {
-                        args.callback(false, res);
+                        args.callback.call(self, false, res);
                     } 
                 }
             };
@@ -98,7 +98,7 @@ export default {
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
 
                 	if (typeof args.callback === 'function') {
-                        args.callback(true, res);
+                        args.callback.call(self, true, res);
                     } 
                     
                     hrm.Toastr.success(res.message);
@@ -112,7 +112,7 @@ export default {
                     });
 
                     if (typeof args.callback === 'function') {
-                        args.callback(false, res);
+                        args.callback.call(self, false, res);
                     } 
                 }
             };
@@ -175,7 +175,7 @@ export default {
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
 
 	            	if (typeof callback === 'function') {
-	                    callback(true, res);
+	                    callback.call(self, true, res);
 	                } 
 	                
 	            },
@@ -188,7 +188,7 @@ export default {
 	                });
 
 	                if (typeof args.callback === 'function') {
-	                    callback(false, res);
+	                    callback.call(self, false, res);
 	                } 
 	            }
 	        };

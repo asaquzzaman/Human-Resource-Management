@@ -21,7 +21,7 @@
                     	<span v-html="printCellData(record, field)"></span>
                     	<div v-if="field.tbRowAction" class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
-	                    	<span class="trash"><a href="#">Delete</a> </span>
+	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
                     </td>
                 </tr>
@@ -189,7 +189,24 @@
 				
 				this.updateRecord(args);
 			},
-
+			selfDelete (record) {
+				var self = this;
+				this.recordDelete([record.id], function() {
+					var hasRecords = self.$store.state[self.nameSpace].records.length;
+					var page = self.$route.params.current_page_number;
+					if (!hasRecords && page > 1) {
+						self.$router.push({
+							params: {
+								current_page_number: page - 1
+							},
+							query: self.$route.query
+						});
+					}
+					if (!hasRecords && self.pagination.total_pages > 1) {
+						self.getRecords();
+					}
+				})
+			},
 			deleteAll () {
 				if (this.deleteAllStatus) {
                     var deleted_id = [];

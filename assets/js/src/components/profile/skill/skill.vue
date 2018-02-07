@@ -34,7 +34,7 @@
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
-            component_name='designation_pagination'>
+            component_name='skill_pagination'>
             
         </hrm-pagination> 
 

@@ -233,6 +233,8 @@ class WP_Hrm {
         Hrm_Employee::getInstance();
         Hrm_JsTemplate::getInstance();
         Hrm_Update::getInstance();
+        Hrm_Dashboard::getInstance();
+        Hrm_Attendance::getInstance();
     }
 
     function install() {

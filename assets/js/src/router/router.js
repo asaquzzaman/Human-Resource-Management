@@ -1,9 +1,8 @@
-import Profile from '@components/profile/router';
+import '@components/profile/router';
 import '@components/designation/router';
+import '@components/dashboard/router';
 
 import Empty from '@components/common/empty.vue';
-
-
 
 HRM_Routers.push({
 	path: '/', 

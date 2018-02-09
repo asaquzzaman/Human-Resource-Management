@@ -20,7 +20,7 @@ var scriptsLoaded = {
 	'Toastr': false,
 	'Uploader': false,
 	'Loading': false,
-	//'TimePicker': false
+	'FontAwesome': false
 };
 
 window.hrmPromise = new Promise(function(resolve, reject) {
@@ -125,6 +125,16 @@ window.hrmPromise = new Promise(function(resolve, reject) {
 		}
 	).then(function() {
 		scriptsLoaded.Uploader = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	require.ensure(
+		['./font-awesome/font-awesome'],
+		function(require) {
+			hrm.FontAwesome = require('./font-awesome/font-awesome');
+		}
+	).then(function() {
+		scriptsLoaded.FontAwesome = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 

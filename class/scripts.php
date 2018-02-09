@@ -228,6 +228,7 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/assets/css/jquery-ui.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/assets/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-preloader', HRM_URL . '/assets/css/Elegant-Loading-Indicator/preloader.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
     }
 }
 

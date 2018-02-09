@@ -15,7 +15,102 @@ class Hrm_Attendance {
     }
 
     function __construct() {
+        add_action('wp_ajax_hrm_get_dashboard_attendance', array( $this, 'get_dashboard_attendance' ) );
+    }
+
+    public function get_dashboard_attendance() {
+        check_ajax_referer('hrm_nonce');
+
+        $employees = Hrm_Employeelist::getInstance()->get_employee(true);
+
+        $attendances = $this->get_attendance(
+            array (
+                'user_id'  => 'all',
+                'punch_in' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+            )
+        );
+
+
+
+        $leaves = Hrm_Leave::getInstance()->get_leaves(
+            array(
+                'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                'end_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                'per_page' =>  1000,
+                'status'   => 1
+            )
+        );
+
+        $presents = $this->get_presents( $employees, $attendances, $leaves['data'] );
+        $absents  = $this->get_absents( $employees, $attendances, $leaves['data'] );
+
+        wp_send_json_success(array(
+            'presents' => $presents,
+            'absents'  => $absents
+        ));
         
+    }
+
+    public function get_presents( $employees, $attendances, $leaves ) {
+        $filter_attendances = [];
+        $fileter_leaves = [];
+        $data = [];
+        
+        foreach ( $leaves as $key => $leave ) {
+            $fileter_leaves[$leave['emp_id']] = $leave;
+        }
+
+        foreach ( $attendances as $key => $attendance ) {
+            
+            $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
+        }
+
+        foreach ( $filter_attendances as $user_id => $filter_attendance ) {
+            $filter_attendances[$user_id] = date( 'H:i:s a', min($filter_attendance) );
+        }
+
+        foreach ( $employees as $key => $emp ) {
+            if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
+                $emp->data->leave = $fileter_leaves[$emp->ID];
+            }
+
+            if ( array_key_exists( $emp->ID, $filter_attendances ) ) {
+                $emp->data->punch_in = $filter_attendances[$emp->ID];
+                $data[] = $emp->data;
+            }
+        }
+        
+        return $data;
+    }
+
+    public function get_absents( $employees, $attendances, $leaves ) {
+        $filter_attendances = [];
+        $fileter_leaves = [];
+        $data = [];
+        
+        foreach ( $leaves as $key => $leave ) {
+            $fileter_leaves[$leave['emp_id']] = $leave;
+        }
+
+        foreach ( $attendances as $key => $attendance ) {
+            $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
+        }
+
+        foreach ( $filter_attendances as $user_id => $filter_attendance ) {
+            $filter_attendances[$user_id] = date( 'H:i:s a', min($filter_attendance) );
+        }
+
+        foreach ( $employees as $key => $emp ) {
+            if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
+                $emp->data->leave = $fileter_leaves[$emp->ID];
+            }
+
+            if ( ! array_key_exists( $emp->ID, $filter_attendances ) ) {
+                $data[] = $emp->data;
+            }
+        }
+        
+        return $data;
     }
 
     public static function attendance_init() {
@@ -390,8 +485,8 @@ class Hrm_Attendance {
 
         foreach ( $attendance as $key => $attend ) {
             $attend->date      = hrm_get_date( $attend->date );
-            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, 'h:i a' );
-            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, 'h:i a' ) : '&#8211 &#8211';
+            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, 'h:i:s a' );
+            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, 'h:i:s a' ) : '&#8211 &#8211';
             
             
             if ( strtotime( $attend->punch_out ) > 0 ) {
@@ -435,6 +530,15 @@ class Hrm_Attendance {
             'punch_in'  => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
             'punch_out' => date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) )
         );
+
+        if ( 
+            ! empty( $args['user_id'] ) 
+                &&
+            $args['user_id'] === 'all'
+        ) {
+            unset( $defaults['user_id'] );
+            unset( $args['user_id'] );
+        }
 
         $args = wp_parse_args( $args, $defaults );
 

@@ -1,4 +1,5 @@
 import Profile from '@components/profile/router';
+import Organization from '@components/organization/router';
 import '@components/designation/router';
 
 import Empty from '@components/common/empty.vue';

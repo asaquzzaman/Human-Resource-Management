@@ -1,7 +1,7 @@
 <template>
 	<div id="hrm-hidden-form-warp" class="postbox">
         <div class="hrm-search-head">
-            <h3>Skill</h3>
+            <h3>Location</h3>
         </div>
         <form id="hrm-hidden-form" action="" @submit.prevent="selfNewRecord()">
             <div id="hrm-form-field">
@@ -21,7 +21,7 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.skill],
+		mixins: [HRMMixin.location],
 		props: {
 			fields: {
 				type: [Array]

@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		19: 0
+/******/ 		20: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"20":"579fe76c6ba7340e5725","21":"08a4581cd970ec401eaf","22":"3764b6b37448bb9e605a","23":"4662973711d3e08523a5","24":"1c52a13d8e7afb9f36ef","25":"37624753c572a11fca47","26":"98d9f00727e5d037c203","27":"29a81504787f96a1e518","28":"1f72cdbc88c63feb1d8d","29":"7cc3cc65e5514e46e3b9","30":"cc3625c1712ceb70b854"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"bf0a2051bb6ed33e5c42","1":"50c22b32044fe8aa65a5","8":"36641120cc4177c0a7a0","11":"e058ba49e19a688aadd5","12":"92499d0e4c1c960973a1","13":"6f6f3999e1a56e81ce56","14":"e7c9b97d572ab237ac2f","15":"9cb2d7c16f2aa23601a1","16":"57867d44c296e0e09178","17":"91d26135f037ade74661","18":"bd2e130f8e6363e23778"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -145,12 +145,12 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 53);
+/******/ 	return __webpack_require__(__webpack_require__.s = 54);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (root) {
@@ -387,11 +387,11 @@
 
 })(this);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16).setImmediate))
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -582,7 +582,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -635,14 +635,14 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(68);
+__webpack_require__(69);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports) {
 
 var g;
@@ -670,12 +670,12 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_promise_polyfill__);
 __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
@@ -703,8 +703,8 @@ var scriptsLoaded = {
 };
 
 window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill___default.a(function (resolve, reject) {
-	__webpack_require__.e/* require.ensure */(24).then((function (require) {
-		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(9)]; (function (script) {
+	__webpack_require__.e/* require.ensure */(12).then((function (require) {
+		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(10)]; (function (script) {
 			hrm.Vue = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
@@ -712,15 +712,15 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill___default.a
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(23).then((function (require) {
-		hrm.Vuex = __webpack_require__(10);
+	__webpack_require__.e/* require.ensure */(11).then((function (require) {
+		hrm.Vuex = __webpack_require__(11);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Vuex = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(25).then((function (require) {
-		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(8)]; (function (script) {
+	__webpack_require__.e/* require.ensure */(13).then((function (require) {
+		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(9)]; (function (script) {
 			hrm.VueRouter = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
@@ -728,36 +728,36 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill___default.a
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(20).then((function (require) {
-		hrm.Fullcalendar = __webpack_require__(4);
+	__webpack_require__.e/* require.ensure */(0).then((function (require) {
+		hrm.Fullcalendar = __webpack_require__(5);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Fullcalendar = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(26).then((function (require) {
-		hrm.Multiselect = __webpack_require__(7);
+	__webpack_require__.e/* require.ensure */(14).then((function (require) {
+		hrm.Multiselect = __webpack_require__(8);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Multiselect = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(27).then((function (require) {
-		hrm.NProgress = __webpack_require__(5);
+	__webpack_require__.e/* require.ensure */(15).then((function (require) {
+		hrm.NProgress = __webpack_require__(6);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.NProgress = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(21).then((function (require) {
+	__webpack_require__.e/* require.ensure */(1).then((function (require) {
 		hrm.Moment = __webpack_require__(1);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Moment = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(22).then((function (require) {
-		hrm.Toastr = __webpack_require__(6);
+	__webpack_require__.e/* require.ensure */(8).then((function (require) {
+		hrm.Toastr = __webpack_require__(7);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Toastr = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
@@ -773,21 +773,21 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill___default.a
 	// 	hrmIsAllScriptsLoaded(resolve, reject);
 	// });
 
-	__webpack_require__.e/* require.ensure */(28).then((function (require) {
-		hrm.Uploader = __webpack_require__(3);
+	__webpack_require__.e/* require.ensure */(16).then((function (require) {
+		hrm.Uploader = __webpack_require__(4);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Uploader = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(29).then((function (require) {
-		hrm.FontAwesome = __webpack_require__(265);
+	__webpack_require__.e/* require.ensure */(17).then((function (require) {
+		hrm.FontAwesome = __webpack_require__(3);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.FontAwesome = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(30).then((function (require) {
+	__webpack_require__.e/* require.ensure */(18).then((function (require) {
 		hrm.Loading = __webpack_require__(2);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Loading = true;
@@ -810,7 +810,7 @@ hrmPromise.then(function (result) {
 
 /***/ }),
 
-/***/ 68:
+/***/ 69:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -1000,7 +1000,7 @@ hrmPromise.then(function (result) {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25), __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(15)))
 
 /***/ })
 

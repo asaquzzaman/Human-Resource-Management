@@ -30,8 +30,6 @@ class Hrm_Attendance {
             )
         );
 
-
-
         $leaves = Hrm_Leave::getInstance()->get_leaves(
             array(
                 'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
@@ -41,8 +39,16 @@ class Hrm_Attendance {
             )
         );
 
+        $office_time = self::getInstance()->get_office_time();
+
         $presents = $this->get_presents( $employees, $attendances, $leaves['data'] );
         $absents  = $this->get_absents( $employees, $attendances, $leaves['data'] );
+        $early_enter = $this->get_early_enter( $employees, $attendances, $leaves['data'], $office_time );
+        $early_leave = $this->get_early_leave( $employees, $attendances, $leaves['data'], $office_time );
+        $late_leave = $this->get_late_leave( $employees, $attendances, $leaves['data'], $office_time );
+
+        pr($late_leave);
+        die();
 
         wp_send_json_success(array(
             'presents' => $presents,
@@ -51,22 +57,120 @@ class Hrm_Attendance {
         
     }
 
+    public function get_early_enter( $employees, $attendances, $leaves, $office_time ) {
+        
+
+        $start  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
+        $closed = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
+
+        $start  = empty( $office_time->start ) ? $start : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
+        $closed = empty( $office_time->end ) ? $closed : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
+
+        $start = strtotime( $start );
+        $closed = strtotime( $closed );
+
+
+        $get_presents = $this->get_presents( $employees, $attendances, $leaves );
+
+        foreach ( $get_presents as $key => $get_present ) {
+            $punch_in = strtotime( $get_present->punch_in_date_time );
+
+            if ( $punch_in >= $start ) {
+                unset( $get_presents[$key] );
+            }
+        }
+
+        return $get_presents;
+        
+    }
+
+    public function get_early_leave( $employees, $attendances, $leaves, $office_time ) {
+        $data = [];
+
+        $start  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
+        $closed = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
+
+        $start  = empty( $office_time->start ) ? $start : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
+        $closed = empty( $office_time->end ) ? $closed : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
+
+        $start = strtotime( $start );
+        $closed = strtotime( $closed );
+
+
+        $get_presents = $this->get_presents( $employees, $attendances, $leaves );
+
+        foreach ( $get_presents as $key => $get_present ) {
+            if ( ! empty( $get_present->punch_out_date_time ) ) {
+                if ( strtotime( $get_present->punch_out_date_time ) < $closed ) {
+                    $data[] = $get_present;
+                }
+            }
+        }
+        
+        return $data;
+        
+    }
+
+    public function get_late_leave( $employees, $attendances, $leaves, $office_time ) {
+
+        $data = [];
+
+        $start  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
+        $closed = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
+
+        $start  = empty( $office_time->start ) ? $start : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
+        $closed = empty( $office_time->end ) ? $closed : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
+
+        $start = strtotime( $start );
+        $closed = strtotime( $closed );
+
+
+        $get_presents = $this->get_presents( $employees, $attendances, $leaves );
+
+        foreach ( $get_presents as $key => $get_present ) {
+            if ( ! empty( $get_present->punch_out_date_time ) ) {
+                if ( strtotime( $get_present->punch_out_date_time ) > $closed ) {
+                    $data[] = $get_present;
+                }
+            }
+        }
+        
+        return $data;
+        
+    }
+
     public function get_presents( $employees, $attendances, $leaves ) {
         $filter_attendances = [];
         $fileter_leaves = [];
+        $filter_punch_outs = [];
         $data = [];
+        $today = date('Y-m-d', strtotime( current_time( 'mysql' ) ) );
         
         foreach ( $leaves as $key => $leave ) {
             $fileter_leaves[$leave['emp_id']] = $leave;
         }
 
+        //filter punch in
         foreach ( $attendances as $key => $attendance ) {
-            
             $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
         }
-
+        //filter punch in
         foreach ( $filter_attendances as $user_id => $filter_attendance ) {
-            $filter_attendances[$user_id] = date( 'H:i:s a', min($filter_attendance) );
+            $filter_attendances[$user_id] = min($filter_attendance);
+        }
+        
+        //filter punch out
+        foreach ( $attendances as $key => $attendance ) {
+            $punch_out = date( 'Y-m-d', strtotime( $attendance->punch_out ) );
+            
+            if ( $punch_out == $today ) {
+                $filter_punch_outs[$attendance->user_id][] = strtotime( $attendance->punch_out );
+            }
+        }
+
+        //filter punch out
+        foreach ( $filter_punch_outs as $user_id => $filter_punch_out ) {
+            $filter_punch_outs[$user_id] = max($filter_punch_out);
         }
 
         foreach ( $employees as $key => $emp ) {
@@ -75,11 +179,20 @@ class Hrm_Attendance {
             }
 
             if ( array_key_exists( $emp->ID, $filter_attendances ) ) {
-                $emp->data->punch_in = $filter_attendances[$emp->ID];
+                $emp->data->punch_in_time = date( 'h:i:s a', $filter_attendances[$emp->ID] );
+                $emp->data->punch_in_date_time = date( 'Y-m-d h:i:s a', $filter_attendances[$emp->ID] );
+            }
+
+            if ( array_key_exists( $emp->ID, $filter_punch_outs ) ) {
+                $emp->data->punch_out_time = date( 'h:i:s a', $filter_punch_outs[$emp->ID] );
+                $emp->data->punch_out_date_time = date( 'Y-m-d h:i:s a', $filter_punch_outs[$emp->ID] );
+            }
+
+            if ( $emp->data->punch_in_time ) {
                 $data[] = $emp->data;
             }
         }
-        
+
         return $data;
     }
 
@@ -97,7 +210,7 @@ class Hrm_Attendance {
         }
 
         foreach ( $filter_attendances as $user_id => $filter_attendance ) {
-            $filter_attendances[$user_id] = date( 'H:i:s a', min($filter_attendance) );
+            $filter_attendances[$user_id] = date( 'h:i:s a', min($filter_attendance) );
         }
 
         foreach ( $employees as $key => $emp ) {
@@ -485,8 +598,8 @@ class Hrm_Attendance {
 
         foreach ( $attendance as $key => $attend ) {
             $attend->date      = hrm_get_date( $attend->date );
-            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, 'h:i:s a' );
-            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, 'h:i:s a' ) : '&#8211 &#8211';
+            $attend->punch_in  = hrm_get_date_time( $attend->punch_in, 'Y-m-d h:i:s a' );
+            $attend->punch_out = ( strtotime( $attend->punch_out ) > 0 )  ? hrm_get_date_time( $attend->punch_out, 'Y-m-d h:i:s a' ) : '&#8211 &#8211';
             
             
             if ( strtotime( $attend->punch_out ) > 0 ) {
@@ -565,7 +678,7 @@ class Hrm_Attendance {
 
                     case 'punch_in':
                         $query_args[] = array(
-                            'field'     => 'date',
+                            'field'     => 'punch_in',
                             'value'     => $arg,
                             'condition' => '>='
                         );
@@ -573,7 +686,7 @@ class Hrm_Attendance {
 
                     case 'punch_out':
                         $query_args[] = array(
-                            'field'     => 'date',
+                            'field'     => 'punch_out',
                             'value'     => $arg,
                             'condition' => '<='
                         );

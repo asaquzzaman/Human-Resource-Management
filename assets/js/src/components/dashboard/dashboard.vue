@@ -303,6 +303,9 @@
 			});
 
 			this.getDashboardAttendance();
+			this.getDashboardLeaves();
+			this.getDashboardNotices();
+			this.getDashboardBirthdays();
 		},
 
 		computed: {

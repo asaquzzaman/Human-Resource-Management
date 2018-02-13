@@ -33,26 +33,26 @@ class Hrm_Attendance {
         $leaves = Hrm_Leave::getInstance()->get_leaves(
             array(
                 'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-                'end_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-                'per_page' =>  1000,
-                'status'   => 1
+                'end_time'   => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                'per_page'   =>  1000,
+                'status'     => 1
             )
         );
 
         $office_time = self::getInstance()->get_office_time();
 
-        $presents = $this->get_presents( $employees, $attendances, $leaves['data'] );
-        $absents  = $this->get_absents( $employees, $attendances, $leaves['data'] );
+        $presents    = $this->get_presents( $employees, $attendances, $leaves['data'] );
+        $absents     = $this->get_absents( $employees, $attendances, $leaves['data'] );
         $early_enter = $this->get_early_enter( $employees, $attendances, $leaves['data'], $office_time );
         $early_leave = $this->get_early_leave( $employees, $attendances, $leaves['data'], $office_time );
-        $late_leave = $this->get_late_leave( $employees, $attendances, $leaves['data'], $office_time );
-
-        pr($late_leave);
-        die();
+        $late_leave  = $this->get_late_leave( $employees, $attendances, $leaves['data'], $office_time );
 
         wp_send_json_success(array(
-            'presents' => $presents,
-            'absents'  => $absents
+            'present'    => $presents,
+            'absent'     => $absents,
+            'early_enter' => $early_enter,
+            'early_leave' => $early_leave,
+            'late_leave'  => $late_leave
         ));
         
     }
@@ -162,7 +162,6 @@ class Hrm_Attendance {
         //filter punch out
         foreach ( $attendances as $key => $attendance ) {
             $punch_out = date( 'Y-m-d', strtotime( $attendance->punch_out ) );
-            
             if ( $punch_out == $today ) {
                 $filter_punch_outs[$attendance->user_id][] = strtotime( $attendance->punch_out );
             }
@@ -174,6 +173,9 @@ class Hrm_Attendance {
         }
 
         foreach ( $employees as $key => $emp ) {
+
+            $emp->data->avatar_url = get_avatar_url( $emp->ID );
+
             if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
                 $emp->data->leave = $fileter_leaves[$emp->ID];
             }

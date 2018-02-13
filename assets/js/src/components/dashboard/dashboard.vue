@@ -88,85 +88,143 @@
 
 		<div id="dashboard-widgets-wrap">
 			<div id="dashboard-widgets" class="metabox-holder">
+				
+
 				<div id="postbox-container-1" class="postbox-container">
-					<div id="normal-sortables" class="meta-box-sortables ui-sortable">
+					<div class="meta-box-sortables ui-sortable">
+						
+
 						<div id="dashboard_activity" class="postbox ">
-							<h2 class="hndle ui-sortable-handle"><span>Attendance</span></h2>
+							<h2 class="hndle ui-sortable-handle">
+								<span>{{ attendanceLabel }}</span>
+							</h2>
 							<div class="inside">
-								ljhakjsgf
+								<div v-if="attendance.present">
+									<ul v-for="punchIn in present" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="punchIn.avatar_url"></li>
+										<li>{{ punchIn.display_name }}</li>
+										<li>{{ punchIn.punch_in_time }}</li>
+									</ul>
+								</div>
+								
+								<div v-if="attendance.absent">
+									<ul v-for="punchOut in absent" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="punchOut.avatar_url"></li>
+										<li>{{ punchOut.display_name }}</li>
+										<li>No Time Available</li>
+									</ul>
+								</div>
+								
+								<div v-if="attendance.earlyEnter">
+									<ul v-for="firstEntry in earlyEnter" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url"></li>
+										<li>{{ firstEntry.display_name }}</li>
+										<li>{{ firstEntry.punch_in_time }}</li>
+									</ul>
+								</div>
+								
+								<div v-if="attendance.earlyLeave">
+									<ul v-for="firstLeave in earlyLeave" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url"></li>
+										<li>{{ firstLeave.display_name }}</li>
+										<li>{{ firstLeave.punch_out_time }}</li>
+									</ul>
+								</div>
+								
+								<div v-if="attendance.lateLeave">
+									<ul v-for="firstOut in lateLeave" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="firstOut.avatar_url"></li>
+										<li>{{ firstOut.display_name }}</li>
+										<li>{{ firstOut.punch_out_time }}</li>
+									</ul>
+								</div>
+
 								<div id="">
 									<div id="" class="activity-block">
 										<ul class="subsubsub">
 											<li class="all">
-												<a href="#l">Present<span class="count">(<span class="all-count">1</span>)</span></a> |
+												<a @click.prevent="attendanceTab('present')" href="#l">Present<span class="count">(<span class="all-count">{{ present.length }}</span>)</span></a> |
 											</li>
 											<li class="moderated">
-												<a href="#">Absent<span class="count">(<span class="pending-count">0</span>)</span></a> |
+												<a @click.prevent="attendanceTab('absent')" href="#">Absent<span class="count">(<span class="pending-count">{{ absent.length }}</span>)</span></a> |
 											</li>
 											<li class="approved">
-												<a href="#">Early Enter<span class="count">(<span class="approved-count">1</span>)</span></a> |
+												<a @click.prevent="attendanceTab('earlyEnter')" href="#">Early Enter<span class="count">(<span class="approved-count">{{ earlyEnter.length }}</span>)</span></a> |
 											</li>
 											<li class="spam">
-												<a href="#">Early Leave<span class="count">(<span class="spam-count">0</span>)</span></a> |
+												<a @click.prevent="attendanceTab('earlyLeave')" href="#">Early Leave<span class="count">(<span class="spam-count">{{ earlyLeave.length }}</span>)</span></a> |
+											</li>
+											<li class="spam">
+												<a @click.prevent="attendanceTab('lateLeave')" href="#">Late Leave<span class="count">(<span class="spam-count">{{ lateLeave.length }}</span>)</span></a> 
 											</li>
 										</ul>
 									</div>
 								</div>
 							</div>
 						</div>
+
+
+
+						<div class="postbox ">
+							<h2 class="hndle ui-sortable-handle">
+								<span class="">Birthday</span> 
+							</h2>
+							<div class="inside">
+								<div>
+									<ul v-for="birth in birthday" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="birth.data.avatar_url"></li>
+										<li>{{ birth.data.display_name }}</li>
+										<li>{{ birth.data.birthday }}</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+
 					</div>	
 				</div>
 
 
 				
 				<div id="postbox-container-2" class="postbox-container">
-					<div id="side-sortables" class="meta-box-sortables ui-sortable">
-						<div id="dashboard_quick_press" class="postbox ">
-						<button type="button" class="handlediv" aria-expanded="true">
-			
-						<span class="toggle-indicator" aria-hidden="true"></span>
-						</button>
-						<h2 class="hndle ui-sortable-handle"><span><span class="hide-if-no-js">Quick Draft</span> <span class="hide-if-js">Your Recent Drafts</span></span></h2>
-						<div class="inside">
+					<div  class="meta-box-sortables ui-sortable">
+						
 
-						<form name="post" action="http://localhost/hrm/wp-admin/post.php" method="post" id="quick-press" class="initial-form hide-if-no-js">
-
-
-						<div class="input-text-wrap" id="title-wrap">
-						<label class="prompt" for="title" id="title-prompt-text">
-
-						Title			</label>
-						<input type="text" name="post_title" id="title" autocomplete="off">
+						<div class="postbox ">
+							<h2 class="hndle ui-sortable-handle hrm-leave-h2">
+								<span class="">Leave</span> 
+								<span class="">Type</span> 
+								<div class="hrm-clear"></div>
+							</h2>
+							<div class="inside">
+								<div>
+									<ul v-for="leave in leaves" class="hrm-attendance-ul">
+										<li><img class="hrm-dashboard-avatar" :src="leave.employee.data.avatar_url"></li>
+										<li>{{ leave.employee.data.display_name }}</li>
+										<li>{{ leave.leave_type.data.name }}</li>
+									</ul>
+								</div>
+							</div>
 						</div>
 
-						<div class="textarea-wrap" id="description-wrap">
-						<label class="prompt" for="content" id="content-prompt-text">What’s on your mind?</label>
-						<textarea name="content" id="content" class="mceEditor" rows="3" cols="15" autocomplete="off"></textarea>
-						</div>
-
-						<p class="submit">		
-							<input type="submit" name="save" id="save-post" class="button button-primary" value="Save Draft">			
-							<br class="clear">
-						</p>
-
-						</form>
-						</div>
+						<div class="postbox ">
+							<h2 class="hndle ui-sortable-handle">
+								<span class="">Notice Board</span> 
+							</h2>
+							<div class="inside">
+								<div>
+									<ul v-for="leave in leaves" class="hrm-attendance-ul">
+										<li>{{ leave.employee.data.display_name }}</li>
+										<li>{{ leave.leave_type.data.name }}</li>
+									</ul>
+								</div>
+							</div>
 						</div>
 
 					</div>	
 				</div>
-
-
 			</div>
-
 		</div>
-
-
-
-
-
-
-
 
 
 	</div>
@@ -271,6 +329,24 @@
 	    font-weight: 600;
     	
 	}
+	.hrm-dashboard-avatar {
+		height: 16px;
+		width: 16px;
+		border-radius: 100%;
+	}
+	.hrm-attendance-ul li {
+		display: inline-block;
+	}
+	.hrm-attendance-ul li:nth-child(2) {
+		width: 72%;
+	}
+
+	.hrm-leave-h2 span {
+		float: left;
+	}
+	.hrm-leave-h2 span:first-child {
+		width: 72%;
+	}
 
 </style>
 
@@ -285,7 +361,22 @@
 				managers: [],
 				employees: 0,
 				males: 0,
-				females: 0
+				females: 0,
+				present: [],
+				absent: [],
+				earlyEnter: [],
+				earlyLeave: [],
+				lateLeave: [],
+				attendanceLabel: 'Present',
+				attendance: {
+					present: true,
+					absent: false,
+					earlyEnter: false,
+					earlyLeave: false,
+					lateLeave: false
+				},
+				leaves: [],
+				birthday: []
 			}
 		},
 		
@@ -302,10 +393,26 @@
 				}
 			});
 
-			this.getDashboardAttendance();
-			this.getDashboardLeaves();
+			this.getDashboardAttendance({
+				callback (res) {
+					self.present = res.present;
+					self.absent = res.absent;
+					self.earlyEnter = res.early_enter;
+					self.earlyLeave = res.early_leave;
+					self.lateLeave = res.late_leave;
+				}
+			});
+			this.getDashboardLeaves({
+				callback (res) {
+					self.leaves = res;
+				}
+			});
 			this.getDashboardNotices();
-			this.getDashboardBirthdays();
+			this.getDashboardBirthdays({
+				callback (res) {
+					self.birthday = res;
+				}
+			});
 		},
 
 		computed: {
@@ -316,7 +423,33 @@
 		},
 
 		methods: {
+			attendanceTab (section) {
+				var self = this;
+				
+				jQuery.each(this.attendance, function(key, val) {
+					self.attendance[key] = false;
+				});
 
+				this.attendance[section] = true;
+
+				switch(section) {
+					case 'present':
+						self.attendanceLabel = 'Present';
+						break;
+					case 'absent':
+						self.attendanceLabel = 'Absent';
+						break;
+					case 'earlyEnter':
+						self.attendanceLabel = 'Early Enter';
+						break;
+					case 'earlyLeave':
+						self.attendanceLabel = 'Early Leave';
+						break;
+					case 'lateLeave':
+						self.attendanceLabel = 'Late Leave';
+						break;
+				}
+			}
 		}
 	}
 </script>

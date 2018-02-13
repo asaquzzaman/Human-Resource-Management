@@ -46,6 +46,12 @@ class Hrm_Employee {
             )
         ));
 
+        foreach ( $users->results as $key => $result ) {
+            $birthday                 = get_user_meta( $result->ID, 'hrm_birthday', true );
+            $result->data->birthday   = hrm_get_date( $birthday );
+            $result->data->avatar_url = get_avatar_url( $result->ID );
+        }
+
         wp_send_json_success( $users->results );
     }
 

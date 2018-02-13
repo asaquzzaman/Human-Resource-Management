@@ -20,8 +20,9 @@ export default {
 	        this.httpRequest('hrm_get_dashboard_header_block', form_data);
 		},
 
-		getDashboardAttendance () {
+		getDashboardAttendance (args) {
 			var self = this;
+			args = args || {};
 
 			var form_data = {
 	            data: {},
@@ -35,8 +36,9 @@ export default {
 	        this.httpRequest('hrm_get_dashboard_attendance', form_data);
 		},
 
-		getDashboardLeaves () {
+		getDashboardLeaves (args) {
 			var self = this;
+			args = args || {};
 
 			var form_data = {
 	            data: {},
@@ -50,8 +52,9 @@ export default {
 	        this.httpRequest('hrm_get_dashboard_leaves', form_data);
 		},
 
-		getDashboardNotices () {
+		getDashboardNotices (args) {
 			var self = this;
+			args = args || {};
 
 			var form_data = {
 	            data: {},
@@ -65,8 +68,9 @@ export default {
 	        //this.httpRequest('hrm_get_dashboard_notices', form_data);
 		},
 
-		getDashboardBirthdays () {
+		getDashboardBirthdays (args) {
 			var self = this;
+			args = args || {};
 
 			var form_data = {
 	            data: {},

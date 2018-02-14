@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
+class ComposerStaticInit5ba305b5ab50164688bc304e388a7412
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -134,8 +134,13 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
         'Create_Designation_Table' => __DIR__ . '/../..' . '/db/migrations/create_designation_table.php',
+        'Create_Education_Table' => __DIR__ . '/../..' . '/db/migrations/create_education_table.php',
         'Create_Financial_Year_Table' => __DIR__ . '/../..' . '/db/migrations/crate_financial_year_table.php',
+        'Create_Location_Table' => __DIR__ . '/../..' . '/db/migrations/create_location_table.php',
         'Create_Migrations_Table' => __DIR__ . '/../..' . '/db/migrations/create_migrations_table.php',
+        'Create_Notice_Table' => __DIR__ . '/../..' . '/db/migrations/create_notice_table.php',
+        'Create_Organization_Table' => __DIR__ . '/../..' . '/db/migrations/create_organization_table.php',
+        'Create_Skill_Table' => __DIR__ . '/../..' . '/db/migrations/create_skill_table.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'HRM\\Core\\Common\\Resource_Editors' => __DIR__ . '/../..' . '/core/common/Resource_Editors.php',
         'HRM\\Core\\Common\\Traits\\Transformer_Manager' => __DIR__ . '/../..' . '/core/common/Traits/Transformer_Manager.php',
@@ -158,16 +163,26 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'HRM\\Core\\User\\User_Transformer' => __DIR__ . '/../..' . '/core/user/User_Transformer.php',
         'HRM\\Models\\Department' => __DIR__ . '/../..' . '/models/Department.php',
         'HRM\\Models\\Designation' => __DIR__ . '/../..' . '/models/Designation.php',
+        'HRM\\Models\\Education' => __DIR__ . '/../..' . '/models/Education.php',
         'HRM\\Models\\Financial_Year' => __DIR__ . '/../..' . '/models/Financial_Year.php',
         'HRM\\Models\\Holiday' => __DIR__ . '/../..' . '/models/Holiday.php',
         'HRM\\Models\\Leave' => __DIR__ . '/../..' . '/models/leave.php',
         'HRM\\Models\\Leave_Type' => __DIR__ . '/../..' . '/models/leave-type.php',
+        'HRM\\Models\\Location' => __DIR__ . '/../..' . '/models/Location.php',
         'HRM\\Models\\Meta' => __DIR__ . '/../..' . '/models/meta.php',
+        'HRM\\Models\\Notice' => __DIR__ . '/../..' . '/models/Notice.php',
+        'HRM\\Models\\Organization' => __DIR__ . '/../..' . '/models/Organization.php',
         'HRM\\Models\\Relation' => __DIR__ . '/../..' . '/models/Relation.php',
+        'HRM\\Models\\Skill' => __DIR__ . '/../..' . '/models/Skill.php',
         'HRM\\Models\\User' => __DIR__ . '/../..' . '/models/user.php',
         'HRM\\Models\\Work_Experience' => __DIR__ . '/../..' . '/models/Work_Experience.php',
         'HRM\\Transformers\\Department_Transformer' => __DIR__ . '/../..' . '/transformers/Department_Transformer.php',
         'HRM\\Transformers\\Designation_Transformer' => __DIR__ . '/../..' . '/transformers/Designation_Transformer.php',
+        'HRM\\Transformers\\Education_Transformer' => __DIR__ . '/../..' . '/transformers/Education_Transformer.php',
+        'HRM\\Transformers\\Location_Transformer' => __DIR__ . '/../..' . '/transformers/Location_Transformer.php',
+        'HRM\\Transformers\\Notice_Transformer' => __DIR__ . '/../..' . '/transformers/Notice_Transformer.php',
+        'HRM\\Transformers\\Organization_Transformer' => __DIR__ . '/../..' . '/transformers/Organization_Transformer.php',
+        'HRM\\Transformers\\Skill_Transformer' => __DIR__ . '/../..' . '/transformers/Skill_Transformer.php',
         'HRM\\Transformers\\Work_Experiance_Transformer' => __DIR__ . '/../..' . '/transformers/Work_Experience_Transformer.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
         'Illuminate\\Container\\Container' => __DIR__ . '/..' . '/illuminate/container/Container.php',
@@ -548,9 +563,9 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5ba305b5ab50164688bc304e388a7412::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5ba305b5ab50164688bc304e388a7412::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5ba305b5ab50164688bc304e388a7412::$classMap;
 
         }, null, ClassLoader::class);
     }

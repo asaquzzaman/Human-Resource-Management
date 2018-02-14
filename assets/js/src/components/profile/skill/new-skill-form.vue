@@ -1,7 +1,7 @@
 <template>
 	<div id="hrm-hidden-form-warp" class="postbox">
         <div class="hrm-search-head">
-            <h3>Education</h3>
+            <h3>Skill</h3>
         </div>
         <form id="hrm-hidden-form" action="" @submit.prevent="selfNewRecord()">
             <div id="hrm-form-field">
@@ -21,7 +21,7 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.education],
+		mixins: [HRMMixin.skill],
 		props: {
 			fields: {
 				type: [Array]
@@ -47,9 +47,9 @@
 				self.canSubmit = false;
 
 				var postData = this.generateFieldData(this.fields);
-					postData['class'] = 'Education';
+					postData['class'] = self.modelName;
 					postData['method'] = 'create';
-					postData['transformers'] = 'Education_Transformer';
+					postData['transformers'] = self.modelTransformer;
 
 				var args = {
 					data: postData,
@@ -58,6 +58,7 @@
 						self.loading = false;
 						self.canSubmit = true;
 						self.showHideNewRecordForm(false);
+						self.makeEmptyField(self.fields);
 					}
 				}
 
@@ -68,11 +69,21 @@
 				var formated = {};
 
 				data.forEach(function(val) {
-					formated[val.name] = val.model;
+					if (typeof val.filterSubmited !== 'undefined') {
+						formated[val.name] = val.filterSubmited(val.model);
+					} else {
+						formated[val.name] = val.model;
+					}
+					
 				});
 
 				return formated;
 			},
+			makeEmptyField (data) {
+				data.forEach(function(val) {
+					val.model = '';
+				});
+			}
 		}
 	}
 </script>

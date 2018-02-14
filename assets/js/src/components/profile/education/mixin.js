@@ -1,7 +1,9 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'education'
+			nameSpace: 'education',
+			modelName: 'Education',
+			modelTransformer: 'Education_Transformer'
 		}
 	},
 	methods: {
@@ -27,7 +29,7 @@ export default {
 			var form_data = {
 	            data: {
 	            	delete: deletedId,
-	            	class: 'Education',
+	            	class: self.modelName,
 					method: 'delete'
 	            },
 
@@ -35,7 +37,7 @@ export default {
 	            	
 	            	self.$store.commit(self.nameSpace + '/afterDelete', deletedId);
 	            	if (typeof callback === 'function') {
-	                    callback(deletedId);
+	                    callback.call(self, deletedId);
 	                } 
 	                
 	            },
@@ -64,7 +66,7 @@ export default {
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
 
                 	if (typeof args.callback === 'function') {
-                        args.callback(true, res);
+                        args.callback.call(self, true, res);
                     } 
                     
                 },
@@ -77,7 +79,7 @@ export default {
                     });
 
                     if (typeof args.callback === 'function') {
-                        args.callback(false, res);
+                        args.callback.call(self, false, res);
                     } 
                 }
             };
@@ -96,7 +98,7 @@ export default {
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
 
                 	if (typeof args.callback === 'function') {
-                        args.callback(true, res);
+                        args.callback.call(self, true, res);
                     } 
                     
                     hrm.Toastr.success(res.message);
@@ -110,7 +112,7 @@ export default {
                     });
 
                     if (typeof args.callback === 'function') {
-                        args.callback(false, res);
+                        args.callback.call(self, false, res);
                     } 
                 }
             };
@@ -132,9 +134,9 @@ export default {
 			var self = this;
 
 			var postData = {
-				'class': 'Education',
+				'class': self.modelName,
 				'method': 'gets',
-				'transformers': 'Education_Transformer',
+				'transformers': self.modelTransformer,
 				'page': this.$route.params.current_page_number
 			};
 			
@@ -154,7 +156,7 @@ export default {
 		},
 
 		recordMeta (record) {
-			record.editMode = false;
+			record['editMode'] = false;
 		},
 
 		filter (callback) {
@@ -173,7 +175,7 @@ export default {
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
 
 	            	if (typeof callback === 'function') {
-	                    callback(true, res);
+	                    callback.call(self, true, res);
 	                } 
 	                
 	            },
@@ -186,12 +188,12 @@ export default {
 	                });
 
 	                if (typeof args.callback === 'function') {
-	                    callback(false, res);
+	                    callback.call(self, false, res);
 	                } 
 	            }
 	        };
 
-	        this.httpRequest('hrm_education_filter', form_data);
+	        this.httpRequest('hrm_experiance_filter', form_data);
 		}
 	}	
 }

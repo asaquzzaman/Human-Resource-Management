@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<h1 class="wp-heading-inline">Education</h1>
+	<div class="page-organization">
+		<h1 class="wp-heading-inline">Locations</h1>
 		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
@@ -34,7 +34,7 @@
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
-            component_name='education_pagination'>
+            component_name='location_pagination'>
             
         </hrm-pagination> 
 
@@ -51,11 +51,11 @@
 </style>
 
 <script>
-	import Table from './education-table.vue';
-	import Form from './new-education-form.vue';
+	import Table from './location-table.vue';
+	import Form from './new-location-form.vue';
 
 	export default {
-		mixins: [HRMMixin.education],
+		mixins: [HRMMixin.location],
 
 		data () {
 
@@ -72,55 +72,108 @@
 					{
 						type: 'text',
 						model: '',
-						label: 'Level',
-						name: 'level',
-						tableHead: 'Level',
+						label: 'Name',
+						name: 'name',
+						tableHead: 'Name',
 						tbRowAction: true,
 						editable: true
 					},
 					{
-						type: 'text',
+						type: 'select',
 						model: '',
-						label: 'Institute',
-						name: 'institute',
-						tableHead: 'Institute',
-						tbRowAction: false,
-						editable: true
+						options: [],
+						label: 'Country',
+						optionLabel: 'country',
+						placeholder: 'Select Country',
+						name: 'country',
+						tableHead: 'Country',
+						editable: true,
+						//Filter submited new data
+						// filterSubmited (val) {
+						// 	return val.id;
+						// },
+						// //Table print data
+						// filterPrintData (val) {
+
+						// 	if (!val) {
+						// 		return '&#8211 &#8211';
+						// 	}
+						// 	return val.data.name;
+						// },
+						// // Filter edit form field data
+						// filterComputedGet (val) {
+
+						// 	if (!val) {
+						// 		return '';
+						// 	}
+						// 	return val.data;
+						// },
+						// // Filer edit changable data
+						// filterComputedSet (val) {
+						// 	return { data: val }
+						// },
+						// //Filter edit submited data
+						// filterEditingData (val) {
+						// 	if (val) {
+						// 		return val.data.id;
+						// 	}
+						// }
+						
 					},
 					{
 						type: 'text',
 						model: '',
-						label: 'Major/Specialization',
-						name: 'major',
-						tableHead: 'Major/Specialization',
-						tbRowAction: false,
+						label: 'State/Province',
+						name: 'state',
+						tableHead: 'State/Province',
 						editable: true
 					},
 					{
 						type: 'text',
 						model: '',
-						label: 'GPA/Score',
-						name: 'gpa',
-						tableHead: 'GPA/Score',
-						tbRowAction: false,
+						label: 'City',
+						name: 'city',
+						tableHead: 'City',
 						editable: true
 					},
 					{
-						type: 'datePickerFrom',
+						type: 'text',
 						model: '',
-						label: 'Start Date',
-						name: 'start',
-						tableHead: 'Start Date',
-						tbRowAction: false,
+						label: 'Address Street 1',
+						name: 'address',
+						tableHead: 'Address Street 1',
 						editable: true
 					},
 					{
-						type: 'datePickerTo',
+						type: 'text',
 						model: '',
-						label: 'End Date',
-						name: 'end',
-						tableHead: 'End Date',
-						tbRowAction: false,
+						label: 'Zip/Postal Code',
+						name: 'zipcode',
+						tableHead: 'Zip/Postal Code',
+						editable: true
+					},
+					{
+						type: 'text',
+						model: '',
+						label: 'Phone',
+						name: 'phone',
+						tableHead: 'Phone',
+						editable: true
+					},
+					{
+						type: 'text',
+						model: '',
+						label: 'Fax',
+						name: 'fax',
+						tableHead: 'Fax',
+						editable: true
+					},
+					{
+						type: 'textarea',
+						model: '',
+						label: 'Note',
+						name: 'note',
+						tableHead: 'Note',
 						editable: true
 					}
 				],

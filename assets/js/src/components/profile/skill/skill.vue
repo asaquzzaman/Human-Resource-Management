@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="wp-heading-inline">Education</h1>
+		<h1 class="wp-heading-inline">Skill</h1>
 		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
@@ -34,7 +34,7 @@
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
-            component_name='education_pagination'>
+            component_name='skill_pagination'>
             
         </hrm-pagination> 
 
@@ -51,11 +51,11 @@
 </style>
 
 <script>
-	import Table from './education-table.vue';
-	import Form from './new-education-form.vue';
+	import Table from './skill-table.vue';
+	import Form from './new-skill-form.vue';
 
 	export default {
-		mixins: [HRMMixin.education],
+		mixins: [HRMMixin.skill],
 
 		data () {
 
@@ -81,45 +81,18 @@
 					{
 						type: 'text',
 						model: '',
-						label: 'Institute',
-						name: 'institute',
-						tableHead: 'Institute',
+						label: 'Years of experiance',
+						name: 'experiance',
+						tableHead: 'Years of experiance',
 						tbRowAction: false,
 						editable: true
 					},
 					{
-						type: 'text',
+						type: 'textarea',
 						model: '',
-						label: 'Major/Specialization',
-						name: 'major',
-						tableHead: 'Major/Specialization',
-						tbRowAction: false,
-						editable: true
-					},
-					{
-						type: 'text',
-						model: '',
-						label: 'GPA/Score',
-						name: 'gpa',
-						tableHead: 'GPA/Score',
-						tbRowAction: false,
-						editable: true
-					},
-					{
-						type: 'datePickerFrom',
-						model: '',
-						label: 'Start Date',
-						name: 'start',
-						tableHead: 'Start Date',
-						tbRowAction: false,
-						editable: true
-					},
-					{
-						type: 'datePickerTo',
-						model: '',
-						label: 'End Date',
-						name: 'end',
-						tableHead: 'End Date',
+						label: 'Comments',
+						name: 'comments',
+						tableHead: 'Comments',
 						tbRowAction: false,
 						editable: true
 					}

@@ -21,13 +21,13 @@
                     	<span v-html="printCellData(record, field)"></span>
                     	<div v-if="field.tbRowAction" class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
-	                    	<span class="trash"><a href="#">Delete</a> </span>
+	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
                     </td>
                 </tr>
                 
                 <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
-                	<td colspan="5" class="colspanchange">
+                	<td :colspan="fields.length + 1" class="colspanchange">
                 		<form action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
@@ -59,7 +59,7 @@
 				</tr>
 
 				<tr v-if="!records.length">
-					<td colspan="2">
+					<td :colspan="fields.length + 1">
 						No result found!
 					</td>
 				</tr>
@@ -189,7 +189,24 @@
 				
 				this.updateRecord(args);
 			},
-
+			selfDelete (record) {
+				var self = this;
+				this.recordDelete([record.id], function() {
+					var hasRecords = self.$store.state[self.nameSpace].records.length;
+					var page = self.$route.params.current_page_number;
+					if (!hasRecords && page > 1) {
+						self.$router.push({
+							params: {
+								current_page_number: page - 1
+							},
+							query: self.$route.query
+						});
+					}
+					if (!hasRecords && self.pagination.total_pages > 1) {
+						self.getRecords();
+					}
+				})
+			},
 			deleteAll () {
 				if (this.deleteAllStatus) {
                     var deleted_id = [];

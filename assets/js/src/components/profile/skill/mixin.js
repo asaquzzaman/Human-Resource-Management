@@ -1,9 +1,9 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'designation',
-			modelName: 'Designation',
-			modelTransformer: 'designation_Transformer'
+			nameSpace: 'skill',
+			modelName: 'Skill',
+			modelTransformer: 'Skill_Transformer'
 		}
 	},
 	methods: {

@@ -27,7 +27,7 @@
                 </tr>
                 
                 <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
-                	<td colspan="5" class="colspanchange">
+                	<td :colspan="fields.length + 1" class="colspanchange">
                 		<form action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
@@ -80,7 +80,7 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.education],	
+		mixins: [HRMMixin.skill],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],

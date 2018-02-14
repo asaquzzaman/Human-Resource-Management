@@ -58,6 +58,7 @@
 						self.loading = false;
 						self.canSubmit = true;
 						self.showHideNewRecordForm(false);
+						self.makeEmptyField(self.fields);
 					}
 				}
 
@@ -73,6 +74,11 @@
 
 				return formated;
 			},
+			makeEmptyField (data) {
+				data.forEach(function(val) {
+					val.model = '';
+				});
+			}
 		}
 	}
 </script>

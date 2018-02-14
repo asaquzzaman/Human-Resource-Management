@@ -7,7 +7,7 @@ function resolve (dir) {
 
 module.exports = {
 	entry: {
-        'hrm-bundle': './assets/js/src/start.js',
+        'hrm': './assets/js/src/start.js',
         'library': './assets/js/src/helpers/library.js',
     },
 	

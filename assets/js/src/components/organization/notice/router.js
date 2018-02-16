@@ -1,3 +1,4 @@
+HRMRegisterModule('notice', 'organization/notice');
 
 let notice = resolve => {
 
@@ -6,13 +7,16 @@ let notice = resolve => {
     });
 }
 
-HRMRegisterChildrenRoute ('hrm_root', 
+HRMRegisterChildrenRoute ('organization', 
     [
 
         {
             path: 'notice', 
             component: notice, 
             name: 'notice',
+            meta: {
+                label: 'Notice',
+            },
 
             children: [
                 {

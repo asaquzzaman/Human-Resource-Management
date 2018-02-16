@@ -129,6 +129,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_hrm_experiance_filter', array( 'Hrm_Employee', 'ajax_experiance_filter' ) );
         add_action( 'wp_ajax_hrm_get_personal_info', array( 'Hrm_Employee', 'ajax_get_personal_info' ) );
         add_action( 'wp_ajax_hrm_save_personal_info', array( 'Hrm_Employee', 'ajax_save_personal_info' ) );
+        
 
     }
 

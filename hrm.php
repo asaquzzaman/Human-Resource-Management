@@ -185,45 +185,6 @@ class WP_Hrm {
         add_action( 'map_meta_cap', 'hrm_map_meta_cap', 10, 4 );
     }
 
-    static function admin_scripts() {
-        global $hrm_is_admin;
-
-        // wp_enqueue_script( 'jquery' );
-        // wp_enqueue_script( 'jquery-ui-dialog' );
-        // wp_enqueue_script( 'jquery-ui-autocomplete');
-        // wp_enqueue_script( 'jquery-ui-datepicker' );
-        // wp_enqueue_script( 'jquery-ui-slider' );
-        // wp_enqueue_script( 'hrm_chosen', plugins_url( '/asset/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), false, true);
-        // wp_enqueue_script( 'hrm_datetimepicker', plugins_url( '/asset/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true);
-        // wp_enqueue_script( 'hrm-jquery.dataTables', plugins_url( '/asset/js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ), false, true);
-        // wp_enqueue_script( 'hrm_admin', plugins_url( '/asset/js/hrm.js', __FILE__ ), array( 'jquery' ), false, true);
-
-        // wp_localize_script( 'hrm_admin', 'HRM_Vars', array(
-        //     'is_admin'    => $hrm_is_admin,
-        //     'confirm_msg' => __( 'Are you sure!', 'hrm'),
-        //     'success_msg' => __( 'Changed Successfully', 'hrm' ),
-        //     'ajax_url'        => admin_url( 'admin-ajax.php' ),
-        //     'nonce'           => wp_create_nonce( 'hrm_nonce' ),
-        //     'time_zone'       => hrm_get_wp_timezone(),
-        //     'wp_date_format'  => get_option( 'date_format' ),
-        //     'wp_time_format'  => get_option( 'time_format' ),
-        //     'message'         => hrm_message(),
-        //     'current_user'    => wp_get_current_user(),
-        //     'settings'        => Hrm_Settings::getInstance()->get_settings(),
-        //     'current_date'    => current_time( 'mysql' ),
-        //     'financial_start' => hrm_financial_start_date(),
-        //     'financial_end'   => hrm_financial_end_date(),
-        //     'user_role' => hrm_current_user_role()
-        // ));
-
-        //wp_enqueue_style( 'hrm-jquery.dataTables-style', plugins_url( '/asset/css/jquery.dataTables.css', __FILE__ ), false, false, 'all' );
-        //wp_enqueue_style( 'hrm-jquery.dataTables_themeroller', plugins_url( '/asset/css/jquery.dataTables_themeroller.css', __FILE__ ), false, false, 'all' );
-        // wp_enqueue_style( 'hrm-admin', plugins_url( '/asset/css/admin.css', __FILE__ ), false, false, 'all' );
-        // wp_enqueue_style( 'hrm-chosen', plugins_url( '/asset/css/chosen.min.css', __FILE__ ), false, false, 'all' );
-        // wp_enqueue_style( 'hrm-jquery-ui', plugins_url( '/asset/css/jquery-ui.css', __FILE__ ), false, false, 'all' );
-        // wp_enqueue_style( 'hrm-jquery-ui-timepicker', plugins_url( '/asset/css/jquery-ui-timepicker-addon.css', __FILE__ ), false, false, 'all' );
-
-    }
 
     function instantiate() {
 
@@ -233,6 +194,8 @@ class WP_Hrm {
         Hrm_Employee::getInstance();
         Hrm_JsTemplate::getInstance();
         Hrm_Update::getInstance();
+        Hrm_Dashboard::getInstance();
+        Hrm_Attendance::getInstance();
     }
 
     function install() {
@@ -250,51 +213,6 @@ class WP_Hrm {
         );
     }
 
-    function pim_scripts() {
-        $this->admin_scripts();
-        wp_enqueue_script( 'jquery-ui' );
-        wp_enqueue_script( 'jquery-ui-mouse' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_script( 'plupload-handlers' );
-    }
-
-    function leave_scripts() {
-        $this->admin_scripts();
-    }
-
-    function employee_scripts() {
-        $this->admin_scripts();
-    }
-
-    function attendance_scripts() {
-        $this->admin_scripts();
-    }
-
-    function evaluation_scripts() {
-        $this->admin_scripts();
-    }
-
-    function author_scripts() {
-        $this->admin_scripts();
-    }
-
-    function employer_scripts() {
-        $this->admin_scripts();
-        wp_enqueue_script( 'jquery-ui' );
-        wp_enqueue_script( 'jquery-ui-mouse' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_script( 'plupload-handlers' );
-    }
-
-    static function file_scripts() {
-        self::admin_scripts();
-        wp_enqueue_script( 'jquery-ui' );
-        wp_enqueue_script( 'jquery-ui-mouse' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_script( 'plupload-handlers' );
-        wp_enqueue_script( 'hrm-file', plugins_url( '/asset/js/file.js', __FILE__ ) );
-    }
-
 
     function admin_menu() {
         global $submenu;
@@ -308,116 +226,55 @@ class WP_Hrm {
 
         $menu  = add_menu_page( __( 'HRM', 'hrm' ), __( 'HRM', 'hrm' ), $capability, $hrm_page_slug, array($this, 'admin_page_handler'), 'dashicons-groups'  );
 
-        foreach ( hrm_menu_label() as $page_slug => $page_label ) {
-            if ( hrm_user_can_access( $page_slug ) ) {
-                $style_slug[$page_slug] = add_submenu_page( $hrm_page_slug, $page_label, $page_label, $capability, $page_slug, array($this, 'admin_page_handler') );
-            }
-        }
-    
-        $submenu['hr_management'][] = [ __( 'Designation', 'hrm' ), $capability, 'admin.php?page=hr_management#/designation' ];
-        $submenu['hr_management'][] = [ __( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/departments' ];
-        $submenu['hr_management'][] = [ __( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/attendance' ];
-        $submenu['hr_management'][] = [ __( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/leave' ];
-
-        if ( !empty( $_GET['active'] ) && $_GET['active'] == 'vue' ) {
-            add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
-        }
         
+        $submenu[$hrm_page_slug][] = [__( 'Dashboard', 'hrm' ), $capability, 'admin.php?page=hr_management#/dashboard'];
+        $submenu[$hrm_page_slug][] = [__( 'Organization', 'hrm' ), $capability, 'admin.php?page=hr_management#/organization'];
+        $submenu[$hrm_page_slug][] = [__( 'Departments', 'hrm' ), $capability, 'admin.php?page=hr_management#/departments'];
+        $submenu[$hrm_page_slug][] = [__( 'Designation', 'hrm' ), $capability, 'admin.php?page=hr_management#/designation'];
+        $submenu[$hrm_page_slug][] = [__( 'Employee', 'hrm' ), $capability, 'admin.php?page=hr_management#/employee'];
+        $submenu[$hrm_page_slug][] = [__( 'Profile', 'hrm' ), $capability, 'admin.php?page=hr_management#/profile'];
+        $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
+        $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
+        $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
+
         
-        if ( hrm_user_can( 'manage_settings' ) ) {
-            $submenu['hr_management'][] = [ __( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management&active=vue#/settings' ];
-        }
-
-        if( isset( $style_slug[hrm_organization_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_organization_page()], array( 'Hrm_Scripts', 'admin') );
-        }
-
-        // if( isset( $style_slug[hrm_department_page()] ) ) {
-        //     add_action( 'admin_print_styles-' . $style_slug[hrm_department_page()], array( 'Hrm_Scripts', 'department') );
-        // }
-
-        if( isset( $style_slug[hrm_admin_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_admin_page()], array( 'Hrm_Scripts', 'admin') );
-        }
-
-        if( isset( $style_slug[hrm_pim_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_pim_page()], array( 'Hrm_Scripts', 'admin') );
-        }
-
-        if( isset( $style_slug[hrm_client_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_client_page()], array( $this, 'admin_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_project_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_project_page()], array( $this, 'admin_scripts') );
-        }
-
-        // if( isset( $style_slug[hrm_leave_page()] ) ) {
-        //     add_action( 'admin_print_styles-' . $style_slug[hrm_leave_page()], array( 'Hrm_Scripts', 'leave_scripts') );
-        // }
-
-        if( isset( $style_slug[hrm_attendance_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_attendance_page()], array( 'Hrm_Scripts', 'attendance_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_evaluation_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_evaluation_page()], array( $this, 'evaluation_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_file_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_file_page()], array( $this, 'file_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_employee_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_employee_page()], array( $this, 'pim_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_salary_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_salary_page()], array( $this, 'admin_scripts') );
-        }
-
-        if( isset( $style_slug[hrm_permission_page()] ) ) {
-            add_action( 'admin_print_styles-' . $style_slug[hrm_permission_page()], array( $this, 'admin_scripts') );
-        }
-
-        do_action( 'hrm_admin_menu', $this, $style_slug );
-
+        add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
     }
 
     function admin_page_handler() {
         require_once HRM_PATH . '/templates/index.html';
 
-        return;
-        if( !is_user_logged_in() ) {
-            sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
-            return;
-        }
-        $current_user_id = get_current_user_id();
-        $user_status     = get_user_meta( $current_user_id, '_status', true );
+        // return;
+        // if( !is_user_logged_in() ) {
+        //     sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
+        //     return;
+        // }
+        // $current_user_id = get_current_user_id();
+        // $user_status     = get_user_meta( $current_user_id, '_status', true );
 
-        if ( $user_status == 'no' ) {
-            _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
-            return;
-        }
+        // if ( $user_status == 'no' ) {
+        //     _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
+        //     return;
+        // }
 
-        $query_args = hrm_get_query_args();
-        $page       = $query_args['page'];
-        $tab        = $query_args['tab'];
-        $subtab     = $query_args['subtab'];
-        $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
+        // $query_args = hrm_get_query_args();
+        // $page       = $query_args['page'];
+        // $tab        = $query_args['tab'];
+        // $subtab     = $query_args['subtab'];
+        // $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
 
-        if ( $page == 'hr_management' && $vue ) {
-            require_once HRM_PATH . '/templates/index.html';
-        } else {
-            echo '<div class="hrm wrap" id="hrm">';
-            if ( $tab === false ) {
-                Hrm_Settings::getInstance()->show_page( $page );
-            } else {
-                Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
-            }
+        // if ( $page == 'hr_management' && $vue ) {
+        //     require_once HRM_PATH . '/templates/index.html';
+        // } else {
+        //     echo '<div class="hrm wrap" id="hrm">';
+        //     if ( $tab === false ) {
+        //         Hrm_Settings::getInstance()->show_page( $page );
+        //     } else {
+        //         Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
+        //     }
 
-            echo '</div>';
-        }
+        //     echo '</div>';
+        // }
      
     }
 }

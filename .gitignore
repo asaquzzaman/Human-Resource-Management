@@ -17,6 +17,8 @@ package-lock.json
 /vendor/
 /assets/js/chunk/
 /assets/js/hrm-bundle.js
+/assets/js/hrm.js
 /assets/js/library.js
+/assets/js/router
 
 

@@ -188,7 +188,7 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-library', HRM_URL . '/assets/js/library.js', false, false, false );
         wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/js/config.js', array('hrm-library'), false, false );
         
-        wp_enqueue_script( 'hrm-vue', HRM_URL . '/assets/js/hrm-bundle.js', array('jquery','hrm-config'), false, true );
+        wp_enqueue_script( 'hrm-vue', HRM_URL . '/assets/js/hrm.js', array('jquery','hrm-config'), false, true );
 
         wp_localize_script( 'hrm-library', 'HRM_Vars', array(
             'ajax_url'        => admin_url( 'admin-ajax.php' ),
@@ -228,6 +228,7 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/assets/css/jquery-ui.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/assets/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-preloader', HRM_URL . '/assets/css/Elegant-Loading-Indicator/preloader.css', false, false, 'all' );
+        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
     }
 }
 

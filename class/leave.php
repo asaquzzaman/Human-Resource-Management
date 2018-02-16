@@ -32,6 +32,22 @@ class Hrm_Leave {
 
     function __construct() {
         add_filter( 'hrm_change_data', array( $this, 'update_holiday_data' ), 10, 5 );
+        add_action( 'wp_ajax_hrm_get_dashboard_leaves', array( $this, 'get_dasboard_leaves' ) );
+    }
+
+    function get_dasboard_leaves() {
+        check_ajax_referer('hrm_nonce');
+
+        $leaves = Hrm_Leave::getInstance()->get_leaves(
+            array(
+                'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                'end_time'   => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+                'per_page'   =>  1000,
+                'status'     => 1
+            )
+        );
+
+        wp_send_json_success( $leaves['data'] );
     }
 
     public static function ajax_get_employee_dropdown() {

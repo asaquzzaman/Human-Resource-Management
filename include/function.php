@@ -792,6 +792,12 @@ function hrm_per_page() {
     return 1;
 }
 
+function valid_date_time($date, $format = 'Y-m-d H:i:s') {
+    $date = date( 'Y-m-d H:i:s', strtotime($date) );
+    var_dump( $date);
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
 
 
 

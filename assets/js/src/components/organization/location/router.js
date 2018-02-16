@@ -1,3 +1,4 @@
+HRMRegisterModule('location', 'organization/location');
 
 let location = resolve => {
 
@@ -6,13 +7,16 @@ let location = resolve => {
     });
 }
 
-HRMRegisterChildrenRoute ('hrm_root', 
+HRMRegisterChildrenRoute ('organization', 
     [
 
         {
             path: 'location', 
             component: location, 
             name: 'location',
+            meta: {
+                label: 'Location',
+            },
 
             children: [
                 {

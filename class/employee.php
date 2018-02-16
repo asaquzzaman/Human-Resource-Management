@@ -15,6 +15,44 @@ class Hrm_Employee {
         //add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
         add_action( 'cpm_after_ajax_upload', array( $this, 'after_ajax_upload' ), 10, 3 );
         add_action( 'hrm_after_new_information', array( $this, 'after_inset_information' ), 10, 2 );
+        add_action( 'wp_ajax_hrm_get_dashboard_birthdays', array( $this, 'get_dashboard_birthdays' ) );
+    }
+
+    function get_dashboard_birthdays() {
+        $today    = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $next_day = date( 'Y-m-d', strtotime( current_time( 'mysql' ) . ' + 2 days' ) );
+
+        
+        $users = new WP_User_Query( array (
+            'role__in' => array (
+                hrm_manager_role_key(),
+                hrm_employee_role_key()
+            ),
+
+            'meta_query' => array(
+                array(
+                    'key' => 'hrm_birthday',
+                    'value' => $today,
+                    'type' => 'DATE',
+                    'compare' => '>=' 
+                ),
+
+                array(
+                    'key' => 'hrm_birthday',
+                    'type' => 'DATE',
+                    'value' => $next_day,
+                    'compare' => '<=' 
+                )
+            )
+        ));
+
+        foreach ( $users->results as $key => $result ) {
+            $birthday                 = get_user_meta( $result->ID, 'hrm_birthday', true );
+            $result->data->birthday   = hrm_get_date( $birthday );
+            $result->data->avatar_url = get_avatar_url( $result->ID );
+        }
+
+        wp_send_json_success( $users->results );
     }
 
     function after_inset_information( $post, $last_inserted_id ) {

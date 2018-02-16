@@ -430,10 +430,17 @@ class Hrm_Employeelist {
         return $emp_lists;
     }
 
-    function get_employee() {
-        $employees = new WP_User_Query( array(
-            'role__in'   => array( hrm_employee_role_key(), hrm_manager_role_key() ),
-        ) );
+    function get_employee( $only_employee = false ) {
+        
+        if ( $only_employee ) {
+            $employees = new WP_User_Query( array(
+                'role__in'   => array( hrm_employee_role_key() ),
+            ) );
+        } else {
+            $employees = new WP_User_Query( array(
+                'role__in'   => array( hrm_employee_role_key(), hrm_manager_role_key() ),
+            ) );
+        }
         
         return $employees->get_results();
     }

@@ -19,12 +19,20 @@
 	            <span class="hrm-clear"></span>
 	            <span class="description"></span>
         	</div>
+        	<div v-if="field.type == 'email'">
+	            <label for="title">
+	                {{ field.label }}<em v-if="field.required">*</em>
+	            </label>
+	            <input type="email" v-model="field.model">
+	            <span class="hrm-clear"></span>
+	            <span class="description"></span>
+        	</div>
 
         	<div v-if="field.type == 'datePickerFrom'">
         		<label for="title">
 	                {{ field.label }} <em v-if="field.required">*</em>
 	            </label>
-	        	<hrm-date-picker placeholder="From" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+	        	<hrm-date-picker :placeholder="field.placeholder" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 	          	<span class="hrm-clear"></span>
             	<span class="description"></span>
         	</div>

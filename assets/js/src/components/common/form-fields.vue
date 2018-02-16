@@ -123,7 +123,7 @@
 
 			<div v-if="field.type == 'select'" class="hrm-form-field hrm-leave-type-wrap">
 				<label>
-					{{ field.label }} {{field.model}}
+					{{ field.label }}
 					<em v-if="field.required">*</em>
 				</label>
 				<div class="hrm-multiselect">

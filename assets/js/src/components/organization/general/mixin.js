@@ -1,7 +1,7 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'organization',
+			nameSpace: 'general',
 			modelName: 'Organization',
 			modelTransformer: 'Organization_Transformer'
 		}

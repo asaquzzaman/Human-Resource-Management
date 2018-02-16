@@ -1,4 +1,5 @@
 import '@components/profile/router';
+import '@components/organization/router';
 import '@components/designation/router';
 import '@components/dashboard/router';
 

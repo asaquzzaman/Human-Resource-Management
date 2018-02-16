@@ -80,7 +80,7 @@
 
 <script>
 	export default {
-		mixins: [HRMMixin.organization],	
+		mixins: [HRMMixin.general],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],

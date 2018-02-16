@@ -101,40 +101,50 @@
 							<div class="inside">
 								<div v-if="attendance.present">
 									<ul v-for="punchIn in present" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="punchIn.avatar_url"></li>
-										<li>{{ punchIn.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="punchIn.avatar_url">
+											{{ punchIn.display_name }}
+										</li>
 										<li>{{ punchIn.punch_in_time }}</li>
 									</ul>
 								</div>
 								
 								<div v-if="attendance.absent">
 									<ul v-for="punchOut in absent" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="punchOut.avatar_url"></li>
-										<li>{{ punchOut.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="punchOut.avatar_url">
+											{{ punchOut.display_name }}
+										</li>
 										<li>No Time Available</li>
 									</ul>
 								</div>
 								
 								<div v-if="attendance.earlyEnter">
 									<ul v-for="firstEntry in earlyEnter" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url"></li>
-										<li>{{ firstEntry.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url">
+											{{ firstEntry.display_name }}
+										</li>
 										<li>{{ firstEntry.punch_in_time }}</li>
 									</ul>
 								</div>
 								
 								<div v-if="attendance.earlyLeave">
 									<ul v-for="firstLeave in earlyLeave" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url"></li>
-										<li>{{ firstLeave.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url">
+											{{ firstLeave.display_name }}
+										</li>
 										<li>{{ firstLeave.punch_out_time }}</li>
 									</ul>
 								</div>
 								
 								<div v-if="attendance.lateLeave">
 									<ul v-for="firstOut in lateLeave" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="firstOut.avatar_url"></li>
-										<li>{{ firstOut.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="firstOut.avatar_url">
+											{{ firstOut.display_name }}
+										</li>
 										<li>{{ firstOut.punch_out_time }}</li>
 									</ul>
 								</div>
@@ -172,8 +182,10 @@
 							<div class="inside">
 								<div>
 									<ul v-for="birth in birthday" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="birth.data.avatar_url"></li>
-										<li>{{ birth.data.display_name }}</li>
+										<li>
+											<img class="hrm-dashboard-avatar" :src="birth.data.avatar_url">
+											{{ birth.data.display_name }}
+										</li>
 										<li>{{ birth.data.birthday }}</li>
 									</ul>
 								</div>
@@ -199,8 +211,11 @@
 							<div class="inside">
 								<div>
 									<ul v-for="leave in leaves" class="hrm-attendance-ul">
-										<li><img class="hrm-dashboard-avatar" :src="leave.employee.data.avatar_url"></li>
-										<li>{{ leave.employee.data.display_name }}</li>
+										
+										<li>
+											<img class="hrm-dashboard-avatar" :src="leave.employee.data.avatar_url">
+											{{ leave.employee.data.display_name }}
+										</li>
 										<li>{{ leave.leave_type.data.name }}</li>
 									</ul>
 								</div>
@@ -330,14 +345,23 @@
     	
 	}
 	.hrm-dashboard-avatar {
-		height: 16px;
-		width: 16px;
-		border-radius: 100%;
+		height: 32px;
+		width: 32px;
+		/*border-radius: 100%;*/
+		float: left;
+		margin-right: 10px;
+	}
+	.hrm-dashboard-avatar:after {
+		visibility: hidden;
+		font-size: 0;
+		content: " ";
+		clear: both;
+		height: 0;
 	}
 	.hrm-attendance-ul li {
 		display: inline-block;
 	}
-	.hrm-attendance-ul li:nth-child(2) {
+	.hrm-attendance-ul li:nth-child(1) {
 		width: 72%;
 	}
 
@@ -346,6 +370,9 @@
 	}
 	.hrm-leave-h2 span:first-child {
 		width: 72%;
+	}
+	#dashboard-widgets-wrap {
+		margin-top: 10px;
 	}
 
 </style>

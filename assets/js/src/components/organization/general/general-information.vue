@@ -3,6 +3,8 @@
 		<h1 class="wp-heading-inline">Organization</h1>
 		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
+		<organization-menu></organization-menu>
+
 		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
@@ -51,11 +53,11 @@
 </style>
 
 <script>
-	import Table from './organization-table.vue';
-	import Form from './new-organization-form.vue';
+	import Table from './general-information-table.vue';
+	import Form from './new-general-information-form.vue';
 
 	export default {
-		mixins: [HRMMixin.organization],
+		mixins: [HRMMixin.general],
 
 		data () {
 
@@ -223,7 +225,7 @@
 		},
 		components: {
 			'hrm-table': Table,
-			'add-new-record-form': Form
+			'add-new-record-form': Form,
 		},
 
 		methods: {

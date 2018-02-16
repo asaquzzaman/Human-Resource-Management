@@ -1,26 +1,22 @@
+HRMRegisterModule('general', 'organization/general');
 
-let organization = resolve => {
+let general = resolve => {
 
-    require.ensure(['./organization.vue'], () => {
-        resolve(require('./organization.vue'));
+    require.ensure(['./general-information.vue'], () => {
+        resolve(require('./general-information.vue'));
     });
 }
 
-HRMRegisterChildrenRoute ('hrm_root', 
+HRMRegisterChildrenRoute ('organization', 
     [
 
         {
-            path: 'organization', 
-            component: organization, 
-            name: 'organization',
-
-            children: [
-                {
-                    path: 'pages/:current_page_number', 
-                    component: organization,
-                    name: 'organization_pagination',
-                },
-            ]
+            path: 'general-information', 
+            component: general, 
+            name: 'general_information',
+            meta: {
+                label: 'General Information',
+            }
         }
     ]
 );

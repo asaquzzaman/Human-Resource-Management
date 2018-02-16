@@ -27,7 +27,7 @@
                 </tr>
                 
                 <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
-                	<td :colspan="fields.length + 1" class="colspanchange">
+                	<td :colspan="9" class="colspanchange">
                 		<form action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
@@ -59,7 +59,7 @@
 				</tr>
 
 				<tr v-if="!records.length">
-					<td :colspan="fields.length + 1">
+					<td :colspan="9">
 						No result found!
 					</td>
 				</tr>

@@ -74,8 +74,6 @@
 						model: '',
 						label: 'User Name',
 						name: 'user_name',
-						tableHead: 'User Name',
-						editable: true,
 						default: '',
 						required: true
 					},
@@ -84,8 +82,6 @@
 						model: '',
 						label: 'Email',
 						name: 'email',
-						tableHead: 'Email',
-						editable: true,
 						default: '',
 						required: true
 					},
@@ -114,13 +110,13 @@
 						model: '',
 						options: [],
 						label: 'Role',
-						optionLabel: 'name',
+						optionLabel: 'label',
 						placeholder: 'Role',
 						name: 'role',
 						tableHead: 'Rore',
 						editable: true,
 						options: 
-						[
+						[ 
 							{
 								label: 'Employee',
 								value: 'employee',
@@ -137,7 +133,6 @@
 						},
 						//Table print data
 						filterPrintData (val) {
-
 							if (!val) {
 								return '&#8211 &#8211';
 							}
@@ -145,7 +140,6 @@
 						},
 						// Filter edit form field data
 						filterComputedGet (val) {
-
 							if (!val) {
 								return '';
 							}
@@ -214,8 +208,6 @@
 						optionLabel: 'name',
 						placeholder: 'Select Location',
 						name: 'location',
-						tableHead: 'Location',
-						editable: true,
 						//Filter submited new data
 						filterSubmited (val) {
 							return val.id;
@@ -253,7 +245,6 @@
 						model: '',
 						label: 'Gender',
 						name: 'gender',
-						editMode: false,
 						default: '&#8211 &#8211',
 						options: 
 						[
@@ -277,39 +268,13 @@
 						}
 					},
 					{
-						type: 'radio',
+						type: 'select',
 						model: '',
-						label: 'Marital Status',
-						name: '_marital_status',
-						editMode: false,
-						options: 
-						[
-							{
-								label: 'Single',
-								value: 'single',
-							},
-
-							{
-								label: 'Married',
-								value: 'married',
-							}
-						],
-						default: '&#8211 &#8211',
-						filter (val) {
-							if(val == 'single' ) {
-								return 'Single';
-							} 
-							if(val == 'married' ) {
-								return 'Married';
-							} 
-						}
-					},
-					{
-						type: 'radio',
-						model: '',
+						optionLabel: 'label',
+						placeholder: 'Seletct Status',
 						label: 'Status',
 						name: 'status',
-						editMode: false,
+						tableHead: 'Status',
 						options: 
 						[
 							{
@@ -322,14 +287,33 @@
 								value: 'inactive',
 							}
 						],
-						default: '&#8211 &#8211',
-						filter (val) {
-							if(val == 'active' ) {
-								return 'Active';
-							} 
-							if(val == 'Inactive' ) {
-								return 'inactive';
-							} 
+						//Filter submited new data
+						filterSubmited (val) {
+							return val.value;
+						},
+						//Table print data
+						filterPrintData (val) {
+							if (!val) {
+								return '&#8211 &#8211';
+							}
+							return val.label;
+						},
+						// Filter edit form field data
+						filterComputedGet (val) {
+							if (!val) {
+								return '';
+							}
+							return val.label;
+						},
+						// Filer edit changable data
+						filterComputedSet (val) {
+							return { data: val }
+						},
+						//Filter edit submited data
+						filterEditingData (val) {
+							if (val) {
+								return val.value;
+							}
 						}
 					},
 					{
@@ -357,12 +341,16 @@
 						type: 'text',
 						model: '',
 						label: 'Mobile Number',
+						tableHead: 'Mobile',
+						editMode: true,
 						name: 'mobile',
 					},
 					{
 						type: 'datePickerFrom',
 						model: '',
 						label: 'Joning Date',
+						placeholder: 'Date of Join',
+						tableHead: 'Joning Date',
 						name: 'joining_date',
 						filter (val, self) {
 							return self.dateFormat(val);
@@ -373,6 +361,7 @@
 						model: [],
 						label: 'Profile Picture',
 						name: '_hrm_user_image_id',
+						tableHead: 'Profile',
 						editMode: false,
 						multiple: false,
 						deleted_files: [],

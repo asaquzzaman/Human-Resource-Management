@@ -8,13 +8,15 @@ let skill = resolve => {
     });
 }
 
-HRMRegisterChildrenRoute ('hrm_root', 
+HRMRegisterChildrenRoute ('profile', 
     [
-
         {
             path: 'skill', 
             component: skill, 
             name: 'skill',
+            meta: {
+                label: 'Skill'
+            },
 
             children: [
                 {

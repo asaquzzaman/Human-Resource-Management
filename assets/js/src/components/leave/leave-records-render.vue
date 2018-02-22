@@ -196,9 +196,9 @@
 		methods: {
 			occurrenceDay (occurrence){
                 var date = new Date(occurrence.start_time);
-                var date = moment(date).format('YYYY-MM-DD');
+                var date = hrm.Moment(date).format('YYYY-MM-DD');
 
-                return moment(date).startOf('month').format('YYYY-MM-DD');
+                return hrm.Moment(date).startOf('month').format('YYYY-MM-DD');
             },
 
             groupToDay(group, day){
@@ -208,7 +208,7 @@
                 }
             },
             selfDateFormat (date) {
-            	return moment(date).format('MMMM');
+            	return hrm.Moment(date).format('MMMM');
             },
 
             selfLeaveDelete (id) {

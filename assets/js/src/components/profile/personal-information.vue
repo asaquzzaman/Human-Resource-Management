@@ -1,51 +1,54 @@
 <template>
-	<div id="hrm-hidden-form-warp" class="postbox">
-        <div class="hrm-search-head">
-            <h3>Profile Information</h3>
-        </div>
-  
-        <div class="inside" id="hrm-visible-form">
-        	<div class="main">
-        		<div v-if="!editMode">
-	        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
-	        			
-	        				<label class="hrm-title">
-								Profile Picture
-							</label> 
-							
-							<div class="hrm-uploaded-item">
-								<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
-									<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
-								</a> 
-							</div>
-							<div class="hrm-clear"></div>
+	<div>
+		<profile-menu></profile-menu>
+		<div id="hrm-hidden-form-warp" class="postbox">
+	        <div class="hrm-search-head">
+	            <h3>Profile Information</h3>
+	        </div>
+	  
+	        <div class="inside" id="hrm-visible-form">
+	        	<div class="main">
+	        		<div v-if="!editMode">
+		        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
+		        			
+		        				<label class="hrm-title">
+									Profile Picture
+								</label> 
+								
+								<div class="hrm-uploaded-item">
+									<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
+										<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
+									</a> 
+								</div>
+								<div class="hrm-clear"></div>
+		        		</div>
+
+		        		<div class="hrm-content-wrap" v-else>
+
+		        				<label class="hrm-title">
+		                			{{ field.label }}
+		                				
+		                		</label> 
+		                		
+		                		<div class="hrm-content" v-html="filter(field.model, field)"></div>
+		                			
+		                		<div class="hrm-clear"></div>
+
+		        		</div>
+
+		        		<a @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
 	        		</div>
-
-	        		<div class="hrm-content-wrap" v-else>
-
-	        				<label class="hrm-title">
-	                			{{ field.label }}
-	                				
-	                		</label> 
-	                		
-	                		<div class="hrm-content" v-html="filter(field.model, field)"></div>
-	                			
-	                		<div class="hrm-clear"></div>
-
-	        		</div>
-
-	        		<a @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
-        		</div>
-        		
-        		<form v-if="editMode" action="" @submit.prevent="selfSavePersonalInfo()" enctype="multipart/form-data">
-        			<hrm-form-fields :fields="fields"></hrm-form-fields>
-        			<input :disabled="canSubmit" type="submit" class="button button-primary">
-        			<a @click.prevent="update(false)" class="button button-secondary" href="#">cancel</a>
-        			<div class="hrm-spinner" v-if="loading">Saving....</div>
-        		</form>
-        	</div>
-        </div>
-    </div>
+	        		
+	        		<form v-if="editMode" action="" @submit.prevent="selfSavePersonalInfo()" enctype="multipart/form-data">
+	        			<hrm-form-fields :fields="fields"></hrm-form-fields>
+	        			<input :disabled="canSubmit" type="submit" class="button button-primary">
+	        			<a @click.prevent="update(false)" class="button button-secondary" href="#">cancel</a>
+	        			<div class="hrm-spinner" v-if="loading">Saving....</div>
+	        		</form>
+	        	</div>
+	        </div>
+	    </div>
+	</div>
 </template>
 
 <style type="text/css">

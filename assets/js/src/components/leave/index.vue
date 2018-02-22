@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    
 	import store from './leave-store';
     import mixin from './leave-mixin';
     import router from './leave-router';

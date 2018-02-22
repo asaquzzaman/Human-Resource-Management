@@ -1,67 +1,57 @@
 HRMRegisterModule('leave', 'leave');
 
 let Hrm_Leave_Records = resolve => {
-
     require.ensure(['./leave-records.vue'], () => {
         resolve(require('./leave-records.vue'));
     });
 }
 
 let Hrm_Leave_Configuration = resolve => {
-
     require.ensure(['./leave-configuration.vue'], () => {
         resolve(require('./leave-configuration.vue'));
     });
 }
 let Hrm_Leave_Type = resolve => {
-
     require.ensure(['./leave-type.vue'], () => {
         resolve(require('./leave-type.vue'));
     });
 }
 let Hrm_Leave_Work_Week = resolve => {
-
     require.ensure(['./leave-work-week.vue'], () => {
         resolve(require('./leave-work-week.vue'));
     });
 }
 let Hrm_Leave_Holidays = resolve => {
-
     require.ensure(['./leave-holidays.vue'], () => {
         resolve(require('./leave-holidays.vue'));
     });
 }
 
 let Hrm_Leave_form_settings = resolve => {
-
     require.ensure(['./leave-form-settings.vue'], () => {
         resolve(require('./leave-form-settings.vue'));
     });
 }
 
 let Hrm_Leave_Requests = resolve => {
-
     require.ensure(['./leave-requests.vue'], () => {
         resolve(require('./leave-requests.vue'));
     });
 }
 
 let Hrm_Leave_Pending = resolve => {
-
     require.ensure(['./leave-pending.vue'], () => {
         resolve(require('./leave-pending.vue'));
     });
 }
 
 let Hrm_Leave_Cancel = resolve => {
-
     require.ensure(['./leave-cancel.vue'], () => {
         resolve(require('./leave-cancel.vue'));
     });
 }
 
 let Hrm_Leave_Approve = resolve => {
-
     require.ensure(['./leave-approve.vue'], () => {
         resolve(require('./leave-approve.vue'));
     });

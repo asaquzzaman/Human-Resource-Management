@@ -1,5 +1,3 @@
-import Vue from './../../vue/vue';
-
 var HRM_Employee_Leave_Recors = {
 	vnode: {},
 	eventCallback: '',
@@ -62,8 +60,8 @@ var HRM_Employee_Leave_Recors = {
 			var obj = {
 				id: val.id,
 				title: val.type == '0' ? 'Extra' : val.leave_type.name,
-				start: moment(val.start_time).format('YYYY-MM-DD'), 
-				end: moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), 
+				start: hrm.Moment(val.start_time).format('YYYY-MM-DD'), 
+				end: hrm.Moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), 
 				backgroundColor: '#e08989',
 				borderColor: '#e08989',
 				allDay: true,
@@ -84,7 +82,7 @@ var HRM_Employee_Leave_Recors = {
 
 
 // Register a global custom directive called v-cpm-datepicker
-Vue.directive('employee-leave-records', {
+hrm.Vue.directive('employee-leave-records', {
     inserted (el, binding, vnode) {
         HRM_Employee_Leave_Recors.init( el, binding, vnode );
     }

@@ -1,5 +1,5 @@
 <template>
-	
+	<profile-menu></profile-menu>
 </template>
 
 <script>

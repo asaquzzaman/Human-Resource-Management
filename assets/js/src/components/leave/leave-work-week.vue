@@ -140,7 +140,7 @@
 	                success: function(res) {
 	                
 	                    // Display a success toast, with a title
-	                    //toastr.success(res.success);
+	                    //hrm.Toastr.success(res.success);
 	                    
 						self.saturday  = res.work_week.saturday ? res.work_week.saturday : 'full';
 						self.sunday    = res.work_week.sunday ? res.work_week.sunday : 'full';
@@ -156,7 +156,7 @@
 	                	self.show_spinner = false;
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });
@@ -180,7 +180,7 @@
 	                
 	                success: function(res) {
 	                    // Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 	                    
 	                },
 
@@ -188,7 +188,7 @@
 	                	self.show_spinner = false;
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });

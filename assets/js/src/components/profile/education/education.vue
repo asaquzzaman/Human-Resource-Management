@@ -3,6 +3,8 @@
 		<h1 class="wp-heading-inline">Education</h1>
 		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
+		<profile-menu></profile-menu>
+
 		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">

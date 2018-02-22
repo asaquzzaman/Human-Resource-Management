@@ -121,7 +121,7 @@
 		},
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect
+			'hrm-multiselect': hrm.Multiselect.default
 		},
 
 		methods: {

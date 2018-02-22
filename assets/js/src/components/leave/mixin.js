@@ -144,7 +144,7 @@ export default {
                 success: function(res) {
                 	self.show_spinner = false;
                     // Display a success toast, with a title
-                    //toastr.success(res.success);
+                    //hrm.Toastr.success(res.success);
             
                     if (typeof args.callback === 'function') {
                     	args.callback(res.data);
@@ -155,7 +155,7 @@ export default {
                 	self.show_spinner = false;
                 	// Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             };
@@ -225,7 +225,7 @@ export default {
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
-                    toastr.success(res.success);
+                    hrm.Toastr.success(res.success);
                     self.addLeaveTypeMeta(res.leave_type.data);
                     self.submit_disabled = false;
 
@@ -241,7 +241,7 @@ export default {
                     
                     // Showing error
                     res.data.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                     self.submit_disabled = false;
                 }
@@ -289,7 +289,7 @@ export default {
                     self.show_spinner = false;
                     // Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             }
@@ -318,7 +318,7 @@ export default {
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
-                    toastr.success(res.success);
+                    hrm.Toastr.success(res.success);
                     self.addHolidayMeta(res.holiday);
                     self.submit_disabled = false;
                     
@@ -334,7 +334,7 @@ export default {
                     
                     // Showing error
                     res.data.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                     self.submit_disabled = false;
                 }
@@ -377,7 +377,7 @@ export default {
                     self.show_spinner = false;
                     // Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             }
@@ -459,7 +459,7 @@ export default {
                     self.show_spinner = false;
                     // Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             }

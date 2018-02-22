@@ -132,6 +132,8 @@
 
 <script>
 
+	import records_directive from './leave-form-directive';
+
 	export default {
 		data: function() {
 			return {
@@ -156,7 +158,8 @@
 				apply_emp_lev_records: [],
 				is_leave_btn_disable: false,
 				holidays: [],
-				isLeaveTypeEnable: false
+				isLeaveTypeEnable: false,
+				leaveCalendar: ''
 			}
 		},
 
@@ -176,7 +179,7 @@
 		mixins: [HRMMixin.leave],
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect
+			'hrm-multiselect': hrm.Multiselect.default
 		},
 
 		created: function() {
@@ -210,7 +213,7 @@
 				this.change_leve_type_statue();
 			},
 			refresh () {
-				jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'refetchEvents' );
+				this.leaveCalendar.refetchEvents();
 			},
 			getInitialData: function() {
 				var request_data = {
@@ -258,7 +261,7 @@
 
 				if (!this.apply_leave_date.length) {
 					// Display a success toast, with a title
-		            toastr.error('Please select your leave date');
+		            hrm.Toastr.error('Please select your leave date');
 					return false;
 				}
 
@@ -288,7 +291,7 @@
 	                	self.show_spinner = false;
 	                    console.log(res);
 	                    // Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 	                    self.$store.commit('leave/afterCreateNewLeave', res.resource);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
@@ -303,7 +306,7 @@
 	                	self.show_spinner = false;
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            };
@@ -312,8 +315,9 @@
 			},
 
 			change_leve_type_statue: function() {
+				var self = this;
 				jQuery.each(this.calendar_evt_id, function(index, event_id) {
-					jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', event_id);
+					self.leaveCalendar.removeEvents(event_id);
 				});
 				
 				this.calendar_evt_id  = [];
@@ -326,9 +330,9 @@
 		    		return [];
 		    	}
 				var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
-				var start = moment(start._d).format('YYYY-MM-DD');
+				var start = hrm.Moment(start._d).format('YYYY-MM-DD');
 				var end   = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
-				var end   = moment(end._d).format('YYYY-MM-DD');
+				var end   = hrm.Moment(end._d).format('YYYY-MM-DD');
 		    	
 		    	var http_data = {
 		    		data: {

@@ -12,7 +12,7 @@ export default {
     },
     computed: {
         display() {
-            return moment(this.time).format('LTS');
+            return hrm.Moment(this.time).format('LTS');
         }
     },
     created() {

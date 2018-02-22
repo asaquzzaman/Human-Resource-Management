@@ -1,13 +1,14 @@
-import Vue from './../../vue/vue';
+var leaveCalendar;
 
 var HRM_Leave_Apply_Calendar = {
 	calendar: function(el, context) {
 
 		var $ = jQuery,
 			work_week = this.work_week_convert_numeric( context.work_week ),
-			emp_leave_with_type_record = context.emp_leave_with_type_record;
+			emp_leave_with_type_record = context.emp_leave_with_type_record,
+			el = $(el);
 
-		jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar({
+		leaveCalendar = new hrm.Fullcalendar.Calendar(el, {
 			header: {
 				left: 'prev,next',
 				center: 'title',
@@ -27,7 +28,7 @@ var HRM_Leave_Apply_Calendar = {
 
 	            if (!emp_id) {
 	            	// Display a success toast, with a title
-		            toastr.error('Please select employee');
+		            hrm.Toastr.error('Please select employee');
 		            return;
 	            }
 
@@ -35,7 +36,7 @@ var HRM_Leave_Apply_Calendar = {
 				
  	        	if (has_leave) {
 					// Display a success toast, with a title
-		            toastr.error('Leave alrady exist');
+		            hrm.Toastr.error('Leave alrady exist');
 		            return;
 				}
 				var is_disable_leave_type = context.disable_leave_type;
@@ -46,14 +47,14 @@ var HRM_Leave_Apply_Calendar = {
 				}
 
 				if (!context.leave_type) {
-					toastr.error('Please select leave type');
+					hrm.Toastr.error('Please select leave type');
 					return false;
 				}
 
 				var has_entitlement = HRM_Leave_Apply_Calendar.has_entitlement(date, jsEvent, view, context);
 
 				if (!has_entitlement) {
-					toastr.error('Leave entitlement exist');
+					hrm.Toastr.error('Leave entitlement exist');
 					return false;
 				}
 				
@@ -127,19 +128,23 @@ var HRM_Leave_Apply_Calendar = {
 
 		    }
 		});
+
+		context.leaveCalendar = leaveCalendar;
+		
+		leaveCalendar.render();
 	},
 
 	remove_event_when_leave_type_exist: function(context, calEvent, jsEvent, view) {
 		var in_collect = context.calendar_evt_id.indexOf(calEvent._id);
+
 		if ( in_collect == '-1' ) {
 			return;
 		}
 
-		var	leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
+		var	leave_start_date  = hrm.Moment(calEvent.start._d).format('YYYY-MM-DD'),
 			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
 		
-			
-        jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
+        leaveCalendar.removeEvents(calEvent._id);
 
         context.calendar_evt_id.splice( in_collect, 1 );
         context.apply_leave_date.splice( collected_lv_st_d, 1 );
@@ -151,12 +156,12 @@ var HRM_Leave_Apply_Calendar = {
 			return;
 		}
 
-		var leave_start_date  = moment(calEvent.start._d).format('YYYY-MM-DD'),
+		var leave_start_date  = hrm.Moment(calEvent.start._d).format('YYYY-MM-DD'),
 			collected_lv_st_d = context.apply_leave_date.indexOf(leave_start_date);
 
 
-        jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('removeEvents', calEvent._id);
-
+        leaveCalendar.removeEvents(calEvent._id);
+        
         context.calendar_evt_id.splice( in_collect, 1 );
         context.apply_leave_date.splice( collected_lv_st_d, 1 );
 	},
@@ -169,18 +174,18 @@ var HRM_Leave_Apply_Calendar = {
 
 		var newEvent = {
 			title: lv_type.leave_type_name,
-			start: moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
-			end: moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
+			start: hrm.Moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+			end: hrm.Moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 			backgroundColor: '#e08989',
 			borderColor: '#e08989',
 			allDay: true,
 		};
 
-		var evt = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'renderEvent', newEvent , true);
-		
+		var evt = leaveCalendar.renderEvent(newEvent, true);
+
 		if (evt.length) {
 			jQuery.each(evt, function(indev, val) {
-				var start = moment(val.start._d).format('YYYY-MM-DD');
+				var start = hrm.Moment(val.start._d).format('YYYY-MM-DD');
 				context.calendar_evt_id.push(val._id);
 				context.apply_leave_date.push(start);
 			});
@@ -191,18 +196,18 @@ var HRM_Leave_Apply_Calendar = {
 
 		var newEvent = {
 			title: 'Extra',
-			start: moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
-			end: moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
+			start: hrm.Moment(date._d).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+			end: hrm.Moment(date._d).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 			backgroundColor: '#e08989',
 			borderColor: '#e08989',
 			allDay: true,
 		};
 
-		var evt = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar( 'renderEvent', newEvent , true);
+		var evt = leaveCalendar.renderEvent( newEvent , true);
 		
 		if (evt.length) {
 			jQuery.each(evt, function(indev, val) {
-				var start = moment(val.start._d).format('YYYY-MM-DD');
+				var start = hrm.Moment(val.start._d).format('YYYY-MM-DD');
 				context.calendar_evt_id.push(val._id);
 				context.apply_leave_date.push(start);
 			});
@@ -234,8 +239,8 @@ var HRM_Leave_Apply_Calendar = {
     		jQuery.each( days_in_month, function( index, date ) {
     			var new_obj = {
     				title: 'Weekend',
-					start: moment(date).format('YYYY-MM-DD'),
-					end: moment(date).add(1, 'days').format('YYYY-MM-DD'),
+					start: hrm.Moment(date).format('YYYY-MM-DD'),
+					end: hrm.Moment(date).add(1, 'days').format('YYYY-MM-DD'),
 					backgroundColor: '#e08989',
 					borderColor: '#e08989',
 					allDay: true,
@@ -255,8 +260,8 @@ var HRM_Leave_Apply_Calendar = {
 		jQuery.each(holidays, function(key, holiday) {
 			var new_obj = {
 				title: holiday.name + ' (Holidays)',
-				start: moment(holiday.from).format('YYYY-MM-DD'),
-				end: moment(holiday.to).add(1, 'days').format('YYYY-MM-DD'),
+				start: hrm.Moment(holiday.from).format('YYYY-MM-DD'),
+				end: hrm.Moment(holiday.to).add(1, 'days').format('YYYY-MM-DD'),
 				backgroundColor: '#e08989',
 				borderColor: '#e08989',
 				allDay: true,
@@ -269,16 +274,16 @@ var HRM_Leave_Apply_Calendar = {
 	},
 
 	has_leave_in_this_day: function(date, jsEvent, view, context) {
-		var cell_date = moment(date._d).format('YYYY-MM-DD'),
-		    events = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('clientEvents'),
+		var cell_date = hrm.Moment(date._d).format('YYYY-MM-DD'),
+		    events    = leaveCalendar.clientEvents(),
 		    has_leave = [];
 
 		jQuery.each(events, function(key, val) {
-			var start = moment(val.start._d).format('YYYY-MM-DD'),
-				end   = moment(val.end._d).subtract(1, 'days').format('YYYY-MM-DD'); 
+			var start = hrm.Moment(val.start._d).format('YYYY-MM-DD'),
+				end   = hrm.Moment(val.end._d).subtract(1, 'days').format('YYYY-MM-DD'); 
 			
 			
-			if ( moment(cell_date).isBetween(start, end, null, '[]') ) {
+			if ( hrm.Moment(cell_date).isBetween(start, end, null, '[]') ) {
 				has_leave.push(val.title);
 			}
 		});
@@ -295,7 +300,7 @@ var HRM_Leave_Apply_Calendar = {
 
 	    while (date < end) {
 	        if (date.getDay() === day ) { 
-	        	var setDate = moment(date).format('YYYY-MM-DD'); //HRM_Leave_Apply_Calendar.get_date(date);
+	        	var setDate = hrm.Moment(date).format('YYYY-MM-DD'); //HRM_Leave_Apply_Calendar.get_date(date);
 	        	dates.push(setDate);
 	        }
 	        date.setDate( date.getDate() + 1 );
@@ -312,8 +317,8 @@ var HRM_Leave_Apply_Calendar = {
 			var obj = {
 				id: val.id,
 				title: val.type == '0' ? 'Extra' : val.leave_type.data.name,
-				start: moment(val.start_time).format('YYYY-MM-DD'), //self.get_date(val.start_time),
-				end: moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
+				start: hrm.Moment(val.start_time).format('YYYY-MM-DD'), //self.get_date(val.start_time),
+				end: hrm.Moment(val.end_time).add(1, 'days').format('YYYY-MM-DD'), //self.get_date(val.end_time),
 				backgroundColor: '#e08989',
 				borderColor: '#e08989',
 				allDay: true,
@@ -424,7 +429,7 @@ var HRM_Leave_Apply_Calendar = {
 }
 
 // Register a global custom directive called v-cpm-datepicker
-Vue.directive('hrm-holiday-datepicker', {
+hrm.Vue.directive('hrm-holiday-datepicker', {
     inserted: function (el, binding, vnode) {
         HRM_Leave_Apply_Calendar.holidayDatePicker( el, vnode.context );
     }
@@ -432,7 +437,7 @@ Vue.directive('hrm-holiday-datepicker', {
 
 
 // Register a global custom directive called v-cpm-datepicker
-Vue.directive('hrm-leave-jquery-fullcalendar', {
+hrm.Vue.directive('hrm-leave-jquery-fullcalendar', {
     inserted: function (el, binding, vnode) {
         HRM_Leave_Apply_Calendar.calendar( el, vnode.context );
     }

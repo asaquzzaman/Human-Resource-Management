@@ -2,6 +2,11 @@ import '@components/profile/router';
 import '@components/organization/router';
 import '@components/designation/router';
 import '@components/dashboard/router';
+import '@components/departments/router';
+import '@components/attendance/router';
+import '@components/leave/router';
+import '@components/settings/router';
+import '@components/employee/router';
 
 import Empty from '@components/common/empty.vue';
 

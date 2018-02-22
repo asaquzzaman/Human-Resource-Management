@@ -37,7 +37,7 @@ var Hrm_Leave_Work_Week = {
                 
                 success: function(res) {
                     // Display a success toast, with a title
-                    //toastr.success(res.success);
+                    //hrm.Toastr.success(res.success);
                     
 					self.saturday  = res.work_week.saturday;
 					self.sunday    = res.work_week.sunday;
@@ -53,7 +53,7 @@ var Hrm_Leave_Work_Week = {
                 	self.show_spinner = false;
                 	// Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             });
@@ -77,7 +77,7 @@ var Hrm_Leave_Work_Week = {
                 
                 success: function(res) {
                     // Display a success toast, with a title
-                    toastr.success(res.success);
+                    hrm.Toastr.success(res.success);
                     
                 },
 
@@ -85,7 +85,7 @@ var Hrm_Leave_Work_Week = {
                 	self.show_spinner = false;
                 	// Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             });

@@ -132,7 +132,7 @@
 	                	self.$store.commit('leave/updateHolidays', res.holiday);
 	                    
 	                    // Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 	                    
 	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
 	                    	self.$store.commit('leave/isNewHolidayFormVisible', {is_visible: false});
@@ -145,7 +145,7 @@
 	                	self.show_spinner = false;
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });

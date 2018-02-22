@@ -51,7 +51,7 @@
   "dependencies": {
     "babel-preset-stage-2": "^6.24.1",
     "code-split-component": "^2.0.0-alpha.5",
-    "fullcalendar": "3.6.2",
+    "fullcalendar": "3.4.0",
     "jquery-timepicker": "^1.3.3",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",

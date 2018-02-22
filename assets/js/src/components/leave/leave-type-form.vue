@@ -119,7 +119,7 @@ var Hrm_Leave_Type_Form = {
 	},
 
 	components: {
-		'hrm-multiselect': hrm.Multiselect
+		'hrm-multiselect': hrm.Multiselect.default
 	},
 	methods: {
 		setDateTime: function(date) {
@@ -171,7 +171,7 @@ var Hrm_Leave_Type_Form = {
                 	
                     self.addLeaveTypeMeta(res.leave_type.data);
                     // Display a success toast, with a title
-                    toastr.success(res.success);
+                    hrm.Toastr.success(res.success);
 
                     self.show_hide_new_leave_type_form({target: '.hrm-form-cancel'});
 
@@ -191,7 +191,7 @@ var Hrm_Leave_Type_Form = {
                 	self.show_spinner = false;
                 	// Showing error
                     res.error.map( function( value, index ) {
-                        toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
                 }
             });

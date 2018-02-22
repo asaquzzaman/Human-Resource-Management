@@ -123,7 +123,7 @@
 
 				var firstDay = new Date(y, m, 1);
 
-	            date = moment(firstDay).format('YYYY-MM-DD');
+	            date = hrm.Moment(firstDay).format('YYYY-MM-DD');
 	            
 	            var format = 'MMMM DD YYYY';
 	            
@@ -137,7 +137,7 @@
 	                format = 'DD/MM/YYYY';
 	            } 
 
-	            return moment( date ).format(format);
+	            return hrm.Moment( date ).format(format);
 			},
 
 			lastDay () {
@@ -147,7 +147,7 @@
 
 				var lastDay = new Date(y, m + 1, 0);
 
-	            date = moment(lastDay).format('YYYY-MM-DD');
+	            date = hrm.Moment(lastDay).format('YYYY-MM-DD');
 	            
 	            var format = 'MMMM DD YYYY';
 	            
@@ -161,7 +161,7 @@
 	                format = 'DD/MM/YYYY';
 	            } 
 
-	            return moment( date ).format(format);
+	            return hrm.Moment( date ).format(format);
 			}
 		}	
 	}

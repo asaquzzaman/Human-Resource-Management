@@ -73,7 +73,7 @@
 </style>
 
 <script>
-
+	
 	import DatePicker from './../common/date-picker.vue';
 
 	export default {
@@ -123,7 +123,7 @@
 			}
 		},
 		components: {
-			'hrm-multiselect': hrm.Multiselect,
+			'hrm-multiselect': hrm.Multiselect.default,
 			'date-picker': DatePicker
 		},
 		methods: {

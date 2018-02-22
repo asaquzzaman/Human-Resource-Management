@@ -6,33 +6,54 @@ import './education/router';
 import './skill/router';
 
 let personalInformation = resolve => {
-
     require.ensure(['./personal-information.vue'], () => {
         resolve(require('./personal-information.vue'));
     });
 }
 
 let jobLocation = resolve => {
-
     require.ensure(['./job-location.vue'], () => {
         resolve(require('./job-location.vue'));
     });
 }
 
+let profile = resolve => {
+    require.ensure(['./profile.vue'], () => {
+        resolve(require('./profile.vue'));
+    });
+}
 
-HRMRegisterChildrenRoute ('hrm_root', 
-    [
-    	{
-            path: 'personal-information', 
-        	component: personalInformation, 
-        	name: 'personal_information',
-        },
+let menu = [
+    {
+        path: 'profile', 
+        component: profile, 
+        name: 'profile',
 
-        {
-            path: 'job-location', 
-            component: jobLocation, 
-            name: 'job_location',
-        }
-    ]
-);
+        children: HRMGetRegisterChildrenRoute( 'profile',
+            [
+                {
+                    path: 'personal-information', 
+                    component: personalInformation, 
+                    name: 'personal_information',
+                    meta: {
+                        label: 'Profile Information'
+                    }
+                },
+
+                {
+                    path: 'job-location', 
+                    component: jobLocation, 
+                    name: 'job_location',
+                    meta: {
+                        label: 'Job Loaction'
+                    }
+                }
+            ]
+        )
+    },
+];
+
+HRMRegisterChildrenRoute ('hrm_root', menu);
+
+export default menu;
 

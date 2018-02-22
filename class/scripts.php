@@ -189,6 +189,9 @@ class Hrm_Scripts {
         wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/js/config.js', array('hrm-library'), false, false );
         
         wp_enqueue_script( 'hrm-vue', HRM_URL . '/assets/js/hrm.js', array('jquery','hrm-config'), false, true );
+       // wp_enqueue_script( 'hrm-moment', HRM_URL . '/assets/js/moment/moment.min.js', array('jquery','hrm-config'), false, true );
+        wp_enqueue_script( 'hrm-datetimepicker', HRM_URL . '/assets/js/datetimepicker/jquery.datetimepicker.full.min.js', array('jquery','hrm-config'), false, true );
+       // wp_enqueue_script( 'hrm-fullcalendar', HRM_URL . '/assets/js/fullcalendar/fullcalendar.min.js', array('jquery','hrm-config', 'hrm-moment'), false, true );
 
         wp_localize_script( 'hrm-library', 'HRM_Vars', array(
             'ajax_url'        => admin_url( 'admin-ajax.php' ),

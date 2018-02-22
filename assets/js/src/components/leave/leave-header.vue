@@ -1,13 +1,13 @@
 <template>
     <div>
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="(item, index) in menu" key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+            <router-link v-for="(item, index) in menu" :key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
         </h2>
 
         <h3 class="hrm-sub-nav">
             <ul class="hrm-subsubsub">
 
-                <li v-for="children in childrens()">
+                <li v-for="(children, child_key) in childrens()" :key="child_key">
                     <router-link  :to="{name: children.name}">{{ children.meta.label }}</router-link> |&nbsp; 
                 </li> 
               

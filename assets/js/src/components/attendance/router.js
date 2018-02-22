@@ -2,21 +2,18 @@
 HRMRegisterModule('attendance', 'attendance');
 
 let hrm_attendace_records = resolve => {
-
     require.ensure(['./attendance-records.vue'], () => {
         resolve(require('./attendance-records.vue'));
     });
 }
 
 let hrm_attendace_user_search = resolve => {
-
     require.ensure(['./attendance-user-search.vue'], () => {
         resolve(require('./attendance-user-search.vue'));
     });
 }
 
 let hrm_attendace_configuration = resolve => {
-
     require.ensure(['./attendance-configuration.vue'], () => {
         resolve(require('./attendance-configuration.vue'));
     });

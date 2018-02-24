@@ -20,6 +20,15 @@
 	            <span class="description"></span>
         	</div>
 
+        	<div v-if="field.type == 'email'">
+	            <label for="title">
+	                {{ field.label }}<em v-if="field.required">*</em>
+	            </label>
+	            <input type="email" v-model="field.model">
+	            <span class="hrm-clear"></span>
+	            <span class="description"></span>
+        	</div>
+
         	<div v-if="field.type == 'datePickerFrom'">
         		<label for="title">
 	                {{ field.label }} <em v-if="field.required">*</em>

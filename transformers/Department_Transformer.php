@@ -18,6 +18,7 @@ class Department_Transformer extends TransformerAbstract
     {
     
         return [
+            'id'          => $item->id,
             'name'        => $item->name,
             'active'      => $item->active,
             'description' => $item->description,

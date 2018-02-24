@@ -789,14 +789,33 @@ function hrm_get_country_by_code( $code ) {
 }
 
 function hrm_per_page() {
-    return 1;
+    return 3;
 }
 
 function valid_date_time($date, $format = 'Y-m-d H:i:s') {
     $date = date( 'Y-m-d H:i:s', strtotime($date) );
-    var_dump( $date);
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
+}
+
+function hrm_employee_status( $status = false ) {
+    $data = array(
+        1 => 'Active',
+        2 => 'Disable',
+        3 => 'Trminate'
+    );
+
+    return $status ? $data[$status] : $data;
+}
+
+function hrm_employee_gender( $gender = false ) {
+    $data = array(
+        1 => 'Male',
+        2 => 'Female',
+        3 => 'Others'
+    );
+
+    return $gender ? $data[$gender] : $data;
 }
 
 

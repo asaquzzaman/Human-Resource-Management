@@ -32,7 +32,7 @@ abstract class Action implements Pattern {
 		$page         = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
-		$per_page     = hrm_per_page();
+		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : $postdata['per_page'];
 
 		$data = $model::orderBy( 'id', 'DESC' )
             ->paginate( $per_page, ['*'], 'page', $page );

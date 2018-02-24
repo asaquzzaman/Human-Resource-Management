@@ -192,7 +192,6 @@ class WP_Hrm {
         Hrm_Admin::getInstance();
         Hrm_Leave::getInstance();
         Hrm_Employee::getInstance();
-        Hrm_JsTemplate::getInstance();
         Hrm_Update::getInstance();
         Hrm_Dashboard::getInstance();
         Hrm_Attendance::getInstance();

@@ -7,15 +7,42 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Work_Experience;
 use HRM\Transformers\Work_Experiance_Transformer;
 use HRM\Core\File_System\File_System;
+use HRM\Transformers\Employee_Transformer;
 
 class Hrm_Employee {
     use Transformer_Manager;
+
+    public static function getInstance() {
+        static $_instance;
+        if( ! $_instance ) {
+            $_instance = new hrm_Employee();
+        }
+
+        return $_instance;
+    }
 
     function __construct() {
         //add_filter( 'hrm_employee_memu', array( $this, 'pim_to_employer' ) );
         add_action( 'cpm_after_ajax_upload', array( $this, 'after_ajax_upload' ), 10, 3 );
         add_action( 'hrm_after_new_information', array( $this, 'after_inset_information' ), 10, 2 );
         add_action( 'wp_ajax_hrm_get_dashboard_birthdays', array( $this, 'get_dashboard_birthdays' ) );
+        add_action( 'wp_ajax_hrm_insert_employee', array( $this, 'ajax_insert_employee' ) );
+        add_action( 'wp_ajax_hrm_get_employees', array( $this, 'ajax_get_employees' ) );
+    }
+
+    public static function ajax_get_employees() {
+        $postdata  = $_POST['page'];
+        $employees = self::getInstance()->get_employees( $postdata );
+        
+        wp_send_json_success( $employees );
+    }
+
+    public static function  ajax_insert_employee() {
+        $postdata    = $_POST;
+        $employee_id = self::getInstance()->add_new_employee( $postdata );
+        $employee    = self::getInstance()->get_employee( $employee_id );
+        
+        wp_send_json_success( $employee );
     }
 
     function get_dashboard_birthdays() {
@@ -241,61 +268,6 @@ class Hrm_Employee {
         return $page;
     }
 
-    function current_user_task( $user_id, $subtab ) {
-        global $wpdb;
-
-        if ( isset( $subtab ) && $subtab == 'outstanding_task' ) {
-
-            $query1 = "AND tcomp.meta_key = '_completed' AND tcomp.meta_value = '0'";
-            $query2 = "AND tend.meta_value != '' AND STR_TO_DATE( tend.meta_value, '%Y-%m-%d') < STR_TO_DATE( NOW(), '%Y-%m-%d')";
-        } else if ( isset( $subtab ) && $subtab == 'completed_task' ) {
-
-            $query1 = "AND tcomp.meta_key = '_completed' AND tcomp.meta_value = '1'";
-            $query2 = '';
-        } else {
-            $query1 = "AND tcomp.meta_key = '_completed' AND tcomp.meta_value = '0'";
-            $query2 = "AND ( tend.meta_value = '' OR STR_TO_DATE( tend.meta_value, '%Y-%m-%d') >= STR_TO_DATE( NOW(), '%Y-%m-%d') ) ";
-        }
-
-        $sql = "SELECT t.post_title as t_t, t.ID as tID, tpm.meta_value as tassign, tend.meta_value as tend,
-                p.post_title as p_t, p.ID as pID
-                FROM $wpdb->posts as t
-                LEFT JOIN $wpdb->posts as p ON p.ID = t.post_parent
-                LEFT JOIN $wpdb->postmeta as tpm ON tpm.post_id = t.ID
-                LEFT JOIN $wpdb->postmeta as tend ON tend.post_id = t.ID
-                LEFT JOIN $wpdb->postmeta as tcomp ON tcomp.post_id = t.ID
-                WHERE
-                t.post_type = 'hrm_task' AND t.post_status = 'publish'
-                AND p.post_type = 'hrm_project' AND p.post_status = 'publish'
-                AND tpm.meta_key = '_assigned' AND tpm.meta_value = $user_id
-                $query1
-                AND tend.meta_key = '_end_date' $query2";
-
-        $results = $wpdb->get_results($sql, ARRAY_A );
-
-        $retrun = array();
-        foreach ( $results as $key => $result ) {
-            if ( array_key_exists( $result['pID'], $retrun ) ) {
-                $retrun[$result['pID']][] = $result;
-            } else {
-                $retrun[$result['pID']][] = $result;
-                $retrun[$result['pID']]['p_title'] = $result['p_t'];
-            }
-        }
-
-        return $retrun;
-
-    }
-
-	public static function getInstance() {
-		static $_instance;
-		if( ! $_instance ) {
-			$_instance = new hrm_Employee();
-		}
-
-		return $_instance;
-	}
-
     function delete_employee( $users_id = array() ) {
         $delte_user = false;
 
@@ -325,589 +297,6 @@ class Hrm_Employee {
 
     }
 
-
-    function get_employee( $employee_id, $table ) {
-    	$table_option['table_name'] = '';
-    	$table_option = get_option( $table );
-    	global $wpdb;
-    	$table = $wpdb->prefix . $table_option['table_name'];
-    	return $wpdb->get_row( "SELECT * FROM $table WHERE id = $employee_id" );
-    }
-
-    function education( $field_data = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $_POST['selfData']['id'] ) ? $_POST['selfData']['id'] : '',
-            );
-        }
-
-        $hidden_form['emp_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
-        );
-
-        $hidden_form['education'] = array(
-            'label' => __( 'Level', 'hrm' ),
-            'type' => 'text',
-            //'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['education'] ) ),
-            'value' => isset( $field_data['education'] ) ? $field_data['education'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['institute'] = array(
-            'label' =>  __( 'Institute', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['institute'] ) ?  $field_data['institute'] : '',
-        );
-
-        $hidden_form['major'] = array(
-            'label' =>  __( 'Major/Specialization', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['major'] ) ?  $field_data['major'] : '',
-        );
-
-        // $hidden_form['year'] = array(
-        //     'label' =>  __( 'Year', 'hrm' ),
-        //     'type' => 'text',
-        //     'class' => 'hrm-datepicker',
-        //     'value' => isset( $field_data['year'] ) ? hrm_date2mysql( $field_data['year'] ) : '',
-        // );
-
-        $hidden_form['score'] = array(
-            'label' =>  __( 'GPA/Score', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['score'] ) ? $field_data['score'] : '',
-        );
-
-        $hidden_form['start_date'] = array(
-            'label' =>  __( 'Start Date', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_data['start_date'] ) ? hrm_date2mysql( $field_data['start_date'] ) : '',
-        );
-
-        $hidden_form['end_date'] = array(
-            'label' =>  __( 'End Date', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_data['end_date'] ) ? hrm_date2mysql( $field_data['end_date'] ) : '',
-        );
-
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_personal_education';
-        $hidden_form['header'] = __('Add Education', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function work_experience( $field_data = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_data['id'] ) ? $field_data['id'] : '',
-            );
-        }
-
-        $hidden_form['emp_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
-        );
-
-        // $hidden_form['company_name'] = array(
-        //     'label' =>  __( 'Company Name', 'hrm' ),
-        //     'type' => 'text',
-        //     'value' => isset( $field_data['company_name'] ) ? $field_data['company_name'] : '',
-        //     'extra' => array(
-        //         'data-hrm_validation' => true,
-        //         'data-hrm_required' => true,
-        //         'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-        //     ),
-        // );
-
-        $hidden_form['job_title'] = array(
-            'label' =>  __( 'Title', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['job_title'] ) ? $field_data['job_title'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['form'] = array(
-            'label' =>  __( 'From', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_data['form'] ) ? hrm_date2mysql( $field_data['form'] ) : '',
-        );
-
-        $hidden_form['to'] = array(
-            'label' =>  __( 'To', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_data['to'] ) ? hrm_date2mysql( $field_data['to'] ) : '',
-        );
-
-        $hidden_form['description'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'class' => 'hrm-des-field',
-            'type' => 'textarea',
-            'value' => isset( $field_data['description'] ) ? $field_data['description'] : '',
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_work_experience';
-        $hidden_form['header'] = __('Work Experience', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function personal_skill( $field_data = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_data['id'] ) ? $field_data['id'] : '',
-            );
-        }
-
-        $hidden_form['emp_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
-        );
-
-        $hidden_form['skill'] = array(
-            'label' => __( 'Level', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['skill'] ) ? $field_data['skill'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['years_of_exp'] = array(
-            'label' =>  __( 'Years of experiance', 'hrm' ),
-            //'class' => 'hrm-datepicker',
-            'type' => 'text',
-            'value' => isset( $field_data['years_of_exp'] ) ?  $field_data['years_of_exp'] : '',
-        );
-
-        $hidden_form['comments'] = array(
-            'label' =>  __( 'Comments', 'hrm' ),
-            'type' => 'textarea',
-            'value' => isset( $field_data['comments'] ) ?  $field_data['comments'] : '',
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_personal_skill';
-        $hidden_form['header'] = __('Add Education', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function personal_language( $field_data = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_data['id'] ) ? $field_data['id'] : '',
-            );
-        }
-
-        $hidden_form['emp_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $_POST['hrm_dataAttr']['employee_id'] ) ? $_POST['hrm_dataAttr']['employee_id'] : '',
-        );
-
-        $hidden_form['language_id'] = array(
-            'label' => __( 'Language', 'hrm' ),
-            'type' => 'select',
-            'option' => json_decode( stripcslashes( $_POST['hrm_dataAttr']['language'] ) ),
-            'selected' => isset( $field_data['language_id'] ) ? $field_data['language_id'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-
-        $hidden_form['fluency'] = array(
-            'label' => __( 'Fluency', 'hrm' ),
-            'type' => 'select',
-            'option' => $this->fluency(),
-            'selected' => isset( $field_data['fluency'] ) ? $this->fluency( $field_data['fluency'] ) : ''
-        );
-
-        $hidden_form['competency'] = array(
-            'label' => __( 'Competency', 'hrm' ),
-            'type' => 'select',
-            'option' => $this->competency(),
-            'selected' => isset( $field_data['competency'] ) ? $this->competency( $field_data['competency'] ) : '',
-
-        );
-
-        $hidden_form['comments'] = array(
-            'label' => __( 'Comments', 'hrm' ),
-            'type' => 'textarea',
-            'value' => isset( $field_data['comments'] ) ? $field_data['comments'] : '',
-        );
-
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_personal_language';
-        $hidden_form['header'] = __('Add Education', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function competency( $competency_code = null ) {
-        $competency = array(
-            '0' => __( 'Poor', 'hrm' ),
-            '1' => __( 'Basic', 'hrm' ),
-            '2' => __( 'Good', 'hrm' ),
-            '3' => __( 'Mother Tongue', 'hrm' )
-        );
-        if ( $competency_code === null ) {
-            return $competency;
-        } else {
-            return $competency[$competency_code];
-        }
-    }
-
-    function fluency( $fluency_code = null ) {
-        $fluency = array(
-            '0' => __( 'Writing', 'hrm' ),
-            '1' => __( 'Reading', 'hrm' ),
-            '2' => __( 'Speaking', 'hrm' )
-        );
-
-        if ( $fluency_code === null ) {
-            return $fluency;
-        } else {
-            return $fluency[$fluency_code];
-        }
-    }
-
-    function salary_search_query( $search_post, $limit, $pagenum ) {
-
-        if ( !isset( $search_post['emp_id'] ) || !$search_post['emp_id'] ) {
-            return array( 'total_row' => 0 );
-        }
-
-        $emp_id = $search_post['emp_id'];
-        $where = "emp_id = $emp_id";
-
-        $year = false;
-        $month = false;
-
-        if ( isset( $search_post['year'] ) && $search_post['year'] != '-1' ) {
-            $year = $search_post['year'];
-        }
-
-        if ( isset( $search_post['month'] ) && $search_post['month'] != '-1' ) {
-            $month = $search_post['month'];
-        }
-
-        if ( $year && $month ) {
-
-            $custom_start = $year .'-'. $month . '-' . '01';
-            $custom_end   = $year .'-'. $month . '-' . '31';
-
-            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
-            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
-
-            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
-        } else if ( $year && !$month ) {
-            $custom_start = $year .'-01-01';
-            $custom_end   = $year .'-12-31';
-
-            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
-            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
-            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
-        } else if ( !$year && $month ) {
-            $year = date( 'Y' );
-
-            $custom_start = $year . '-' .$month. '-01';
-            $custom_end   = $year . '-' .$month. '-31';
-
-            $start_date   = date( 'Y-m-d H:i:s', strtotime( $custom_start ) );
-            $end_date     = date( 'Y-m-d H:i:s', strtotime( $custom_end ) );
-
-            $where        .= " AND billing_date >= '$start_date' AND billing_date <= '$end_date'";
-        }
-        $offset = ( $pagenum - 1 ) * $limit;
-        global $wpdb;
-        $table                = $wpdb->prefix . 'hrm_salary';
-        $sql                  = "SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE $where ORDER BY id desc LIMIT $offset,$limit";
-        $results              = $wpdb->get_results( $sql );
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-
-        return $results;
-    }
-
-    function salary( $field_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        $search_status = $_POST['hrm_dataAttr']['search_status'] ? $_POST['hrm_dataAttr']['search_status'] : false;
-        if ( $field_value !== null ) {
-
-            $field['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-
-        $users = get_users();
-
-        foreach ( $users as $key => $user ) {
-            $user_info[$user->ID] = $user->display_name;
-        }
-
-        $user_info = isset( $user_info ) ? $user_info : array();
-
-        $field['emp_id'] = array(
-            'label'    => __( 'Employee Name', 'hrm' ),
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-            'class'  => 'hrm-chosen',
-            'type'   => 'select',
-            'option' => $user_info,
-            'selected' => $search_status ? $search_post['emp_id'] : ''
-        );
-        $new_pay_grade = hrm_new_pay_grade_url();
-        $field['pay_grade'] = array(
-            'label'    => __( 'Pay Grade', 'hrm' ),
-            'type'     => 'select',
-            'option'   => json_decode( stripcslashes( $_POST['hrm_dataAttr']['pay_grade_js'] ) ),
-            'selected' => isset( $field_value['pay_grade'] ) ? $field_value['pay_grade'] : '',
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_pay_grade,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['component'] = array(
-            'label' => __( 'Salary Component', 'hrm' ),
-            'type'  => 'text',
-            'value' => isset( $field_value['component'] ) ? $field_value['component'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['billing_date'] = array(
-            'label' =>  __( 'Billing Date', 'hrm' ),
-            'type'  => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_value['billing_date'] ) ? hrm_get_date2mysql( $field_value['billing_date'] ) : hrm_get_date2mysql( current_time( 'mysql' ) ),
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['frequency'] = array(
-            'label'    => __( 'Pay Frequency', 'hrm' ),
-            'type'     => 'select',
-            'option'   => $this->pay_frequency(),
-            'selected' => isset( $field_value['frequency'] ) ? $field_value['frequency'] : ''
-        );
-
-        $field['currency'] = array(
-            'label'    => __( 'Currency', 'hrm' ),
-            'type'     => 'select',
-            'option'   => hrm_Settings::getInstance()->get_currency_list(),
-            'selected' => isset( $field_value['currency'] ) ? $field_value['currency'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-
-
-        $field['amount'] = array(
-            'label' => __( 'Amount', 'hrm' ),
-            'type'  => 'text',
-            'value' => isset( $field_value['amount'] ) ? $field_value['amount'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['comments'] = array(
-            'label' => __( 'Comments', 'hrm' ),
-            'type'  => 'textarea',
-            'value' => isset( $field_value['comments'] ) ? $field_value['comments'] : ''
-        );
-
-        $field['direct_deposit'] = array(
-            'label' => __( 'Deposit', 'hrm' ),
-            'type'  => 'checkbox',
-            'fields' => array(
-                array(
-                    'label'   => __( 'Add Direct Deposit Details ', 'hrm' ),
-                    'class'   => 'hrm-direct-deposit-handelar',
-                    'value'   => 'yes',
-                    'checked' => isset( $field_value['direct_deposit'] ) ? $field_value['direct_deposit'] : '',
-                    'extra' => array(
-                        'data-direct_deposit' => 'checked',
-                    ),
-                )
-            ),
-        );
-
-
-        $field['account_number'] = array(
-            'label' => __( 'Account Number', 'hrm' ),
-            'class' => 'hrm-direct-deposit-part',
-            'type'  => 'text',
-            'value' => isset( $field_value['account_number'] ) ? $field_value['account_number'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_dependency'         => 'direct_deposit',
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['account_type'] = array(
-            'label'    => __( 'Account Type', 'hrm' ),
-            'type'     => 'select',
-            'class'    => 'hrm-direct-deposit-part',
-            'option'   => $this->account_type(),
-            'selected' => isset( $field_value['account_type'] ) ? $field_value['account_type'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_dependency'         => 'direct_deposit',
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['routing'] = array(
-            'label' => __( 'Routing Number', 'hrm' ),
-            'type'  => 'text',
-            'class' => 'hrm-direct-deposit-part',
-            'value' => isset( $field_value['routing'] ) ? $field_value['routing'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_dependency'         => 'direct_deposit',
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['dipo_amount'] = array(
-            'label' => __( 'Amount', 'hrm' ),
-            'type'  => 'text',
-            'class' => 'hrm-direct-deposit-part',
-            'value' => isset( $field_value['dipo_amount'] ) ? $field_value['dipo_amount'] : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_dependency'         => 'direct_deposit',
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $field['header']       = 'Salary';
-        $field['action']       = 'ajax_referer_insert';
-        $field['table_option'] = 'hrm_salary';
-        $field['url']          = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $field );
-
-        $return_value = array(
-            'append_data'     => ob_get_clean(),
-            'personal_salary' => true
-        );
-
-        return $return_value;
-    }
-
-    function pay_frequency( $frequency = null ) {
-        $frequencys = array(
-            '0' => __( 'Bi Weekly', 'hrm' ),
-            '1' => __( 'Hourly', 'hrm' ),
-            '2' => __( 'Monthly', 'hrm' ),
-            '3' => __( 'Monthly on first pay of month.', 'hrm' ),
-            '4' => __( 'Semi Monthly', 'hrm' ),
-            '5' => __( 'Weekly', 'hrm' ),
-        );
-        if ( $frequency === null ) {
-            return $frequencys;
-        } else {
-            return $frequencys[$frequency];
-        }
-    }
-
-    function account_type( $account_type = null ) {
-        $account_types = array(
-            '0' => __( 'Savings', 'hrm' ),
-            '1' => __( 'Checking', 'hrm' ),
-            '2' => __( 'Other', 'hrm' ),
-        );
-        if ( $account_type === null ) {
-            return $account_types;
-        } else {
-            return $account_types[$account_type];
-        }
-    }
-
     public static function ajax_experiance_filter() {
         check_ajax_referer('hrm_nonce');
         $result = self::getInstance()->experiance_filter( $_POST );
@@ -918,11 +307,11 @@ class Hrm_Employee {
         $title = $postdata['title'];
         $from  = $postdata['from'];
         $to    = $postdata['to'];
-        $page  = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $page  = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page = hrm_per_page();
 
         $experiance = Work_Experience::where( function($q) use($title, $from, $to) {
-            if ( ! empty( $title ) ) {
+            if ( ! empty(  $title ) ) {
                 $q->where( 'title', 'LIKE', '%' . $title . '%' );
             }
             
@@ -1049,6 +438,206 @@ class Hrm_Employee {
         }
 
         return $this->get_personal_info($user_id);
+    }
+    function add_new_employee( $postdata ) {
+        
+        if ( 
+            isset( $postdata['id'] ) 
+                && 
+            ! empty( absint($postdata['id'] ) ) 
+        ) {
+            $user_id = $postdata['id'];
+            $this->update_empoyee( $user_id, $postdata );
+            return $user_id;
+        }
+
+        $validate = $this->new_admin_form_validate( $postdata );
+
+        if ( is_wp_error( $validate ) ) {
+            return $validate;
+        }
+
+        $random_password = wp_generate_password( 8, false );
+        $first_name      = sanitize_text_field( $postdata['firstName'] );
+        $last_name       = sanitize_text_field( $postdata['lastName'] );
+        $display_name    = $first_name .' '. $last_name;
+
+        $userdata = array(
+            'user_login'   => $postdata['userName'],
+            'user_pass'    => $random_password,
+            'user_email'   => $postdata['email'],
+            'first_name'   => $first_name,
+            'last_name'    => $last_name,
+            'display_name' => $display_name,
+            'role'         => $postdata['role']
+        );
+
+        $user_id = wp_insert_user( $userdata );
+
+        if( $user_id ) {
+            $this->update_empoyee( $user_id, $postdata );
+            wp_new_user_notification( $user_id, $random_password );
+            
+            return $user_id;
+
+        } else {
+            return false;
+        }
+    }
+
+    function update_empoyee( $user_id, $postdata ) {
+        
+        $display_name = $postdata['firstName'] . ' ' . $postdata['lastName'];
+        $join_date    = empty( $postdata['joiningDate'] ) ? current_time( 'mysql' ) : $postdata['joiningDate'];
+        
+        update_user_meta( $user_id, 'first_name', $postdata['firstName'] );
+        update_user_meta( $user_id, 'last_name', $postdata['lastName'] );
+
+        wp_update_user( array(
+            'ID'           =>  $user_id,
+            'display_name' => $display_name,
+            'role'         => $postdata['role']
+        ) );
+
+        update_user_meta( $user_id, 'hrm_job_category', $postdata['department'] );
+        update_user_meta( $user_id, 'hrm_location', $postdata['location'] );
+        update_user_meta( $user_id, 'hrm_job_desc', $postdata['description'] );
+        update_user_meta( $user_id, 'hrm_status', $postdata['status'] );
+        update_user_meta( $user_id, 'hrm_mob_number', $postdata['mobileNumber'] );
+        update_user_meta( $user_id, 'hrm_joined_date', hrm_date2mysql( $join_date ) );
+        update_user_meta( $user_id, 'hrm_gender',  $postdata['gender'] );
+        update_user_meta( $user_id, 'hrm_role',  $postdata['role'] );
+        update_user_meta( $user_id, 'hrm_designation',  $postdata['designation'] );
+
+        if ( $postdata['employee_image'] ) {
+            $image_id = File_System::upload_base64_file( $postdata['employee_image'][0] );
+            update_user_meta( $user_id, 'hrm_user_image_id', $image_id );
+        }
+    }
+
+    function new_admin_form_validate( $postdata ) {
+
+        if ( empty( $postdata['userName'] ) ) {
+            return new WP_Error( 'error', __('Username required ', 'hrm' ) );
+        }
+
+        if ( username_exists( $postdata['userName'] ) ) {
+            echo 'adkjfasd'; die();
+            return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
+        }
+
+        if ( empty( $postdata['email'] ) ) {
+            return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
+        }
+
+        if ( ! is_email($postdata['email'] ) ) {
+            return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
+        }
+
+        if ( email_exists( $postdata['email']) ) {
+            return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
+        }
+
+        return true;
+    }
+
+
+    function employeer_search_query( $post, $limit, $pagenum ) {
+        if ( !empty( $post['first_name'] ) ) {
+            $meta[] =   array(
+                'key'     => 'first_name',
+                'value'   =>  trim( $post['first_name'] ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        if ( !empty( $post['last_name'] ) ) {
+            $meta[] = array(
+                'key'     => 'last_name',
+                'value'   =>  trim( $post['last_name'] ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        if ( !empty( $post['status'] ) ) {
+            $meta[] = array(
+                'key'     => '_status',
+                'value'   =>  trim( $post['status'] ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        if ( !empty( $post['mobile'] ) ) {
+            $meta[] = array(
+                'key'     => '_mob_number',
+                'value'   =>  trim( $post['mobile'] ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        if ( isset( $meta ) ) {
+            $meta['relation'] = 'AND';
+        } else {
+            $meta = '';
+        }
+
+        $offset = ( $pagenum - 1 ) * $limit;
+
+        $args = array(
+            'search'         => !empty( $post['user'] ) ? trim( $post['user'] ) : '',
+            'search_columns' => array( 'user_login', 'user_email' ),
+            'meta_query'     => $meta,
+            'number'         => $limit,
+            'offset'         => $offset
+        );
+
+
+        $user_query = new WP_User_Query( $args );
+
+        return $user_query;
+    }
+
+    function get_employee_drop_down() {
+        $employees = $this->get_employee();
+        $emp_lists = array();
+
+        foreach ( $employees as $key => $employee ) {
+            $emp_lists[$employee->ID] = $employee->display_name;
+        }
+
+        return $emp_lists;
+    }
+
+    function get_employee( $employee_id ) {
+        $employee = get_user_by( 'id', $employee_id );
+        $resource = new Item( $employee, new Employee_Transformer );
+
+        return $this->get_response( $resource );
+    }
+
+    function get_employees( $args = array() ) {
+
+        $default = array(
+            'role__in' => array_keys( hrm_get_roles() ),
+            'offset'   => 1,
+            'number'   => hrm_per_page()   
+        );
+
+        $args      = wp_parse_args( $args, $default );
+        $query     = new WP_User_Query( $args );
+        $employees = $query->get_results();
+        
+        $resource = new Collection( $employees, new Employee_Transformer );
+        $resource->setMeta( 
+            [
+                'pagination' => [
+                    'total'    => $query->total_users,
+                    'per_page' => $args['number']
+                ]
+            ] 
+        );
+
+        return $this->get_response( $resource );
     }
 }
 

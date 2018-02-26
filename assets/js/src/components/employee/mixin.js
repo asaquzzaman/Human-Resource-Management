@@ -51,7 +51,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_delete_record', form_data);
+	        this.httpRequest('hrm_delete_employee', form_data);
 		},
 
 		updateRecord (args) {

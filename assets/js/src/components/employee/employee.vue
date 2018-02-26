@@ -31,7 +31,7 @@
 		</div>
 		
 	    <hrm-table :fields="fields"></hrm-table>
-
+	    
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
             component_name='employee_pagination'>
@@ -107,7 +107,9 @@
             },
 
             pagination () {
-            	return this.$store.state[this.nameSpace].pagination;
+            	var pagination = this.$store.state[this.nameSpace].pagination;
+            	pagination['total_pages'] = Math.ceil(pagination.total/pagination.per_page);
+            	return pagination;
             }
 		},
 		components: {

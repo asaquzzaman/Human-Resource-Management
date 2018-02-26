@@ -28,10 +28,25 @@ class Hrm_Employee {
         add_action( 'wp_ajax_hrm_get_dashboard_birthdays', array( $this, 'get_dashboard_birthdays' ) );
         add_action( 'wp_ajax_hrm_insert_employee', array( $this, 'ajax_insert_employee' ) );
         add_action( 'wp_ajax_hrm_get_employees', array( $this, 'ajax_get_employees' ) );
+        add_action( 'wp_ajax_hrm_delete_employee', array( $this, 'ajax_delete_employee' ) );
+    }
+
+    public static function ajax_delete_employee() {
+        check_ajax_referer('hrm_nonce');
+        $employee_ids = $_POST['delete'];
+        self::getInstance()->delete_employee( $employee_ids );
+
+        wp_send_json_success();
+    }
+
+    public function delete_employee( $ids ) {
+        foreach ( $ids as $key => $id ) {
+            wp_delete_user( $id );
+        }
     }
 
     public static function ajax_get_employees() {
-        $postdata  = $_POST['page'];
+        $postdata['page']  = $_POST['page'];
         $employees = self::getInstance()->get_employees( $postdata );
         
         wp_send_json_success( $employees );
@@ -266,16 +281,6 @@ class Hrm_Employee {
         }
 
         return $page;
-    }
-
-    function delete_employee( $users_id = array() ) {
-        $delte_user = false;
-
-        foreach ( $users_id as $user_id => $empty ) {
-            $delte_user = wp_delete_user( $user_id );
-        }
-
-        return $delte_user;
     }
 
     function edit_my_info( $postdata, $table_options ) {
@@ -619,11 +624,13 @@ class Hrm_Employee {
 
         $default = array(
             'role__in' => array_keys( hrm_get_roles() ),
-            'offset'   => 1,
+            'page'     => 1,
             'number'   => hrm_per_page()   
         );
 
-        $args      = wp_parse_args( $args, $default );
+        $args = wp_parse_args( $args, $default );
+        $args['offset'] = ( $args['page'] - 1 ) * $args['number'];
+        
         $query     = new WP_User_Query( $args );
         $employees = $query->get_results();
         

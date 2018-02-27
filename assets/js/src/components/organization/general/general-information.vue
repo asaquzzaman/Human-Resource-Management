@@ -1,156 +1,161 @@
 <template>
 	<div class="page-organization">
 		<h1 class="wp-heading-inline">Organization</h1>
-		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<organization-menu></organization-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<div id="hrm-hidden-form-warp" class="postbox">
+	        <div class="hrm-search-head">
+	            <h3>Profile Information</h3>
+	        </div>
+	  
+	        <div class="inside" id="hrm-visible-form">
+	        	<div class="main">
+	        		<div v-if="!editMode">
+		        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
+		        			
+		        				<label class="hrm-title">
+									Profile Picture
+								</label> 
+								
+								<div class="hrm-uploaded-item">
+									<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
+										<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
+									</a> 
+								</div>
+								<div class="hrm-clear"></div>
+		        		</div>
 
-	    <div class="hrm-tbl-action-wrap">
-			<div class="hrm-bulk-wrap">
-				<label for="bulk-action-selector-top" class="screen-reader-text">
-					Select bulk action
-				</label>
-				<select v-model="bulkAction" name="action" id="bulk-action-selector-top">
-					<option value="-1">Bulk Actions</option>
-					<option value="delete">Delete</option>
-				</select>
-				<a href="#" @click.prevent="selfBulkAction()" class="button button-secondary">Apply</a>
-			</div>
+		        		<div class="hrm-content-wrap" v-else>
 
-			<div class="hrm-filter-wrap">
-				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
+		        				<label class="hrm-title">
+		                			{{ field.label }}
+		                				
+		                		</label> 
+		                		
+		                		<div class="hrm-content" v-html="filter(field.model, field)"></div>
+		                			
+		                		<div class="hrm-clear"></div>
 
-				</div>
+		        		</div>
 
-			</div>
-			<div class="hrm-clear"></div>
-		</div>
-		
-	    <hrm-table :fields="fields"></hrm-table>
-
-	    <hrm-pagination 
-            :total_pages="pagination.total_pages" 
-            component_name='organization_pagination'>
-            
-        </hrm-pagination> 
-
+		        		<a @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
+	        		</div>
+	        		
+	        		<form v-if="editMode" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
+	        			<hrm-form-fields :fields="fields"></hrm-form-fields>
+	        			<input :disabled="canSubmit" type="submit" class="button button-primary">
+	        			<a @click.prevent="update(false)" class="button button-secondary" href="#">cancel</a>
+	        			<div class="hrm-spinner" v-if="loading">Saving....</div>
+	        		</form>
+	        	</div>
+	        </div>
+	    </div>
 	</div>
 </template>
 
-<style>
-	.hrm-bulk-wrap, .hrm-filter-wrap {
+<style type="text/css">
+	.hrm-title, .hrm-content {
 		float: left;
 	}
-	.hrm-tbl-action-wrap {
-		margin-top: 20px;
+	.hrm-content {
+		width: 65%;
+	}
+	.hrm-content-wrap {
+		display: block;
+		margin-bottom: 10px;
+		width: 100%;
 	}
 </style>
 
 <script>
-	import Table from './general-information-table.vue';
-	import Form from './new-general-information-form.vue';
-
 	export default {
-		mixins: [HRMMixin.general],
+		mixins: [HRMMixin.profile],
 
 		data () {
-
 			return {
-				search: {
-					filter: 'active',
-					title: this.$route.query.title,
-					from: this.$route.query.from,
-					to: this.$route.query.to
-				},
-				bulkAction: -1,
-
+				editMode: false,
 				fields: [
 					{
 						type: 'text',
 						model: '',
 						label: 'Organization Name ',
-						name: 'name',
-						tableHead: 'Organization Name ',
-						tbRowAction: true,
-						editable: true
+						name: 'organization_name',
+						required: true,
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Tax ID',
-						name: 'taxid',
-						tableHead: 'Tax ID',
-						editable: true
+						name: 'tax_id',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Registration Number',
-						name: 'regnumber',
-						tableHead: 'Registration Number',
-						editable: true
+						name: 'registration_number',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Phone',
 						name: 'phone',
-						tableHead: 'Phone',
-						editable: true
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Fax',
 						name: 'fax',
-						tableHead: 'Fax',
-						editable: true
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Address Street 1',
-						name: 'address1',
-						tableHead: 'Address Street 1',
-						editable: true
+						name: 'addres_street_1',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Address Street 2',
-						name: 'address2',
-						tableHead: 'Address Street 2',
-						editable: true
+						name: 'address_street_2',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'City',
 						name: 'city',
-						tableHead: 'City',
-						editable: true
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'State/Province',
-						name: 'state',
-						tableHead: 'State/Province',
-						editable: true
+						name: 'state_province',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'Zip/Postal Code',
-						name: 'zipcode',
-						tableHead: 'Zip/Postal Code',
-						editable: true
+						name: 'zip',
+						editMode: false,
+						default: '&#8211 &#8211'
 					},
 					{
 						type: 'select',
@@ -160,108 +165,152 @@
 						optionLabel: 'country',
 						placeholder: 'Select Country',
 						name: 'country',
-						tableHead: 'Country',
-						editable: true,
-						//Filter submited new data
-						// filterSubmited (val) {
-						// 	return val.id;
-						// },
-						// //Table print data
-						// filterPrintData (val) {
-
-						// 	if (!val) {
-						// 		return '&#8211 &#8211';
-						// 	}
-						// 	return val.data.name;
-						// },
-						// // Filter edit form field data
-						// filterComputedGet (val) {
-
-						// 	if (!val) {
-						// 		return '';
-						// 	}
-						// 	return val.data;
-						// },
-						// // Filer edit changable data
-						// filterComputedSet (val) {
-						// 	return { data: val }
-						// },
-						// //Filter edit submited data
-						// filterEditingData (val) {
-						// 	if (val) {
-						// 		return val.data.id;
-						// 	}
-						// }
-						
+						editMode: false,
+						default: '&#8211 &#8211',
+						filter (val) {
+							return val.country;
+						}
 					},
 					{
 						type: 'textarea',
 						model: '',
 						label: 'Note',
 						name: 'note',
-						tableHead: 'Note',
-						editable: true
+						editMode: false,
+						default: '&#8211 &#8211'
 					}
 				],
+
+				loading: false,
+				canSubmit: false,
+				record: {}
 			}
 		},
-		
+
 		created () {
 			var self = this;
-		},
+			var args = {
+				callback (res) {
+					self.record = res.data;
+					self.fields.forEach(function(field) {						
+						if (field.name == 'country') {
+							field.options = res.countries;
+						}
+					});
 
-		computed: {
-			isNewRecordFormActive () {
-				return this.$store.state[this.nameSpace].isNewRecordFormActive;
-			},
-
-            total_experiance_page () {
-                return 10;
-            },
-
-            pagination () {
-            	return this.$store.state[this.nameSpace].pagination;
-            }
-		},
-		components: {
-			'hrm-table': Table,
-			'add-new-record-form': Form,
+					self.afterGetRecored();
+				}
+			}
+			this.getOrganizationInfo(args);
 		},
 
 		methods: {
+			filter (value, field) {
 
-			selfBulkAction () {
-				var self = this;
-				switch( this.bulkAction) {
-					case 'delete':
-						this.recordDelete(self.$store.state[self.nameSpace].deletedId, function() {
-							var hasRecords = self.$store.state[self.nameSpace].records.length;
-							var page = self.$route.params.current_page_number;
-							
-							if (!hasRecords && page > 1) {
-								self.$router.push({
-									params: {
-										current_page_number: page - 1
-									},
-									query: self.$route.query
-								});
-							}
-							if (!hasRecords && self.pagination.total_pages > 1) {
-								self.getRecords();
-							}
-						});
-						break;
+				if (!value) {
+					return field.default;
+				}
 
-					default:
+				if (typeof field.filter !== 'undefined') {
+					return field.filter(value, this);
+				}
+				return value;
+			},
+			afterGetRecored () {
+				var self = this,
+					record = self.record;
+				if (record == null) {
+					return ;
+				}
+				self.fields.forEach(function(field) {
+					field.model = record[field.name] ? record[field.name] : '';
+				});
+			},
+			update (status) {
 
-						break;
+				this.editMode = status;
+
+				this.afterGetRecored();
+			},
+			setStyle (field) {
+				return {
+					height: field.attr.height,
+					width: field.attr.width
 				}
 			},
+			getOrganizationInfo (args) {
+				var self = this;
+				
+	            var request_data = {
+	                data: {},
+	                success: function(res) {
+	                	// self.$store.commit('general/setOrganizationInfo', res.data);
+	                	if (typeof args.callback === 'function') {
+	                        args.callback(res);
+	                    } 
+	                }
+	            };
 
-			recordSearch () {
-				this.$router.push({query: this.search});
-				this.getRecords();
+	            self.httpRequest('hrm_get_organigation_info', request_data);
+			},
+			selfSaveOrganizationalInfo () {
+				var self = this;
+
+				self.loading = true;
+				self.canSubmit = true;
+				var postData = this.generateFieldData(this.fields);
+				var args = {
+					data: postData,
+					callback (res) {
+						self.record = res.data;
+						self.loading = false;
+						self.canSubmit = false;	
+						self.editMode = false;
+					}
+				}
+
+				this.saveOrganizationalInfo(args);
+			},
+
+			generateFieldData (data) {
+				var formated = [];
+
+				data.forEach(function(val) {
+					formated.push(
+						{	
+							'name': val.name,
+							'value': val.model
+						}
+					);
+				});
+
+				return formated;
+			},
+
+			saveOrganizationalInfo (args) {
+				var self = this;
+				args.data.push({
+					name: 'action',
+					value: 'single_form'
+				});
+				args.data.push({
+					name: 'table_option',
+					value: 'hrm_general_info'
+				});
+	            var request_data = {
+	                data: args.data,
+	                type: 'POST',
+	                success: function(res) {
+	                	//self.$store.commit('profile/setPersonalInfo', res);
+	                	if (typeof args.callback === 'function') {
+	                        args.callback(res);
+	                    } 
+	                }
+	            };
+	            
+	            self.httpRequest('single_form', request_data);
 			}
+
 		}
 	}
 </script>

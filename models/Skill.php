@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Skill extends Eloquent {
 
     protected $primaryKey = 'id';
-    protected $table      = 'hrm_skill';
-    public $timestamps    = true;
+    protected $table      = 'hrm_personal_skill';
+    public $timestamps    = false;
 
     protected $fillable = [
-		'level',
-		'experiance',
+		'emp_id',
+		'skill',
+		'years_of_exp',
 		'comments'
     ];
 }

@@ -87,7 +87,7 @@
 						label: 'Country',
 						optionLabel: 'country',
 						placeholder: 'Select Country',
-						name: 'country',
+						name: 'country_code',
 						tableHead: 'Country',
 						editable: true,
 						//Filter submited new data
@@ -126,7 +126,7 @@
 						type: 'text',
 						model: '',
 						label: 'State/Province',
-						name: 'state',
+						name: 'province',
 						tableHead: 'State/Province',
 						editable: true
 					},
@@ -150,7 +150,7 @@
 						type: 'text',
 						model: '',
 						label: 'Zip/Postal Code',
-						name: 'zipcode',
+						name: 'zip_code',
 						tableHead: 'Zip/Postal Code',
 						editable: true
 					},
@@ -174,7 +174,7 @@
 						type: 'textarea',
 						model: '',
 						label: 'Note',
-						name: 'note',
+						name: 'notes',
 						tableHead: 'Note',
 						editable: true
 					}

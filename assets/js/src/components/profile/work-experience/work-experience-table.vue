@@ -12,13 +12,14 @@
                 </tr>
             </thead>
             <tbody>
+            	
                 <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
                 	<th v-if="deleteCheckbox" scope="row" class="check-column">			
 						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
 					
                     <td>
-                    	{{ record.title }}
+                    	{{ record.eexp_jobtit }}
 
                     	<div class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
@@ -26,13 +27,13 @@
 	                    </div>
                     </td>
                     <td>
-                    	{{ record.start }}
+                    	{{ record.eexp_from_date }}
                     </td>
                     <td>
-                    	{{ record.end }}
+                    	{{ record.eexp_to_date }}
                     </td>
                     <td>
-                    	{{ record.description }}
+                    	{{ record.eexp_comments }}
                     </td>
                 </tr>
                 

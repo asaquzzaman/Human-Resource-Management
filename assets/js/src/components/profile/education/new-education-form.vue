@@ -76,7 +76,7 @@
 					}
 					
 				});
-
+				formated['emp_id'] = HRM_Vars.current_user.ID;
 				return formated;
 			},
 			makeEmptyField (data) {

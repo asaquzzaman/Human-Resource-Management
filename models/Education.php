@@ -6,16 +6,18 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Education extends Eloquent {
 
     protected $primaryKey = 'id';
-    protected $table      = 'hrm_education';
-    public $timestamps    = true;
+    protected $table      = 'hrm_personal_education';
+    public $timestamps    = false;
 
     protected $fillable = [
-		'level',
+    	'emp_id',
+		'education',
 		'institute',
 		'major',
-		'gpa',
-		'start',
-		'end'
+		'score',
+		'year',
+		'start_date',
+		'end_date'
     ];
 }
 

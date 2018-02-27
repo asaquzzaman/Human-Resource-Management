@@ -7,13 +7,15 @@ class Work_Experience extends Eloquent {
 
     protected $primaryKey = 'id';
     protected $table      = 'hrm_work_experience';
-    public $timestamps    = true;
+    public $timestamps    = false;
 
     protected $fillable = [
-		'title',
-		'start',
-		'end',
-		'description'
+		'emp_number',
+		'eexp_company',
+		'eexp_jobtit',
+		'eexp_from_date',
+		'eexp_to_date',
+		'eexp_comments'
     ];
 }
 

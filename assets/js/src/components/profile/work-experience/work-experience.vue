@@ -72,25 +72,25 @@
 						type: 'text',
 						model: '',
 						label: 'Title',
-						name: 'title'
+						name: 'eexp_jobtit'
 					},
 					{
 						type: 'datePickerFrom',
 						model: '',
 						label: 'From',
-						name: 'start'
+						name: 'eexp_from_date'
 					},
 					{
 						type: 'datePickerTo',
 						model: '',
 						label: 'To',
-						name: 'end'
+						name: 'eexp_to_date'
 					},
 					{
 						type: 'textarea',
 						model: '',
 						label: 'Description',
-						name: 'description'
+						name: 'eexp_comments'
 					}
 				]
 			}

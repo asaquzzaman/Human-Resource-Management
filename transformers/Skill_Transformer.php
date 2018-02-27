@@ -17,10 +17,11 @@ class Skill_Transformer extends TransformerAbstract
     {
     
         return [
-            'id'         => $item->id,
-            'level'      => $item->level,
-            'experiance' => $item->experiance,
-            'comments'   => $item->comments
+            'id'           => $item->id,
+            'emp_id'       => $item->emp_id,
+            'skill'        => $item->skill,
+            'years_of_exp' => $item->years_of_exp,
+            'comments'     => $item->comments
         ];
 
     }

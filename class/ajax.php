@@ -22,6 +22,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_ajax_referer_insert', array( $this, 'add_new_data' ) );
         add_action( 'wp_ajax_hrm_form_edit', array( $this, 'edit' ) );
         add_action( 'wp_ajax_single_form', array( $this, 'singel_form_add' ) );
+        add_action( 'wp_ajax_hrm_get_organigation_info', array( $this, 'get_organization_info' ) );
         add_action( 'wp_ajax_hrm_delete', array( $this, 'delete' ) );
         add_action( 'wp_ajax_hrm_autocomplete', array( $this, 'hrm_autocomplete_action' ) );
         add_action( 'wp_ajax_user_create', array( $this, 'create_user' ) );
@@ -1255,7 +1256,7 @@ class Hrm_Ajax {
     }
 
     function singel_form_add() {
-        check_ajax_referer( 'hrm_nonce' );
+        //check_ajax_referer( 'hrm_nonce' );
 
         if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
             wp_send_json_error( array( 'error_msg' => __('Update Failed', 'hrm') ) );
@@ -1279,10 +1280,24 @@ class Hrm_Ajax {
         }
 
         if( $update ) {
-            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
+            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ), 'data' => $data  ) );
         } else {
             wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
+    }
+
+    function get_organization_info(){
+        $info          = get_option( 'hrm_general_info', array() );
+        $country_lists = hrm_Settings::getInstance()->country_list();
+        $lists         = [];
+
+        foreach ( $country_lists as $key => $value ) {
+            $lists[] = ['iso' => $key, 'country' => $value];
+        }
+        wp_send_json_success( [ 
+            'data'      => $info['data'],
+            'countries' => $lists,
+        ] );
     }
 
     function delete() {

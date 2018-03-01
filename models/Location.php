@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Location extends Eloquent {
 
     protected $table      = 'hrm_location';
-    public $timestamps    = true;
+    public $timestamps    = false;
 
     protected $fillable = [
         'name',
-        'country',
-        'state',
+        'country_code',
+        'province',
         'city',
         'address',
-        'zipcode',
+        'zip_code',
         'phone',
         'fax',
-        'note'
+        'notes'
     ];
 }

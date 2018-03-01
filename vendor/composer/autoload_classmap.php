@@ -55,6 +55,7 @@ return array(
     'HRM\\Transformers\\Department_Transformer' => $baseDir . '/transformers/Department_Transformer.php',
     'HRM\\Transformers\\Designation_Transformer' => $baseDir . '/transformers/Designation_Transformer.php',
     'HRM\\Transformers\\Education_Transformer' => $baseDir . '/transformers/Education_Transformer.php',
+    'HRM\\Transformers\\Employee_Transformer' => $baseDir . '/transformers/Employee_Transformer.php',
     'HRM\\Transformers\\Location_Transformer' => $baseDir . '/transformers/Location_Transformer.php',
     'HRM\\Transformers\\Notice_Transformer' => $baseDir . '/transformers/Notice_Transformer.php',
     'HRM\\Transformers\\Organization_Transformer' => $baseDir . '/transformers/Organization_Transformer.php',

@@ -3,7 +3,7 @@ export default {
 		return {
 			nameSpace: 'designation',
 			modelName: 'Designation',
-			modelTransformer: 'designation_Transformer'
+			modelTransformer: 'Designation_Transformer'
 		}
 	},
 	methods: {

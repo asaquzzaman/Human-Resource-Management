@@ -20,14 +20,14 @@ class Location_Transformer extends TransformerAbstract
         return [
             'id'        => (int) $item->id,
             'name'      => $item->name,
-            'country'   => $item->country,
-            'state'     => $item->state,
+            'country_code'   => $item->country_code,
+            'province'     => $item->province,
             'city'      => $item->city,
             'address'  => $item->address,
-            'zipcode'   => $item->zipcode,
+            'zip_code'   => $item->zip_code,
             'phone'     => $item->phone,
             'fax'       => $item->fax,
-            'note'      => $item->note,
+            'notes'      => $item->notes,
         ];
 
     }

@@ -7,13 +7,12 @@ class Notice extends Eloquent {
 
     protected $primaryKey = 'id';
     protected $table      = 'hrm_notice';
-    public $timestamps    = true;
+    public $timestamps    = false;
 
     protected $fillable = [
 		'title',
-		'description',
+        'description',
+		'user_id',
 		'date',
-		'created_by',
-        'updated_by',
     ];
 }

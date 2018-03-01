@@ -23,7 +23,7 @@ class Notice_Transformer extends TransformerAbstract
             'id'          => $item->id,
             'title'       => $item->title,
             'description' => $item->description,
-            'date'        => $item->date,
+            'date'        => hrm_get_date( $item->date ),
         ];
 
     }

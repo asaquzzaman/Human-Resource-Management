@@ -192,7 +192,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_experiance_filter', form_data);
+	        this.httpRequest('hrm_employee_filter', form_data);
 		},
 
 		getDesignations (args) {

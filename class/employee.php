@@ -29,6 +29,7 @@ class Hrm_Employee {
         add_action( 'wp_ajax_hrm_insert_employee', array( $this, 'ajax_insert_employee' ) );
         add_action( 'wp_ajax_hrm_get_employees', array( $this, 'ajax_get_employees' ) );
         add_action( 'wp_ajax_hrm_delete_employee', array( $this, 'ajax_delete_employee' ) );
+        add_action( 'wp_ajax_hrm_employee_filter', array( $this, 'ajax_employee_filter' ) );
     }
 
     public static function ajax_delete_employee() {
@@ -43,6 +44,19 @@ class Hrm_Employee {
         foreach ( $ids as $key => $id ) {
             wp_delete_user( $id );
         }
+    }
+
+    public function ajax_employee_filter() {
+        check_ajax_referer('hrm_nonce');
+
+        $postdata = [];
+        $postdata['search']         = '*' . $_POST['name'] . '*';
+        $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
+        $postdata['page']  = empty( absint( $_POST['page'] ) ) ? 1 : absint( $_POST['page'] );
+        
+        $employees = self::getInstance()->get_employees( $postdata );
+        
+        wp_send_json_success( $employees );
     }
 
     public static function ajax_get_employees() {

@@ -99,54 +99,62 @@
 								<span>{{ attendanceLabel }}</span>
 							</h2>
 							<div class="inside">
-								<div v-if="attendance.present">
-									<ul v-for="punchIn in present" class="hrm-attendance-ul">
-										<li>
-											<img class="hrm-dashboard-avatar" :src="punchIn.avatar_url">
-											{{ punchIn.display_name }}
-										</li>
-										<li>{{ punchIn.punch_in_time }}</li>
-									</ul>
-								</div>
-								
-								<div v-if="attendance.absent">
-									<ul v-for="punchOut in absent" class="hrm-attendance-ul">
-										<li>
-											<img class="hrm-dashboard-avatar" :src="punchOut.avatar_url">
-											{{ punchOut.display_name }}
-										</li>
-										<li>No Time Available</li>
-									</ul>
-								</div>
-								
-								<div v-if="attendance.earlyEnter">
-									<ul v-for="firstEntry in earlyEnter" class="hrm-attendance-ul">
-										<li>
-											<img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url">
-											{{ firstEntry.display_name }}
-										</li>
-										<li>{{ firstEntry.punch_in_time }}</li>
-									</ul>
-								</div>
-								
-								<div v-if="attendance.earlyLeave">
-									<ul v-for="firstLeave in earlyLeave" class="hrm-attendance-ul">
-										<li>
-											<img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url">
-											{{ firstLeave.display_name }}
-										</li>
-										<li>{{ firstLeave.punch_out_time }}</li>
-									</ul>
-								</div>
-								
-								<div v-if="attendance.lateLeave">
-									<ul v-for="firstOut in lateLeave" class="hrm-attendance-ul">
-										<li>
-											<img class="hrm-dashboard-avatar" :src="firstOut.avatar_url">
-											{{ firstOut.display_name }}
-										</li>
-										<li>{{ firstOut.punch_out_time }}</li>
-									</ul>
+								<div class="pm-present-body">
+									<div v-if="attendance.present">
+										<ul v-for="punchIn in present" class="hrm-attendance-ul">
+											<li>
+												<img class="hrm-dashboard-avatar" :src="punchIn.avatar_url">
+												{{ punchIn.display_name }}
+											</li>
+											<li>{{ punchIn.punch_in_time }}</li>
+										</ul>
+
+										<div class="pm-attendance-nothing-found" v-if="!present.length">Nothing found</div>
+									</div>
+									
+									<div v-if="attendance.absent">
+										<ul v-for="punchOut in absent" class="hrm-attendance-ul">
+											<li>
+												<img class="hrm-dashboard-avatar" :src="punchOut.avatar_url">
+												{{ punchOut.display_name }}
+											</li>
+											<li>No Time Available</li>
+										</ul>
+										<div class="pm-attendance-nothing-found" v-if="!absent.length">Nothing found</div>
+									</div>
+									
+									<div v-if="attendance.earlyEnter">
+										<ul v-for="firstEntry in earlyEnter" class="hrm-attendance-ul">
+											<li>
+												<img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url">
+												{{ firstEntry.display_name }}
+											</li>
+											<li>{{ firstEntry.punch_in_time }}</li>
+										</ul>
+										<div class="pm-attendance-nothing-found" v-if="!earlyEnter.length">Nothing found</div>
+									</div>
+									
+									<div v-if="attendance.earlyLeave">
+										<ul v-for="firstLeave in earlyLeave" class="hrm-attendance-ul">
+											<li>
+												<img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url">
+												{{ firstLeave.display_name }}
+											</li>
+											<li>{{ firstLeave.punch_out_time }}</li>
+										</ul>
+										<div class="pm-attendance-nothing-found" v-if="!earlyLeave.length">Nothing found</div>
+									</div>
+									
+									<div v-if="attendance.lateLeave">
+										<ul v-for="firstOut in lateLeave" class="hrm-attendance-ul">
+											<li>
+												<img class="hrm-dashboard-avatar" :src="firstOut.avatar_url">
+												{{ firstOut.display_name }}
+											</li>
+											<li>{{ firstOut.punch_out_time }}</li>
+										</ul>
+										<div class="pm-attendance-nothing-found" v-if="!lateLeave.length">Nothing found</div>
+									</div>
 								</div>
 
 								<div id="">
@@ -180,7 +188,7 @@
 								<span class="">Birthday</span> 
 							</h2>
 							<div class="inside">
-								<div>
+								<div class="pm-birthday-body">
 									<ul v-for="birth in birthday" class="hrm-attendance-ul">
 										<li>
 											<img class="hrm-dashboard-avatar" :src="birth.data.avatar_url">
@@ -188,6 +196,7 @@
 										</li>
 										<li>{{ birth.data.birthday }}</li>
 									</ul>
+									<div class="pm-birthday-nothing-found" v-if="!birthday.length">Nothing found</div>
 								</div>
 							</div>
 						</div>
@@ -209,7 +218,7 @@
 								<div class="hrm-clear"></div>
 							</h2>
 							<div class="inside">
-								<div>
+								<div class="pm-leave-body">
 									<ul v-for="leave in leaves" class="hrm-attendance-ul">
 										
 										<li>
@@ -218,6 +227,7 @@
 										</li>
 										<li>{{ leave.leave_type.data.name }}</li>
 									</ul>
+									<div class="pm-leave-nothing-found" v-if="!leaves.length">Nothing found</div>
 								</div>
 							</div>
 						</div>
@@ -227,11 +237,22 @@
 								<span class="">Notice Board</span> 
 							</h2>
 							<div class="inside">
-								<div>
-									<ul v-for="leave in leaves" class="hrm-attendance-ul">
-										<li>{{ leave.employee.data.display_name }}</li>
-										<li>{{ leave.leave_type.data.name }}</li>
+								<div class="pm-notice-body">
+									
+									<ul v-if="notices.length" class="hrm-notice-ul">
+										<li v-for="notice in notices">
+											<a @click.prevent="popUpNotice(notice)" href="#">{{ notice.title }}</a>
+											<span><i class="far fa-calendar-alt"></i>{{ notice.date }}</span>
+											<div v-if="notice.popup">
+												<div v-hrm-dialog :title="notice.title">
+													<p class="hrm-popup-date"><i class="far fa-calendar-alt"></i>{{ notice.date }}</p>
+													<p v-html="notice.description"></p> 
+												</div>
+											</div>
+										</li>
+										
 									</ul>
+									<div class="pm-notice-nothing-found" v-if="!notices.length">Nothing found</div>
 								</div>
 							</div>
 						</div>
@@ -374,10 +395,44 @@
 	#dashboard-widgets-wrap {
 		margin-top: 10px;
 	}
+	.pm-present-body,
+	.pm-birthday-body,
+	.pm-leave-body,
+	.pm-notice-body {
+		min-height: 50px;
+	}
+	.pm-attendance-nothing-found {
+		padding-top: 20px;
+	}
+	.pm-birthday-nothing-found,
+	.pm-leave-nothing-found,
+	.pm-notice-nothing-found {
+		padding-top: 15px;
+	}
+	.pm-notice-body .hrm-notice-ul {
+		margin: 0;
+		padding: 0;
+	}
+	.pm-notice-body .hrm-notice-ul li {
+		display: block;
+		padding-top: 5px;
+	}
+	.hrm-notice-ul .fa-calendar-alt {
+		margin-left: 10px;
+		margin-right: 5px;
+	}
+	.hrm-popup-date {
+		display: block;
+		margin-left: 50%;
+	}
+	.hrm-popup-date .fa-calendar-alt {
+		margin-right: 5px;
+	}
 
 </style>
 
 <script>
+	import Directive from './directive'
 
 	export default {
 		mixins: [HRMMixin.dashboard],
@@ -403,7 +458,8 @@
 					lateLeave: false
 				},
 				leaves: [],
-				birthday: []
+				birthday: [],
+				notices: []
 			}
 		},
 		
@@ -434,7 +490,14 @@
 					self.leaves = res;
 				}
 			});
-			this.getDashboardNotices();
+			this.getDashboardNotices({
+				callback (res) {
+					res.data.forEach(function(notice) {
+						notice.popup = false;
+					});
+					self.notices = res.data;
+				}
+			});
 			this.getDashboardBirthdays({
 				callback (res) {
 					self.birthday = res;
@@ -476,6 +539,10 @@
 						self.attendanceLabel = 'Late Leave';
 						break;
 				}
+			},
+
+			popUpNotice (notice) {
+				notice.popup = true;
 			}
 		}
 	}

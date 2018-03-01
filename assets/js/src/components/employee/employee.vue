@@ -19,9 +19,8 @@
 
 			<div class="hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+					<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="text">
+
 					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
 
 				</div>
@@ -63,9 +62,7 @@
 			return {
 				search: {
 					filter: 'active',
-					title: this.$route.query.title,
-					from: this.$route.query.from,
-					to: this.$route.query.to
+					name: this.$route.query.name
 				},
 				bulkAction: -1,
 
@@ -149,7 +146,7 @@
 
 			recordSearch () {
 				this.$router.push({query: this.search});
-				this.getRecords();
+				//this.getRecords();
 			}
 		}
 	}

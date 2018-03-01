@@ -54,18 +54,24 @@ export default {
 
 		getDashboardNotices (args) {
 			var self = this;
-			args = args || {};
 
-			var form_data = {
-	            data: {},
-	            success: function(res) {
-	            	if (typeof args.callback != 'undefined') {
-	            		args.callback(res);
-	            	}
-	            },
-	        };
+			var postData = {
+				'class': 'Notice',
+				'method': 'gets',
+				'transformers': 'Notice_Transformer',
+				'page': 1
+			};
+			
+            var request_data = {
+                data: postData,
+                success: function(res) {
+                	if(typeof args.callback != 'undefined') {
+                		args.callback(res);
+                	}
+                }
+            };
 
-	        //this.httpRequest('hrm_get_dashboard_notices', form_data);
+            self.httpRequest('hrm_get_records', request_data);
 		},
 
 		getDashboardBirthdays (args) {

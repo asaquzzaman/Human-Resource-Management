@@ -182,9 +182,9 @@ class Hrm_Scripts {
 
     public static function footer_tag() {
 
-        
-        wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_media();
+        wp_enqueue_script( 'jquery-ui-dialog' );
+        wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'hrm-library', HRM_URL . '/assets/js/library.js', false, false, false );
         wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/js/config.js', array('hrm-library'), false, false );
         

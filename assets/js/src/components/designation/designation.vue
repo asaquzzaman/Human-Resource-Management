@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<h1 class="wp-heading-inline">Designation</h1>
-		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
+		<h1 v-if="manageDesignation()" class="wp-heading-inline">Designation</h1>
+		<a v-if="manageDesignation()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div class="hrm-bulk-wrap">
+			<div v-if="manageDesignation()" class="hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -19,9 +19,7 @@
 
 			<div class="hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+					<input v-model="search.title" placeholder="Title" type="text">
 					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
 
 				</div>
@@ -75,7 +73,7 @@
 						label: 'Title',
 						name: 'title',
 						tableHead: 'Title',
-						tbRowAction: true,
+						tbRowAction: this.manageDesignation(),
 						editable: true
 					},
 					{

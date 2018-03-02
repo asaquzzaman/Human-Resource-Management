@@ -11,7 +11,7 @@ let skill = resolve => {
 HRMRegisterChildrenRoute ('profile', 
     [
         {
-            path: 'skill', 
+            path: ':employeeId/skill', 
             component: skill, 
             name: 'skill',
             meta: {

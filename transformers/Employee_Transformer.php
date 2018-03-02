@@ -22,21 +22,22 @@ class Employee_Transformer extends TransformerAbstract
     public function transform( $item ) {
         
         return [
-            'id'                => $item->ID,
-            'email'             => $item->user_email,
-            'display_name'      => $item->display_name,
-            'firstName'        => get_user_meta( $item->ID, 'first_name', true ),
-            'lastName'         => get_user_meta( $item->ID, 'last_name', true ),
-            'department'        => $this->get_department( $item ),
-            'location'          => $this->get_location( $item ),
-            'description'       => get_user_meta( $item->ID, 'hrm_job_desc', true ),
-            'status'            => $this->get_status( $item ),
-            'mobileNumber'      => get_user_meta( $item->ID, 'hrm_mob_number', true ),
-            'joiningDate'      => hrm_get_date( get_user_meta( $item->ID, 'hrm_joined_date', true ) ),
-            'gender'            => $this->get_gender( $item ),
-            'role'              => $this->get_role( $item ),
-            'designation'       => $this->get_designation( $item ),
-            'avatar'            => $this->get_avatar( $item )
+            'id'           => $item->ID,
+            'email'        => $item->user_email,
+            'display_name' => $item->display_name,
+            'firstName'    => get_user_meta( $item->ID, 'first_name', true ),
+            'lastName'     => get_user_meta( $item->ID, 'last_name', true ),
+            'department'   => $this->get_department( $item ),
+            'location'     => $this->get_location( $item ),
+            'description'  => get_user_meta( $item->ID, 'hrm_job_desc', true ),
+            'status'       => $this->get_status( $item ),
+            'mobileNumber' => get_user_meta( $item->ID, 'hrm_mob_number', true ),
+            'joiningDate'  => hrm_get_date( get_user_meta( $item->ID, 'hrm_joined_date', true ) ),
+            'gender'       => $this->get_gender( $item ),
+            'role'         => $this->get_role( $item ),
+            'designation'  => $this->get_designation( $item ),
+            'avatar'       => $this->get_avatar( $item ),
+            'can_update'   => hrm_user_can( 'edit_employee', $item->ID )
         ];
     }
 

@@ -285,6 +285,7 @@
 		created () {
 			var self = this;
 			var args = {
+				employee_id: this.$route.params.employeeId,
 				callback (info) {
 					self.record = info;
 					self.fields.forEach(function(field) {						

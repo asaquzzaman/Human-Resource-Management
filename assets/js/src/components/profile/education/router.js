@@ -10,7 +10,7 @@ let education = resolve => {
 HRMRegisterChildrenRoute ('profile', 
     [
         {
-            path: 'education', 
+            path: ':employeeId/education', 
             component: education, 
             name: 'education',
             meta: {

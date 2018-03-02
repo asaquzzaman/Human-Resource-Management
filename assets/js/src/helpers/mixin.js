@@ -183,5 +183,18 @@ export default hrm.Vue.mixin({
             }
             return new File([u8arr], filename, {type:mime});
         },
+
+        manageOrganization() {
+            return hrm_user_can('manage_organization');
+        },
+
+        getEmployeeId () {
+
+            if (typeof this.$route.params.employeeId == 'undefined') {
+                return parseInt(HRM_Vars.current_user.ID);
+            }
+            
+            return parseInt(this.$route.params.employeeId);
+        }
 	},
 });

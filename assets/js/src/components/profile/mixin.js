@@ -4,7 +4,9 @@ export default {
 			var self = this;
 			
             var request_data = {
-                data: {},
+                data: {
+                    employee_id: args.employee_id
+                },
                 success: function(res) {
                 	self.$store.commit('profile/setPersonalInfo', res);
                 	if (typeof args.callback === 'function') {

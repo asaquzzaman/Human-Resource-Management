@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9
+class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -134,13 +134,8 @@ class ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
         'Create_Designation_Table' => __DIR__ . '/../..' . '/db/migrations/create_designation_table.php',
-        'Create_Education_Table' => __DIR__ . '/../..' . '/db/migrations/create_education_table.php',
         'Create_Financial_Year_Table' => __DIR__ . '/../..' . '/db/migrations/crate_financial_year_table.php',
-        'Create_Location_Table' => __DIR__ . '/../..' . '/db/migrations/create_location_table.php',
         'Create_Migrations_Table' => __DIR__ . '/../..' . '/db/migrations/create_migrations_table.php',
-        'Create_Notice_Table' => __DIR__ . '/../..' . '/db/migrations/create_notice_table.php',
-        'Create_Organization_Table' => __DIR__ . '/../..' . '/db/migrations/create_organization_table.php',
-        'Create_Skill_Table' => __DIR__ . '/../..' . '/db/migrations/create_skill_table.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'HRM\\Core\\Common\\Resource_Editors' => __DIR__ . '/../..' . '/core/common/Resource_Editors.php',
         'HRM\\Core\\Common\\Traits\\Transformer_Manager' => __DIR__ . '/../..' . '/core/common/Traits/Transformer_Manager.php',
@@ -171,7 +166,6 @@ class ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9
         'HRM\\Models\\Location' => __DIR__ . '/../..' . '/models/Location.php',
         'HRM\\Models\\Meta' => __DIR__ . '/../..' . '/models/meta.php',
         'HRM\\Models\\Notice' => __DIR__ . '/../..' . '/models/Notice.php',
-        'HRM\\Models\\Organization' => __DIR__ . '/../..' . '/models/Organization.php',
         'HRM\\Models\\Relation' => __DIR__ . '/../..' . '/models/Relation.php',
         'HRM\\Models\\Skill' => __DIR__ . '/../..' . '/models/Skill.php',
         'HRM\\Models\\User' => __DIR__ . '/../..' . '/models/user.php',
@@ -182,7 +176,6 @@ class ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9
         'HRM\\Transformers\\Employee_Transformer' => __DIR__ . '/../..' . '/transformers/Employee_Transformer.php',
         'HRM\\Transformers\\Location_Transformer' => __DIR__ . '/../..' . '/transformers/Location_Transformer.php',
         'HRM\\Transformers\\Notice_Transformer' => __DIR__ . '/../..' . '/transformers/Notice_Transformer.php',
-        'HRM\\Transformers\\Organization_Transformer' => __DIR__ . '/../..' . '/transformers/Organization_Transformer.php',
         'HRM\\Transformers\\Skill_Transformer' => __DIR__ . '/../..' . '/transformers/Skill_Transformer.php',
         'HRM\\Transformers\\Work_Experiance_Transformer' => __DIR__ . '/../..' . '/transformers/Work_Experience_Transformer.php',
         'Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
@@ -564,9 +557,9 @@ class ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf6e3d910f392d2d7c587768c343c8eb9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$classMap;
 
         }, null, ClassLoader::class);
     }

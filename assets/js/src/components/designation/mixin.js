@@ -194,6 +194,10 @@ export default {
 	        };
 
 	        this.httpRequest('hrm_experiance_filter', form_data);
-		}
+		},
+
+		manageDesignation() {
+            return hrm_user_can('manage_designation');
+        }
 	}		
 }

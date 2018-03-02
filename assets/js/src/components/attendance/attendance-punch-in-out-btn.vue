@@ -10,10 +10,10 @@
 				<div class="main hrm-punch-in-out-main">
 					<div class="hrm-clock-wrap">
 						<strong>
-							<time><i class="fa fa-calendar" aria-hidden="true"></i> {{ currentDate() }}</time>
+							<time><i class="far fa-calendar-alt"></i> {{ currentDate() }}</time>
 						</strong>
 						<strong>
-							<time><i class="fa fa-clock-o" aria-hidden="true"></i> <clock></clock></time>
+							<time><i class="far fa-clock"></i></i> <clock></clock></time>
 						</strong>
 					</div>
 					

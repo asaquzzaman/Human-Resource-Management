@@ -8,7 +8,7 @@
 				<div class="hrm-attendance-records-text-wrap">
 					<h2>Attendace Records</h2>
 				</div>
-				<div  class="hrm-records-from">
+				<!-- <div  class="hrm-records-from">
 					<h2>From</h2>
 
 					<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchInFormatedDate }}</span>
@@ -16,7 +16,7 @@
 				<div class="hrm-records-to">
 					<h2>To</h2>
 					<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchOutFormatedDate }}</span>
-				</div>
+				</div> -->
 				<div class="hrm-clear"></div>
 			</div>
 			<hrm-attendace-user-search></hrm-attendace-user-search>

@@ -39,10 +39,10 @@
 
 		        		</div>
 
-		        		<a @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
+		        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
 	        		</div>
 	        		
-	        		<form v-if="editMode" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
+	        		<form v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
 	        			<hrm-form-fields :fields="fields"></hrm-form-fields>
 	        			<input :disabled="canSubmit" type="submit" class="button button-primary">
 	        			<a @click.prevent="update(false)" class="button button-secondary" href="#">cancel</a>

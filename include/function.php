@@ -667,7 +667,7 @@ function hrm_manager_role_key() {
 function hrm_manager_capability() {
     return array(
         'manage_employee_profile',
-        'manage_hrm_organization',
+        'manage_organization',
         'manage_employee',
         'edit_employee',
         'manage_attendance',
@@ -676,7 +676,8 @@ function hrm_manager_capability() {
         'manage_location',
         'manage_notice',
         'manage_department',
-        'manage_settings'
+        'manage_settings',
+        'manage_designation',
     );
 }
 

@@ -357,7 +357,7 @@ class Hrm_Employee {
 
     public static function ajax_get_personal_info() {
         check_ajax_referer('hrm_nonce');
-        $user_id = empty( $_POST['user_id'] ) ? get_current_user_id() : intval( $_POST['user_id'] );
+        $user_id = empty( $_POST['employee_id'] ) ? get_current_user_id() : intval( $_POST['employee_id'] );
         $result = self::getInstance()->get_personal_info( $user_id );
         wp_send_json_success( $result );
     }

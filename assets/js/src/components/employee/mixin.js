@@ -238,5 +238,9 @@ export default {
 
             self.httpRequest('hrm_get_records', request_data);
 		},
+
+		manageEmployee() {
+            return hrm_user_can('manage_employee');
+        }
 	}		
 }

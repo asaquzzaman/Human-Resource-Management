@@ -11,7 +11,7 @@ HRMRegisterChildrenRoute ('profile',
     [
 
         {
-            path: 'work-experience', 
+            path: ':employeeId/work-experience', 
             component: workExperience, 
             name: 'work_experience',
             meta: {

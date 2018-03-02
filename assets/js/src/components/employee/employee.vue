@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<h1 class="wp-heading-inline">Employee</h1>
-		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
+		<h1 v-if="manageEmployee()" class="wp-heading-inline">Employee</h1>
+		<a v-if="manageEmployee()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div class="hrm-bulk-wrap">
+			<div v-if="manageEmployee()" class="hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>

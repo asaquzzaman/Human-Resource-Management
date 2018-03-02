@@ -9,11 +9,13 @@
 	
 	export default {
 		created () {
-			
-			if ( '/profile' === this.$route.path ) {
+			if ( '/employees' === this.$route.path ) {
 				this.$router.push(
 					{
 						name: 'personal_information',
+						params: {
+							employeeId: this.getEmployeeId()
+						}
 					}
 				);
 			}
@@ -21,10 +23,13 @@
 
 		watch: {
 			'$route' () {
-				if ( '/profile' === this.$route.path ) {
+				if ( '/employees' === this.$route.path ) {
 					this.$router.push(
 						{
 							name: 'personal_information',
+							params: {
+								employeeId: this.getEmployeeId()
+							}
 						}
 					);
 				}

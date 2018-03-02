@@ -3,7 +3,7 @@
 		<table class="wp-list-table widefat fixed striped pages">
             <thead>
                 <tr>
-                	<td v-if="deleteCheckbox" id="cb" class="manage-column column-cb check-column">
+                	<td v-if="manageEmployee()" id="cb" class="manage-column column-cb check-column">
                 		<input @change.prevent="deleteAll()" v-model="deleteAllStatus" id="cb-select-all-1" type="checkbox">
                 	</td>
                 	<th>Name</th>
@@ -15,15 +15,15 @@
 
             <tbody>
                 <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
-                	<th v-if="deleteCheckbox" scope="row" class="check-column">			
+                	<th v-if="manageEmployee()" scope="row" class="check-column">			
 						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
 
 					<td>
 						{{ record.display_name }}
 						<div class="row-actions">
-                    		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
-	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
+                    		<span v-if="record.can_update" class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a></span>
+	                    	<span v-if="manageEmployee()" class="trash"> | <a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
 
 					</td>

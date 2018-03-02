@@ -25,14 +25,14 @@ let profile = resolve => {
 
 let menu = [
     {
-        path: 'profile', 
+        path: 'employees', 
         component: profile, 
         name: 'profile',
 
         children: HRMGetRegisterChildrenRoute( 'profile',
             [
                 {
-                    path: 'personal-information', 
+                    path: ':employeeId/personal-information', 
                     component: personalInformation, 
                     name: 'personal_information',
                     meta: {
@@ -41,7 +41,7 @@ let menu = [
                 },
 
                 {
-                    path: 'job-location', 
+                    path: ':employeeId/job-location', 
                     component: jobLocation, 
                     name: 'job_location',
                     meta: {

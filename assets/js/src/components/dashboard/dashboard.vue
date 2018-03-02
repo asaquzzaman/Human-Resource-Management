@@ -276,7 +276,6 @@
 		float: right;
 	    padding-right: 44px;
 	    font-size: 14px;
-	    color: #e0e0e0cf;
 	}
 
 	.hrm-block-3 .hrm-count {
@@ -287,20 +286,23 @@
 	}
 	
 	.hrm-block-1 {
-		background: #d5d5d5; /*#30ddbc;*/
+		background: #f7f7f7; /*#30ddbc;*/
 	}
 	.hrm-block-2 {
-		background: #8e99a1; /*#01bcd4;*/
+		background: #f7f7f7; /*#01bcd4;*/
 	}
 	.hrm-block-3 {
-		background: #6d7993; /*#7e57c2;*/
+		background: #f7f7f7; /*#7e57c2;*/
 	}
 	.hrm-block-4 {
-		background: #96838d; /*#2b6a93;*/
+		background: #f7f7f7; /*#2b6a93;*/
+		border-right: 1px solid #ddd;
 	}
 	.hrm-block {
 		float: left;
-		width: 25%;
+		width: 24.8%;
+		border-left: 1px solid #ddd;
+		border-top: 1px solid #dddddd8f;
 	}
 	.hrm-block-content-wrap {
 		height: 120px;
@@ -329,7 +331,7 @@
 	}
 	.hrm-block-3 .fa-user,
 	.hrm-block-4 .fa-transgender {
-		color: #e0e0e070;
+		color: #a0a5aa;
 	}
 	.hrm-img {
 		height: 90px;
@@ -358,11 +360,12 @@
 	.hrm-block-4 footer {
 		position: absolute;
 		bottom: 0;
-	    background: rgba(197, 196, 196, 0.6);
+	    background: rgba(197, 196, 196, 0.34);
 	    width: 100%;
 	    text-align: center;
 	    color: #555;
 	    font-weight: 600;
+	    padding: 2px 0;
     	
 	}
 	.hrm-dashboard-avatar {

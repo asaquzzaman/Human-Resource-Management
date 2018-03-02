@@ -1,14 +1,14 @@
 <template>
 	<div class="page-organization">
-		<h1 class="wp-heading-inline">Notice</h1>
-		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
+		<h1 v-if="manageOrganization()" class="wp-heading-inline">Notice</h1>
+		<a v-if="manageOrganization()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<organization-menu></organization-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div class="hrm-bulk-wrap">
+			<div v-if="manageOrganization()" class="hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -21,7 +21,7 @@
 
 			<div class="hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
+					<input v-model="search.title" placeholder="Notice title" type="text">
 					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
 					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
@@ -77,7 +77,7 @@
 						label: 'Title',
 						name: 'title',
 						tableHead: 'Title',
-						tbRowAction: true,
+						tbRowAction: this.manageOrganization(),
 						editable: true
 					},
 					{

@@ -15,11 +15,15 @@
 									Profile Picture
 								</label> 
 								
-								<div class="hrm-uploaded-item">
+								<div v-if="field.model.length" class="hrm-uploaded-item">
 									<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
 										<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
 									</a> 
 								</div>
+								<div v-if="!field.model.length" class="hrm-uploaded-item" v-for="file in field.default">
+				                    <img :style="setStyle(field)" class="hrm-uploaded-file" :src="file.url" :alt="file.name">
+				                </div>
+
 								<div class="hrm-clear"></div>
 		        		</div>
 
@@ -287,11 +291,16 @@
 			var args = {
 				employee_id: this.$route.params.employeeId,
 				callback (info) {
+
 					self.record = info;
 					self.fields.forEach(function(field) {						
 
 						if (field.name == '_country_code') {
 							field.options = info.country_list;
+						}
+
+						if (field.name == '_hrm_user_image_id') {
+							field.default = info.default_profile_pic;
 						}
 					});
 

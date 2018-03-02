@@ -374,8 +374,13 @@ class Hrm_Employee {
         }
 
         $profile_pic = $this->get_profile_picture( $user_id );
-        $profile_pic = is_array($profile_pic) ? $profile_pic : [];
-
+        $profile_pic = empty( $profile_pic ) ? [] : $profile_pic;
+        
+        $default_profile_pic[] = [
+            'url'   => get_avatar_url( $user_id ),
+            'name'  => $user->display_name,
+        ];
+    
         return [
             'country_list'    => $lists,
             '_hrm_user_image_id' => $profile_pic,
@@ -392,6 +397,7 @@ class Hrm_Employee {
             '_work_mobile'    => get_user_meta( $user_id, '_work_mobile', true ),
             'email'           => $user->user_email,
             '_country_code'   => get_user_meta( $user_id, '_country_code', true ),
+            'default_profile_pic' => $default_profile_pic
         ];
     }
 

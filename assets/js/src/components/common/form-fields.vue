@@ -62,7 +62,7 @@
         		<label for="description">
 					{{ field.label }} <em v-if="field.required">*</em>
 				</label>
-				<hrm-file-uploader :files="field.model" :multiple="field.multiple" :attr="field.attr" :delete="field.deleted_files"></hrm-file-uploader>
+				<hrm-file-uploader :defaults="field.default" :files="field.model" :multiple="field.multiple" :attr="field.attr" :delete="field.deleted_files"></hrm-file-uploader>
 				<span class="hrm-clear"></span>
 				<span class="description"></span>
         	</div>

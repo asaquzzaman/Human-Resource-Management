@@ -3,13 +3,17 @@
         <div v-hrm-uploader id="hrm-upload-container">
             <div class="hrm-upload-filelist">
                 
-                <div class="hrm-uploaded-item" v-for="file in files" :key="file.id">
+                <div v-if="files.length" class="hrm-uploaded-item" v-for="file in files" :key="file.id">
                     <a class="hrm-uploaded-img" :href="file.url" target="_blank">
                         <img :style="'height:'+attr.height+'; width:'+attr.width+';'" class="hrm-uploaded-file" :src="file.thumb" :alt="file.name">
                     </a> 
                     
                     <a href="#"  @click.prevent="deletefile(file.id)" class="button">Delete</a>
                         
+                </div>
+
+                <div v-if="!files.length" class="hrm-uploaded-item" v-for="file in defaults">
+                    <img :style="'height:'+attr.height+'; width:'+attr.width+';'" class="hrm-uploaded-file" :src="file.url" :alt="file.name">
                 </div>
      
                            
@@ -29,7 +33,7 @@
         },
 
         update: function (el, binding, vnode) { 
-            new HRM_Uploader('hrm-upload-pickfiles', 'hrm-upload-container', vnode.context );
+            //new HRM_Uploader('hrm-upload-pickfiles', 'hrm-upload-container', vnode.context );
         }
     });
 
@@ -62,6 +66,13 @@
                         width: '80px'
                     }
                 }
+            },
+
+            defaults: {
+                type: [Array],
+                default () {
+                    return []
+                }
             }
         },
 
@@ -81,7 +92,6 @@
                 }
                 
                 this.files.push( file_res.res.file );
-                
             },
 
             /**

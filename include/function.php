@@ -236,6 +236,10 @@ function hrm_get_time( $time, $strtotime = true ) {
 }
 
 function hrm_get_date( $date, $default = false, $gmt = false ) {
+    if ( strtotime( $date ) < 0 ) {
+        return '';
+    }
+    
     $date_format = get_option( 'date_format' );
 
     if ( $default ) {
@@ -790,7 +794,7 @@ function hrm_get_country_by_code( $code ) {
 }
 
 function hrm_per_page() {
-    return 3;
+    return 2;
 }
 
 function valid_date_time($date, $format = 'Y-m-d H:i:s') {

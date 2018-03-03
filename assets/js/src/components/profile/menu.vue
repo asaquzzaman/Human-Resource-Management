@@ -1,7 +1,7 @@
 <template>
     <div v-if="menu">
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="(item, index) in menu" :key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+            <router-link v-for="(item, index) in menu" :key="index" :class="activeClass(item)" :to="{name: item.name}">{{ item.meta.label }}</router-link>
         </h2>
 
         <h3 class="hrm-sub-nav">
@@ -33,6 +33,16 @@
         },
 
         methods: {
+            activeClass (item) {
+                var tabClass = 'nav-tab';
+                
+                if (item.name == this.$route.name) {
+                    tabClass = tabClass + ' nav-tab-active'; 
+                }
+                
+                return tabClass;
+            },
+            
             childrens () {
                 let root_menu = this.$route.matched[1].name;
                 let index = this.getIndex(this.menu, root_menu, 'name');

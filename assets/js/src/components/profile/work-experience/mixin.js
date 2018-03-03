@@ -92,6 +92,7 @@ export default {
                 data: args.data,
 
                 success: function(res) {
+                	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
 
@@ -121,11 +122,11 @@ export default {
 		getRecords (args) {
 			var self = this;
 
-			if (self.$route.query.filter == 'active') {
+			//if (self.$route.query.filter == 'active') {
 				self.filter(args);
-			} else {
-				self.fetchRecords(args);
-			}
+			// } else {
+			// 	self.fetchRecords(args);
+			// }
 		},
 
 		fetchRecords () {
@@ -160,6 +161,7 @@ export default {
 		filter (callback) {
 			var self = this;
 			this.$route.query['page'] = this.$route.params.current_page_number;
+			this.$route.query['employee_id'] = this.$route.params.employeeId;
 
 			var form_data = {
 	            data: this.$route.query,

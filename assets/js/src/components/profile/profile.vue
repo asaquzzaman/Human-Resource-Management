@@ -12,7 +12,7 @@
 			if ( '/employees' === this.$route.path ) {
 				this.$router.push(
 					{
-						name: 'personal_information',
+						name: 'employee_general_information',
 						params: {
 							employeeId: this.getEmployeeId()
 						}
@@ -26,7 +26,7 @@
 				if ( '/employees' === this.$route.path ) {
 					this.$router.push(
 						{
-							name: 'personal_information',
+							name: 'employee_general_information',
 							params: {
 								employeeId: this.getEmployeeId()
 							}

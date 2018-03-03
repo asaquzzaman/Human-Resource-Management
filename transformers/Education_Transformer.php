@@ -17,15 +17,14 @@ class Education_Transformer extends TransformerAbstract
     {
     
         return [
-            'id'        => $item->id,
-            'emp_id'        => $item->emp_id,
-            'education'     => $item->education,
-            'institute' => $item->institute,
-            'major'     => $item->major,
-            'score'       => $item->score,
-            'year'       => $item->year,
-            'start_date'     => $item->start,
-            'end_date'       => $item->end
+            'id'          => $item->id,
+            'employee_id' => $item->employee_id,
+            'level'       => $item->level,
+            'institute'   => $item->institute,
+            'major'       => $item->major,
+            'gpa'         => $item->gpa,
+            'start'       => hrm_get_date( $item->start ),
+            'end'         => hrm_get_date( $item->end )
         ];
 
     }

@@ -10,13 +10,13 @@ class Location extends Eloquent {
 
     protected $fillable = [
         'name',
-        'country_code',
-        'province',
+        'country',
+        'state',
         'city',
         'address',
-        'zip_code',
+        'zipcode',
         'phone',
         'fax',
-        'notes'
+        'note'
     ];
 }

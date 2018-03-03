@@ -6,6 +6,7 @@ import Mixin from '@helpers/mixin';
 import Directive from '@directives/directives';
 import Components from '@helpers/common-components';
 import HRM from './App.vue';
+import MenuFix from '@helpers/menu-fix';
 
 var wpspear_hrm = {
 	el: '#wpspear-hrm',
@@ -17,8 +18,8 @@ var wpspear_hrm = {
 new hrm.Vue(wpspear_hrm);	
 
 
-
-
+// fix the admin menu for the slug "vue-app"
+MenuFix('hr_management');
 
 
 

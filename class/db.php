@@ -278,7 +278,7 @@ class Hrm_Db {
 
       $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `emp_id` int(7) NOT NULL DEFAULT '0',
+        `employee_id` int(7) NOT NULL DEFAULT '0',
         `skill` varchar(255) NOT NULL,
         `years_of_exp` decimal(2,0) DEFAULT NULL,
         `comments` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -310,7 +310,7 @@ class Hrm_Db {
 
     $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `emp_id` int(11) NOT NULL,
+      `employee_id` int(11) NOT NULL,
       `education` varchar(255) NOT NULL,
       `institute` varchar(100) DEFAULT NULL,
       `major` varchar(100) DEFAULT NULL,
@@ -346,6 +346,7 @@ class Hrm_Db {
         $table_name = $wpdb->prefix . 'hrm_work_experience';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
             `id` int(11) NOT NULL AUTO_INCREMENT,
+            `employee_id` int(11) NOT NULL,
             `emp_number` varchar(7) NOT NULL DEFAULT '0',
             `eexp_company` varchar(100) DEFAULT NULL,
             `eexp_jobtit` varchar(120) DEFAULT NULL,

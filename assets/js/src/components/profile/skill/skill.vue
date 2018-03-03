@@ -75,7 +75,7 @@
 						type: 'text',
 						model: '',
 						label: 'Level',
-						name: 'skill',
+						name: 'level',
 						tableHead: 'Skill',
 						tbRowAction: true,
 						editable: true
@@ -84,7 +84,7 @@
 						type: 'text',
 						model: '',
 						label: 'Years of experiance',
-						name: 'years_of_exp',
+						name: 'experiance',
 						tableHead: 'Years of experiance',
 						tbRowAction: false,
 						editable: true

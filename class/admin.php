@@ -1,6 +1,14 @@
 <?php
+use HRM\Core\Common\Traits\Transformer_Manager;
+use League\Fractal;
+use League\Fractal\Resource\Item as Item;
+use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use HRM\Models\Location;
+use HRM\Transformers\Location_Transformer;
 
 class Hrm_Admin {
+    use Transformer_Manager;
 
     private static $_instance;
 
@@ -37,6 +45,41 @@ class Hrm_Admin {
         add_action( 'edit_user_profile', array( $this, 'role_display' ) );
         add_action( 'show_user_profile', array( $this, 'role_display' ) );
         add_action( 'profile_update', array( $this, 'profile_update_role' ) );
+    }
+
+    function location_filter( $postdata = [], $id = false  ) {
+            
+        $name     = empty( $postdata['name'] ) ? '' : $postdata['name'];
+        $page     = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $location = Location::find( $id );
+            
+            if ( $location ) {
+                $resource = new Item( $location, new Location_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $experiance = Location::where( function($q) use($title, $from, $to) {
+            if ( ! empty(  $name ) ) {
+                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $experiance->getCollection();
+
+        $resource = new Collection( $collection, new Location_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
+
+        return $this->get_response( $resource );
+    
     }
 
     /**

@@ -53,6 +53,7 @@
 <script>
 	import Table from './location-table.vue';
 	import Form from './new-location-form.vue';
+	import Countires from '@helpers/countries/countries'
 
 	export default {
 		mixins: [HRMMixin.location],
@@ -81,17 +82,17 @@
 					{
 						type: 'select',
 						model: '',
-						options: [],
+						options: Countires,
 						label: 'Country',
-						optionLabel: 'country',
+						optionLabel: 'name',
 						placeholder: 'Select Country',
-						name: 'country_code',
+						name: 'country',
 						tableHead: 'Country',
 						editable: true,
 						//Filter submited new data
-						// filterSubmited (val) {
-						// 	return val.id;
-						// },
+						filterSubmited (val) {
+							return val.code;
+						},
 						// //Table print data
 						// filterPrintData (val) {
 
@@ -124,7 +125,7 @@
 						type: 'text',
 						model: '',
 						label: 'State/Province',
-						name: 'province',
+						name: 'state',
 						tableHead: 'State/Province',
 						editable: true
 					},
@@ -148,7 +149,7 @@
 						type: 'text',
 						model: '',
 						label: 'Zip/Postal Code',
-						name: 'zip_code',
+						name: 'zipcode',
 						tableHead: 'Zip/Postal Code',
 						editable: true
 					},
@@ -172,7 +173,7 @@
 						type: 'textarea',
 						model: '',
 						label: 'Note',
-						name: 'notes',
+						name: 'note',
 						tableHead: 'Note',
 						editable: true
 					}

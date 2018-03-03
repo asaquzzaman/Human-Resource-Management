@@ -19,21 +19,21 @@
 					</th>
 					
                     <td>
-                    	{{ record.eexp_jobtit }}
+                    	{{ record.title }}
 
                     	<div class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
-	                    	<span class="trash"><a  href="#">Delete</a> </span>
+	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
                     </td>
                     <td>
-                    	{{ record.eexp_from_date }}
+                    	{{ record.start }}
                     </td>
                     <td>
-                    	{{ record.eexp_to_date }}
+                    	{{ record.end }}
                     </td>
                     <td>
-                    	{{ record.eexp_comments }}
+                    	{{ record.description }}
                     </td>
                 </tr>
                 
@@ -165,7 +165,7 @@
 		methods: {
 			recordEditForm (record, status) {
 				status = status || 'toggle';
-				this.$store.commit( 'profile/showHideEditForm', 
+				this.$store.commit( this.nameSpace+'/showHideEditForm', 
 					{
 						id: record.id,
 						status: status
@@ -216,7 +216,33 @@
 				} else {
 					this.deleteAllStatus = false;
 				}
-			}
+			},
+
+			selfDelete (record) {
+				var self = this;
+				this.recordDelete([record.id], function() {
+					var hasRecords = self.$store.state[self.nameSpace].records.length;
+					var page = self.$route.params.current_page_number;
+					if (!hasRecords && page > 1) {
+						self.$router.push({
+							params: {
+								current_page_number: page - 1
+							},
+							query: self.$route.query
+						});
+					}
+					
+					if (
+						!hasRecords 
+							&& 
+						typeof self.pagination != 'undefined'
+							&&
+						self.pagination.total_pages > 1
+					) {
+						self.getRecords();
+					}
+				})
+			},
 		}
 		
 	}

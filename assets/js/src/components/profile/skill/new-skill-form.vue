@@ -47,6 +47,7 @@
 				self.canSubmit = false;
 
 				var postData = this.generateFieldData(this.fields);
+					postData['employee_id'] = this.$route.params.employeeId;
 					postData['class'] = self.modelName;
 					postData['method'] = 'create';
 					postData['transformers'] = self.modelTransformer;

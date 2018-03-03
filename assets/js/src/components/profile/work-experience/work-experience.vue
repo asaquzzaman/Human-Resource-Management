@@ -21,7 +21,7 @@
 
 			<div class="hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
+					<input v-model="search.title" placeholder="Title" type="text">
 					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
 					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
@@ -72,25 +72,25 @@
 						type: 'text',
 						model: '',
 						label: 'Title',
-						name: 'eexp_jobtit'
+						name: 'title'
 					},
 					{
 						type: 'datePickerFrom',
 						model: '',
 						label: 'From',
-						name: 'eexp_from_date'
+						name: 'start'
 					},
 					{
 						type: 'datePickerTo',
 						model: '',
 						label: 'To',
-						name: 'eexp_to_date'
+						name: 'end'
 					},
 					{
 						type: 'textarea',
 						model: '',
 						label: 'Description',
-						name: 'eexp_comments'
+						name: 'description'
 					}
 				]
 			}

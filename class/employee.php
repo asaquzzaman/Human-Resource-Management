@@ -5,7 +5,11 @@ use League\Fractal\Resource\Item as Item;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Work_Experience;
+use HRM\Models\Education;
+use HRM\Models\Skill;
 use HRM\Transformers\Work_Experiance_Transformer;
+use HRM\Transformers\Education_Transformer;
+use HRM\Transformers\Skill_Transformer;
 use HRM\Core\File_System\File_System;
 use HRM\Transformers\Employee_Transformer;
 
@@ -30,6 +34,12 @@ class Hrm_Employee {
         add_action( 'wp_ajax_hrm_get_employees', array( $this, 'ajax_get_employees' ) );
         add_action( 'wp_ajax_hrm_delete_employee', array( $this, 'ajax_delete_employee' ) );
         add_action( 'wp_ajax_hrm_employee_filter', array( $this, 'ajax_employee_filter' ) );
+        add_action( 'wp_ajax_hrm_get_employee_job_location', array( $this, 'ajax_get_employee_job_location' ) );
+        add_action( 'wp_ajax_hrm_experiance_filter', array( $this, 'ajax_experiance_filter' ) );
+        add_action( 'wp_ajax_hrm_education_filter', array( $this, 'ajax_education_filter' ) );
+        add_action( 'wp_ajax_hrm_skill_filter', array( $this, 'ajax_skill_filter' ) );
+        add_action( 'wp_ajax_hrm_get_personal_info', array( $this, 'ajax_get_personal_info' ) );
+        add_action( 'wp_ajax_hrm_save_personal_info', array( $this, 'ajax_save_personal_info' ) );
     }
 
     public static function ajax_delete_employee() {
@@ -323,13 +333,15 @@ class Hrm_Employee {
     }
 
     function experiance_filter( $postdata ) {
-        $title = $postdata['title'];
-        $from  = $postdata['from'];
-        $to    = $postdata['to'];
-        $page  = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
-        $per_page = hrm_per_page();
+        $title       = $postdata['title'];
+        $from        = $postdata['from'];
+        $to          = $postdata['to'];
+        $employee_id = $postdata['employee_id'];
+        $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page    = hrm_per_page();
 
-        $experiance = Work_Experience::where( function($q) use($title, $from, $to) {
+        $experiance = Work_Experience::where('employee_id', $employee_id)
+            ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
                 $q->where( 'title', 'LIKE', '%' . $title . '%' );
             }
@@ -354,6 +366,106 @@ class Hrm_Employee {
 
         return $this->get_response( $resource );
     }
+
+    public static function ajax_education_filter() {
+        check_ajax_referer('hrm_nonce');
+        $result = self::getInstance()->education_filter( $_POST );
+        wp_send_json_success( $result );
+    }
+
+    function education_filter( $postdata ) {
+        $title       = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $from        = empty( $postdata['from'] ) ? '' : $postdata['from'];
+        $to          = empty( $postdata['to'] ) ? '' : $postdata['to'];
+        $employee_id = $postdata['employee_id'];
+        $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page    = hrm_per_page();
+
+        $experiance = Education::where('employee_id', $employee_id)
+            ->where( function($q) use($title, $from, $to) {
+            if ( ! empty(  $title ) ) {
+                $q->where( 'level', 'LIKE', '%' . $title . '%' );
+            }
+            
+            if ( ! empty( $from ) ) {
+                $from = date( 'Y-m-d', strtotime( $from ) );
+                $q->where( 'start', '>=', $from);
+            }
+
+            if ( ! empty( $to ) ) {
+                $to = date( 'Y-m-d', strtotime( $to ) );
+                $q->where( 'end', '<=', $to);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $experiance->getCollection();
+
+        $resource = new Collection( $collection, new Education_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
+
+        return $this->get_response( $resource );
+    }
+    
+    public static function ajax_skill_filter() {
+        check_ajax_referer('hrm_nonce');
+        $result = self::getInstance()->skill_filter( $_POST );
+        wp_send_json_success( $result );
+    }
+
+    function skill_filter( $postdata ) {
+        $title       = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        // $from        = empty( $postdata['from'] ) ? '' : $postdata['from'];
+        // $to          = empty( $postdata['to'] ) ? '' : $postdata['to'];
+        $employee_id = $postdata['employee_id'];
+        $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page    = hrm_per_page();
+
+        $experiance = Skill::where('employee_id', $employee_id)
+            ->where( function($q) use($title, $from, $to) {
+            if ( ! empty(  $title ) ) {
+                $q->where( 'level', 'LIKE', '%' . $title . '%' );
+            }
+            
+            // if ( ! empty( $from ) ) {
+            //     $from = date( 'Y-m-d', strtotime( $from ) );
+            //     $q->where( 'start', '>=', $from);
+            // }
+
+            // if ( ! empty( $to ) ) {
+            //     $to = date( 'Y-m-d', strtotime( $to ) );
+            //     $q->where( 'end', '<=', $to);
+            // }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $experiance->getCollection();
+
+        $resource = new Collection( $collection, new Skill_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
+
+        return $this->get_response( $resource );
+    }
+
+
+    public static function ajax_get_employee_job_location() {
+        check_ajax_referer('hrm_nonce');
+
+        $user_id = empty( $_POST['employee_id'] ) ? get_current_user_id() : intval( $_POST['employee_id'] );
+        $result = self::getInstance()->get_employee_job_location( $user_id );
+        
+        wp_send_json_success( $result );
+    }
+
+    public function get_employee_job_location( $employee_id ) {
+        $location_id = get_user_meta( $employee_id, 'hrm_location', true );
+        $location_id = empty( $location_id ) ? -1 : intval( $location_id );
+
+        return Hrm_Admin::getInstance()->location_filter( [], $location_id );
+    }
+
 
     public static function ajax_get_personal_info() {
         check_ajax_referer('hrm_nonce');

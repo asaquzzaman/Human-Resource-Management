@@ -3,7 +3,7 @@
 		<profile-menu></profile-menu>
 		<div id="hrm-hidden-form-warp" class="postbox">
 	        <div class="hrm-search-head">
-	            <h3>Profile Information</h3>
+	            <h3>General Information</h3>
 	        </div>
 	  
 	        <div class="inside" id="hrm-visible-form">

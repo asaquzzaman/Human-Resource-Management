@@ -32,11 +32,11 @@ let menu = [
         children: HRMGetRegisterChildrenRoute( 'profile',
             [
                 {
-                    path: ':employeeId/personal-information', 
+                    path: ':employeeId/general-information', 
                     component: personalInformation, 
-                    name: 'personal_information',
+                    name: 'employee_general_information',
                     meta: {
-                        label: 'Profile Information'
+                        label: 'General Information'
                     }
                 },
 

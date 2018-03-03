@@ -10,12 +10,13 @@ class Work_Experience extends Eloquent {
     public $timestamps    = false;
 
     protected $fillable = [
-		'emp_number',
-		'eexp_company',
-		'eexp_jobtit',
-		'eexp_from_date',
-		'eexp_to_date',
-		'eexp_comments'
+    	'employee_id',
+		'title',
+		'start',
+		'end',
+		'description',
+		'created_at',
+		'updated_at'
     ];
 }
 

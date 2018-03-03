@@ -45,10 +45,11 @@
 
 				self.loading = true;
 				self.canSubmit = false;
-
+				
 				var postData = this.generateFieldData(this.fields);
-					postData['class'] = 'Work_Experience';
-					postData['method'] = 'create';
+					postData['employee_id']  = this.$route.params.employeeId;
+					postData['class']        = 'Work_Experience';
+					postData['method']       = 'create';
 					postData['transformers'] = 'Work_Experiance_Transformer';
 
 				var args = {

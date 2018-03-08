@@ -57,56 +57,72 @@ let Hrm_Leave_Approve = resolve => {
     });
 }
 
+import Empty from './empty.vue'
+
 let menu = [
     { 
         path: 'leave', 
-        component:  Hrm_Leave_Records,
-        name: 'leave_records',
+        component:  Empty,
+        name: 'leave',
         meta: {
             label: 'Leave',
-        }
-    },
-    {
-        path: 'leave-request', 
-        component: Hrm_Leave_Requests, 
-        name: 'leave_request',
-        meta: {
-            label: 'Requested Leave'
         },
 
         children: [
             {
-                path: 'pending', 
-                component: Hrm_Leave_Pending, 
-                name: 'leave_pending',
+                path: 'records', 
+                component:  Hrm_Leave_Records,
+                name: 'leave_records',
                 meta: {
-                    label: 'Pending'
-                },
+                    label: 'Leave',
+                }
             },
 
             {
-                path: 'approve', 
-                component: Hrm_Leave_Approve, 
-                name: 'leave_approve',
+                path: 'leave-request', 
+                component: Hrm_Leave_Requests, 
+                name: 'leave_request',
                 meta: {
-                    label: 'Approve'
+                    label: 'Requested Leave'
                 },
-            },
 
-            {
-                path: 'cancel', 
-                component: Hrm_Leave_Cancel, 
-                name: 'leave_cancel',
-                meta: {
-                    label: 'Cancel'
-                },
+                children: [
+                    {
+                        path: 'pending', 
+                        component: Hrm_Leave_Pending, 
+                        name: 'leave_pending',
+                        meta: {
+                            label: 'Pending'
+                        },
+                    },
+
+                    {
+                        path: 'approve', 
+                        component: Hrm_Leave_Approve, 
+                        name: 'leave_approve',
+                        meta: {
+                            label: 'Approve'
+                        },
+                    },
+
+                    {
+                        path: 'cancel', 
+                        component: Hrm_Leave_Cancel, 
+                        name: 'leave_cancel',
+                        meta: {
+                            label: 'Cancel'
+                        },
+                    }
+                ]
             }
+
         ]
-    }
+    },
+    
 ];
 
 if (hrm_user_can('manage_leave')) {
-    menu.push(
+    menu[0].children.push(
         {
             path: 'leave-configuration', 
             component: Hrm_Leave_Configuration, 

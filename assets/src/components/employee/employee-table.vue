@@ -6,7 +6,7 @@
                 	<td v-if="manageEmployee()" id="cb" class="manage-column column-cb check-column">
                 		<input @change.prevent="deleteAll()" v-model="deleteAllStatus" id="cb-select-all-1" type="checkbox">
                 	</td>
-                	<th>Name</th>
+                	<th class="has-row-actions">Name</th>
                     <th v-for="(header, header_index) in filterHeader(fields)" :key="header_index">
                     	{{ header.tableHead }}
                     </th>
@@ -19,10 +19,19 @@
 						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
 
-					<td>
-						{{ record.display_name }}
+					<td class="">
+						<img class="hrm-avatar" :src="record.avatar" style="height:32px; width: 32px;">
+						<router-link class="hrm-profile-link" :to="{
+							name: 'employee_general_information',
+							params: {
+								employeeId: record.id
+							}
+						}">
+							{{ record.display_name }}
+						</router-link>
+						<div class="hrm-clear"></div>
 						<div class="row-actions">
-                    		<span v-if="record.can_update" class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a></span>
+                    		<span v-if="manageEmployee() || record.can_update" class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a></span>
 	                    	<span v-if="manageEmployee()" class="trash"> | <a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
 
@@ -83,6 +92,17 @@
 		margin-right: 10px;
 		margin-top: 6px;
 	}
+	.hrm-avatar,
+	.hrm-profile-link {
+		float: left;
+	}
+	.hrm-avatar {
+		margin-right: 5px;
+	}
+	.has-row-actions {
+		width: 16%;
+	}
+
 </style>
 
 <script>

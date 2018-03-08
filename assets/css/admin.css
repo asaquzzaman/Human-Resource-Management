@@ -934,6 +934,19 @@ label em {
 .hrm-multiselect .multiselect__select {
     height: 30px;
 }
+.pm-pagination-wrap {
+  margin-top: 10px;
+}
+.pm-pagination-wrap .pm-pagination-btn {
+  padding: 3px 3px 3px 5px;
+  background: #585858;
+  border: 1px solid;
+  color: #fff;
+  text-decoration: none;
+}
+.pm-pagination-wrap .router-link-active {
+  background: #9ea3a8;
+}
 
 
 

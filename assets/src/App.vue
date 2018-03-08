@@ -1,8 +1,8 @@
 <template>
     <div id="hrm" class="wrap">
+        <hrm-do-action :hook="'hrm-before-router-view'"></hrm-do-action>
         <router-view></router-view>
-        <!-- <hrm-leave></hrm-leave>
-        <hrm-settings></hrm-settings> -->
+        <hrm-do-action :hook="'hrm-after-router-view'"></hrm-do-action>
     </div>
 </template>
 

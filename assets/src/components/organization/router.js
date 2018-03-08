@@ -8,7 +8,11 @@ let menu = [
         path: 'organization', 
         component: Empty, 
         name: 'organization',
-        children: HRMGetRegisterChildrenRoute('organization')
+        children: HRMGetRegisterChildrenRoute('organization'),
+        meta: {
+        	label: 'Organization',
+        	order: 2
+        }
     }
 ];
 

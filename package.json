@@ -41,6 +41,7 @@
     "react": "^15.6.2",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
+    "shelljs": "^0.8.1",
     "uglify-js": "^3.3.9",
     "vue-loader": "^13.7.1",
     "vue-template-compiler": "^2.5.13",

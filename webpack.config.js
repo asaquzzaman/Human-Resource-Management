@@ -1,18 +1,23 @@
 const path = require('path');
-//var webpack = require('webpack');
+const shell = require('shelljs');
+const outputPath = path.resolve( __dirname, 'assets/js')
+
+
+//Remove all webpack build file
+shell.rm('-rf', outputPath)
 
 function resolve (dir) {
-  return path.join(__dirname, './assets/js/src', dir)
+  return path.join(__dirname, './assets/src', dir)
 }
 
 module.exports = {
 	entry: {
-        'hrm': './assets/js/src/start.js',
-        'library': './assets/js/src/helpers/library.js',
+        'hrm': './assets/src/start.js',
+        'library': './assets/src/helpers/library.js',
     },
 	
 	output: {
-		path: path.resolve( __dirname, 'assets/js'),
+		path: outputPath,
 		filename: '[name].js',
 		publicPath: '',
 		chunkFilename: 'chunk/[chunkhash].chunk-bundle.js',

@@ -1,5 +1,5 @@
 <script>
-    
+    import Vue from 'vue/dist/vue.esm.js';
     function HRMGetComponents() {
         var components = {};
         
@@ -37,11 +37,13 @@
 
             var components = [],
                 self = this;
+ 
 
             HRM_Components.map(function(obj, key) {
+
                 if (obj.hook == self.hook) {
                     components.push(
-                       hrm.Vue.compile('<'+obj.component+' :actionData="actionData"></'+obj.component+'>').render.call(self)
+                       Vue.compile('<'+obj.component+' :actionData="actionData"></'+obj.component+'>').render.call(self)
                     );
                 }
             });
@@ -51,6 +53,10 @@
     }
 
     export default action;
+
+// if (obj.hook == self.hook) {
+//     components.push(h(obj.component));
+// }
     
 </script>
 

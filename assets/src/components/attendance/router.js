@@ -26,6 +26,7 @@ let menu = [
         name: 'attendance_records',
         meta: {
             label: 'Attendance',
+            order: 7
         },
 
         children: [

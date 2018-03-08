@@ -28,6 +28,10 @@ let menu = [
         path: 'employees', 
         component: profile, 
         name: 'profile',
+        meta: {
+            label: 'Profile',
+            order: 6
+        },
 
         children: HRMGetRegisterChildrenRoute( 'profile',
             [

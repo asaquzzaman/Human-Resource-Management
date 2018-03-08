@@ -15,6 +15,10 @@ HRMRegisterChildrenRoute ('hrm_root',
             path: 'designation', 
             component: designation, 
             name: 'designation',
+            meta: {
+                label: 'Designation',
+                order: 4
+            },
 
             children: [
                 {

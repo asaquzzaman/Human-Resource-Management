@@ -69,5 +69,4 @@
         }
     }
 </script>
-	</div>
-</template>
+	

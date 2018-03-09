@@ -66,6 +66,7 @@ let menu = [
         name: 'leave',
         meta: {
             label: 'Leave',
+            order: 8
         },
 
         children: [

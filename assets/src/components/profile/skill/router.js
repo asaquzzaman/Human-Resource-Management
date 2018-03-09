@@ -8,6 +8,16 @@ let skill = resolve => {
     });
 }
 
+function HRM_URM_Params (self, params) {
+    let employeeId = self.$route.params.employeeId 
+        ? self.$route.params.employeeId 
+        : HRM_Vars.current_user.data.ID
+    
+    return {
+        employeeId: employeeId
+    }
+}
+
 HRMRegisterChildrenRoute ('profile', 
     [
         {
@@ -15,7 +25,10 @@ HRMRegisterChildrenRoute ('profile',
             component: skill, 
             name: 'skill',
             meta: {
-                label: 'Skill'
+                label: 'Skill',
+                params (self, params) {
+                    return HRM_URM_Params(self, params);
+                }
             },
 
             children: [

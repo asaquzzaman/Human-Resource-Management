@@ -15,6 +15,10 @@ HRMRegisterChildrenRoute ('hrm_root',
             path: 'dashboard', 
             component: dashboard, 
             name: 'dashboard',
+            meta: {
+                label: 'Dashboard',
+                order: 1
+            }
         }
     ]
 );

@@ -19,17 +19,27 @@ let hrm_attendace_configuration = resolve => {
     });
 }
 
+import Empty from './empty.vue'
+
 let menu = [
     { 
         path: 'attendance', 
-        component: hrm_attendace_records, 
-        name: 'attendance_records',
+        component: Empty, 
+        name: 'attendance',
         meta: {
             label: 'Attendance',
             order: 7
         },
 
         children: [
+            {
+                path: 'records', 
+                component: hrm_attendace_records, 
+                name: 'attendance_records',
+                meta: {
+                    label: 'Attendance',
+                },
+            },
             { 
                 path: 'search', 
                 component: hrm_attendace_user_search, 
@@ -44,7 +54,7 @@ let menu = [
 ];
 
 if ( hrm_user_can('manage_attendance') ) {
-    menu.push(
+    menu[0].children.push(
         {
             path: 'attendance-configuration', 
             component: hrm_attendace_configuration, 

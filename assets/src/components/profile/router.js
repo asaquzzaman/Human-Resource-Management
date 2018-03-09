@@ -23,6 +23,16 @@ let profile = resolve => {
     });
 }
 
+function HRM_URM_Params (self, params) {
+    let employeeId = self.$route.params.employeeId 
+        ? self.$route.params.employeeId 
+        : HRM_Vars.current_user.data.ID
+    
+    return {
+        employeeId: employeeId
+    }
+}
+
 let menu = [
     {
         path: 'employees', 
@@ -40,7 +50,10 @@ let menu = [
                     component: personalInformation, 
                     name: 'employee_general_information',
                     meta: {
-                        label: 'General Information'
+                        label: 'General Information',
+                        params (self, params) {
+                            return HRM_URM_Params(self, params);
+                        }
                     }
                 },
 
@@ -49,7 +62,10 @@ let menu = [
                     component: jobLocation, 
                     name: 'job_location',
                     meta: {
-                        label: 'Job Loaction'
+                        label: 'Job Loaction',
+                        params (self, params) {
+                            return HRM_URM_Params(self, params);
+                        }
                     }
                 }
             ]

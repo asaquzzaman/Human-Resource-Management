@@ -1,6 +1,6 @@
 <template>
     <div v-if="total > 1">
-        <div class="cpm-pagination-wrap">
+        <div class="hrm-pagination-wrap">
 
             <router-link 
                 v-if="page_number > 1" 

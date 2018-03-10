@@ -6,7 +6,7 @@
                 	<td v-if="manageOrganization()" id="cb" class="manage-column column-cb check-column">
                 		<input @change.prevent="deleteAll()" v-model="deleteAllStatus" id="cb-select-all-1" type="checkbox">
                 	</td>
-                    <th v-for="(header, header_index) in filterHeader(fields)" :key="header_index">
+                    <th v-for="(header, header_index) in filterHeader(fields)" :class="getClass(header)" :key="header_index">
                     	{{ header.tableHead }}
                     </th>
                 </tr>
@@ -49,8 +49,8 @@
 							</fieldset>
 
 							<div class="submit inline-edit-save">
-								<button @click.prevent="recordEditForm(record, false)" type="button" class="button cancel alignleft">Cancel</button>
-								<input :disabled="!canSubmit" type="submit" class="button button-primary save alignright" value="Update">
+								<button @click.prevent="recordEditForm(record, false)" type="button" class="button hrm-button-secondary cancel alignleft">Cancel</button>
+								<input :disabled="!canSubmit" type="submit" class="button hrm-button-primary button-primary save alignright" value="Update">
 								<div v-if="loading" class="hrm-spinner alignright"></div>
 								<br class="clear">
 							</div>
@@ -141,7 +141,7 @@
 					return record[field.name];
 				}
 
-				return field.filterPrintData( record[field.name] );
+				return field.filterPrintData( record[field.name], this );
 			},
 
 			recordEditForm (record, status) {
@@ -202,7 +202,14 @@
 							query: self.$route.query
 						});
 					}
-					if (!hasRecords && self.pagination.total_pages > 1) {
+					
+					if (
+						!hasRecords 
+							&&
+						typeof self.pagination != 'undefined'
+							&& 
+						self.pagination.total_pages > 1
+					) {
 						self.getRecords();
 					}
 				})
@@ -230,6 +237,14 @@
 				} else {
 					this.deleteAllStatus = false;
 				}
+			},
+
+			getClass (header) {
+				if ( header.tbRowAction === true ) {
+					return 'hrm-row-action-header';
+				}
+
+				return '';
 			}
 		}
 		

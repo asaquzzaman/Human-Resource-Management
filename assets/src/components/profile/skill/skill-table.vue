@@ -49,8 +49,8 @@
 							</fieldset>
 
 							<div class="submit inline-edit-save">
-								<button @click.prevent="recordEditForm(record, false)" type="button" class="button cancel alignleft">Cancel</button>
-								<input :disabled="!canSubmit" type="submit" class="button button-primary save alignright" value="Update">
+								<button @click.prevent="recordEditForm(record, false)" type="button" class="button cancel hrm-button-secondary alignleft">Cancel</button>
+								<input :disabled="!canSubmit" type="submit" class="button button-primary hrm-button-primary save alignright" value="Update">
 								<div v-if="loading" class="hrm-spinner alignright"></div>
 								<br class="clear">
 							</div>

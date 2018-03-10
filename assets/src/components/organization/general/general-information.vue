@@ -1,14 +1,14 @@
 <template>
-	<div class="page-organization">
+	<div class="page-organization metabox-holder">
 		<h1 class="wp-heading-inline">Organization</h1>
 
 		<organization-menu></organization-menu>
 
 		<div id="hrm-hidden-form-warp" class="postbox">
-	        <div class="hrm-search-head">
-	            <h3>Profile Information</h3>
-	        </div>
-	  
+
+	        
+	        <h2 class="hndle ui-sortable-handle">General Information</h2>
+
 	        <div class="inside" id="hrm-visible-form">
 	        	<div class="main">
 	        		<div v-if="!editMode">
@@ -39,13 +39,13 @@
 
 		        		</div>
 
-		        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button button-primary" href="#">Update</a>
+		        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
 	        		</div>
 	        		
 	        		<form v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
 	        			<hrm-form-fields :fields="fields"></hrm-form-fields>
-	        			<input :disabled="canSubmit" type="submit" class="button button-primary">
-	        			<a @click.prevent="update(false)" class="button button-secondary" href="#">cancel</a>
+	        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
+	        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
 	        			<div class="hrm-spinner" v-if="loading">Saving....</div>
 	        		</form>
 	        	</div>

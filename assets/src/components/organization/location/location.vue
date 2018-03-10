@@ -8,7 +8,7 @@
 		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div  v-if="manageOrganization()" class="hrm-bulk-wrap">
+			<div  v-if="manageOrganization()" class="hrm-table-action hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -16,13 +16,13 @@
 					<option value="-1">Bulk Actions</option>
 					<option value="delete">Delete</option>
 				</select>
-				<a href="#" @click.prevent="selfBulkAction()" class="button button-secondary">Apply</a>
+				<a href="#" @click.prevent="selfBulkAction()" class="button hrm-button-secondary button-secondary">Apply</a>
 			</div>
 
-			<div class="hrm-filter-wrap">
+			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" placeholder="Location name" type="text">
-					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
+					<input v-model="search.name" placeholder="Location name" type="text">
+					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
 
 				</div>
 
@@ -63,7 +63,7 @@
 			return {
 				search: {
 					filter: 'active',
-					title: this.$route.query.title,
+					name: this.$route.query.name,
 					from: this.$route.query.from,
 					to: this.$route.query.to
 				},
@@ -86,46 +86,47 @@
 						label: 'Country',
 						optionLabel: 'name',
 						placeholder: 'Select Country',
-						name: 'country',
+						name: 'country_code',
 						tableHead: 'Country',
 						editable: true,
 						//Filter submited new data
 						filterSubmited (val) {
 							return val.code;
 						},
-						// //Table print data
-						// filterPrintData (val) {
+						//Table print data
+						filterPrintData (val, self) {
+							let index = self.getIndex( Countires, val, 'code' );
 
-						// 	if (!val) {
-						// 		return '&#8211 &#8211';
-						// 	}
-						// 	return val.data.name;
-						// },
-						// // Filter edit form field data
-						// filterComputedGet (val) {
+							if (!val || index === false) {
+								return '&#8211 &#8211';
+							}
 
-						// 	if (!val) {
-						// 		return '';
-						// 	}
-						// 	return val.data;
-						// },
-						// // Filer edit changable data
-						// filterComputedSet (val) {
-						// 	return { data: val }
-						// },
-						// //Filter edit submited data
-						// filterEditingData (val) {
-						// 	if (val) {
-						// 		return val.data.id;
-						// 	}
-						// }
+							return Countires[index].name;
+						},
+						// Filter edit form field data
+						filterComputedGet (val, self) {
+							let index = self.getIndex( Countires, val, 'code' );
+
+							if (!val) {
+								return '';
+							}
+							return Countires[index];
+						},
+						// Filer edit changable data
+						filterComputedSet (val) {
+							return val.code;
+						},
+						//Filter edit submited data
+						filterEditingData (val) {
+							return val;
+						}
 						
 					},
 					{
 						type: 'text',
 						model: '',
 						label: 'State/Province',
-						name: 'state',
+						name: 'province',
 						tableHead: 'State/Province',
 						editable: true
 					},
@@ -149,7 +150,7 @@
 						type: 'text',
 						model: '',
 						label: 'Zip/Postal Code',
-						name: 'zipcode',
+						name: 'zip_code',
 						tableHead: 'Zip/Postal Code',
 						editable: true
 					},
@@ -173,7 +174,7 @@
 						type: 'textarea',
 						model: '',
 						label: 'Note',
-						name: 'note',
+						name: 'notes',
 						tableHead: 'Note',
 						editable: true
 					}

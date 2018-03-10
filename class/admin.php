@@ -25,6 +25,7 @@ class Hrm_Admin {
         add_action( 'init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
+        add_action( 'wp_ajax_hrm_organization_location_filter', array( $this, 'ajax_location_filter' ) );
 
         $this->setup_actions();
     }
@@ -47,6 +48,13 @@ class Hrm_Admin {
         add_action( 'profile_update', array( $this, 'profile_update_role' ) );
     }
 
+    function ajax_location_filter() {
+        check_ajax_referer('hrm_nonce');
+        $locations = $this->location_filter($_POST);
+
+        wp_send_json_success($locations);
+    }
+
     function location_filter( $postdata = [], $id = false  ) {
             
         $name     = empty( $postdata['name'] ) ? '' : $postdata['name'];
@@ -65,18 +73,18 @@ class Hrm_Admin {
             return $this->get_response( null );
         }
 
-        $experiance = Location::where( function($q) use($title, $from, $to) {
+        $location = Location::where( function($q) use( $name ) {
             if ( ! empty(  $name ) ) {
-                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+                $q->where( 'name', 'LIKE', '%' . $name . '%' );
             }
         })
         ->orderBy( 'id', 'DESC' )
         ->paginate( $per_page, ['*'], 'page', $page );
     
-        $collection = $experiance->getCollection();
+        $collection = $location->getCollection();
 
         $resource = new Collection( $collection, new Location_Transformer );
-        $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $location ) );
 
         return $this->get_response( $resource );
     

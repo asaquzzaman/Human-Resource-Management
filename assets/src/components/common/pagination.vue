@@ -1,6 +1,6 @@
 <template>
     <div v-if="total_pages > 1">
-        <div class="pm-pagination-wrap">
+        <div class="hrm-pagination-wrap">
             
             <router-link 
                 v-if="parseInt(current_page_number) > 1" 

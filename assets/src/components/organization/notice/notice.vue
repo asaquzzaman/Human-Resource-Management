@@ -8,7 +8,7 @@
 		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div v-if="manageOrganization()" class="hrm-bulk-wrap">
+			<div v-if="manageOrganization()" class="hrm-table-action  hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -16,15 +16,15 @@
 					<option value="-1">Bulk Actions</option>
 					<option value="delete">Delete</option>
 				</select>
-				<a href="#" @click.prevent="selfBulkAction()" class="button button-secondary">Apply</a>
+				<a href="#" @click.prevent="selfBulkAction()" class="button hrm-button-secondary button-secondary">Apply</a>
 			</div>
 
-			<div class="hrm-filter-wrap">
+			<div class="hrm-table-action  hrm-filter-wrap">
 				<div class="alignleft actions">
 					<input v-model="search.title" placeholder="Notice title" type="text">
 					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
+					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
 
 				</div>
 

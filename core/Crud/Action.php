@@ -61,7 +61,7 @@ abstract class Action implements Pattern {
 		$resource  = new Item( $crated, new $transformers );
 
         $message = [
-            'message' => 'Data has been created successfully!'
+            'message' => 'Record has been save successfully!'
         ];
 
         return $this->get_response( $resource, $message );

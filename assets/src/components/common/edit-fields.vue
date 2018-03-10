@@ -126,7 +126,7 @@
 					var record = this.record;
 
 					if (typeof field.filterComputedGet != 'undefined') {
-						return field.filterComputedGet(record[field.name]);
+						return field.filterComputedGet(record[field.name], this);
 					} else {
 						return record[field.name];
 					}
@@ -135,7 +135,7 @@
 				set (select_val) {
 					var field = this.field;
 					var record = this.record;
-
+					
 					if (typeof field.filterComputedSet != 'undefined') {
 						this.record[this.field.name] = field.filterComputedSet(select_val);
 					} else {

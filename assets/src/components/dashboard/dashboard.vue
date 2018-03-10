@@ -58,7 +58,7 @@
 		<div class="hrm-block hrm-block-3">
 			<div class="hrm-block-content-wrap">
 				<i class="far fa-user"></i>
-				<div class="hrm-count">{{ employees }} Employess</div>
+				<div class="hrm-count"><span>{{ employees }}</span> Employess</div>
 				<div class="hrm-clear"></div>
 			</div>
 			<footer>
@@ -396,7 +396,7 @@
 		width: 72%;
 	}
 	#dashboard-widgets-wrap {
-		margin-top: 10px;
+		margin-top: 20px;
 	}
 	.pm-present-body,
 	.pm-birthday-body,

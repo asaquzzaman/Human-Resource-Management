@@ -6,7 +6,7 @@
 		<add-new-record-form v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div v-if="manageEmployee()" class="hrm-bulk-wrap">
+			<div v-if="manageEmployee()" class="hrm-table-action hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -14,14 +14,14 @@
 					<option value="-1">Bulk Actions</option>
 					<option value="delete">Delete</option>
 				</select>
-				<a href="#" @click.prevent="selfBulkAction()" class="button button-secondary">Apply</a>
+				<a href="#" @click.prevent="selfBulkAction()" class="button hrm-button-secondary button-secondary">Apply</a>
 			</div>
 
-			<div class="hrm-filter-wrap">
+			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
 					<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="text">
 
-					<a href="#" class="button button-secondary" @click.prevent="recordSearch()">Filter</a>
+					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
 
 				</div>
 

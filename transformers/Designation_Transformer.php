@@ -29,7 +29,7 @@ class Designation_Transformer extends TransformerAbstract
     }
 
     public function includeDepartment( Designation $item ) {
-        $department = $item->department()->first();
+        $department = $item->dept()->first();
 
         if ( $department ) {
             return $this->item( $department, new Department_Transformer );

@@ -1,6 +1,6 @@
 <template>
     <div v-if="manageDepartment()" class="hrm-department-del-btn-wrap hrm-tbl-action-btn-sibling">
-        <a @click.prevent="departmentGroupDelete()" v-if="type == 'group'" href="#" class="button hrm-delete-button">Delete</a>
+        <a @click.prevent="departmentGroupDelete()" v-if="type == 'group'" href="#" class="button hrm-button-secondary">Delete</a>
         <a @click.prevent="departmentDelete()" v-if="type == 'single'" href="#" class="hrm-delete">Delete</a>
     </div>
 </template>
@@ -28,7 +28,7 @@
 
                     if ( dept_id.includes(department.id) ) {
                         if ( parseInt(department.number_of_employee) > 0 && is_continue ) {
-                            toastr.success('The departments are contain employee you can not remove them');
+                            hrm.Toastr.success('The departments are contain employee you can not remove them');
                             is_continue = false;
                         }
                     }
@@ -48,7 +48,7 @@
                     data: request_data,
                     success: function(res) {
                     	// Display a success toast, with a title
-                        toastr.success(res.success);
+                        hrm.Toastr.success(res.success);
                         
                         self.$store.commit('departments/departmentDelId', {del_dept: []});
 
@@ -63,7 +63,7 @@
                     error: function(res) {
                     	// Showing error
                         res.error.map( function( value, index ) {
-                            toastr.error(value);
+                            hrm.Toastr.error(value);
                         });
                     }
                 });

@@ -1,6 +1,6 @@
 <template>
 	<div v-if="manageDepartment()" class="hrm-tbl-action-btn-sibling">
-		<a @click.prevent="showHideDepartmentForm('toggle')" href="#" class="button button-primary">Add</a>
+		<a @click.prevent="showHideDepartmentForm('toggle')" href="#" class="button hrm-button-primary button-primary">Add</a>
 	</div>
 
 </template>

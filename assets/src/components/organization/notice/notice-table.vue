@@ -202,7 +202,14 @@
 							query: self.$route.query
 						});
 					}
-					if (!hasRecords && self.pagination.total_pages > 1) {
+					
+					if (
+						!hasRecords 
+							&&
+						typeof self.pagination != 'undefined'
+							&& 
+						self.pagination.total_pages > 1
+					) {
 						self.getRecords();
 					}
 				})

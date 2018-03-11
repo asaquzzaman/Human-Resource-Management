@@ -6,6 +6,8 @@ use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Location;
 use HRM\Transformers\Location_Transformer;
+use HRM\Models\Notice;
+use HRM\Transformers\Notice_Transformer;
 
 class Hrm_Admin {
     use Transformer_Manager;
@@ -26,6 +28,7 @@ class Hrm_Admin {
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
         add_action( 'wp_ajax_hrm_organization_location_filter', array( $this, 'ajax_location_filter' ) );
+        add_action( 'wp_ajax_hrm_notice_filter', array( $this, 'ajax_notice_filter' ) );
 
         $this->setup_actions();
     }
@@ -46,6 +49,60 @@ class Hrm_Admin {
         add_action( 'edit_user_profile', array( $this, 'role_display' ) );
         add_action( 'show_user_profile', array( $this, 'role_display' ) );
         add_action( 'profile_update', array( $this, 'profile_update_role' ) );
+    }
+
+    function ajax_notice_filter() {
+        check_ajax_referer('hrm_nonce');
+        $locations = $this->notice_filter($_POST);
+
+        wp_send_json_success($locations);
+    }
+
+    function notice_filter( $postdata = [], $id = false  ) {
+            
+        $title     = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $from      = empty( $postdata['from'] ) ? '' : $postdata['from'];
+        $to        = empty( $postdata['to'] ) ? '' : $postdata['to'];
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $location = Notice::find( $id );
+            
+            if ( $location ) {
+                $resource = new Item( $location, new Location_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $location = Notice::where( function($q) use( $title, $from, $to ) {
+            if ( ! empty(  $title ) ) {
+                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+            }
+
+            if ( ! empty( $from ) ) {
+                $from = date( 'Y-m-d', strtotime( $from ) );
+                $q->where( 'date', '>=', $from);
+            }
+
+            if ( ! empty( $to ) ) {
+                $to = date( 'Y-m-d', strtotime( $to ) );
+                $q->where( 'date', '<=', $to);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $location->getCollection();
+
+        $resource = new Collection( $collection, new Notice_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $location ) );
+
+        return $this->get_response( $resource );
+    
     }
 
     function ajax_location_filter() {
@@ -218,59 +275,59 @@ class Hrm_Admin {
         }
     }
 
-    function admin_notice( $field_value = null ) {
-        $user_id = get_current_user_id();
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+    // function admin_notice( $field_value = null ) {
+    //     $user_id = get_current_user_id();
+    //     $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
 
-        if ( $field_value !== null ) {
-            $notice['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
+    //     if ( $field_value !== null ) {
+    //         $notice['id'] = array(
+    //             'type' => 'hidden',
+    //             'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
+    //         );
+    //     }
 
-        $notice['title'] = array(
-            'label' =>  __( 'Title', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['title'] ) ? $field_value['title'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
+    //     $notice['title'] = array(
+    //         'label' =>  __( 'Title', 'hrm' ),
+    //         'type' => 'text',
+    //         'value' => isset( $field_value['title'] ) ? $field_value['title'] : '',
+    //         'extra' => array(
+    //             'data-hrm_validation' => true,
+    //             'data-hrm_required' => true,
+    //             'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+    //         ),
+    //     );
 
-        $notice['description'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'class' => 'hrm-admin-notice-field',
-            'type' => 'textarea',
-            'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
-        );
+    //     $notice['description'] = array(
+    //         'label' =>  __( 'Description', 'hrm' ),
+    //         'class' => 'hrm-admin-notice-field',
+    //         'type' => 'textarea',
+    //         'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
+    //     );
 
-        $notice['user_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $user_id ) ? $user_id : '',
-        );
-        $notice['date'] = array(
-            'label' =>  __( 'date', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_value['date'] ) ? $field_value['date'] : '',
-        );
+    //     $notice['user_id'] = array(
+    //         'type' => 'hidden',
+    //         'value' => isset( $user_id ) ? $user_id : '',
+    //     );
+    //     $notice['date'] = array(
+    //         'label' =>  __( 'date', 'hrm' ),
+    //         'type' => 'text',
+    //         'class' => 'hrm-datepicker',
+    //         'value' => isset( $field_value['date'] ) ? $field_value['date'] : '',
+    //     );
 
-        $notice['action'] = 'ajax_referer_insert';
-        $notice['table_option'] = 'hrm_notice';
-        $notice['header'] = 'Notice';
-        $notice['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $notice );
+    //     $notice['action'] = 'ajax_referer_insert';
+    //     $notice['table_option'] = 'hrm_notice';
+    //     $notice['header'] = 'Notice';
+    //     $notice['url'] = $redirect;
+    //     ob_start();
+    //     echo hrm_Settings::getInstance()->hidden_form_generator( $notice );
 
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
+    //     $return_value = array(
+    //         'append_data' => ob_get_clean(),
+    //     );
 
-        return $return_value;
-    }
+    //     return $return_value;
+    // }
 
     function project_search_parm( $data ) {
         return $data;
@@ -287,213 +344,6 @@ class Hrm_Admin {
         } else {
             return false;
         }
-    }
-
-    function sub_task_form( $post = null ) {
-        $project_id = isset( $_POST['project_id'] ) ? $_POST['project_id'] : '';
-        if ( gettype( $post ) !== 'object' && isset( $_POST['task_id'] ) ) {
-            $form['task_id'] = array(
-                'type' => 'hidden',
-                'value' => $_POST['task_id'],
-            );
-        } else {
-            $form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $post->ID ) ? $post->ID : '',
-            );
-        }
-        $form['title'] = array(
-            'label' => __( 'Task title', 'hrm' ),
-            'value' => isset( $post->post_title ) ? $post->post_title : '',
-            'type' => 'text'
-        );
-
-        $form['description'] = array(
-            'label' => __( 'Description', 'hrm' ),
-            'value' => isset( $post->post_content ) ? $post->post_content : '',
-            'type' => 'textarea'
-        );
-
-        $start_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_start_date', true ) : '';
-        $start_date = !empty( $start_date ) ? date_i18n( 'M j, Y', strtotime( $start_date ) ) : '';
-
-
-        $form['start_date'] = array(
-            'label' => __( 'Start date', 'hrm' ),
-            'value' => $start_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $end_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_end_date', true ) : '';
-        $end_date = !empty( $end_date ) ? date_i18n( 'M j, Y', strtotime( $end_date ) ) : '';
-
-        $form['end_date'] = array(
-            'label' => __( 'End date', 'hrm' ),
-            'value' => $end_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $status = isset( $post->ID ) ? get_post_meta( $post->ID, '_status', true ) : '';
-
-        $form['status'] = array(
-            'label' => __( 'Status', 'hrm' ),
-            'type'=> 'select',
-            'option'=> array( 'running' => __( 'Running', 'hrm'), 'completed' => 'Completed'),
-            'selected' => !empty( $status ) ? $status : '',
-        );
-
-        $assigned = $this->get_project_assigned_user( $project_id );
-        $bb_assign = isset( $post->ID ) ? get_post_meta( $post->ID, '_assigned', true ) : '';
-        //$bb_assign = !empty( $bb_assign ) ? $bb_assign : array();
-
-        foreach ( $assigned as $user_id => $assign ) {
-            $check[] = array(
-                'label' => $assign['name'],
-                'value' => $user_id,
-                'checked' => $bb_assign,
-            );
-        }
-
-        $form['assigned'] = array(
-            'label' => __( 'Assigned', 'hrm' ),
-            'type' => 'radio',
-            'desc' => 'Choose co-workers',
-            'fields' => $check,
-        );
-
-        $form['action'] = 'add_sub_task';
-        $form['header'] = __('Add Sub Task', 'hrm');
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function task_form( $post = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( gettype( $post ) !== 'object' && isset( $_POST['project_id'] ) ) {
-            $project_id = $_POST['project_id'];
-            $form['project_id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $_POST['project_id'] ) ? $_POST['project_id'] : '',
-            );
-        } else {
-            $project_id = $post->post_parent;
-            $form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $post->ID ) ? $post->ID : '',
-            );
-        }
-
-        $form['title'] = array(
-            'label' => __( 'Task title', 'hrm' ),
-            'value' => isset( $post->post_title ) ? $post->post_title : '',
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $form['description'] = array(
-            'label' => __( 'Description', 'hrm' ),
-            'class' => 'hrm-task-des-field',
-            'value' => isset( $post->post_content ) ? $post->post_content : '',
-            'type' => 'textarea'
-        );
-
-        $start_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_start_date', true ) : '';
-        $start_date = !empty( $start_date ) ? date_i18n( 'M j, Y', strtotime( $start_date ) ) : '';
-
-        $form['start_date'] = array(
-            'label' => __( 'Start date', 'hrm' ),
-            'value' => $start_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $end_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_end_date', true ) : '';
-        $end_date = !empty( $end_date ) ? date_i18n( 'M j, Y', strtotime( $end_date ) ) : '';
-
-        $form['end_date'] = array(
-            'label' => __( 'End date', 'hrm' ),
-            'value' => $end_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $status = isset( $post->ID ) ? get_post_meta( $post->ID, '_completed', true ) : '';
-
-        $form['status'] = array(
-            'label' => __( 'Status', 'hrm' ),
-            'type'=> 'select',
-            'option'=> array( '0' => __( 'Running', 'hrm'), '1' => 'Completed'),
-            'selected' => !empty( $status ) ? $status : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $assigned = $this->get_project_assigned_user( $project_id );
-        $bb_assign = isset( $post->ID ) ? get_post_meta( $post->ID, '_assigned', true ) : '';
-        $bb_assign = !empty( $bb_assign ) ? $bb_assign : 0;
-
-        foreach ( $assigned as $user_id => $assign ) {
-            $check[] = array(
-                'label' => $assign['name'],
-                'value' => $user_id,
-                'checked' =>  ( $user_id == $bb_assign) ? $user_id : '',
-            );
-        }
-
-        $form['assigned'] = array(
-            'label' => __( 'Assigned', 'hrm' ),
-            'type' => 'radio',
-            'desc' => 'Choose co-workers',
-            'fields' => $check,
-
-        );
-
-        $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
-        $total_budget = get_post_meta( $project_id, '_budget', true );
-        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
-        $budget_remain = $total_budget - $budget_utilize;
-
-        if ( $total_budget ) {
-            $form['task_budget'] = array(
-                'label' => __( 'Budget', 'hrm' ),
-                'type' => 'text',
-                'placeholder' => __( 'Insert value should be less than ' . $budget_remain, 'hrm' ),
-                'extra' => array( 'project_id' => $project_id ),
-                'value' => isset( $post->ID ) ? get_post_meta( $post->ID, '_task_budget', true ) : '',
-                'desc' => sprintf( 'Total budget: %1s, Budget utilize: %2s, Budget remain %3s', $currency_symbol . $total_budget, $currency_symbol . $budget_utilize, $currency_symbol . $budget_remain ),
-            );
-        }
-
-
-        $form['action'] = 'add_task';
-        $form['header'] = __('Add Task', 'hrm');
-        $form['url'] = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
     }
 
 
@@ -522,152 +372,6 @@ class Hrm_Admin {
 
         return $user_list;
 
-    }
-
-    function get_task_title( $results, $task_id = array(), $project_id, $add_permission, $currency_symbol ) {
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-        ob_start();
-        foreach ($results as $key => $result ) {
-
-            if ( !in_array( $result->ID, $task_id ) ) {
-                continue;
-            }
-            $task_budget = get_post_meta( $result->ID, '_task_budget', true );
-            $task_budget = empty( $task_budget ) ? '0' : $task_budget;
-            $assign_to   = get_post_meta($result->ID, '_assigned', true);
-            $user        = get_user_by( 'id', $assign_to );
-            $url         = hrm_task_assing_user_url( 'hrm_pim', 'my_task', $assign_to );
-            ?>
-
-            <div class="hrm-task-wrap">
-                <div class="hrm-task-title-wrap">
-                    <div class="hrm-task-content">
-                        <a href="#" class="hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><strong><?php echo $result->post_title; ?></strong></a>
-                        <div>
-                            <strong><?php _e( 'Task Budget: ' ); ?></strong><?php echo $currency_symbol . $task_budget; ?>
-                        </div>
-                        <div>
-                            <strong><?php _e( 'Assign to: ', 'hrm' ); ?></strong>
-                            <a href="<?php echo $url; ?>"><?php echo isset( $user->display_name ) ? $user->display_name : ''; ?></a>
-                        </div>
-                        <div>
-                            <strong><?php _e( 'Status: ', 'hrm' ); ?></strong>
-                            <?php echo $this->get_task_status( $result->ID ); ?>
-                        </div>
-                    </div>
-                    <div class="hrm-task-avatar">
-                        <a href="<?php echo $url; ?>"><?php echo isset( $user->ID ) ? get_avatar( $user->ID, '32' ) : ''; ?></a>
-                    </div>
-                    <div style="clear: both;"></div>
-                </div>
-
-                <div class="hrm-task-status-desc">
-                    <ul>
-                        <li>
-                            <div data-task_assign="<?php echo $assign_to; ?>" data-task_id="<?php echo $result->ID; ?>" data-project_id="<?php echo $project_id; ?>" class="hrm-delete-task button-secondary"><?php _e( 'Delete', 'cpm' ); ?></div>
-                        </li>
-                        <li>
-                            <div class="button-secondary hrm-task-edit hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><?php _e( 'Edit', 'hrm' ); ?></div>
-                        </li>
-                        <li>
-                            <div class="button-secondary hrm-popup-desc" data-task_id="<?php echo $result->ID; ?>"><?php _e( 'Description', 'hrm' ); ?></div>
-                        </li>
-                    </li>
-                </div>
-            </div>
-
-            <div title="<?php echo $result->post_title; ?>" class="hrm-deposit-dialog" id="hrm-popup-desc-wrap-<?php echo $result->ID; ?>" style="display: none;">
-                <?php echo $result->post_content; ?>
-            </div>
-
-            <?php
-        }
-
-        if ( $add_permission ) {
-            ?>
-
-            <div>
-                <a href="#" class="hrm-add-button button-primary" data-task="task" data-project_id="<?php echo esc_attr( $project_id ); ?>"><?php _e( 'Add Task', 'ehrn' ); ?></a>
-            </div>
-            <?php
-
-        }
-        return ob_get_clean();
-    }
-
-    function get_task_description( $results, $task_id = array() ) {
-
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-
-        ob_start();
-        foreach ($results as $key => $result ) {
-            if ( !in_array( $result->ID, $task_id ) ) {
-                continue;
-            }
-            ?>
-
-            <div><?php echo $result->post_content; ?></div>
-            <?php
-        }
-
-        return ob_get_clean();
-    }
-
-    function get_sub_task_title( $results, $tasks_id = array(), $project_id, $add_permission ) {
-
-        if ( !is_array( $tasks_id ) ) {
-            return;
-        }
-
-        ob_start();
-        foreach ( $tasks_id as $task_id ) {
-            sprintf( '<div class="hrm-sub-task-wrap-%s">', $task_id );
-            foreach ( $results as $key => $result ) {
-                if ( $task_id == $result->ID ) {
-                    ?>
-                    <a href="#"><?php echo $result->post_title; ?></a>
-                    <?php
-                }
-
-                if ( $result->post_parent == $task_id && $result->post_type == 'hrm_sub_task' ) {
-                    ?>
-                    <div><a href="#" class="hrm-editable" data-project_id="<?php echo esc_attr( $project_id ); ?>" data-action="sub_task_edit" data-id="<?php echo $result->ID; ?>" ><?php echo $result->post_title; ?> </a></div>
-
-                    <?php
-                }
-            }
-
-            if ( $add_permission ) {
-                ?>
-                <div><a href="#" class="hrm-add-button" data-project_id="<?php echo esc_attr( $project_id ); ?>" data-sub_task="sub_task" data-task_id="<?php echo esc_attr( $task_id ); ?>"><?php _e( 'Add more', 'ehrn' ); ?></a></div>
-                <?php
-            }
-
-            echo '</div>';
-        }
-
-        return ob_get_clean();
-    }
-
-    function get_sub_task_description( $results, $task_id = array() ) {
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-        ob_start();
-        foreach ( $results as $key => $result ) {
-            if ( $result->post_type != 'hrm_sub_task' || !in_array( $result->post_parent, $task_id ) ) {
-                continue;
-            }
-
-            ?>
-            <div><?php echo $result->post_content; ?></div>
-            <?php
-        }
-        return ob_get_clean();
     }
 
 

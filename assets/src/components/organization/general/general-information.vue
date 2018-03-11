@@ -8,48 +8,49 @@
 
 	        
 	        <h2 class="hndle ui-sortable-handle">General Information</h2>
+	        <div id="hrm-visible-form">
+		        <div class="inside">
+		        	<div class="main">
+		        		<div v-if="!editMode">
+			        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
+			        			
+			        				<label class="hrm-title">
+										Profile Picture
+									</label> 
+									
+									<div class="hrm-uploaded-item">
+										<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
+											<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
+										</a> 
+									</div>
+									<div class="hrm-clear"></div>
+			        		</div>
 
-	        <div class="inside" id="hrm-visible-form">
-	        	<div class="main">
-	        		<div v-if="!editMode">
-		        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
-		        			
-		        				<label class="hrm-title">
-									Profile Picture
-								</label> 
-								
-								<div class="hrm-uploaded-item">
-									<a v-for="file in field.model" :href="file.url" target="_blank" class="hrm-uploaded-img">
-										<img :src="file.thumb" alt="10-dithering-opt-3" class="hrm-uploaded-file" :style="setStyle(field)">
-									</a> 
-								</div>
-								<div class="hrm-clear"></div>
+			        		<div class="hrm-content-wrap" v-else>
+
+			        				<label class="hrm-title">
+			                			{{ field.label }}
+			                				
+			                		</label> 
+			                		
+			                		<div class="hrm-content" v-html="filter(field.model, field)"></div>
+			                			
+			                		<div class="hrm-clear"></div>
+
+			        		</div>
+
+			        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
 		        		</div>
-
-		        		<div class="hrm-content-wrap" v-else>
-
-		        				<label class="hrm-title">
-		                			{{ field.label }}
-		                				
-		                		</label> 
-		                		
-		                		<div class="hrm-content" v-html="filter(field.model, field)"></div>
-		                			
-		                		<div class="hrm-clear"></div>
-
-		        		</div>
-
-		        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
-	        		</div>
-	        		
-	        		<form v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
-	        			<hrm-form-fields :fields="fields"></hrm-form-fields>
-	        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
-	        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
-	        			<div class="hrm-spinner" v-if="loading">Saving....</div>
-	        		</form>
-	        	</div>
-	        </div>
+		        		
+		        		<form v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
+		        			<hrm-form-fields :fields="fields"></hrm-form-fields>
+		        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
+		        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
+		        			<div class="hrm-spinner" v-if="loading">Saving....</div>
+		        		</form>
+		        	</div>
+		        </div>
+		    </div>
 	    </div>
 	</div>
 </template>

@@ -94,6 +94,7 @@ export default {
                 data: args.data,
 
                 success: function(res) {
+                	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
 
@@ -101,7 +102,7 @@ export default {
                         args.callback.call(self, true, res);
                     } 
                     
-                    hrm.Toastr.success(res.message);
+                   // hrm.Toastr.success(res.message);
                 },
 
                 error: function(res) {

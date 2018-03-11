@@ -49,6 +49,9 @@
 
 	export default {
 		mixins: [HRMMixin.departments],
+		created () {
+			this.getDepartments();
+		},
 		computed: {
 	 		is_new_department_form_visible: function() {
 	 			return this.$store.state.departments.is_department_form_active;
@@ -60,7 +63,9 @@
 			'department-del-btn': DepartmentDelButton,
 			'department-table': DepartmentTable,
 			'department-pagination': DepartmentPagination
-		}
+		},
+
+
 	}
 </script>
 

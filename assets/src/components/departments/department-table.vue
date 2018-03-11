@@ -78,12 +78,6 @@
             }
         },
 
-        created: function() {
-            if ( !this.$store.state.departments.length ) {
-                this.departmentQuery();
-            }
-        },
-
         computed: {
             departments: function() {
                 return this.$store.state.departments.departments;

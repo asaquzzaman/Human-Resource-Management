@@ -18,7 +18,7 @@ class Designation extends Eloquent {
         'updated_by',
     ];
 
-    public function department() {
+    public function dept() {
         return $this->hasOne( Department::class, 'id', 'department' );
     }
 }

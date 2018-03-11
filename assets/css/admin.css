@@ -150,14 +150,18 @@ label em {
 #hrm-list-form .hrm-table-action-wrap {
   display: inline-block;
   margin-bottom: 5px;
+  width: 100%;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action {
   float: left;
-  width: 50%;
+  width: 100%;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-tbl-action-btn-sibling,
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-department-del-btn-wrap {
   float: left;
+}
+#hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-tbl-action-btn-sibling {
+  margin-right: 10px;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-right-action {
   float: right;

@@ -1,7 +1,7 @@
 <template>
 	<div class="metabox-holder">
 		<div id="hrm-hidden-form-warp" class="postbox">
-	        <h2 class="hndle">Work Experiance</h2>
+	        <h2 class="hndle">Designation</h2>
 
 	        <div class="inside">
 		        <form id="hrm-hidden-form" action="" @submit.prevent="selfNewRecord()">

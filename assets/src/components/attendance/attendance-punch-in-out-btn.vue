@@ -17,8 +17,8 @@
 						</strong>
 					</div>
 					
-					<button :disabled="isDisabled()" class="button button-primary hrm-punch-in-btn" @click.prevent="punchIn()">Punch In</button>
-					<button :disabled="punch_out_disable" class="button button-secondary hrm-punch-out-btn" @click.prevent="punchOut()">Punch Out</button>
+					<button :disabled="isDisabled()" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
+					<button :disabled="punch_out_disable" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
 				</div>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 	                data: request_data,
 	                success: function(res) {
 	                	// Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 	                    //self.punch_id = res.punch_id;
 	                    //self.punch_id = res.punch_in_status;
 
@@ -87,7 +87,7 @@
 	                	
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });
@@ -113,7 +113,7 @@
 	                data: request_data,
 	                success: function(res) {
 	                	// Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 						self.punch_out_disable = false;
 
 						self.$store.commit( 'attendance/setAttendance', 
@@ -136,7 +136,7 @@
 
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });

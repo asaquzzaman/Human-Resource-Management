@@ -75,7 +75,7 @@
 						type: 'text',
 						model: '',
 						label: 'Level',
-						name: 'level',
+						name: 'education',
 						tableHead: 'Level',
 						tbRowAction: true,
 						editable: true
@@ -102,7 +102,7 @@
 						type: 'text',
 						model: '',
 						label: 'GPA/Score',
-						name: 'gpa',
+						name: 'score',
 						tableHead: 'GPA/Score',
 						tbRowAction: false,
 						editable: true
@@ -111,7 +111,7 @@
 						type: 'datePickerFrom',
 						model: '',
 						label: 'Start Date',
-						name: 'start',
+						name: 'start_date',
 						tableHead: 'Start Date',
 						tbRowAction: false,
 						editable: true
@@ -120,7 +120,7 @@
 						type: 'datePickerTo',
 						model: '',
 						label: 'End Date',
-						name: 'end',
+						name: 'end_date',
 						tableHead: 'End Date',
 						tbRowAction: false,
 						editable: true

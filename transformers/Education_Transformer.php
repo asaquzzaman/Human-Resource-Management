@@ -19,12 +19,13 @@ class Education_Transformer extends TransformerAbstract
         return [
             'id'          => $item->id,
             'employee_id' => $item->employee_id,
-            'level'       => $item->level,
+            'education'   => $item->education,
             'institute'   => $item->institute,
             'major'       => $item->major,
-            'gpa'         => $item->gpa,
-            'start'       => hrm_get_date( $item->start ),
-            'end'         => hrm_get_date( $item->end )
+            'year'        => $item->year,
+            'score'        => $item->score,
+            'start'       => hrm_get_date( $item->start_date ),
+            'end'         => hrm_get_date( $item->end_date )
         ];
 
     }

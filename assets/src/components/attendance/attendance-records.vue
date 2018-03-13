@@ -22,10 +22,12 @@
 			<hrm-attendace-user-search></hrm-attendace-user-search>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
-					<th>Date</th>
-					<th>In Time</th>
-					<th>Out Time</th>
-					<th>Duration</th>
+					<tr>
+						<th>Date</th>
+						<th>In Time</th>
+						<th>Out Time</th>
+						<th>Duration</th>
+					</tr>
 
 				</thead>
 				<tbody>

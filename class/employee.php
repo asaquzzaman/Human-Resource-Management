@@ -384,17 +384,17 @@ class Hrm_Employee {
         $experiance = Education::where('employee_id', $employee_id)
             ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
-                $q->where( 'level', 'LIKE', '%' . $title . '%' );
+                $q->where( 'education', 'LIKE', '%' . $title . '%' );
             }
             
             if ( ! empty( $from ) ) {
                 $from = date( 'Y-m-d', strtotime( $from ) );
-                $q->where( 'start', '>=', $from);
+                $q->where( 'start_date', '>=', $from);
             }
 
             if ( ! empty( $to ) ) {
                 $to = date( 'Y-m-d', strtotime( $to ) );
-                $q->where( 'end', '<=', $to);
+                $q->where( 'end_date', '<=', $to);
             }
         })
         ->orderBy( 'id', 'DESC' )
@@ -425,7 +425,7 @@ class Hrm_Employee {
         $experiance = Skill::where('employee_id', $employee_id)
             ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
-                $q->where( 'level', 'LIKE', '%' . $title . '%' );
+                $q->where( 'skill', 'LIKE', '%' . $title . '%' );
             }
             
             // if ( ! empty( $from ) ) {

@@ -19,8 +19,8 @@ class Skill_Transformer extends TransformerAbstract
         return [
             'id'          => $item->id,
             'employee_id' => $item->employee_id,
-            'level'       => $item->level,
-            'experiance'  => $item->experiance,
+            'skill'       => $item->skill,
+            'years_of_exp'  => $item->years_of_exp,
             'comments'    => $item->comments
         ];
 

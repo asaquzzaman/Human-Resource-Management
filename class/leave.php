@@ -6,11 +6,11 @@ use League\Fractal;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Resource\Item;
 use HRM\Core\Transformer_Manager;
-use HRM\Core\Leave\Leave_Transformer;
+use HRM\Transformers\Leave_Transformer;
 use HRM\Models\Leave;
 use HRM\Models\User;
 use HRM\Models\Leave_Type;
-use HRM\Core\Leave\Leave_Type_Transform as Leave_Type_Transform;
+use HRM\Transformers\Leave_Type_Transform as Leave_Type_Transform;
 use HRM\Models\Meta;
 use HRM\Core\Crud\Crud;
 use HRM\Models\Relation;
@@ -106,6 +106,10 @@ class Hrm_Leave {
                 : $_POST['query']['emp_id'],
 
         );
+
+        if ( !empty( $_POST['status'] ) ) {
+            $args['status'] = intval( $_POST['status'] );
+        }
         
         if ( ! hrm_user_can( 'manage_leave' ) ) {
             $args['emp_id'] = $_POST['emp_id'];
@@ -858,6 +862,7 @@ class Hrm_Leave {
         $times       = empty( $postdata['time'] ) ? array() : $postdata['time'];
         $leave       = array();
         $return_data = array();
+        $postdata['transformers'] = 'Leave_Transformer';
         
         
         foreach ( $times as $key => $time ) {
@@ -865,10 +870,10 @@ class Hrm_Leave {
             $postdata['start_time'] = date( 'Y-m-d', strtotime( $time ) );
             $postdata['end_time']   = date( 'Y-m-d', strtotime( $time ) );
             
-            $leave  = Crud::data_process( $postdata );
+            $return_data[]  = Crud::data_process( $postdata );
 
-            $resource = new Item( $leave, new Leave_Transformer );
-            $return_data[] = self::getInstance()->get_response( $resource );
+           // $resource = new Item( $leave, new Leave_Transformer );
+            //$return_data[] = self::getInstance()->get_response( $resource );
         }
 
         if ( is_wp_error( $leave ) ) {
@@ -933,6 +938,7 @@ class Hrm_Leave {
     }
 
     public function update_leave( $postdata ) {
+        $postdata['transformers'] = 'Leave_Transformer';
         return Crud::data_process( $postdata );
     }
 

@@ -1660,8 +1660,14 @@ class Hrm_Settings {
             $last_row = Financial_Year::orderBy('id', 'desc')->first();
             return date('Y-m-d', strtotime( $last_row->start ) );
         } else {
-            
-            return date('Y-07-01', strtotime( current_time( 'mysql' ) ) );
+            $current_date   = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $financial_date = date( 'Y-07-01', strtotime( current_time( 'mysql' ) ) );
+
+            if ( $financial_date > $current_date ) {
+                return date( 'Y-07-01', strtotime( $current_date . '-1 year' ) );
+            } else {
+                return $financial_date;
+            }
 
         }
     }

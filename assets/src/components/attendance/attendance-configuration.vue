@@ -28,9 +28,9 @@
 								Office start time
 								<em>   </em>
 							</label>
-							<input type="text" v-hrm-datepicker="" :value="office_start_with_date_time" class="hrm-date-time-picker-from" id="hrm-office-start-date-field">
+							<input type="text" :value="office_start_with_date_time" class="hrm-date-time-picker-from" id="hrm-office-start-date-field">
 							<span class="hrm-clear"></span>
-							<span class="description"></span>
+							<span class="description">Format: 2018-03-08 06:00 pm</span>
 						</div>
 
 						<div class="hrm-form-field ">
@@ -38,9 +38,9 @@
 								Office closing time
 								<em>   </em>
 							</label>
-							<input type="text" v-hrm-datepicker="" :value="office_closed_with_date_time" class="hrm-date-time-picker-to" id="hrm-office-closed-date-field">
+							<input type="text"  :value="office_closed_with_date_time" class="hrm-date-time-picker-to" id="hrm-office-closed-date-field">
 							<span class="hrm-clear"></span>
-							<span class="description"></span>
+							<span class="description">Format: 2018-03-08 06:00 pm</span>
 						</div>
 
 						<div class="hrm-form-field ">
@@ -53,7 +53,7 @@
 							<span class="description">Employee can puch in/out only from this IP</span>
 						</div>
 
-						<input @click.prevent="saveConfiguration()" type="submit" class="button  button-primary" name="requst" value="Save changes">
+						<input @click.prevent="saveConfiguration()" type="submit" class="button hrm-button-primary  button-primary" name="requst" value="Save changes">
 					</div>
 
 				</div>
@@ -159,7 +159,7 @@
 	                data: request_data,
 	                success: function(res) {
 	                	// Display a success toast, with a title
-	                    toastr.success(res.success);
+	                    hrm.Toastr.success(res.success);
 	                    
 	                    self.$store.commit( 'attendance/setAttendance', {records: res.attendance} );
 	                },
@@ -167,7 +167,7 @@
 	                error: function(res) {
 	                	// Showing error
 	                    res.error.map( function( value, index ) {
-	                        toastr.error(value);
+	                        hrm.Toastr.error(value);
 	                    });
 	                }
 	            });

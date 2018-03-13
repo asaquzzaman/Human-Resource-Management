@@ -47,10 +47,10 @@
 
 						<td>
 							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 1)" class="button button-secondary">
-								<i class="fa fa-undo" aria-hidden="true"></i>
+								<i class="fas fa-undo" aria-hidden="true"></i>
 							</button>
 							<button class="button button-secondary" v-if="canManamgeLeave()" @click.prevent="selfLeaveDelete(pendingLeave.id)">
-								<i class="fa fa-trash-o" aria-hidden="true"></i>
+								<i class="fas fa-trash" aria-hidden="true"></i>
 							</button>
 							<div v-if="!canManamgeLeave()">Not available</div>
 						</td>

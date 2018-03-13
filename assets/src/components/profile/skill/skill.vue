@@ -60,7 +60,6 @@
 		mixins: [HRMMixin.skill],
 
 		data () {
-
 			return {
 				search: {
 					filter: 'active',
@@ -75,7 +74,7 @@
 						type: 'text',
 						model: '',
 						label: 'Level',
-						name: 'level',
+						name: 'skill',
 						tableHead: 'Skill',
 						tbRowAction: true,
 						editable: true
@@ -84,7 +83,7 @@
 						type: 'text',
 						model: '',
 						label: 'Years of experiance',
-						name: 'experiance',
+						name: 'years_of_exp',
 						tableHead: 'Years of experiance',
 						tbRowAction: false,
 						editable: true

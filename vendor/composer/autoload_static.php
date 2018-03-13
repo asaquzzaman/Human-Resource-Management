@@ -174,6 +174,8 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'HRM\\Transformers\\Designation_Transformer' => __DIR__ . '/../..' . '/transformers/Designation_Transformer.php',
         'HRM\\Transformers\\Education_Transformer' => __DIR__ . '/../..' . '/transformers/Education_Transformer.php',
         'HRM\\Transformers\\Employee_Transformer' => __DIR__ . '/../..' . '/transformers/Employee_Transformer.php',
+        'HRM\\Transformers\\Leave_Transformer' => __DIR__ . '/../..' . '/transformers/Leave_Transformer.php',
+        'HRM\\Transformers\\Leave_Type_Transform' => __DIR__ . '/../..' . '/transformers/Leave_Type_Transform.php',
         'HRM\\Transformers\\Location_Transformer' => __DIR__ . '/../..' . '/transformers/Location_Transformer.php',
         'HRM\\Transformers\\Notice_Transformer' => __DIR__ . '/../..' . '/transformers/Notice_Transformer.php',
         'HRM\\Transformers\\Skill_Transformer' => __DIR__ . '/../..' . '/transformers/Skill_Transformer.php',

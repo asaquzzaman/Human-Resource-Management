@@ -1,6 +1,6 @@
 <template>
 	<div class="hrm-tbl-action-btn-sibling">
-		<a @click.prevent="showHideNewLeaveTypeForm()" href="#" class="button button-primary ">Add</a>
+		<a @click.prevent="showHideNewLeaveTypeForm()" href="#" class="button hrm-button-primary ">Add</a>
 	</div>
 </template>
 

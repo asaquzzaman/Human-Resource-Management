@@ -98,7 +98,7 @@
 						    <span class="hrm-clear"></span>
 						    <span class="description">This roles can change leave status</span>
 						</div>
-						<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
+						<input  type="submit" class="button  hrm-button-primary" name="requst" value="Save changes">
 					</form>
 				</div>
 

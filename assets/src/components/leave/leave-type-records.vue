@@ -3,11 +3,13 @@
 		<div class="metabox-holder hrm-leave-type-records-wrap">
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
-					<th>Leave Type</th>
-					<th>Days</th>
-					<th>Start</th>
-					<th>End</th>
-					<th>Carry to next year</th>
+					<tr>
+						<th class="manage-column column-cb check-column">Leave Type</th>
+						<th>Days</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Carry to next year</th>
+					</tr>
 
 				</thead>
 				<tbody>

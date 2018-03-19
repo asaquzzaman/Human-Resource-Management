@@ -46,10 +46,12 @@
 				<div class="inside metabox-holder hrm-leave-type-records-wrap">
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
-							<th>Leave Type</th>
-							<th>Entitlement</th>
-							<th>Taken Leave</th>
-							<th>Remain</th>
+							<tr>
+								<th class="manage-column column-cb check-column">Leave Type</th>
+								<th>Entitlement</th>
+								<th>Taken Leave</th>
+								<th>Remain</th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="type in meta.types">
@@ -85,12 +87,14 @@
 
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
-							<th>Leave Type</th>
-							<th>Duration</th>
-							<th>Start</th>
-							<th>End</th>
-							<th>Status</th>
-							<th>Action</th>
+							<tr>
+								<th class="manage-column column-cb check-column">Leave Type</th>
+								<th>Duration</th>
+								<th>Start</th>
+								<th>End</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
 
 						</thead>
 						<tbody>
@@ -102,7 +106,7 @@
 								<td>{{ dateFormat(leave.end_time) }}</td>
 								<td>{{ status[leave.status] }}</td>
 								<td>
-									<button @click.prevent="selfLeaveDelete(leave.id)" v-if="leave.status === 1 || leave.status === 3">Delete</button>
+									<button class="hrm-button-secondary" @click.prevent="selfLeaveDelete(leave.id)" v-if="leave.status === 1 || leave.status === 3">Delete</button>
 									<div v-else>Not available</div>
 								</td>
 							</tr>

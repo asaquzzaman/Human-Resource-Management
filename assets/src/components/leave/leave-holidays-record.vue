@@ -3,10 +3,12 @@
 		<div class="metabox-holder hrm-leave-type-records-wrap">
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
-					<th>Name</th>
-					<th>Start</th>
-					<th>End</th>
-					<th>Description</th>
+					<tr>
+						<th class="manage-column column-cb check-column">Name</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Description</th>
+					</tr>
 
 				</thead>
 				<tbody>

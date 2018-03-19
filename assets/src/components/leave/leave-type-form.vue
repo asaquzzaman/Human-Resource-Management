@@ -2,8 +2,8 @@
 	<div class="metabox-holder hrm-slide-up hrm-punch-in-out-wrap">
 		<div class="postbox">
 
-			<h2 class="hndle ui-sortable-handle">
-				<span>Leave Type</span>
+			<h2 class="hndle">
+				Leave Type
 			</h2>
 
 			<div class="inside">
@@ -76,8 +76,8 @@
 							<span class="description">Leave type carry to next financial year.</span>
 						</div>				
 
-						<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
-						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
+						<input  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
+						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 					</form>
 				</div>
 

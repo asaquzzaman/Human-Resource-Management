@@ -1,75 +1,45 @@
 <template>
 	
-	<div class="hrm-form-field hrm-leave-search-wrap">
+	<div class="hrm-tbl-action-wrap hrm-form-field hrm-leave-search-wrap">
 		
-		<date-picker placeholder="Leave From" v-model="start_time" class="pm-datepickter-to" dependency="pm-datepickter-from"></date-picker>
-		<date-picker placeholder="Leave To" v-model="end_time" class="pm-datepickter-from" dependency="pm-datepickter-to"></date-picker>
+		<div class="hrm-table-action">
+			<date-picker placeholder="Leave From" v-model="start_time" class="pm-datepickter-to" dependency="pm-datepickter-from"></date-picker>
+		</div>
+		<div class="hrm-table-action">
+			<date-picker placeholder="Leave To" v-model="end_time" class="pm-datepickter-from" dependency="pm-datepickter-to"></date-picker>
+		</div>
 		
-		<div v-if="canManamgeLeave()" class="hrm-multiselect hrm-leave-search">
-	        <hrm-multiselect 
-	            v-model="emp_id" 
-	            :options="employessDropDown" 
-	            :multiple="false" 
-	            :close-on-select="true"
-	            :clear-on-select="true"
-	            :hide-selected="false"
-	            :show-labels="true"
-	            placeholder="Select Employee"
-	            select-label=""
-	            selected-label="selected"
-	            deselect-label=""
-	            :taggable="false"
-	            label="name"
-	            track-by="id"
-	            :allow-empty="true">
+		<div class="hrm-table-action">
+			<div v-if="canManamgeLeave()" class="hrm-multiselect hrm-leave-search">
+		        <hrm-multiselect 
+		            v-model="emp_id" 
+		            :options="employessDropDown" 
+		            :multiple="false" 
+		            :close-on-select="true"
+		            :clear-on-select="true"
+		            :hide-selected="false"
+		            :show-labels="true"
+		            placeholder="Select Employee"
+		            select-label=""
+		            selected-label="selected"
+		            deselect-label=""
+		            :taggable="false"
+		            label="name"
+		            track-by="id"
+		            :allow-empty="true">
 
-	        </hrm-multiselect>               
-	    </div>
-	    
-	    <button @click.prevent="leaveFilter()"  class="button button-secondary">Filter</button>
+		        </hrm-multiselect>               
+		    </div>
+		</div>
+	    <div class="hrm-table-action">
+	    	<a href="#" @click.prevent="leaveFilter()"  class="button hrm-button-secondary button-secondary">Filter</a>
+		</div>
 	</div>
 	
 </template>
 
 <style>
-	.hrm-form-field {
-		margin-bottom: 12px;
-	}
-	.search-date-field-wrap, .hrm-multiselect {
-		
-	}
-	.hrm-leave-search .multiselect {
-		width: auto;
-	}
-	.hrm-leave-search .multiselect__tags {
-		background: inherit !important;
-		border: none !important;
-		padding: 0 !important;
-		min-height: 0 !important;
-	}
-	.hrm-leave-search .multiselect {
-		min-height: 0 !important;
-	}
-	.hrm-leave-search .multiselect__select {
-		display: none !important;
-	}
-	.pm-datepickter-to, .pm-datepickter-from {
-		height: 30px;
-	}
-	.hrm-leave-search .multiselect__input {
-		margin-bottom: 0 !important;
-		width: 30% !important;
-	}
-	.hrm-leave-search {
-		margin-left: 2px;
-	}
-	.hrm-leave-search-wrap .button-secondary {
-		margin-left: 8px !important;
-    	margin-top: 2px !important;
-	}
-	.hrm-leave-search, .pm-datepickter-to, .pm-datepickter-from, .button-secondary {
-		display: inline-block;
-	}
+
 </style>
 
 <script>

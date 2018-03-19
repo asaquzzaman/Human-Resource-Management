@@ -120,8 +120,8 @@
 					</div>
 
 					
-					<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
-					<a @click.prevent="showHideLeaveRecordsForm(false)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
+					<input  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
+					<a @click.prevent="showHideLeaveRecordsForm(false)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 				</form>
 			</div>
 

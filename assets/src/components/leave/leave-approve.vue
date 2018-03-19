@@ -3,13 +3,15 @@
 		<div class="metabox-holder hrm-leave-type-records-wrap">
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
-					<th>Employee</th>
-					<th>Leave Type</th>
-					<th>Apply Date</th>
-					<th>Leave Duration</th>
-					<th>Comment</th>
-					<th>Start</th>
-					<th>End</th>
+					<tr>
+						<th class="manage-column column-cb check-column">Employee</th>
+						<th>Leave Type</th>
+						<th>Apply Date</th>
+						<th>Leave Duration</th>
+						<th>Comment</th>
+						<th>Start</th>
+						<th>End</th>
+					</tr>
 					<!-- <th>Action</th> -->
 
 				</thead>

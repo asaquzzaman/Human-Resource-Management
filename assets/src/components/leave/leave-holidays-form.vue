@@ -51,8 +51,8 @@
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>
-						<input  type="submit" class="button  button-primary" name="requst" value="Save changes">
-						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-form-cancel">Cancel</a>
+						<input  type="submit" class="button  hrm-button-primary" name="requst" value="Save changes">
+						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 					</form>
 				</div>
 

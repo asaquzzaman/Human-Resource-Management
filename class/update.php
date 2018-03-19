@@ -155,6 +155,7 @@ class Hrm_Update {
             if ( version_compare( $installed_version, $version, '<' ) ) {
                 include $path;
                 update_option( 'hrm_version', $version );
+                update_option( 'hrm_db_version', $version );
             }
         }
 

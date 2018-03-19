@@ -4,7 +4,7 @@
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
-						<th class="manage-column column-cb check-column">Leave Type</th>
+						<th class="manage-column column-cb">Leave Type</th>
 						<th>Days</th>
 						<th>Start</th>
 						<th>End</th>

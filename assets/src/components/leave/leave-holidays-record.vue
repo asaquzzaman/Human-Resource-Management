@@ -4,7 +4,7 @@
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
-						<th class="manage-column column-cb check-column">Name</th>
+						<th class="manage-column column-cb">Name</th>
 						<th>Start</th>
 						<th>End</th>
 						<th>Description</th>

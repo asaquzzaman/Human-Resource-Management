@@ -47,7 +47,7 @@
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th class="manage-column column-cb check-column">Leave Type</th>
+								<th class="manage-column column-cb">Leave Type</th>
 								<th>Entitlement</th>
 								<th>Taken Leave</th>
 								<th>Remain</th>
@@ -88,7 +88,7 @@
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th class="manage-column column-cb check-column">Leave Type</th>
+								<th class="manage-column column-cb">Leave Type</th>
 								<th>Duration</th>
 								<th>Start</th>
 								<th>End</th>

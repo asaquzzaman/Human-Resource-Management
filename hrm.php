@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 1.1
+ * Version: 2.0-beta
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -103,8 +103,8 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '1.2' );
-        $this->define( 'HRM_DB_VERSION', '0.2' );
+        $this->define( 'HRM_VERSION', '2.0' );
+        $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
         $this->define( 'HRM_COMP_PATH', dirname( __FILE__ ) . '/asset/js/components' );
@@ -172,12 +172,7 @@ class WP_Hrm {
     function init_action() {
         add_action( 'plugins_loaded', array($this, 'load_textdomain') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
-        add_action( 'admin_notices', array($this, 'fornt_end') );
-        //add_action( 'wp_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
-        //add_action( 'admin_enqueue_scripts', array( 'Hrm_Scripts', 'init_scripts') );
         add_action( 'init', array( $this, 'init' ) );
-        //add_action( 'wp_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
-        //add_action( 'admin_footer', array( 'Hrm_Scripts', 'footer_tag' ), 99999 );
         add_action( 'init', 'hrm_set_capability' );
     }
 
@@ -204,12 +199,11 @@ class WP_Hrm {
         new Hrm_Update();
 
         update_option( 'hrm_admin', $logged_in_user_id );
-        update_option( 'hrm_version', HRM_VERSION );
-        update_option( 'hrm_db_version', HRM_DB_VERSION );
+       
 
-        Hrm_Settings::getInstance()->update_financial_year( 
-            date( 'Y-07-01 H:i:s', strtotime( current_time('mysql') ) ) 
-        );
+        // Hrm_Settings::getInstance()->update_financial_year( 
+        //     date( 'Y-07-01 H:i:s', strtotime( current_time('mysql') ) ) 
+        // );
     }
 
 
@@ -242,38 +236,6 @@ class WP_Hrm {
 
     function admin_page_handler() {
         require_once HRM_PATH . '/templates/index.html';
-
-        // return;
-        // if( !is_user_logged_in() ) {
-        //     sprintf( 'Please <a href="%s">login</a>', wp_login_url() );
-        //     return;
-        // }
-        // $current_user_id = get_current_user_id();
-        // $user_status     = get_user_meta( $current_user_id, '_status', true );
-
-        // if ( $user_status == 'no' ) {
-        //     _e( '<div class="hrm wrap"><h1>This account temporary disabled!</h1></div>', 'hrm' );
-        //     return;
-        // }
-
-        // $query_args = hrm_get_query_args();
-        // $page       = $query_args['page'];
-        // $tab        = $query_args['tab'];
-        // $subtab     = $query_args['subtab'];
-        // $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
-
-        // if ( $page == 'hr_management' && $vue ) {
-        //     require_once HRM_PATH . '/templates/index.html';
-        // } else {
-        //     echo '<div class="hrm wrap" id="hrm">';
-        //     if ( $tab === false ) {
-        //         Hrm_Settings::getInstance()->show_page( $page );
-        //     } else {
-        //         Hrm_Settings::getInstance()->show_tab_page( $page, $tab, $subtab );
-        //     }
-
-        //     echo '</div>';
-        // }
      
     }
 }

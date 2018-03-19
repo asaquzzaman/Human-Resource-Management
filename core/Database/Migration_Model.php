@@ -8,7 +8,8 @@ class Migration_Model extends Eloquent {
     protected $table;
 
     public function __construct( array $attributes = [] ) {
-        $this->table = 'hrm' . '_migrations';
+    	
+        $this->table = 'hrm_migrations';
 
         parent::__construct( $attributes );
     }

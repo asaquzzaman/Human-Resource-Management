@@ -1284,7 +1284,7 @@ class Hrm_Ajax {
         $info          = get_option( 'hrm_general_info', array() );
         $country_lists = hrm_Settings::getInstance()->country_list();
         $lists         = [];
-
+        
         foreach ( $country_lists as $key => $value ) {
             $lists[] = ['iso' => $key, 'country' => $value];
         }

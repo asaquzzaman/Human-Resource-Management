@@ -76,6 +76,9 @@ let menu = [
                 name: 'leave_records',
                 meta: {
                     label: 'Leave',
+                    params (self, params) {
+                        return HRM_URM_Params(self, params);
+                    }
                 }
             },
 
@@ -84,7 +87,10 @@ let menu = [
                 component: Hrm_Leave_Requests, 
                 name: 'leave_request',
                 meta: {
-                    label: 'Requested Leave'
+                    label: 'Requested Leave',
+                    params (self, params) {
+                        return HRM_URM_Params(self, params);
+                    }
                 },
 
                 children: [

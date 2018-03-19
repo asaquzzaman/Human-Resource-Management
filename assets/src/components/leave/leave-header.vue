@@ -74,4 +74,3 @@
 
     export default Hrm_Leave_Header;
 </script>
-

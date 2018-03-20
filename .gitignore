@@ -14,11 +14,6 @@ npm-debug.log
 composer.lock
 package-lock.json
 /node_modules/
-/vendor/
-/assets/js/chunk/
-/assets/js/hrm-bundle.js
-/assets/js/hrm.js
-/assets/js/library.js
-/assets/js/router
+
 
 

@@ -1,0 +1,920 @@
+.chosen-container {
+    .search-field {
+        input {
+            height: 26px !important;
+        }
+    }
+}
+
+label em {
+    color: red;
+}
+
+.hrm-delte-user-meta:after {
+    background: #9C3232;
+    border-radius: 7px;
+    color: #FDFDFD;
+    content: "✖";
+    font-size: 12px;
+    margin-left: 7px;
+    padding: 0 3px;
+    cursor: pointer;
+}
+.hrm-required {
+    color: red;
+    padding: 6px 0 0;
+}
+
+.hrm-clear:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+.hrm-clear { display: inline-block; }
+/* start commented backslash hack \*/
+.hrm-clear { height: 1%; }
+.hrm-clear { display: block; }
+.hrm-spinner {
+    margin-top: 1%;
+}
+.hrm-error {
+    strong {
+        //color: #C63E3E;
+    }
+}
+.hrm-success {
+    strong {
+        color: #1F8478;
+    }
+}
+.hrm-spinner:after {
+    background: url("images/loading.gif") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;
+    height: 16px;
+    margin-bottom: -3px;
+    margin-left: 8px;
+    width: 16px;
+
+}
+#hrm-visible-form-warp, .hrm-visible-form-warp, #hrm-hidden-form-warp {
+    margin-top: 2%;
+
+    .hrm-inside-padding-wrap {
+        padding: 5px 10px 20px 20px;
+    }
+    .hrm-slider-width {
+        width: 50%;
+    }
+    .hrm-task-wrap {
+        line-height: 30px;
+    }
+}
+#hrm-visible-form-warp {
+    .hrm-text-wrap {
+        padding: 10px;
+    }
+    .hrm-text-label, .hrm-text-info {
+        float: left;
+        width: 35%;
+        text-align: justify;
+    }
+}
+#hrm-hidden-form-warp {
+    .chosen-container {
+        width: 30%;
+    }
+    .hrm-form-link {
+        text-decoration: none;
+    }
+    #hrm-select {
+        position: relative;
+    }
+    .hrm-user-role-wrap {
+        position: absolute;
+        left: 60%;
+        top:-1px;
+        label {
+            width: 40%;
+        }
+        input {
+            float: none;
+            width: 50%;
+        }
+
+    }
+
+}
+
+
+#hrm-list-form {
+    margin-top: 2%;
+    .hrm-delete, .hrm-edit {
+       display: none;
+    }
+    .hrm-title-action {
+        height: 20px;
+        width: 110px;
+
+        .hrm-department-edit-btn-wrap, .hrm-department-del-btn-wrap {
+            float: left;
+            display: inline-block;
+        }
+    }
+    .hrm-single-checked {
+        margin: 0;
+    }
+    .hrm-title {
+        display: block;
+    }
+    .hrm-title-wrap {
+      &:hover {
+        .hrm-delete, .hrm-edit {
+            display: inline-block;
+        }
+      }
+    }
+
+    .hrm-all-checked {
+        margin: 0;
+    }
+    .hrm-table-checkbox {
+        width: 4%;
+    }
+    .hrm-nothing-found {
+        padding: 10px;
+        font-weight: 800;
+    }
+    .hrm-edit {
+        font-size: 10px;
+        margin-right: 10px;
+        color: #838383;
+        font-weight: 800;
+    }
+    .hrm-delete {
+        font-size: 10px;
+        color: #A96464;
+        font-weight: 800;
+    }
+
+    .hrm-table-action-wrap {
+        display: inline-block;
+        margin-bottom: 5px;
+
+        .hrm-left-action {
+            float: left;
+            width: 50%;
+
+            .hrm-tbl-action-btn-sibling, .hrm-department-del-btn-wrap {
+                float: left;
+            }
+        }
+        .hrm-right-action {
+            float: right;
+            width: 50%;
+            #hrm-data-table_filter, #hrm-data-table_length {
+                float: right;
+            }
+        }
+    }
+    .hrm-pagi-src {
+        width: 70%;
+        float: right;
+        text-align: right;
+        margin-top: 0px;
+    }
+
+    .widefat td {
+        padding: 8px 10px;
+        text-align: justify;
+        width: auto;
+
+    }
+
+    .hrm-task-wrap {
+        width: 300px;
+        position: relative;
+        margin-bottom: 16px;
+        .hrm-task-content {
+            float: left;
+        }
+        .hrm-task-avatar {
+            float: right;
+        }
+    }
+    .hrm-task-title-wrap {
+        border: 2px solid #e5e5e5;
+        padding: 5px;
+        text-align: justify;
+    }
+    .hrm-running-text {
+        background: #fad163;
+    }
+    .hrm-complete-text {
+        background: #1FF14D;
+    }
+    .hrm-outstanding-text {
+        background: #FF9898;
+    }
+    .hrm-task-status-desc {
+        ul {
+            margin: 0;
+            li {
+                margin: 0;
+                display: inline-block;
+                margin-right: 5px;
+                padding-top: 5px;
+            }
+        }
+
+    }
+}
+
+#hrm-skills {
+    .hrm-label-font {
+        font-weight: 600;
+        font-size: 14px;
+    }
+}
+#hrm-hidden-form, #hrm-visible-form  {
+    padding: 10px;
+
+    label, input, select, textarea {
+        float: left;
+    }
+
+    label {
+        width: 21%;
+        font-size: 14px;
+    }
+    label.hrm-radio, label.hrm-checkbox {
+        width: 5%;
+    }
+    input, textarea, select {
+        width: 30%;
+    }
+    input[type="radio"], input[type="checkbox"] {
+        width: 0;
+        margin: 2px;
+    }
+    span {
+        display: block;
+    }
+    .description {
+        margin-left: 21%;
+        margin-bottom: 10px;
+    }
+    .hrm-submit-button {
+        width: auto;
+        margin-right: 1%;
+    }
+    input[type='submit'] {
+        float: none;
+        width: auto;
+    }
+    .hrm-form-field {
+        display: inline-block;
+        margin-bottom: 6px;
+        position: relative;
+        width: 100%;
+
+        .hrm-multiselect {
+            float: left;
+            width: 65%;
+        }
+        .multiselect {
+            width: 46%;
+        }
+        .multiselect__content {
+            margin-top: 31px;
+        }
+    }
+    .hrm-parent-field {
+
+    }
+    .hrm-child-field {
+        label:first-child {
+            margin-left: 2%;
+            width: 19%
+        }
+    }
+    .hrm-notification {
+        position: absolute;
+        left: 52%;
+        top: -2%;
+        color: red;
+        padding: 6px 0 0;
+    }
+}
+
+.hrm-search-head h3 {
+
+
+    font-size: 14px;
+    line-height: 1.4;
+    border-bottom: 1px solid #eee;
+    margin: 0;
+    padding: 8px 12px;
+
+}
+
+.hrm-premission-form-wrap{
+    .hrm-permission-content {
+        padding: 8px 12px;
+    }
+    .hrm-permission-check-all {
+        float: right;
+    }
+}
+
+.hrm-search-content {
+
+    #hrm-search-form {
+        .chosen-container {
+            width: 170px;
+        }
+
+        label {
+            float: left;
+        }
+        input, select {
+            width: 162px;
+        }
+        input[type="submit"] {
+            width: auto;
+        }
+        padding: 10px;
+        label{
+            width: 40%;
+            font-size: 14px;
+        }
+        .hrm-notification, span {
+            display: block;
+
+        }
+        .hrm-notification {
+            color: red;
+        }
+        .description {
+            margin-bottom: 10px;
+        }
+        .hrm-text-wrap {
+            float: left;
+            width: 32%;
+        }
+    }
+}
+
+.hrm-sub-nav {
+
+    background: #FFFFFF;
+    border-color: #CCCCCC;
+    border-image: none;
+    //border-radius: 0 0 5px 5px;
+    border-right: 1px solid #CCCCCC;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    color: #898989;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    padding: 5px 20px;
+    position: relative;
+
+    .hrm-subsubsub {
+        margin: 0;
+        padding: 0;
+        li {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+        }
+        a {
+            text-decoration: none;
+        }
+        .hrm-sub-current {
+            font-weight: 600;
+            color: #000000;
+        }
+    }
+}
+
+.hrm-create-user-form-wrap {
+	input:after {
+		content: ".";
+	   visibility: hidden;
+	   display: block;
+	   height: 0;
+	   clear: both;
+	}
+	label, input {
+		float: left;
+		margin-bottom: 14px;
+	}
+
+	label {
+		width: 30%;
+	}
+}
+
+.hrm-author-wrap {
+    .hrm-author-dis-ul {
+        li {
+            font-size: 14px;
+            line-height: 28px;
+            list-style-type: initial;
+            margin-left: 3%;
+        }
+    }
+}
+
+.ui-slider .ui-slider-handle {
+    height: 15px;
+    width: 5px;
+    padding-left: 5px; //add this
+}
+.hrm-file-index-file-wrap {
+    .hrm-file-tag {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        max-width: 150px;
+        padding: 5px;
+
+    }
+    .avatar {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        max-width: 80px;
+        padding: 2px;
+    }
+}
+.hrm-secondary-button {
+    background: none repeat scroll 0 0 #f7f7f7;
+    border-color: #ccc;
+    box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+    color: #555;
+    vertical-align: top;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    height: 28px;
+    line-height: 26px;
+    margin: 0;
+    padding: 0 10px 1px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+#hrm {
+    .hrm-assign-leave {
+        .hrm-popup-desc-leave-cat {
+            float: right;
+        }
+        #hrm-list-form  {
+            .hrm-pagi-src {
+                margin-top: 0;
+            }
+        }
+    }
+    .hrm-notification-cross {
+        float: right;
+        color: #dd3d36;
+        cursor: pointer;
+    }
+    .chosen-search {
+        width: 100%;
+        display: inline-block;
+        input[type="text"] {
+            width: 100% !important;
+        }
+    }
+    .chosen-results {
+        overflow-x: visible;
+        overflow-y: hidden;
+    }
+
+    .hrm-pagination {
+
+        .tablenav .tablenav-pages a {
+            background: none;
+        }
+    }
+    #hrm-job-info {
+
+        .title {
+            width: 20%;
+        }
+        .title, .content {
+            float: left;
+        }
+        .job-content-warp {
+            width: 100%;
+            display: inline-block;
+        }
+        .padding-wrap {
+            padding-left: 10px;
+        }
+    }
+    #hrm-list-form{
+        width: 100%;
+        #hrm-data-table {
+            width: 100%;
+            .odd {
+                background: #f9f9f9;
+            }
+        }
+        .widefat {
+            td, th {
+                padding: 8px 10px;
+            }
+        }
+        .hrm-before-table {
+            display: inline-block;
+            width: 100%;
+        }
+        .hrm-sub-table {
+            td {
+                width: 50%;
+                text-align: right !important;
+            }
+        }
+        .dataTables_filter, .dataTables_length {
+            float: right;
+            margin-bottom: 10px;
+        }
+        .dataTables_filter::after, .dataTables_length::after {
+            content: ".";
+            visibility: hidden;
+            display: block;
+            height: 0;
+            clear: both;
+        }
+        .hrm-table-action-wrap {
+            width: 100%;
+            .hrm-add-button {
+                margin-right: 5px;
+            }
+        }
+        .dataTables_length {
+            margin-left: 5px;
+        }
+        .dataTables_paginate {
+            float: right;
+            margin-top: 10px;
+            .paginate_button {
+                .hrm-secondary-button();
+                margin: 0 2px;
+            }
+        }
+        .dataTables_empty {
+            text-align: center;
+        }
+    }
+    #hrm-file-index {
+        .hrm-file-index-file-wrap();
+    }
+    #hrm-file {
+        .hrm-file-index-file-wrap();
+        #hrm-upload-file-container {
+            border: 1px dashed #9f9898;
+            margin-left: 21%;
+            margin-bottom: 15px;
+            margin-top: 50px;
+            padding: 10px;
+            text-align: center;
+            width: 29%;
+
+            #hrm-filelist {
+                .hrm-single-progress {
+                    position: relative;
+                    overflow: hidden;
+                    margin: 10px;
+                    .hrm-filename {
+                        left: 2%;
+                        position: absolute;
+                        text-align: left;
+                        width: 98%;
+
+                        strong {
+                            position: absolute;
+                            right: 2%;
+                        }
+                    }
+                    .hrm-upload-bar {
+                        height: 20px;
+                        background-color: #5EB95E;
+                        width: 1px;
+                    }
+                }
+            }
+        }
+    }
+
+    .hrm-personal {
+        position: relative;
+        .hrm-employee-avatar, .hrm-profile-image-wrap {
+            position: absolute;
+            top: -585px;
+            left: 56%;
+        }
+        .hrm-employee-display-name {
+            font-size: 24px;
+            left: 110%;
+            line-height: 8px;
+            position: absolute;
+            top: 10%;
+            width: 375px;
+            font-weight: 900;
+        }
+        #hrm-user-image-wrap {
+            img {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 2px;
+            }
+        }
+        .hrm-employee-pic-text {
+            position: absolute;
+            top: 24%;
+            left: 110%;
+            width: 100%;
+        }
+        #hrm-pickfiles {
+            position: absolute;
+            top: 24%;
+            left: 168%;
+            text-decoration: none;
+        }
+        .hrm-delete-file {
+            position: absolute;
+            top: 24%;
+            left: 199%;
+            width: 100%;
+            text-decoration: none;
+            margin: 0;
+
+        }
+        .hrm-delete-file:before {
+            content: "| ";
+        }
+    }
+
+    #hrm-eployee-list, #hrm-admin-list {
+        #hrm-upload-file-container {
+            margin-left: 21%;
+        }
+        .hrm-employee-pic-text {
+            left: 20%;
+            position: absolute;
+            top: 9%;
+        }
+        #hrm-user-image-wrap {
+            img {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 2px;
+            }
+        }
+        #hrm-drop-files-zone {
+            left: 20%;
+            position: absolute;
+            top: 21%;
+            a { text-decoration: none; }
+        }
+        .hrm-delete-file:before {
+            content: "| ";
+        }
+        .hrm-delete-file {
+            left: 25%;
+            position: absolute;
+            top: 21%;
+            text-decoration: none;
+            margin: 0;
+        }
+    }
+
+    #hrm-admin-leave-summary, #hrm-assign-leave-summary {
+        margin-top: 0px;
+        .hrm-popup-desc-leave-cat {
+            float: right;
+        }
+        .hrm-table-action-wrap {
+            float: none;
+            margin-bottom: 0;
+            width: auto;
+        }
+        #hrm-list-form {
+            position: relative;
+            margin-top: 55px;
+        }
+        .hrm-delete-button {
+            float: left;
+        }
+        .hrm-before-table {
+            float: right;
+            width: auto;
+        }
+
+        .hrm-add-button {
+            position: absolute;
+            top: -43px;
+            left: 0;
+        }
+        .hrm-pagi-src {
+            position: absolute;
+            top: -55px;
+            left: 30%;
+        }
+        table th, table td {
+            padding: 0;
+        }
+
+        .hrm-head-notice {
+            font-size: 10px;
+        }
+
+        .hrm-nested-table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            td:first-child {
+                padding-left: 11px;
+                padding-top: 10px;
+                width: 30px;
+            }
+            .hrm-table-checkbox {
+                width: 16px;
+            }
+            .hrm-leave-td-tr {
+                padding: 10px;
+                padding-left: 0;
+            }
+
+            .hrm-leave-cal-bottom {
+                padding-bottom: 20px;
+            }
+        }
+        .hrm-leave-td-tr {
+            width: 12%;
+
+        }
+    }
+
+    .hrm-my-task {
+        .hrm-my-task-body {
+            padding: 10px;
+        }
+    }
+
+    .cpm-pagination-wrap {
+        margin-top: 10px;
+        .cpm-pagination-btn {
+            padding: 4px 10px;
+            margin-right: 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            text-decoration: none;
+            display: inline-block;
+            background: #fff;
+        }
+
+        .router-link-active, >.cpm-pagination-btn:hover {
+            background: #32373c;
+            border-color: #ddd;
+            color: #fff;
+        }
+    }
+
+}
+.hrm-ui-dialog {
+    left: 32% !important;
+    top: 10% !important;
+}
+
+.hrm-leave-details-dialog {
+    .widefat {
+        border: none;
+    }
+}
+
+.hrm-disable-field-css {
+    resize: none !important;
+    border: none !important;
+}
+.hrm-partial-payment-date-field, .hrm-partial-payment-amount-field {
+    width: 60%;
+}
+
+.hrm-attendance {
+    .hrm-attendance-records-wrap {
+        .hrm-records-text {
+            margin-bottom: 8px;
+            line-height: 2;
+            h2 {
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+            }
+        }
+        .hrm-records-from {
+            margin-right: 8px;
+        }
+        .hrm-records-from, .hrm-records-to {
+            float: left;
+            font-size: 14px;
+            background: #fff;
+            padding: 2px 12px;
+            border: 1px solid #e5e5e5;
+
+            h2 {
+                display: inline-block;
+                margin-right: 8px;
+            }
+
+            i {
+                margin-right: 5px;
+            }
+        }
+    }
+    .hrm-attendance-user-serch-wrap {
+        .hrm-form-field  {
+            float: left;
+            width: 25%;
+            label {
+                margin-right: 5px;
+                font-weight: 600;
+            }
+            .hrm-date-picker-from, .hrm-date-picker-to {
+                width: 80%;
+                padding: 5px;
+            }
+        }
+    }
+    .hrm-punch-in-out-main {
+        text-align: center;
+    }
+    .hrm-clock-wrap {
+        background: #eee;
+        padding: 10px;
+        margin-bottom: 10px;
+
+        time {
+            margin-right: 10px;
+        }
+    }
+}
+.hrm-multiselect {
+    .multiselect {
+        width: 30%;
+
+        .multiselect__input {
+            width: 100% !important;
+            min-height: 30px;
+            border-radius: 0;
+        }
+        .multiselect__tags {
+            border-radius: 0;
+            min-height: 0px; 
+            display: block; 
+            padding: 0; 
+            border-radius: 0px; 
+            border: 0px solid #e8e8e8; 
+           // background: #fff;
+        }
+
+        .multi-img-wrap {
+            width: 10%;
+        }
+
+        .multi-img-wrap, .option__desc {
+            float: left;
+        }
+        .multiselect__option--highlight {
+            background: #f1f1f1;
+            color: #000;
+        }
+        .multiselect__option--selected:after {
+            content: "\2713 ";
+            background: #f1f1f1;
+            color: #000;
+        }
+    }
+}
+
+.hrm-leave {
+    .hrm-leave-jquery-fullcalendar {
+        width: 60%;
+        margin-left: 21%;
+        margin-bottom: 15px;
+    }
+}
+

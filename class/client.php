@@ -79,7 +79,7 @@ class HRM_Client {
         $form['client_role'] = array(
             'label'    => __( 'Role', 'hrm' ),
             'type'     => 'select',
-            'option'   => hrm_get_role(),
+            'option'   => hrm_get_roles(),
             'selected' => isset( $current_client->roles ) ? reset( $current_client->roles ) : '',
             'extra' => array(
                 'data-hrm_validation'         => true,

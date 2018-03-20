@@ -1,6 +1,16 @@
 <?php
+use HRM\Core\Common\Traits\Transformer_Manager;
+use League\Fractal;
+use League\Fractal\Resource\Item as Item;
+use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use HRM\Models\Location;
+use HRM\Transformers\Location_Transformer;
+use HRM\Models\Notice;
+use HRM\Transformers\Notice_Transformer;
 
 class Hrm_Admin {
+    use Transformer_Manager;
 
     private static $_instance;
 
@@ -14,10 +24,207 @@ class Hrm_Admin {
 
 
     function __construct() {
-
         add_action( 'init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
+        add_action( 'wp_ajax_hrm_organization_location_filter', array( $this, 'ajax_location_filter' ) );
+        add_action( 'wp_ajax_hrm_notice_filter', array( $this, 'ajax_notice_filter' ) );
+
+        $this->setup_actions();
+    }
+
+    /**
+     * Setup the admin hooks, actions and filters
+     *
+     * @return void
+     */
+    function setup_actions() {
+
+        // Bail if in network admin
+        if ( is_network_admin() ) {
+            return;
+        }
+
+        // User profile edit/display actions
+        add_action( 'edit_user_profile', array( $this, 'role_display' ) );
+        add_action( 'show_user_profile', array( $this, 'role_display' ) );
+        add_action( 'profile_update', array( $this, 'profile_update_role' ) );
+    }
+
+    function ajax_notice_filter() {
+        check_ajax_referer('hrm_nonce');
+        $locations = $this->notice_filter($_POST);
+
+        wp_send_json_success($locations);
+    }
+
+    function notice_filter( $postdata = [], $id = false  ) {
+            
+        $title     = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $from      = empty( $postdata['from'] ) ? '' : $postdata['from'];
+        $to        = empty( $postdata['to'] ) ? '' : $postdata['to'];
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $location = Notice::find( $id );
+            
+            if ( $location ) {
+                $resource = new Item( $location, new Location_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $location = Notice::where( function($q) use( $title, $from, $to ) {
+            if ( ! empty(  $title ) ) {
+                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+            }
+
+            if ( ! empty( $from ) ) {
+                $from = date( 'Y-m-d', strtotime( $from ) );
+                $q->where( 'date', '>=', $from);
+            }
+
+            if ( ! empty( $to ) ) {
+                $to = date( 'Y-m-d', strtotime( $to ) );
+                $q->where( 'date', '<=', $to);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $location->getCollection();
+
+        $resource = new Collection( $collection, new Notice_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $location ) );
+
+        return $this->get_response( $resource );
+    
+    }
+
+    function ajax_location_filter() {
+        check_ajax_referer('hrm_nonce');
+        $locations = $this->location_filter($_POST);
+
+        wp_send_json_success($locations);
+    }
+
+    function location_filter( $postdata = [], $id = false  ) {
+            
+        $name     = empty( $postdata['name'] ) ? '' : $postdata['name'];
+        $page     = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $location = Location::find( $id );
+            
+            if ( $location ) {
+                $resource = new Item( $location, new Location_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $location = Location::where( function($q) use( $name ) {
+            if ( ! empty(  $name ) ) {
+                $q->where( 'name', 'LIKE', '%' . $name . '%' );
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $location->getCollection();
+
+        $resource = new Collection( $collection, new Location_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $location ) );
+
+        return $this->get_response( $resource );
+    
+    }
+
+    /**
+     * Default interface for setting a HR role
+     *
+     * @param WP_User $profileuser User data
+     *
+     * @return bool Always false
+     */
+    public static function role_display( $profileuser ) {
+        // Bail if current user cannot edit users
+        if ( ! current_user_can( 'edit_user', $profileuser->ID ) || !current_user_can( 'manage_options') ) {
+            return;
+        }
+
+        $checked = in_array( hrm_manager_role_key(), $profileuser->roles ) ? 'checked' : '';
+        
+        ?>
+
+        <h3><?php esc_html_e( 'HRM', 'erp' ); ?></h3>
+
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th><label for="erp-hr-role"><?php esc_html_e( 'HRM Manager', 'erp' ); ?></label></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text"><span>HRM Manager</span></legend>
+                            <label for="hrm-manager">
+                                <input <?php echo $checked; ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
+                                Confirm HRM manager
+                            </label>
+                            <br>
+                        </fieldset>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <?php
+    }
+
+    public static function profile_update_role( $user_id ) {
+
+        $postdata = $_POST;
+        // Bail if no user ID was passed
+        if ( empty( $user_id ) ) {
+            return;
+        }
+
+        // AC role we want the user to have
+        $new_role = isset( $postdata['hrm_manager'] ) ? sanitize_text_field( $postdata['hrm_manager'] ) : false;
+
+
+        // Bail if current user cannot promote the passing user
+        if ( ! current_user_can( 'promote_user', $user_id ) ) {
+            return;
+        }
+
+        // Set the new HRM role
+        $user = get_user_by( 'id', $user_id );
+
+        if ( $new_role ) {
+            $user->add_role( $new_role );
+        } else if ( count( $user->roles ) > 1 ) {
+            $user->remove_role( hrm_manager_role_key() );
+        }
+    }
+
+    function employer_role() {
+        $role_name            = hrm_employee_role_key();
+        $display_name         = __( 'HRM Employee', 'hrm' );
+        $capabilities['read'] = true;
+        add_role( $role_name, $display_name, $capabilities );
+
+        $role_name            = hrm_manager_role_key();
+        $display_name         = __( 'HRM Manager', 'hrm' );
+        $capabilities['read'] = true;
+        add_role( $role_name, $display_name, $capabilities );
     }
 
     function get_employer() {
@@ -68,59 +275,59 @@ class Hrm_Admin {
         }
     }
 
-    function admin_notice( $field_value = null ) {
-        $user_id = get_current_user_id();
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+    // function admin_notice( $field_value = null ) {
+    //     $user_id = get_current_user_id();
+    //     $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
 
-        if ( $field_value !== null ) {
-            $notice['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
+    //     if ( $field_value !== null ) {
+    //         $notice['id'] = array(
+    //             'type' => 'hidden',
+    //             'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
+    //         );
+    //     }
 
-        $notice['title'] = array(
-            'label' =>  __( 'Title', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['title'] ) ? $field_value['title'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
+    //     $notice['title'] = array(
+    //         'label' =>  __( 'Title', 'hrm' ),
+    //         'type' => 'text',
+    //         'value' => isset( $field_value['title'] ) ? $field_value['title'] : '',
+    //         'extra' => array(
+    //             'data-hrm_validation' => true,
+    //             'data-hrm_required' => true,
+    //             'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
+    //         ),
+    //     );
 
-        $notice['description'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'class' => 'hrm-admin-notice-field',
-            'type' => 'textarea',
-            'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
-        );
+    //     $notice['description'] = array(
+    //         'label' =>  __( 'Description', 'hrm' ),
+    //         'class' => 'hrm-admin-notice-field',
+    //         'type' => 'textarea',
+    //         'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
+    //     );
 
-        $notice['user_id'] = array(
-            'type' => 'hidden',
-            'value' => isset( $user_id ) ? $user_id : '',
-        );
-        $notice['date'] = array(
-            'label' =>  __( 'date', 'hrm' ),
-            'type' => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => isset( $field_value['date'] ) ? $field_value['date'] : '',
-        );
+    //     $notice['user_id'] = array(
+    //         'type' => 'hidden',
+    //         'value' => isset( $user_id ) ? $user_id : '',
+    //     );
+    //     $notice['date'] = array(
+    //         'label' =>  __( 'date', 'hrm' ),
+    //         'type' => 'text',
+    //         'class' => 'hrm-datepicker',
+    //         'value' => isset( $field_value['date'] ) ? $field_value['date'] : '',
+    //     );
 
-        $notice['action'] = 'ajax_referer_insert';
-        $notice['table_option'] = 'hrm_notice';
-        $notice['header'] = 'Notice';
-        $notice['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $notice );
+    //     $notice['action'] = 'ajax_referer_insert';
+    //     $notice['table_option'] = 'hrm_notice';
+    //     $notice['header'] = 'Notice';
+    //     $notice['url'] = $redirect;
+    //     ob_start();
+    //     echo hrm_Settings::getInstance()->hidden_form_generator( $notice );
 
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
+    //     $return_value = array(
+    //         'append_data' => ob_get_clean(),
+    //     );
 
-        return $return_value;
-    }
+    //     return $return_value;
+    // }
 
     function project_search_parm( $data ) {
         return $data;
@@ -137,213 +344,6 @@ class Hrm_Admin {
         } else {
             return false;
         }
-    }
-
-    function sub_task_form( $post = null ) {
-        $project_id = isset( $_POST['project_id'] ) ? $_POST['project_id'] : '';
-        if ( gettype( $post ) !== 'object' && isset( $_POST['task_id'] ) ) {
-            $form['task_id'] = array(
-                'type' => 'hidden',
-                'value' => $_POST['task_id'],
-            );
-        } else {
-            $form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $post->ID ) ? $post->ID : '',
-            );
-        }
-        $form['title'] = array(
-            'label' => __( 'Task title', 'hrm' ),
-            'value' => isset( $post->post_title ) ? $post->post_title : '',
-            'type' => 'text'
-        );
-
-        $form['description'] = array(
-            'label' => __( 'Description', 'hrm' ),
-            'value' => isset( $post->post_content ) ? $post->post_content : '',
-            'type' => 'textarea'
-        );
-
-        $start_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_start_date', true ) : '';
-        $start_date = !empty( $start_date ) ? date_i18n( 'M j, Y', strtotime( $start_date ) ) : '';
-
-
-        $form['start_date'] = array(
-            'label' => __( 'Start date', 'hrm' ),
-            'value' => $start_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $end_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_end_date', true ) : '';
-        $end_date = !empty( $end_date ) ? date_i18n( 'M j, Y', strtotime( $end_date ) ) : '';
-
-        $form['end_date'] = array(
-            'label' => __( 'End date', 'hrm' ),
-            'value' => $end_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $status = isset( $post->ID ) ? get_post_meta( $post->ID, '_status', true ) : '';
-
-        $form['status'] = array(
-            'label' => __( 'Status', 'hrm' ),
-            'type'=> 'select',
-            'option'=> array( 'running' => __( 'Running', 'hrm'), 'completed' => 'Completed'),
-            'selected' => !empty( $status ) ? $status : '',
-        );
-
-        $assigned = $this->get_project_assigned_user( $project_id );
-        $bb_assign = isset( $post->ID ) ? get_post_meta( $post->ID, '_assigned', true ) : '';
-        //$bb_assign = !empty( $bb_assign ) ? $bb_assign : array();
-
-        foreach ( $assigned as $user_id => $assign ) {
-            $check[] = array(
-                'label' => $assign['name'],
-                'value' => $user_id,
-                'checked' => $bb_assign,
-            );
-        }
-
-        $form['assigned'] = array(
-            'label' => __( 'Assigned', 'hrm' ),
-            'type' => 'radio',
-            'desc' => 'Choose co-workers',
-            'fields' => $check,
-        );
-
-        $form['action'] = 'add_sub_task';
-        $form['header'] = __('Add Sub Task', 'hrm');
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function task_form( $post = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( gettype( $post ) !== 'object' && isset( $_POST['project_id'] ) ) {
-            $project_id = $_POST['project_id'];
-            $form['project_id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $_POST['project_id'] ) ? $_POST['project_id'] : '',
-            );
-        } else {
-            $project_id = $post->post_parent;
-            $form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $post->ID ) ? $post->ID : '',
-            );
-        }
-
-        $form['title'] = array(
-            'label' => __( 'Task title', 'hrm' ),
-            'value' => isset( $post->post_title ) ? $post->post_title : '',
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $form['description'] = array(
-            'label' => __( 'Description', 'hrm' ),
-            'class' => 'hrm-task-des-field',
-            'value' => isset( $post->post_content ) ? $post->post_content : '',
-            'type' => 'textarea'
-        );
-
-        $start_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_start_date', true ) : '';
-        $start_date = !empty( $start_date ) ? date_i18n( 'M j, Y', strtotime( $start_date ) ) : '';
-
-        $form['start_date'] = array(
-            'label' => __( 'Start date', 'hrm' ),
-            'value' => $start_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $end_date = isset( $post->ID ) ? get_post_meta( $post->ID, '_end_date', true ) : '';
-        $end_date = !empty( $end_date ) ? date_i18n( 'M j, Y', strtotime( $end_date ) ) : '';
-
-        $form['end_date'] = array(
-            'label' => __( 'End date', 'hrm' ),
-            'value' => $end_date,
-            'type' => 'text',
-            'class' => 'hrm-datepicker'
-        );
-
-        $status = isset( $post->ID ) ? get_post_meta( $post->ID, '_completed', true ) : '';
-
-        $form['status'] = array(
-            'label' => __( 'Status', 'hrm' ),
-            'type'=> 'select',
-            'option'=> array( '0' => __( 'Running', 'hrm'), '1' => 'Completed'),
-            'selected' => !empty( $status ) ? $status : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $assigned = $this->get_project_assigned_user( $project_id );
-        $bb_assign = isset( $post->ID ) ? get_post_meta( $post->ID, '_assigned', true ) : '';
-        $bb_assign = !empty( $bb_assign ) ? $bb_assign : 0;
-
-        foreach ( $assigned as $user_id => $assign ) {
-            $check[] = array(
-                'label' => $assign['name'],
-                'value' => $user_id,
-                'checked' =>  ( $user_id == $bb_assign) ? $user_id : '',
-            );
-        }
-
-        $form['assigned'] = array(
-            'label' => __( 'Assigned', 'hrm' ),
-            'type' => 'radio',
-            'desc' => 'Choose co-workers',
-            'fields' => $check,
-
-        );
-
-        $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
-        $total_budget = get_post_meta( $project_id, '_budget', true );
-        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
-        $budget_remain = $total_budget - $budget_utilize;
-
-        if ( $total_budget ) {
-            $form['task_budget'] = array(
-                'label' => __( 'Budget', 'hrm' ),
-                'type' => 'text',
-                'placeholder' => __( 'Insert value should be less than ' . $budget_remain, 'hrm' ),
-                'extra' => array( 'project_id' => $project_id ),
-                'value' => isset( $post->ID ) ? get_post_meta( $post->ID, '_task_budget', true ) : '',
-                'desc' => sprintf( 'Total budget: %1s, Budget utilize: %2s, Budget remain %3s', $currency_symbol . $total_budget, $currency_symbol . $budget_utilize, $currency_symbol . $budget_remain ),
-            );
-        }
-
-
-        $form['action'] = 'add_task';
-        $form['header'] = __('Add Task', 'hrm');
-        $form['url'] = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
     }
 
 
@@ -372,152 +372,6 @@ class Hrm_Admin {
 
         return $user_list;
 
-    }
-
-    function get_task_title( $results, $task_id = array(), $project_id, $add_permission, $currency_symbol ) {
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-        ob_start();
-        foreach ($results as $key => $result ) {
-
-            if ( !in_array( $result->ID, $task_id ) ) {
-                continue;
-            }
-            $task_budget = get_post_meta( $result->ID, '_task_budget', true );
-            $task_budget = empty( $task_budget ) ? '0' : $task_budget;
-            $assign_to   = get_post_meta($result->ID, '_assigned', true);
-            $user        = get_user_by( 'id', $assign_to );
-            $url         = hrm_task_assing_user_url( 'hrm_pim', 'my_task', $assign_to );
-            ?>
-
-            <div class="hrm-task-wrap">
-                <div class="hrm-task-title-wrap">
-                    <div class="hrm-task-content">
-                        <a href="#" class="hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><strong><?php echo $result->post_title; ?></strong></a>
-                        <div>
-                            <strong><?php _e( 'Task Budget: ' ); ?></strong><?php echo $currency_symbol . $task_budget; ?>
-                        </div>
-                        <div>
-                            <strong><?php _e( 'Assign to: ', 'hrm' ); ?></strong>
-                            <a href="<?php echo $url; ?>"><?php echo isset( $user->display_name ) ? $user->display_name : ''; ?></a>
-                        </div>
-                        <div>
-                            <strong><?php _e( 'Status: ', 'hrm' ); ?></strong>
-                            <?php echo $this->get_task_status( $result->ID ); ?>
-                        </div>
-                    </div>
-                    <div class="hrm-task-avatar">
-                        <a href="<?php echo $url; ?>"><?php echo isset( $user->ID ) ? get_avatar( $user->ID, '32' ) : ''; ?></a>
-                    </div>
-                    <div style="clear: both;"></div>
-                </div>
-
-                <div class="hrm-task-status-desc">
-                    <ul>
-                        <li>
-                            <div data-task_assign="<?php echo $assign_to; ?>" data-task_id="<?php echo $result->ID; ?>" data-project_id="<?php echo $project_id; ?>" class="hrm-delete-task button-secondary"><?php _e( 'Delete', 'cpm' ); ?></div>
-                        </li>
-                        <li>
-                            <div class="button-secondary hrm-task-edit hrm-editable hrm-task-title" data-task="task" data-action="task_edit"  data-id="<?php echo $result->ID; ?>"><?php _e( 'Edit', 'hrm' ); ?></div>
-                        </li>
-                        <li>
-                            <div class="button-secondary hrm-popup-desc" data-task_id="<?php echo $result->ID; ?>"><?php _e( 'Description', 'hrm' ); ?></div>
-                        </li>
-                    </li>
-                </div>
-            </div>
-
-            <div title="<?php echo $result->post_title; ?>" class="hrm-deposit-dialog" id="hrm-popup-desc-wrap-<?php echo $result->ID; ?>" style="display: none;">
-                <?php echo $result->post_content; ?>
-            </div>
-
-            <?php
-        }
-
-        if ( $add_permission ) {
-            ?>
-
-            <div>
-                <a href="#" class="hrm-add-button button-primary" data-task="task" data-project_id="<?php echo esc_attr( $project_id ); ?>"><?php _e( 'Add Task', 'ehrn' ); ?></a>
-            </div>
-            <?php
-
-        }
-        return ob_get_clean();
-    }
-
-    function get_task_description( $results, $task_id = array() ) {
-
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-
-        ob_start();
-        foreach ($results as $key => $result ) {
-            if ( !in_array( $result->ID, $task_id ) ) {
-                continue;
-            }
-            ?>
-
-            <div><?php echo $result->post_content; ?></div>
-            <?php
-        }
-
-        return ob_get_clean();
-    }
-
-    function get_sub_task_title( $results, $tasks_id = array(), $project_id, $add_permission ) {
-
-        if ( !is_array( $tasks_id ) ) {
-            return;
-        }
-
-        ob_start();
-        foreach ( $tasks_id as $task_id ) {
-            sprintf( '<div class="hrm-sub-task-wrap-%s">', $task_id );
-            foreach ( $results as $key => $result ) {
-                if ( $task_id == $result->ID ) {
-                    ?>
-                    <a href="#"><?php echo $result->post_title; ?></a>
-                    <?php
-                }
-
-                if ( $result->post_parent == $task_id && $result->post_type == 'hrm_sub_task' ) {
-                    ?>
-                    <div><a href="#" class="hrm-editable" data-project_id="<?php echo esc_attr( $project_id ); ?>" data-action="sub_task_edit" data-id="<?php echo $result->ID; ?>" ><?php echo $result->post_title; ?> </a></div>
-
-                    <?php
-                }
-            }
-
-            if ( $add_permission ) {
-                ?>
-                <div><a href="#" class="hrm-add-button" data-project_id="<?php echo esc_attr( $project_id ); ?>" data-sub_task="sub_task" data-task_id="<?php echo esc_attr( $task_id ); ?>"><?php _e( 'Add more', 'ehrn' ); ?></a></div>
-                <?php
-            }
-
-            echo '</div>';
-        }
-
-        return ob_get_clean();
-    }
-
-    function get_sub_task_description( $results, $task_id = array() ) {
-        if ( !is_array( $task_id ) ) {
-            return;
-        }
-        ob_start();
-        foreach ( $results as $key => $result ) {
-            if ( $result->post_type != 'hrm_sub_task' || !in_array( $result->post_parent, $task_id ) ) {
-                continue;
-            }
-
-            ?>
-            <div><?php echo $result->post_content; ?></div>
-            <?php
-        }
-        return ob_get_clean();
     }
 
 
@@ -2300,4 +2154,427 @@ class Hrm_Admin {
         }
     }
 
+    public static function ajax_update_department() {
+        check_ajax_referer('hrm_nonce');
+        $department     = self::update_department( $_POST );
+        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        //$departments    = self::get_departments(false, true);
+        //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
+
+
+        $departments = self::get_departments( false, true );
+        
+        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 1000 );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
+        
+
+        if ( is_wp_error( $department ) ) {
+            wp_send_json_error( array( 'error' => $department->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 
+                'department'  => $department, 
+                'departments' => $send_depts, 
+                'total_dept'  => $departments['total_dept'],
+                'dept_drop_down' => $dept_drop_down,
+                'success'     => __( 'Department has been created successfully', 'hrm' ) 
+            ) );
+        }
+    }
+
+    public static function update_department( $postdata ) {
+        
+        if ( empty( $postdata['title'] ) ) {
+            return new WP_Error( 'dept_title', __( 'Department title required', 'hrm' ) );
+        }
+
+        global $wpdb;
+
+        $dept_id = empty( $postdata['dept_id'] ) ? false : absint( $postdata['dept_id'] );
+        $dept_id = $dept_id ? $dept_id : false;
+
+        $table = $wpdb->prefix . 'hrm_job_category'; 
+        $data  = array(
+            'name'        => $postdata['title'],
+            'active'      => $postdata['status'],
+            'description' => $postdata['description'],
+            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $_POST['parent'] ),
+        );
+        $format = array( '%s', '%d', '%s', '%d' );
+
+        if ( $dept_id ) {
+            $result = $wpdb->update( $table, $data, array( 'id' => $dept_id ), $format, array( '%d' ) );
+
+        } else {
+            $result  = $wpdb->insert( $table, $data, $format );
+            $dept_id = $wpdb->insert_id;
+        }
+
+        $department = self::get_departments( $dept_id );
+
+        if ( $result ) {
+            return array( 'dept_id' => $dept_id, 'department' => $department );
+        }
+
+        return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
+    }
+
+    public static function ajax_get_departments() {
+        check_ajax_referer('hrm_nonce');
+        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        
+        $departments = self::get_departments( false, true );
+        
+        $send_depts     = self::get_department_by_hierarchical( $departments['departments'], $page_number, 1000 );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
+        
+        wp_send_json_success(array( 
+            'departments' => $send_depts,
+            'total_dept'  => $departments['total_dept'],
+            'dept_drop_down' => $dept_drop_down
+        ));
+    }
+
+    public static function get_department_by_hierarchical( $departments, $page_number, $per_page ) {
+        $depts = array();
+        
+        foreach ( $departments as $key => $dept ) {
+            $depts[$dept->id] = $dept;
+        }
+        
+        $departments_hierachical = self::display_rows_hierarchical( $departments, $page_number, $per_page );
+        $fromated_depts = array();
+        
+        foreach ( $departments_hierachical as $id => $hierarchical_depth ) {
+            $depts[$id]->hierarchical_depth    = $hierarchical_depth;
+            $depts[$id]->hierarchical_pad      = str_repeat( '&#8212; ', $hierarchical_depth );
+            $depts[$id]->hierarchical_free_pad = str_repeat( '&nbsp; ', $hierarchical_depth ); 
+
+            $fromated_depts[] = $depts[$id];
+        }
+
+        return $fromated_depts;
+    }
+
+    public static function get_departments( 
+        $dept_id  = false, 
+        $show_all = false,
+        $pagenum  = 1,
+        $limit    = 50
+    ) {
+        
+        global $wpdb;
+
+        $table           = $wpdb->prefix . 'hrm_job_category';
+        $user_meta_table = $wpdb->prefix . 'usermeta';
+        $offset          = ( $pagenum - 1 ) * $limit;
+
+        if ( $dept_id ) {
+            $query =  $wpdb->prepare( 
+                "
+                SELECT      *
+                FROM        {$table}
+                WHERE       1 = 1
+                AND         id = %d
+                ",
+                $dept_id
+            ); 
+
+            $results = $wpdb->get_row( $query );
+
+        } else if ( true === $show_all ) {
+            
+            $query = "
+                SELECT      SQL_CALC_FOUND_ROWS *
+                FROM        {$table}
+                WHERE       1 = 1
+                ORDER BY    id ASC"; 
+            
+            $results = $wpdb->get_results( $query );
+            $total_departments = $wpdb->get_var( "SELECT FOUND_ROWS()" );
+
+        } else {
+            
+            $query =  $wpdb->prepare( 
+                "
+                SELECT      SQL_CALC_FOUND_ROWS *
+                FROM        {$table}
+                WHERE       1 = 1
+                ORDER BY    id ASC
+                LiMIT       %d,%d
+                ",
+                $offset,
+                $limit
+            ); 
+
+            $results = $wpdb->get_results( $query );
+            $total_departments = $wpdb->get_var( "SELECT FOUND_ROWS()" );
+            
+        }
+
+        
+        if ( $dept_id && $results ) {
+
+            $query = "
+                SELECT      meta_value as department_id, count(meta_value) as num_of_employee
+                FROM        {$user_meta_table}
+                WHERE       1 = 1
+                AND         meta_key = '_job_category'
+                AND         meta_value = $dept_id
+                GROUP BY meta_value
+                ";
+                
+            $employee_counts = $wpdb->get_row($query);
+            $results->number_of_employee = empty( $employee_counts->num_of_employee ) ? 0 : $employee_counts->num_of_employee;
+        
+        } else if ( $results ) {
+            $dept_emps = wp_list_pluck( $results, 'id' );
+            $dept_emps = implode( ",", $dept_emps);
+            
+            $query = "
+                SELECT      meta_value as department_id, count(meta_value) as num_of_employee
+                FROM        {$user_meta_table}
+                WHERE       1 = 1
+                AND         meta_key = '_job_category'
+                AND         meta_value IN ($dept_emps)
+                GROUP BY    meta_value
+                ";
+                
+            $employee_counts = $wpdb->get_results($query);
+            $employee_counts = wp_list_pluck( $employee_counts, 'num_of_employee', 'department_id' );
+            
+
+            foreach ( $results as $key => $employee ) {
+                $count = empty( $employee_counts[$employee->id] ) ? 0 : $employee_counts[$employee->id];
+                $employee->number_of_employee = $count;
+            }
+        }
+
+        if ( $dept_id ) {
+            return $results;
+        }
+       
+        return array( 'total_dept' => $total_departments, 'departments' => $results );
+    }
+
+
+
+    /**
+     * Display Row hierarchical
+     *
+     * @param array departments
+     * @param integer $pagenum
+     * @param integer $per_page
+     *
+     * @return void
+     */
+    public static function display_rows_hierarchical( $departments, $pagenum = 1, $per_page = 20 ) {
+        
+        $level = 0;
+
+        if ( empty( $_REQUEST['s'] ) ) {
+
+            $top_level_departments = array();
+            $children_departments = array();
+
+            foreach ( $departments as $page ) {
+
+                if ( 0 == $page->parent )
+                    $top_level_departments[] = $page;
+                else
+                    $children_departments[ $page->parent ][] = $page;
+            }
+
+            $departments = &$top_level_departments;
+        }
+
+        $count = 0;
+        $start = ( $pagenum - 1 ) * $per_page;
+        $end = $start + $per_page;
+        $to_display = array();
+
+        foreach ( $departments as $page ) {
+            if ( $count >= $end )
+                break;
+
+            if ( $count >= $start ) {
+                $to_display[$page->id] = $level;
+            }
+
+            $count++;
+
+            if ( isset( $children_departments ) )
+                self::page_rows( $children_departments, $count, $page->id, $level + 1, $pagenum, $per_page, $to_display );
+        }
+
+        // If it is the last pagenum and there are orphaned departments, display them with paging as well.
+        if ( isset( $children_departments ) && $count < $end ){
+            foreach ( $children_departments as $orphans ){
+                foreach ( $orphans as $op ) {
+                    if ( $count >= $end )
+                        break;
+
+                    if ( $count >= $start ) {
+                        $to_display[$op->id] = 0;
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+
+        // foreach ( $to_display as $department_id => $level ) {
+
+        //     $this->single_row( $department_id, $level );
+        // }
+        return $to_display;
+    }
+
+        /**
+     * Single Page row
+     *
+     * @param array $children_departments
+     * @param integer $count
+     * @param integer $parent
+     * @param integer $level
+     * @param integer $pagenum
+     * @param integer $per_page
+     * @param array $to_display List of pages to be displayed. Passed by reference.
+     *
+     * @return void
+     */
+    public static function page_rows( &$children_departments, &$count, $parent, $level, $pagenum, $per_page, &$to_display ) {
+
+        if ( ! isset( $children_departments[$parent] ) )
+            return;
+
+        $start = ( $pagenum - 1 ) * $per_page;
+        $end = $start + $per_page;
+
+        foreach ( $children_departments[$parent] as $page ) {
+
+            if ( $count >= $end )
+                break;
+
+            // If the page starts in a subtree, print the parents.
+            if ( $count == $start && $page->parent > 0 ) {
+                $my_parents = array();
+                $my_parent = $page->parent;
+                while ( $my_parent ) {
+                    // Get the ID from the list or the attribute if my_parent is an object
+                    $parent_id = $my_parent;
+                    if ( is_object( $my_parent ) ) {
+                        $parent_id = $my_parent->id;
+                    }
+
+                    $my_parent = self::get_departments($parent_id); //(object) \WeDevs\ERP\HRM\Models\Department::find($parent_id)->toArray();//get_post( $parent_id );
+                    $my_parents[] = $my_parent;
+                    if ( !$my_parent->parent )
+                        break;
+                    $my_parent = $my_parent->parent;
+                }
+                $num_parents = count( $my_parents );
+                while ( $my_parent = array_pop( $my_parents ) ) {
+                    $to_display[$my_parent->id] = $level - $num_parents;
+                    $num_parents--;
+                }
+            }
+
+            if ( $count >= $start ) {
+                $to_display[$page->id] = $level;
+            }
+
+            $count++;
+
+            self::page_rows( $children_departments, $count, $page->id, $level + 1, $pagenum, $per_page, $to_display );
+        }
+
+        unset( $children_departments[$parent] ); //required in order to keep track of orphans
+    }
+
+    public static function ajax_delete_department() {
+        check_ajax_referer('hrm_nonce');
+        $results = self::delete_department( $_POST['dept_id'] );
+
+        $departments = self::get_departments( false, true );
+        $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
+
+        if ( is_wp_error( $results ) ) {
+            wp_send_json_error( array( 'error' => $results->get_error_messages() ) ); 
+        } else {
+            wp_send_json_success( array( 
+                'deleted_dept' => $results['deleted_dept'], 
+                'undone_dept'  => $results['undone_dept'], 
+                'dept_drop_down' => $dept_drop_down,
+                'success'      => __( 'Department has been deleted successfully', 'hrm' ) 
+            ) );
+        }
+    }
+
+    public static function delete_department($dept_id) {
+        
+        global $wpdb;
+
+        //get all employee
+        $employess   = self::is_employee_exist_in_department( $dept_id );
+        //filter department id from all employees
+        $emp_dept_id = wp_list_pluck( $employess, 'department_id' );
+
+        $undone_dept = array();
+
+        foreach ( $dept_id as $key => $department_id ) {
+            if ( in_array( $department_id, $emp_dept_id ) ) {
+                unset( $dept_id[$key] );
+                $undone_dept[$department_id] = $department_id;
+            }
+        }   
+
+        if ( empty( $dept_id ) ) {
+            return new WP_Error( 'dept_id', __( 'Required department id!', 'hrm' ) );
+        }
+
+        $table    = $wpdb->prefix . 'hrm_job_category';
+        $dept_ids = implode( "','", $dept_id );
+
+        $delete = $wpdb->query( 
+            "
+             DELETE FROM {$table}
+             WHERE id IN ('$dept_ids')
+            "
+        ); 
+        
+        if ( $delete ) {
+            return array( 'deleted_dept' => $dept_id, 'undone_dept' => $undone_dept ); 
+        } else {
+            return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
+        }
+          
+    }
+
+    public static function is_employee_exist_in_department( $depts_id ) {
+        
+        $args = array(
+            'role__in' => array( 'hrm_employee' ),
+            'fields'   => 'all_with_meta',
+            'meta_query' => array(
+
+                array(
+                    'key'     => '_job_category',
+                    'value'   => $depts_id,
+                    'compare' => 'IN'
+                )
+            )
+        );
+
+        $users = new WP_User_Query( $args );
+
+        foreach ( $users->results as $key => $user ) {
+            $user->department_id = get_user_meta( $user->id, '_job_category', true );
+        }
+
+        return $users->results;
+
+    }
 }
+
+

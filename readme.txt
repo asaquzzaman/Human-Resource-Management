@@ -1,149 +1,78 @@
-=== WP human resource management ===
+=== WP Human Resource Management ===
 
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
-Requires at least: 3.3
-Tested up to: 4.3
+Requires at least: 4
+Tested up to: 4.9.1
 Stable tag: trunk
 License: GPLv2 or later
 
 Organization, Industries and Office management
 
 == Description ==
-    Managing human resource, project, task and assign task.
 
-= Features:  =
+Manage your Business of Company HR (Human Resource) professionally and break down the barrier of traditional office & employee management using WP HRM (WordPress Human Resource Management System).
 
-* From admin panel you can manage
-    1. Organization Information.
-    2. Create employer role, employer and employer access permission in accordance to the role.
-    3. Employee job information.
-    4. Employee qualification.
-    5. Create project, task and assign the task to the employee.
+WP HRM is a powerful WordPress plugin that turns your website into a fully functional employee management system. You can easily create unlimited number of employees, add their professional details, roles, employers and access permission.
 
-* PIM
-    1. Personal information management (PIM). Where you create employee and manage there information and can access each employee profile.
-
-* Leave
-    1. leave management system.
-
-* Each employee has there personal account where employee can manage
-    1. Personal information, work experiance, education, skill and language.
-    2. Get organization informtion which information include from admin panel.
-    3. Employee can monitoring there current task, outstanding task and completed task.
-    4. Leave Apply.
-
-* Time
-    1. Employer/Employee attendance records.
-    2. Punch In/Punch Out.
-    3. Configuration for access permission.
-
-* Evaluation
-    1. Employee evaluation by project task.
-    2. Employee evaluation record.
-
-* File
-    1. Share your file.
-    2. File inbox.
+HR Management is all about people, not the paperwork. So, why waste your time on traditional systems and paperworks? Be organized and adapt the latest technology to build your very own HR Management system directly on your WordPress site using WP HRM (Human Resource Management).
 
 
-== Installation ==
+= Features & Advantages of WP HRM  =
+Here are some notable features that you may consider before diving in.
 
-	1. Unzip and upload the hrm directory to /wp-content/plugins/
-    2. Activate the plugin through the Plugins menu in WordPress
+* **Powerful HR Admin Dashboard** 
+ From admin panel you can manage - 
+ * **The information of your Organization, Business or Company.**
+ * **Employee job information.**
+ * **Employee qualification.**
 
-Browser Compatibility
+* **Personal Information Management for Your Employees** 
+ 
+ PIM is a must have feature for any HR Management system. WP HRM not different. You get your own personal information management (PIM) for each of your employees. This allows you to -
+ * **Create employees and manage their information on the go**
+ * **Prepare individual profiles for each employee**
+ * **Access each employee profile**
 
-    1. Google Chrome
-    2. Firefox.
+* **A Complete Leave Management System** 
+ 
+ WP HRM has built-in leave management system for your employees. You can -
+ * **Add multiple leave types**
+ * **Specify work days**
+ * **Create holiday list**
+ * **Manage your employee leaves easily**
 
-= Usage =
+* **Individual Profiles & Features for Each Employee** 
+ 
+ Each of your employee has their own personal account where they can manage -
+ * **Personal information, work experience, education, skill and language.**
+ * **Get organization information that is included in the admin panel (Added by the Admin)**
+ * **Monitor their current, outstanding and completed task.**
+ * **Apply for leaves.**
 
-	This plugin has three types of user.
+* **Attendance & Time Management** 
+ 
+ Attendance is one of the most popular and prefered feature of any HR manager. WP HRM has powerful time management and attendance system for your employees. With this, you can -
+ * **View Employer/Employee attendance records.**
+ * **Punch In/Punch Out (check-in and check-out).**
+ * **Configure access permission.**
+ * **Manage attendance and time properly.**
 
-    Super Admin :
-    HRM plugin installer is the super admin. Its mean If you install this plugin then you are the super admin.
-
-    General admin or Employer :
-    Employer created by super admin. Employer also can create others employer if he has a permission by admin.
-
-	Create general admin or employer:
-	First you have to create role for the employer. To create role goto Admin->Employer->Employer role, click add button, insert Role, Display name and choose the access permission for the individual page for this role. You can also create many others roles as your wish.
-	Now you can create employer. To create employer goto Admin->Employer->Employer List, click Add button, insert Name if the user exist then the user will shown in drpodown and select the user. Other wise Create a new user button will appear and create the user. Now you have to select the employer role  and press submit button. A new employer create successfully.
-
-    Employee : Employee created by super admin or employer. Employee does not have permission to accea admin panel. Employee has only their personal account.
-
-== Screenshots ==
-
-    1. Admin panel
-    2. Employee profile
-    3. Leave management
+If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
-==1.1==
-* Just fix the dataTable problem
-==1.0==
-* Employee page not found problem fix
-* Permission management code separated by addon
-* Only administator can maintain update and permission tab
-* Fix many undefined index problem
-* Improved some permission management function
 
-= 0.9 =
-* client management system.
-* code fromat change
+= 2.0 - March 20, 2018 =
 
-= 0.8.1 =
-* fix chosen problem.
-* employee can apply there leave from their personal profile
-* fix undefined problem from salary
-
-= 0.8 =
-* fix many undefined index
-* Advanced leave search
-* fix conflict for individual employee profile and my info
-
-= 0.7 =
-* Change design and menu rearrange
-* leave system change
-
-= 0.6 =
-* fix permission management
-* extra field add for salary
-
-= 0.5 =
-* File management
-* Real time update insert, edit, delete, pagination, search
-* Punch In/Out bug fix
-
-= 0.4 =
-* hrm_employer can assign only project co-worder
-* delete action
-* support page
-* register post type hrm_task
-* New feature Evaluation
-
-= 0.3 =
-* Attendence
-* Attendence configuration
-* Punch in/out
-* Attendence record
-
-= 0.2 =
-* project budget
-* assign task
-* task user avater
-
-= 0.1 =
-* redirect problem
-* table create
-* employer create
-* page handelar
+ * [new] HRM front-end fully migrate with Vue js.
+ * [new] Included eloquent
+ * [update] HRM is now single page application
+ * [update] All items are updated
 
 
 == Frequently Asked Questions ==
 
-You can contact with me joy.mishu@gmail.com with this email address. You can ask me any kinds of question about this plugin.
+You can contact with me joy.mishu@gmail.com this email address. You can ask me any kinds of question about this plugin.
 
 == Upgrade Notice ==
 

@@ -1,0 +1,81 @@
+{
+  "name": "HRM",
+  "version": "2.0.0",
+  "description": "Human resourcee management",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "hrm": "webpack",
+    "build": "webpack-dev-server",
+    "watch": "webpack --progress --colors --watch",
+    "reset": "webpack --progress --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weDevsOfficial/wp-project-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weDevsOfficial/wp-project-manager/issues"
+  },
+  "homepage": "https://github.com/weDevsOfficial/wp-project-manager#readme",
+  "devDependencies": {
+    "ajv": "^5.5.2",
+    "ajv-keywords": "^2.1.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-preset-env": "^1.6.1",
+    "coffee-loader": "^0.8.0",
+    "coffeescript": "^1.12.7",
+    "css-loader": "^0.28.9",
+    "es6-promise": "^4.2.4",
+    "eslint": "^4.17.0",
+    "eslint-loader": "^1.9.0",
+    "file-loader": "^0.11.2",
+    "grunt": "^1.0.2",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compress": "^1.4.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-run": "^0.8.0",
+    "grunt-ssh": "^0.12.9",
+    "grunt-wp-i18n": "^1.0.0",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.7.2",
+    "pug": "^2.0.0-rc.4",
+    "react": "^15.6.2",
+    "rimraf": "^2.6.1",
+    "sass-loader": "^6.0.6",
+    "shelljs": "^0.8.1",
+    "uglify-js": "^3.3.9",
+    "vue-loader": "^13.7.1",
+    "vue-template-compiler": "^2.5.13",
+    "watch": "^1.0.2",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "dependencies": {
+    "babel-preset-stage-2": "^6.24.1",
+    "code-split-component": "^2.0.0-alpha.5",
+    "fullcalendar": "3.4.0",
+    "jquery-timepicker": "^1.3.3",
+    "moment": "^2.19.1",
+    "moment-timezone": "^0.5.13",
+    "nprogress": "^0.2.0",
+    "promise-polyfill": "7.0.0",
+    "proposal": "^3.0.0",
+    "toastr": "^2.1.2",
+    "vue": "^2.5.2",
+    "vue-multiselect": "^2.0.3",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.0"
+  }
+}

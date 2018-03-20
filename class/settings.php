@@ -1,4 +1,6 @@
 <?php
+use HRM\Models\Financial_Year;
+
 class Hrm_Settings {
     private static $_instance;
 
@@ -21,7 +23,6 @@ class Hrm_Settings {
     }
 
     function show_page( $page ) {
-
         $menu = hrm_page();
 
         $path = isset( $menu[$page]['file_path'] ) ? $menu[$page]['file_path'] : '';
@@ -84,6 +85,59 @@ class Hrm_Settings {
                 echo 'Page not found';
             }
         }
+    }
+
+    function new_select_field( $element ) {
+
+        $id           = isset( $element['field_elements']['id'] ) ? esc_attr( $element['field_elements']['id'] ) : '';
+        $label        = isset( $element['label'] ) ? $element['label'] : '';
+        $required     = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
+        $desc         = isset( $element['desc'] ) ? $element['desc'] : '';
+        $wrap_class   = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag     = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $selected     = isset( $element['selected'] ) ? $element['selected'] : '';
+        $option       = isset( $element['option'] ) ? $element['option'] : array();
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $is_vue       = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+        $html  = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html .= sprintf( '<select %s>', $elements );
+
+        foreach ( $option as $key => $label ) {
+            if ( $is_vue ) {
+                $html .= sprintf( '<option value="%1$s">%2$s</option>', esc_attr( $key ), esc_attr( $label ) ); 
+            } else {
+                $html .= sprintf( '<option value="%1$s" %2$s >%3$s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_attr( $label ) );
+            }
+            
+        }
+
+        $html .= sprintf( '</select>' );
+        $html .= sprintf( '<span class="hrm-clear"></span><span class="description"> %s</span>', $desc );
+
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
     }
 
     function select_field( $name, $element ) {
@@ -174,6 +228,43 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+    function new_text_field( $element ) {
+        $id           = isset( $element['field_elements']['id'] ) ? esc_attr( $element['field_elements']['id'] ) : '';
+        $label        = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $required     = ( isset( $element['required'] ) &&  ( $element['required'] === true ) ) ? '*' : '';
+        $desc         = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $wrap_class   = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag     = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+
+        $html         = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html        .= sprintf( '<input type="text" %s />', $elements );
+        $html        .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap         = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close   = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+        return ob_get_clean();
+    }
+
     function text_field( $name = '', $element ) {
         if( empty( $name ) ) {
             return;
@@ -194,22 +285,29 @@ class Hrm_Settings {
 
         if( is_array( $extra ) && count( $extra ) ) {
             foreach( $extra as $key => $action ) {
-                $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
+                if ( is_int( $key ) ) {
+
+                    $extra_field .= ' '. esc_attr( $action ) .' ';
+
+                } else {
+                    $extra_field .= ' '. esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
+
+                }
             }
         }
 
         ob_start();
             //do_action( 'text_field_before_input', $name, $element );
-        $input_before = ob_get_clean();
-
-        $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
-        $html .= $input_before;
-        $html .= sprintf( '<input type="text" name="%1$s" value="%2$s" placeholder="%3$s" class="%4$s" id="%5$s" %6$s %7$s />', $name,
+            $input_before = ob_get_clean();
+            
+            $html         = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+            $html         .= $input_before;
+            $html         .= sprintf( '<input type="text" name="%1$s" value="%2$s" placeholder="%3$s" class="%4$s" id="%5$s" %6$s %7$s />', $name,
             $value, $placeholder, $class, $id, $disabled, $extra_field );
-        $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
-
-        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
-        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+            $html         .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+            
+            $wrap         = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+            $wrap_close   = sprintf('</%1$s>', $wrap_tag);
 
         ob_start();
             echo $this->multiple_field_inside_this_wrap( $element );
@@ -233,7 +331,7 @@ class Hrm_Settings {
 
         if( is_array( $extra ) && count( $extra ) ) {
             foreach( $extra as $key => $action ) {
-                $extra_field .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                $extra_field .= esc_attr( $key ) .'="'. esc_attr( $action ) . '" ';
             }
         }
 
@@ -246,6 +344,64 @@ class Hrm_Settings {
             echo $html;
             echo '</div>';
         return ob_get_clean();
+    }
+
+    function new_radio_field( $element ) {
+        
+        $required   = ( isset( $element['required'] ) &&  ( $element['required'] == 'required' ) ) ? '*' : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';     
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
+        $is_vue     = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
+        $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
+        $html      .= '<span class="hrm-radio-wrap">';
+
+        foreach( $fields as $field ) {
+            
+            $value      = isset( $field['elements']['value'] ) ? esc_attr( $field['elements']['value'] ) : '';
+            $id         = isset( $field['elements']['id'] ) ? esc_attr( $field['elements']['id'] ) : '';
+            $label      = isset( $field['label'] ) ? esc_attr( $field['label'] ) : '';
+            $checked    = isset( $field['checked'] ) ? esc_attr( $field['checked'] ) : '';
+            $eles       = isset( $field['elements'] ) ? $field['elements'] : array(); 
+            $elements   = array();
+           
+
+            foreach ( $eles as $key => $ele ) {
+                if ( is_int( $key ) ) {
+                    $elements[] = ' '. esc_attr( $ele ) .' ';
+                } else {
+                    $elements[] = esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+                }
+            }
+
+            $elements = implode( ' ', $elements );
+
+            if ( $is_vue ) {
+                $html .= sprintf( '<input type="radio" %1$s/>', $elements );
+            } else {
+                $html .= sprintf( '<input type="radio" %1$s %2$s />', $elements, checked( $value, $checked, false ) );   
+            }
+            
+            $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
+
+        }
+
+        $html      .= '</span>';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $html      .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+
     }
 
     function radio_field( $name = '', $element ) {
@@ -300,6 +456,66 @@ class Hrm_Settings {
         return ob_get_clean();
     }
 
+
+    function new_checkbox_field( $element ) {
+        
+        $required   = ( isset( $element['required'] ) &&  ( $element['required'] == 'required' ) ) ? '*' : '';
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';     
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $fields     = isset( $element['fields'] ) ? $element['fields'] : array();
+        $is_vue     = isset( $element['is_vue'] ) ? $element['is_vue'] : false;
+        
+        $html       = sprintf( '<label for="">%1$s<em>%2$s</em></label>', $label, $required );
+        $html      .= '<span class="hrm-checkbox-wrap">';
+
+        foreach( $fields as $field ) {
+            
+            $value      = isset( $field['elements']['value'] ) ? esc_attr( $field['elements']['value'] ) : '';
+            $id         = isset( $field['elements']['id'] ) ? esc_attr( $field['elements']['id'] ) : '';
+            $label      = isset( $field['label'] ) ? esc_attr( $field['label'] ) : '';
+            $checked    = isset( $field['checked'] ) ? esc_attr( $field['checked'] ) : '';
+            $eles       = isset( $field['elements'] ) ? $field['elements'] : array(); 
+            $elements   = array();
+           
+
+            foreach( $eles as $key => $ele ) {
+                if ( is_int( $key ) ) {
+                    $elements[] = ' '. esc_attr( $ele ) .' ';
+                } else {
+                    $elements[] = esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+                }
+            }
+
+            $elements = implode( ' ', $elements );
+            
+            if ( $is_vue ) {
+                $html .= sprintf( '<input type="checkbox" %1$s/>', $elements );
+            } else {
+                $html .= sprintf( '<input type="checkbox" %1$s %2$s />', $elements, checked( $value, $checked, false ) );
+
+            }
+            $html .= sprintf( '<label class="hrm-radio" for="%1s">%2s</label>', $id, $label );
+
+        }
+
+        $html      .= '</span>';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $html      .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%1$s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+
+    }
+
     function checkbox_field( $name = '', $element ) {
         if( empty( $name ) ) {
             return;
@@ -326,7 +542,13 @@ class Hrm_Settings {
 
             if( is_array( $extra ) && count( $extra ) ) {
                 foreach( $extra as $key => $action ) {
-                    $extra_attr .= esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                     if ( is_int( $key ) ) {
+
+                        $extra_field .= ' '. esc_attr( $action ) .' ';
+
+                    } else {
+                        $extra_attr .= ' '. esc_attr( $key ) .'='. esc_attr( $action ) . ' ';
+                    }
                 }
             }
 
@@ -350,6 +572,47 @@ class Hrm_Settings {
             echo $this->multiple_field_inside_this_wrap_close( $element );
         return ob_get_clean();
     }
+
+    function new_textarea_field( $element ) {
+
+        $id         = isset( $element['id'] ) ? esc_attr( $element['id'] ) : esc_attr( $name );
+        $label      = isset( $element['label'] ) ? esc_attr( $element['label'] ) : '';
+        $required   = ( isset( $extra['data-hrm_required'] ) &&  ( $extra['data-hrm_required'] === true ) ) ? '*' : '';
+        $desc       = isset( $element['desc'] ) ? esc_attr( $element['desc'] ) : '';
+        $wrap_tag   = isset( $element['wrap_tag'] ) ? $element['wrap_tag'] : 'div';
+        $wrap_class = isset( $element['wrap_class'] ) ? $element['wrap_class'] : '';
+        $value      = isset( $element['value'] ) ? esc_attr( $element['value'] ) : '';
+        $field_elemts = isset( $element['field_elements'] ) ? $element['field_elements'] : array();
+        $elements     = array();
+
+        foreach ( $field_elemts as $key => $ele ) {
+            if ( is_int( $key ) ) {
+                $elements[] =  ' '. esc_attr( $ele ) .' ';
+            } else {
+                $elements[] = ' '. esc_attr( $key ) .'="'. esc_attr( $ele ) . '" ';
+            }
+            
+        }
+
+        $elements = implode( '', $elements );
+
+        $html = sprintf( '<label for="%1s">%2s<em>%3s</em></label>', $id, $label, $required );
+        $html .= sprintf( '<textarea %1$s>%2$s</textarea>', $elements, $value );
+        $html .= sprintf( '<span class="hrm-clear"></span><span class="description">%s</span>', $desc );
+
+        $wrap       = sprintf( '<%1$s class="hrm-form-field %2$s">', $wrap_tag, $wrap_class );
+        $wrap_close = sprintf('</%s>', $wrap_tag);
+
+        ob_start();
+            echo $this->multiple_field_inside_this_wrap( $element );
+                echo $wrap;
+                echo $html;
+                echo $wrap_close;
+            echo $this->multiple_field_inside_this_wrap_close( $element );
+
+        return ob_get_clean();
+    }
+
 
     function textarea_field( $name = '', $element ) {
         if( empty( $name ) ) {
@@ -741,7 +1004,7 @@ class Hrm_Settings {
 
                     }
 
-                if ( hrm_user_can_access( $page, $form['tab'], $form['subtab'], 'add' ) && $submit_btn ) {
+                if ( $submit_btn ) {
                     ?>
                     <input type="submit" class="button hrm-submit-button button-primary" name="" value="Submit">
                     <div class="hrm-spinner" style="display: none;"><?php _e( 'Saving....', 'hrm' ); ?></div>
@@ -869,8 +1132,8 @@ class Hrm_Settings {
             $datatable = 'hrm-data-table';
         }
 
-        $insert_new = ( hrm_user_can_access( $page, $tab, $subtab, 'add' ) &&  $add_btn_name ) ? true : false;
-        $event_delete = ( hrm_user_can_access( $page,$tab, $subtab, 'delete' ) && $delet_button ) ? true : false;
+        $insert_new = isset( $table['add_btn'] ) ? $table['add_btn'] : true;
+        $event_delete = isset( $table['delete_btn'] ) ? $table['delete_btn'] : true;
         ob_start();
         ?>
 
@@ -1210,6 +1473,7 @@ class Hrm_Settings {
         if ( $row ) {
             return $wpdb->get_row( "SELECT $fields FROM $table WHERE $where" );
         } else {
+           
             $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where $limit" );
 
             $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
@@ -1221,7 +1485,7 @@ class Hrm_Settings {
     function country_list() {
         $list = include dirname( __FILE__ ) . '/../include/iso_country_codes.php';
 
-        return array_merge( array('' => '- Select -'), $list );
+        return array_merge( $list );
     }
 
     function get_country_by_code( $code ) {
@@ -1335,6 +1599,77 @@ class Hrm_Settings {
         }
 
         return $selected ? $year[$selected] : $year;
+    }
+
+    public static function ajax_update_settings() {
+        check_ajax_referer('hrm_nonce');
+        self::getInstance()->update_settings($_POST);
+
+        wp_send_json_success();
+    }
+
+    public function update_settings( $settings ) {
+        if ( empty( $settings['hrm_financial_year'] ) ) {
+            $current_date = current_time( 'mysql' );
+        } else {
+            $current_date = $settings['hrm_financial_year'];
+        }
+        
+        $this->update_financial_year( $current_date );
+    }
+
+    function update_financial_year( $date ) {
+        $hrm_financial_year = date('Y-m-d H:i:s', strtotime( $date ) );
+        $count = Financial_Year::count();
+        
+        if ( $count > 0 ) {
+            
+            $last_row = Financial_Year::orderBy('id', 'desc')->first();
+            
+            Financial_Year::where('id', $last_row->id)->update([
+                'start' => $hrm_financial_year
+            ]);
+            
+        } else {
+            Financial_Year::create(array(
+                'start' => $hrm_financial_year
+            ));
+        }
+    }
+
+    function insert_financial_year( $date ) {
+        $hrm_financial_year = date('Y-m-d H:i:s', strtotime( $date ) );
+       
+        Financial_Year::create(array(
+            'start' => $hrm_financial_year
+        ));
+       
+    }
+
+    public function get_settings() {
+
+        return array(
+            'hrm_financial_year' => $this->get_financial_year()
+        );
+    }
+
+    public function get_financial_year() {
+        $count = Financial_Year::count();
+
+        if ( $count > 0 ) {
+            $last_row = Financial_Year::orderBy('id', 'desc')->first();
+            return date('Y-m-d', strtotime( $last_row->start ) );
+        } else {
+            $current_date   = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $financial_date = date( 'Y-07-01', strtotime( current_time( 'mysql' ) ) );
+
+            if ( $financial_date > $current_date ) {
+                return date( 'Y-07-01', strtotime( $current_date . '-1 year' ) );
+            } else {
+                return $financial_date;
+            }
+
+        }
     }
 
 }

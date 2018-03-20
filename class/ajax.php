@@ -2,6 +2,8 @@
 class Hrm_Ajax {
     private static $instance;
 
+    public static $crud;
+
     public static function getInstance() {
         if( ! self::$instance ) {
             self::$instance = new hrm_Ajax();
@@ -11,13 +13,21 @@ class Hrm_Ajax {
     }
 
     function __construct() {
+        add_action( 'init', array( $this, 'action' ), 11 );
+    }
+
+    function action() {
+        self::$crud = new HRM\Core\Crud\Crud();
+
         add_action( 'wp_ajax_ajax_referer_insert', array( $this, 'add_new_data' ) );
         add_action( 'wp_ajax_hrm_form_edit', array( $this, 'edit' ) );
         add_action( 'wp_ajax_single_form', array( $this, 'singel_form_add' ) );
+        add_action( 'wp_ajax_hrm_get_organigation_info', array( $this, 'get_organization_info' ) );
         add_action( 'wp_ajax_hrm_delete', array( $this, 'delete' ) );
         add_action( 'wp_ajax_hrm_autocomplete', array( $this, 'hrm_autocomplete_action' ) );
         add_action( 'wp_ajax_user_create', array( $this, 'create_user' ) );
-        add_action( 'wp_ajax_admin_autocomplete', array( $this, 'search_admin' ) );
+        add_action( 'wp_ajax_search_users', array( $this, 'search_users' ) );
+        add_action( 'wp_ajax_search_emp_leave_records', array( 'Hrm_Leave', 'search_emp_leave_records' ) );
         add_action( 'wp_ajax_get_role', array( $this, 'get_user_role' ) );
         add_action( 'wp_ajax_hrm_user_delete', array( $this, 'user_delete' ) );
         add_action( 'wp_ajax_update_user_role', array( $this, 'user_role_update' ) );
@@ -32,7 +42,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_add_task', array( $this, 'insert_task' ) );
         add_action( 'wp_ajax_add_sub_task', array( $this, 'insert_sub_task' ) );
         add_action( 'wp_ajax_insert_leave', array( $this, 'new_leave' ) );
-        add_action( 'wp_ajax_change_leave_status', array( $this, 'update_leave_status' ) );
+        add_action( 'wp_ajax_change_status', array( $this, 'update_status' ) );
         add_action( 'wp_ajax_new_employer', array( $this, 'add_employer' ) );
         add_action( 'wp_ajax_employer_edit', array( $this, 'edit_employer' ) );
         add_action( 'wp_ajax_update_my_info', array( $this, 'edit_my_info' ) );
@@ -78,6 +88,53 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_partial_payment_update', array( $this, 'partial_payment_update' ) );
         add_action( 'wp_ajax_partial_payment_cancel', array( $this, 'partial_payment_cancel' ) );
         add_action( 'wp_ajax_partial_payment_delete', array( $this, 'partial_payment_delete' ) );
+        
+        add_action( 'wp_ajax_create_new_department', array( 'Hrm_Admin', 'ajax_update_department' ) );
+        add_action( 'wp_ajax_get_departments', array( 'Hrm_Admin', 'ajax_get_departments' ) );
+        add_action( 'wp_ajax_delete_department', array( 'Hrm_Admin', 'ajax_delete_department' ) );
+
+        add_action( 'wp_ajax_punch_in', array( 'Hrm_Attendance', 'ajax_punch_in' ) );
+        add_action( 'wp_ajax_attendance_init', array( 'Hrm_Attendance', 'attendance_init' ) );
+        add_action( 'wp_ajax_punch_out', array( 'Hrm_Attendance', 'ajax_punch_out' ) );
+        add_action( 'wp_ajax_get_attendance', array( 'Hrm_Attendance', 'ajax_get_attendance' ) );
+        add_action( 'wp_ajax_attendance_configuration', array( 'Hrm_Attendance', 'ajax_attendance_configuration' ) );
+        add_action( 'wp_ajax_leave_header', array( 'Hrm_Leave', 'ajax_leave_header' ) );
+        add_action( 'wp_ajax_create_new_leave_type', array( 'Hrm_Leave', 'ajax_create_new_leave_type' ) );
+        add_action( 'wp_ajax_get_leave_type', array( 'Hrm_Leave', 'ajax_get_leave_type' ) );
+        add_action( 'wp_ajax_create_new_holidays', array( 'Hrm_Leave', 'ajax_create_new_holidays' ) );
+        add_action( 'wp_ajax_get_holidays', array( 'Hrm_Leave', 'ajax_get_holidays' ) );
+        add_action( 'wp_ajax_delete_holiday', array( 'Hrm_Leave', 'ajax_delete_holiday' ) );
+        add_action( 'wp_ajax_save_work_week', array( 'Hrm_Leave', 'ajax_save_work_week' ) );
+        add_action( 'wp_ajax_get_work_week', array( 'Hrm_Leave', 'ajax_get_work_week' ) );
+        add_action( 'wp_ajax_get_leave_records_init_data', array( 'Hrm_Leave', 'get_leave_records_init_data' ) );
+        add_action( 'wp_ajax_get_leave_record_events', array( 'Hrm_Leave', 'ajax_get_leave_record_events' ) );
+        //array( 'Hrm_Leave', 'update_leave' )
+        
+        add_action( 'wp_ajax_create_new_leave', array( 'Hrm_Leave', 'ajax_create_new_leave' ) );
+        add_action( 'wp_ajax_get_leaves', array( 'Hrm_Leave', 'ajax_get_leaves' ) );
+        add_action( 'wp_ajax_get_leave_form_settings', array( 'Hrm_Leave', 'ajax_get_leave_form_settings' ) );
+        add_action( 'wp_ajax_save_leave_form_settings', array( 'Hrm_Leave', 'ajax_save_leave_form_settings' ) );
+        add_action( 'wp_ajax_update_leave', array( 'Hrm_Leave', 'ajax_update_leave' ) );
+        add_action( 'wp_ajax_delete_leave', array( 'Hrm_Leave', 'ajax_delete_leave' ) );
+        add_action( 'wp_ajax_update_settings', array( 'Hrm_Settings', 'ajax_update_settings' ) );
+        add_action( 'wp_ajax_delete_leave_type', array( 'Hrm_Leave', 'ajax_delete_leave_type' ) );
+        add_action( 'wp_ajax_hrm_user_can', array( $this, 'user_can' ) );
+        add_action( 'wp_ajax_get_employee_leave_summery', array( 'Hrm_Leave', 'ajax_get_employee_leave_summery' ) );
+        add_action( 'wp_ajax_get_employee_dropdown', array( 'Hrm_Leave', 'ajax_get_employee_dropdown' ) );
+
+        add_action( 'wp_ajax_hrm_insert_record', 'hrm_ajax_insert_records' );
+        add_action( 'wp_ajax_hrm_update_record', 'hrm_ajax_update_records' );
+        add_action( 'wp_ajax_hrm_get_records', 'hrm_ajax_get_records' );
+        add_action( 'wp_ajax_hrm_delete_record', 'hrm_ajax_delete_records' );
+    }
+
+    function user_can() {
+        check_ajax_referer('hrm_nonce');
+        
+        $user_id = $_POST['user_id'];
+        $cap = $_POST['cap'];
+
+        wp_send_json_success( hrm_user_can( $cap, $user_id ) );
     }
 
     function partial_payment_delete() {
@@ -658,10 +715,10 @@ class Hrm_Ajax {
         }
     }
 
-    function update_leave_status() {
+    function update_status() {
         check_ajax_referer('hrm_nonce');
         $postdata = $_POST;
-        $update = hrm_Leave::getInstance()->update_leave_status( $postdata );
+        $update = hrm_Leave::getInstance()->update_status( $postdata );
         if ( $update ) {
             wp_send_json_success( array( 'success_msg' => __( 'Successfully update leave status', 'hrm' ) ) );
         } else {
@@ -685,7 +742,7 @@ class Hrm_Ajax {
             $_POST['emp_id'] = $_POST['name'];
             $_POST['type_id'] = $_POST['type_id'];*/
 
-            //unset( $_POST['from'], $_POST['to'], $_POST['leave_status'], $_POST['leave_comments'] );
+            //unset( $_POST['from'], $_POST['to'], $_POST['status'], $_POST['comments'] );
 
             ob_start();
                 require_once $req_frm;
@@ -695,31 +752,31 @@ class Hrm_Ajax {
         }
     }
 
-    function find_project_worker() {
-        $users = get_users( array(
-            'search' => '*' . $_POST['search_admin'] . '*',
-            'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-        ) );
-        $data = array();
-        foreach( $users as $user) {
-            $data[] = array(
-                'label' => $user->display_name,
-                '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
-            );
-        }
-        if( count($data) ) {
-            $user_info = json_encode( $data );
-        } else {
-            $data[] = array(
-                'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
-                'value' => 'hrm_create_user',
-                '_user_meta' =>'',
-            );
-            $user_info = json_encode( $data );
-        }
+    // function find_project_worker() {
+    //     $users = get_users( array(
+    //         'search' => '*' . $_POST['search_admin'] . '*',
+    //         'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
+    //     ) );
+    //     $data = array();
+    //     foreach( $users as $user) {
+    //         $data[] = array(
+    //             'label' => $user->display_name,
+    //             '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
+    //         );
+    //     }
+    //     if( count($data) ) {
+    //         $user_info = json_encode( $data );
+    //     } else {
+    //         $data[] = array(
+    //             'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
+    //             'value' => 'hrm_create_user',
+    //             '_user_meta' =>'',
+    //         );
+    //         $user_info = json_encode( $data );
+    //     }
 
-        wp_send_json_success( $user_info );
-    }
+    //     wp_send_json_success( $user_info );
+    // }
 
     function insert_sub_task() {
         check_ajax_referer('hrm_nonce');
@@ -1073,33 +1130,19 @@ class Hrm_Ajax {
         wp_send_json_success( array( 'append_data' => $data ) );
     }
 
-    function search_admin() {
+    function search_users() {
+        check_ajax_referer('hrm_nonce');
+        $send = [];
         $users = get_users( array(
-            'search' => '*' . $_POST['search_admin'] . '*',
+            'search' => '*' . $_POST['user'] . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-        ) );
-
-        $data = array();
-        $super_admin = get_option( 'hrm_admin');
-        foreach( $users as $user) {
-            if ( $user->ID == $super_admin ) continue;
-            $data[] = array(
-                'label' => $user->display_name,
-                '_user_meta' => Hrm_Admin::getInstance()->create_user_meta( $user->display_name, $user->ID ),
-            );
+        ));
+        
+        foreach( $users as $user ) {
+            $send[] = $user->data;
         }
-        if( count($data) ) {
-            $user_info = json_encode( $data );
-        } else {
-            $data[] = array(
-                'label' => '<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
-                'value' => 'hrm_create_user',
-                '_user_meta' =>'',
-            );
-            $user_info = json_encode( $data );
-        }
-
-        wp_send_json_success( $user_info );
+        
+        wp_send_json_success( $send );
     }
 
 
@@ -1207,7 +1250,7 @@ class Hrm_Ajax {
     }
 
     function singel_form_add() {
-        check_ajax_referer( 'hrm_nonce' );
+        //check_ajax_referer( 'hrm_nonce' );
 
         if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
             wp_send_json_error( array( 'error_msg' => __('Update Failed', 'hrm') ) );
@@ -1231,10 +1274,24 @@ class Hrm_Ajax {
         }
 
         if( $update ) {
-            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
+            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ), 'data' => $data  ) );
         } else {
             wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
+    }
+
+    function get_organization_info(){
+        $info          = get_option( 'hrm_general_info', array() );
+        $country_lists = hrm_Settings::getInstance()->country_list();
+        $lists         = [];
+        
+        foreach ( $country_lists as $key => $value ) {
+            $lists[] = ['iso' => $key, 'country' => $value];
+        }
+        wp_send_json_success( [ 
+            'data'      => $info['data'],
+            'countries' => $lists,
+        ] );
     }
 
     function delete() {

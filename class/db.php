@@ -14,6 +14,61 @@ class Hrm_Db {
         $this->employer();
         $this->worker_evaluation();
         $this->client_partial_payment();
+        $this->attendance();
+        $this->office_time();
+        $this->relation();
+    }
+
+    function relation() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'hrm_relation';
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+          `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+          `type` varchar(255) DEFAULT NULL,
+          `from` int(11) DEFAULT NULL,
+          `to` int(11) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+
+    function office_time() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'hrm_office_time';
+        
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `start` datetime NOT NULL,
+          `end` datetime NOT NULL,
+          `is_multi` INT(3) NOT NULL,
+          `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `ip` TINYTEXT NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+
+    function attendance() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'hrm_attendance';
+
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `user_id` bigint(20) NOT NULL,
+          `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `punch_in` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `punch_out` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `total` int(11) NOT NULL,
+          `config_id` BIGINT(20) NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
     }
 
     function client_partial_payment() {
@@ -216,104 +271,93 @@ class Hrm_Db {
     }
 
     function personal_skill() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_personal_skill';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `emp_id` int(7) NOT NULL DEFAULT '0',
-          `skill_id` int(11) NOT NULL,
-          `years_of_exp` decimal(2,0) DEFAULT NULL,
-          `comments` varchar(100) NOT NULL DEFAULT '',
-          PRIMARY KEY (`id`),
-          KEY `emp_number` (`emp_id`),
-          KEY `skill_id` (`skill_id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+      global $wpdb;
+      $table_name = $wpdb->prefix . 'hrm_personal_skill';
+      $sql = "DROP TABLE IF EXISTS $table_name";
+      $wpdb->query($sql);
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+      $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `employee_id` int(7) NOT NULL DEFAULT '0',
+        `skill` varchar(255) NOT NULL,
+        `years_of_exp` decimal(2,0) DEFAULT NULL,
+        `comments` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+        PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
-        $table_option['table_name'] = 'hrm_personal_skill';
-        $table_option['table_format'] = array( '%d', '%d', '%s', '%s' );
-        $table_option['table_option'] = array(
-            'emp_id'       => 'emp_id',
-            'skill_id'     => 'skill_id',
-            'years_of_exp' => 'years_of_exp',
-            'comments'     => 'comments',
-        );
-        $table_option_name = 'hrm_personal_skill';
+      require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+      dbDelta( $sql );
 
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+      $table_option['table_name'] = 'hrm_personal_skill';
+      $table_option['table_format'] = array( '%d', '%s', '%s', '%s' );
+      $table_option['table_option'] = array(
+          'emp_id'       => 'emp_id',
+          'skill'     => 'skill',
+          'years_of_exp' => 'years_of_exp',
+          'comments'     => 'comments',
+      );
+      $table_option_name = 'hrm_personal_skill';
+
+      hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function personal_education() {
 
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_personal_education';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `emp_id` int(11) NOT NULL,
-          `education_id` int(11) NOT NULL,
-          `institute` varchar(100) DEFAULT NULL,
-          `major` varchar(100) DEFAULT NULL,
-          `year` timestamp NULL DEFAULT NULL,
-          `score` varchar(25) DEFAULT NULL,
-          `start_date` timestamp NULL DEFAULT NULL,
-          `end_date` timestamp NULL DEFAULT NULL,
-          PRIMARY KEY (`id`),
-          KEY `emp_number` (`emp_id`),
-          KEY `education_id` (`education_id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hrm_personal_education';
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `employee_id` int(11) NOT NULL,
+      `education` varchar(255) NOT NULL,
+      `institute` varchar(100) DEFAULT NULL,
+      `major` varchar(100) DEFAULT NULL,
+      `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      `score` varchar(25) DEFAULT NULL,
+      `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
-        $table_option['table_name'] = 'hrm_personal_education';
-        $table_option['table_format'] = array( '%d', '%d', '%s', '%s', '%s', '%f', '%s', '%s' );
-        $table_option['table_option'] = array(
-            'emp_id'       => 'emp_id',
-            'education_id' => 'education_id',
-            'institute'    => 'institute',
-            'major'        => 'major',
-            'year'         => 'year',
-            'score'        => 'score',
-            'start_date'   => 'start_date',
-            'end_date'     => 'end_date',
-        );
-        $table_option_name = 'hrm_personal_education';
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
 
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+    $table_option['table_name'] = 'hrm_personal_education';
+    $table_option['table_format'] = array( '%d', '%s', '%s', '%s', '%s', '%f', '%s', '%s' );
+    $table_option['table_option'] = array(
+        'emp_id'       => 'emp_id',
+        'education'    => 'education',
+        'institute'    => 'institute',
+        'major'        => 'major',
+        'year'         => 'year',
+        'score'        => 'score',
+        'start_date'   => 'start_date',
+        'end_date'     => 'end_date',
+    );
+    $table_option_name = 'hrm_personal_education';
+
+    hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function work_exp() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_work_experience';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `emp_number` varchar(7) NOT NULL DEFAULT '0',
-            `eexp_company` varchar(100) DEFAULT NULL,
-            `eexp_jobtit` varchar(120) DEFAULT NULL,
-            `eexp_from_date` varchar(15) DEFAULT NULL,
-            `eexp_to_date` varchar(15) DEFAULT NULL,
-            `eexp_comments` varchar(200) DEFAULT NULL,
-        PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2;";
+      global $wpdb;
+      $table_name = $wpdb->prefix . 'hrm_work_experience';
+      $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `employee_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL DEFAULT '0',
+        `start` timestamp NULL DEFAULT NULL,
+        `end` timestamp NULL DEFAULT NULL,
+        `description` tinytext,
+        `created_at` timestamp NULL DEFAULT NULL,
+        `updated_at` timestamp NULL DEFAULT NULL,
+      PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-
-        $table_option['table_name'] = 'hrm_work_experience';
-        $table_option['table_format'] = array( '%s', '%s', '%s', '%s', '%s', '%s');
-        $table_option['table_option'] = array(
-            'emp_number'     => 'emp_id',
-            'eexp_company'   => 'company_name',
-            'eexp_jobtit'    => 'job_title',
-            'eexp_from_date' => 'form',
-            'eexp_to_date'   => 'to',
-            'eexp_comments'  => 'description',
-        );
-        $table_option_name = 'hrm_work_experience';
-
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
+      require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+      dbDelta( $sql );
     }
 
     function salary() {
@@ -340,27 +384,6 @@ class Hrm_Db {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
-
-        $table_option['table_name'] = 'hrm_salary';
-        $table_option['table_format'] = array( '%d', '%s', '%s', '%d', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%d', '%s' );
-        $table_option['table_option'] = array(
-            'emp_id'         => 'emp_id',
-            'pay_grade'      => 'pay_grade',
-            'component'      => 'component',
-            'frequency'      => 'frequency',
-            'currency'       => 'currency',
-            'amount'         => 'amount',
-            'comments'       => 'comments',
-            'direct_deposit' => 'direct_deposit',
-            'account_number' => 'account_number',
-            'account_type'   => 'account_type',
-            'routing'        => 'routing',
-            'dipo_amount'    => 'dipo_amount',
-            'billing_date'   => 'billing_date'
-        );
-        $table_option_name = 'hrm_salary';
-
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function leave_summary() {
@@ -368,12 +391,14 @@ class Hrm_Db {
         $table_name = $wpdb->prefix . 'hrm_leave';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
           `id` int(11) NOT NULL AUTO_INCREMENT,
-          `leave_status` smallint(6) DEFAULT NULL,
-          `leave_comments` varchar(256) DEFAULT NULL,
-          `leave_type_id` varchar(13) NOT NULL,
+          `status` smallint(6) DEFAULT NULL,
+          `comments` varchar(256) DEFAULT NULL COMMENT '1 = ''Pending'', 2 = ''Approve'', 3 = ''Cancel''',
+          `type` varchar(13) NOT NULL,
           `emp_id` int(7) NOT NULL,
           `start_time` timestamp NULL DEFAULT NULL,
           `end_time` timestamp NULL DEFAULT NULL,
+          `created_at` timestamp NULL DEFAULT NULL,
+          `updated_at` timestamp NULL DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -385,10 +410,10 @@ class Hrm_Db {
         $table_option['table_option'] = array(
             'start_time'     => 'from',
             'end_time'       => 'to',
-            'leave_comments' => 'comment',
-            'leave_type_id'  => 'type_id',
+            'comments' => 'comment',
+            'type'  => 'type_id',
             'emp_id'         => 'emp_id',
-            'leave_status'   => 'leave_status'
+            'status'   => 'status'
         );
         $table_option_name = 'hrm_leave';
 
@@ -411,15 +436,16 @@ class Hrm_Db {
         global $wpdb;
         $table_name = $wpdb->prefix . 'hrm_holiday';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `name` varchar(20) NOT NULL,
+          `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+          `name` varchar(255) NOT NULL,
           `description` text,
-          `from` timestamp NULL DEFAULT NULL,
-          `to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `from` datetime DEFAULT NULL,
+          `to` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `f_year` int(11) DEFAULT NULL,
           `length` varchar(10) NOT NULL,
           `index_holiday` text NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
@@ -439,17 +465,18 @@ class Hrm_Db {
     }
 
     function leave_type() {
-
         global $wpdb;
         $table_name = $wpdb->prefix . 'hrm_leave_type';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` bigint(13) NOT NULL AUTO_INCREMENT,
-          `leave_type_name` varchar(50) DEFAULT NULL,
-          `entitlement` smallint(6) DEFAULT NULL,
-          `entitle_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} ( 
+            `id` int(11) NOT NULL AUTO_INCREMENT, 
+            `leave_type_name` varchar(50) DEFAULT NULL, 
+            `entitlement` smallint(6) DEFAULT '0', 
+            `entitle_from` timestamp NULL DEFAULT NULL, 
+            `entitle_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', 
+            `f_year` int(11) DEFAULT NULL, 
+            `carry` int(11) DEFAULT NULL, 
+            PRIMARY KEY (`id`) 
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
@@ -497,49 +524,40 @@ class Hrm_Db {
 
     function education() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_education';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+        $table_name = $wpdb->prefix . 'hrm_personal_education';
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
           `id` int(11) NOT NULL AUTO_INCREMENT,
-          `name` varchar(100) NOT NULL,
+          `employee_id` int(11) NOT NULL,
+          `education` varchar(255) NOT NULL,
+          `institute` varchar(100) DEFAULT NULL,
+          `major` varchar(100) DEFAULT NULL,
+          `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+          `score` varchar(25) DEFAULT NULL,
+          `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+          `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 
-        $table_option['table_name'] = 'hrm_education';
-        $table_option['table_format'] = array( '%s');
-        $table_option['table_option'] = array(
-            'name' => 'education_name',
-        );
-        $table_option_name = 'hrm_qualification_education';
-
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function skills() {
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_skill';
+        $table_name = $wpdb->prefix . 'hrm_personal_skill';
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `name` varchar(120) DEFAULT NULL,
-            `description` text,
-            PRIMARY KEY (`id`)
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `employee_id` int(7) NOT NULL DEFAULT '0',
+          `skill` varchar(255) NOT NULL,
+          `years_of_exp` decimal(2,0) DEFAULT NULL,
+          `comments` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
-
-        $table_option['table_name'] = 'hrm_skill';
-        $table_option['table_format'] = array( '%s', '%s');
-        $table_option['table_option'] = array(
-            'name' => 'skill_name',
-            'description' => 'skill_desc',
-        );
-        $table_option_name = 'hrm_qualification_skills';
-
-        hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function job() {
@@ -556,6 +574,8 @@ class Hrm_Db {
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `name` varchar(60) DEFAULT NULL,
           `active` varchar(4) NOT NULL,
+          `description` TINYTEXT NOT NULL,
+          `parent` INT NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -624,10 +644,7 @@ class Hrm_Db {
     }
 
     function employer_role() {
-        $role_name            = 'hrm_employee';
-        $display_name         = __( 'HRM employee', 'hrm' );
-        $capabilities['read'] = true;
-        add_role( $role_name, $display_name, $capabilities );
+        Hrm_Admin::getInstance()->employer_role();
     }
 
     function organization() {

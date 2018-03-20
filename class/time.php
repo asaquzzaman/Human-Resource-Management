@@ -154,7 +154,7 @@ class Hrm_Time {
             'type'     => 'text',
             'class'    => 'hrm-timepicker',
             'label'    => __( 'Punch In Time', 'hrm' ),
-            'value'    => date( 'h:i:s a', strtotime( $post->post_date ) ),
+            'value'    => date( 'H:i:s a', strtotime( $post->post_date ) ),
             'required' => 'required',
             'extra' => array(
                 'data-hrm_validation'         => true,
@@ -186,7 +186,7 @@ class Hrm_Time {
             'type'  => 'text',
             'class' => 'hrm-timepicker',
             'label' => __( 'Punch Out Time', 'hrm' ),
-            'value' => !empty( $punch_out_time ) ? date( 'h:i:s a', $punch_out_time ) : ''
+            'value' => !empty( $punch_out_time ) ? date( 'H:i:s a', $punch_out_time ) : ''
         );
 
         $form['type'] = array(

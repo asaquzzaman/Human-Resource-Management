@@ -1,0 +1,38 @@
+{
+    "name": "Human Resource Management",
+    "description": "HR management plugin for WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "asaquzzaman",
+            "email": "joy.mishu@gmail.com",
+            "homepage": "http://mishubd.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^5.4",
+        "illuminate/pagination": "^5.4",
+        "illuminate/events": "^5.4",
+        "league/fractal": "^0.17.0"
+    },
+    "autoload": {
+        "classmap": [
+            "db"
+        ],
+        "psr-4": {
+            "HRM\\Core\\": "core/",
+            "HRM\\Include\\": "include/",
+            "HRM\\Models\\": "models/",
+            "HRM\\Transformers\\": "transformers/"
+        },
+        "files": [
+            "include/loaders.php",
+            "include/configurations.php",
+            "include/function.php",
+            "include/urls.php",
+            "include/page.php",
+            "include/init.php"
+        ]
+    }
+}

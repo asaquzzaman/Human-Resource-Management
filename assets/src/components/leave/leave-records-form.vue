@@ -116,7 +116,10 @@
 
 					<div class="hrm-form-field">
 						<label>Leave Duration<em>*</em></label>
-						<div v-hrm-leave-jquery-fullcalendar class="hrm-leave-jquery-fullcalendar"></div>
+						<div><strong>To take leave just click the calendar date cell.</strong></div>
+						<div v-hrm-leave-jquery-fullcalendar class="hrm-leave-jquery-fullcalendar">
+							
+						</div>
 					</div>
 
 					

@@ -60,6 +60,15 @@ Here are some notable features that you may consider before diving in.
 
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
+== Changelog ==
+
+= 2.0 - March 20, 2018 =
+
+ * [new] HRM front-end fully migrate with Vue js.
+ * [new] Included eloquent
+ * [update] HRM is now single page application
+ * [update] All items are updated
+
 
 == Frequently Asked Questions ==
 

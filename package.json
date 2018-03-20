@@ -9,7 +9,8 @@
   "scripts": {
     "hrm": "webpack",
     "build": "webpack-dev-server",
-    "watch": "webpack --progress --colors --watch"
+    "watch": "webpack --progress --colors --watch",
+    "reset": "webpack --progress --colors"
   },
   "repository": {
     "type": "git",

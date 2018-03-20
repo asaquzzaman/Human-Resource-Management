@@ -1,4 +1,5 @@
 .DS_Store
+.gitignore
 plugin-deploy.sh
 config.codekit
 export.sh
@@ -12,7 +13,6 @@ secret.json
 .netbeans.xml
 npm-debug.log
 /node_modules/
-/vendor/
 composer.json
 composer.lock
 Gruntfile.js
@@ -21,4 +21,4 @@ package-lock.json
 package.json
 prev.json
 webpack.config.js
-/asset/js/components
+/asset/js/src

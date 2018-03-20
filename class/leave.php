@@ -739,6 +739,7 @@ class Hrm_Leave {
 
         wp_send_json_success(array( 
             'work_week'  => $work_week, 
+            'message' => 'Update weekend successfully'
         ));
     }
 

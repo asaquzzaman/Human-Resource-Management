@@ -2,8 +2,8 @@
 	<div class="metabox-holder hrm-punch-in-out-wrap">
 		<div class="postbox">
 
-			<h2 class="hndle ui-sortable-handle">
-				<span>Holidays</span>
+			<h2 class="hndle">
+				<span>Weekend</span>
 			</h2>
 
 			<div class="inside">
@@ -180,7 +180,7 @@
 	                
 	                success: function(res) {
 	                    // Display a success toast, with a title
-	                    hrm.Toastr.success(res.success);
+	                    hrm.Toastr.success(res.message);
 	                    
 	                },
 

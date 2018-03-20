@@ -1,0 +1,6 @@
+= 2.0 - March 20, 2018 =
+
+ * [new] HRM front-end fully migrate with Vue js.
+ * [new] Included eloquent
+ * [update] HRM is now single page application
+ * [update] All items are updated

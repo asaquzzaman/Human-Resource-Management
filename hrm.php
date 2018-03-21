@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP human resource management
+ * Plugin Name: WP human resource management running
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
@@ -201,6 +201,7 @@ class WP_Hrm {
         new Hrm_Update();
 
         update_option( 'hrm_admin', $logged_in_user_id );
+        update_option( 'hrm_version', HRM_VERSION );
        
 
         // Hrm_Settings::getInstance()->update_financial_year( 

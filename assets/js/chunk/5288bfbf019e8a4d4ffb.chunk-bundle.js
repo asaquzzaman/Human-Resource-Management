@@ -609,185 +609,6 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -978,7 +799,37 @@ var render = function() {
       _vm._m(0)
     ]),
     _vm._v(" "),
-    _vm._m(1),
+    _c("div", { staticClass: "hrm-block hrm-block-2" }, [
+      _c("div", { staticClass: "hrm-block-content-wrap" }, [
+        _c(
+          "div",
+          { staticClass: "hrm-block-image-wrap" },
+          [
+            _vm._l(_vm.managers, function(manager) {
+              return _vm.managers.length
+                ? _c("div", { staticClass: "hrm-img" }, [
+                    _c("img", {
+                      staticStyle: { height: "46px", width: "46px" },
+                      attrs: { src: manager.data.avatar }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "hrm-admin-name" }, [
+                      _vm._v(_vm._s(manager.data.display_name))
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            !_vm.managers.length ? _c("div", [_vm._m(1)]) : _vm._e()
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "hrm-clear" })
+      ]),
+      _vm._v(" "),
+      _vm._m(2)
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "hrm-block hrm-block-3" }, [
       _c("div", { staticClass: "hrm-block-content-wrap" }, [
@@ -992,7 +843,7 @@ var render = function() {
         _c("div", { staticClass: "hrm-clear" })
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _vm._m(3)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "hrm-block hrm-block-4" }, [
@@ -1008,7 +859,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(4)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "hrm-clear" }),
@@ -1406,7 +1257,7 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("div", { staticClass: "postbox " }, [
-                  _vm._m(4),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("div", { staticClass: "inside" }, [
                     _c(
@@ -1460,7 +1311,7 @@ var render = function() {
             [
               _c("div", { staticClass: "meta-box-sortables ui-sortable" }, [
                 _c("div", { staticClass: "postbox " }, [
-                  _vm._m(5),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("div", { staticClass: "inside" }, [
                     _c(
@@ -1505,7 +1356,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "postbox " }, [
-                  _vm._m(6),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("div", { staticClass: "inside" }, [
                     _c("div", { staticClass: "pm-notice-body" }, [
@@ -1607,81 +1458,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "hrm-block hrm-block-2" }, [
-      _c("div", { staticClass: "hrm-block-content-wrap" }, [
-        _c("div", { staticClass: "hrm-block-image-wrap" }, [
-          _c("div", { staticClass: "hrm-img" }, [
-            _c("img", {
-              staticStyle: { height: "46px", width: "46px" },
-              attrs: {
-                src:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "hrm-admin-name" }, [_vm._v("mishu")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "hrm-img" }, [
-            _c("img", {
-              staticStyle: { height: "46px", width: "46px" },
-              attrs: {
-                src:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "hrm-admin-name" }, [
-              _vm._v("MD.Asaquzzaman  Faruk")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "hrm-img" }, [
-            _c("img", {
-              staticStyle: { height: "46px", width: "46px" },
-              attrs: {
-                src:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "hrm-admin-name" }, [_vm._v("Kabir")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "hrm-img" }, [
-            _c("img", {
-              staticStyle: { height: "46px", width: "46px" },
-              attrs: {
-                src:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "hrm-admin-name" }, [
-              _vm._v("MD.Asaquzzaman mishu")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "hrm-img" }, [
-            _c("img", {
-              staticStyle: { height: "46px", width: "46px" },
-              attrs: {
-                src:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "hrm-admin-name" }, [
-              _vm._v("MD.Asaquzzaman")
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-clear" })
-      ]),
-      _vm._v(" "),
-      _c("footer", [_c("div", [_vm._v("Managers")])])
+    return _c("div", { staticClass: "hrm-admin-name" }, [
+      _c("strong", [_vm._v("No manager found!")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("footer", [_c("div", [_vm._v("Managers")])])
   },
   function() {
     var _vm = this

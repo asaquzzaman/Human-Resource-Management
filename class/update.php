@@ -149,12 +149,11 @@ class Hrm_Update {
             return;
         }
 
-        $installed_version = get_option( 'hrm_version' );
+        $installed_version = get_option( 'hrm_db_version' );
 
         foreach ( self::$updates as $version => $path ) {
             if ( version_compare( $installed_version, $version, '<' ) ) {
                 include $path;
-                update_option( 'hrm_version', $version );
                 update_option( 'hrm_db_version', $version );
             }
         }

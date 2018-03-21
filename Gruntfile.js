@@ -37,6 +37,7 @@ module.exports = function(grunt) {
                     '!composer.lock',
                     '!prev.json',
                     '!secret.json',
+                    '!assets/src/**',
                     '!assets/less/**',
                     '!tests/**',
                     '!**/Gruntfile.js',

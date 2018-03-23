@@ -574,7 +574,8 @@ module.exports = function listToStyles (parentId, list) {
 						query: self.$route.query
 					});
 				}
-				if (!hasRecords && self.pagination.total_pages > 1) {
+
+				if (!hasRecords && typeof self.pagination != 'undefined' && self.pagination.total_pages > 1) {
 					self.getRecords();
 				}
 			});
@@ -820,11 +821,19 @@ module.exports = function listToStyles (parentId, list) {
 	methods: {
 		selfNewRecord() {
 			var self = this;
-
-			//self.loading = true;
-			//self.canSubmit = false;
-
 			var postData = this.generateFieldData(this.fields);
+			var isFormValidate = true;
+
+			this.fields.forEach(function (val) {
+				if (val.required === true && !postData[val.name]) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			if (!isFormValidate) {
+				return false;
+			}
 
 			var args = {
 				data: postData,
@@ -875,34 +884,40 @@ function FormFields(self) {
 		name: 'userName',
 		//tableHead: 'Title',
 		//tbRowAction: true,
-		editable: false
+		editable: false,
+		required: true
 	}, {
 		type: 'email',
 		model: '',
 		label: 'Email',
-		name: 'email'
+		name: 'email',
+		required: true
 	}, {
 		type: 'text',
 		model: '',
 		label: 'First Name',
 		name: 'firstName',
-		editable: true
+		editable: true,
+		required: true
 	}, {
 		type: 'text',
 		model: '',
 		label: 'Last Name',
 		name: 'lastName',
-		editable: true
+		editable: true,
+		required: true
 	}, {
 		type: 'select',
-		model: '',
+		model: hrmGetDefaultRole(),
 		options: hrmGetRoles(),
 		label: 'Role',
 		optionLabel: 'display_name',
 		placeholder: 'Select Role',
 		name: 'role',
 		tableHead: 'Role',
+		trackBy: 'name',
 		editable: true,
+		required: true,
 		//Filter submited new data
 		filterSubmited(val) {
 			return val.name;
@@ -932,6 +947,8 @@ function FormFields(self) {
 		name: 'department',
 		tableHead: 'Department',
 		editable: true,
+		required: true,
+		helpText: '<a href="#/departments">Create Department</a>',
 		//Filter submited new data
 		filterSubmited(val) {
 			return val.id;
@@ -970,6 +987,8 @@ function FormFields(self) {
 		name: 'designation',
 		tableHead: 'Designation',
 		editable: true,
+		required: true,
+		helpText: '<a href="#/designation">Create Designation</a>',
 		//Filter submited new data
 		filterSubmited(val) {
 			return val.id;
@@ -1010,7 +1029,7 @@ function FormFields(self) {
 		name: 'location',
 		tableHead: 'Location',
 		editable: true,
-
+		helpText: '<a href="#/organization/location">Create Location</a>',
 		//Filter submited new data
 		filterSubmited(val) {
 			return val.id;
@@ -1044,7 +1063,7 @@ function FormFields(self) {
 
 	}, {
 		type: 'select',
-		model: '',
+		model: hrmGetDefaultStatus(),
 		options: hrmGetStatus(),
 		label: 'Status',
 		optionLabel: 'label',
@@ -1164,6 +1183,28 @@ function hrmGetRoles() {
 	});
 
 	return roles;
+}
+
+function hrmGetDefaultRole() {
+	var role = {};
+
+	jQuery.each(HRM_Vars.hrm_roles, function (key, val) {
+		if (key == 'hrm_employee') {
+			role = {
+				name: key,
+				display_name: val
+			};
+		}
+	});
+
+	return role;
+}
+
+function hrmGetDefaultStatus() {
+	return {
+		key: 1,
+		label: 'Active'
+	};
 }
 
 
@@ -1342,7 +1383,10 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm.isNewRecordFormActive && _vm.manageEmployee()
-        ? _c("add-new-record-form", { attrs: { fields: _vm.fields } })
+        ? _c("add-new-record-form", {
+            staticClass: "hrm-toggle",
+            attrs: { fields: _vm.fields }
+          })
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "hrm-tbl-action-wrap" }, [
@@ -1460,7 +1504,9 @@ var render = function() {
         _c("div", { staticClass: "hrm-clear" })
       ]),
       _vm._v(" "),
-      _c("hrm-table", { attrs: { fields: _vm.fields } }),
+      _c("hrm-table", {
+        attrs: { id: "hrm-employee-list-table", fields: _vm.fields }
+      }),
       _vm._v(" "),
       _c("hrm-pagination", {
         attrs: {
@@ -1994,7 +2040,7 @@ var render = function() {
           _vm._v(" "),
           !_vm.records.length
             ? _c("tr", [
-                _c("td", { attrs: { colspan: _vm.fields.length + 1 } }, [
+                _c("td", { attrs: { colspan: "9" } }, [
                   _vm._v("\n\t\t\t\t\t\tNo result found!\n\t\t\t\t\t")
                 ])
               ])

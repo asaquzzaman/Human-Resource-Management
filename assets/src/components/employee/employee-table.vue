@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<table class="wp-list-table widefat fixed striped pages">
+		<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped pages">
             <thead>
                 <tr>
                 	<td v-if="manageEmployee()" id="cb" class="manage-column column-cb check-column">
@@ -14,7 +14,7 @@
             </thead>
 
             <tbody>
-                <tr class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
+                <tr :data-recordId="record.id" class="" v-for="(record, record_index) in records" :key="record_index" v-if="!record.editMode">
                 	<th v-if="manageEmployee()" scope="row" class="check-column">			
 						<input id="cb-select-7" @change="actionCheckbox()" v-model="deletedId" :value="record.id" type="checkbox">
 					</th>
@@ -42,20 +42,21 @@
                     </td>
                 </tr>
                 
-                <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
-                	<td :colspan="fields.length + 1" class="colspanchange">
-                		<form action="" @submit.prevent="selfUpdate(record)">
+                <tr v-else id="edit-8" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle" style="">
+                	<td colspan="9" class="colspanchange">
+                		<form class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
 								<div class="inline-edit-col">
 						
-									<label v-for="(field, field_index) in filterEditField(fields)">
-										<span class="title">{{ field.label }}</span>
+									<div class="hrm-edit-field-wrap" v-for="(field, field_index) in filterEditField(fields)">
+										<label class="title">{{ field.label }}</label>
 										<span class="input-text-wrap">
 											<hrm-edit-field :record="record" :field="field"></hrm-edit-field>
 											<!-- <input type="text" v-model="record[field.name]" class="ptitle"> -->
 										</span>
-									</label>
+										<div class="hrm-clear"></div>
+									</div>
 								</div>
 							</fieldset>
 
@@ -75,7 +76,7 @@
 				</tr>
 
 				<tr v-if="!records.length">
-					<td :colspan="fields.length + 1">
+					<td colspan="9">
 						No result found!
 					</td>
 				</tr>
@@ -226,7 +227,14 @@
 							query: self.$route.query
 						});
 					}
-					if (!hasRecords && self.pagination.total_pages > 1) {
+					
+					if (
+						!hasRecords 
+							&& 
+						typeof self.pagination != 'undefined'
+							&&
+						self.pagination.total_pages > 1
+					) {
 						self.getRecords();
 					}
 				})

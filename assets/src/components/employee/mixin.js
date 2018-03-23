@@ -3,14 +3,15 @@ export default {
 		return {
 			nameSpace: 'employee',
 			modelName: '',
-			modelTransformer: ''
+			modelTransformer: '',
+			isFetchRecord: false
 		}
 	},
 	methods: {
 		showHideNewRecordForm (status, experiance) {
 			var experiance   = experiance || false,
 			    experiance   = jQuery.isEmptyObject(experiance) ? false : experiance;
-
+			
 			if ( experiance ) {
 			    if ( status === 'toggle' ) {
 			        experiance.editMode = experiance.editMode ? false : true;
@@ -18,13 +19,16 @@ export default {
 			        experiance.editMode = status;
 			    }
 			} else {
-
 			    this.$store.commit(this.nameSpace+'/showHideNewRecordForm', status);
 			}
 		},
 
 		recordDelete (deletedId, callback) {
 			var self = this;
+
+			deletedId.forEach(function(id) {
+				jQuery('tr[data-recordId="'+id+'"]').fadeOut();
+			});
 
 			var form_data = {
 	            data: {
@@ -102,6 +106,18 @@ export default {
                         args.callback.call(self, true, res);
                     } 
                     
+                    hrm.Vue.nextTick(function() {
+                    	var tr = jQuery('.wp-list-table')
+                    		.find('tbody tr:first-child');
+
+                    	tr.css({ display: 'none' });
+                    	tr.addClass('new-records');
+                    	tr.fadeIn(1000);
+
+                    	setTimeout(function() {
+                    		tr.removeClass('new-records');
+                    	}, 3000);
+                    });
                    // hrm.Toastr.success(res.message);
                 },
 
@@ -142,6 +158,9 @@ export default {
 			
             var request_data = {
                 data: postData,
+                beforeSend () {
+                	self.loadingStart('hrm-employee-list-table');
+                },
                 success: function(res) {
                 	res.data.forEach(function(record) {
                 		self.recordMeta(record);
@@ -149,6 +168,8 @@ export default {
                     
                     self.$store.commit( self.nameSpace + '/setRecords', res.data );
                     self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
+                    self.loadingStop('hrm-employee-list-table');
+                    self.isFetchRecord = true;
                 }
             };
 

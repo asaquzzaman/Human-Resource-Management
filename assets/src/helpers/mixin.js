@@ -156,15 +156,21 @@ export default hrm.Vue.mixin({
                 duration: '', 
 
                 // z-index property
-                zIndex: '', 
+                zIndex: '9999', 
 
                 // sets relative position to preloader's parent
                 setRelative: false 
 
             };
             var args = jQuery.extend(true, pre_define, args);
-
-            jQuery('#'+id).preloader(args);
+            
+            hrm.Vue.nextTick(function() {
+                jQuery('#'+id).css({
+                    position: 'relative'
+                });
+                jQuery('#'+id).preloader(args);
+            });
+            
         },
 
         loadingStop (id) {

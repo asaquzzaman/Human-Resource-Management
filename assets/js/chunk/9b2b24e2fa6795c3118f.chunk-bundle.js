@@ -1,3 +1,8 @@
+wpSpearHrm([38],{
+
+/***/ 6:
+/***/ (function(module, exports) {
+
 /**
  * jQuery плагин Прелоадер
  *
@@ -17,12 +22,12 @@
 ;(function ($, window, document, undefined) {
     var pluginName = 'preloader',
         defaults = {
-            text: '', // explaining text under animation
-            percent: '', // from 0 to 100
-            duration: '', // in ms
-            zIndex: '', // setting z-index rule to .preloader
-            setRelative: false // setting relative position to preloader's parent
-        },
+        text: '', // explaining text under animation
+        percent: '', // from 0 to 100
+        duration: '', // in ms
+        zIndex: '', // setting z-index rule to .preloader
+        setRelative: false // setting relative position to preloader's parent
+    },
         $preloader,
         $animationBlock,
         $text,
@@ -96,13 +101,13 @@
 
             // Позиционирование анимации в центре
             element.on('scroll', fixAnimBlock).trigger('scroll');
-            function fixAnimBlock () {
+            function fixAnimBlock() {
                 var scrollTop = element.scrollTop(),
                     preloaderPosition,
                     preloaderHeight = $preloaderContainer.height();
-
+                console.log('adkfjasd');
                 preloaderPosition = Math.round(elementHeight / 2 - preloaderHeight / 2 + scrollTop) + 'px';
-                //$preloaderContainer.css({'top': preloaderPosition});
+                $preloaderContainer.css({ 'top': preloaderPosition });
             }
         }
 
@@ -154,7 +159,7 @@
             return this.each(function () {
                 methods[firstArg].call(this, argsArr);
             });
-        } else if (typeof(firstArg) === 'object' || !firstArg) {
+        } else if (typeof firstArg === 'object' || !firstArg) {
             return this.each(function () {
                 if (!$.data(this, 'plugin_' + pluginName)) {
                     $.data(this, 'plugin_' + pluginName);
@@ -166,3 +171,7 @@
         }
     };
 })(jQuery, window, document);
+
+/***/ })
+
+});

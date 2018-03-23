@@ -3,7 +3,7 @@
 		<h1 v-if="manageEmployee()" class="wp-heading-inline">Employee</h1>
 		<a v-if="manageEmployee()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
-		<add-new-record-form v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div v-if="manageEmployee()" class="hrm-table-action hrm-bulk-wrap">
@@ -29,7 +29,7 @@
 			<div class="hrm-clear"></div>
 		</div>
 		
-	    <hrm-table :fields="fields"></hrm-table>
+	    <hrm-table id="hrm-employee-list-table" :fields="fields"></hrm-table>
 	    
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 

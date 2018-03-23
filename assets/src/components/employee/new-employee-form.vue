@@ -46,11 +46,23 @@
 		methods: {
 			selfNewRecord () {
 				var self = this;
-
-				//self.loading = true;
-				//self.canSubmit = false;
-
 				var postData = this.generateFieldData(this.fields);
+				var isFormValidate = true;
+
+				this.fields.forEach(function(val) {
+					if(
+						val.required === true
+							&&
+						!postData[val.name]
+					) {
+						hrm.Toastr.error(val.label + ' is required!');
+						isFormValidate = false;
+					}
+				});
+				
+				if (!isFormValidate) {
+					return false;
+				}	
 				
 				var args = {
 					data: postData,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP human resource management running
+ * Plugin Name: WP human resource management
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman

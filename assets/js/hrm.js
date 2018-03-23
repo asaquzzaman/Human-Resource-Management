@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"818cc1f292867f6a8f5c","3":"a509473c0c59572b3517","4":"4a69fb96d940cb81b56c","5":"cbc677f12fa25b5698f4","6":"f245bc64842f5d016637","7":"8a19f7ad768e7be4c1ab","8":"ce2d4ca303cd5eb3c04c","9":"7cad7b0b7f00a5b38676","10":"6ea8693b3b6e56c5c2e9","11":"b0ebcfee4b1ed81f3b0b","12":"ef5e4e729fdfb4f2c33b","13":"5736b38dda9c6a964f3d","14":"5288bfbf019e8a4d4ffb","15":"e43a4c5de7c125a1906e","16":"c88fe08f5fb1d47636e4","17":"a67c8b0898eb94a64c8e","18":"95d6988ae661294d547c","19":"c397d439f64bb8d410a5","20":"640e8c2d4d271e4e7182","21":"fd12690b54831bbda694","22":"3fc38d562595efc9d173","23":"efd2a6e7f49c17d83be5","24":"acb6852ca3c64d6d281e","25":"df3b9d90113fe1e1da93","26":"facae551ec147a9cbb4a","28":"ee36c1f0240a6b55189c","29":"a3894235cf3b702a4d09","30":"25cae99b0388e02c31f4"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"818cc1f292867f6a8f5c","3":"a509473c0c59572b3517","4":"4a69fb96d940cb81b56c","5":"cbc677f12fa25b5698f4","6":"f245bc64842f5d016637","7":"fd92af4eb5d3782e86b0","8":"ce2d4ca303cd5eb3c04c","9":"7cad7b0b7f00a5b38676","10":"6ea8693b3b6e56c5c2e9","11":"b0ebcfee4b1ed81f3b0b","12":"ef5e4e729fdfb4f2c33b","13":"5736b38dda9c6a964f3d","14":"5288bfbf019e8a4d4ffb","15":"e43a4c5de7c125a1906e","16":"c88fe08f5fb1d47636e4","17":"a67c8b0898eb94a64c8e","18":"95d6988ae661294d547c","19":"c397d439f64bb8d410a5","20":"640e8c2d4d271e4e7182","21":"fd12690b54831bbda694","22":"3fc38d562595efc9d173","23":"efd2a6e7f49c17d83be5","24":"acb6852ca3c64d6d281e","25":"df3b9d90113fe1e1da93","26":"facae551ec147a9cbb4a","28":"ee36c1f0240a6b55189c","29":"a3894235cf3b702a4d09","30":"25cae99b0388e02c31f4"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -1343,6 +1343,7 @@ hrm.Vue.directive('hrm-uploader', {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
 //
 //
 //
@@ -3234,7 +3235,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			nameSpace: 'employee',
 			modelName: '',
-			modelTransformer: ''
+			modelTransformer: '',
+			isFetchRecord: false
 		};
 	},
 	methods: {
@@ -3249,13 +3251,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					experiance.editMode = status;
 				}
 			} else {
-
 				this.$store.commit(this.nameSpace + '/showHideNewRecordForm', status);
 			}
 		},
 
 		recordDelete(deletedId, callback) {
 			var self = this;
+
+			deletedId.forEach(function (id) {
+				jQuery('tr[data-recordId="' + id + '"]').fadeOut();
+			});
 
 			var form_data = {
 				data: {
@@ -3331,6 +3336,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						args.callback.call(self, true, res);
 					}
 
+					hrm.Vue.nextTick(function () {
+						var tr = jQuery('.wp-list-table').find('tbody tr:first-child');
+
+						tr.css({ display: 'none' });
+						tr.addClass('new-records');
+						tr.fadeIn(1000);
+
+						setTimeout(function () {
+							tr.removeClass('new-records');
+						}, 3000);
+					});
 					// hrm.Toastr.success(res.message);
 				},
 
@@ -3369,6 +3385,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var request_data = {
 				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-employee-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -3376,6 +3395,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-employee-list-table');
+					self.isFetchRecord = true;
 				}
 			};
 
@@ -3516,15 +3537,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('.hrm-edit-toggle[data-recordId="' + id + '"]').find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('.hrm-edit-toggle[data-recordId="' + id + '"]');
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
+
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -3551,12 +3609,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -6054,12 +6123,11 @@ var HRM_Admin = {
 hrm.Vue.directive('hrm-slide-down', {
     inserted: function (el) {
         var node = jQuery(el);
+        node.css({
+            display: 'none'
+        });
 
-        if (node.is(':visible')) {
-            node.slideUp(400);
-        } else {
-            node.slideDown(400);
-        }
+        node.slideDown(400);
     }
 });
 
@@ -6289,7 +6357,7 @@ function menuFix(slug) {
                 duration: '',
 
                 // z-index property
-                zIndex: '',
+                zIndex: '9999',
 
                 // sets relative position to preloader's parent
                 setRelative: false
@@ -6297,7 +6365,12 @@ function menuFix(slug) {
             };
             var args = jQuery.extend(true, pre_define, args);
 
-            jQuery('#' + id).preloader(args);
+            hrm.Vue.nextTick(function () {
+                jQuery('#' + id).css({
+                    position: 'relative'
+                });
+                jQuery('#' + id).preloader(args);
+            });
         },
 
         loadingStop(id) {
@@ -7093,7 +7166,7 @@ var render = function() {
                     expression: "field.model"
                   }
                 ],
-                attrs: { type: "text" },
+                attrs: { type: "text", required: field.required },
                 domProps: { value: field.model },
                 on: {
                   input: function($event) {
@@ -7127,7 +7200,7 @@ var render = function() {
                     expression: "field.model"
                   }
                 ],
-                attrs: { type: "email" },
+                attrs: { type: "email", required: field.required },
                 domProps: { value: field.model },
                 on: {
                   input: function($event) {
@@ -7158,6 +7231,7 @@ var render = function() {
                   staticClass: "pm-datepickter-to",
                   attrs: {
                     placeholder: "From",
+                    required: field.required,
                     dependency: "pm-datepickter-from"
                   },
                   model: {
@@ -7189,6 +7263,7 @@ var render = function() {
                 _c("hrm-date-picker", {
                   staticClass: "pm-datepickter-to",
                   attrs: {
+                    required: field.required,
                     placeholder: "To",
                     dependency: "pm-datepickter-from"
                   },
@@ -7226,7 +7301,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "hrm-des-field",
-                attrs: { name: "description", id: "description" },
+                attrs: {
+                  required: field.required,
+                  name: "description",
+                  id: "description"
+                },
                 domProps: { value: field.model },
                 on: {
                   input: function($event) {
@@ -7294,7 +7373,11 @@ var render = function() {
                             expression: "field.model"
                           }
                         ],
-                        attrs: { type: "radio", id: option.name },
+                        attrs: {
+                          type: "radio",
+                          required: field.required,
+                          id: option.name
+                        },
                         domProps: {
                           value: option.value,
                           checked: _vm._q(field.model, option.value)
@@ -7349,7 +7432,11 @@ var render = function() {
                             expression: "field.model"
                           }
                         ],
-                        attrs: { type: "checkbox", id: option.name },
+                        attrs: {
+                          type: "checkbox",
+                          required: field.required,
+                          id: option.name
+                        },
                         domProps: {
                           value: option.value,
                           checked: Array.isArray(field.model)
@@ -7439,7 +7526,9 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "hrm-clear" })
+              _c("div", { staticClass: "hrm-clear" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "description" })
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -7466,9 +7555,10 @@ var render = function() {
                       "select-label": "",
                       "selected-label": "selected",
                       "deselect-label": "",
+                      "track-by": field.trackBy,
                       taggable: false,
                       label: field.optionLabel,
-                      "allow-empty": true
+                      "allow-empty": false
                     },
                     model: {
                       value: field.model,
@@ -7482,7 +7572,14 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "hrm-clear" })
+              _c("div", { staticClass: "hrm-clear" }),
+              _vm._v(" "),
+              field.helpText
+                ? _c("span", {
+                    staticClass: "description",
+                    domProps: { innerHTML: _vm._s(field.helpText) }
+                  })
+                : _vm._e()
             ])
           : _vm._e()
       ])

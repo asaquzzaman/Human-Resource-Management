@@ -15,7 +15,7 @@
 	            <label for="title">
 	                {{ field.label }}<em v-if="field.required">*</em>
 	            </label>
-	            <input type="text" v-model="field.model">
+	            <input type="text" :required="field.required" v-model="field.model">
 	            <span class="hrm-clear"></span>
 	            <span class="description"></span>
         	</div>
@@ -24,7 +24,7 @@
 	            <label for="title">
 	                {{ field.label }}<em v-if="field.required">*</em>
 	            </label>
-	            <input type="email" v-model="field.model">
+	            <input type="email" :required="field.required" v-model="field.model">
 	            <span class="hrm-clear"></span>
 	            <span class="description"></span>
         	</div>
@@ -33,7 +33,7 @@
         		<label for="title">
 	                {{ field.label }} <em v-if="field.required">*</em>
 	            </label>
-	        	<hrm-date-picker placeholder="From" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+	        	<hrm-date-picker placeholder="From" :required="field.required" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 	          	<span class="hrm-clear"></span>
             	<span class="description"></span>
         	</div>
@@ -42,7 +42,7 @@
         		<label for="title">
 	                {{ field.label }}<em v-if="field.required">*</em>
 	            </label>
-	        	<hrm-date-picker placeholder="To" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+	        	<hrm-date-picker :required="field.required" placeholder="To" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 	          	<span class="hrm-clear"></span>
             	<span class="description"></span>
         	</div>
@@ -52,7 +52,7 @@
         		<label for="description">
 					{{ field.label }} <em v-if="field.required">*</em>
 				</label>
-				<textarea name="description" v-model="field.model" class="hrm-des-field" id="description"></textarea>
+				<textarea :required="field.required" name="description" v-model="field.model" class="hrm-des-field" id="description"></textarea>
 				<span class="hrm-clear"></span>
 				<span class="description"></span>
         	</div>
@@ -73,7 +73,7 @@
 					{{ field.label }} <em v-if="field.required">*</em>
 				</label>
 				<span class="hrm-radio-wrap" v-for="(option, optKey) in field.options" :key="optKey">
-					<input type="radio" :value="option.value" v-model="field.model" :id="option.name">
+					<input type="radio" :required="field.required" :value="option.value" v-model="field.model" :id="option.name">
 					<label class="hrm-radio" :for="option.name">{{ option.label }}</label>
 				</span>
 				<span class="hrm-clear"></span>
@@ -86,7 +86,7 @@
 					{{ field.label }} <em v-if="field.required">*</em>
 				</label>
 				<span class="hrm-checkbox-wrap" v-for="(option, optKey) in field.options" :key="optKey">
-					<input type="checkbox" :value="option.value"  v-model="field.model" :id="option.name">
+					<input type="checkbox" :required="field.required" :value="option.value"  v-model="field.model" :id="option.name">
 					<label class="hrm-checkbox" :for="option.name">{{ option.label }}</label>
 				</span>
 				<span class="hrm-clear"></span>
@@ -99,7 +99,6 @@
 					<em v-if="field.required">*</em>
 				</label>
 				<div class="hrm-multiselect">
-
 			        <hrm-multiselect 
 			            v-model="field.model" 
 			            :options="field.options" 
@@ -120,6 +119,7 @@
 			        </hrm-multiselect>               
 			    </div>
 			    <div class="hrm-clear"></div>
+			    <span class="description"></span>
 			</div>
 
 			<div v-if="field.type == 'select'" class="hrm-form-field hrm-leave-type-wrap">
@@ -128,7 +128,6 @@
 					<em v-if="field.required">*</em>
 				</label>
 				<div class="hrm-multiselect">
-
 			        <hrm-multiselect 
 			            v-model="field.model" 
 			            :options="field.options" 
@@ -141,13 +140,15 @@
 			            select-label=""
 			            selected-label="selected"
 			            deselect-label=""
+			            :track-by="field.trackBy"
 			            :taggable="false"
 			            :label="field.optionLabel"
-			            :allow-empty="true">
+			            :allow-empty="false">
 
 			        </hrm-multiselect>               
 			    </div>
 			    <div class="hrm-clear"></div>
+			    <span v-if="field.helpText" class="description" v-html="field.helpText"></span>
 			</div>
         </div>
 	</div>

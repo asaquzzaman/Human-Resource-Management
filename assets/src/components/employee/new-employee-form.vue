@@ -74,6 +74,9 @@
 					}
 				}
 
+				self.loading = true;
+				self.canSubmit = false;
+
 				this.addNewRecord(args);
 			},
 

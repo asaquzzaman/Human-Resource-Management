@@ -42,9 +42,9 @@
                     </td>
                 </tr>
                 
-                <tr v-else id="edit-8" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle" style="">
+                <tr v-else :id="'hrm-edit-'+record.id" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle" style="">
                 	<td colspan="9" class="colspanchange">
-                		<form class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
+                		<form :id="'hrm-edit-form-'+record.id" class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
 								<div class="inline-edit-col">
@@ -140,7 +140,12 @@
 		computed: {
 			records () {
 				return this.$store.state[this.nameSpace].records;
-			}
+			},
+			pagination () {
+            	var pagination = this.$store.state[this.nameSpace].pagination;
+            	pagination['total_pages'] = Math.ceil(pagination.total/pagination.per_page);
+            	return pagination;
+            }
 		},
 
 		watch: {
@@ -187,10 +192,10 @@
 				var self = this,
 					data = {};
 
-				data['id']           = record.id;
+				data['id']  = record.id;
 
-				//self.canSubmit = false;
-				//self.loading = true;
+				self.canSubmit = false;
+				self.loading = true;
 
 				self.fields.forEach(function(field) {
 					if ( !field.editable ) {
@@ -235,6 +240,7 @@
 							&&
 						self.pagination.total_pages > 1
 					) {
+
 						self.getRecords();
 					}
 				})

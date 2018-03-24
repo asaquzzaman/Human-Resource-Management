@@ -236,7 +236,7 @@ function FormFields (self) {
 			},
 			//Filter edit submited data
 			filterEditingData (val) {
-				return val.key;
+				return val ? val.key : '';
 			},
 			//Table print data
 			filterPrintData (val) {

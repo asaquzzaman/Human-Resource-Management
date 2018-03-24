@@ -64,6 +64,9 @@ export default {
 			var form_data = {
                 data: args.data,
 
+                beforeSend () {
+                	//self.loadingStart('hrm-edit-form-'+args.data.id);
+                },
                 success: function(res) {
                 	self.recordMeta(res.data);
 
@@ -72,7 +75,6 @@ export default {
                 	if (typeof args.callback === 'function') {
                         args.callback.call(self, true, res);
                     } 
-                    
                 },
 
                 error: function(res) {
@@ -107,17 +109,12 @@ export default {
                     } 
                     
                     hrm.Vue.nextTick(function() {
-                    	var tr = jQuery('.wp-list-table')
-                    		.find('tbody tr:first-child');
+	                    var tr = jQuery('.wp-list-table')
+	                    	.find('tbody tr:first-child');
+	                    
+	                    self.newRecordEffect(tr);
+                	})
 
-                    	tr.css({ display: 'none' });
-                    	tr.addClass('new-records');
-                    	tr.fadeIn(1000);
-
-                    	setTimeout(function() {
-                    		tr.removeClass('new-records');
-                    	}, 3000);
-                    });
                    // hrm.Toastr.success(res.message);
                 },
 
@@ -186,6 +183,9 @@ export default {
 
 			var form_data = {
 	            data: this.$route.query,
+	            beforeSend () {
+                	self.loadingStart('hrm-employee-list-table');
+                },
 
 	            success: function(res) {
 	            	res.data.forEach(function(record) {
@@ -198,7 +198,9 @@ export default {
 	            	if (typeof callback === 'function') {
 	                    callback.call(self, true, res);
 	                } 
-	                
+
+	                self.loadingStop('hrm-employee-list-table');
+                    self.isFetchRecord = true;
 	            },
 
 	            error: function(res) {

@@ -21,7 +21,7 @@ export default {
 			node.slideDown(400);
 	    },
 	    editSlideUp (id, callBack) {
-        	jQuery('.hrm-edit-toggle[data-recordId="'+id+'"]')
+        	jQuery('#hrm-edit-'+id)
         		.find('form')
         		.slideUp(400, function() {
         			callBack();
@@ -29,7 +29,7 @@ export default {
         	);
         },
         editSlideDwon (id) {
-        	var node = jQuery('.hrm-edit-toggle[data-recordId="'+id+'"]');
+        	var node = jQuery('#hrm-edit-'+id);
 
 	        node.find('form').css({
 	            display: 'none'
@@ -76,8 +76,16 @@ export default {
 
 		updateRecord (state, record) {
 			let index = state.getIndex( state.records, record.id, 'id' );
+			var self = this;
+			state.editSlideUp(record.id, function() {
+				state.records.splice(index, 1, record);
 
-			state.records.splice(index, 1, record);
+				hrm.Vue.nextTick(function() {
+					var tr = jQuery('tr[data-recordId="'+record.id+'"]');
+                	self._vm.updateRecordEffect(tr);
+				});
+			});
+			
 		},
 
 		showHideEditForm (state, data) {

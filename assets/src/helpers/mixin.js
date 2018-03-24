@@ -201,6 +201,27 @@ export default hrm.Vue.mixin({
             }
             
             return parseInt(this.$route.params.employeeId);
+        },
+
+        newRecordEffect (selector) {
+            selector.css({ display: 'none' });
+            selector.addClass('new-records');
+            selector.fadeIn(1000);
+
+            setTimeout(function() {
+                selector.removeClass('new-records');
+            }, 3000);
+        },
+
+        updateRecordEffect (selector) {
+            //selector.css({ display: 'none' });
+            selector.addClass('new-records');
+            //selector.fadeIn(1000);
+
+            setTimeout(function() {
+                selector.removeClass('new-records');
+            }, 3000);
+            
         }
 	},
 });

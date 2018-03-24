@@ -19,9 +19,11 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="text">
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="search">
 
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 
 				</div>
 
@@ -65,8 +67,18 @@
 					name: this.$route.query.name
 				},
 				bulkAction: -1,
-
 				fields: FormFields(this),
+			}
+		},
+
+		watch: {
+			search: {
+				handler(obj){
+			    	if (obj.name == '') {
+			    		this.recordSearch();
+			       	}
+			    },
+			    deep: true
 			}
 		},
 		
@@ -146,7 +158,6 @@
 
 			recordSearch () {
 				this.$router.push({query: this.search});
-				//this.getRecords();
 			}
 		}
 	}

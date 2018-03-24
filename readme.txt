@@ -17,8 +17,12 @@ WP HRM is a powerful WordPress plugin that turns your website into a fully funct
 
 HR Management is all about people, not the paperwork. So, why waste your time on traditional systems and paperworks? Be organized and adapt the latest technology to build your very own HR Management system directly on your WordPress site using WP HRM (Human Resource Management).
 
+== Multi-Site ==
 
-= Features & Advantages of WP HRM  =
+This plugin is not compatible with multi-site
+
+
+== Features & Advantages of WP HRM  ==
 Here are some notable features that you may consider before diving in.
 
 * **Powerful HR Admin Dashboard** 

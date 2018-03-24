@@ -794,7 +794,7 @@ function hrm_get_country_by_code( $code ) {
 }
 
 function hrm_per_page() {
-    return 2;
+    return 1;
 }
 
 function valid_date_time($date, $format = 'Y-m-d H:i:s') {

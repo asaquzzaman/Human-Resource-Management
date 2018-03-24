@@ -952,14 +952,27 @@ label em {
   background: #9ea3a8;
 }
 
+
+
 #hrm .preloader-animation,
-.hrm  .preloader-animation {
+.hrm .preloader-animation {
     display: inline-block;
     height: 6.5em;
     width: 7.1em;
     background: url("images/hrm-loading.gif") no-repeat center center;
     animation: none;
     border: none;
+}
+
+#hrm .preloader-update-animation,
+.hrm .preloader-update-animation {
+    display: inline-block;
+    height: 70px;
+    width: 70px;
+    background: url(images/load-icon.gif) no-repeat center center;
+    animation: none;
+    border: none;
+    background-size: 70px;
 }
 
 #hrm .preloader-animation:before,

@@ -47,20 +47,8 @@
 			selfNewRecord () {
 				var self = this;
 				var postData = this.generateFieldData(this.fields);
-				var isFormValidate = true;
-
-				this.fields.forEach(function(val) {
-					if(
-						val.required === true
-							&&
-						!postData[val.name]
-					) {
-						hrm.Toastr.error(val.label + ' is required!');
-						isFormValidate = false;
-					}
-				});
 				
-				if (!isFormValidate) {
+				if (!this.formValidation(this.fields, postData)) {
 					return false;
 				}	
 				

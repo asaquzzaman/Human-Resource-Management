@@ -50,7 +50,9 @@
 								<div class="inline-edit-col">
 						
 									<div class="hrm-edit-field-wrap" v-for="(field, field_index) in filterEditField(fields)">
-										<label class="title">{{ field.label }}</label>
+										<label class="title">
+											{{ field.label }} <em v-if="field.required">*</em>
+										</label>
 										<span class="input-text-wrap">
 											<hrm-edit-field :record="record" :field="field"></hrm-edit-field>
 											<!-- <input type="text" v-model="record[field.name]" class="ptitle"> -->
@@ -194,9 +196,6 @@
 
 				data['id']  = record.id;
 
-				self.canSubmit = false;
-				self.loading = true;
-
 				self.fields.forEach(function(field) {
 					if ( !field.editable ) {
 						return;
@@ -216,6 +215,13 @@
 						self.loading = false;
 					}
 				}
+
+				if (!this.editFormValidation(self.fields, data)) {
+					return false;
+				}
+
+				self.canSubmit = false;
+				self.loading = true;
 				
 				this.updateRecord(args);
 			},

@@ -15,6 +15,7 @@ function FormFields (self) {
 			model: '',
 			label: 'Email',
 			name: 'email',
+			editable: false,
 			required: true
 		},
 		{

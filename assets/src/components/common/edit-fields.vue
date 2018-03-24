@@ -7,19 +7,19 @@
 	
 	
 
-        <input v-if="field.type == 'text'" type="text" v-model="record[field.name]">
+        <input :required="field.required" v-if="field.type == 'text'" type="text" v-model="record[field.name]">
 
 
 
-    	<hrm-date-picker v-if="field.type == 'datePickerFrom'" placeholder="From" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+    	<hrm-date-picker :required="field.required" v-if="field.type == 'datePickerFrom'" placeholder="From" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
     
 
 
-    	<hrm-date-picker v-if="field.type == 'datePickerTo'" placeholder="To" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+    	<hrm-date-picker :required="field.required" v-if="field.type == 'datePickerTo'" placeholder="To" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
   
 
 	
-		<textarea v-if="field.type == 'textarea'" name="description" v-model="record[field.name]" class="hrm-des-field" id="description"></textarea>
+		<textarea :required="field.required" v-if="field.type == 'textarea'" name="description" v-model="record[field.name]" class="hrm-des-field" id="description"></textarea>
 	
 
 	
@@ -28,14 +28,14 @@
 
 
 		<span v-if="field.type == 'radio'" class="hrm-radio-wrap" v-for="(option, optKey) in field.options" :key="optKey">
-			<input type="radio" :value="option.value" v-model="record[field.name]" :id="option.name">
+			<input :required="field.required" type="radio" :value="option.value" v-model="record[field.name]" :id="option.name">
 			<label class="hrm-radio" :for="option.name">{{ option.label }}</label>
 		</span>
 	
 
 
 		<span v-if="field.type == 'checkbox'" class="hrm-checkbox-wrap" v-for="(option, optKey) in field.options" :key="optKey">
-			<input type="checkbox" :value="option.value"  v-model="record[field.name]" :id="option.name">
+			<input :required="field.required" type="checkbox" :value="option.value"  v-model="record[field.name]" :id="option.name">
 			<label class="hrm-checkbox" :for="option.name">{{ option.label }}</label>
 		</span>
 	

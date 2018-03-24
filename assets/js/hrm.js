@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"6eb132dbb3bf5a849cfd","3":"0958da7f7e180f361c8d","4":"9888fc1f4cfd93011433","5":"40ee4971da2636fc6c69","6":"3d00c72f32d153f211d9","7":"aa083456fd9fdd95a23f","8":"4edbc4cebcea77db88fd","9":"bd4bb401f7253fd3d5a6","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"0f6acff16c31774ee630","15":"3c07abd0a6ddca4d8666","16":"b8ccd397364da15b0a07","17":"a69a97a27214cb6bbd62","18":"8757e316fbd5516b806f","19":"835623e513b088da72fb","20":"b3917946b0b312575151","21":"75cc023973f3cfbdce9d","22":"034e6ce216eddee716b9","23":"dacb8ec2aaca91f57a3e","24":"26be056f17e11cd389f9","25":"9c6b9b48a88d694a7a48","26":"181c462755b58235e1e3","28":"d717398d368b42d28490","29":"b816f0d167716afd032b","30":"d02c74fcbea59b0cc1a6"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"6eb132dbb3bf5a849cfd","3":"0958da7f7e180f361c8d","4":"9888fc1f4cfd93011433","5":"40ee4971da2636fc6c69","6":"3d00c72f32d153f211d9","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"bd4bb401f7253fd3d5a6","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"0f6acff16c31774ee630","15":"3c07abd0a6ddca4d8666","16":"b8ccd397364da15b0a07","17":"a69a97a27214cb6bbd62","18":"8757e316fbd5516b806f","19":"835623e513b088da72fb","20":"b3917946b0b312575151","21":"75cc023973f3cfbdce9d","22":"034e6ce216eddee716b9","23":"dacb8ec2aaca91f57a3e","24":"26be056f17e11cd389f9","25":"9c6b9b48a88d694a7a48","26":"181c462755b58235e1e3","28":"d717398d368b42d28490","29":"b816f0d167716afd032b","30":"d02c74fcbea59b0cc1a6"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -3610,12 +3610,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				data: args.data,
 
 				beforeSend() {
-					//self.loadingStart('hrm-edit-form-'+args.data.id);
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
 				},
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -3643,11 +3644,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: args.data,
-
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -3807,6 +3811,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		manageEmployee() {
 			return hrm_user_can('manage_employee');
+		},
+
+		formValidation(fields, postData) {
+			var isFormValidate = true;
+
+			fields.forEach(function (val) {
+				if (val.required === true && !postData[val.name]) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
+		},
+
+		editFormValidation(fields, postData) {
+			var isFormValidate = true;
+
+			fields.forEach(function (val) {
+				if (val.editable !== false && val.required === true && !postData[val.name]) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
 		}
 	}
 });
@@ -6685,7 +6715,9 @@ function menuFix(slug) {
                 zIndex: '9999',
 
                 // sets relative position to preloader's parent
-                setRelative: false
+                setRelative: false,
+
+                animationClass: 'preloader-animation'
 
             };
             var args = jQuery.extend(true, pre_define, args);
@@ -8245,7 +8277,7 @@ var render = function() {
                 expression: "record[field.name]"
               }
             ],
-            attrs: { type: "text" },
+            attrs: { required: _vm.field.required, type: "text" },
             domProps: { value: _vm.record[_vm.field.name] },
             on: {
               input: function($event) {
@@ -8261,7 +8293,11 @@ var render = function() {
       _vm.field.type == "datePickerFrom"
         ? _c("hrm-date-picker", {
             staticClass: "pm-datepickter-to",
-            attrs: { placeholder: "From", dependency: "pm-datepickter-from" },
+            attrs: {
+              required: _vm.field.required,
+              placeholder: "From",
+              dependency: "pm-datepickter-from"
+            },
             model: {
               value: _vm.record[_vm.field.name],
               callback: function($$v) {
@@ -8275,7 +8311,11 @@ var render = function() {
       _vm.field.type == "datePickerTo"
         ? _c("hrm-date-picker", {
             staticClass: "pm-datepickter-to",
-            attrs: { placeholder: "To", dependency: "pm-datepickter-from" },
+            attrs: {
+              required: _vm.field.required,
+              placeholder: "To",
+              dependency: "pm-datepickter-from"
+            },
             model: {
               value: _vm.record[_vm.field.name],
               callback: function($$v) {
@@ -8297,7 +8337,11 @@ var render = function() {
               }
             ],
             staticClass: "hrm-des-field",
-            attrs: { name: "description", id: "description" },
+            attrs: {
+              required: _vm.field.required,
+              name: "description",
+              id: "description"
+            },
             domProps: { value: _vm.record[_vm.field.name] },
             on: {
               input: function($event) {
@@ -8333,7 +8377,11 @@ var render = function() {
                     expression: "record[field.name]"
                   }
                 ],
-                attrs: { type: "radio", id: option.name },
+                attrs: {
+                  required: _vm.field.required,
+                  type: "radio",
+                  id: option.name
+                },
                 domProps: {
                   value: option.value,
                   checked: _vm._q(_vm.record[_vm.field.name], option.value)
@@ -8366,7 +8414,11 @@ var render = function() {
                     expression: "record[field.name]"
                   }
                 ],
-                attrs: { type: "checkbox", id: option.name },
+                attrs: {
+                  required: _vm.field.required,
+                  type: "checkbox",
+                  id: option.name
+                },
                 domProps: {
                   value: option.value,
                   checked: Array.isArray(_vm.record[_vm.field.name])

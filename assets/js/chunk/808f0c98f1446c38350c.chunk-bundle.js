@@ -112,6 +112,8 @@ wpSpearHrm([8],{
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	mixins: [HRMMixin.employee],
@@ -196,9 +198,6 @@ wpSpearHrm([8],{
 
 			data['id'] = record.id;
 
-			self.canSubmit = false;
-			self.loading = true;
-
 			self.fields.forEach(function (field) {
 				if (!field.editable) {
 					return;
@@ -218,6 +217,13 @@ wpSpearHrm([8],{
 					self.loading = false;
 				}
 			};
+
+			if (!this.editFormValidation(self.fields, data)) {
+				return false;
+			}
+
+			self.canSubmit = false;
+			self.loading = true;
 
 			this.updateRecord(args);
 		},
@@ -494,16 +500,8 @@ wpSpearHrm([8],{
 		selfNewRecord() {
 			var self = this;
 			var postData = this.generateFieldData(this.fields);
-			var isFormValidate = true;
 
-			this.fields.forEach(function (val) {
-				if (val.required === true && !postData[val.name]) {
-					hrm.Toastr.error(val.label + ' is required!');
-					isFormValidate = false;
-				}
-			});
-
-			if (!isFormValidate) {
+			if (!this.formValidation(this.fields, postData)) {
 				return false;
 			}
 
@@ -566,6 +564,7 @@ function FormFields(self) {
 		model: '',
 		label: 'Email',
 		name: 'email',
+		editable: false,
 		required: true
 	}, {
 		type: 'text',
@@ -1618,7 +1617,16 @@ var render = function() {
                                                 _c(
                                                   "label",
                                                   { staticClass: "title" },
-                                                  [_vm._v(_vm._s(field.label))]
+                                                  [
+                                                    _vm._v(
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                                        _vm._s(field.label) +
+                                                        " "
+                                                    ),
+                                                    field.required
+                                                      ? _c("em", [_vm._v("*")])
+                                                      : _vm._e()
+                                                  ]
                                                 ),
                                                 _vm._v(" "),
                                                 _c(

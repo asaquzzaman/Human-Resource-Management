@@ -159,7 +159,9 @@ export default hrm.Vue.mixin({
                 zIndex: '9999', 
 
                 // sets relative position to preloader's parent
-                setRelative: false 
+                setRelative: false,
+
+                animationClass: 'preloader-animation'
 
             };
             var args = jQuery.extend(true, pre_define, args);

@@ -21,7 +21,8 @@
             percent: '', // from 0 to 100
             duration: '', // in ms
             zIndex: '', // setting z-index rule to .preloader
-            setRelative: false // setting relative position to preloader's parent
+            setRelative: false, // setting relative position to preloader's parent
+            animationClass: 'preloader-animation'
         },
         $preloader,
         $animationBlock,
@@ -74,17 +75,18 @@
             percentVal,
             elementHeight,
             elementScrollHeight,
-            preloaderHeight;
+            preloaderHeight,
+            animationClass = this.options.animationClass;
 
         if (isInited) {
             console.warn('Plugin ' + pluginName + ' is already initialized');
             return false;
         }
-
-        element.prepend('<div class="preloader"><div class="preloader-container"><div class="preloader-animation"></div></div></div>');
+        
+        element.prepend('<div class="preloader"><div class="preloader-container"><div class="'+animationClass+'"></div></div></div>');
         $preloader = element.find('.preloader');
         $preloaderContainer = element.find('.preloader-container');
-        $animationBlock = $preloader.find('.preloader-animation');
+        $animationBlock = $preloader.find('.'+animationClass);
 
         // Установка высоты прелоадера
         elementHeight = element.height();

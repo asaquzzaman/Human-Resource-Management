@@ -65,12 +65,16 @@ export default {
                 data: args.data,
 
                 beforeSend () {
-                	//self.loadingStart('hrm-edit-form-'+args.data.id);
+                	self.loadingStart(
+                		'hrm-edit-form-'+args.data.id, 
+                		{animationClass: 'preloader-update-animation'}
+                	);
                 },
                 success: function(res) {
                 	self.recordMeta(res.data);
 
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
+                	self.loadingStop('hrm-edit-form-'+res.data.id);
 
                 	if (typeof args.callback === 'function') {
                         args.callback.call(self, true, res);
@@ -98,11 +102,17 @@ export default {
 
 			var form_data = {
                 data: args.data,
-
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-hidden-form', 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
                 success: function(res) {
                 	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
+                	self.loadingStop('hrm-hidden-form');
 
                 	if (typeof args.callback === 'function') {
                         args.callback.call(self, true, res);
@@ -265,6 +275,42 @@ export default {
 
 		manageEmployee() {
             return hrm_user_can('manage_employee');
+        },
+
+        formValidation (fields, postData) {
+        	var isFormValidate = true;
+
+			fields.forEach(function(val) {
+				if(
+					val.required === true
+						&&
+					!postData[val.name]
+				) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
+        },
+
+        editFormValidation (fields, postData) {
+        	var isFormValidate = true;
+
+			fields.forEach(function(val) {
+				if(
+					val.editable !== false
+						&&
+					val.required === true
+						&&
+					!postData[val.name]
+				) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
         }
 	}		
 }

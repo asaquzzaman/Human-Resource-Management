@@ -1,7 +1,7 @@
 <template>
 	<div class="hrm-leave">
-		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<table class="wp-list-table widefat fixed striped">
+		<div id="hrm-leave-record-wrap" class="metabox-holder hrm-leave-type-records-wrap">
+			<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
 						<th class="manage-column column-cb">Employee</th>
@@ -16,7 +16,7 @@
 
 				</thead>
 				<tbody>
-					<tr class="leave-action-tr" v-for="(pendingLeave, index) in pendingLeaves" :key="index">
+					<tr :data-recordId="pendingLeave.id" :id="'hrm-tr-'+pendingLeave.id"  class="leave-action-tr" v-for="(pendingLeave, index) in pendingLeaves" :key="index">
 						
 						<td v-if="!pendingLeave.metaSummeryDisplay">
 							<div>
@@ -29,8 +29,9 @@
 								</div>
 				                <div class="leave-action-wrap">
 				                    <div class="leave-action">
-				                        <a href="#" @click.prevent="selfEmployeeLeaveSummery(pendingLeave.employee.data.id, pendingLeave.id)" class="pm-todo-edit">
+				                        <a href="#" @click.prevent="selfEmployeeLeaveSummery(pendingLeave.employee.data.id, pendingLeave.id, $event)" class="pm-todo-edit">
 				                            <span class="">Summery</span>
+				                            <span class="hrm-spinner" style="display: none;"></span>
 				                        </a>
 				                    </div>
 				                </div>
@@ -73,7 +74,7 @@
 						</td>
 
 						<td colspan="8" v-if="pendingLeave.metaSummeryDisplay">
-							<div>
+							<div :id="'hrm-toggle-'+pendingLeave.id">
 
 									<table class="wp-list-table widefat fixed striped">
 										<thead>
@@ -117,7 +118,7 @@
 
 					<tr v-if="!pendingLeaves.length">
 						
-						<td colspan="7">No record found!</td>
+						<td colspan="8">No record found!</td>
 					</tr>
 				</tbody>
 			</table>
@@ -174,8 +175,11 @@
 			total () {
 				
 			},
-			selfEmployeeLeaveSummery (employee_id, row_id) {
-				
+			selfEmployeeLeaveSummery (employee_id, row_id, $event) {
+				var target = jQuery($event.target).parent();
+
+				target.find('.hrm-spinner').show();
+
 				var args = {
 					data: {
 						employee_id: employee_id,
@@ -184,7 +188,10 @@
 					},
 
 					callback () {
-
+						hrm.Vue.nextTick(function() {
+							jQuery('#hrm-toggle-'+row_id).hide();
+							jQuery('#hrm-toggle-'+row_id).slideDown(400);
+						});
 					}
 				}
 
@@ -224,8 +231,10 @@
 	                	);
 	                }
 	            };
-
-	            self.updateLeave(args);
+	            
+	            //jQuery('#hrm-tr-'+pendingLeave.id).fadeOut(400, function() {
+	            	self.updateLeave(args);
+	            //});
 			},
 
 			selfLeaveDelete (id) {

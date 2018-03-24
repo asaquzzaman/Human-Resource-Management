@@ -161,81 +161,102 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "hrm-leave" }, [
-    _c("div", { staticClass: "metabox-holder hrm-leave-type-records-wrap" }, [
-      _c("table", { staticClass: "wp-list-table widefat fixed striped" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.pendingLeaves, function(pendingLeave) {
-              return _c("tr", [
-                _c("td", [
-                  _c("div", [
-                    _c("div", { staticClass: "hrm-td-content" }, [
-                      _c("div", { staticClass: "hrm-image" }, [
-                        _c("img", {
-                          attrs: {
-                            src: pendingLeave.employee.data.avatar_url,
-                            height: "32",
-                            width: "32"
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "hrm-employee-name" }, [
-                        _vm._v(_vm._s(pendingLeave.employee.data.display_name))
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" })
-                    ])
-                  ])
-                ]),
+    _c(
+      "div",
+      {
+        staticClass: "metabox-holder hrm-leave-type-records-wrap",
+        attrs: { id: "hrm-leave-record-wrap" }
+      },
+      [
+        _vm.isFetchRecord
+          ? _c(
+              "table",
+              { staticClass: "wp-list-table widefat fixed striped" },
+              [
+                _vm._m(0),
                 _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t" +
-                      _vm._s(pendingLeave.leave_type.data.name) +
-                      "\n\t\t\t\t\t"
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t" +
-                      _vm._s(_vm.dateFormat(pendingLeave.apply_at.date)) +
-                      "\n\t\t\t\t\t"
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("1 day")]),
-                _vm._v(" "),
-                _c("td", {
-                  domProps: { innerHTML: _vm._s(pendingLeave.comments) }
-                }),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(_vm.dateFormat(pendingLeave.start_time)))
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(_vm.dateFormat(pendingLeave.end_time)))
-                ])
-              ])
-            }),
-            _vm._v(" "),
-            !_vm.pendingLeaves.length
-              ? _c("tr", [
-                  _c("td", { attrs: { colspan: "6" } }, [
-                    _vm._v("No record found!")
-                  ])
-                ])
-              : _vm._e()
-          ],
-          2
-        )
-      ])
-    ])
+                _c(
+                  "tbody",
+                  [
+                    _vm._l(_vm.pendingLeaves, function(pendingLeave) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("div", [
+                            _c("div", { staticClass: "hrm-td-content" }, [
+                              _c("div", { staticClass: "hrm-image" }, [
+                                _c("img", {
+                                  attrs: {
+                                    src: pendingLeave.employee.data.avatar_url,
+                                    height: "32",
+                                    width: "32"
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "hrm-employee-name" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    pendingLeave.employee.data.display_name
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "hrm-clear" })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t" +
+                              _vm._s(pendingLeave.leave_type.data.name) +
+                              "\n\t\t\t\t\t"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t" +
+                              _vm._s(
+                                _vm.dateFormat(pendingLeave.apply_at.date)
+                              ) +
+                              "\n\t\t\t\t\t"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("1 day")]),
+                        _vm._v(" "),
+                        _c("td", {
+                          domProps: { innerHTML: _vm._s(pendingLeave.comments) }
+                        }),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(_vm.dateFormat(pendingLeave.start_time))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.dateFormat(pendingLeave.end_time)))
+                        ])
+                      ])
+                    }),
+                    _vm._v(" "),
+                    !_vm.pendingLeaves.length
+                      ? _c("tr", [
+                          _c("td", { attrs: { colspan: "6" } }, [
+                            _vm._v("No record found!")
+                          ])
+                        ])
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ]
+            )
+          : _vm._e()
+      ]
+    )
   ])
 }
 var staticRenderFns = [

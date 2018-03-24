@@ -83,24 +83,10 @@ var HRM_Leave_Apply_Calendar = {
 	                data: request_data,
 
 	               	beforeSend () {
-		    			jQuery('.hrm-leave-records-form').preloader({
-
-						  // loading text
-						  text: '', 
-
-						  // from 0 to 100 
-						  percent: '', 
-
-						  // duration in ms
-						  duration: '', 
-
-						  // z-index property
-						  zIndex: '9999', 
-
-						  // sets relative position to preloader's parent
-						  setRelative: false 
-						  
-						});
+	               		context.loadingStart(
+	               			'hrm-leave-records-form',
+	               			{animationClass: 'preloader-update-animation'}
+	               		);
 		    		},
 	                
 	                success: function(res) {
@@ -109,7 +95,8 @@ var HRM_Leave_Apply_Calendar = {
 						var holidays = HRM_Leave_Apply_Calendar.render_holidays(start._d, end._d, res.holidays);
 						events      = events.concat( weekend, holidays );
 						context.apply_emp_lev_records = res.records;
-						jQuery('.hrm-leave-records-form').preloader('remove');
+						
+						context.loadingStop('hrm-leave-records-form');
 
 				    	callback(events);
 	                },

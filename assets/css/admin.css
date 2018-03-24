@@ -872,7 +872,7 @@ label em {
   margin-right: 10px;
 }
 .hrm-multiselect .multiselect {
-  width: 30%;
+ /* width: 30%;*/
 }
 .hrm-multiselect .multiselect .multiselect__input {
   width: 100% !important;
@@ -983,8 +983,7 @@ label em {
 }
 
 .hrm-tbl-action-wrap {
-  margin-top: 20px;
-  margin-bottom: 5px;
+  
 }
 
 #hrm .new-records,
@@ -1032,6 +1031,30 @@ label em {
 #hrm .hrm-edit-form,
 .hrm .hrm-edit-form {
     margin: 10px 0 10px 0;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action {
+  display: inline-block;
+  vertical-align: top;
+}
+.hrm-tbl-action-wrap .hrm-table-action .multiselect__tags {
+  border-radius: 0;
+  border: 1px solid #ddd;
+  width: 180px;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action .search-input {
+  padding: 6px;
+  width: 135px;
+  border: 1px solid #ddd;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action input[type="submit"] {
+  margin-top: 2px;
+}
+.nav-tab-wrapper .nav-tab-active,
+.nav-tab-wrapper .router-link-exact-active {
+  background: #f1f1f1;
 }
 
 

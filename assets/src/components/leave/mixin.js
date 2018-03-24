@@ -1,4 +1,9 @@
 export default {
+    data () {
+        return {
+            isFetchRecord: false
+        }
+    },
 	methods: {
         employeeLeaveSummery (args) {
             var self = this;
@@ -8,6 +13,9 @@ export default {
 
             var request_data = {
                 data: { employee_id: data.employee_id },
+                beforeSend () {
+
+                },
                 success (res) {
 
                     self.$store.commit('leave/afterEmployeeLeaveSummery', 
@@ -105,12 +113,18 @@ export default {
 			
             var request_data = {
                 data: data,
+                beforeSend () {
+                    self.loadingStart('hrm-leave-record-wrap');
+                },
                 success (res) {
                     res.data.forEach( function(leave) {
                         self.setLeaveRecoredsMeta(leave);
                     });
                     
                     self.$store.commit('leave/getLeaveRecords', res);
+
+                    self.isFetchRecord = true;
+                    self.loadingStop('hrm-leave-record-wrap');
 
                     if (typeof args.callback === 'function') {
                     	args.callback(res);
@@ -137,6 +151,7 @@ export default {
                 data: args.data,
 
                 beforSend: function(xhr) {
+
                 	self.show_spinner = true;
                 	self.is_leave_btn_disable = true;
                 },
@@ -160,6 +175,7 @@ export default {
                 }
             };
 
+            //jQuery('.wp-list-table').find('tr[data-recordId="'+args.data.id+'"]').fadeOut();
             this.httpRequest('update_leave', form_data);
 		},
 
@@ -187,7 +203,9 @@ export default {
                 return;
             }
             var self = this;
-       
+
+            jQuery('tr[data-recordId="'+args.data.leave_id+'"]').fadeOut();
+            
             var request_data = {
                 data: {
                     leave_id: args.data.leave_id,
@@ -213,7 +231,7 @@ export default {
             var self = this;
             var pre_define = {};
             var args = jQuery.extend(true, pre_define, args );
-            
+
             // Disable submit button for preventing multiple click
             this.submit_disabled = true;
 
@@ -434,14 +452,17 @@ export default {
         },
 
         showHideSummery (showHideSummery, type, status) {
-            status = status || 'toggle';
-            this.$store.commit('leave/showHideSummery', 
-                {
-                    id: showHideSummery.id,
-                    status: status,
-                    type: type
-                }
-            );
+            var self = this;
+            jQuery('#hrm-toggle-'+showHideSummery.id).slideUp(400, function() {
+                status = status || 'toggle';
+                self.$store.commit('leave/showHideSummery', 
+                    {
+                        id: showHideSummery.id,
+                        status: status,
+                        type: type
+                    }
+                );
+            });
         },
 
         getEmployeeDropDown (args) {

@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"6eb132dbb3bf5a849cfd","3":"0958da7f7e180f361c8d","4":"9888fc1f4cfd93011433","5":"40ee4971da2636fc6c69","6":"3d00c72f32d153f211d9","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"bd4bb401f7253fd3d5a6","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"0f6acff16c31774ee630","15":"3c07abd0a6ddca4d8666","16":"b8ccd397364da15b0a07","17":"a69a97a27214cb6bbd62","18":"8757e316fbd5516b806f","19":"835623e513b088da72fb","20":"b3917946b0b312575151","21":"75cc023973f3cfbdce9d","22":"034e6ce216eddee716b9","23":"dacb8ec2aaca91f57a3e","24":"26be056f17e11cd389f9","25":"9c6b9b48a88d694a7a48","26":"181c462755b58235e1e3","28":"d717398d368b42d28490","29":"b816f0d167716afd032b","30":"d02c74fcbea59b0cc1a6"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"de85335a1e15e14e953d","3":"0958da7f7e180f361c8d","4":"9888fc1f4cfd93011433","5":"40ee4971da2636fc6c69","6":"3d00c72f32d153f211d9","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"bd4bb401f7253fd3d5a6","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"0f6acff16c31774ee630","15":"3c07abd0a6ddca4d8666","16":"b8ccd397364da15b0a07","17":"a69a97a27214cb6bbd62","18":"8757e316fbd5516b806f","19":"835623e513b088da72fb","20":"b3917946b0b312575151","21":"75cc023973f3cfbdce9d","22":"b84299f9897ddb853e24","23":"dacb8ec2aaca91f57a3e","24":"f4c64d98887ca97d4aed","25":"08bfba5f97f4a702f9e2","26":"181c462755b58235e1e3","28":"d717398d368b42d28490","29":"b816f0d167716afd032b","30":"d02c74fcbea59b0cc1a6"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -4016,6 +4016,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data() {
+        return {
+            isFetchRecord: false
+        };
+    },
     methods: {
         employeeLeaveSummery(args) {
             var self = this;
@@ -4025,6 +4030,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var request_data = {
                 data: { employee_id: data.employee_id },
+                beforeSend() {},
                 success(res) {
 
                     self.$store.commit('leave/afterEmployeeLeaveSummery', {
@@ -4120,12 +4126,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var request_data = {
                 data: data,
+                beforeSend() {
+                    self.loadingStart('hrm-leave-record-wrap');
+                },
                 success(res) {
                     res.data.forEach(function (leave) {
                         self.setLeaveRecoredsMeta(leave);
                     });
 
                     self.$store.commit('leave/getLeaveRecords', res);
+
+                    self.isFetchRecord = true;
+                    self.loadingStop('hrm-leave-record-wrap');
 
                     if (typeof args.callback === 'function') {
                         args.callback(res);
@@ -4152,6 +4164,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 data: args.data,
 
                 beforSend: function (xhr) {
+
                     self.show_spinner = true;
                     self.is_leave_btn_disable = true;
                 },
@@ -4175,6 +4188,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             };
 
+            //jQuery('.wp-list-table').find('tr[data-recordId="'+args.data.id+'"]').fadeOut();
             this.httpRequest('update_leave', form_data);
         },
 
@@ -4200,6 +4214,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return;
             }
             var self = this;
+
+            jQuery('tr[data-recordId="' + args.data.leave_id + '"]').fadeOut();
 
             var request_data = {
                 data: {
@@ -4445,11 +4461,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         showHideSummery(showHideSummery, type, status) {
-            status = status || 'toggle';
-            this.$store.commit('leave/showHideSummery', {
-                id: showHideSummery.id,
-                status: status,
-                type: type
+            var self = this;
+            jQuery('#hrm-toggle-' + showHideSummery.id).slideUp(400, function () {
+                status = status || 'toggle';
+                self.$store.commit('leave/showHideSummery', {
+                    id: showHideSummery.id,
+                    status: status,
+                    type: type
+                });
             });
         },
 
@@ -4511,6 +4530,32 @@ let HRM_Leave_Store = {
 			});
 
 			return index;
+		},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
 		}
 	},
 
@@ -4525,17 +4570,41 @@ let HRM_Leave_Store = {
 				let index = state.getIndex(state.pending_leaves, data.row_id, 'id');
 				state.pending_leaves[index].metaSummery = data.res;
 				state.pending_leaves[index].metaSummeryDisplay = true;
+
+				// hrm.Vue.nextTick(function() {
+				// 	state.slideDwon();
+				// });
 			}
 		},
 		showHideSummery(state, data) {
+			var status = data.status;
+
 			if (data.type == 'pending') {
 				let index = state.getIndex(state.pending_leaves, data.id, 'id');
 
-				if (data.status == 'toggle') {
-					state.pending_leaves[index].metaSummeryDisplay = state.pending_leaves[index].metaSummeryDisplay ? false : true;
+				if (data.status === 'toggle') {
+					status = state.pending_leaves[index].metaSummeryDisplay ? false : true;
+				}
+
+				if (status === false) {
+					state.pending_leaves[index].metaSummeryDisplay = status;
+					// state.slideUp(function() {
+					// 	state.pending_leaves[index].metaSummeryDisplay = status;
+					// });
 				} else {
 					state.pending_leaves[index].metaSummeryDisplay = status;
+					// hrm.Vue.nextTick(function() {
+					// 	state.slideDwon();
+					// });
 				}
+
+				// if ( data.status == 'toggle' ) {
+				// 	state.pending_leaves[index].metaSummeryDisplay = 
+				// 		state.pending_leaves[index].metaSummeryDisplay
+				// 		? false : true;
+				// } else {
+				// 	state.pending_leaves[index].metaSummeryDisplay = status;
+				// }
 			}
 		},
 		setCancelLeaves(state, calcelLeaves) {
@@ -4560,10 +4629,25 @@ let HRM_Leave_Store = {
 
 		showHideleaveForm(state, status) {
 			if (status === 'toggle') {
-				state.is_leave_form_active = state.is_leave_form_active ? false : true;
+				status = state.is_leave_form_active ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.is_leave_form_active = status;
+				});
 			} else {
 				state.is_leave_form_active = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
+
+			// if ( status === 'toggle' ) {
+			//              state.is_leave_form_active = state.is_leave_form_active ? false : true;
+			//          } else {
+			//              state.is_leave_form_active = status;
+			//          }
 		},
 
 		getLeaveRecords(state, leave_records) {

@@ -501,26 +501,31 @@ if (false) {
 				method: 'create'
 			};
 
-			this.show_spinner = true;
-
 			var form_data = {
 				data: request_data,
 
-				beforSend: function (xhr) {
+				beforeSend: function (xhr) {
 					self.is_leave_btn_disable = true;
+					self.show_spinner = true;
+					self.loadingStart('hrm-leave-records-form', { animationClass: 'preloader-update-animation' });
 				},
 
 				success: function (res) {
+					self.is_leave_btn_disable = false;
 					self.show_spinner = false;
-					console.log(res);
+					self.loadingStop('hrm-leave-records-form');
+
 					// Display a success toast, with a title
 					hrm.Toastr.success(res.success);
 					self.$store.commit('leave/afterCreateNewLeave', res.resource);
+					self.showHideLeaveRecordsForm(false);
 
-					self.slideUp(jQuery('.hrm-form-cancel'), function () {
-						//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
+					//    hrm.Vue.nextTick(function() {
+					//     var tr = jQuery('.wp-list-table')
+					//     	.find('tbody tr:first-child');
 
-					});
+					//     self.newRecordEffect(tr);
+					// })
 				},
 
 				error: function (res) {
@@ -583,33 +588,6 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_search_vue__ = __webpack_require__(390);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -910,6 +888,8 @@ if (false) {
 //
 //
 //
+//
+//
 
 
 
@@ -1074,24 +1054,7 @@ var HRM_Leave_Apply_Calendar = {
 					data: request_data,
 
 					beforeSend() {
-						jQuery('.hrm-leave-records-form').preloader({
-
-							// loading text
-							text: '',
-
-							// from 0 to 100 
-							percent: '',
-
-							// duration in ms
-							duration: '',
-
-							// z-index property
-							zIndex: '9999',
-
-							// sets relative position to preloader's parent
-							setRelative: false
-
-						});
+						context.loadingStart('hrm-leave-records-form', { animationClass: 'preloader-update-animation' });
 					},
 
 					success: function (res) {
@@ -1100,7 +1063,8 @@ var HRM_Leave_Apply_Calendar = {
 						var holidays = HRM_Leave_Apply_Calendar.render_holidays(start._d, end._d, res.holidays);
 						events = events.concat(weekend, holidays);
 						context.apply_emp_lev_records = res.records;
-						jQuery('.hrm-leave-records-form').preloader('remove');
+
+						context.loadingStop('hrm-leave-records-form');
 
 						callback(events);
 					}
@@ -1484,7 +1448,7 @@ exports = module.exports = __webpack_require__(35)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1742,7 +1706,7 @@ var render = function() {
                 "form",
                 {
                   staticClass: "hrm-leave-records-form",
-                  attrs: { action: "" },
+                  attrs: { id: "hrm-leave-records-form", action: "" },
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -2039,6 +2003,7 @@ var render = function() {
                   _c("input", {
                     staticClass: "button hrm-button-primary button-primary",
                     attrs: {
+                      disabled: _vm.is_leave_btn_disable,
                       type: "submit",
                       name: "requst",
                       value: "Save changes"
@@ -2162,173 +2127,217 @@ var render = function() {
       "div",
       { staticClass: "metabox-holder" },
       [
-        _vm._m(0),
-        _vm._v(" "),
         _c("hrm-leave-search"),
         _vm._v(" "),
-        !_vm.records.length
-          ? _c("div", { staticClass: "notice notice-success" }, [
-              _c("p", [_vm._v("No leave record found")])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.records.length
-          ? _c("div", { staticClass: "postbox" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
+        _c("div", { attrs: { id: "hrm-leave-record-wrap" } }, [
+          _vm.isFetchRecord
+            ? _c(
                 "div",
-                {
-                  staticClass:
-                    "inside metabox-holder hrm-leave-type-records-wrap"
-                },
                 [
-                  _c(
-                    "table",
-                    { staticClass: "wp-list-table widefat fixed striped" },
-                    [
-                      _vm._m(2),
+                  !_vm.records.length
+                    ? _c("div", { staticClass: "notice notice-success" }, [
+                        _c("p", [_vm._v("No leave record found")])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.records.length
+                    ? _c("div", { staticClass: "postbox" }, [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "inside metabox-holder hrm-leave-type-records-wrap"
+                          },
+                          [
+                            _c(
+                              "table",
+                              {
+                                staticClass:
+                                  "wp-list-table widefat fixed striped"
+                              },
+                              [
+                                _vm._m(1),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  [
+                                    _vm._l(_vm.meta.types, function(type) {
+                                      return _c("tr", [
+                                        _c("td", [
+                                          _vm._v(_vm._s(type.leave_type_name))
+                                        ]),
+                                        _vm._v(" "),
+                                        type.id === 1
+                                          ? _c("td", [_vm._v("–")])
+                                          : _c("td", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.pad(type.entitlement)
+                                                )
+                                              )
+                                            ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(_vm.pad(type.count)))
+                                        ]),
+                                        _vm._v(" "),
+                                        type.id === 0
+                                          ? _c("td", [_vm._v("–")])
+                                          : _c("td", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.pad(
+                                                    type.entitlement -
+                                                      type.count
+                                                  )
+                                                )
+                                              )
+                                            ])
+                                      ])
+                                    }),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _vm._m(2),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c("strong", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.pad(_vm.total.entitlement)
+                                            )
+                                          )
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c("strong", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.pad(_vm.total.taken_leave)
+                                            )
+                                          )
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c("strong", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.pad(_vm.total.remain_leave)
+                                            )
+                                          )
+                                        ])
+                                      ])
+                                    ])
+                                  ],
+                                  2
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.records, function(record) {
+                    return _c("div", { staticClass: "postbox" }, [
+                      _c("h2", { staticClass: "hndle ui-sortable-handle" }, [
+                        _c("span", [
+                          _vm._v(_vm._s(_vm.selfDateFormat(record.date)))
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "tbody",
+                        "div",
+                        {
+                          staticClass:
+                            "inside metabox-holder hrm-leave-type-records-wrap"
+                        },
                         [
-                          _vm._l(_vm.meta.types, function(type) {
-                            return _c("tr", [
-                              _c("td", [_vm._v(_vm._s(type.leave_type_name))]),
+                          _c(
+                            "table",
+                            {
+                              staticClass: "wp-list-table widefat fixed striped"
+                            },
+                            [
+                              _vm._m(3, true),
                               _vm._v(" "),
-                              type.id === 1
-                                ? _c("td", [_vm._v("–")])
-                                : _c("td", [
-                                    _vm._v(_vm._s(_vm.pad(type.entitlement)))
-                                  ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(_vm.pad(type.count)))]),
-                              _vm._v(" "),
-                              type.id === 0
-                                ? _c("td", [_vm._v("–")])
-                                : _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.pad(type.entitlement - type.count)
-                                      )
-                                    )
-                                  ])
-                            ])
-                          }),
-                          _vm._v(" "),
-                          _c("tr", [
-                            _vm._m(3),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c("strong", [
-                                _vm._v(_vm._s(_vm.pad(_vm.total.entitlement)))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c("strong", [
-                                _vm._v(_vm._s(_vm.pad(_vm.total.taken_leave)))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c("strong", [
-                                _vm._v(_vm._s(_vm.pad(_vm.total.remain_leave)))
-                              ])
-                            ])
-                          ])
-                        ],
-                        2
+                              _c(
+                                "tbody",
+                                _vm._l(record.activities, function(leave) {
+                                  return _c(
+                                    "tr",
+                                    { attrs: { "data-recordID": leave.id } },
+                                    [
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(leave.leave_type.data.name)
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("1")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.dateFormat(leave.start_time)
+                                          )
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(_vm.dateFormat(leave.end_time))
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(_vm._s(_vm.status[leave.status]))
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        leave.status === 1 || leave.status === 3
+                                          ? _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "hrm-button-secondary",
+                                                on: {
+                                                  click: function($event) {
+                                                    $event.preventDefault()
+                                                    _vm.selfLeaveDelete(
+                                                      leave.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Delete")]
+                                            )
+                                          : _c("div", [_vm._v("Not available")])
+                                      ])
+                                    ]
+                                  )
+                                })
+                              )
+                            ]
+                          )
+                        ]
                       )
-                    ]
-                  )
-                ]
+                    ])
+                  })
+                ],
+                2
               )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm._l(_vm.records, function(record) {
-          return _c("div", { staticClass: "postbox" }, [
-            _c("h2", { staticClass: "hndle ui-sortable-handle" }, [
-              _c("span", [_vm._v(_vm._s(_vm.selfDateFormat(record.date)))])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "inside metabox-holder hrm-leave-type-records-wrap"
-              },
-              [
-                _c(
-                  "table",
-                  { staticClass: "wp-list-table widefat fixed striped" },
-                  [
-                    _vm._m(4, true),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(record.activities, function(leave) {
-                        return _c("tr", [
-                          _c("td", [
-                            _vm._v(_vm._s(leave.leave_type.data.name))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v("1")]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(_vm._s(_vm.dateFormat(leave.start_time)))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(_vm._s(_vm.dateFormat(leave.end_time)))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(_vm.status[leave.status]))]),
-                          _vm._v(" "),
-                          _c("td", [
-                            leave.status === 1 || leave.status === 3
-                              ? _c(
-                                  "button",
-                                  {
-                                    staticClass: "hrm-button-secondary",
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.selfLeaveDelete(leave.id)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Delete")]
-                                )
-                              : _c("div", [_vm._v("Not available")])
-                          ])
-                        ])
-                      })
-                    )
-                  ]
-                )
-              ]
-            )
-          ])
-        })
+            : _vm._e()
+        ])
       ],
-      2
+      1
     )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "hrm-records-text" }, [
-      _c("div", { staticClass: "hrm-attendance-records-text-wrap" }, [
-        _c("h2", [_vm._v("Leave Records")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hrm-clear" })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -2427,7 +2436,9 @@ var render = function() {
       _vm._v(" "),
       _c("leave-header"),
       _vm._v(" "),
-      _vm.is_leave_form_active ? _c("hrm-leave-records-form") : _vm._e(),
+      _vm.is_leave_form_active
+        ? _c("hrm-leave-records-form", { staticClass: "hrm-toggle" })
+        : _vm._e(),
       _vm._v(" "),
       _c("hrm-leave-records-render")
     ],
@@ -2460,103 +2471,116 @@ var render = function() {
     { staticClass: "hrm-tbl-action-wrap hrm-form-field hrm-leave-search-wrap" },
     [
       _c(
-        "div",
-        { staticClass: "hrm-table-action" },
-        [
-          _c("date-picker", {
-            staticClass: "pm-datepickter-to",
-            attrs: {
-              placeholder: "Leave From",
-              dependency: "pm-datepickter-from"
-            },
-            model: {
-              value: _vm.start_time,
-              callback: function($$v) {
-                _vm.start_time = $$v
-              },
-              expression: "start_time"
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              _vm.leaveFilter()
             }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "hrm-table-action" },
+          }
+        },
         [
-          _c("date-picker", {
-            staticClass: "pm-datepickter-from",
-            attrs: { placeholder: "Leave To", dependency: "pm-datepickter-to" },
-            model: {
-              value: _vm.end_time,
-              callback: function($$v) {
-                _vm.end_time = $$v
-              },
-              expression: "end_time"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "hrm-table-action" }, [
-        _vm.canManamgeLeave()
-          ? _c(
-              "div",
-              { staticClass: "hrm-multiselect hrm-leave-search" },
-              [
-                _c("hrm-multiselect", {
-                  attrs: {
-                    options: _vm.employessDropDown,
-                    multiple: false,
-                    "close-on-select": true,
-                    "clear-on-select": true,
-                    "hide-selected": false,
-                    "show-labels": true,
-                    placeholder: "Select Employee",
-                    "select-label": "",
-                    "selected-label": "selected",
-                    "deselect-label": "",
-                    taggable: false,
-                    label: "name",
-                    "track-by": "id",
-                    "allow-empty": true
+          _c(
+            "div",
+            { staticClass: "hrm-table-action" },
+            [
+              _c("date-picker", {
+                staticClass: "search-input pm-datepickter-to",
+                attrs: {
+                  placeholder: "Leave From",
+                  dependency: "pm-datepickter-from"
+                },
+                model: {
+                  value: _vm.start_time,
+                  callback: function($$v) {
+                    _vm.start_time = $$v
                   },
-                  model: {
-                    value: _vm.emp_id,
-                    callback: function($$v) {
-                      _vm.emp_id = $$v
-                    },
-                    expression: "emp_id"
-                  }
-                })
-              ],
-              1
-            )
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hrm-table-action" }, [
-        _c(
-          "a",
-          {
-            staticClass: "button hrm-button-secondary button-secondary",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                _vm.leaveFilter()
-              }
-            }
-          },
-          [_vm._v("Filter")]
-        )
-      ])
+                  expression: "start_time"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "hrm-table-action" },
+            [
+              _c("date-picker", {
+                staticClass: "search-input pm-datepickter-from",
+                attrs: {
+                  placeholder: "Leave To",
+                  dependency: "pm-datepickter-to"
+                },
+                model: {
+                  value: _vm.end_time,
+                  callback: function($$v) {
+                    _vm.end_time = $$v
+                  },
+                  expression: "end_time"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "hrm-table-action" }, [
+            _vm.canManamgeLeave()
+              ? _c(
+                  "div",
+                  { staticClass: "hrm-multiselect hrm-leave-search" },
+                  [
+                    _c("hrm-multiselect", {
+                      attrs: {
+                        options: _vm.employessDropDown,
+                        multiple: false,
+                        "close-on-select": true,
+                        "clear-on-select": true,
+                        "hide-selected": false,
+                        "show-labels": true,
+                        placeholder: "Select Employee",
+                        "select-label": "",
+                        "selected-label": "selected",
+                        "deselect-label": "",
+                        taggable: false,
+                        label: "name",
+                        "track-by": "id",
+                        "allow-empty": true
+                      },
+                      model: {
+                        value: _vm.emp_id,
+                        callback: function($$v) {
+                          _vm.emp_id = $$v
+                        },
+                        expression: "emp_id"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ]
+      )
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "hrm-table-action" }, [
+      _c("input", {
+        staticClass: "button hrm-button-secondary button-secondary",
+        attrs: { type: "submit", value: "Filter" }
+      })
+    ])
+  }
+]
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);

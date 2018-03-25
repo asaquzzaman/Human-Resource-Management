@@ -1,6 +1,6 @@
 <template>
 	<div class="hrm-td-editble-wrap inline-edit-row">
-		<form @submit.prevent="updateSelfLeaveType()">
+		<form :id="'hrm-edit-'+leaveType.id"  @submit.prevent="updateSelfLeaveType()">
 			<fieldset class="hrm-inline-edit-col-left">
 				<legend class="inline-edit-legend">Quick Edit</legend>
 				
@@ -61,7 +61,7 @@
 
 			<p class="submit inline-edit-save">
 				<button @click.prevent="showHideLeaveTypeUpdateForm('toggle', leaveType)" type="button" class="button cancel alignleft">Cancel</button>			
-				<input type="submit" value="submit" class="button button-primary save alignright">
+				<input :disabled="!canSubmit" type="submit" value="submit" class="button button-primary save alignright">
 				<br class="clear">
 			</p>
 		</form>
@@ -110,7 +110,7 @@
 
 		data () {
 			return {
-				//departments: []
+				canSubmit: true
 			}
 		},
 
@@ -125,18 +125,46 @@
 		},
 
 		methods: {
+			formValidation (data) {
+				var isFormValidate = true;
+				
+				if(!data.leave_type) {
+					hrm.Toastr.error('Leave type is required!');
+					isFormValidate = false;
+				}
+				if(!data.departments.length) {
+					hrm.Toastr.error('Department is required!');
+					isFormValidate = false;
+				}
+
+				return isFormValidate;
+			},
+
 			updateSelfLeaveType () {
+				if ( !this.canSubmit ) {
+					return false;
+				}
+				var self = this;
             	var args = {
             		data: {
             			id: this.leaveType.id,
             			leave_type: this.leaveType.name,
             			nextYear: this.leaveType.next_year,
-            			departments: this.leaveType.departments
+            			departments: this.leaveType.departments.data
             		},
             		callback: function() {
-
+            			self.canSubmit = true;
+            			self.loadingStop('hrm-edit-'+args.data.id);
             		}
             	}
+            	if ( !this.formValidation(args.data) ) {
+            		return false;
+            	}
+            	this.loadingStart(
+            		'hrm-edit-'+this.leaveType.id,
+            		{animationClass: 'preloader-update-animation'}
+            	);
+            	this.canSubmit = false;
             	this.updateLeaveType(args);
         	}
 		}

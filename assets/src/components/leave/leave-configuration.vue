@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<leave-header></leave-header>
+		<!-- <leave-header></leave-header> -->
 		<router-view></router-view>
 	</div>
 </template>

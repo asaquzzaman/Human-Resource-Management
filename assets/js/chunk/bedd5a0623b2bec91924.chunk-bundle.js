@@ -1,4 +1,4 @@
-wpSpearHrm([20],{
+wpSpearHrm([22],{
 
 /***/ 330:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -402,11 +402,16 @@ wpSpearHrm([20],{
 				cache: false,
 				contentType: false,
 				processData: false,
+				beforeSend() {
+					self.loadingStart('hrm-personal-gnrl-info', { animationClass: 'preloader-update-animation' });
+				},
 				success: function (res) {
 					self.$store.commit('profile/setPersonalInfo', res);
 					if (typeof args.callback === 'function') {
 						args.callback(res);
 					}
+					hrm.Toastr.success('Update successfully!');
+					self.loadingStop('hrm-personal-gnrl-info');
 				}
 			};
 
@@ -454,73 +459,40 @@ var render = function() {
             _c("h2", { staticClass: "hndle" }, [_vm._v("General Information")]),
             _vm._v(" "),
             _c("div", { staticClass: "inside" }, [
-              _c(
-                "div",
-                { staticClass: "inside", attrs: { id: "hrm-visible-form" } },
-                [
-                  _c("div", { staticClass: "main" }, [
-                    !_vm.editMode
-                      ? _c(
-                          "div",
-                          [
-                            _vm._l(_vm.fields, function(field, index) {
-                              return field.type == "file"
-                                ? _c(
-                                    "div",
-                                    {
-                                      key: index,
-                                      staticClass: "hrm-content-wrap"
-                                    },
-                                    [
-                                      _c(
-                                        "label",
-                                        { staticClass: "hrm-title" },
-                                        [
-                                          _vm._v(
-                                            "\n\t\t\t\t\t\t\t\t\t\tProfile Picture\n\t\t\t\t\t\t\t\t\t"
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      field.model.length
-                                        ? _c(
-                                            "div",
-                                            {
-                                              staticClass: "hrm-uploaded-item"
-                                            },
-                                            _vm._l(field.model, function(file) {
-                                              return _c(
-                                                "a",
-                                                {
-                                                  staticClass:
-                                                    "hrm-uploaded-img",
-                                                  attrs: {
-                                                    href: file.url,
-                                                    target: "_blank"
-                                                  }
-                                                },
-                                                [
-                                                  _c("img", {
-                                                    staticClass:
-                                                      "hrm-uploaded-file",
-                                                    style: _vm.setStyle(field),
-                                                    attrs: {
-                                                      src: file.thumb,
-                                                      alt: "10-dithering-opt-3"
-                                                    }
-                                                  })
-                                                ]
-                                              )
-                                            })
-                                          )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _vm._l(field.default, function(file) {
-                                        return !field.model.length
-                                          ? _c(
-                                              "div",
+              _c("div", { attrs: { id: "hrm-visible-form" } }, [
+                _c("div", { staticClass: "main" }, [
+                  !_vm.editMode
+                    ? _c(
+                        "div",
+                        [
+                          _vm._l(_vm.fields, function(field, index) {
+                            return field.type == "file"
+                              ? _c(
+                                  "div",
+                                  {
+                                    key: index,
+                                    staticClass: "hrm-content-wrap"
+                                  },
+                                  [
+                                    _c("label", { staticClass: "hrm-title" }, [
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\t\tProfile Picture\n\t\t\t\t\t\t\t\t\t"
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    field.model.length
+                                      ? _c(
+                                          "div",
+                                          { staticClass: "hrm-uploaded-item" },
+                                          _vm._l(field.model, function(file) {
+                                            return _c(
+                                              "a",
                                               {
-                                                staticClass: "hrm-uploaded-item"
+                                                staticClass: "hrm-uploaded-img",
+                                                attrs: {
+                                                  href: file.url,
+                                                  target: "_blank"
+                                                }
                                               },
                                               [
                                                 _c("img", {
@@ -528,123 +500,138 @@ var render = function() {
                                                     "hrm-uploaded-file",
                                                   style: _vm.setStyle(field),
                                                   attrs: {
-                                                    src: file.url,
-                                                    alt: file.name
+                                                    src: file.thumb,
+                                                    alt: "10-dithering-opt-3"
                                                   }
                                                 })
                                               ]
                                             )
-                                          : _vm._e()
-                                      }),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "hrm-clear" })
-                                    ],
-                                    2
-                                  )
-                                : _c(
-                                    "div",
-                                    { staticClass: "hrm-content-wrap" },
-                                    [
-                                      _c(
-                                        "label",
-                                        { staticClass: "hrm-title" },
-                                        [
-                                          _vm._v(
-                                            "\n\t\t\t                \t\t\t" +
-                                              _vm._s(field.label) +
-                                              "\n\t\t\t                \t\t\t\t\n\t\t\t                \t\t"
+                                          })
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm._l(field.default, function(file) {
+                                      return !field.model.length
+                                        ? _c(
+                                            "div",
+                                            {
+                                              staticClass: "hrm-uploaded-item"
+                                            },
+                                            [
+                                              _c("img", {
+                                                staticClass:
+                                                  "hrm-uploaded-file",
+                                                style: _vm.setStyle(field),
+                                                attrs: {
+                                                  src: file.url,
+                                                  alt: file.name
+                                                }
+                                              })
+                                            ]
                                           )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("div", {
-                                        staticClass: "hrm-content",
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.filter(field.model, field)
-                                          )
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "hrm-clear" })
-                                    ]
-                                  )
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "button hrm-button-primary button-primary",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    _vm.update(true)
-                                  }
-                                }
-                              },
-                              [_vm._v("Update")]
-                            )
-                          ],
-                          2
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editMode
-                      ? _c(
-                          "form",
-                          {
-                            attrs: {
-                              action: "",
-                              enctype: "multipart/form-data"
-                            },
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                _vm.selfSavePersonalInfo()
-                              }
-                            }
-                          },
-                          [
-                            _c("hrm-form-fields", {
-                              attrs: { fields: _vm.fields }
-                            }),
-                            _vm._v(" "),
-                            _c("input", {
+                                        : _vm._e()
+                                    }),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "hrm-clear" })
+                                  ],
+                                  2
+                                )
+                              : _c("div", { staticClass: "hrm-content-wrap" }, [
+                                  _c("label", { staticClass: "hrm-title" }, [
+                                    _vm._v(
+                                      "\n\t\t\t                \t\t\t" +
+                                        _vm._s(field.label) +
+                                        "\n\t\t\t                \t\t\t\t\n\t\t\t                \t\t"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", {
+                                    staticClass: "hrm-content",
+                                    domProps: {
+                                      innerHTML: _vm._s(
+                                        _vm.filter(field.model, field)
+                                      )
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "hrm-clear" })
+                                ])
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
                               staticClass:
                                 "button hrm-button-primary button-primary",
-                              attrs: { disabled: _vm.canSubmit, type: "submit" }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "button hrm-button-secondary button-secondary",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    _vm.update(false)
-                                  }
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.update(true)
                                 }
-                              },
-                              [_vm._v("cancel")]
-                            ),
-                            _vm._v(" "),
-                            _vm.loading
-                              ? _c("div", { staticClass: "hrm-spinner" }, [
-                                  _vm._v("Saving....")
-                                ])
-                              : _vm._e()
-                          ],
-                          1
-                        )
-                      : _vm._e()
-                  ])
-                ]
-              )
+                              }
+                            },
+                            [_vm._v("Update")]
+                          )
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.editMode
+                    ? _c(
+                        "form",
+                        {
+                          attrs: {
+                            id: "hrm-personal-gnrl-info",
+                            action: "",
+                            enctype: "multipart/form-data"
+                          },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              _vm.selfSavePersonalInfo()
+                            }
+                          }
+                        },
+                        [
+                          _c("hrm-form-fields", {
+                            attrs: { fields: _vm.fields }
+                          }),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass:
+                              "button hrm-button-primary button-primary",
+                            attrs: { disabled: _vm.canSubmit, type: "submit" }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "button hrm-button-secondary button-secondary",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.update(false)
+                                }
+                              }
+                            },
+                            [_vm._v("cancel")]
+                          ),
+                          _vm._v(" "),
+                          _vm.loading
+                            ? _c("div", { staticClass: "hrm-spinner" }, [
+                                _vm._v("Saving....")
+                              ])
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ])
+              ])
             ])
           ]
         )

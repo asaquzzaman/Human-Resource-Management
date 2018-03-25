@@ -21,7 +21,8 @@ class Department_Transformer extends TransformerAbstract
             'name'        => $item->name,
             'active'      => $item->active,
             'description' => $item->description,
-            'parent'      => $item->parent
+            'parent'      => $item->parent,
+            'id'          => $item->id
         ];
 
     }

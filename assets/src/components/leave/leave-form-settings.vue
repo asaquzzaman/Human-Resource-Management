@@ -1,107 +1,110 @@
 <template>
-	<div class="metabox-holder hrm-punch-in-out-wrap">
-		<div class="postbox">
+	<div>
+		<leave-header></leave-header>
+		<div class="metabox-holder hrm-punch-in-out-wrap">
+			<div class="postbox">
 
-			<h2 class="hndle ui-sortable-handle">
-				<span>Leave Form Settings</span>
-			</h2>
+				<h2 class="hndle ui-sortable-handle">
+					<span>Leave Form Settings</span>
+				</h2>
 
-			<div class="inside">
-				<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-					<form action="" @submit.prevent="saveLeaveFormSettings()">
-						<div v-if="false" class="hrm-form-field">
-							<label>
-								Others employee 
-								<em></em>
-							</label>
-							<div class="hrm-multiselect">
+				<div class="inside">
+					<div class="hrm-attendance-configuration" id="hrm-hidden-form">
+						<form id="hrm-leave-form-setting" action="" @submit.prevent="saveLeaveFormSettings()">
+							<div v-if="false" class="hrm-form-field">
+								<label>
+									Others employee 
+									<em></em>
+								</label>
+								<div class="hrm-multiselect">
 
-						        <hrm-multiselect 
-						            v-model="others_employee" 
-						            :options="roles" 
-						            :multiple="true" 
-						            :close-on-select="true"
-						            :clear-on-select="true"
-						            :hide-selected="false"
-						            :show-labels="true"
-						            placeholder="Select roles"
-						            select-label=""
-						            selected-label="selected"
-						            deselect-label=""
-						            :taggable="false"
-						            label="name"
-						            track-by="id"
-						            :allow-empty="true">
+							        <hrm-multiselect 
+							            v-model="others_employee" 
+							            :options="roles" 
+							            :multiple="true" 
+							            :close-on-select="true"
+							            :clear-on-select="true"
+							            :hide-selected="false"
+							            :show-labels="true"
+							            placeholder="Select roles"
+							            select-label=""
+							            selected-label="selected"
+							            deselect-label=""
+							            :taggable="false"
+							            label="name"
+							            track-by="id"
+							            :allow-empty="true">
 
-						        </hrm-multiselect>               
-						    </div>
-						    <span class="hrm-clear"></span>
-						    <span class="description">This roles can aplly behalf of others employee leave</span>
-						</div>
+							        </hrm-multiselect>               
+							    </div>
+							    <span class="hrm-clear"></span>
+							    <span class="description">This roles can aplly behalf of others employee leave</span>
+							</div>
 
-						<div class="hrm-form-field">
-							<label>
-								Leave type  
-								<em></em>
-							</label>
-							<div class="hrm-multiselect">
+							<div class="hrm-form-field">
+								<label>
+									Leave type  
+									<em></em>
+								</label>
+								<div class="hrm-multiselect">
 
-						        <hrm-multiselect 
-						            v-model="leave_types" 
-						            :options="roles" 
-						            :multiple="true" 
-						            :close-on-select="true"
-						            :clear-on-select="true"
-						            :hide-selected="false"
-						            :show-labels="true"
-						            placeholder="Select roles"
-						            select-label=""
-						            selected-label="selected"
-						            deselect-label=""
-						            :taggable="false"
-						            label="name"
-						            track-by="id"
-						            :allow-empty="true">
+							        <hrm-multiselect 
+							            v-model="leave_types" 
+							            :options="roles" 
+							            :multiple="true" 
+							            :close-on-select="true"
+							            :clear-on-select="true"
+							            :hide-selected="false"
+							            :show-labels="true"
+							            placeholder="Select roles"
+							            select-label=""
+							            selected-label="selected"
+							            deselect-label=""
+							            :taggable="false"
+							            label="name"
+							            track-by="id"
+							            :allow-empty="true">
 
-						        </hrm-multiselect>               
-						    </div>
-						    <span class="hrm-clear"></span>
-						    <span class="description">This roles can aplly leave type enable/disable option</span>
-						</div>
+							        </hrm-multiselect>               
+							    </div>
+							    <span class="hrm-clear"></span>
+							    <span class="description">This roles can aplly leave type enable/disable option</span>
+							</div>
 
-						<div v-if="false" class="hrm-form-field">
-							<label>
-								Leave request approve by 
-								<em></em>
-							</label>
-							<div class="hrm-multiselect">
+							<div v-if="false" class="hrm-form-field">
+								<label>
+									Leave request approve by 
+									<em></em>
+								</label>
+								<div class="hrm-multiselect">
 
-						        <hrm-multiselect 
-						            v-model="apply_to" 
-						            :options="roles" 
-						            :multiple="true" 
-						            :close-on-select="true"
-						            :clear-on-select="true"
-						            :hide-selected="false"
-						            :show-labels="true"
-						            placeholder="Select roles"
-						            select-label=""
-						            selected-label="selected"
-						            deselect-label=""
-						            :taggable="false"
-						            label="name"
-						            track-by="id"
-						            :allow-empty="true">
+							        <hrm-multiselect 
+							            v-model="apply_to" 
+							            :options="roles" 
+							            :multiple="true" 
+							            :close-on-select="true"
+							            :clear-on-select="true"
+							            :hide-selected="false"
+							            :show-labels="true"
+							            placeholder="Select roles"
+							            select-label=""
+							            selected-label="selected"
+							            deselect-label=""
+							            :taggable="false"
+							            label="name"
+							            track-by="id"
+							            :allow-empty="true">
 
-						        </hrm-multiselect>               
-						    </div>
-						    <span class="hrm-clear"></span>
-						    <span class="description">This roles can change leave status</span>
-						</div>
-						<input  type="submit" class="button  hrm-button-primary" name="requst" value="Save changes">
-					</form>
+							        </hrm-multiselect>               
+							    </div>
+							    <span class="hrm-clear"></span>
+							    <span class="description">This roles can change leave status</span>
+							</div>
+							<input  type="submit" class="button button-primary  hrm-button-primary" name="requst" value="Save changes">
+						</form>
+					</div>
+
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -124,6 +127,7 @@
 
 
 <script>
+	import leave_header from './leave-header.vue';
 
 	export default {
 		beforeRouteEnter (to, form, next) {
@@ -141,7 +145,8 @@
 		},
 		mixins: [HRMMixin.leave],
 		components: {
-			'hrm-multiselect': hrm.Multiselect.default
+			'hrm-multiselect': hrm.Multiselect.default,
+			'leave-header': leave_header
 		},
 
 		methods: {
@@ -205,8 +210,15 @@
 						leave_types: self.leave_types,
 						apply_to: self.apply_to
 					},
+					beforeSend () {
+						self.loadingStart(
+							'hrm-leave-form-setting',
+							{animationClass: 'preloader-update-animation'}
+						);
+					},
 					success (res) {
-						
+						self.loadingStop('hrm-leave-form-setting');
+						hrm.Toastr.success('Update successfully!');
 					}
 				}
 				this.httpRequest('save_leave_form_settings', request);

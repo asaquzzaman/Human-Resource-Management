@@ -60,8 +60,11 @@ let HRM_Leave_Store = {
 	mutations: {
 		afterUpdateLeaveType (state, type) {
 			let index = state.getIndex( state.leaveTypes, type.id, 'id' );
-
-			state.leaveTypes.splice(index, 1, type);
+			
+			state.editSlideUp(type.id, function() {
+				state.leaveTypes.splice(index, 1, type);
+			});
+			
 		},
 		afterEmployeeLeaveSummery(state, data) {
 			if (data.type == 'pending') {

@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<table class="wp-list-table widefat fixed striped">
+		<div id="hrm-leave-type-records-wrap" class="metabox-holder hrm-leave-type-records-wrap">
+			<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
 						<th class="manage-column column-cb">Leave Type</th>
@@ -13,7 +13,7 @@
 
 				</thead>
 				<tbody>
-					<tr v-for="record in records" class="hrm-tr inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor">
+					<tr v-for="record in records" class="hrm-tr  inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor">
 						
 						<td v-if="!record.editMode" class="hrm-td">
 							<div class="hrm-td-content">
@@ -50,7 +50,7 @@
 						<td v-if="!record.editMode" class="hrm-td">{{ carryStatus(record.next_year) }}</td>
 
 						<td v-if="record.editMode" colspan="5">
-							<leave-type-edit-form :leaveType="record"></leave-type-edit-form>
+							<leave-type-edit-form :id="'hrm-edit-'+record.id" :leaveType="record"></leave-type-edit-form>
 						</td>
 					</tr>
 					<tr v-if="!records.length">
@@ -72,7 +72,13 @@
 	    line-height: 2.5;
 	    font-weight: 600;
 	}
+	#hrm-leave-type-records-wrap .hrm-td {
+		padding: 8px 10px;
+	}
 
+	.hrm-field-wrap {
+		padding-left: 6px;
+	}
 </style>
 
 <script>
@@ -110,12 +116,17 @@
 
 	            wp.ajax.send('get_leave_type', {
 	                data: request_data,
+	                beforeSend () {
+                		self.loadingStart('hrm-leave-type-records-wrap');
+                	},
 	                success: function(res) {
 	                	res.data.forEach(function(type, index) {
 	                		self.addLeaveTypeMeta(type);
 	                	});
 	                    
 	                    self.$store.commit('leave/setLeaveTypes', res.data);
+	                    self.isFetchRecord = true;
+	                    self.loadingStop('hrm-leave-type-records-wrap');
 	                },
 
 	                error: function(res) {

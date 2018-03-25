@@ -46,6 +46,10 @@
 			selfNewRecord () {
 				var self = this;
 
+				if (!this.canSubmit) {
+					return false;
+				}
+
 				self.loading = true;
 				self.canSubmit = false;
 				
@@ -54,6 +58,10 @@
 					postData['class']        = 'Work_Experience';
 					postData['method']       = 'create';
 					postData['transformers'] = 'Work_Experiance_Transformer';
+
+				if (!this.formValidation(this.fields, postData)) {
+					return false;
+				}	
 
 				var args = {
 					data: postData,

@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<table class="wp-list-table widefat fixed striped pages">
+	<div id="hrm-list-table">
+		<table v-if="isFetchRecord"  class="wp-list-table widefat fixed striped pages">
             <thead>
                 <tr>
                 	<td v-if="deleteCheckbox" id="cb" class="manage-column column-cb check-column">
@@ -37,47 +37,56 @@
                     </td>
                 </tr>
                 
-                <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
+                <tr v-else :id="'hrm-edit-'+record.id" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle">
                 	<td colspan="5" class="colspanchange">
-                		<form action="" @submit.prevent="selfUpdate(record)">
+                		<form :id="'hrm-edit-form-'+record.id" class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
 								<div class="inline-edit-col">
-						
-									<label>
-										<span class="title">Title</span>
-										<span class="input-text-wrap">
-											<input type="text" v-model="record.title" class="ptitle">
-										</span>
-									</label>
+									
+									<div class="hrm-edit-field-wrap">
+										<label class="title">
+											Title<em>*</em>
+										</label>
 
-									<label>
-										<span class="title">From</span>
 										<span class="input-text-wrap">
-											<hrm-date-picker placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+											<input type="text" required="required" v-model="record.title" class="ptitle">
 										</span>
-									</label>
-
-									<label>
-										<span class="title">To</span>
+										<div class="hrm-clear"></div>
+									</div>
+										
+									<div class="hrm-edit-field-wrap">
+										<label class="title">
+											From<em>*</em>
+										</label>
 										<span class="input-text-wrap">
-											<hrm-date-picker placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-to"></hrm-date-picker>
+											<hrm-date-picker required="required" placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 										</span>
-									</label>
+										<div class="hrm-clear"></div>
+									</div>
 
-									<label>
-										<span class="title">Comments</span>
+									<div class="hrm-edit-field-wrap">
+										<label class="title">
+											To<em>*</em>
+										</label>
+										<span class="input-text-wrap">
+											<hrm-date-picker required="required" placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-to"></hrm-date-picker>
+										</span>
+										<div class="hrm-clear"></div>
+									</div>
+
+									<div class="hrm-edit-field-wrap">
+										<label class="title">
+											Comments
+										</label>
 										<span class="input-text-wrap">
 											<textarea v-model="record.description"></textarea>
 										</span>
-									</label>
+										<div class="hrm-clear"></div>
+									</div>
 								</div>
 							</fieldset>
 
-			
-							<fieldset class="inline-edit-col-right">
-								<div class="inline-edit-col"></div>
-							</fieldset>
 
 							<div class="submit inline-edit-save">
 								<button @click.prevent="recordEditForm(record, false)" type="button" class="button hrm-button-secondary cancel alignleft">Cancel</button>
@@ -119,6 +128,12 @@
 					return true;
 				}
 			},
+			fields: {
+				type: [Array],
+				default () {
+					return []
+				}
+			}
 		},
 
 		data () {
@@ -179,9 +194,6 @@
 				record['method'] = 'update';
 				record['transformers'] = 'Work_Experiance_Transformer';
 
-				self.canSubmit = false;
-				self.loading = true;
-				
 				var args = {
 					data: record,
 					callback () {
@@ -189,7 +201,14 @@
 						self.loading = false;
 					}
 				}
+
+				if (!this.editFormValidation(self.fields, record)) {
+					return false;
+				}
 				
+				self.canSubmit = false;
+				self.loading = true;
+
 				this.updateRecord(args);
 			},
 

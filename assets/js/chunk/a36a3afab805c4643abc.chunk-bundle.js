@@ -1,5 +1,198 @@
 wpSpearHrm([5],{
 
+/***/ 146:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(37);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+var Hrm_Leave_Header = {
+    mixins: [HRMMixin.leave],
+
+    data: function () {
+        return {
+            menu: __WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */][0].children
+        };
+    },
+
+    created() {},
+
+    methods: {
+        childrens() {
+            if (!this.has_child) {
+                return [];
+            }
+
+            let root_menu = this.getParentName();
+            let index = this.getIndex(this.menu, root_menu, 'name');
+
+            if (index === false) {
+                return [];
+            }
+
+            if (this.menu[index].hasOwnProperty('children')) {
+                if (this.menu[index].children.length) {
+                    return this.menu[index].children;
+                }
+            } else {
+                return [];
+            }
+        },
+
+        has_child: function () {
+
+            if (this.$route.matched.length > 1) {
+                return true;
+            }
+
+            return false;
+        },
+
+        getParentName() {
+            let index = this.getIndex(this.$route.matched, this.$route.name, 'name');
+            index = parseInt(index) - 1;
+            return this.$route.matched[index].name;
+        }
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Hrm_Leave_Header);
+
+/***/ }),
+
+/***/ 147:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__ = __webpack_require__(146);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__ = __webpack_require__(148);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/leave/leave-header.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0385a22a", Component.options)
+  } else {
+    hotAPI.reload("data-v-0385a22a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "h2",
+      { staticClass: "nav-tab-wrapper" },
+      _vm._l(_vm.menu, function(item, index) {
+        return _c(
+          "router-link",
+          {
+            key: index,
+            staticClass: "nav-tab",
+            attrs: { to: { name: item.name } }
+          },
+          [_vm._v(_vm._s(item.meta.label))]
+        )
+      })
+    ),
+    _vm._v(" "),
+    _c("h3", { staticClass: "hrm-sub-nav" }, [
+      _c(
+        "ul",
+        { staticClass: "hrm-subsubsub" },
+        _vm._l(_vm.childrens(), function(children, child_key) {
+          return _c(
+            "li",
+            { key: child_key },
+            [
+              _c("router-link", { attrs: { to: { name: children.name } } }, [
+                _vm._v(_vm._s(children.meta.label))
+              ]),
+              _vm._v(" |  \n            ")
+            ],
+            1
+          )
+        })
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0385a22a", esExports)
+  }
+}
+
+/***/ }),
+
 /***/ 296:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -45,21 +238,47 @@ wpSpearHrm([5],{
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  props: ['holiday'],
-  mixins: [HRMMixin.leave],
-  methods: {
-    updateSelfHoliday() {
-      var args = {
-        data: {
-          id: this.holiday.id,
-          name: this.holiday.name,
-          description: this.holiday.description
-        },
-        callback: function () {}
-      };
-      this.updateHoliday(args);
-    }
-  }
+	props: ['holiday'],
+	mixins: [HRMMixin.leave],
+	data() {
+		return {
+			canSubmit: true
+		};
+	},
+	methods: {
+		validation(data) {
+			var isFormValidate = true;
+
+			if (!data.name) {
+				hrm.Toastr.error('Holiday title is required!');
+				isFormValidate = false;
+			}
+
+			return isFormValidate;
+		},
+		updateSelfHoliday() {
+			if (!this.canSubmit) {
+				return false;
+			}
+			var self = this;
+			var args = {
+				data: {
+					id: this.holiday.id,
+					name: this.holiday.name,
+					description: this.holiday.description
+				},
+				callback: function () {
+					self.canSubmit = true;
+				}
+			};
+
+			if (!this.validation(args.data)) {
+				return false;
+			}
+			this.canSubmit = false;
+			this.updateHoliday(args);
+		}
+	}
 });
 
 /***/ }),
@@ -75,12 +294,15 @@ wpSpearHrm([5],{
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	mixins: [HRMMixin.leave],
 
 	methods: {
-		showHideNewLeaveTypeForm: function () {
+		showHideNewHolidayForm: function () {
 			this.$store.commit('leave/isNewHolidayFormVisible', { is_visible: true });
 		}
 	}
@@ -159,90 +381,115 @@ wpSpearHrm([5],{
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
-  mixins: [HRMMixin.leave],
+	mixins: [HRMMixin.leave],
 
-  data: function () {
-    return {
-      financial_start: HRM_Vars.financial_start,
-      financial_end: HRM_Vars.financial_end,
-      name: '',
-      from: '',
-      to: '',
-      description: '',
-      records: []
-    };
-  },
+	data: function () {
+		return {
+			financial_start: HRM_Vars.financial_start,
+			financial_end: HRM_Vars.financial_end,
+			name: '',
+			from: '',
+			to: '',
+			description: '',
+			records: [],
+			canSubmit: true
+		};
+	},
 
-  created: function () {
-    this.$on('hrm_date_picker', this.setDateTime);
-  },
-  methods: {
-    setDateTime: function (date) {
-      if (date.field == 'datepicker_from') {
-        this.from = date.date;
-      }
+	created: function () {
+		this.$on('hrm_date_picker', this.setDateTime);
+	},
+	methods: {
+		setDateTime: function (date) {
+			if (date.field == 'datepicker_from') {
+				this.from = date.date;
+			}
 
-      if (date.field == 'datepicker_to') {
-        this.to = date.date;
-      }
-    },
-    show_hide_new_leave_type_form: function (el) {
-      var self = this;
+			if (date.field == 'datepicker_to') {
+				this.to = date.date;
+			}
+		},
+		show_hide_new_leave_type_form: function (el) {
+			var self = this;
 
-      this.slideUp(el.target, function () {
-        self.$store.commit('leave/isNewLeaveTypeFormVisible', { is_visible: false });
-      });
-    },
+			this.slideUp(el.target, function () {
+				self.$store.commit('leave/isNewHolidayFormVisible', { is_visible: false });
+			});
+		},
 
-    createNewHolidays: function () {
+		validation(data) {
+			var isFormValidate = true;
 
-      var request_data = {
-        _wpnonce: HRM_Vars.nonce,
-        name: this.name,
-        from: this.from,
-        to: this.to,
-        description: this.description
-      },
+			if (!data.name) {
+				hrm.Toastr.error('Holiday title is required!');
+				isFormValidate = false;
+			}
+			if (!data.from) {
+				hrm.Toastr.error('Holiday start date is required!');
+				isFormValidate = false;
+			}
+			if (!data.to) {
+				hrm.Toastr.error('Holiday end date is required!');
+				isFormValidate = false;
+			}
 
+			return isFormValidate;
+		},
 
-      // is_update  = parseInt( this.department_id ) ? true : false,
+		createNewHolidays: function () {
 
-      // target_index = is_update ? this.getIndex(
-      //     this.$store.state.leave.departments, this.department_id, 'id'
-      // ) : false,
+			if (!this.canSubmit) {
+				return false;
+			}
 
-      self = this;
+			var request_data = {
+				_wpnonce: HRM_Vars.nonce,
+				name: this.name,
+				from: this.from,
+				to: this.to,
+				description: this.description
+			},
+			    self = this;
 
-      this.show_spinner = true;
+			if (!this.validation(request_data)) {
+				return false;
+			}
 
-      wp.ajax.send('create_new_holidays', {
-        data: request_data,
+			this.show_spinner = true;
 
-        success: function (res) {
-          self.show_spinner = false;
+			wp.ajax.send('create_new_holidays', {
+				data: request_data,
 
-          self.addHolidayMeta(res.holiday);
+				beforeSend() {
+					self.loadingStart('hrm-holiday-form', { animationClass: 'preloader-update-animation' });
+				},
 
-          self.$store.commit('leave/updateHolidays', res.holiday);
+				success: function (res) {
+					self.show_spinner = false;
 
-          // Display a success toast, with a title
-          hrm.Toastr.success(res.success);
+					self.addHolidayMeta(res.holiday);
 
-          self.slideUp(jQuery('.hrm-form-cancel'), function () {
-            self.$store.commit('leave/isNewHolidayFormVisible', { is_visible: false });
-          });
-        },
+					self.$store.commit('leave/updateHolidays', res.holiday);
 
-        error: function (res) {
-          self.show_spinner = false;
-          // Showing error
-          res.error.map(function (value, index) {
-            hrm.Toastr.error(value);
-          });
-        }
-      });
-    }
-  }
+					// Display a success toast, with a title
+					hrm.Toastr.success(res.success);
+					self.loadingStop('hrm-holiday-form');
+
+					jQuery('#hrm-holiday-form').slideUp(400, function () {
+						self.$store.commit('leave/isNewHolidayFormVisible', { is_visible: false });
+					});
+				},
+
+				error: function (res) {
+					self.show_spinner = false;
+					// Showing error
+					res.error.map(function (value, index) {
+						hrm.Toastr.error(value);
+					});
+				}
+			});
+		}
+	}
 });
 
 /***/ }),
@@ -345,12 +592,16 @@ wpSpearHrm([5],{
 
 			wp.ajax.send('get_holidays', {
 				data: request_data,
+				beforeSend() {
+					self.loadingStart('hrm-holiday-table');
+				},
 				success: function (res) {
 					res.holidays.forEach(function (holiday) {
 						self.addHolidayMeta(holiday);
 					});
-
+					self.loadingStop('hrm-holiday-table');
 					self.$store.commit('leave/setHoliday', res.holidays);
+					self.isFetchRecord = true;
 				},
 
 				error: function (res) {}
@@ -368,6 +619,7 @@ wpSpearHrm([5],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_holidays_form_vue__ = __webpack_require__(385);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_holidays_record_vue__ = __webpack_require__(386);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_holidays_add_btn_vue__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(147);
 //
 //
 //
@@ -379,6 +631,8 @@ wpSpearHrm([5],{
 //
 //
 //
+//
+
 
 
 
@@ -398,7 +652,8 @@ var Hrm_Leave_Holidays = {
 	components: {
 		'leave-holidays-form': __WEBPACK_IMPORTED_MODULE_0__leave_holidays_form_vue__["a" /* default */],
 		'leave-holidays-record': __WEBPACK_IMPORTED_MODULE_1__leave_holidays_record_vue__["a" /* default */],
-		'leave-holidays-add-btn': __WEBPACK_IMPORTED_MODULE_2__leave_holidays_add_btn_vue__["a" /* default */]
+		'leave-holidays-add-btn': __WEBPACK_IMPORTED_MODULE_2__leave_holidays_add_btn_vue__["a" /* default */],
+		'leave-header': __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__["a" /* default */]
 	},
 
 	computed: {
@@ -652,110 +907,131 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "metabox-holder hrm-leave-type-records-wrap" }, [
-      _c("table", { staticClass: "wp-list-table widefat fixed striped" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.records, function(record) {
-              return _c("tr", { staticClass: "hrm-tr" }, [
-                !record.editMode
-                  ? _c("td", [
-                      _vm._v(
-                        "\n\t\t\t\t\t\t" +
-                          _vm._s(record.name) +
-                          "\n\t\t\t\t\t\t"
-                      ),
-                      _c("div", { staticClass: "row-actions" }, [
-                        _c("span", { staticClass: "edit" }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href: "#",
-                                "aria-label": "Edit “Hello world!”"
-                              },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.showHideHolidayUpdateForm(
-                                    "toggle",
-                                    record
+    _c(
+      "div",
+      {
+        staticClass: "metabox-holder hrm-leave-type-records-wrap",
+        attrs: { id: "hrm-holiday-table" }
+      },
+      [
+        _vm.isFetchRecord
+          ? _c(
+              "table",
+              { staticClass: "wp-list-table widefat fixed striped" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  [
+                    _vm._l(_vm.records, function(record) {
+                      return _c("tr", { staticClass: "hrm-tr" }, [
+                        !record.editMode
+                          ? _c("td", [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t" +
+                                  _vm._s(record.name) +
+                                  "\n\t\t\t\t\t\t"
+                              ),
+                              _c("div", { staticClass: "row-actions" }, [
+                                _c("span", { staticClass: "edit" }, [
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        href: "#",
+                                        "aria-label": "Edit “Hello world!”"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.showHideHolidayUpdateForm(
+                                            "toggle",
+                                            record
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\tEdit\n\t\t\t\t\t\t\t\t"
+                                      )
+                                    ]
                                   )
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tEdit\n\t\t\t\t\t\t\t\t"
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v("\n\t\t\t\t\t\t\t|\n\t\t\t\t\t\t\t"),
-                        _c("span", { staticClass: "edit" }, [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href: "#",
-                                "aria-label": "Edit “Hello world!”"
-                              },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.selfDeleteHoliday(record)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tDelete\n\t\t\t\t\t\t\t\t"
-                              )
-                            ]
-                          )
-                        ])
+                                ]),
+                                _vm._v("\n\t\t\t\t\t\t\t|\n\t\t\t\t\t\t\t"),
+                                _c("span", { staticClass: "edit" }, [
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        href: "#",
+                                        "aria-label": "Edit “Hello world!”"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.selfDeleteHoliday(record)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\tDelete\n\t\t\t\t\t\t\t\t"
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        !record.editMode
+                          ? _c("td", [
+                              _vm._v(_vm._s(_vm.dateFormat(record.from)))
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        !record.editMode
+                          ? _c("td", [
+                              _vm._v(_vm._s(_vm.dateFormat(record.to)))
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        !record.editMode
+                          ? _c("td", [_vm._v(_vm._s(record.description))])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        record.editMode
+                          ? _c(
+                              "td",
+                              { attrs: { colspan: "4" } },
+                              [
+                                _c("holiday-edit-form", {
+                                  attrs: { holiday: record }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e()
                       ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                !record.editMode
-                  ? _c("td", [_vm._v(_vm._s(_vm.dateFormat(record.from)))])
-                  : _vm._e(),
-                _vm._v(" "),
-                !record.editMode
-                  ? _c("td", [_vm._v(_vm._s(_vm.dateFormat(record.to)))])
-                  : _vm._e(),
-                _vm._v(" "),
-                !record.editMode
-                  ? _c("td", [_vm._v(_vm._s(record.description))])
-                  : _vm._e(),
-                _vm._v(" "),
-                record.editMode
-                  ? _c(
-                      "td",
-                      { attrs: { colspan: "4" } },
-                      [_c("holiday-edit-form", { attrs: { holiday: record } })],
-                      1
-                    )
-                  : _vm._e()
-              ])
-            }),
-            _vm._v(" "),
-            !_vm.records.length
-              ? _c("tr", [
-                  _c("td", { attrs: { colspan: "4" } }, [
-                    _vm._v("No record found!")
-                  ])
-                ])
-              : _vm._e()
-          ],
-          2
-        )
-      ])
-    ])
+                    }),
+                    _vm._v(" "),
+                    !_vm.records.length
+                      ? _c("tr", [
+                          _c("td", { attrs: { colspan: "4" } }, [
+                            _vm._v("No record found!")
+                          ])
+                        ])
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ]
+            )
+          : _vm._e()
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -800,6 +1076,7 @@ var render = function() {
     _c(
       "form",
       {
+        attrs: { id: "hrm-edit-" + _vm.holiday.id },
         on: {
           submit: function($event) {
             $event.preventDefault()
@@ -892,7 +1169,7 @@ var render = function() {
           _vm._v(" "),
           _c("input", {
             staticClass: "button button-primary save alignright",
-            attrs: { type: "submit", value: "submit" }
+            attrs: { disabled: !_vm.canSubmit, type: "submit", value: "submit" }
           }),
           _vm._v(" "),
           _c("br", { staticClass: "clear" })
@@ -907,7 +1184,10 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "hrm-inline-edit-label" }, [
-      _c("span", { staticClass: "title" }, [_vm._v("Name")])
+      _c("span", { staticClass: "title" }, [
+        _vm._v("Name "),
+        _c("em", [_vm._v("*")])
+      ])
     ])
   },
   function() {
@@ -942,6 +1222,10 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("leave-holidays-add-btn"),
+      _vm._v(" "),
+      _c("leave-header"),
+      _vm._v(" "),
       _vm.is_new_holiday_form_visible
         ? _c(
             "div",
@@ -956,8 +1240,6 @@ var render = function() {
             1
           )
         : _vm._e(),
-      _vm._v(" "),
-      _c("leave-holidays-add-btn"),
       _vm._v(" "),
       _c("leave-holidays-record")
     ],
@@ -985,20 +1267,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "hrm-tbl-action-btn-sibling" }, [
+  return _c("div", [
+    _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Holiday")]),
+    _vm._v(" "),
     _c(
       "a",
       {
-        staticClass: "button hrm-button-primary ",
+        staticClass: "page-title-action hrm-btn",
         attrs: { href: "#" },
         on: {
           click: function($event) {
             $event.preventDefault()
-            _vm.showHideNewLeaveTypeForm()
+            _vm.showHideNewHolidayForm()
           }
         }
       },
-      [_vm._v("Add")]
+      [_vm._v("\n\t\tAdd New\n\t")]
     )
   ])
 }
@@ -1038,7 +1322,7 @@ var render = function() {
             _c(
               "form",
               {
-                attrs: { action: "" },
+                attrs: { action: "", id: "hrm-holiday-form" },
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
@@ -1149,9 +1433,13 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "hrm-form-field " }, [
-                  _vm._m(4),
+                  _c(
+                    "label",
+                    { attrs: { for: "hrm-leave-description-textarea-field" } },
+                    [_vm._v("\n\t\t\t\t\t\t\tDescription\n\t\t\t\t\t\t")]
+                  ),
                   _vm._v(" "),
-                  _c("input", {
+                  _c("textarea", {
                     directives: [
                       {
                         name: "model",
@@ -1160,12 +1448,6 @@ var render = function() {
                         expression: "description"
                       }
                     ],
-                    attrs: {
-                      type: "text",
-                      id: "hrm-leave-description-textarea-field",
-                      required: "required",
-                      name: "description"
-                    },
                     domProps: { value: _vm.description },
                     on: {
                       input: function($event) {
@@ -1183,8 +1465,9 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("input", {
-                  staticClass: "button  hrm-button-primary",
+                  staticClass: "button button-primary  hrm-button-primary",
                   attrs: {
+                    disabled: !_vm.canSubmit,
                     type: "submit",
                     name: "requst",
                     value: "Save changes"
@@ -1249,16 +1532,6 @@ var staticRenderFns = [
       _vm._v("\n\t\t\t\t\t\t\tTo"),
       _c("em", [_vm._v("  *")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "label",
-      { attrs: { for: "hrm-leave-description-textarea-field" } },
-      [_vm._v("\n\t\t\t\t\t\t\tDescription"), _c("em", [_vm._v("  *")])]
-    )
   }
 ]
 render._withStripped = true

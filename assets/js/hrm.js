@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"de85335a1e15e14e953d","3":"0958da7f7e180f361c8d","4":"9888fc1f4cfd93011433","5":"40ee4971da2636fc6c69","6":"3d00c72f32d153f211d9","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"bd4bb401f7253fd3d5a6","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"0f6acff16c31774ee630","15":"3c07abd0a6ddca4d8666","16":"b8ccd397364da15b0a07","17":"a69a97a27214cb6bbd62","18":"8757e316fbd5516b806f","19":"835623e513b088da72fb","20":"b3917946b0b312575151","21":"75cc023973f3cfbdce9d","22":"b84299f9897ddb853e24","23":"dacb8ec2aaca91f57a3e","24":"f4c64d98887ca97d4aed","25":"08bfba5f97f4a702f9e2","26":"181c462755b58235e1e3","28":"d717398d368b42d28490","29":"b816f0d167716afd032b","30":"d02c74fcbea59b0cc1a6"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"1e28c5467076a11a20b2","3":"3b65b2abb4e9f3b85892","4":"2e1494d71c7cf6bd83f8","5":"a36a3afab805c4643abc","6":"1a13ddcff2ffd9c2bf62","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"8aebf3849f655ee24208","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"1e3bdf4482cb9787468e","15":"771b417d85caa450889a","16":"e14d550b862f77096ef5","17":"2970113d769dff14c2be","18":"1948697717eae9f8b227","19":"006627fed8109da617b0","20":"79f0d07a200b9c73b6ae","21":"7ec78cf816e96902455b","22":"bedd5a0623b2bec91924","23":"c31e36872fb32a43dc34","24":"3ebd0b036e459640d379","25":"ecfb8d9203363a293ac8","26":"8cf3a0fb029895050196","27":"21ba4482383b0ee64e75","29":"0a7f7fa49dbb801322d2","30":"cb9776ddb153c6539352"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -823,7 +823,7 @@ HRMMixin.settings = __WEBPACK_IMPORTED_MODULE_0__mixin__["default"];
 
 const Hrm_Settings = resolve => {
 
-	__webpack_require__.e/* require.ensure */(14).then((() => {
+	__webpack_require__.e/* require.ensure */(15).then((() => {
 		resolve(__webpack_require__(68));
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2310,7 +2310,7 @@ let Hrm_Leave_Records = resolve => {
 };
 
 let Hrm_Leave_Configuration = resolve => {
-    __webpack_require__.e/* require.ensure */(17).then((() => {
+    __webpack_require__.e/* require.ensure */(19).then((() => {
         resolve(__webpack_require__(51));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2320,7 +2320,7 @@ let Hrm_Leave_Type = resolve => {
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 let Hrm_Leave_Work_Week = resolve => {
-    __webpack_require__.e/* require.ensure */(28).then((() => {
+    __webpack_require__.e/* require.ensure */(17).then((() => {
         resolve(__webpack_require__(58));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2331,31 +2331,31 @@ let Hrm_Leave_Holidays = resolve => {
 };
 
 let Hrm_Leave_form_settings = resolve => {
-    __webpack_require__.e/* require.ensure */(23).then((() => {
+    __webpack_require__.e/* require.ensure */(14).then((() => {
         resolve(__webpack_require__(52));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Requests = resolve => {
-    __webpack_require__.e/* require.ensure */(16).then((() => {
+    __webpack_require__.e/* require.ensure */(18).then((() => {
         resolve(__webpack_require__(56));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Pending = resolve => {
-    __webpack_require__.e/* require.ensure */(22).then((() => {
+    __webpack_require__.e/* require.ensure */(24).then((() => {
         resolve(__webpack_require__(54));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Cancel = resolve => {
-    __webpack_require__.e/* require.ensure */(24).then((() => {
+    __webpack_require__.e/* require.ensure */(25).then((() => {
         resolve(__webpack_require__(50));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Approve = resolve => {
-    __webpack_require__.e/* require.ensure */(25).then((() => {
+    __webpack_require__.e/* require.ensure */(26).then((() => {
         resolve(__webpack_require__(49));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2486,7 +2486,7 @@ let hrm_attendace_user_search = resolve => {
 };
 
 let hrm_attendace_configuration = resolve => {
-    __webpack_require__.e/* require.ensure */(18).then((() => {
+    __webpack_require__.e/* require.ensure */(20).then((() => {
         resolve(__webpack_require__(42));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2555,19 +2555,19 @@ HRMRegisterModule('profile', 'profile');
 
 
 let personalInformation = resolve => {
-    __webpack_require__.e/* require.ensure */(20).then((() => {
+    __webpack_require__.e/* require.ensure */(22).then((() => {
         resolve(__webpack_require__(64));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let jobLocation = resolve => {
-    __webpack_require__.e/* require.ensure */(26).then((() => {
+    __webpack_require__.e/* require.ensure */(27).then((() => {
         resolve(__webpack_require__(63));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let profile = resolve => {
-    __webpack_require__.e/* require.ensure */(15).then((() => {
+    __webpack_require__.e/* require.ensure */(16).then((() => {
         resolve(__webpack_require__(65));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -3046,7 +3046,7 @@ HRMRegisterModule('dashboard', 'dashboard');
 
 let dashboard = resolve => {
 
-    __webpack_require__.e/* require.ensure */(19).then((() => {
+    __webpack_require__.e/* require.ensure */(21).then((() => {
         resolve(__webpack_require__(45));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -4098,9 +4098,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             if (type) {
                 if (status === 'toggle') {
-                    type.editMode = type.editMode ? false : true;
+                    status = type.editMode ? false : true;
+                }
+
+                if (status === false) {
+                    jQuery('#hrm-edit-' + type.id).find('form').slideUp(function () {
+
+                        type.editMode = status;
+                    });
                 } else {
                     type.editMode = status;
+                    hrm.Vue.nextTick(function () {
+                        var node = jQuery('#hrm-edit-' + type.id);
+
+                        node.find('form').css({
+                            display: 'none'
+                        });
+
+                        node.find('form').slideDown(400);
+                    });
                 }
             }
         },
@@ -4342,12 +4358,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var request_data = {
                 data: args.data,
+                beforeSend() {
+                    self.loadingStart('hrm-edit-' + args.data.id, { animationClass: 'preloader-update-animation' });
+                },
                 success(res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
                     hrm.Toastr.success(res.success);
                     self.addHolidayMeta(res.holiday);
                     self.submit_disabled = false;
+                    self.loadingStop('hrm-edit-' + args.data.id);
 
                     self.$store.commit('leave/afterUpdateHoliday', res.holiday);
 
@@ -4493,6 +4513,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             this.httpRequest('get_employee_dropdown', request_data);
+        },
+        showHideNewLeaveTypeForm: function () {
+            this.$store.commit('leave/isNewLeaveTypeFormVisible', { is_visible: true });
         }
     }
 });
@@ -4563,7 +4586,9 @@ let HRM_Leave_Store = {
 		afterUpdateLeaveType(state, type) {
 			let index = state.getIndex(state.leaveTypes, type.id, 'id');
 
-			state.leaveTypes.splice(index, 1, type);
+			state.editSlideUp(type.id, function () {
+				state.leaveTypes.splice(index, 1, type);
+			});
 		},
 		afterEmployeeLeaveSummery(state, data) {
 			if (data.type == 'pending') {
@@ -4742,7 +4767,7 @@ HRMRegisterModule('general', 'organization/general');
 
 let general = resolve => {
 
-    __webpack_require__.e/* require.ensure */(21).then((() => {
+    __webpack_require__.e/* require.ensure */(23).then((() => {
         resolve(__webpack_require__(59));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -6143,7 +6168,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data() {
 		return {
-			nameSpace: 'workExperience'
+			nameSpace: 'workExperience',
+			isFetchRecord: false
 		};
 	},
 	methods: {
@@ -6199,10 +6225,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback(true, res);
@@ -6225,16 +6256,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.httpRequest('hrm_update_record', form_data);
 		},
 
+		formValidation(fields, postData) {
+			var isFormValidate = true;
+
+			fields.forEach(function (val) {
+				if (val.required === true && !postData[val.name]) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
+		},
+
 		addNewRecord(args) {
 			var self = this;
 
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback(true, res);
@@ -6306,6 +6356,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: this.$route.query,
 
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
+
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -6313,6 +6367,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 
 					if (typeof callback === 'function') {
 						callback(true, res);
@@ -6333,6 +6389,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};
 
 			this.httpRequest('hrm_experiance_filter', form_data);
+		},
+
+		editFormValidation(fields, postData) {
+			var isFormValidate = true;
+
+			fields.forEach(function (val) {
+				if (val.editable !== false && val.required === true && !postData[val.name]) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
 		}
 	}
 });
@@ -6390,15 +6459,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -6425,12 +6530,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 

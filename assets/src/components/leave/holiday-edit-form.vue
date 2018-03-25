@@ -1,12 +1,12 @@
 <template>
 	<div class="hrm-td-editble-wrap inline-edit-row">
-		<form @submit.prevent="updateSelfHoliday()">
+		<form :id="'hrm-edit-'+holiday.id" @submit.prevent="updateSelfHoliday()">
 			<fieldset class="hrm-inline-edit-col-left">
 				<legend class="inline-edit-legend">Quick Edit</legend>
 				
 				<div class="hrm-field-wrap">
 					<label class="hrm-inline-edit-label">
-						<span class="title">Name</span>
+						<span class="title">Name <em>*</em></span>
 					</label>
 					<div class="hrm-inline-edit-field">
 						<span class="input-text-wrap">
@@ -29,7 +29,7 @@
 
 			<p class="submit inline-edit-save">
 				<button @click.prevent="showHideHolidayUpdateForm('toggle', holiday)" type="button" class="button cancel alignleft">Cancel</button>			
-				<input type="submit" value="submit" class="button button-primary save alignright">
+				<input :disabled="!canSubmit" type="submit" value="submit" class="button button-primary save alignright">
 				<br class="clear">
 			</p>
 		</form>
@@ -41,8 +41,27 @@
 	export default {
 		props: ['holiday'],
 		mixins: [HRMMixin.leave],
+		data () {
+			return {
+				canSubmit: true
+			}
+		},
 		methods: {
+			validation (data) {
+				var isFormValidate = true;
+
+				if(!data.name) {
+					hrm.Toastr.error('Holiday title is required!');
+					isFormValidate = false;
+				}
+
+				return isFormValidate;
+			},
 			updateSelfHoliday () {
+				if (!this.canSubmit) {
+					return false;
+				}
+				var self = this;
 				var args = {
             		data: {
             			id: this.holiday.id,
@@ -50,9 +69,14 @@
             			description: this.holiday.description,
             		},
             		callback: function() {
-
+            			self.canSubmit = true;
             		}
             	}
+
+            	if( !this.validation(args.data) ) {
+	            	return false;
+	            }
+	            this.canSubmit = false;
             	this.updateHoliday(args);
 			}
 		}

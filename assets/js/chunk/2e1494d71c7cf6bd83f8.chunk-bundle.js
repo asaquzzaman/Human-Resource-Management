@@ -1,5 +1,198 @@
 wpSpearHrm([4],{
 
+/***/ 146:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(37);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+var Hrm_Leave_Header = {
+    mixins: [HRMMixin.leave],
+
+    data: function () {
+        return {
+            menu: __WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */][0].children
+        };
+    },
+
+    created() {},
+
+    methods: {
+        childrens() {
+            if (!this.has_child) {
+                return [];
+            }
+
+            let root_menu = this.getParentName();
+            let index = this.getIndex(this.menu, root_menu, 'name');
+
+            if (index === false) {
+                return [];
+            }
+
+            if (this.menu[index].hasOwnProperty('children')) {
+                if (this.menu[index].children.length) {
+                    return this.menu[index].children;
+                }
+            } else {
+                return [];
+            }
+        },
+
+        has_child: function () {
+
+            if (this.$route.matched.length > 1) {
+                return true;
+            }
+
+            return false;
+        },
+
+        getParentName() {
+            let index = this.getIndex(this.$route.matched, this.$route.name, 'name');
+            index = parseInt(index) - 1;
+            return this.$route.matched[index].name;
+        }
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Hrm_Leave_Header);
+
+/***/ }),
+
+/***/ 147:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__ = __webpack_require__(146);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__ = __webpack_require__(148);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/leave/leave-header.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0385a22a", Component.options)
+  } else {
+    hotAPI.reload("data-v-0385a22a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "h2",
+      { staticClass: "nav-tab-wrapper" },
+      _vm._l(_vm.menu, function(item, index) {
+        return _c(
+          "router-link",
+          {
+            key: index,
+            staticClass: "nav-tab",
+            attrs: { to: { name: item.name } }
+          },
+          [_vm._v(_vm._s(item.meta.label))]
+        )
+      })
+    ),
+    _vm._v(" "),
+    _c("h3", { staticClass: "hrm-sub-nav" }, [
+      _c(
+        "ul",
+        { staticClass: "hrm-subsubsub" },
+        _vm._l(_vm.childrens(), function(children, child_key) {
+          return _c(
+            "li",
+            { key: child_key },
+            [
+              _c("router-link", { attrs: { to: { name: children.name } } }, [
+                _vm._v(_vm._s(children.meta.label))
+              ]),
+              _vm._v(" |  \n            ")
+            ],
+            1
+          )
+        })
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0385a22a", esExports)
+  }
+}
+
+/***/ }),
+
 /***/ 312:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,17 +205,12 @@ wpSpearHrm([4],{
 //
 //
 //
+//
+//
 
-var HRM_Leave_Type_Add_Btn = {
-	mixins: [HRMMixin.leave],
-	methods: {
-		showHideNewLeaveTypeForm: function () {
-			this.$store.commit('leave/isNewLeaveTypeFormVisible', { is_visible: true });
-		}
-	}
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (HRM_Leave_Type_Add_Btn);
+/* harmony default export */ __webpack_exports__["a"] = ({
+	mixins: [HRMMixin.leave]
+});
 
 /***/ }),
 
@@ -142,7 +330,7 @@ var HRM_Leave_Type_Add_Btn = {
 
 	data() {
 		return {
-			//departments: []
+			canSubmit: true
 		};
 	},
 
@@ -157,16 +345,43 @@ var HRM_Leave_Type_Add_Btn = {
 	},
 
 	methods: {
+		formValidation(data) {
+			var isFormValidate = true;
+
+			if (!data.leave_type) {
+				hrm.Toastr.error('Leave type is required!');
+				isFormValidate = false;
+			}
+			if (!data.departments.length) {
+				hrm.Toastr.error('Department is required!');
+				isFormValidate = false;
+			}
+
+			return isFormValidate;
+		},
+
 		updateSelfLeaveType() {
+			if (!this.canSubmit) {
+				return false;
+			}
+			var self = this;
 			var args = {
 				data: {
 					id: this.leaveType.id,
 					leave_type: this.leaveType.name,
 					nextYear: this.leaveType.next_year,
-					departments: this.leaveType.departments
+					departments: this.leaveType.departments.data
 				},
-				callback: function () {}
+				callback: function () {
+					self.canSubmit = true;
+					self.loadingStop('hrm-edit-' + args.data.id);
+				}
 			};
+			if (!this.formValidation(args.data)) {
+				return false;
+			}
+			this.loadingStart('hrm-edit-' + this.leaveType.id, { animationClass: 'preloader-update-animation' });
+			this.canSubmit = false;
 			this.updateLeaveType(args);
 		}
 	}
@@ -283,7 +498,8 @@ var Hrm_Leave_Type_Form = {
 			nextYear: false,
 			financial_start: HRM_Vars.financial_start,
 			financial_end: HRM_Vars.financial_end,
-			departments: []
+			departments: [],
+			canSubmit: true
 		};
 	},
 
@@ -311,9 +527,9 @@ var Hrm_Leave_Type_Form = {
 				this.entitle_to = date.date;
 			}
 		},
-		show_hide_new_leave_type_form: function (el) {
+		show_hide_new_leave_type_form: function () {
 			var self = this;
-			var node = jQuery(el.target).closest('.hrm-slide-up');
+			var node = jQuery('.hrm-slide-up');
 
 			node.slideUp(400, function () {
 				self.$store.commit('leave/isNewLeaveTypeFormVisible', { is_visible: false });
@@ -325,7 +541,30 @@ var Hrm_Leave_Type_Form = {
 			return pad.repeat(department.hierarchical_depth) + department.name;
 		},
 
+		formValidation(data) {
+			var isFormValidate = true;
+
+			if (!parseInt(data.entitlement)) {
+				hrm.Toastr.error('Entitlement is required!');
+				isFormValidate = false;
+			}
+			if (!data.leave_type) {
+				hrm.Toastr.error('Leave type is required!');
+				isFormValidate = false;
+			}
+			if (!data.departments.length) {
+				hrm.Toastr.error('Department is required!');
+				isFormValidate = false;
+			}
+
+			return isFormValidate;
+		},
+
 		createNewLeaveType: function () {
+
+			if (!this.canSubmit) {
+				return false;
+			}
 
 			var request_data = {
 				_wpnonce: HRM_Vars.nonce,
@@ -335,32 +574,32 @@ var Hrm_Leave_Type_Form = {
 				// entitle_to: this.entitle_to,
 				nextYear: this.nextYear,
 				departments: this.departments
-			},
-			    self = this;
+			};
 
+			if (!this.formValidation(request_data)) {
+				return false;
+			}
+
+			self = this;
 			this.show_spinner = true;
 
 			wp.ajax.send('create_new_leave_type', {
 				data: request_data,
 
+				beforeSend() {
+					self.canSubmit = false;
+					self.loadingStart('hrm-leave-type-form', { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.show_spinner = false;
-
+					self.canSubmit = true;
 					self.addLeaveTypeMeta(res.leave_type.data);
 					// Display a success toast, with a title
 					hrm.Toastr.success(res.success);
-
-					self.show_hide_new_leave_type_form({ target: '.hrm-form-cancel' });
-
-					// self.$store.commit('leave/updateDepartment', {
-					//     is_update: is_update, 
-					//     dept_id: self.department_id,
-					//     target_index: target_index,
-					//     departments: res.departments,
-					//     dept_drop_down: res.dept_drop_down
-					// });
-
+					self.show_hide_new_leave_type_form();
 					self.$store.commit('leave/setNewLeaveType', res.leave_type.data);
+					self.loadingStop('hrm-leave-type-form');
 				},
 
 				error: function (res) {
@@ -384,6 +623,12 @@ var Hrm_Leave_Type_Form = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_type_edit_form_vue__ = __webpack_require__(392);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -494,12 +739,17 @@ var Hrm_Leave_Type_Records = {
 
 			wp.ajax.send('get_leave_type', {
 				data: request_data,
+				beforeSend() {
+					self.loadingStart('hrm-leave-type-records-wrap');
+				},
 				success: function (res) {
 					res.data.forEach(function (type, index) {
 						self.addLeaveTypeMeta(type);
 					});
 
 					self.$store.commit('leave/setLeaveTypes', res.data);
+					self.isFetchRecord = true;
+					self.loadingStop('hrm-leave-type-records-wrap');
 				},
 
 				error: function (res) {}
@@ -532,6 +782,7 @@ var Hrm_Leave_Type_Records = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_type_form_vue__ = __webpack_require__(393);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_type_records_vue__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_type_add_btn_vue__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(147);
 //
 //
 //
@@ -544,6 +795,8 @@ var Hrm_Leave_Type_Records = {
 //
 //
 //
+//
+
 
 
 
@@ -557,7 +810,8 @@ var Hrm_Leave_Type_Records = {
 	components: {
 		'leave-type-form': __WEBPACK_IMPORTED_MODULE_0__leave_type_form_vue__["a" /* default */],
 		'leave-type-records': __WEBPACK_IMPORTED_MODULE_1__leave_type_records_vue__["a" /* default */],
-		'leave-type-add-btn': __WEBPACK_IMPORTED_MODULE_2__leave_type_add_btn_vue__["a" /* default */]
+		'leave-type-add-btn': __WEBPACK_IMPORTED_MODULE_2__leave_type_add_btn_vue__["a" /* default */],
+		'leave-header': __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__["a" /* default */]
 	},
 
 	computed: {
@@ -595,7 +849,7 @@ exports = module.exports = __webpack_require__(35)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-td-editble-wrap .inline-edit-legend {\n\tmargin: 0;\n    padding: 0.2em 0.5em 0;\n    line-height: 2.5;\n    font-weight: 600;\n}\n\n", ""]);
+exports.push([module.i, "\n.hrm-td-editble-wrap .inline-edit-legend {\n\tmargin: 0;\n    padding: 0.2em 0.5em 0;\n    line-height: 2.5;\n    font-weight: 600;\n}\n#hrm-leave-type-records-wrap .hrm-td {\n\tpadding: 8px 10px;\n}\n.hrm-field-wrap {\n\tpadding-left: 6px;\n}\n", ""]);
 
 // exports
 
@@ -846,145 +1100,171 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "metabox-holder hrm-leave-type-records-wrap" }, [
-      _c("table", { staticClass: "wp-list-table widefat fixed striped" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.records, function(record) {
-              return _c(
-                "tr",
-                {
-                  staticClass:
-                    "hrm-tr inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor"
-                },
-                [
-                  !record.editMode
-                    ? _c("td", { staticClass: "hrm-td" }, [
-                        _c("div", { staticClass: "hrm-td-content" }, [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\t" +
-                              _vm._s(record.name) +
-                              "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t"
-                          ),
-                          _c("div", { staticClass: "row-actions" }, [
-                            _c("span", { staticClass: "edit" }, [
-                              _c(
-                                "a",
-                                {
-                                  attrs: {
-                                    href: "#",
-                                    "aria-label": "Edit “Hello world!”"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      _vm.showHideLeaveTypeUpdateForm(
-                                        "toggle",
-                                        record
+    _c(
+      "div",
+      {
+        staticClass: "metabox-holder hrm-leave-type-records-wrap",
+        attrs: { id: "hrm-leave-type-records-wrap" }
+      },
+      [
+        _vm.isFetchRecord
+          ? _c(
+              "table",
+              { staticClass: "wp-list-table widefat fixed striped" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  [
+                    _vm._l(_vm.records, function(record) {
+                      return _c(
+                        "tr",
+                        {
+                          staticClass:
+                            "hrm-tr  inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor"
+                        },
+                        [
+                          !record.editMode
+                            ? _c("td", { staticClass: "hrm-td" }, [
+                                _c("div", { staticClass: "hrm-td-content" }, [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t" +
+                                      _vm._s(record.name) +
+                                      "\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t"
+                                  ),
+                                  _c("div", { staticClass: "row-actions" }, [
+                                    _c("span", { staticClass: "edit" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          attrs: {
+                                            href: "#",
+                                            "aria-label": "Edit “Hello world!”"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.showHideLeaveTypeUpdateForm(
+                                                "toggle",
+                                                record
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\tEdit\n\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
                                       )
-                                    }
-                                  }
-                                },
+                                    ]),
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t\t|\n\t\t\t\t\t\t\t\t"
+                                    ),
+                                    _c("span", { staticClass: "edit" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          attrs: {
+                                            href: "#",
+                                            "aria-label": "Edit “Hello world!”"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.selfDeleteLeaveType(record)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\tDelete\n\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !record.editMode
+                            ? _c("td", { staticClass: "hrm-td" }, [
+                                _vm._v(_vm._s(record.entitlement))
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !record.editMode
+                            ? _c("td", { staticClass: "hrm-td" }, [
+                                record.next_year === 1
+                                  ? _c("span", [_vm._v("¯¯")])
+                                  : _c("span", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.dateFormat(record.entitle_from)
+                                        )
+                                      )
+                                    ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !record.editMode
+                            ? _c("td", { staticClass: "hrm-td" }, [
+                                record.next_year === 1
+                                  ? _c("span", [_vm._v("¯¯")])
+                                  : _c("span", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.dateFormat(record.entitle_to)
+                                        )
+                                      )
+                                    ])
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !record.editMode
+                            ? _c("td", { staticClass: "hrm-td" }, [
+                                _vm._v(
+                                  _vm._s(_vm.carryStatus(record.next_year))
+                                )
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          record.editMode
+                            ? _c(
+                                "td",
+                                { attrs: { colspan: "5" } },
                                 [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t\t\tEdit\n\t\t\t\t\t\t\t\t\t"
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v("\n\t\t\t\t\t\t\t\t|\n\t\t\t\t\t\t\t\t"),
-                            _c("span", { staticClass: "edit" }, [
-                              _c(
-                                "a",
-                                {
-                                  attrs: {
-                                    href: "#",
-                                    "aria-label": "Edit “Hello world!”"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      _vm.selfDeleteLeaveType(record)
+                                  _c("leave-type-edit-form", {
+                                    attrs: {
+                                      id: "hrm-edit-" + record.id,
+                                      leaveType: record
                                     }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t\t\tDelete\n\t\t\t\t\t\t\t\t\t"
-                                  )
-                                ]
+                                  })
+                                ],
+                                1
                               )
-                            ])
+                            : _vm._e()
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    !_vm.records.length
+                      ? _c("tr", [
+                          _c("td", { attrs: { colspan: "4" } }, [
+                            _vm._v("No record found!")
                           ])
                         ])
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !record.editMode
-                    ? _c("td", { staticClass: "hrm-td" }, [
-                        _vm._v(_vm._s(record.entitlement))
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !record.editMode
-                    ? _c("td", { staticClass: "hrm-td" }, [
-                        record.next_year === 1
-                          ? _c("span", [_vm._v("¯¯")])
-                          : _c("span", [
-                              _vm._v(
-                                _vm._s(_vm.dateFormat(record.entitle_from))
-                              )
-                            ])
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !record.editMode
-                    ? _c("td", { staticClass: "hrm-td" }, [
-                        record.next_year === 1
-                          ? _c("span", [_vm._v("¯¯")])
-                          : _c("span", [
-                              _vm._v(_vm._s(_vm.dateFormat(record.entitle_to)))
-                            ])
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !record.editMode
-                    ? _c("td", { staticClass: "hrm-td" }, [
-                        _vm._v(_vm._s(_vm.carryStatus(record.next_year)))
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  record.editMode
-                    ? _c(
-                        "td",
-                        { attrs: { colspan: "5" } },
-                        [
-                          _c("leave-type-edit-form", {
-                            attrs: { leaveType: record }
-                          })
-                        ],
-                        1
-                      )
-                    : _vm._e()
-                ]
-              )
-            }),
-            _vm._v(" "),
-            !_vm.records.length
-              ? _c("tr", [
-                  _c("td", { attrs: { colspan: "4" } }, [
-                    _vm._v("No record found!")
-                  ])
-                ])
-              : _vm._e()
-          ],
-          2
-        )
-      ])
-    ])
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ]
+            )
+          : _vm._e()
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -1033,6 +1313,7 @@ var render = function() {
     _c(
       "form",
       {
+        attrs: { id: "hrm-edit-" + _vm.leaveType.id },
         on: {
           submit: function($event) {
             $event.preventDefault()
@@ -1184,7 +1465,7 @@ var render = function() {
           _vm._v(" "),
           _c("input", {
             staticClass: "button button-primary save alignright",
-            attrs: { type: "submit", value: "submit" }
+            attrs: { disabled: !_vm.canSubmit, type: "submit", value: "submit" }
           }),
           _vm._v(" "),
           _c("br", { staticClass: "clear" })
@@ -1242,6 +1523,10 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("leave-type-add-btn"),
+      _vm._v(" "),
+      _c("leave-header"),
+      _vm._v(" "),
       _vm.is_new_leave_type_form_visible
         ? _c(
             "div",
@@ -1256,8 +1541,6 @@ var render = function() {
             1
           )
         : _vm._e(),
-      _vm._v(" "),
-      _c("leave-type-add-btn"),
       _vm._v(" "),
       _c("leave-type-records")
     ],
@@ -1285,11 +1568,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "hrm-tbl-action-btn-sibling" }, [
+  return _c("div", [
+    _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Leave Type")]),
+    _vm._v(" "),
     _c(
       "a",
       {
-        staticClass: "button hrm-button-primary ",
+        staticClass: "page-title-action hrm-btn",
         attrs: { href: "#" },
         on: {
           click: function($event) {
@@ -1298,7 +1583,7 @@ var render = function() {
           }
         }
       },
-      [_vm._v("Add")]
+      [_vm._v("\n\t\tAdd New\n\t")]
     )
   ])
 }
@@ -1343,7 +1628,7 @@ var render = function() {
               _c(
                 "form",
                 {
-                  attrs: { action: "" },
+                  attrs: { id: "hrm-leave-type-form", action: "" },
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -1425,12 +1710,14 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" })
+                      _c("div", { staticClass: "hrm-clear" }),
+                      _vm._v(" "),
+                      _vm._m(2)
                     ]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "hrm-form-field " }, [
-                    _vm._m(2),
+                    _vm._m(3),
                     _vm._v(" "),
                     _c("input", {
                       directives: [
@@ -1491,7 +1778,7 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _c("div", { staticClass: "hrm-form-field " }, [
-                    _vm._m(3),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c("span", { staticClass: "hrm-checkbox-wrap" }, [
                       _c("input", {
@@ -1552,6 +1839,7 @@ var render = function() {
                   _c("input", {
                     staticClass: "button hrm-button-primary button-primary",
                     attrs: {
+                      disabled: !_vm.canSubmit,
                       type: "submit",
                       name: "requst",
                       value: "Save changes"
@@ -1598,6 +1886,16 @@ var staticRenderFns = [
     return _c("label", [
       _vm._v("\n\t\t\t\t\t\t\tDepartments\n\t\t\t\t\t\t\t"),
       _c("em", [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "description" }, [
+      _c("a", { attrs: { href: "#/departments" } }, [
+        _vm._v("Create Department")
+      ])
     ])
   },
   function() {

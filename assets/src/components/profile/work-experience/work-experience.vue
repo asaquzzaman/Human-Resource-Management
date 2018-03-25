@@ -5,7 +5,7 @@
 
 		<profile-menu></profile-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div class="hrm-table-action hrm-bulk-wrap">
@@ -21,18 +21,19 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" placeholder="Title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
-
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.title" placeholder="Title" type="text">
+						<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+						<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 				</div>
 
 			</div>
 			<div class="hrm-clear"></div>
 		</div>
 		
-	    <hrm-table></hrm-table>
+	    <hrm-table :fields="fields"></hrm-table>
 
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
@@ -72,19 +73,22 @@
 						type: 'text',
 						model: '',
 						label: 'Title',
-						name: 'title'
+						name: 'title',
+						required: true
 					},
 					{
 						type: 'datePickerFrom',
 						model: '',
 						label: 'From',
-						name: 'start'
+						name: 'start',
+						required: true
 					},
 					{
 						type: 'datePickerTo',
 						model: '',
 						label: 'To',
-						name: 'end'
+						name: 'end',
+						required: true
 					},
 					{
 						type: 'textarea',

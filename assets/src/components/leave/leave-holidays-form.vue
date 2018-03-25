@@ -8,7 +8,7 @@
 
 			<div class="inside">
 				<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-					<form action="" @submit.prevent="createNewHolidays()">
+					<form action="" id="hrm-holiday-form" @submit.prevent="createNewHolidays()">
 						<div class="hrm-form-field ">
 							<label for="hrm-leave-type-text-field">
 								Name<em>  *</em>
@@ -45,13 +45,13 @@
 
 						<div class="hrm-form-field ">
 							<label for="hrm-leave-description-textarea-field">
-								Description<em>  *</em>
+								Description
 							</label>
-							<input type="text" class="" id="hrm-leave-description-textarea-field" required="required" name="description" v-model="description">
+							<textarea v-model="description"></textarea>  
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>
-						<input  type="submit" class="button  hrm-button-primary" name="requst" value="Save changes">
+						<input :disabled="!canSubmit"  type="submit" class="button button-primary  hrm-button-primary" name="requst" value="Save changes">
 						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 					</form>
 				</div>
@@ -75,7 +75,8 @@
 				from: '',
 				to: '',
 				description: '',
-				records: []
+				records: [],
+				canSubmit: true
 			}
 		},
 
@@ -96,12 +97,35 @@
 				var self = this;
 
 				this.slideUp(el.target, function() {
-					self.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: false});
+					self.$store.commit('leave/isNewHolidayFormVisible', {is_visible: false});
 				});
 							
 			},
 
+			validation (data) {
+				var isFormValidate = true;
+
+				if(!data.name) {
+					hrm.Toastr.error('Holiday title is required!');
+					isFormValidate = false;
+				}
+				if(!data.from) {
+					hrm.Toastr.error('Holiday start date is required!');
+					isFormValidate = false;
+				}
+				if(!data.to) {
+					hrm.Toastr.error('Holiday end date is required!');
+					isFormValidate = false;
+				}
+
+				return isFormValidate;
+			},
+
 			createNewHolidays: function() {
+
+				if (!this.canSubmit) {
+					return false;
+				}
 				
 			    var request_data = {
 	                _wpnonce: HRM_Vars.nonce,
@@ -111,18 +135,23 @@
 	                description: this.description,
 	            },
 	            
-	            // is_update  = parseInt( this.department_id ) ? true : false,
-	            
-	            // target_index = is_update ? this.getIndex(
-	            //     this.$store.state.leave.departments, this.department_id, 'id'
-	            // ) : false,
-
 	            self = this;
+
+	            if( !this.validation(request_data) ) {
+	            	return false;
+	            }
 
 	            this.show_spinner = true;
 
 	            wp.ajax.send('create_new_holidays', {
 	                data: request_data,
+
+	                beforeSend () {
+	                	self.loadingStart(
+	                		'hrm-holiday-form',
+	                		{animationClass: 'preloader-update-animation'}
+	                	);
+	                },
 	                
 	                success: function(res) {
 	                	self.show_spinner = false;
@@ -133,12 +162,11 @@
 	                    
 	                    // Display a success toast, with a title
 	                    hrm.Toastr.success(res.success);
+	                    self.loadingStop('hrm-holiday-form');
 	                    
-	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
+	                    jQuery('#hrm-holiday-form').slideUp(400, function() {
 	                    	self.$store.commit('leave/isNewHolidayFormVisible', {is_visible: false});
 	                    });
-
-	                    
 	                },
 
 	                error: function(res) {

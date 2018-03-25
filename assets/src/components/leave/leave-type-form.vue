@@ -8,7 +8,7 @@
 
 			<div class="inside">
 				<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-					<form action="" @submit.prevent="createNewLeaveType()">
+					<form id="hrm-leave-type-form" action="" @submit.prevent="createNewLeaveType()">
 						<div class="hrm-form-field ">
 							<label for="hrm-leave-type-text-field">Leave Type<em>  *</em></label>
 							<input type="text"  id="hrm-leave-type-text-field"  required="required"  v-model="leave_type"  name="leave_type"  />
@@ -45,10 +45,10 @@
 						        </hrm-multiselect>               
 						    </div>
 						    <div class="hrm-clear"></div>
+						    <span class="description">
+						    	<a href="#/departments">Create Department</a>
+						    </span>
 						</div>
-
-
-
 
 						<div class="hrm-form-field ">
 							<label for="hrm-leave-entitlement-text-field">Entitlement <em>  *</em></label>
@@ -76,7 +76,7 @@
 							<span class="description">Leave type carry to next financial year.</span>
 						</div>				
 
-						<input  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
+						<input :disabled="!canSubmit"  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
 						<a @click.prevent="show_hide_new_leave_type_form($event)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 					</form>
 				</div>
@@ -104,6 +104,7 @@ var Hrm_Leave_Type_Form = {
 			financial_start: HRM_Vars.financial_start,
 			financial_end: HRM_Vars.financial_end,
 			departments: [],
+			canSubmit: true
 		}
 	},
 
@@ -131,9 +132,9 @@ var Hrm_Leave_Type_Form = {
 				this.entitle_to = date.date
 			}
 		},
-		show_hide_new_leave_type_form: function(el) {
+		show_hide_new_leave_type_form: function() {
 			var self = this;
-			var node = jQuery(el.target).closest('.hrm-slide-up');
+			var node = jQuery('.hrm-slide-up');
 
 			node.slideUp(400, function() {
 				self.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: false});
@@ -147,7 +148,30 @@ var Hrm_Leave_Type_Form = {
 
 		},
 
+		formValidation (data) {
+			var isFormValidate = true;
+
+			if(!parseInt(data.entitlement)) {
+				hrm.Toastr.error('Entitlement is required!');
+				isFormValidate = false;
+			}
+			if(!data.leave_type) {
+				hrm.Toastr.error('Leave type is required!');
+				isFormValidate = false;
+			}
+			if(!data.departments.length) {
+				hrm.Toastr.error('Department is required!');
+				isFormValidate = false;
+			}
+
+			return isFormValidate;
+		},
+
 		createNewLeaveType: function() {
+
+			if (!this.canSubmit) {
+				return false;
+			}
 
 		    var request_data = {
                 _wpnonce: HRM_Vars.nonce,
@@ -157,34 +181,35 @@ var Hrm_Leave_Type_Form = {
                 // entitle_to: this.entitle_to,
                 nextYear: this.nextYear,
                 departments: this.departments
-            },
+            }
+
+            if (!this.formValidation(request_data)) {
+				return false;
+			}	
             
             self = this;
-
             this.show_spinner = true;
 
             wp.ajax.send('create_new_leave_type', {
                 data: request_data,
+
+                beforeSend () {
+                	self.canSubmit = false;
+                	self.loadingStart(
+                		'hrm-leave-type-form',
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                }, 
                 
                 success: function(res) {
                 	self.show_spinner = false;
-                	
+                	self.canSubmit = true;
                     self.addLeaveTypeMeta(res.leave_type.data);
                     // Display a success toast, with a title
                     hrm.Toastr.success(res.success);
-
-                    self.show_hide_new_leave_type_form({target: '.hrm-form-cancel'});
-
-
-                    // self.$store.commit('leave/updateDepartment', {
-                    //     is_update: is_update, 
-                    //     dept_id: self.department_id,
-                    //     target_index: target_index,
-                    //     departments: res.departments,
-                    //     dept_drop_down: res.dept_drop_down
-                    // });
-
+                    self.show_hide_new_leave_type_form();
                     self.$store.commit('leave/setNewLeaveType', res.leave_type.data);
+                    self.loadingStop('hrm-leave-type-form');
                 },
 
                 error: function(res) {

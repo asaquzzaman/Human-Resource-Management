@@ -84,10 +84,28 @@ export default {
                 type   = jQuery.isEmptyObject(type) ? false : type;
             
             if ( type ) {
-                if ( status === 'toggle' ) {
-                    type.editMode = type.editMode ? false : true;
+                if ( status === 'toggle' ) { 
+                    status = type.editMode ? false : true;
+                }
+
+                if ( status === false ) {
+                    jQuery('#hrm-edit-'+type.id)
+                        .find('form')
+                        .slideUp(function() {
+
+                        type.editMode = status;
+                    });
                 } else {
                     type.editMode = status;
+                    hrm.Vue.nextTick(function() {
+                        var node = jQuery('#hrm-edit-'+type.id);
+
+                        node.find('form').css({
+                            display: 'none'
+                        });
+
+                        node.find('form').slideDown(400);
+                    });
                 }
             }
         },
@@ -333,12 +351,19 @@ export default {
 
             var request_data = {
                 data: args.data,
+                beforeSend () {
+                    self.loadingStart(
+                        'hrm-edit-'+args.data.id,
+                        {animationClass: 'preloader-update-animation'}
+                    );
+                },
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
                     hrm.Toastr.success(res.success);
                     self.addHolidayMeta(res.holiday);
                     self.submit_disabled = false;
+                    self.loadingStop('hrm-edit-'+args.data.id );
                     
                     self.$store.commit('leave/afterUpdateHoliday', res.holiday);
 
@@ -486,6 +511,9 @@ export default {
             }
             
             this.httpRequest('get_employee_dropdown', request_data);
+        },
+        showHideNewLeaveTypeForm: function() {
+            this.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: true});
         }   
 	},
 };

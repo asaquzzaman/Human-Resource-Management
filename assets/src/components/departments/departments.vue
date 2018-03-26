@@ -12,7 +12,7 @@
 	            	<new-department-form></new-department-form>
 	            </div>
 
-	            <form id="hrm-list-form" class="" action="" method="post">
+	            <div id="hrm-list-form" class="" action="" method="post">
 
 	                <div class="hrm-table-action-wrap">
 	                    <div class="hrm-left-action">
@@ -20,9 +20,6 @@
 	                        <department-del-btn :type="'group'"></department-del-btn>
 	                        <span class="hrm-clear"></span>
 	                    </div>
-
-
-	                    <span class="hrm-clear"></span>
 	                    
 	                </div>
 
@@ -31,7 +28,7 @@
 	                   <department-table></department-table>
 	                   
 	            	</div>
-	            </form>
+	            </div>
 	            <!-- <department-pagination></department-pagination> -->
 	        </div>
 	        
@@ -50,7 +47,7 @@
 	export default {
 		mixins: [HRMMixin.departments],
 		created () {
-			this.getDepartments();
+			//this.getDepartments();
 		},
 		computed: {
 	 		is_new_department_form_visible: function() {
@@ -70,9 +67,7 @@
 </script>
 
 <style>
-	#hrm-list-form .hrm-table-action-wrap {
-		display: inline;
-	}
+
 	.hrm-tbl-action-btn-sibling {
 		width: 6%;
 	}

@@ -66,6 +66,12 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.0.1 - March 26, 2018 =
+
+ * [new] Overall included loading effect
+ * [update] Overall design changes
+ 
+
 = 2.0 - March 20, 2018 =
 
  * [new] HRM front-end fully migrate with Vue js.

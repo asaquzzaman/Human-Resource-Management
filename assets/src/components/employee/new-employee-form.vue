@@ -46,11 +46,11 @@
 		methods: {
 			selfNewRecord () {
 				var self = this;
-
-				//self.loading = true;
-				//self.canSubmit = false;
-
 				var postData = this.generateFieldData(this.fields);
+				
+				if (!this.formValidation(this.fields, postData)) {
+					return false;
+				}	
 				
 				var args = {
 					data: postData,
@@ -61,6 +61,9 @@
 						self.makeEmptyField(self.fields);
 					}
 				}
+
+				self.loading = true;
+				self.canSubmit = false;
 
 				this.addNewRecord(args);
 			},

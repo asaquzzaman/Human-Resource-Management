@@ -1,7 +1,7 @@
 <template>
 	<div class="hrm-leave">
-		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<table class="wp-list-table widefat fixed striped">
+		<div id="hrm-leave-record-wrap" class="metabox-holder hrm-leave-type-records-wrap">
+			<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
 						<th class="manage-column column-cb">Employee</th>
@@ -16,7 +16,7 @@
 
 				</thead>
 				<tbody>
-					<tr v-for="pendingLeave in pendingLeaves">
+					<tr :data-recordId="pendingLeave.id" :id="'hrm-tr-' + pendingLeave.id" v-for="pendingLeave in pendingLeaves">
 						
 						<td>
 
@@ -62,7 +62,7 @@
 					
 					<tr v-if="!pendingLeaves.length">
 						
-						<td colspan="7">No record found!</td>
+						<td colspan="8">No record found!</td>
 					</tr>
 				</tbody>
 			</table>

@@ -5,7 +5,7 @@
 
 		<organization-menu></organization-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div  v-if="manageOrganization()" class="hrm-table-action hrm-bulk-wrap">
@@ -21,9 +21,10 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.name" placeholder="Location name" type="text">
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
-
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.name" placeholder="Title" type="search">
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 				</div>
 
 			</div>
@@ -77,7 +78,8 @@
 						name: 'name',
 						tableHead: 'Name',
 						tbRowAction: this.manageOrganization(),
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'select',
@@ -182,10 +184,6 @@
 			}
 		},
 		
-		created () {
-			var self = this;
-		},
-
 		computed: {
 			isNewRecordFormActive () {
 				return this.$store.state[this.nameSpace].isNewRecordFormActive;

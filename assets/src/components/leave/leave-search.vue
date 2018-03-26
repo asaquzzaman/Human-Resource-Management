@@ -1,39 +1,41 @@
 <template>
 	
 	<div class="hrm-tbl-action-wrap hrm-form-field hrm-leave-search-wrap">
-		
-		<div class="hrm-table-action">
-			<date-picker placeholder="Leave From" v-model="start_time" class="pm-datepickter-to" dependency="pm-datepickter-from"></date-picker>
-		</div>
-		<div class="hrm-table-action">
-			<date-picker placeholder="Leave To" v-model="end_time" class="pm-datepickter-from" dependency="pm-datepickter-to"></date-picker>
-		</div>
-		
-		<div class="hrm-table-action">
-			<div v-if="canManamgeLeave()" class="hrm-multiselect hrm-leave-search">
-		        <hrm-multiselect 
-		            v-model="emp_id" 
-		            :options="employessDropDown" 
-		            :multiple="false" 
-		            :close-on-select="true"
-		            :clear-on-select="true"
-		            :hide-selected="false"
-		            :show-labels="true"
-		            placeholder="Select Employee"
-		            select-label=""
-		            selected-label="selected"
-		            deselect-label=""
-		            :taggable="false"
-		            label="name"
-		            track-by="id"
-		            :allow-empty="true">
+		<form @submit.prevent="leaveFilter()">
+			<div class="hrm-table-action">
+				<date-picker  placeholder="Leave From" v-model="start_time" class="search-input pm-datepickter-to" dependency="pm-datepickter-from"></date-picker>
+			</div>
+			<div class="hrm-table-action">
+				<date-picker placeholder="Leave To" v-model="end_time" class="search-input pm-datepickter-from" dependency="pm-datepickter-to"></date-picker>
+			</div>
 
-		        </hrm-multiselect>               
-		    </div>
-		</div>
-	    <div class="hrm-table-action">
-	    	<a href="#" @click.prevent="leaveFilter()"  class="button hrm-button-secondary button-secondary">Filter</a>
-		</div>
+			
+			<div class="hrm-table-action">
+				<div v-if="canManamgeLeave()" class="hrm-multiselect hrm-leave-search">
+			        <hrm-multiselect 
+			            v-model="emp_id" 
+			            :options="employessDropDown" 
+			            :multiple="false" 
+			            :close-on-select="true"
+			            :clear-on-select="true"
+			            :hide-selected="false"
+			            :show-labels="true"
+			            placeholder="Select Employee"
+			            select-label=""
+			            selected-label="selected"
+			            deselect-label=""
+			            :taggable="false"
+			            label="name"
+			            track-by="id"
+			            :allow-empty="true">
+
+			        </hrm-multiselect>               
+			    </div>
+			</div>
+		    <div class="hrm-table-action">
+		    	<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+			</div>
+		</form>
 	</div>
 	
 </template>

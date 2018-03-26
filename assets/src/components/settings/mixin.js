@@ -5,6 +5,7 @@ export default {
 			var request = {
 				data: args.data,
 				success (res) {
+					hrm.Toastr.success('Udpate settings successfully!');
 					if (typeof args.callback === 'function') {
 						args.callback(res);
 					}

@@ -8,7 +8,7 @@
 
 		<div class="inside">
 			<div class="hrm-attendance-configuration" id="hrm-hidden-form">
-				<form class="hrm-leave-records-form" action="" @submit.prevent="createNewLeave()">
+				<form id="hrm-leave-records-form" class="hrm-leave-records-form" action="" @submit.prevent="createNewLeave()">
 					<div v-if="leave_proxy" class="hrm-form-field hrm-leave-employee-search-wrap">
 						<label>
 							Employee
@@ -123,7 +123,7 @@
 					</div>
 
 					
-					<input  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
+					<input :disabled="is_leave_btn_disable"  type="submit" class="button hrm-button-primary button-primary" name="requst" value="Save changes">
 					<a @click.prevent="showHideLeaveRecordsForm(false)" target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 				</form>
 			</div>
@@ -281,28 +281,34 @@
 	                method: 'create'
 	            };
 
-	            this.show_spinner = true;
-
 	            var form_data = {
 	                data: request_data,
 
-	                beforSend: function(xhr) {
+	                beforeSend: function(xhr) {
 	                	self.is_leave_btn_disable = true;
+	                	self.show_spinner = true;
+	                	self.loadingStart(
+	               			'hrm-leave-records-form',
+	               			{animationClass: 'preloader-update-animation'}
+	               		);
 	                },
 	                
 	                success: function(res) {
+	                	self.is_leave_btn_disable = false;
 	                	self.show_spinner = false;
-	                    console.log(res);
+	                	self.loadingStop('hrm-leave-records-form');
+	                    
 	                    // Display a success toast, with a title
 	                    hrm.Toastr.success(res.success);
 	                    self.$store.commit('leave/afterCreateNewLeave', res.resource);
-	                    
-	                    self.slideUp(jQuery('.hrm-form-cancel'), function() {
-	                    	//self.$store.commit('leave/isNewDepartmentForVisible', {is_visible: false});
-	                    	
-	                    });
+	                    self.showHideLeaveRecordsForm(false);
 
-	                    
+	                 //    hrm.Vue.nextTick(function() {
+		                //     var tr = jQuery('.wp-list-table')
+		                //     	.find('tbody tr:first-child');
+		                    
+		                //     self.newRecordEffect(tr);
+	                	// })
 	                },
 
 	                error: function(res) {

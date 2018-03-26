@@ -5,7 +5,7 @@
 
 		<profile-menu></profile-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div class="hrm-table-action hrm-bulk-wrap">
@@ -21,11 +21,12 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
-
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.title" placeholder="Title" type="text">
+						<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+						<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 				</div>
 
 			</div>
@@ -73,11 +74,12 @@
 					{
 						type: 'text',
 						model: '',
-						label: 'Level',
+						label: 'Title',
 						name: 'skill',
 						tableHead: 'Skill',
 						tbRowAction: true,
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'text',

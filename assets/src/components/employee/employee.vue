@@ -3,7 +3,7 @@
 		<h1 v-if="manageEmployee()" class="wp-heading-inline">Employee</h1>
 		<a v-if="manageEmployee()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
-		<add-new-record-form v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive && manageEmployee()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div v-if="manageEmployee()" class="hrm-table-action hrm-bulk-wrap">
@@ -19,9 +19,11 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="text">
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.name" size="40" placeholder="Search by user login, nicename, email" type="search">
 
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 
 				</div>
 
@@ -29,7 +31,7 @@
 			<div class="hrm-clear"></div>
 		</div>
 		
-	    <hrm-table :fields="fields"></hrm-table>
+	    <hrm-table id="hrm-employee-list-table" :fields="fields"></hrm-table>
 	    
 	    <hrm-pagination 
             :total_pages="pagination.total_pages" 
@@ -65,8 +67,18 @@
 					name: this.$route.query.name
 				},
 				bulkAction: -1,
-
 				fields: FormFields(this),
+			}
+		},
+
+		watch: {
+			search: {
+				handler(obj){
+			    	if (obj.name == '') {
+			    		this.recordSearch();
+			       	}
+			    },
+			    deep: true
 			}
 		},
 		
@@ -146,7 +158,6 @@
 
 			recordSearch () {
 				this.$router.push({query: this.search});
-				//this.getRecords();
 			}
 		}
 	}

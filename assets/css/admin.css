@@ -153,7 +153,6 @@ label em {
   width: 100%;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action {
-  float: left;
   width: 100%;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-tbl-action-btn-sibling,
@@ -161,7 +160,7 @@ label em {
   float: left;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action .hrm-tbl-action-btn-sibling {
-  margin-right: 10px;
+  
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-right-action {
   float: right;
@@ -267,7 +266,7 @@ label em {
 #hrm-hidden-form .description,
 #hrm-visible-form .description {
   margin-left: 21%;
-  margin-bottom: 10px;
+  font-size: 12px;
 }
 #hrm-hidden-form .hrm-submit-button,
 #hrm-visible-form .hrm-submit-button {
@@ -297,7 +296,7 @@ label em {
 }
 #hrm-hidden-form .hrm-form-field .multiselect__content,
 #hrm-visible-form .hrm-form-field .multiselect__content {
-  margin-top: 31px;
+  
 }
 #hrm-hidden-form .hrm-child-field label:first-child,
 #hrm-visible-form .hrm-child-field label:first-child {
@@ -353,7 +352,7 @@ label em {
   color: red;
 }
 .hrm-search-content #hrm-search-form .description {
-  margin-bottom: 10px;
+  
 }
 .hrm-search-content #hrm-search-form .hrm-text-wrap {
   float: left;
@@ -872,7 +871,7 @@ label em {
   margin-right: 10px;
 }
 .hrm-multiselect .multiselect {
-  width: 30%;
+ /* width: 30%;*/
 }
 .hrm-multiselect .multiselect .multiselect__input {
   width: 100% !important;
@@ -951,6 +950,113 @@ label em {
 .pm-pagination-wrap .router-link-active {
   background: #9ea3a8;
 }
+
+
+
+#hrm .preloader-animation,
+.hrm .preloader-animation {
+    display: inline-block;
+    height: 6.5em;
+    width: 7.1em;
+    background: url("images/hrm-loading.gif") no-repeat center center;
+    animation: none;
+    border: none;
+}
+
+#hrm .preloader-update-animation,
+.hrm .preloader-update-animation {
+    display: inline-block;
+    height: 70px;
+    width: 70px;
+    background: url(images/load-icon.gif) no-repeat center center;
+    animation: none;
+    border: none;
+    background-size: 70px;
+}
+
+#hrm .preloader-animation:before,
+#hrm .preloader-animation:after,
+.hrm .preloader-animation:after,
+.hrm .preloader-animation:before {
+  display: none;
+}
+
+.hrm-tbl-action-wrap {
+  
+}
+
+#hrm .new-records,
+.hrm .new-records {
+  background: #5b9dd91a;
+}
+
+#hrm .inline-edit-col,
+.hrm .inline-edit-col {
+    width: 100%;
+}
+
+#hrm .inline-edit-col .title,
+.hrm .inline-edit-col .title,
+.hrm .inline-edit-col .input-text-wrap,
+#hrm .inline-edit-col .input-text-wrap {
+    float: left;
+}
+
+#hrm .inline-edit-col .title,
+.hrm .inline-edit-col .title {
+    width: 15%;
+}
+
+.hrm .inline-edit-col .input-text-wrap,
+#hrm .inline-edit-col .input-text-wrap {
+    width: 60%;
+    margin-left: 0;
+}
+
+.hrm .inline-edit-col .hrm-edit-field-wrap,
+#hrm .inline-edit-col .hrm-edit-field-wrap{
+    margin-bottom: 3px;
+}
+
+.hrm .inline-edit-col .input-text-wrap input,
+#hrm .inline-edit-col .input-text-wrap input,
+.hrm .inline-edit-col .input-text-wrap textarea,
+#hrm .inline-edit-col .input-text-wrap textarea,
+.hrm .inline-edit-col .input-text-wrap .multiselect,
+#hrm .inline-edit-col .input-text-wrap .multiselect {
+    width: 50%;
+}
+
+#hrm .hrm-edit-form,
+.hrm .hrm-edit-form {
+    margin: 10px 0 10px 0;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action {
+  display: inline-block;
+  vertical-align: top;
+}
+.hrm-tbl-action-wrap .hrm-table-action .multiselect__tags {
+  border-radius: 0;
+  border: 1px solid #ddd;
+  width: 180px;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action .search-input {
+  padding: 6px;
+  width: 135px;
+  border: 1px solid #ddd;
+}
+
+.hrm-tbl-action-wrap .hrm-table-action input[type="submit"] {
+  margin-top: 2px;
+}
+.nav-tab-wrapper .nav-tab-active,
+.nav-tab-wrapper .router-link-exact-active {
+  background: #f1f1f1;
+}
+
+
 
 
 

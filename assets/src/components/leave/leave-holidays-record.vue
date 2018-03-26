@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<div class="metabox-holder hrm-leave-type-records-wrap">
-			<table class="wp-list-table widefat fixed striped">
+		<div id="hrm-holiday-table" class="metabox-holder hrm-leave-type-records-wrap">
+			<table  v-if="isFetchRecord" class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
 						<th class="manage-column column-cb">Name</th>
@@ -95,12 +95,16 @@
 
 	            wp.ajax.send('get_holidays', {
 	                data: request_data,
+	                beforeSend () {
+	                	self.loadingStart('hrm-holiday-table');
+	                },
 	                success: function(res) {
 	                	res.holidays.forEach(function(holiday) {
 	                		self.addHolidayMeta(holiday);
 	                	});
-
+	                	self.loadingStop('hrm-holiday-table');
 	                    self.$store.commit('leave/setHoliday', res.holidays);
+	                    self.isFetchRecord = true;
 	                },
 
 	                error: function(res) {

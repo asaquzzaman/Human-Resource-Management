@@ -156,15 +156,23 @@ export default hrm.Vue.mixin({
                 duration: '', 
 
                 // z-index property
-                zIndex: '', 
+                zIndex: '9999', 
 
                 // sets relative position to preloader's parent
-                setRelative: false 
+                setRelative: false,
+
+                animationClass: 'preloader-animation'
 
             };
             var args = jQuery.extend(true, pre_define, args);
-
-            jQuery('#'+id).preloader(args);
+            
+            hrm.Vue.nextTick(function() {
+                jQuery('#'+id).css({
+                    position: 'relative'
+                });
+                jQuery('#'+id).preloader(args);
+            });
+            
         },
 
         loadingStop (id) {
@@ -195,6 +203,63 @@ export default hrm.Vue.mixin({
             }
             
             return parseInt(this.$route.params.employeeId);
+        },
+
+        newRecordEffect (selector) {
+            selector.css({ display: 'none' });
+            selector.addClass('new-records');
+            selector.fadeIn(1000);
+
+            setTimeout(function() {
+                selector.removeClass('new-records');
+            }, 3000);
+        },
+
+        updateRecordEffect (selector) {
+            //selector.css({ display: 'none' });
+            selector.addClass('new-records');
+            //selector.fadeIn(1000);
+
+            setTimeout(function() {
+                selector.removeClass('new-records');
+            }, 3000);
+            
+        },
+
+        formValidation (fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function(val) {
+                if(
+                    val.required === true
+                        &&
+                    !postData[val.name]
+                ) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
+        },
+
+        editFormValidation (fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function(val) {
+                if(
+                    val.editable !== false
+                        &&
+                    val.required === true
+                        &&
+                    !postData[val.name]
+                ) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
         }
 	},
 });

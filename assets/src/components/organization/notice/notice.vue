@@ -5,7 +5,7 @@
 
 		<organization-menu></organization-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div v-if="manageOrganization()" class="hrm-table-action  hrm-bulk-wrap">
@@ -21,11 +21,12 @@
 
 			<div class="hrm-table-action  hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" placeholder="Notice title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
-
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.title" placeholder="Title" type="text">
+						<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+						<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 				</div>
 
 			</div>
@@ -78,7 +79,8 @@
 						name: 'title',
 						tableHead: 'Title',
 						tbRowAction: this.manageOrganization(),
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'textarea',
@@ -86,7 +88,8 @@
 						label: 'Description',
 						name: 'description',
 						tableHead: 'Description',
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'datePickerFrom',
@@ -95,16 +98,13 @@
 						name: 'date',
 						tableHead: 'Date',
 						tbRowAction: false,
-						editable: true
+						editable: true,
+						required: true
 					},
 				],
 			}
 		},
 		
-		created () {
-			var self = this;
-		},
-
 		computed: {
 			isNewRecordFormActive () {
 				return this.$store.state[this.nameSpace].isNewRecordFormActive;

@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.0
+ * Version: 2.0.1
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.0' );
+        $this->define( 'HRM_VERSION', '2.0.1' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -201,6 +201,7 @@ class WP_Hrm {
         new Hrm_Update();
 
         update_option( 'hrm_admin', $logged_in_user_id );
+        update_option( 'hrm_version', HRM_VERSION );
        
 
         // Hrm_Settings::getInstance()->update_financial_year( 
@@ -231,6 +232,7 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
         $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
+        $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
         
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );

@@ -1,4 +1,9 @@
 export default {
+    data () {
+        return {
+            isFetchRecord: false
+        }
+    },
 	methods: {
         employeeLeaveSummery (args) {
             var self = this;
@@ -8,6 +13,9 @@ export default {
 
             var request_data = {
                 data: { employee_id: data.employee_id },
+                beforeSend () {
+
+                },
                 success (res) {
 
                     self.$store.commit('leave/afterEmployeeLeaveSummery', 
@@ -76,10 +84,28 @@ export default {
                 type   = jQuery.isEmptyObject(type) ? false : type;
             
             if ( type ) {
-                if ( status === 'toggle' ) {
-                    type.editMode = type.editMode ? false : true;
+                if ( status === 'toggle' ) { 
+                    status = type.editMode ? false : true;
+                }
+
+                if ( status === false ) {
+                    jQuery('#hrm-edit-'+type.id)
+                        .find('form')
+                        .slideUp(function() {
+
+                        type.editMode = status;
+                    });
                 } else {
                     type.editMode = status;
+                    hrm.Vue.nextTick(function() {
+                        var node = jQuery('#hrm-edit-'+type.id);
+
+                        node.find('form').css({
+                            display: 'none'
+                        });
+
+                        node.find('form').slideDown(400);
+                    });
                 }
             }
         },
@@ -105,12 +131,18 @@ export default {
 			
             var request_data = {
                 data: data,
+                beforeSend () {
+                    self.loadingStart('hrm-leave-record-wrap');
+                },
                 success (res) {
                     res.data.forEach( function(leave) {
                         self.setLeaveRecoredsMeta(leave);
                     });
                     
                     self.$store.commit('leave/getLeaveRecords', res);
+
+                    self.isFetchRecord = true;
+                    self.loadingStop('hrm-leave-record-wrap');
 
                     if (typeof args.callback === 'function') {
                     	args.callback(res);
@@ -137,6 +169,7 @@ export default {
                 data: args.data,
 
                 beforSend: function(xhr) {
+
                 	self.show_spinner = true;
                 	self.is_leave_btn_disable = true;
                 },
@@ -160,6 +193,7 @@ export default {
                 }
             };
 
+            //jQuery('.wp-list-table').find('tr[data-recordId="'+args.data.id+'"]').fadeOut();
             this.httpRequest('update_leave', form_data);
 		},
 
@@ -187,7 +221,9 @@ export default {
                 return;
             }
             var self = this;
-       
+
+            jQuery('tr[data-recordId="'+args.data.leave_id+'"]').fadeOut();
+            
             var request_data = {
                 data: {
                     leave_id: args.data.leave_id,
@@ -213,7 +249,7 @@ export default {
             var self = this;
             var pre_define = {};
             var args = jQuery.extend(true, pre_define, args );
-            
+
             // Disable submit button for preventing multiple click
             this.submit_disabled = true;
 
@@ -315,12 +351,19 @@ export default {
 
             var request_data = {
                 data: args.data,
+                beforeSend () {
+                    self.loadingStart(
+                        'hrm-edit-'+args.data.id,
+                        {animationClass: 'preloader-update-animation'}
+                    );
+                },
                 success (res) {
                     self.show_spinner = false;
                     // Display a success toast, with a title
                     hrm.Toastr.success(res.success);
                     self.addHolidayMeta(res.holiday);
                     self.submit_disabled = false;
+                    self.loadingStop('hrm-edit-'+args.data.id );
                     
                     self.$store.commit('leave/afterUpdateHoliday', res.holiday);
 
@@ -434,14 +477,17 @@ export default {
         },
 
         showHideSummery (showHideSummery, type, status) {
-            status = status || 'toggle';
-            this.$store.commit('leave/showHideSummery', 
-                {
-                    id: showHideSummery.id,
-                    status: status,
-                    type: type
-                }
-            );
+            var self = this;
+            jQuery('#hrm-toggle-'+showHideSummery.id).slideUp(400, function() {
+                status = status || 'toggle';
+                self.$store.commit('leave/showHideSummery', 
+                    {
+                        id: showHideSummery.id,
+                        status: status,
+                        type: type
+                    }
+                );
+            });
         },
 
         getEmployeeDropDown (args) {
@@ -465,6 +511,9 @@ export default {
             }
             
             this.httpRequest('get_employee_dropdown', request_data);
+        },
+        showHideNewLeaveTypeForm: function() {
+            this.$store.commit('leave/isNewLeaveTypeFormVisible', {is_visible: true});
         }   
 	},
 };

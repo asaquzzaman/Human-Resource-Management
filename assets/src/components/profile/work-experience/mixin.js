@@ -1,7 +1,8 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'workExperience'
+			nameSpace: 'workExperience',
+			isFetchRecord: false
 		}
 	},
 	methods: {
@@ -58,10 +59,18 @@ export default {
 			var form_data = {
                 data: args.data,
 
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-edit-form-'+args.data.id, 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
+
                 success: function(res) {
                 	self.recordMeta(res.data);
 
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
+                	self.loadingStop('hrm-edit-form-'+res.data.id);
 
                 	if (typeof args.callback === 'function') {
                         args.callback(true, res);
@@ -91,10 +100,19 @@ export default {
 			var form_data = {
                 data: args.data,
 
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-hidden-form', 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
+
                 success: function(res) {
                 	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
+
+                	self.loadingStop('hrm-hidden-form');
 
                 	if (typeof args.callback === 'function') {
                         args.callback(true, res);
@@ -166,6 +184,10 @@ export default {
 			var form_data = {
 	            data: this.$route.query,
 
+	            beforeSend () {
+	            	self.loadingStart('hrm-list-table');
+	            },
+
 	            success: function(res) {
 	            	res.data.forEach(function(record) {
                 		self.recordMeta(record);
@@ -173,7 +195,9 @@ export default {
 
 	            	self.$store.commit(self.nameSpace + '/setRecords', res.data);
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
-
+	            	self.loadingStop('hrm-list-table');
+	            	self.isFetchRecord = true;
+	            	
 	            	if (typeof callback === 'function') {
 	                    callback(true, res);
 	                } 
@@ -194,6 +218,25 @@ export default {
 	        };
 
 	        this.httpRequest('hrm_experiance_filter', form_data);
-		}
+		},
+
+		editFormValidation (fields, postData) {
+        	var isFormValidate = true;
+
+			fields.forEach(function(val) {
+				if(
+					val.editable !== false
+						&&
+					val.required === true
+						&&
+					!postData[val.name]
+				) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
+        }
 	}	
 }

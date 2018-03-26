@@ -24,7 +24,7 @@
                             <span class="description"></span>
                         </div>
 
-                        <div class="hrm-form-field ">
+                        <!-- <div class="hrm-form-field ">
                             <label for="status">Parent<em>   </em></label>
                             
                             <select v-model="parent" class="status" name="status" id="status" data-placeholder="-- Chose --">
@@ -33,7 +33,7 @@
                             </select>
                             <span class="hrm-clear"></span>
                             <span class="description">Choose Parent Department</span>
-                        </div>
+                        </div> -->
 
                         
                         <div  class="hrm-form-field ">

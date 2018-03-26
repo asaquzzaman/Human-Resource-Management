@@ -3,14 +3,15 @@ export default {
 		return {
 			nameSpace: 'employee',
 			modelName: '',
-			modelTransformer: ''
+			modelTransformer: '',
+			isFetchRecord: false
 		}
 	},
 	methods: {
 		showHideNewRecordForm (status, experiance) {
 			var experiance   = experiance || false,
 			    experiance   = jQuery.isEmptyObject(experiance) ? false : experiance;
-
+			
 			if ( experiance ) {
 			    if ( status === 'toggle' ) {
 			        experiance.editMode = experiance.editMode ? false : true;
@@ -18,13 +19,16 @@ export default {
 			        experiance.editMode = status;
 			    }
 			} else {
-
 			    this.$store.commit(this.nameSpace+'/showHideNewRecordForm', status);
 			}
 		},
 
 		recordDelete (deletedId, callback) {
 			var self = this;
+
+			deletedId.forEach(function(id) {
+				jQuery('tr[data-recordId="'+id+'"]').fadeOut();
+			});
 
 			var form_data = {
 	            data: {
@@ -60,15 +64,21 @@ export default {
 			var form_data = {
                 data: args.data,
 
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-edit-form-'+args.data.id, 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
                 success: function(res) {
                 	self.recordMeta(res.data);
 
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
+                	self.loadingStop('hrm-edit-form-'+res.data.id);
 
                 	if (typeof args.callback === 'function') {
                         args.callback.call(self, true, res);
                     } 
-                    
                 },
 
                 error: function(res) {
@@ -92,16 +102,29 @@ export default {
 
 			var form_data = {
                 data: args.data,
-
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-hidden-form', 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
                 success: function(res) {
                 	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
+                	self.loadingStop('hrm-hidden-form');
 
                 	if (typeof args.callback === 'function') {
                         args.callback.call(self, true, res);
                     } 
                     
+                    hrm.Vue.nextTick(function() {
+	                    var tr = jQuery('.wp-list-table')
+	                    	.find('tbody tr:first-child');
+	                    
+	                    self.newRecordEffect(tr);
+                	})
+
                    // hrm.Toastr.success(res.message);
                 },
 
@@ -142,6 +165,9 @@ export default {
 			
             var request_data = {
                 data: postData,
+                beforeSend () {
+                	self.loadingStart('hrm-employee-list-table');
+                },
                 success: function(res) {
                 	res.data.forEach(function(record) {
                 		self.recordMeta(record);
@@ -149,6 +175,8 @@ export default {
                     
                     self.$store.commit( self.nameSpace + '/setRecords', res.data );
                     self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
+                    self.loadingStop('hrm-employee-list-table');
+                    self.isFetchRecord = true;
                 }
             };
 
@@ -165,6 +193,9 @@ export default {
 
 			var form_data = {
 	            data: this.$route.query,
+	            beforeSend () {
+                	self.loadingStart('hrm-employee-list-table');
+                },
 
 	            success: function(res) {
 	            	res.data.forEach(function(record) {
@@ -177,7 +208,9 @@ export default {
 	            	if (typeof callback === 'function') {
 	                    callback.call(self, true, res);
 	                } 
-	                
+
+	                self.loadingStop('hrm-employee-list-table');
+                    self.isFetchRecord = true;
 	            },
 
 	            error: function(res) {
@@ -242,6 +275,25 @@ export default {
 
 		manageEmployee() {
             return hrm_user_can('manage_employee');
+        },
+
+        editFormValidation (fields, postData) {
+        	var isFormValidate = true;
+
+			fields.forEach(function(val) {
+				if(
+					val.editable !== false
+						&&
+					val.required === true
+						&&
+					!postData[val.name]
+				) {
+					hrm.Toastr.error(val.label + ' is required!');
+					isFormValidate = false;
+				}
+			});
+
+			return isFormValidate;
         }
 	}		
 }

@@ -11,6 +11,9 @@ export default {
 
             wp.ajax.send('get_attendance', {
                 data: request_data,
+                beforeSend () {
+                    self.loadingStart('hrm-list-table');
+                },
                 success: function(res) {
                 	
                     self.$store.commit( 'attendance/setAttendance', {
@@ -22,6 +25,8 @@ export default {
                         totalOfficeTime: res.total_time
 
                     } );
+                    self.loadingStop('hrm-list-table');
+                    self.isFetchRecord = true;
                 },
 
                 error: function(res) {

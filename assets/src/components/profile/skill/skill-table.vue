@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<table class="wp-list-table widefat fixed striped pages">
+	<div id="hrm-list-table">
+		<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped pages">
             <thead>
                 <tr>
                 	<td v-if="deleteCheckbox" id="cb" class="manage-column column-cb check-column">
@@ -26,20 +26,25 @@
                     </td>
                 </tr>
                 
-                <tr v-else id="edit-8" class="inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
+                <tr v-else :id="'hrm-edit-'+record.id" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle">
                 	<td :colspan="fields.length + 1" class="colspanchange">
-                		<form action="" @submit.prevent="selfUpdate(record)">
+                		<form :id="'hrm-edit-form-'+record.id" class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
 							<fieldset class="inline-edit-col-left">
 								<legend class="inline-edit-legend">Quick Edit</legend>
 								<div class="inline-edit-col">
-						
-									<label v-for="(field, field_index) in filterEditField(fields)">
-										<span class="title">{{ field.label }}</span>
+									<div v-for="(field, field_index) in filterEditField(fields)" class="hrm-edit-field-wrap">
+										<label>
+											<span class="title">
+												{{ field.label }}<em v-if="field.required">*</em>
+											</span>
+										</label>
 										<span class="input-text-wrap">
 											<hrm-edit-field :record="record" :field="field"></hrm-edit-field>
 											<!-- <input type="text" v-model="record[field.name]" class="ptitle"> -->
 										</span>
-									</label>
+										<div class="hrm-clear"></div>
+										
+									</div>
 								</div>
 							</fieldset>
 
@@ -102,6 +107,7 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
+				isFetchRecord: false
 			}
 		},
 		
@@ -164,8 +170,6 @@
 				data['transformers'] = self.modelTransformer;
 				data['id']           = record.id;
 
-				self.canSubmit = false;
-				self.loading = true;
 
 				self.fields.forEach(function(field) {
 					if ( !field.editable ) {
@@ -186,7 +190,13 @@
 						self.loading = false;
 					}
 				}
+
+				if (!this.editFormValidation(self.fields, args.data)) {
+					return false;
+				}
 				
+				self.canSubmit = false;
+				self.loading = true;
 				this.updateRecord(args);
 			},
 			selfDelete (record) {

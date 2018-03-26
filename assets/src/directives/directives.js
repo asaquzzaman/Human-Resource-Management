@@ -86,12 +86,12 @@ hrm.Vue.directive('hrm-datepicker', {
 hrm.Vue.directive('hrm-slide-down', {
 	inserted: function(el) {
 		var node = jQuery(el);
+        node.css({
+            display: 'none'
+        });
 
-		if (node.is(':visible')) {
-			node.slideUp(400);
-		} else {
-			node.slideDown(400);
-		}
-		
+		node.slideDown(400);
 	},
 });
+
+

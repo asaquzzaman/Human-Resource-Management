@@ -1,15 +1,15 @@
 <template>
-	<div class="page-organization metabox-holder">
+	<div  class="page-organization metabox-holder">
 		<h1 class="wp-heading-inline">Organization</h1>
 
 		<organization-menu></organization-menu>
 
-		<div id="hrm-hidden-form-warp" class="postbox">
+		<div  id="hrm-hidden-form-warp" class="postbox">
 
 	        
 	        <h2 class="hndle ui-sortable-handle">General Information</h2>
 	        <div id="hrm-visible-form">
-		        <div class="inside">
+		        <div v-if="isFetchRecord" class="inside">
 		        	<div class="main">
 		        		<div v-if="!editMode">
 			        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
@@ -42,7 +42,7 @@
 			        		<a v-if="manageOrganization()" @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
 		        		</div>
 		        		
-		        		<form v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
+		        		<form id="hrm-general-info-form" v-if="editMode && manageOrganization()" action="" @submit.prevent="selfSaveOrganizationalInfo()" enctype="multipart/form-data">
 		        			<hrm-form-fields :fields="fields"></hrm-form-fields>
 		        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
 		        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
@@ -76,6 +76,7 @@
 		data () {
 			return {
 				editMode: false,
+				isFetchRecord: false,
 				fields: [
 					{
 						type: 'text',
@@ -244,8 +245,13 @@
 				
 	            var request_data = {
 	                data: {},
+	                beforeSend () {
+                		self.loadingStart('hrm-visible-form');
+                	},
 	                success: function(res) {
 	                	// self.$store.commit('general/setOrganizationInfo', res.data);
+	                	self.loadingStop('hrm-visible-form');
+	                	self.isFetchRecord = true;
 	                	if (typeof args.callback === 'function') {
 	                        args.callback(res);
 	                    } 
@@ -301,8 +307,16 @@
 	            var request_data = {
 	                data: args.data,
 	                type: 'POST',
+	                beforeSend () {
+                		self.loadingStart(
+                			'hrm-general-info-form',
+                			{animationClass: 'preloader-update-animation'}
+                		);
+                	},
 	                success: function(res) {
 	                	//self.$store.commit('profile/setPersonalInfo', res);
+	                	self.loadingStop('hrm-general-info-form');
+	                	hrm.Toastr.success('Update successfully!');
 	                	if (typeof args.callback === 'function') {
 	                        args.callback(res);
 	                    } 

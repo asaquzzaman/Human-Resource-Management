@@ -7,6 +7,7 @@ import '@components/attendance/router';
 import '@components/leave/router';
 import '@components/settings/router';
 import '@components/employee/router';
+import '@components/addons/router';
 
 import Empty from '@components/common/empty.vue';
 

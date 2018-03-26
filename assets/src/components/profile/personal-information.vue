@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<profile-menu></profile-menu>
-		<div class="metabox-holder">
-			<div id="hrm-hidden-form-warp" class="postbox">
+		<div id="hrm-general-info" class="metabox-holder">
+			<div v-if="isFetchRecord" id="hrm-hidden-form-warp" class="postbox">
 		        <h2 class="hndle">General Information</h2>
 		        <div class="inside">
-			        <div class="inside" id="hrm-visible-form">
+			        <div id="hrm-visible-form">
 			        	<div class="main">
 			        		<div v-if="!editMode">
 				        		<div class="hrm-content-wrap" v-for="(field, index) in fields" :key="index" v-if="field.type == 'file'">
@@ -42,7 +42,7 @@
 				        		<a @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
 			        		</div>
 			        		
-			        		<form v-if="editMode" action="" @submit.prevent="selfSavePersonalInfo()" enctype="multipart/form-data">
+			        		<form id="hrm-personal-gnrl-info" v-if="editMode" action="" @submit.prevent="selfSavePersonalInfo()" enctype="multipart/form-data">
 			        			<hrm-form-fields :fields="fields"></hrm-form-fields>
 			        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
 			        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
@@ -77,6 +77,7 @@
 		data () {
 			return {
 				editMode: false,
+				isFetchRecord: false,
         		fields: [
 					{
 						type: 'file',
@@ -465,11 +466,19 @@
 	                cache: false,
                 	contentType: false,
                 	processData: false,
+                	beforeSend () {
+                		self.loadingStart(
+                			'hrm-personal-gnrl-info',
+                			{animationClass: 'preloader-update-animation'}
+                		);
+                	},
 	                success: function(res) {
 	                	self.$store.commit('profile/setPersonalInfo', res);
 	                	if (typeof args.callback === 'function') {
 	                        args.callback(res);
 	                    } 
+	                    hrm.Toastr.success('Update successfully!');
+	                    self.loadingStop('hrm-personal-gnrl-info');
 	                }
 	            };
 	            

@@ -21,7 +21,7 @@
 
                     <div style="padding-left: 10px">
                         <p class="submit">
-                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Settings">
+                            <input :disabled="!canSubmit" type="submit" name="submit" id="submit" class="button button-primary" value="Save Settings">
                             <span  class="pm-spinner"></span>
                         </p>                            
                     </div>
@@ -38,7 +38,8 @@
         mixins: [HRMMixin.settings],
         data () {
             return {
-               hrm_financial_year: this.getSettings('hrm_financial_year')
+               hrm_financial_year: this.getSettings('hrm_financial_year'),
+               canSubmit: true
             }
         },
 
@@ -53,6 +54,9 @@
 
         methods: {
    			selfGeneralSettings () {
+                if (!this.canSubmit) {
+                    return false;
+                }
    				var self = this;
 		        var args = {
 		        	data: {
@@ -60,10 +64,10 @@
 		        	},
 
 		        	callback: function() {
-
+                        self.canSubmit = true;
 		        	}
 		        }
-		        
+		        this.canSubmit = false;
 		        self.updateSettings(args);
    			}
         }

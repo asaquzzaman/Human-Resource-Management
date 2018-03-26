@@ -8,48 +8,42 @@
 				<div class="hrm-attendance-records-text-wrap">
 					<h2>Attendace Records</h2>
 				</div>
-				<!-- <div  class="hrm-records-from">
-					<h2>From</h2>
 
-					<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchInFormatedDate }}</span>
-				</div>
-				<div class="hrm-records-to">
-					<h2>To</h2>
-					<span><i aria-hidden="true" class="fa fa-calendar"></i>{{ punchOutFormatedDate }}</span>
-				</div> -->
 				<div class="hrm-clear"></div>
 			</div>
 			<hrm-attendace-user-search></hrm-attendace-user-search>
-			<table class="wp-list-table widefat fixed striped">
-				<thead>
-					<tr>
-						<th>Date</th>
-						<th>In Time</th>
-						<th>Out Time</th>
-						<th>Duration</th>
-					</tr>
+			<div id="hrm-list-table">
+				<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>In Time</th>
+							<th>Out Time</th>
+							<th>Duration</th>
+						</tr>
 
-				</thead>
-				<tbody>
-					<tr v-for="attendace in attendace_records">
-						
-						<td>{{ attendace.date }}</td>
-						<td>{{ attendace.punch_in }}</td>
-						<td v-html="attendace.punch_out"></td>
-						<td v-html="attendace.total"></td>
-					</tr>
-					<tr v-if="attendace_records.length">
-						<td><strong>Total Duration</strong></td>
-						<td>&#8211 &#8211</td>
-						<td>&#8211 &#8211</td>
-						<td><strong>{{ totalOfficeTime }}</strong></td>
-					</tr>
-					<tr v-if="!attendace_records.length">
-						
-						<td colspan="4">No record found!</td>
-					</tr>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<tr v-for="attendace in attendace_records">
+							
+							<td>{{ attendace.date }}</td>
+							<td>{{ attendace.punch_in }}</td>
+							<td v-html="attendace.punch_out"></td>
+							<td v-html="attendace.total"></td>
+						</tr>
+						<tr v-if="attendace_records.length">
+							<td><strong>Total Duration</strong></td>
+							<td>&#8211 &#8211</td>
+							<td>&#8211 &#8211</td>
+							<td><strong>{{ totalOfficeTime }}</strong></td>
+						</tr>
+						<tr v-if="!attendace_records.length">
+							
+							<td colspan="4">No record found!</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
 		</div>
 	</div>
@@ -72,7 +66,7 @@
 		
 		data: function() {
 			return {
-				
+				isFetchRecord: false
 			}
 		},
 

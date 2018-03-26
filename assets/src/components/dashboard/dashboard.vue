@@ -26,25 +26,12 @@
 				<!-- <i class="fas fa-users"></i> -->
 				
 				<div class="hrm-block-image-wrap">
-					<div class="hrm-img"  >
-						<img style="height: 46px; width: 46px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG">
-						<div class="hrm-admin-name">mishu</div>
+					<div class="hrm-img" v-if="managers.length" v-for="manager in managers">
+						<img :src="manager.data.avatar" style="height: 46px; width: 46px;">
+						<div class="hrm-admin-name">{{ manager.data.display_name }}</div>
 					</div>
-					<div class="hrm-img"  >
-						<img style="height: 46px; width: 46px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG">
-						<div class="hrm-admin-name">MD.Asaquzzaman  Faruk</div>
-					</div>
-					<div class="hrm-img"  >
-						<img style="height: 46px; width: 46px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG">
-						<div class="hrm-admin-name">Kabir</div>
-					</div>
-					<div class="hrm-img"  >
-						<img style="height: 46px; width: 46px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG">
-						<div class="hrm-admin-name">MD.Asaquzzaman mishu</div>
-					</div>
-					<div class="hrm-img"  >
-						<img style="height: 46px; width: 46px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv6WZ-jtTctKOWxCD5u2B7b-XNfpJoxXB0THTVVsB1Yo99OrjG">
-						<div class="hrm-admin-name">MD.Asaquzzaman</div>
+					<div v-if="!managers.length">
+						<div class="hrm-admin-name"><strong>No manager found!</strong></div>
 					</div>
 				</div>
 
@@ -266,6 +253,125 @@
 	</div>
 </template>
 
+
+
+<script>
+	import Directive from './directive'
+
+	export default {
+		mixins: [HRMMixin.dashboard],
+
+		data () {
+			return {
+				administrators: [],
+				managers: [],
+				employees: 0,
+				males: 0,
+				females: 0,
+				present: [],
+				absent: [],
+				earlyEnter: [],
+				earlyLeave: [],
+				lateLeave: [],
+				attendanceLabel: 'Present',
+				attendance: {
+					present: true,
+					absent: false,
+					earlyEnter: false,
+					earlyLeave: false,
+					lateLeave: false
+				},
+				leaves: [],
+				birthday: [],
+				notices: []
+			}
+		},
+		
+		created () {
+			var self = this;
+
+			this.getHeaderBlock({
+				callback (args) {
+					self.administrators = args.administrators;
+					self.managers       = args.managers;
+					self.employees      = args.employees;
+					self.males          = args.males;
+					self.females        = args.females;
+				}
+			});
+
+			this.getDashboardAttendance({
+				callback (res) {
+					self.present = res.present;
+					self.absent = res.absent;
+					self.earlyEnter = res.early_enter;
+					self.earlyLeave = res.early_leave;
+					self.lateLeave = res.late_leave;
+				}
+			});
+			this.getDashboardLeaves({
+				callback (res) {
+					self.leaves = res;
+				}
+			});
+			this.getDashboardNotices({
+				callback (res) {
+					res.data.forEach(function(notice) {
+						notice.popup = false;
+					});
+					self.notices = res.data;
+				}
+			});
+			this.getDashboardBirthdays({
+				callback (res) {
+					self.birthday = res;
+				}
+			});
+		},
+
+		computed: {
+
+		},
+		components: {
+
+		},
+
+		methods: {
+			attendanceTab (section) {
+				var self = this;
+				
+				jQuery.each(this.attendance, function(key, val) {
+					self.attendance[key] = false;
+				});
+
+				this.attendance[section] = true;
+
+				switch(section) {
+					case 'present':
+						self.attendanceLabel = 'Present';
+						break;
+					case 'absent':
+						self.attendanceLabel = 'Absent';
+						break;
+					case 'earlyEnter':
+						self.attendanceLabel = 'Early Enter';
+						break;
+					case 'earlyLeave':
+						self.attendanceLabel = 'Early Leave';
+						break;
+					case 'lateLeave':
+						self.attendanceLabel = 'Late Leave';
+						break;
+				}
+			},
+
+			popUpNotice (notice) {
+				notice.popup = true;
+			}
+		}
+	}
+</script>
+
 <style type="text/css">
 	.fa-transgender,
 	.fa-user {
@@ -433,120 +539,3 @@
 	}
 
 </style>
-
-<script>
-	import Directive from './directive'
-
-	export default {
-		mixins: [HRMMixin.dashboard],
-
-		data () {
-			return {
-				administrators: [],
-				managers: [],
-				employees: 0,
-				males: 0,
-				females: 0,
-				present: [],
-				absent: [],
-				earlyEnter: [],
-				earlyLeave: [],
-				lateLeave: [],
-				attendanceLabel: 'Present',
-				attendance: {
-					present: true,
-					absent: false,
-					earlyEnter: false,
-					earlyLeave: false,
-					lateLeave: false
-				},
-				leaves: [],
-				birthday: [],
-				notices: []
-			}
-		},
-		
-		created () {
-			var self = this;
-
-			this.getHeaderBlock({
-				callback (args) {
-					self.administrators = args.administrators;
-					self.managers       = args.managers;
-					self.employees      = args.employees;
-					self.males          = args.males;
-					self.females        = args.females;
-				}
-			});
-
-			this.getDashboardAttendance({
-				callback (res) {
-					self.present = res.present;
-					self.absent = res.absent;
-					self.earlyEnter = res.early_enter;
-					self.earlyLeave = res.early_leave;
-					self.lateLeave = res.late_leave;
-				}
-			});
-			this.getDashboardLeaves({
-				callback (res) {
-					self.leaves = res;
-				}
-			});
-			this.getDashboardNotices({
-				callback (res) {
-					res.data.forEach(function(notice) {
-						notice.popup = false;
-					});
-					self.notices = res.data;
-				}
-			});
-			this.getDashboardBirthdays({
-				callback (res) {
-					self.birthday = res;
-				}
-			});
-		},
-
-		computed: {
-
-		},
-		components: {
-
-		},
-
-		methods: {
-			attendanceTab (section) {
-				var self = this;
-				
-				jQuery.each(this.attendance, function(key, val) {
-					self.attendance[key] = false;
-				});
-
-				this.attendance[section] = true;
-
-				switch(section) {
-					case 'present':
-						self.attendanceLabel = 'Present';
-						break;
-					case 'absent':
-						self.attendanceLabel = 'Absent';
-						break;
-					case 'earlyEnter':
-						self.attendanceLabel = 'Early Enter';
-						break;
-					case 'earlyLeave':
-						self.attendanceLabel = 'Early Leave';
-						break;
-					case 'lateLeave':
-						self.attendanceLabel = 'Late Leave';
-						break;
-				}
-			},
-
-			popUpNotice (notice) {
-				notice.popup = true;
-			}
-		}
-	}
-</script>

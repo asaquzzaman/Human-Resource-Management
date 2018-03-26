@@ -1,118 +1,91 @@
  <template>
 	<div>
-	<!-- 	<span class="page-title-action">
-			Leave records from 
-			<span class="hrm-start-date">{{ dateFormat(financialStart) }}</span>
-			to 
-			<span class="hrm-end-date">{{ dateFormat(financialEnd) }}</span>
-
-		</span> -->
-
-		<!-- <hrm-attendace-user-search></hrm-attendace-user-search> -->
 		<div class="metabox-holder">
 
-			<div class="hrm-records-text">
-				<div class="hrm-attendance-records-text-wrap">
-					<h2>Leave Records</h2>
-				</div>
-				<!-- <div  class="hrm-records-from">
-					<h2>From</h2>
-
-					<span>
-						<i aria-hidden="true" class="fa fa-calendar"></i>
-						{{ dateFormat(financialStart) }}
-					</span>
-				</div>
-				<div class="hrm-records-to">
-					<h2>To</h2>
-					<span>
-						<i aria-hidden="true" class="fa fa-calendar"></i>
-						{{ dateFormat(financialEnd) }}
-					</span>
-				</div> -->
-				<div class="hrm-clear"></div>
-			</div>
-
 			<hrm-leave-search></hrm-leave-search>
+			<div id="hrm-leave-record-wrap">
+				<div v-if="isFetchRecord">
 
-			<div v-if="!records.length" class="notice notice-success">
-				<p>No leave record found</p>
-			</div>
+					<div v-if="!records.length" class="notice notice-success">
+						<p>No leave record found</p>
+					</div>
 
-			<div v-if="records.length" class="postbox">
-				<h2 class="hndle ui-sortable-handle">
-					<span>Summery</span>
-				</h2>
-				<div class="inside metabox-holder hrm-leave-type-records-wrap">
-					<table class="wp-list-table widefat fixed striped">
-						<thead>
-							<tr>
-								<th class="manage-column column-cb">Leave Type</th>
-								<th>Entitlement</th>
-								<th>Taken Leave</th>
-								<th>Remain</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="type in meta.types">
-								
-								<td>{{ type.leave_type_name }}</td>
-								
-								<td v-if="type.id === 1">&#8211;</td>
-								<td v-else>{{ pad(type.entitlement) }}</td>
-								
-								<td>{{ pad(type.count) }}</td>
-								
-								<td v-if="type.id === 0">&#8211;</td>
-								<td v-else>{{ pad(type.entitlement - type.count) }}</td>
+					<div v-if="records.length" class="postbox">
+						<h2 class="hndle ui-sortable-handle">
+							<span>Summery</span>
+						</h2>
+						<div class="inside metabox-holder hrm-leave-type-records-wrap">
+							<table class="wp-list-table widefat fixed striped">
+								<thead>
+									<tr>
+										<th class="manage-column column-cb">Leave Type</th>
+										<th>Entitlement</th>
+										<th>Taken Leave</th>
+										<th>Remain</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="type in meta.types">
+										
+										<td>{{ type.leave_type_name }}</td>
+										
+										<td v-if="type.id === 1">&#8211;</td>
+										<td v-else>{{ pad(type.entitlement) }}</td>
+										
+										<td>{{ pad(type.count) }}</td>
+										
+										<td v-if="type.id === 0">&#8211;</td>
+										<td v-else>{{ pad(type.entitlement - type.count) }}</td>
 
-							</tr>
-							<tr>
-								<td><strong>Total</strong></td>
-								<td><strong>{{ pad(total.entitlement) }}</strong></td>
-								<td><strong>{{ pad(total.taken_leave) }}</strong></td>
-								<td><strong>{{ pad(total.remain_leave) }}</strong></td>
-							</tr>
-						</tbody>
-					</table>
+									</tr>
+									<tr>
+										<td><strong>Total</strong></td>
+										<td><strong>{{ pad(total.entitlement) }}</strong></td>
+										<td><strong>{{ pad(total.taken_leave) }}</strong></td>
+										<td><strong>{{ pad(total.remain_leave) }}</strong></td>
+									</tr>
+								</tbody>
+							</table>
 
-				</div>
-			</div>
-			
-			<div class="postbox" v-for="record in records">
-				<h2 class="hndle ui-sortable-handle">
-					<span>{{ selfDateFormat(record.date) }}</span>
-				</h2>
-				<div class="inside metabox-holder hrm-leave-type-records-wrap">
+						</div>
+					</div>
+					
+					<div class="postbox" v-for="record in records">
+						<h2 class="hndle ui-sortable-handle">
+							<span>{{ selfDateFormat(record.date) }}</span>
+						</h2>
+						<div class="inside metabox-holder hrm-leave-type-records-wrap">
 
-					<table class="wp-list-table widefat fixed striped">
-						<thead>
-							<tr>
-								<th class="manage-column column-cb">Leave Type</th>
-								<th>Duration</th>
-								<th>Start</th>
-								<th>End</th>
-								<th>Status</th>
-								<th>Action</th>
-							</tr>
+							<table class="wp-list-table widefat fixed striped">
+								<thead>
+									<tr>
+										<th class="manage-column column-cb">Leave Type</th>
+										<th>Duration</th>
+										<th>Start</th>
+										<th>End</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
 
-						</thead>
-						<tbody>
-							<tr v-for="leave in record.activities">
-								
-								<td>{{ leave.leave_type.data.name }}</td>
-								<td>1</td>
-								<td>{{ dateFormat(leave.start_time) }}</td>
-								<td>{{ dateFormat(leave.end_time) }}</td>
-								<td>{{ status[leave.status] }}</td>
-								<td>
-									<button class="hrm-button-secondary" @click.prevent="selfLeaveDelete(leave.id)" v-if="leave.status === 1 || leave.status === 3">Delete</button>
-									<div v-else>Not available</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+								</thead>
+								<tbody>
+									<tr :data-recordID="leave.id" v-for="leave in record.activities">
+										
+										<td>{{ leave.leave_type.data.name }}</td>
+										<td>1</td>
+										<td>{{ dateFormat(leave.start_time) }}</td>
+										<td>{{ dateFormat(leave.end_time) }}</td>
+										<td>{{ status[leave.status] }}</td>
+										<td>
+											<button class="hrm-button-secondary" @click.prevent="selfLeaveDelete(leave.id)" v-if="leave.status === 1 || leave.status === 3">Delete</button>
+											<div v-else>Not available</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

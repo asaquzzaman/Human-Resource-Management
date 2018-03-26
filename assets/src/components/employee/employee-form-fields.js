@@ -7,38 +7,45 @@ function FormFields (self) {
 			name: 'userName',
 			//tableHead: 'Title',
 			//tbRowAction: true,
-			editable: false
+			editable: false,
+			required: true
 		},
 		{
 			type: 'email',
 			model: '',
 			label: 'Email',
 			name: 'email',
+			editable: false,
+			required: true
 		},
 		{
 			type: 'text',
 			model: '',
 			label: 'First Name',
 			name: 'firstName',
-			editable: true
+			editable: true,
+			required: true
 		},
 		{
 			type: 'text',
 			model: '',
 			label: 'Last Name',
 			name: 'lastName',
-			editable: true
+			editable: true,
+			required: true
 		},
 		{
 			type: 'select',
-			model: '',
+			model: hrmGetDefaultRole(),
 			options: hrmGetRoles(),
 			label: 'Role',
 			optionLabel: 'display_name',
 			placeholder: 'Select Role',
 			name: 'role',
 			tableHead: 'Role',
+			trackBy: 'name',
 			editable: true,
+			required: true,
 			//Filter submited new data
 			filterSubmited (val) {
 				return val.name;
@@ -69,6 +76,8 @@ function FormFields (self) {
 			name: 'department',
 			tableHead: 'Department',
 			editable: true,
+			required: true,
+			helpText: '<a href="#/departments">Create Department</a>',
 			//Filter submited new data
 			filterSubmited (val) {
 				return val.id;
@@ -108,6 +117,8 @@ function FormFields (self) {
 			name: 'designation',
 			tableHead: 'Designation',
 			editable: true,
+			required: true,
+			helpText: '<a href="#/designation">Create Designation</a>',
 			//Filter submited new data
 			filterSubmited (val) {
 				return val.id;
@@ -149,7 +160,7 @@ function FormFields (self) {
 			name: 'location',
 			tableHead: 'Location',
 			editable: true,
-
+			helpText: '<a href="#/organization/location">Create Location</a>',
 			//Filter submited new data
 			filterSubmited (val) {
 				return val.id;
@@ -184,7 +195,7 @@ function FormFields (self) {
 		},
 		{
 			type: 'select',
-			model: '',
+			model: hrmGetDefaultStatus(),
 			options: hrmGetStatus(),
 			label: 'Status',
 			optionLabel: 'label',
@@ -226,7 +237,7 @@ function FormFields (self) {
 			},
 			//Filter edit submited data
 			filterEditingData (val) {
-				return val.key;
+				return val ? val.key : '';
 			},
 			//Table print data
 			filterPrintData (val) {
@@ -317,8 +328,30 @@ function hrmGetRoles() {
 			}
 		);
 	})
-
+	
 	return roles;
+}
+
+function hrmGetDefaultRole() {
+	var role = {};
+
+	jQuery.each(HRM_Vars.hrm_roles, function(key, val) {
+		if ( key == 'hrm_employee' ) {
+			role = {
+				name: key,
+				display_name: val
+			}
+		}
+	});
+	
+	return role;
+}
+
+function hrmGetDefaultStatus() {
+	return {
+		key: 1,
+		label: 'Active'
+	}
 }
 
 export { FormFields }

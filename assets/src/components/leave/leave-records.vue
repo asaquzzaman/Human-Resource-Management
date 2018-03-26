@@ -7,7 +7,7 @@
 		
 		<leave-header></leave-header>
 		
-		<hrm-leave-records-form v-if="is_leave_form_active"></hrm-leave-records-form>
+		<hrm-leave-records-form class="hrm-toggle" v-if="is_leave_form_active"></hrm-leave-records-form>
 		
 		<!-- <div v-employee-leave-records class="hrm-employee-leave-records"></div> -->
 		<hrm-leave-records-render></hrm-leave-records-render>

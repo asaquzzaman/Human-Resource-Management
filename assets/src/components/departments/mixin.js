@@ -1,4 +1,9 @@
 export default {
+    data () {
+        return {
+            isFetchRecord: false
+        }
+    },
 	methods: {
 		showHideDepartmentForm (status, department) {
             var department   = department || false,
@@ -27,6 +32,9 @@ export default {
 
             wp.ajax.send('get_departments', {
                 data: request_data,
+                beforeSend () {
+                    self.loadingStart('hrm-department-tbl-wrap');
+                },
                 success: function(res) {
                     self.$store.commit( 
                         'departments/setDepartments', 
@@ -34,6 +42,8 @@ export default {
                             departments: res.departments
                         } 
                     );
+                    self.isFetchRecord = true;
+                    self.loadingStop('hrm-department-tbl-wrap');
                 },
 
                 error: function(res) {

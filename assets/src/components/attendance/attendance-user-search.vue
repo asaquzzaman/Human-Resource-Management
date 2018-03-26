@@ -1,20 +1,20 @@
 <template>
 	<div class="hrm-tbl-action-wrap">
 		<div class="hrm-table-action main hrm-attendance-user-searach-main">
-			
-			<input type="text" placeholder="From" name="punch_in" value=""  class="hrm-date-picker-from" id="punch_in" v-hrm-datepicker="" :value="punch_in_date">
+			<form @submit.prevent="search()">
+				<input type="text" placeholder="From" name="punch_in" value=""  class="hrm-date-picker-from" id="punch_in" v-hrm-datepicker="" :value="punch_in_date">
 
-			<input type="text" placeholder="To" name="punch_out" value="" class="hrm-date-picker-to" id="punch_out" v-hrm-datepicker="" :value="punch_out_date">
+				<input type="text" placeholder="To" name="punch_out" value="" class="hrm-date-picker-to" id="punch_out" v-hrm-datepicker="" :value="punch_out_date">
 
-			<select v-if="manageAttendance" class="user_id" name="user_id" id="user_id" v-model="search_user_id">
-				<option value="-1">-Select Employee-</option>
-				<option v-for="(employee, id) in employessDropDown" :value="id">{{ employee }}</option>
+				<select v-if="manageAttendance" class="user_id" name="user_id" id="user_id" v-model="search_user_id">
+					<option value="-1">-Select Employee-</option>
+					<option v-for="(employee, id) in employessDropDown" :value="id">{{ employee }}</option>
+					
+				</select>
 				
-			</select>
-			
 
-			<button @click.prevent="search()" class="button button-secondary attendance-search-btn">Find</button>
-		
+				<input type="submit" value="Find" class="button button-secondary attendance-search-btn">
+			</form>
 		</div>
 	</div>
 			

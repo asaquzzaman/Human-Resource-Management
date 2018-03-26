@@ -26,32 +26,86 @@ let HRM_Leave_Store = {
 
             return index;
         },
+        slideUp (callBack) {
+        	jQuery('.hrm-toggle').slideUp(400, function() {
+        		callBack();
+        	});
+        },
+        slideDwon () {
+        	var node = jQuery('.hrm-toggle');
+	        node.css({
+	            display: 'none'
+	        });
+			node.slideDown(400);
+	    },
+	    editSlideUp (id, callBack) {
+        	jQuery('#hrm-edit-'+id)
+        		.find('form')
+        		.slideUp(400, function() {
+        			callBack();
+        		}
+        	);
+        },
+        editSlideDwon (id) {
+        	var node = jQuery('#hrm-edit-'+id);
+
+	        node.find('form').css({
+	            display: 'none'
+	        });
+
+			node.find('form').slideDown(400);
+	    }
 	},
 
 	mutations: {
 		afterUpdateLeaveType (state, type) {
 			let index = state.getIndex( state.leaveTypes, type.id, 'id' );
-
-			state.leaveTypes.splice(index, 1, type);
+			
+			state.editSlideUp(type.id, function() {
+				state.leaveTypes.splice(index, 1, type);
+			});
+			
 		},
 		afterEmployeeLeaveSummery(state, data) {
 			if (data.type == 'pending') {
 				let index = state.getIndex( state.pending_leaves, data.row_id, 'id' );
 				state.pending_leaves[index].metaSummery = data.res;
 				state.pending_leaves[index].metaSummeryDisplay = true;
+				
+				// hrm.Vue.nextTick(function() {
+				// 	state.slideDwon();
+				// });
 			}
 		},
 		showHideSummery (state, data) {
+			var status = data.status;
+
 			if (data.type == 'pending') {
 				let index = state.getIndex( state.pending_leaves, data.id, 'id' );
-				
-				if ( data.status == 'toggle' ) {
-					state.pending_leaves[index].metaSummeryDisplay = 
-						state.pending_leaves[index].metaSummeryDisplay
-						? false : true;
+
+				if (data.status === 'toggle') {
+					status = state.pending_leaves[index].metaSummeryDisplay ? false : true;
+            	} 
+
+            	if (status === false) {
+            		state.pending_leaves[index].metaSummeryDisplay = status;
+					// state.slideUp(function() {
+					// 	state.pending_leaves[index].metaSummeryDisplay = status;
+					// });
 				} else {
 					state.pending_leaves[index].metaSummeryDisplay = status;
+					// hrm.Vue.nextTick(function() {
+					// 	state.slideDwon();
+					// });
 				}
+				
+				// if ( data.status == 'toggle' ) {
+				// 	state.pending_leaves[index].metaSummeryDisplay = 
+				// 		state.pending_leaves[index].metaSummeryDisplay
+				// 		? false : true;
+				// } else {
+				// 	state.pending_leaves[index].metaSummeryDisplay = status;
+				// }
 				
 			}
 		},
@@ -76,11 +130,26 @@ let HRM_Leave_Store = {
 		},
 
 		showHideleaveForm  (state, status) {
-			if ( status === 'toggle' ) {
-                state.is_leave_form_active = state.is_leave_form_active ? false : true;
-            } else {
-                state.is_leave_form_active = status;
-            }
+			if (status === 'toggle') {
+				status = state.is_leave_form_active ? false : true;
+            } 
+
+        	if (status === false) {
+				state.slideUp(function() {
+					state.is_leave_form_active = status;
+				});
+			} else {
+				state.is_leave_form_active = status;
+				hrm.Vue.nextTick(function() {
+					state.slideDwon();
+				});
+			} 
+
+			// if ( status === 'toggle' ) {
+   //              state.is_leave_form_active = state.is_leave_form_active ? false : true;
+   //          } else {
+   //              state.is_leave_form_active = status;
+   //          }
 		},
 
 		getLeaveRecords (state, leave_records) {
@@ -148,8 +217,6 @@ let HRM_Leave_Store = {
 			} else if ( data.record.status == 3 ) {
 				state.cancelLeaves.push(data.record);
 			}
-
-
 		},
 
 		afterCreateNewLeave (state, leaves) {

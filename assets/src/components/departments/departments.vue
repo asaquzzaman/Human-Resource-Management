@@ -74,7 +74,7 @@
 		display: inline;
 	}
 	.hrm-tbl-action-btn-sibling {
-		width: 11%;
+		width: 6%;
 	}
 	.hrm-left-action {
 		margin-bottom: 2%;

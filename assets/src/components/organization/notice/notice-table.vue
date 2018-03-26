@@ -44,7 +44,7 @@
 											<!-- <input type="text" v-model="record[field.name]" class="ptitle"> -->
 										</span>
 										<div class="hrm-clear"></div>
-									</div>>
+									</div>
 									</label>
 								</div>
 							</fieldset>
@@ -108,6 +108,7 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
+				isFetchRecord: false
 			}
 		},
 		

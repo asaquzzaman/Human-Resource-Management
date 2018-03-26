@@ -1,9 +1,9 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'location',
-			modelName: 'Location',
-			modelTransformer: 'Location_Transformer'
+			nameSpace: 'designation',
+			modelName: 'Designation',
+			modelTransformer: 'Designation_Transformer'
 		}
 	},
 	methods: {
@@ -60,7 +60,7 @@ export default {
 			var form_data = {
                 data: args.data,
 
-                beforeSend () {
+				beforeSend () {
                 	self.loadingStart(
                 		'hrm-edit-form-'+args.data.id, 
                 		{animationClass: 'preloader-update-animation'}
@@ -71,6 +71,7 @@ export default {
                 	self.recordMeta(res.data);
 
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
+
                 	self.loadingStop('hrm-edit-form-'+res.data.id);
 
                 	if (typeof args.callback === 'function') {
@@ -100,6 +101,7 @@ export default {
 
 			var form_data = {
                 data: args.data,
+
                 beforeSend () {
                 	self.loadingStart(
                 		'hrm-hidden-form', 
@@ -111,6 +113,7 @@ export default {
                 	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
+
                 	self.loadingStop('hrm-hidden-form');
 
                 	if (typeof args.callback === 'function') {
@@ -169,7 +172,7 @@ export default {
                     self.$store.commit( self.nameSpace + '/setRecords', res.data );
                     self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
                     self.loadingStop('hrm-list-table');
-                    self.isFetchRecord = true;
+	            	self.isFetchRecord = true;
                 }
             };
 
@@ -187,10 +190,6 @@ export default {
 			var form_data = {
 	            data: this.$route.query,
 
-				beforeSend () {
-	            	self.loadingStart('hrm-list-table');
-	            },
-
 	            success: function(res) {
 	            	res.data.forEach(function(record) {
                 		self.recordMeta(record);
@@ -198,8 +197,6 @@ export default {
 
 	            	self.$store.commit(self.nameSpace + '/setRecords', res.data);
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
-	            	self.loadingStop('hrm-list-table');
-	            	self.isFetchRecord = true;
 
 	            	if (typeof callback === 'function') {
 	                    callback.call(self, true, res);
@@ -220,7 +217,11 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_organization_location_filter', form_data);
-		}
+	        this.httpRequest('hrm_experiance_filter', form_data);
+		},
+
+		manageDesignation() {
+            return hrm_user_can('manage_designation');
+        }
 	}		
 }

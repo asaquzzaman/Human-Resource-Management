@@ -107,6 +107,7 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
+				isFetchRecord: false
 			}
 		},
 		

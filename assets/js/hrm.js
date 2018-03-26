@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		39: 0
+/******/ 		40: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"302dd5ff2c19028e0b1a","3":"0e799601d739907257c3","4":"191136fd08f0b6692b96","5":"713b937e0335baf6c3ae","6":"eb9fe9f63a5cb15245ba","7":"10975bd82b6c8b309e66","8":"e755fcfffc3d2701880c","9":"8d6a3ba4038a8978657a","10":"2d9e34a89002def23dea","11":"99f6ea66b1c335a153d3","12":"996aa7852daf87608d51","13":"8e0c83edf06df405c07e","14":"67460dcef3c71c922337","15":"a725b4754bcfcbe01c4e","16":"63decc5729fd6a933f24","17":"aa6fa7423d94ea80b7a2","18":"09a9a58f9a870a935b4d","19":"b8aa1bbf2936a8a3c31e","20":"feb4cfb6e1944a0f1841","21":"36453bd316fd987cbebd","22":"9ead6d89e5a30c4a6ea6","23":"b39a36a03f4196162555","24":"63e54166b5d8e1cf07ec","25":"20471ae9860d86dd421f","26":"5a60ff42fb4e214f9dea","27":"876add389326db1a3c61","29":"0a7f7fa49dbb801322d2","30":"cb9776ddb153c6539352"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"3826b25006538855e57d","3":"c292b35de9afe345fc5c","4":"6ced5e932867392bd1cf","5":"62f9f9ed528b2df32ad6","6":"e7606070788e9b6a0fa5","7":"ef2919dd689064732298","8":"e7f75d2e2f2d21d181db","9":"46b931b042bc6c4034cf","10":"5f86064b3da65d63f833","11":"0fdc6345822c0197889a","12":"41f89c1999d7913aed9f","13":"f58bd1d57f6fbeec10e5","14":"4333154274ba7572b41e","15":"1acd83ae2e0898542b6e","16":"948948109ae3be5b2301","17":"c9d71efcee30d7bcbab3","18":"97ce8126d3c1fb824bdc","19":"9041ea0a435fbbbbe6c6","20":"b194ab2d7222018bf804","21":"32c10521ac8632fe2712","22":"2d2ef9317d8db50488fc","23":"97977731eb50117fe346","24":"65a915d0e13b5e316b58","25":"c6fa84cf6a71ebe1c09b","26":"ef285778a570ef7cfd71","27":"5332630bc4b5f915189f","28":"ac8ae6f1c8efbf20dc68","30":"b7404c8c3d7962d3992b","31":"e2618f3fcdeafa3cd45f"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -145,7 +145,7 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 115);
+/******/ 	return __webpack_require__(__webpack_require__.s = 119);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -743,13 +743,13 @@ exports.clearImmediate = clearImmediate;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_router__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_router__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__general_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__location_router__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__location_router__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__location_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__location_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notice_router__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notice_router__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notice_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__notice_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__organization_vue__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__organization_vue__ = __webpack_require__(132);
 
 
 
@@ -783,6 +783,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var request = {
 				data: args.data,
 				success(res) {
+					hrm.Toastr.success('Udpate settings successfully!');
 					if (typeof args.callback === 'function') {
 						args.callback(res);
 					}
@@ -812,7 +813,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_vue__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_vue__ = __webpack_require__(133);
 HRMRegisterModule('settings', 'settings');
 
 
@@ -824,7 +825,7 @@ HRMMixin.settings = __WEBPACK_IMPORTED_MODULE_0__mixin__["default"];
 const Hrm_Settings = resolve => {
 
 	__webpack_require__.e/* require.ensure */(15).then((() => {
-		resolve(__webpack_require__(68));
+		resolve(__webpack_require__(69));
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -876,8 +877,8 @@ if (hrm_user_can('manage_settings')) {
 
             HRMModules.forEach(function (module) {
 
-                let mixin = __webpack_require__(70)("./" + module.path + '/mixin.js');
-                let store = __webpack_require__(71)("./" + module.path + '/store.js');
+                let mixin = __webpack_require__(71)("./" + module.path + '/mixin.js');
+                let store = __webpack_require__(72)("./" + module.path + '/store.js');
 
                 HRMMixin[module.name] = mixin.default;
 
@@ -967,7 +968,7 @@ if (hrm_user_can('manage_settings')) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_esm_js__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_esm_js__ = __webpack_require__(149);
 
 
 function HRMGetComponents() {
@@ -1784,7 +1785,7 @@ var Hrm_Leave_Header = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__menu_vue__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__menu_vue__ = __webpack_require__(131);
 //
 //
 //
@@ -1954,14 +1955,14 @@ var Hrm_Settings_Header = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_store__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_router__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_mixin__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_store__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_router__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_mixin__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__directives_directives__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_common_components__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_common_components__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__ = __webpack_require__(116);
 __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 
@@ -2087,7 +2088,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(144)
+var listToStyles = __webpack_require__(148)
 
 /*
 type StyleObject = {
@@ -2300,65 +2301,73 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__empty_vue__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__empty_vue__ = __webpack_require__(130);
 HRMRegisterModule('leave', 'leave');
 
 let Hrm_Leave_Records = resolve => {
     __webpack_require__.e/* require.ensure */(2).then((() => {
-        resolve(__webpack_require__(55));
+        resolve(__webpack_require__(56));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Configuration = resolve => {
     __webpack_require__.e/* require.ensure */(19).then((() => {
-        resolve(__webpack_require__(51));
+        resolve(__webpack_require__(52));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 let Hrm_Leave_Type = resolve => {
     __webpack_require__.e/* require.ensure */(4).then((() => {
-        resolve(__webpack_require__(57));
+        resolve(__webpack_require__(58));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 let Hrm_Leave_Work_Week = resolve => {
     __webpack_require__.e/* require.ensure */(17).then((() => {
-        resolve(__webpack_require__(58));
+        resolve(__webpack_require__(59));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 let Hrm_Leave_Holidays = resolve => {
     __webpack_require__.e/* require.ensure */(5).then((() => {
-        resolve(__webpack_require__(53));
+        resolve(__webpack_require__(54));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_form_settings = resolve => {
     __webpack_require__.e/* require.ensure */(14).then((() => {
-        resolve(__webpack_require__(52));
+        resolve(__webpack_require__(53));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Requests = resolve => {
     __webpack_require__.e/* require.ensure */(18).then((() => {
-        resolve(__webpack_require__(56));
+        resolve(__webpack_require__(57));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Pending = resolve => {
     __webpack_require__.e/* require.ensure */(25).then((() => {
-        resolve(__webpack_require__(54));
+        resolve(__webpack_require__(55));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Cancel = resolve => {
     __webpack_require__.e/* require.ensure */(26).then((() => {
-        resolve(__webpack_require__(50));
+        resolve(__webpack_require__(51));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Approve = resolve => {
     __webpack_require__.e/* require.ensure */(27).then((() => {
-        resolve(__webpack_require__(49));
+        resolve(__webpack_require__(50));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
+
+function HRM_URM_Params(self, params) {
+    let employeeId = self.$route.params.employeeId ? self.$route.params.employeeId : HRM_Vars.current_user.data.ID;
+
+    return {
+        employeeId: employeeId
+    };
+}
 
 
 
@@ -2469,25 +2478,25 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__empty_vue__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__empty_vue__ = __webpack_require__(123);
 
 HRMRegisterModule('attendance', 'attendance');
 
 let hrm_attendace_records = resolve => {
     __webpack_require__.e/* require.ensure */(6).then((() => {
-        resolve(__webpack_require__(43));
+        resolve(__webpack_require__(44));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let hrm_attendace_user_search = resolve => {
-    __webpack_require__.e/* require.ensure */(30).then((() => {
+    __webpack_require__.e/* require.ensure */(31).then((() => {
         resolve(__webpack_require__(38));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let hrm_attendace_configuration = resolve => {
     __webpack_require__.e/* require.ensure */(20).then((() => {
-        resolve(__webpack_require__(42));
+        resolve(__webpack_require__(43));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -2541,11 +2550,11 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_experience_router__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_experience_router__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_experience_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__work_experience_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__education_router__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__education_router__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__education_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__education_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_router__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_router__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__skill_router__);
 
 HRMRegisterModule('profile', 'profile');
@@ -2556,19 +2565,19 @@ HRMRegisterModule('profile', 'profile');
 
 let personalInformation = resolve => {
     __webpack_require__.e/* require.ensure */(23).then((() => {
-        resolve(__webpack_require__(64));
+        resolve(__webpack_require__(65));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let jobLocation = resolve => {
     __webpack_require__.e/* require.ensure */(21).then((() => {
-        resolve(__webpack_require__(63));
+        resolve(__webpack_require__(64));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let profile = resolve => {
     __webpack_require__.e/* require.ensure */(16).then((() => {
-        resolve(__webpack_require__(65));
+        resolve(__webpack_require__(66));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -2619,13 +2628,14 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /***/ }),
 /* 42 */,
 /* 43 */,
-/* 44 */
+/* 44 */,
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_date_picker_vue__ = __webpack_require__(21);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_28643299_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_date_picker_vue__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_28643299_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_date_picker_vue__ = __webpack_require__(138);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2671,7 +2681,6 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 45 */,
 /* 46 */,
 /* 47 */,
 /* 48 */,
@@ -2695,13 +2704,14 @@ if (false) {(function () {
 /* 66 */,
 /* 67 */,
 /* 68 */,
-/* 69 */
+/* 69 */,
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_header_vue__ = __webpack_require__(31);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2429d80e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_header_vue__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2429d80e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_header_vue__ = __webpack_require__(137);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2747,60 +2757,25 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./attendance/mixin.js": 72,
-	"./dashboard/mixin.js": 74,
-	"./departments/mixin.js": 77,
-	"./designation/mixin.js": 80,
-	"./employee/mixin.js": 83,
-	"./leave/mixin.js": 86,
-	"./organization/general/mixin.js": 88,
-	"./organization/location/mixin.js": 91,
-	"./organization/notice/mixin.js": 94,
-	"./profile/education/mixin.js": 97,
-	"./profile/mixin.js": 100,
-	"./profile/skill/mixin.js": 101,
-	"./profile/work-experience/mixin.js": 105,
-	"./settings/mixin.js": 17
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 70;
-
-/***/ }),
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./attendance/store.js": 73,
-	"./dashboard/store.js": 76,
-	"./departments/store.js": 79,
-	"./designation/store.js": 82,
-	"./employee/store.js": 85,
-	"./leave/store.js": 87,
-	"./organization/general/store.js": 90,
-	"./organization/location/store.js": 93,
-	"./organization/notice/store.js": 96,
-	"./profile/education/store.js": 99,
-	"./profile/skill/store.js": 103,
-	"./profile/store.js": 104,
-	"./profile/work-experience/store.js": 107,
-	"./settings/store.js": 108
+	"./addons/mixin.js": 73,
+	"./attendance/mixin.js": 76,
+	"./dashboard/mixin.js": 78,
+	"./departments/mixin.js": 81,
+	"./designation/mixin.js": 84,
+	"./employee/mixin.js": 87,
+	"./leave/mixin.js": 90,
+	"./organization/general/mixin.js": 92,
+	"./organization/location/mixin.js": 95,
+	"./organization/notice/mixin.js": 98,
+	"./profile/education/mixin.js": 101,
+	"./profile/mixin.js": 104,
+	"./profile/skill/mixin.js": 105,
+	"./profile/work-experience/mixin.js": 109,
+	"./settings/mixin.js": 17
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -2820,405 +2795,43 @@ webpackContext.id = 71;
 
 /***/ }),
 /* 72 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    methods: {
-        getAttendance: function () {
-
-            var request_data = {
-                _wpnonce: HRM_Vars.nonce,
-                search: this.$route.query
-            },
-                self = this;
-
-            wp.ajax.send('get_attendance', {
-                data: request_data,
-                success: function (res) {
-
-                    self.$store.commit('attendance/setAttendance', {
-                        records: res.attendance,
-                        punch_in_formated_date: res.punch_in_formated_date,
-                        punch_out_formated_date: res.punch_out_formated_date,
-                        punch_in_date: res.punch_in_date,
-                        punch_out_date: res.punch_out_date,
-                        totalOfficeTime: res.total_time
-
-                    });
-                },
-
-                error: function (res) {}
-            });
-        }
-    }
-});
+var map = {
+	"./addons/store.js": 75,
+	"./attendance/store.js": 77,
+	"./dashboard/store.js": 80,
+	"./departments/store.js": 83,
+	"./designation/store.js": 86,
+	"./employee/store.js": 89,
+	"./leave/store.js": 91,
+	"./organization/general/store.js": 94,
+	"./organization/location/store.js": 97,
+	"./organization/notice/store.js": 100,
+	"./profile/education/store.js": 103,
+	"./profile/skill/store.js": 107,
+	"./profile/store.js": 108,
+	"./profile/work-experience/store.js": 111,
+	"./settings/store.js": 112
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 72;
 
 /***/ }),
 /* 73 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-	state: {
-		attendance: [],
-		search_mode: false,
-		punch_in_date: '',
-		punch_out_date: '',
-		search_user_id: '-1',
-		punch_in_status: 'disable',
-		punch_in_formated_date: '',
-		punch_out_formated_date: '',
-		hrm_is_multi_attendance: 0,
-		office_start: '',
-		office_closed: '',
-		office_start_with_date_time: '',
-		office_closed_with_date_time: '',
-		allow_ip: '',
-		employessDropDown: [],
-		totalOfficeTime: 0
-	},
-
-	mutations: {
-		setInitVal: function (state, res) {
-			state.punch_out_date = res.punch_out_date;
-			state.punch_in_date = res.punch_in_date;
-			//state.search_user_id               = res.search_user_id;
-			state.punch_in_status = res.punch_in;
-			state.punch_in_formated_date = res.punch_in_formated_date;
-			state.punch_out_formated_date = res.punch_out_formated_date;
-			state.hrm_is_multi_attendance = res.hrm_is_multi_attendance;
-			state.office_start = res.office_start;
-			state.office_closed = res.office_closed;
-			state.office_start_with_date_time = res.office_start_with_date_time;
-			state.office_closed_with_date_time = res.office_closed_with_date_time;
-			state.employessDropDown = res.employees_dropdown;
-			state.allow_ip = res.allow_ip;
-		},
-		setAttendance: function (state, records) {
-
-			state.attendance = records.records;
-			state.totalOfficeTime = records.totalOfficeTime;
-
-			if (typeof records.punch_in_formated_date != 'undefined') {
-				state.punch_in_formated_date = records.punch_in_formated_date;
-				state.punch_out_formated_date = records.punch_out_formated_date;
-				state.punch_in_date = records.punch_in_date, state.punch_out_date = records.punch_out_date;
-			}
-		},
-
-		searchMode: function (state, search) {
-			state.search_mode = search.status;
-		},
-		setPunchInDate: function (state, date) {
-			state.punch_in_date = date.date.date;
-		},
-		setPunchOutDate: function (state, date) {
-			state.punch_out_date = date.date.date;
-		},
-		setSearchUserId: function (state, user_id) {
-			state.search_user_id = user_id;
-		},
-		office_start: function (state, date_time) {
-			state.office_start_with_date_time = date_time.date_time;
-		},
-		office_closed: function (state, date_time) {
-			state.office_closed_with_date_time = date_time.date_time;
-		},
-		setMultiAttendance: function (state, multi) {
-			state.hrm_is_multi_attendance = multi;
-		},
-		punch_in: function (state, status) {
-			state.punch_in_status = status.status;
-		},
-		setAllowIP: function (state, ip) {
-			state.allow_ip = ip;
-		}
-	}
-});
-
-/***/ }),
-/* 74 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data() {
-		return {};
-	},
-	methods: {
-		getHeaderBlock(args) {
-			var self = this;
-
-			var form_data = {
-				data: {},
-				success: function (res) {
-					if (typeof args.callback != 'undefined') {
-						args.callback(res);
-					}
-				}
-			};
-
-			this.httpRequest('hrm_get_dashboard_header_block', form_data);
-		},
-
-		getDashboardAttendance(args) {
-			var self = this;
-			args = args || {};
-
-			var form_data = {
-				data: {},
-				success: function (res) {
-					if (typeof args.callback != 'undefined') {
-						args.callback(res);
-					}
-				}
-			};
-
-			this.httpRequest('hrm_get_dashboard_attendance', form_data);
-		},
-
-		getDashboardLeaves(args) {
-			var self = this;
-			args = args || {};
-
-			var form_data = {
-				data: {},
-				success: function (res) {
-					if (typeof args.callback != 'undefined') {
-						args.callback(res);
-					}
-				}
-			};
-
-			this.httpRequest('hrm_get_dashboard_leaves', form_data);
-		},
-
-		getDashboardNotices(args) {
-			var self = this;
-
-			var postData = {
-				'class': 'Notice',
-				'method': 'gets',
-				'transformers': 'Notice_Transformer',
-				'page': 1
-			};
-
-			var request_data = {
-				data: postData,
-				success: function (res) {
-					if (typeof args.callback != 'undefined') {
-						args.callback(res);
-					}
-				}
-			};
-
-			self.httpRequest('hrm_get_records', request_data);
-		},
-
-		getDashboardBirthdays(args) {
-			var self = this;
-			args = args || {};
-
-			var form_data = {
-				data: {},
-				success: function (res) {
-					if (typeof args.callback != 'undefined') {
-						args.callback(res);
-					}
-				}
-			};
-
-			this.httpRequest('hrm_get_dashboard_birthdays', form_data);
-		}
-	}
-});
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-HRMRegisterModule('dashboard', 'dashboard');
-
-let dashboard = resolve => {
-
-    __webpack_require__.e/* require.ensure */(22).then((() => {
-        resolve(__webpack_require__(45));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-HRMRegisterChildrenRoute('hrm_root', [{
-    path: 'dashboard',
-    component: dashboard,
-    name: 'dashboard',
-    meta: {
-        label: 'Dashboard',
-        order: 1
-    }
-}]);
-
-/***/ }),
-/* 76 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-	state: {},
-
-	mutations: {}
-});
-
-/***/ }),
-/* 77 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    methods: {
-        showHideDepartmentForm(status, department) {
-            var department = department || false,
-                department = jQuery.isEmptyObject(department) ? false : department;
-
-            if (department) {
-                if (status === 'toggle') {
-                    department.edit_mode = department.edit_mode ? false : true;
-                } else {
-                    department.edit_mode = status;
-                }
-            } else {
-                this.$store.commit('departments/showHideDepartmentForm', status);
-            }
-        },
-
-        manageDepartment() {
-            return hrm_user_can('manage_department');
-        },
-
-        getDepartments: function () {
-            var request_data = {
-                _wpnonce: HRM_Vars.nonce
-            },
-                self = this;
-
-            wp.ajax.send('get_departments', {
-                data: request_data,
-                success: function (res) {
-                    self.$store.commit('departments/setDepartments', {
-                        departments: res.departments
-                    });
-                },
-
-                error: function (res) {}
-            });
-        }
-
-    }
-});
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-HRMRegisterModule('departments', 'departments');
-
-let departments = resolve => {
-
-    __webpack_require__.e/* require.ensure */(3).then((() => {
-        resolve(__webpack_require__(46));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-let pagination = resolve => {
-
-    __webpack_require__.e/* require.ensure */(29).then((() => {
-        resolve(__webpack_require__(39));
-    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
-};
-
-HRMRegisterChildrenRoute('hrm_root', [{
-    path: 'departments',
-    component: departments,
-    name: 'departments',
-    meta: {
-        label: 'Department',
-        order: 3
-    },
-
-    children: [{
-        path: 'page/:page_number',
-        component: pagination,
-        name: 'department_pagination'
-    }]
-}]);
-
-/***/ }),
-/* 79 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-	state: {
-		is_department_form_active: false,
-		departments: [],
-		department_id: false,
-		del_dept: [],
-		dept_pagination: {
-			total: 0,
-			limit: 5,
-			page_number: 1
-		},
-		dept_drop_down: []
-	},
-
-	mutations: {
-		showHideDepartmentForm: function (state, status) {
-			if (status === 'toggle') {
-				state.is_department_form_active = state.is_department_form_active ? false : true;
-			} else {
-				state.is_department_form_active = status;
-			}
-		},
-
-		setDepartments: function (state, departments) {
-			state.departments = departments.departments;
-			state.dept_pagination.total = departments.total_dept;
-			state.dept_drop_down = departments.dept_drop_down;
-		},
-
-		department_edit_id: function (state, department) {
-			state.department_id = department.department_id;
-		},
-
-		updateDepartment: function (state, department) {
-			if (department.is_update) {
-				state.departments = department.departments;
-			} else {
-				state.departments = department.departments;
-			}
-
-			state.dept_drop_down = department.dept_drop_down;
-		},
-
-		departmentDelId: function (state, del_dept) {
-			state.del_dept = del_dept.del_dept;
-		},
-		afterDeleteDept: function (state, deleted_dept) {
-			state.departments.splice(deleted_dept.target_del_dept, 1);
-			state.dept_drop_down = deleted_dept.dept_drop_down;
-		}
-	}
-});
-
-/***/ }),
-/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3443,37 +3056,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 81 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-HRMRegisterModule('designation', 'designation');
+HRMRegisterModule('addons', 'addons');
 
-let designation = resolve => {
+let addons = resolve => {
 
-    __webpack_require__.e/* require.ensure */(13).then((() => {
-        resolve(__webpack_require__(47));
+    __webpack_require__.e/* require.ensure */(28).then((() => {
+        resolve(__webpack_require__(42));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 HRMRegisterChildrenRoute('hrm_root', [{
-    path: 'designation',
-    component: designation,
-    name: 'designation',
-    meta: {
-        label: 'Designation',
-        order: 4
-    },
-
-    children: [{
-        path: 'pages/:current_page_number',
-        component: designation,
-        name: 'designation_pagination'
-    }]
+    path: 'addons',
+    component: addons,
+    name: 'addons'
 }]);
 
 /***/ }),
-/* 82 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3603,7 +3206,806 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
+/* 76 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    methods: {
+        getAttendance: function () {
+
+            var request_data = {
+                _wpnonce: HRM_Vars.nonce,
+                search: this.$route.query
+            },
+                self = this;
+
+            wp.ajax.send('get_attendance', {
+                data: request_data,
+                beforeSend() {
+                    self.loadingStart('hrm-list-table');
+                },
+                success: function (res) {
+
+                    self.$store.commit('attendance/setAttendance', {
+                        records: res.attendance,
+                        punch_in_formated_date: res.punch_in_formated_date,
+                        punch_out_formated_date: res.punch_out_formated_date,
+                        punch_in_date: res.punch_in_date,
+                        punch_out_date: res.punch_out_date,
+                        totalOfficeTime: res.total_time
+
+                    });
+                    self.loadingStop('hrm-list-table');
+                    self.isFetchRecord = true;
+                },
+
+                error: function (res) {}
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 77 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {
+		attendance: [],
+		search_mode: false,
+		punch_in_date: '',
+		punch_out_date: '',
+		search_user_id: '-1',
+		punch_in_status: 'disable',
+		punch_in_formated_date: '',
+		punch_out_formated_date: '',
+		hrm_is_multi_attendance: 0,
+		office_start: '',
+		office_closed: '',
+		office_start_with_date_time: '',
+		office_closed_with_date_time: '',
+		allow_ip: '',
+		employessDropDown: [],
+		totalOfficeTime: 0
+	},
+
+	mutations: {
+		setInitVal: function (state, res) {
+			state.punch_out_date = res.punch_out_date;
+			state.punch_in_date = res.punch_in_date;
+			//state.search_user_id               = res.search_user_id;
+			state.punch_in_status = res.punch_in;
+			state.punch_in_formated_date = res.punch_in_formated_date;
+			state.punch_out_formated_date = res.punch_out_formated_date;
+			state.hrm_is_multi_attendance = res.hrm_is_multi_attendance;
+			state.office_start = res.office_start;
+			state.office_closed = res.office_closed;
+			state.office_start_with_date_time = res.office_start_with_date_time;
+			state.office_closed_with_date_time = res.office_closed_with_date_time;
+			state.employessDropDown = res.employees_dropdown;
+			state.allow_ip = res.allow_ip;
+		},
+		setAttendance: function (state, records) {
+
+			state.attendance = records.records;
+			state.totalOfficeTime = records.totalOfficeTime;
+
+			if (typeof records.punch_in_formated_date != 'undefined') {
+				state.punch_in_formated_date = records.punch_in_formated_date;
+				state.punch_out_formated_date = records.punch_out_formated_date;
+				state.punch_in_date = records.punch_in_date, state.punch_out_date = records.punch_out_date;
+			}
+		},
+
+		searchMode: function (state, search) {
+			state.search_mode = search.status;
+		},
+		setPunchInDate: function (state, date) {
+			state.punch_in_date = date.date.date;
+		},
+		setPunchOutDate: function (state, date) {
+			state.punch_out_date = date.date.date;
+		},
+		setSearchUserId: function (state, user_id) {
+			state.search_user_id = user_id;
+		},
+		office_start: function (state, date_time) {
+			state.office_start_with_date_time = date_time.date_time;
+		},
+		office_closed: function (state, date_time) {
+			state.office_closed_with_date_time = date_time.date_time;
+		},
+		setMultiAttendance: function (state, multi) {
+			state.hrm_is_multi_attendance = multi;
+		},
+		punch_in: function (state, status) {
+			state.punch_in_status = status.status;
+		},
+		setAllowIP: function (state, ip) {
+			state.allow_ip = ip;
+		}
+	}
+});
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data() {
+		return {};
+	},
+	methods: {
+		getHeaderBlock(args) {
+			var self = this;
+
+			var form_data = {
+				data: {},
+				success: function (res) {
+					if (typeof args.callback != 'undefined') {
+						args.callback(res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_get_dashboard_header_block', form_data);
+		},
+
+		getDashboardAttendance(args) {
+			var self = this;
+			args = args || {};
+
+			var form_data = {
+				data: {},
+				success: function (res) {
+					if (typeof args.callback != 'undefined') {
+						args.callback(res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_get_dashboard_attendance', form_data);
+		},
+
+		getDashboardLeaves(args) {
+			var self = this;
+			args = args || {};
+
+			var form_data = {
+				data: {},
+				success: function (res) {
+					if (typeof args.callback != 'undefined') {
+						args.callback(res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_get_dashboard_leaves', form_data);
+		},
+
+		getDashboardNotices(args) {
+			var self = this;
+
+			var postData = {
+				'class': 'Notice',
+				'method': 'gets',
+				'transformers': 'Notice_Transformer',
+				'page': 1
+			};
+
+			var request_data = {
+				data: postData,
+				success: function (res) {
+					if (typeof args.callback != 'undefined') {
+						args.callback(res);
+					}
+				}
+			};
+
+			self.httpRequest('hrm_get_records', request_data);
+		},
+
+		getDashboardBirthdays(args) {
+			var self = this;
+			args = args || {};
+
+			var form_data = {
+				data: {},
+				success: function (res) {
+					if (typeof args.callback != 'undefined') {
+						args.callback(res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_get_dashboard_birthdays', form_data);
+		}
+	}
+});
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+HRMRegisterModule('dashboard', 'dashboard');
+
+let dashboard = resolve => {
+
+    __webpack_require__.e/* require.ensure */(22).then((() => {
+        resolve(__webpack_require__(46));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+HRMRegisterChildrenRoute('hrm_root', [{
+    path: 'dashboard',
+    component: dashboard,
+    name: 'dashboard',
+    meta: {
+        label: 'Dashboard',
+        order: 1
+    }
+}]);
+
+/***/ }),
+/* 80 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {},
+
+	mutations: {}
+});
+
+/***/ }),
+/* 81 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data() {
+        return {
+            isFetchRecord: false
+        };
+    },
+    methods: {
+        showHideDepartmentForm(status, department) {
+            var department = department || false,
+                department = jQuery.isEmptyObject(department) ? false : department;
+
+            if (department) {
+                if (status === 'toggle') {
+                    department.edit_mode = department.edit_mode ? false : true;
+                } else {
+                    department.edit_mode = status;
+                }
+            } else {
+                this.$store.commit('departments/showHideDepartmentForm', status);
+            }
+        },
+
+        manageDepartment() {
+            return hrm_user_can('manage_department');
+        },
+
+        getDepartments: function () {
+            var request_data = {
+                _wpnonce: HRM_Vars.nonce
+            },
+                self = this;
+
+            wp.ajax.send('get_departments', {
+                data: request_data,
+                beforeSend() {
+                    self.loadingStart('hrm-department-tbl-wrap');
+                },
+                success: function (res) {
+                    self.$store.commit('departments/setDepartments', {
+                        departments: res.departments
+                    });
+                    self.isFetchRecord = true;
+                    self.loadingStop('hrm-department-tbl-wrap');
+                },
+
+                error: function (res) {}
+            });
+        }
+
+    }
+});
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+HRMRegisterModule('departments', 'departments');
+
+let departments = resolve => {
+
+    __webpack_require__.e/* require.ensure */(3).then((() => {
+        resolve(__webpack_require__(47));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+let pagination = resolve => {
+
+    __webpack_require__.e/* require.ensure */(30).then((() => {
+        resolve(__webpack_require__(39));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+HRMRegisterChildrenRoute('hrm_root', [{
+    path: 'departments',
+    component: departments,
+    name: 'departments',
+    meta: {
+        label: 'Department',
+        order: 3
+    },
+
+    children: [{
+        path: 'page/:page_number',
+        component: pagination,
+        name: 'department_pagination'
+    }]
+}]);
+
+/***/ }),
 /* 83 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {
+		is_department_form_active: false,
+		departments: [],
+		department_id: false,
+		del_dept: [],
+		dept_pagination: {
+			total: 0,
+			limit: 5,
+			page_number: 1
+		},
+		dept_drop_down: []
+	},
+
+	mutations: {
+		showHideDepartmentForm: function (state, status) {
+			if (status === 'toggle') {
+				state.is_department_form_active = state.is_department_form_active ? false : true;
+			} else {
+				state.is_department_form_active = status;
+			}
+		},
+
+		setDepartments: function (state, departments) {
+			state.departments = departments.departments;
+			state.dept_pagination.total = departments.total_dept;
+			state.dept_drop_down = departments.dept_drop_down;
+		},
+
+		department_edit_id: function (state, department) {
+			state.department_id = department.department_id;
+		},
+
+		updateDepartment: function (state, department) {
+			if (department.is_update) {
+				state.departments = department.departments;
+			} else {
+				state.departments = department.departments;
+			}
+
+			state.dept_drop_down = department.dept_drop_down;
+		},
+
+		departmentDelId: function (state, del_dept) {
+			state.del_dept = del_dept.del_dept;
+		},
+		afterDeleteDept: function (state, deleted_dept) {
+			state.departments.splice(deleted_dept.target_del_dept, 1);
+			state.dept_drop_down = deleted_dept.dept_drop_down;
+		}
+	}
+});
+
+/***/ }),
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data() {
+		return {
+			nameSpace: 'designation',
+			modelName: 'Designation',
+			modelTransformer: 'Designation_Transformer'
+		};
+	},
+	methods: {
+		showHideNewRecordForm(status, experiance) {
+			var experiance = experiance || false,
+			    experiance = jQuery.isEmptyObject(experiance) ? false : experiance;
+
+			if (experiance) {
+				if (status === 'toggle') {
+					experiance.editMode = experiance.editMode ? false : true;
+				} else {
+					experiance.editMode = status;
+				}
+			} else {
+
+				this.$store.commit(this.nameSpace + '/showHideNewRecordForm', status);
+			}
+		},
+
+		recordDelete(deletedId, callback) {
+			var self = this;
+
+			var form_data = {
+				data: {
+					delete: deletedId,
+					class: self.modelName,
+					method: 'delete'
+				},
+
+				success: function (res) {
+
+					self.$store.commit(self.nameSpace + '/afterDelete', deletedId);
+					if (typeof callback === 'function') {
+						callback.call(self, deletedId);
+					}
+				},
+
+				error: function (res) {
+					self.show_spinner = false;
+					// Showing error
+					res.error.map(function (value, index) {
+						hrm.toastr.error(value);
+					});
+				}
+			};
+
+			this.httpRequest('hrm_delete_record', form_data);
+		},
+
+		updateRecord(args) {
+			var self = this;
+
+			var form_data = {
+				data: args.data,
+
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
+				success: function (res) {
+					self.recordMeta(res.data);
+
+					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+
+					self.loadingStop('hrm-edit-form-' + res.data.id);
+
+					if (typeof args.callback === 'function') {
+						args.callback.call(self, true, res);
+					}
+				},
+
+				error: function (res) {
+
+					// Showing error
+					res.error.map(function (value, index) {
+						hrm.toastr.error(value);
+					});
+
+					if (typeof args.callback === 'function') {
+						args.callback.call(self, false, res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_update_record', form_data);
+		},
+
+		addNewRecord(args) {
+			var self = this;
+
+			var form_data = {
+				data: args.data,
+
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
+
+				success: function (res) {
+					self.recordMeta(res.data);
+					self.$store.commit(self.nameSpace + '/setRecord', res.data);
+					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+
+					self.loadingStop('hrm-hidden-form');
+
+					if (typeof args.callback === 'function') {
+						args.callback.call(self, true, res);
+					}
+
+					hrm.Toastr.success(res.message);
+				},
+
+				error: function (res) {
+
+					// Showing error
+					res.error.map(function (value, index) {
+						hrm.Toastr.error(value);
+					});
+
+					if (typeof args.callback === 'function') {
+						args.callback.call(self, false, res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_insert_record', form_data);
+		},
+
+		getRecords(args) {
+			var self = this;
+
+			if (self.$route.query.filter == 'active') {
+				self.filter(args);
+			} else {
+				self.fetchRecords(args);
+			}
+		},
+
+		fetchRecords() {
+			var self = this;
+
+			var postData = {
+				'class': self.modelName,
+				'method': 'gets',
+				'transformers': self.modelTransformer,
+				'page': this.$route.params.current_page_number
+			};
+
+			var request_data = {
+				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
+				success: function (res) {
+					res.data.forEach(function (record) {
+						self.recordMeta(record);
+					});
+
+					self.$store.commit(self.nameSpace + '/setRecords', res.data);
+					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
+				}
+			};
+
+			self.httpRequest('hrm_get_records', request_data);
+		},
+
+		recordMeta(record) {
+			record['editMode'] = false;
+		},
+
+		filter(callback) {
+			var self = this;
+			this.$route.query['page'] = this.$route.params.current_page_number;
+
+			var form_data = {
+				data: this.$route.query,
+
+				success: function (res) {
+					res.data.forEach(function (record) {
+						self.recordMeta(record);
+					});
+
+					self.$store.commit(self.nameSpace + '/setRecords', res.data);
+					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+
+					if (typeof callback === 'function') {
+						callback.call(self, true, res);
+					}
+				},
+
+				error: function (res) {
+					self.show_spinner = false;
+					// Showing error
+					res.error.map(function (value, index) {
+						hrm.toastr.error(value);
+					});
+
+					if (typeof args.callback === 'function') {
+						callback.call(self, false, res);
+					}
+				}
+			};
+
+			this.httpRequest('hrm_experiance_filter', form_data);
+		},
+
+		manageDesignation() {
+			return hrm_user_can('manage_designation');
+		}
+	}
+});
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+HRMRegisterModule('designation', 'designation');
+
+let designation = resolve => {
+
+    __webpack_require__.e/* require.ensure */(13).then((() => {
+        resolve(__webpack_require__(48));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+
+HRMRegisterChildrenRoute('hrm_root', [{
+    path: 'designation',
+    component: designation,
+    name: 'designation',
+    meta: {
+        label: 'Designation',
+        order: 4
+    },
+
+    children: [{
+        path: 'pages/:current_page_number',
+        component: designation,
+        name: 'designation_pagination'
+    }]
+}]);
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {
+		isNewRecordFormActive: false,
+		records: [],
+		getIndex: function (itemList, id, slug) {
+			return itemList.findIndex(x => x[slug] == id);
+		},
+		deletedId: [],
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
+	},
+
+	mutations: {
+		showHideNewRecordForm(state, status) {
+			if (status === 'toggle') {
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
+			} else {
+				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
+			}
+		},
+
+		setRecords(state, records) {
+			state.records = records;
+		},
+
+		setRecord(state, record) {
+			var per_page = state.pagination.per_page,
+			    length = state.records.length;
+
+			if (per_page <= length) {
+				state.records.splice(0, 0, record);
+				state.records.pop();
+			} else {
+				state.records.splice(0, 0, record);
+			}
+		},
+
+		updateRecord(state, record) {
+			let index = state.getIndex(state.records, record.id, 'id');
+
+			state.records.splice(index, 1, record);
+		},
+
+		showHideEditForm(state, data) {
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
+
+			if (data.status == 'toggle') {
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
+			} else {
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
+			}
+		},
+
+		setDeletedId(state, deletedId) {
+			state.deletedId = deletedId;
+		},
+
+		setPagination(state, pagination) {
+			state.pagination = pagination;
+		},
+
+		updatePaginationAfterNewRecord(state) {
+			state.pagination.total = state.pagination.total + 1;
+			state.pagination.total_pages = Math.ceil(state.pagination.total / state.pagination.per_page);
+		},
+
+		afterDelete(state, deletedId) {
+			deletedId.forEach(function (id) {
+				let index = state.getIndex(state.records, id, 'id');
+
+				state.records.splice(index, 1);
+			});
+		},
+
+		setSearchResults(state, records) {}
+	}
+});
+
+/***/ }),
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3893,7 +4295,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 84 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3902,7 +4304,7 @@ HRMRegisterModule('employee', 'employee');
 let employee = resolve => {
 
     __webpack_require__.e/* require.ensure */(8).then((() => {
-        resolve(__webpack_require__(48));
+        resolve(__webpack_require__(49));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -3923,7 +4325,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 85 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4061,7 +4463,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 86 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4572,7 +4974,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 87 */
+/* 91 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4803,7 +5205,7 @@ let HRM_Leave_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Leave_Store);
 
 /***/ }),
-/* 88 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4811,7 +5213,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 89 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 HRMRegisterModule('general', 'organization/general');
@@ -4819,7 +5221,7 @@ HRMRegisterModule('general', 'organization/general');
 let general = resolve => {
 
     __webpack_require__.e/* require.ensure */(24).then((() => {
-        resolve(__webpack_require__(59));
+        resolve(__webpack_require__(60));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -4833,7 +5235,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 90 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4855,7 +5257,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 91 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5023,6 +5425,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
 					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 				}
 			};
 
@@ -5052,6 +5455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
 					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -5077,7 +5481,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 92 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 HRMRegisterModule('location', 'organization/location');
@@ -5085,7 +5489,7 @@ HRMRegisterModule('location', 'organization/location');
 let location = resolve => {
 
     __webpack_require__.e/* require.ensure */(7).then((() => {
-        resolve(__webpack_require__(60));
+        resolve(__webpack_require__(61));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -5105,7 +5509,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5235,7 +5639,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 94 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5403,6 +5807,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
 					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 				}
 			};
 
@@ -5432,6 +5837,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
 					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -5457,7 +5863,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 95 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 HRMRegisterModule('notice', 'organization/notice');
@@ -5465,7 +5871,7 @@ HRMRegisterModule('notice', 'organization/notice');
 let notice = resolve => {
 
     __webpack_require__.e/* require.ensure */(12).then((() => {
-        resolve(__webpack_require__(61));
+        resolve(__webpack_require__(62));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -5485,7 +5891,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 96 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5615,7 +6021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 97 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5838,7 +6244,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 98 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -5846,7 +6252,7 @@ HRMRegisterModule('education', 'profile/education');
 
 let education = resolve => {
     __webpack_require__.e/* require.ensure */(11).then((() => {
-        resolve(__webpack_require__(62));
+        resolve(__webpack_require__(63));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -5877,7 +6283,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 99 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6007,7 +6413,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 100 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6065,7 +6471,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 101 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6282,7 +6688,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 102 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -6291,7 +6697,7 @@ HRMRegisterModule('skill', 'profile/skill');
 let skill = resolve => {
 
     __webpack_require__.e/* require.ensure */(10).then((() => {
-        resolve(__webpack_require__(66));
+        resolve(__webpack_require__(67));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -6322,7 +6728,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 103 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6452,7 +6858,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 104 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6478,7 +6884,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 105 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6712,7 +7118,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 106 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -6720,7 +7126,7 @@ HRMRegisterModule('workExperience', 'profile/work-experience');
 
 let workExperience = resolve => {
     __webpack_require__.e/* require.ensure */(9).then((() => {
-        resolve(__webpack_require__(67));
+        resolve(__webpack_require__(68));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
@@ -6751,7 +7157,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 107 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6881,7 +7287,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 108 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6895,7 +7301,7 @@ let HRM_Settings_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Settings_Store);
 
 /***/ }),
-/* 109 */
+/* 113 */
 /***/ (function(module, exports) {
 
 /**
@@ -6992,17 +7398,17 @@ hrm.Vue.directive('hrm-slide-down', {
 });
 
 /***/ }),
-/* 110 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_common_date_picker_vue__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_common_form_fields_vue__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_common_pagination_vue__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_common_file_uploader_vue__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_common_edit_fields_vue__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_common_date_picker_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_common_form_fields_vue__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_common_pagination_vue__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_common_file_uploader_vue__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_common_edit_fields_vue__ = __webpack_require__(125);
 
 
 
@@ -7020,8 +7426,8 @@ hrm.Vue.component('hrm-file-uploader', __WEBPACK_IMPORTED_MODULE_5__components_c
 hrm.Vue.component('hrm-edit-field', __WEBPACK_IMPORTED_MODULE_6__components_common_edit_fields_vue__["a" /* default */]);
 
 /***/ }),
-/* 111 */,
-/* 112 */
+/* 115 */,
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7061,7 +7467,7 @@ function menuFix(slug) {
 /* harmony default export */ __webpack_exports__["a"] = (menuFix);
 
 /***/ }),
-/* 113 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7314,24 +7720,27 @@ function menuFix(slug) {
 }));
 
 /***/ }),
-/* 114 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_organization_router__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_designation_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_departments_router__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_attendance_router__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_leave_router__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_settings_router__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_employee_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_common_empty_vue__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_addons_router__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_addons_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_addons_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_common_empty_vue__ = __webpack_require__(126);
+
 
 
 
@@ -7346,7 +7755,7 @@ function menuFix(slug) {
 
 HRM_Routers.push({
 	path: '/',
-	component: __WEBPACK_IMPORTED_MODULE_9__components_common_empty_vue__["a" /* default */],
+	component: __WEBPACK_IMPORTED_MODULE_10__components_common_empty_vue__["a" /* default */],
 	name: 'hrm_root',
 
 	children: HRMGetRegisterChildrenRoute('hrm_root')
@@ -7359,7 +7768,7 @@ var router = new hrm.VueRouter({
 /* harmony default export */ __webpack_exports__["a"] = (router);
 
 /***/ }),
-/* 115 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
@@ -7369,7 +7778,7 @@ hrmPromise.then(function (result) {
 });
 
 /***/ }),
-/* 116 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7385,7 +7794,7 @@ hrmPromise.then(function (result) {
 }));
 
 /***/ }),
-/* 117 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(35)(false);
@@ -7399,13 +7808,13 @@ exports.push([module.i, "\n.hrm .hrm-pagination-btn,\n#hrm .hrm-pagination-btn {
 
 
 /***/ }),
-/* 118 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(19);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31ad00d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_31ad00d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(140);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7451,13 +7860,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 119 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_empty_vue__ = __webpack_require__(20);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_59d7c2d7_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_59d7c2d7_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(143);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7503,7 +7912,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 120 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7554,13 +7963,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 121 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_edit_fields_vue__ = __webpack_require__(23);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_58786930_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_edit_fields_vue__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_58786930_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_edit_fields_vue__ = __webpack_require__(142);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7606,13 +8015,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 122 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_empty_vue__ = __webpack_require__(24);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2147fb59_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2147fb59_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(136);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7658,13 +8067,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 123 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_file_uploader_vue__ = __webpack_require__(25);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_78ef60ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_file_uploader_vue__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_78ef60ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_file_uploader_vue__ = __webpack_require__(145);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7710,13 +8119,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 124 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_form_fields_vue__ = __webpack_require__(26);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0ee6946e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_form_fields_vue__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0ee6946e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_form_fields_vue__ = __webpack_require__(135);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7762,17 +8171,17 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 125 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_pagination_vue__ = __webpack_require__(27);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2dcf73be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_pagination_vue__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2dcf73be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_pagination_vue__ = __webpack_require__(139);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(143)
+  __webpack_require__(147)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7818,13 +8227,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 126 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_empty_vue__ = __webpack_require__(28);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ab469816_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ab469816_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_empty_vue__ = __webpack_require__(146);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7870,13 +8279,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 127 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_menu_vue__ = __webpack_require__(29);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_70d99fbb_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_menu_vue__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_70d99fbb_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_menu_vue__ = __webpack_require__(144);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7922,13 +8331,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 128 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_organization_vue__ = __webpack_require__(30);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_33f1e98f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_organization_vue__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_33f1e98f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_organization_vue__ = __webpack_require__(141);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -7974,13 +8383,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 129 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__ = __webpack_require__(32);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_06b82d8f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_06b82d8f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue__ = __webpack_require__(134);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -8026,7 +8435,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 130 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8048,7 +8457,7 @@ if (false) {
 }
 
 /***/ }),
-/* 131 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8524,7 +8933,7 @@ if (false) {
 }
 
 /***/ }),
-/* 132 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8546,7 +8955,7 @@ if (false) {
 }
 
 /***/ }),
-/* 133 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8607,7 +9016,7 @@ if (false) {
 }
 
 /***/ }),
-/* 134 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8632,7 +9041,7 @@ if (false) {
 }
 
 /***/ }),
-/* 135 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8723,7 +9132,7 @@ if (false) {
 }
 
 /***/ }),
-/* 136 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8756,7 +9165,7 @@ if (false) {
 }
 
 /***/ }),
-/* 137 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8778,7 +9187,7 @@ if (false) {
 }
 
 /***/ }),
-/* 138 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9073,7 +9482,7 @@ if (false) {
 }
 
 /***/ }),
-/* 139 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9095,7 +9504,7 @@ if (false) {
 }
 
 /***/ }),
-/* 140 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9156,7 +9565,7 @@ if (false) {
 }
 
 /***/ }),
-/* 141 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9271,7 +9680,7 @@ if (false) {
 }
 
 /***/ }),
-/* 142 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9293,13 +9702,13 @@ if (false) {
 }
 
 /***/ }),
-/* 143 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(117);
+var content = __webpack_require__(121);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -9319,7 +9728,7 @@ if(false) {
 }
 
 /***/ }),
-/* 144 */
+/* 148 */
 /***/ (function(module, exports) {
 
 /**
@@ -9352,7 +9761,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 145 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

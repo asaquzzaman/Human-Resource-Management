@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		40: 0
+/******/ 		41: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"3bed83c5b73ec11e34b2","1":"b4836bcb59bb1a273b8a","28":"325506d45045d6ec2e71","31":"a7a8974613e9cf204f55","32":"23e91b5745c58079d212","33":"13a7039d1cf98725ff4c","34":"d94cc2e61b1d3b661700","35":"3b5bdb55863628deb1f5","36":"fb5a5c320be44e22d551","37":"e083d4850073a05d16d3","38":"a4395700d02a99107a74"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"edb36ae323753dd87be7","1":"c54f110fbb1cdcca7911","29":"6ab4f0ee3d610f56fcb6","32":"8e05b9902708590d8f0a","33":"ee2df1e0d0f6222de346","34":"1969a81cd0e028fe6e7c","35":"28a9c95c8a8c810502af","36":"70c8b04d9d8e8ee426bc","37":"84faed4ee1262533cefe","38":"195e10e60ea0fbd65aca","39":"9d56a21d28a6bfd677f7"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -145,7 +145,7 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 111);
+/******/ 	return __webpack_require__(__webpack_require__.s = 115);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -341,7 +341,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 111:
+/***/ 115:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -373,7 +373,7 @@ var scriptsLoaded = {
 };
 
 window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */](function (resolve, reject) {
-	__webpack_require__.e/* require.ensure */(32).then((function (require) {
+	__webpack_require__.e/* require.ensure */(33).then((function (require) {
 		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(14)]; (function (script) {
 			hrm.Vue = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
@@ -382,14 +382,14 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(31).then((function (require) {
+	__webpack_require__.e/* require.ensure */(32).then((function (require) {
 		hrm.Vuex = __webpack_require__(15);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Vuex = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(33).then((function (require) {
+	__webpack_require__.e/* require.ensure */(34).then((function (require) {
 		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(13)]; (function (script) {
 			hrm.VueRouter = script.default;
 		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
@@ -405,14 +405,14 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(34).then((function (require) {
+	__webpack_require__.e/* require.ensure */(35).then((function (require) {
 		hrm.Multiselect = __webpack_require__(12);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Multiselect = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(35).then((function (require) {
+	__webpack_require__.e/* require.ensure */(36).then((function (require) {
 		hrm.NProgress = __webpack_require__(10);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.NProgress = true;
@@ -426,7 +426,7 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(28).then((function (require) {
+	__webpack_require__.e/* require.ensure */(29).then((function (require) {
 		hrm.Toastr = __webpack_require__(11);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Toastr = true;
@@ -443,21 +443,21 @@ window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* de
 	// 	hrmIsAllScriptsLoaded(resolve, reject);
 	// });
 
-	__webpack_require__.e/* require.ensure */(36).then((function (require) {
+	__webpack_require__.e/* require.ensure */(37).then((function (require) {
 		hrm.Uploader = __webpack_require__(8);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Uploader = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(37).then((function (require) {
+	__webpack_require__.e/* require.ensure */(38).then((function (require) {
 		hrm.FontAwesome = __webpack_require__(7);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.FontAwesome = true;
 		hrmIsAllScriptsLoaded(resolve, reject);
 	});
 
-	__webpack_require__.e/* require.ensure */(38).then((function (require) {
+	__webpack_require__.e/* require.ensure */(39).then((function (require) {
 		hrm.Loading = __webpack_require__(6);
 	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
 		scriptsLoaded.Loading = true;

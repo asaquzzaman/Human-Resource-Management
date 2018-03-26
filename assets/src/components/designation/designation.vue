@@ -3,7 +3,7 @@
 		<h1 v-if="manageDesignation()" class="wp-heading-inline">Designation</h1>
 		<a v-if="manageDesignation()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div v-if="manageDesignation()" class="hrm-table-action hrm-bulk-wrap">
@@ -17,10 +17,14 @@
 				<a href="#" @click.prevent="selfBulkAction()" class="button hrm-button-secondary button-secondary">Apply</a>
 			</div>
 
+
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" placeholder="Title" type="text">
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.title"  type="search">
+
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 
 				</div>
 
@@ -74,7 +78,8 @@
 						name: 'title',
 						tableHead: 'Title',
 						tbRowAction: this.manageDesignation(),
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'select',
@@ -86,6 +91,8 @@
 						name: 'department',
 						tableHead: 'Department',
 						editable: true,
+						required: true,
+						helpText: '<a href="#/departments">Create Department</a>',
 						//Filter submited new data
 						filterSubmited (val) {
 							return val.id;
@@ -129,7 +136,16 @@
 				],
 			}
 		},
-		
+		watch: {
+			search: {
+				handler(obj){
+			    	if (obj.title == '') {
+			    		this.recordSearch();
+			       	}
+			    },
+			    deep: true
+			}
+		},
 		created () {
 			var self = this;
 			this.getDepartments({

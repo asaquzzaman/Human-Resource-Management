@@ -47,14 +47,20 @@
 			selfNewRecord () {
 				var self = this;
 
-				self.loading = true;
-				self.canSubmit = false;
+				if (!this.canSubmit) {
+					return false;
+				}
+
 
 				var postData = this.generateFieldData(this.fields);
 					postData['employee_id'] = this.$route.params.employeeId;
 					postData['class'] = self.modelName;
 					postData['method'] = 'create';
 					postData['transformers'] = self.modelTransformer;
+
+				if (!this.formValidation(this.fields, postData)) {
+					return false;
+				}
 
 				var args = {
 					data: postData,
@@ -66,6 +72,9 @@
 						self.makeEmptyField(self.fields);
 					}
 				}
+
+				self.loading = true;
+				self.canSubmit = false;
 
 				this.addNewRecord(args);
 			},

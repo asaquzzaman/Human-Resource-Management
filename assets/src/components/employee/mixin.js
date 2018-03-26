@@ -277,23 +277,6 @@ export default {
             return hrm_user_can('manage_employee');
         },
 
-        formValidation (fields, postData) {
-        	var isFormValidate = true;
-
-			fields.forEach(function(val) {
-				if(
-					val.required === true
-						&&
-					!postData[val.name]
-				) {
-					hrm.Toastr.error(val.label + ' is required!');
-					isFormValidate = false;
-				}
-			});
-
-			return isFormValidate;
-        },
-
         editFormValidation (fields, postData) {
         	var isFormValidate = true;
 

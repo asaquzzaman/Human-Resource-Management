@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"1e28c5467076a11a20b2","3":"3b65b2abb4e9f3b85892","4":"2e1494d71c7cf6bd83f8","5":"a36a3afab805c4643abc","6":"1a13ddcff2ffd9c2bf62","7":"aa083456fd9fdd95a23f","8":"808f0c98f1446c38350c","9":"8aebf3849f655ee24208","10":"8b44c6a46939c9ddd571","11":"9cd8319a2b87d8caacdb","12":"e823711b390e3122c7b5","13":"0ed924bb298ab6a00600","14":"1e3bdf4482cb9787468e","15":"771b417d85caa450889a","16":"e14d550b862f77096ef5","17":"2970113d769dff14c2be","18":"1948697717eae9f8b227","19":"006627fed8109da617b0","20":"79f0d07a200b9c73b6ae","21":"7ec78cf816e96902455b","22":"bedd5a0623b2bec91924","23":"c31e36872fb32a43dc34","24":"3ebd0b036e459640d379","25":"ecfb8d9203363a293ac8","26":"8cf3a0fb029895050196","27":"21ba4482383b0ee64e75","29":"0a7f7fa49dbb801322d2","30":"cb9776ddb153c6539352"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"2":"302dd5ff2c19028e0b1a","3":"0e799601d739907257c3","4":"191136fd08f0b6692b96","5":"713b937e0335baf6c3ae","6":"eb9fe9f63a5cb15245ba","7":"10975bd82b6c8b309e66","8":"e755fcfffc3d2701880c","9":"8d6a3ba4038a8978657a","10":"2d9e34a89002def23dea","11":"99f6ea66b1c335a153d3","12":"996aa7852daf87608d51","13":"8e0c83edf06df405c07e","14":"67460dcef3c71c922337","15":"a725b4754bcfcbe01c4e","16":"63decc5729fd6a933f24","17":"aa6fa7423d94ea80b7a2","18":"09a9a58f9a870a935b4d","19":"b8aa1bbf2936a8a3c31e","20":"feb4cfb6e1944a0f1841","21":"36453bd316fd987cbebd","22":"9ead6d89e5a30c4a6ea6","23":"b39a36a03f4196162555","24":"63e54166b5d8e1cf07ec","25":"20471ae9860d86dd421f","26":"5a60ff42fb4e214f9dea","27":"876add389326db1a3c61","29":"0a7f7fa49dbb801322d2","30":"cb9776ddb153c6539352"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -2343,19 +2343,19 @@ let Hrm_Leave_Requests = resolve => {
 };
 
 let Hrm_Leave_Pending = resolve => {
-    __webpack_require__.e/* require.ensure */(24).then((() => {
+    __webpack_require__.e/* require.ensure */(25).then((() => {
         resolve(__webpack_require__(54));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Cancel = resolve => {
-    __webpack_require__.e/* require.ensure */(25).then((() => {
+    __webpack_require__.e/* require.ensure */(26).then((() => {
         resolve(__webpack_require__(50));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let Hrm_Leave_Approve = resolve => {
-    __webpack_require__.e/* require.ensure */(26).then((() => {
+    __webpack_require__.e/* require.ensure */(27).then((() => {
         resolve(__webpack_require__(49));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -2555,13 +2555,13 @@ HRMRegisterModule('profile', 'profile');
 
 
 let personalInformation = resolve => {
-    __webpack_require__.e/* require.ensure */(22).then((() => {
+    __webpack_require__.e/* require.ensure */(23).then((() => {
         resolve(__webpack_require__(64));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 
 let jobLocation = resolve => {
-    __webpack_require__.e/* require.ensure */(27).then((() => {
+    __webpack_require__.e/* require.ensure */(21).then((() => {
         resolve(__webpack_require__(63));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -3046,7 +3046,7 @@ HRMRegisterModule('dashboard', 'dashboard');
 
 let dashboard = resolve => {
 
-    __webpack_require__.e/* require.ensure */(21).then((() => {
+    __webpack_require__.e/* require.ensure */(22).then((() => {
         resolve(__webpack_require__(45));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -3284,10 +3284,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -3316,10 +3322,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -3366,6 +3378,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var request_data = {
 				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -3373,6 +3388,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 				}
 			};
 
@@ -3469,15 +3486,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -3504,12 +3557,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -3811,19 +3875,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		manageEmployee() {
 			return hrm_user_can('manage_employee');
-		},
-
-		formValidation(fields, postData) {
-			var isFormValidate = true;
-
-			fields.forEach(function (val) {
-				if (val.required === true && !postData[val.name]) {
-					hrm.Toastr.error(val.label + ' is required!');
-					isFormValidate = false;
-				}
-			});
-
-			return isFormValidate;
 		},
 
 		editFormValidation(fields, postData) {
@@ -4767,7 +4818,7 @@ HRMRegisterModule('general', 'organization/general');
 
 let general = resolve => {
 
-    __webpack_require__.e/* require.ensure */(23).then((() => {
+    __webpack_require__.e/* require.ensure */(24).then((() => {
         resolve(__webpack_require__(59));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
@@ -4870,10 +4921,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -4901,11 +4957,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: args.data,
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
 
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -4952,6 +5012,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var request_data = {
 				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -4959,6 +5022,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
 				}
 			};
 
@@ -4976,6 +5040,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: this.$route.query,
 
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
+
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -4983,6 +5051,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -5049,15 +5118,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -5084,12 +5189,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -5185,10 +5301,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5217,9 +5338,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5266,6 +5392,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var request_data = {
 				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -5273,6 +5402,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
 				}
 			};
 
@@ -5290,6 +5420,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: this.$route.query,
 
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
+
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -5297,6 +5431,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -5363,15 +5498,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -5398,12 +5569,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -5499,10 +5681,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5530,11 +5717,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: args.data,
-
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5581,6 +5771,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var request_data = {
 				data: postData,
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -5588,6 +5781,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 				}
 			};
 
@@ -5605,7 +5800,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: this.$route.query,
-
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -5613,6 +5810,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -5690,15 +5890,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -5725,12 +5961,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -5774,8 +6021,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 data: {
                     employee_id: args.employee_id
                 },
+                beforeSend() {
+                    self.loadingStart('hrm-general-info');
+                },
                 success: function (res) {
                     self.$store.commit('profile/setPersonalInfo', res);
+                    self.loadingStop('hrm-general-info');
+                    self.isFetchRecord = true;
+
                     if (typeof args.callback === 'function') {
                         args.callback(res);
                     }
@@ -5792,8 +6045,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 data: {
                     employee_id: args.employee_id
                 },
+                beforeSend() {
+                    self.loadingStart('hrm-location-wrap');
+                },
                 success: function (res) {
                     self.$store.commit('profile/setJobLocation', res.data);
+                    self.loadingStop('hrm-location-wrap');
+                    self.isFetchRecord = true;
+
                     if (typeof args.callback === 'function') {
                         args.callback(res);
                     }
@@ -5872,10 +6131,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var form_data = {
 				data: args.data,
 
+				beforeSend() {
+					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+				},
+
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+					self.loadingStop('hrm-edit-form-' + res.data.id);
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5903,11 +6167,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: args.data,
-
+				beforeSend() {
+					self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+				},
 				success: function (res) {
 					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+					self.loadingStop('hrm-hidden-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback.call(self, true, res);
@@ -5978,7 +6245,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var form_data = {
 				data: this.$route.query,
-
+				beforeSend() {
+					self.loadingStart('hrm-list-table');
+				},
 				success: function (res) {
 					res.data.forEach(function (record) {
 						self.recordMeta(record);
@@ -5986,6 +6255,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+					self.loadingStop('hrm-list-table');
+					self.isFetchRecord = true;
 
 					if (typeof callback === 'function') {
 						callback.call(self, true, res);
@@ -6064,15 +6335,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return itemList.findIndex(x => x[slug] == id);
 		},
 		deletedId: [],
-		pagination: {}
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
 	},
 
 	mutations: {
 		showHideNewRecordForm(state, status) {
 			if (status === 'toggle') {
-				state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
 			} else {
 				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
 			}
 		},
 
@@ -6099,12 +6406,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		showHideEditForm(state, data) {
-			var index = state.getIndex(state.records, data.id, 'id');
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 
@@ -6254,19 +6572,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};
 
 			this.httpRequest('hrm_update_record', form_data);
-		},
-
-		formValidation(fields, postData) {
-			var isFormValidate = true;
-
-			fields.forEach(function (val) {
-				if (val.required === true && !postData[val.name]) {
-					hrm.Toastr.error(val.label + ' is required!');
-					isFormValidate = false;
-				}
-			});
-
-			return isFormValidate;
 		},
 
 		addNewRecord(args) {
@@ -6978,6 +7283,32 @@ function menuFix(slug) {
             setTimeout(function () {
                 selector.removeClass('new-records');
             }, 3000);
+        },
+
+        formValidation(fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function (val) {
+                if (val.required === true && !postData[val.name]) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
+        },
+
+        editFormValidation(fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function (val) {
+                if (val.editable !== false && val.required === true && !postData[val.name]) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
         }
     }
 }));
@@ -7062,7 +7393,7 @@ exports = module.exports = __webpack_require__(35)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm .hrm-pagination-btn,\n#hrm .hrm-pagination-btn {\n    display: inline-block;\n    text-decoration: none;\n    font-size: 13px;\n    line-height: 26px;\n    height: 28px;\n    margin: 0;\n    padding: 0 10px 1px;\n    cursor: pointer;\n    border-width: 1px;\n    border-style: solid;\n    -webkit-appearance: none;\n    border-radius: 3px;\n    white-space: nowrap;\n    box-sizing: border-box;\n    color: #555;\n    border-color: #ccc;\n    background: #f7f7f7;\n    vertical-align: top;\n    margin-right: 3px;\n}\n.hrm .router-link-exact-active,\n#hrm .router-link-exact-active {\n    background: #e5e5e5;\n}\n.hrm-pagination-wrap {\n    margin-top: 8px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm .hrm-pagination-btn,\n#hrm .hrm-pagination-btn {\n    display: inline-block;\n    text-decoration: none;\n    font-size: 13px;\n    line-height: 26px;\n    height: 28px;\n    margin: 0;\n    padding: 0 10px 1px;\n    cursor: pointer;\n    border-width: 1px;\n    border-style: solid;\n    -webkit-appearance: none;\n    border-radius: 3px;\n    white-space: nowrap;\n    box-sizing: border-box;\n    color: #555;\n    border-color: #ccc;\n    background: #f7f7f7;\n    vertical-align: top;\n    margin-right: 3px;\n}\n.hrm .router-link-exact-active,\n#hrm .router-link-exact-active {\n    background: #f1f1f1;\n}\n.hrm-pagination-wrap {\n    margin-top: 8px;\n}\n", ""]);
 
 // exports
 

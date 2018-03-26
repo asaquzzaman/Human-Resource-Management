@@ -92,6 +92,11 @@ wpSpearHrm([7],{
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	mixins: [HRMMixin.location],
@@ -174,9 +179,6 @@ wpSpearHrm([7],{
 			data['transformers'] = self.modelTransformer;
 			data['id'] = record.id;
 
-			self.canSubmit = false;
-			self.loading = true;
-
 			self.fields.forEach(function (field) {
 				if (!field.editable) {
 					return;
@@ -197,6 +199,12 @@ wpSpearHrm([7],{
 				}
 			};
 
+			if (!this.editFormValidation(self.fields, args.data)) {
+				return false;
+			}
+
+			self.canSubmit = false;
+			self.loading = true;
 			this.updateRecord(args);
 		},
 		selfDelete(record) {
@@ -259,8 +267,8 @@ wpSpearHrm([7],{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__location_table_vue__ = __webpack_require__(395);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_location_form_vue__ = __webpack_require__(396);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__location_table_vue__ = __webpack_require__(396);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_location_form_vue__ = __webpack_require__(397);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__ = __webpack_require__(271);
 //
 //
@@ -436,10 +444,6 @@ wpSpearHrm([7],{
 		};
 	},
 
-	created() {
-		var self = this;
-	},
-
 	computed: {
 		isNewRecordFormActive() {
 			return this.$store.state[this.nameSpace].isNewRecordFormActive;
@@ -547,13 +551,14 @@ wpSpearHrm([7],{
 		selfNewRecord() {
 			var self = this;
 
-			self.loading = true;
-			self.canSubmit = false;
-
 			var postData = this.generateFieldData(this.fields);
 			postData['class'] = self.modelName;
 			postData['method'] = 'create';
 			postData['transformers'] = self.modelTransformer;
+
+			if (!this.formValidation(this.fields, postData)) {
+				return false;
+			}
 
 			var args = {
 				data: postData,
@@ -566,6 +571,8 @@ wpSpearHrm([7],{
 				}
 			};
 
+			self.loading = true;
+			self.canSubmit = false;
 			this.addNewRecord(args);
 		},
 
@@ -607,7 +614,7 @@ exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}
 
 /***/ }),
 
-/***/ 370:
+/***/ 371:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(35)(false);
@@ -622,17 +629,17 @@ exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\t
 
 /***/ }),
 
-/***/ 395:
+/***/ 396:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_table_vue__ = __webpack_require__(319);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2c41bb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_table_vue__ = __webpack_require__(461);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2c41bb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_table_vue__ = __webpack_require__(462);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(494)
+  __webpack_require__(496)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -679,13 +686,13 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 396:
+/***/ 397:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_new_location_form_vue__ = __webpack_require__(321);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_603dcef1_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_location_form_vue__ = __webpack_require__(438);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_603dcef1_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_location_form_vue__ = __webpack_require__(439);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -732,7 +739,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 424:
+/***/ 425:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -767,7 +774,10 @@ var render = function() {
       _c("organization-menu"),
       _vm._v(" "),
       _vm.isNewRecordFormActive && _vm.manageOrganization()
-        ? _c("add-new-record-form", { attrs: { fields: _vm.fields } })
+        ? _c("add-new-record-form", {
+            staticClass: "hrm-toggle",
+            attrs: { fields: _vm.fields }
+          })
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "hrm-tbl-action-wrap" }, [
@@ -906,7 +916,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 438:
+/***/ 439:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -993,7 +1003,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 461:
+/***/ 462:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1001,334 +1011,384 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("table", { staticClass: "wp-list-table widefat fixed striped pages" }, [
-      _c("thead", [
-        _c(
-          "tr",
+  return _c("div", { attrs: { id: "hrm-list-table" } }, [
+    _vm.isFetchRecord
+      ? _c(
+          "table",
+          { staticClass: "wp-list-table widefat fixed striped pages" },
           [
-            _vm.manageOrganization()
-              ? _c(
-                  "td",
-                  {
-                    staticClass: "manage-column column-cb check-column",
-                    attrs: { id: "cb" }
-                  },
-                  [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.deleteAllStatus,
-                          expression: "deleteAllStatus"
-                        }
-                      ],
-                      attrs: { id: "cb-select-all-1", type: "checkbox" },
-                      domProps: {
-                        checked: Array.isArray(_vm.deleteAllStatus)
-                          ? _vm._i(_vm.deleteAllStatus, null) > -1
-                          : _vm.deleteAllStatus
-                      },
-                      on: {
-                        change: [
-                          function($event) {
-                            var $$a = _vm.deleteAllStatus,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = null,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  (_vm.deleteAllStatus = $$a.concat([$$v]))
-                              } else {
-                                $$i > -1 &&
-                                  (_vm.deleteAllStatus = $$a
-                                    .slice(0, $$i)
-                                    .concat($$a.slice($$i + 1)))
-                              }
-                            } else {
-                              _vm.deleteAllStatus = $$c
-                            }
-                          },
-                          function($event) {
-                            $event.preventDefault()
-                            _vm.deleteAll()
-                          }
-                        ]
-                      }
-                    })
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._l(_vm.filterHeader(_vm.fields), function(
-              header,
-              header_index
-            ) {
-              return _c(
-                "th",
-                { key: header_index, class: _vm.getClass(header) },
+            _c("thead", [
+              _c(
+                "tr",
                 [
-                  _vm._v(
-                    "\n                    \t" +
-                      _vm._s(header.tableHead) +
-                      "\n                    "
-                  )
-                ]
-              )
-            })
-          ],
-          2
-        )
-      ]),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        [
-          _vm._l(_vm.records, function(record, record_index) {
-            return !record.editMode
-              ? _c(
-                  "tr",
-                  { key: record_index },
-                  [
-                    _vm.manageOrganization()
-                      ? _c(
-                          "th",
-                          {
-                            staticClass: "check-column",
-                            attrs: { scope: "row" }
-                          },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.deletedId,
-                                  expression: "deletedId"
-                                }
-                              ],
-                              attrs: { id: "cb-select-7", type: "checkbox" },
-                              domProps: {
-                                value: record.id,
-                                checked: Array.isArray(_vm.deletedId)
-                                  ? _vm._i(_vm.deletedId, record.id) > -1
-                                  : _vm.deletedId
-                              },
-                              on: {
-                                change: [
-                                  function($event) {
-                                    var $$a = _vm.deletedId,
-                                      $$el = $event.target,
-                                      $$c = $$el.checked ? true : false
-                                    if (Array.isArray($$a)) {
-                                      var $$v = record.id,
-                                        $$i = _vm._i($$a, $$v)
-                                      if ($$el.checked) {
-                                        $$i < 0 &&
-                                          (_vm.deletedId = $$a.concat([$$v]))
-                                      } else {
-                                        $$i > -1 &&
-                                          (_vm.deletedId = $$a
-                                            .slice(0, $$i)
-                                            .concat($$a.slice($$i + 1)))
-                                      }
-                                    } else {
-                                      _vm.deletedId = $$c
-                                    }
-                                  },
-                                  function($event) {
-                                    _vm.actionCheckbox()
-                                  }
-                                ]
+                  _vm.manageOrganization()
+                    ? _c(
+                        "td",
+                        {
+                          staticClass: "manage-column column-cb check-column",
+                          attrs: { id: "cb" }
+                        },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.deleteAllStatus,
+                                expression: "deleteAllStatus"
                               }
-                            })
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm._l(_vm.filterHeader(_vm.fields), function(
-                      field,
-                      field_index
-                    ) {
-                      return _c("td", [
-                        _c("span", {
-                          domProps: {
-                            innerHTML: _vm._s(_vm.printCellData(record, field))
-                          }
-                        }),
-                        _vm._v(" "),
-                        field.tbRowAction
-                          ? _c("div", { staticClass: "row-actions" }, [
-                              _c("span", { staticClass: "edit" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.recordEditForm(record)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Edit")]
-                                ),
-                                _vm._v(" | ")
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "trash" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.selfDelete(record)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Delete")]
-                                )
-                              ])
-                            ])
-                          : _vm._e()
-                      ])
-                    })
-                  ],
-                  2
-                )
-              : _c(
-                  "tr",
-                  {
-                    staticClass:
-                      "inline-edit-row inline-edit-row-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor",
-                    attrs: { id: "edit-8" }
-                  },
-                  [
-                    _c(
-                      "td",
-                      {
-                        staticClass: "colspanchange",
-                        attrs: { colspan: _vm.fields.length + 1 }
-                      },
-                      [
-                        _c(
-                          "form",
-                          {
-                            attrs: { action: "" },
+                            ],
+                            attrs: { id: "cb-select-all-1", type: "checkbox" },
+                            domProps: {
+                              checked: Array.isArray(_vm.deleteAllStatus)
+                                ? _vm._i(_vm.deleteAllStatus, null) > -1
+                                : _vm.deleteAllStatus
+                            },
                             on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                _vm.selfUpdate(record)
-                              }
-                            }
-                          },
-                          [
-                            _c(
-                              "fieldset",
-                              { staticClass: "inline-edit-col-left" },
-                              [
-                                _c(
-                                  "legend",
-                                  { staticClass: "inline-edit-legend" },
-                                  [_vm._v("Quick Edit")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "inline-edit-col" },
-                                  _vm._l(
-                                    _vm.filterEditField(_vm.fields),
-                                    function(field, field_index) {
-                                      return _c("label", [
-                                        _c("span", { staticClass: "title" }, [
-                                          _vm._v(_vm._s(field.label))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c(
-                                          "span",
-                                          { staticClass: "input-text-wrap" },
-                                          [
-                                            _c("hrm-edit-field", {
-                                              attrs: {
-                                                record: record,
-                                                field: field
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ])
+                              change: [
+                                function($event) {
+                                  var $$a = _vm.deleteAllStatus,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.deleteAllStatus = $$a.concat([
+                                          $$v
+                                        ]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.deleteAllStatus = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
                                     }
-                                  )
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _vm._m(0),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "submit inline-edit-save" },
-                              [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "button hrm-button-secondary cancel alignleft",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.recordEditForm(record, false)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Cancel")]
-                                ),
-                                _vm._v(" "),
-                                _c("input", {
-                                  staticClass:
-                                    "button hrm-button-primary button-primary save alignright",
-                                  attrs: {
-                                    disabled: !_vm.canSubmit,
-                                    type: "submit",
-                                    value: "Update"
+                                  } else {
+                                    _vm.deleteAllStatus = $$c
                                   }
-                                }),
-                                _vm._v(" "),
-                                _vm.loading
-                                  ? _c("div", {
-                                      staticClass: "hrm-spinner alignright"
-                                    })
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _c("br", { staticClass: "clear" })
+                                },
+                                function($event) {
+                                  $event.preventDefault()
+                                  _vm.deleteAll()
+                                }
                               ]
-                            )
-                          ]
+                            }
+                          })
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.filterHeader(_vm.fields), function(
+                    header,
+                    header_index
+                  ) {
+                    return _c(
+                      "th",
+                      { key: header_index, class: _vm.getClass(header) },
+                      [
+                        _vm._v(
+                          "\n                    \t" +
+                            _vm._s(header.tableHead) +
+                            "\n                    "
                         )
                       ]
                     )
-                  ]
-                )
-          }),
-          _vm._v(" "),
-          !_vm.records.length
-            ? _c("tr", [
-                _c("td", { attrs: { colspan: _vm.fields.length + 1 } }, [
-                  _vm._v("\n\t\t\t\t\t\tNo result found!\n\t\t\t\t\t")
-                ])
-              ])
-            : _vm._e()
-        ],
-        2
-      )
-    ])
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              [
+                _vm._l(_vm.records, function(record, record_index) {
+                  return !record.editMode
+                    ? _c(
+                        "tr",
+                        { key: record_index },
+                        [
+                          _vm.manageOrganization()
+                            ? _c(
+                                "th",
+                                {
+                                  staticClass: "check-column",
+                                  attrs: { scope: "row" }
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.deletedId,
+                                        expression: "deletedId"
+                                      }
+                                    ],
+                                    attrs: {
+                                      id: "cb-select-7",
+                                      type: "checkbox"
+                                    },
+                                    domProps: {
+                                      value: record.id,
+                                      checked: Array.isArray(_vm.deletedId)
+                                        ? _vm._i(_vm.deletedId, record.id) > -1
+                                        : _vm.deletedId
+                                    },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$a = _vm.deletedId,
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = record.id,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                (_vm.deletedId = $$a.concat([
+                                                  $$v
+                                                ]))
+                                            } else {
+                                              $$i > -1 &&
+                                                (_vm.deletedId = $$a
+                                                  .slice(0, $$i)
+                                                  .concat($$a.slice($$i + 1)))
+                                            }
+                                          } else {
+                                            _vm.deletedId = $$c
+                                          }
+                                        },
+                                        function($event) {
+                                          _vm.actionCheckbox()
+                                        }
+                                      ]
+                                    }
+                                  })
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm._l(_vm.filterHeader(_vm.fields), function(
+                            field,
+                            field_index
+                          ) {
+                            return _c("td", [
+                              _c("span", {
+                                domProps: {
+                                  innerHTML: _vm._s(
+                                    _vm.printCellData(record, field)
+                                  )
+                                }
+                              }),
+                              _vm._v(" "),
+                              field.tbRowAction
+                                ? _c("div", { staticClass: "row-actions" }, [
+                                    _c("span", { staticClass: "edit" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.recordEditForm(record)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Edit")]
+                                      ),
+                                      _vm._v(" | ")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("span", { staticClass: "trash" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.selfDelete(record)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Delete")]
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e()
+                            ])
+                          })
+                        ],
+                        2
+                      )
+                    : _c(
+                        "tr",
+                        {
+                          staticClass: "inline-edit-row hrm-edit-toggle",
+                          attrs: {
+                            id: "hrm-edit-" + record.id,
+                            "data-recordId": record.id
+                          }
+                        },
+                        [
+                          _c(
+                            "td",
+                            {
+                              staticClass: "colspanchange",
+                              attrs: { colspan: _vm.fields.length + 1 }
+                            },
+                            [
+                              _c(
+                                "form",
+                                {
+                                  staticClass: "hrm-edit-form",
+                                  attrs: {
+                                    id: "hrm-edit-form-" + record.id,
+                                    action: ""
+                                  },
+                                  on: {
+                                    submit: function($event) {
+                                      $event.preventDefault()
+                                      _vm.selfUpdate(record)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "fieldset",
+                                    { staticClass: "inline-edit-col-left" },
+                                    [
+                                      _c(
+                                        "legend",
+                                        { staticClass: "inline-edit-legend" },
+                                        [_vm._v("Quick Edit")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "inline-edit-col" },
+                                        _vm._l(
+                                          _vm.filterEditField(_vm.fields),
+                                          function(field, field_index) {
+                                            return _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "hrm-edit-field-wrap"
+                                              },
+                                              [
+                                                _c("label", [
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "title" },
+                                                    [
+                                                      _vm._v(
+                                                        "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                          _vm._s(field.label)
+                                                      ),
+                                                      field.required
+                                                        ? _c("em", [
+                                                            _vm._v("*")
+                                                          ])
+                                                        : _vm._e()
+                                                    ]
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "input-text-wrap"
+                                                  },
+                                                  [
+                                                    _c("hrm-edit-field", {
+                                                      attrs: {
+                                                        record: record,
+                                                        field: field
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c("div", {
+                                                  staticClass: "hrm-clear"
+                                                })
+                                              ]
+                                            )
+                                          }
+                                        )
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(0),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "submit inline-edit-save" },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "button hrm-button-secondary cancel alignleft",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.recordEditForm(record, false)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Cancel")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        staticClass:
+                                          "button hrm-button-primary button-primary save alignright",
+                                        attrs: {
+                                          disabled: !_vm.canSubmit,
+                                          type: "submit",
+                                          value: "Update"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm.loading
+                                        ? _c("div", {
+                                            staticClass:
+                                              "hrm-spinner alignright"
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _c("br", { staticClass: "clear" })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                }),
+                _vm._v(" "),
+                !_vm.records.length
+                  ? _c("tr", [
+                      _c("td", { attrs: { colspan: _vm.fields.length + 1 } }, [
+                        _vm._v("\n\t\t\t\t\t\tNo result found!\n\t\t\t\t\t")
+                      ])
+                    ])
+                  : _vm._e()
+              ],
+              2
+            )
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -1353,7 +1413,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 479:
+/***/ 480:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -1380,13 +1440,13 @@ if(false) {
 
 /***/ }),
 
-/***/ 494:
+/***/ 496:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(370);
+var content = __webpack_require__(371);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -1414,11 +1474,11 @@ if(false) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_vue__ = __webpack_require__(320);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_393a3f23_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_vue__ = __webpack_require__(424);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_393a3f23_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_vue__ = __webpack_require__(425);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(479)
+  __webpack_require__(480)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */

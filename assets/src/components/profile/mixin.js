@@ -7,8 +7,14 @@ export default {
                 data: {
                     employee_id: args.employee_id
                 },
+                beforeSend () {
+                    self.loadingStart('hrm-general-info');
+                },
                 success: function(res) {
                 	self.$store.commit('profile/setPersonalInfo', res);
+                    self.loadingStop('hrm-general-info');
+                    self.isFetchRecord = true;
+
                 	if (typeof args.callback === 'function') {
                         args.callback(res);
                     } 
@@ -25,8 +31,14 @@ export default {
                 data: {
                     employee_id: args.employee_id
                 },
+                beforeSend () {
+                    self.loadingStart('hrm-location-wrap');
+                },
                 success: function(res) {
                     self.$store.commit('profile/setJobLocation', res.data);
+                    self.loadingStop('hrm-location-wrap');
+                    self.isFetchRecord = true;
+
                     if (typeof args.callback === 'function') {
                         args.callback(res);
                     } 

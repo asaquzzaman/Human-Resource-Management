@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<profile-menu></profile-menu>
-		<div class="metabox-holder">
-			<div id="hrm-hidden-form-warp" class="postbox">
+		<div id="hrm-general-info" class="metabox-holder">
+			<div v-if="isFetchRecord" id="hrm-hidden-form-warp" class="postbox">
 		        <h2 class="hndle">General Information</h2>
 		        <div class="inside">
 			        <div id="hrm-visible-form">
@@ -77,6 +77,7 @@
 		data () {
 			return {
 				editMode: false,
+				isFetchRecord: false,
         		fields: [
 					{
 						type: 'file',

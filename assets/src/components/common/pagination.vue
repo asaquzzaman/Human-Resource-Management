@@ -105,7 +105,7 @@
     }
     .hrm .router-link-exact-active,
     #hrm .router-link-exact-active {
-        background: #e5e5e5;
+        background: #f1f1f1;
     }
     .hrm-pagination-wrap {
         margin-top: 8px;

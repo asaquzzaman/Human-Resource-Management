@@ -23,9 +23,9 @@ class Education_Transformer extends TransformerAbstract
             'institute'   => $item->institute,
             'major'       => $item->major,
             'year'        => $item->year,
-            'score'        => $item->score,
-            'start'       => hrm_get_date( $item->start_date ),
-            'end'         => hrm_get_date( $item->end_date )
+            'score'       => $item->score,
+            'start_date'  => hrm_get_date( $item->start_date ),
+            'end_date'    => hrm_get_date( $item->end_date )
         ];
 
     }

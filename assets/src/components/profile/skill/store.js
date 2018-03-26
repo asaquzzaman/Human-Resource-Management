@@ -6,16 +6,55 @@ export default {
             return itemList.findIndex(x => x[slug]==id);
         },
         deletedId: [],
-        pagination: {}
+        pagination: {},
+                slideUp (callBack) {
+        	jQuery('.hrm-toggle').slideUp(400, function() {
+        		callBack();
+        	});
+        },
+        slideDwon () {
+        	var node = jQuery('.hrm-toggle');
+	        node.css({
+	            display: 'none'
+	        });
+
+			node.slideDown(400);
+	    },
+	    editSlideUp (id, callBack) {
+        	jQuery('#hrm-edit-'+id)
+        		.find('form')
+        		.slideUp(400, function() {
+        			callBack();
+        		}
+        	);
+        },
+        editSlideDwon (id) {
+        	var node = jQuery('#hrm-edit-'+id);
+
+	        node.find('form').css({
+	            display: 'none'
+	        });
+
+			node.find('form').slideDown(400);
+	    }
 	},
 
 	mutations: {
 		showHideNewRecordForm  (state, status) {
-			if ( status === 'toggle' ) {
-                state.isNewRecordFormActive = state.isNewRecordFormActive ? false : true;
-            } else {
-                state.isNewRecordFormActive = status;
-            }
+			if (status === 'toggle') {
+				status = state.isNewRecordFormActive ? false : true;
+            } 
+
+        	if (status === false) {
+				state.slideUp(function() {
+					state.isNewRecordFormActive = status;
+				});
+			} else {
+				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function() {
+					state.slideDwon();
+				});
+			} 
 		},
 
 		setRecords (state, records) {
@@ -41,12 +80,23 @@ export default {
 		},
 
 		showHideEditForm (state, data) {
-			var index = state.getIndex(state.records, data.id, 'id' );
+			var index = state.getIndex(state.records, data.id, 'id' ),
+				status = data.status,
+				id     = state.records[index].id;
 
 			if (data.status == 'toggle') {
-				state.records[index].editMode = state.records[index].editMode ? false : true;
+				status = state.records[index].editMode ? false : true;
+			} 
+
+			if ( status === false ) {
+				state.editSlideUp(id, function() {
+					state.records[index].editMode = status;
+				});
 			} else {
-				state.records[index].editMode = data.status;
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function() {
+					state.editSlideDwon(id);
+				});
 			}
 		},
 

@@ -5,7 +5,7 @@
 
 		<organization-menu></organization-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive && manageOrganization()" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
 			<div  v-if="manageOrganization()" class="hrm-table-action hrm-bulk-wrap">
@@ -182,10 +182,6 @@
 			}
 		},
 		
-		created () {
-			var self = this;
-		},
-
 		computed: {
 			isNewRecordFormActive () {
 				return this.$store.state[this.nameSpace].isNewRecordFormActive;

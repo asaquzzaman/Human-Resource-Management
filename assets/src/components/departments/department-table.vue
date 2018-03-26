@@ -33,7 +33,7 @@
 
                 <td>
                     <div v-if="manageDepartment()" class="hrm-title-wrap">
-                        <a href="#" class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></a>
+                        <div class="hrm-editable hrm-title"><span v-html="department.hierarchical_pad"></span><span>{{ department.name }}</span></div>
                         <div class="hrm-title-action row-actions">
                             <department-edit-btn :department_id="department.id"></department-edit-btn>
                             <department-del-btn :department_id="department.id" :type="'single'"></department-del-btn>

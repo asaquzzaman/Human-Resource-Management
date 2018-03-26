@@ -224,6 +224,42 @@ export default hrm.Vue.mixin({
                 selector.removeClass('new-records');
             }, 3000);
             
+        },
+
+        formValidation (fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function(val) {
+                if(
+                    val.required === true
+                        &&
+                    !postData[val.name]
+                ) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
+        },
+
+        editFormValidation (fields, postData) {
+            var isFormValidate = true;
+
+            fields.forEach(function(val) {
+                if(
+                    val.editable !== false
+                        &&
+                    val.required === true
+                        &&
+                    !postData[val.name]
+                ) {
+                    hrm.Toastr.error(val.label + ' is required!');
+                    isFormValidate = false;
+                }
+            });
+
+            return isFormValidate;
         }
 	},
 });

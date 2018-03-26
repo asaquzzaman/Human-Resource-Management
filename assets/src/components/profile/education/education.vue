@@ -5,9 +5,9 @@
 
 		<profile-menu></profile-menu>
 
-		<add-new-record-form v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
+		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
-	    <div class="hrm-tbl-action-wrap">
+		<div class="hrm-tbl-action-wrap">
 			<div class="hrm-table-action hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
@@ -21,11 +21,12 @@
 
 			<div class="hrm-table-action hrm-filter-wrap">
 				<div class="alignleft actions">
-					<input v-model="search.title" type="text">
-					<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-					<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
-					<a href="#" class="button hrm-button-secondary button-secondary" @click.prevent="recordSearch()">Filter</a>
-
+					<form @submit.prevent="recordSearch()">
+						<input v-model="search.title" placeholder="Title" type="text">
+						<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+						<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
+					</form>
 				</div>
 
 			</div>
@@ -78,7 +79,8 @@
 						name: 'education',
 						tableHead: 'Level',
 						tbRowAction: true,
-						editable: true
+						editable: true,
+						required: true
 					},
 					{
 						type: 'text',
@@ -87,7 +89,28 @@
 						name: 'institute',
 						tableHead: 'Institute',
 						tbRowAction: false,
-						editable: true
+						editable: true,
+						required: true
+					},
+					{
+						type: 'datePickerFrom',
+						model: '',
+						label: 'Start Date',
+						name: 'start_date',
+						tableHead: 'Start Date',
+						tbRowAction: false,
+						editable: true,
+						required: true
+					},
+					{
+						type: 'datePickerTo',
+						model: '',
+						label: 'End Date',
+						name: 'end_date',
+						tableHead: 'End Date',
+						tbRowAction: false,
+						editable: true,
+						required: true
 					},
 					{
 						type: 'text',
@@ -106,33 +129,11 @@
 						tableHead: 'GPA/Score',
 						tbRowAction: false,
 						editable: true
-					},
-					{
-						type: 'datePickerFrom',
-						model: '',
-						label: 'Start Date',
-						name: 'start_date',
-						tableHead: 'Start Date',
-						tbRowAction: false,
-						editable: true
-					},
-					{
-						type: 'datePickerTo',
-						model: '',
-						label: 'End Date',
-						name: 'end_date',
-						tableHead: 'End Date',
-						tbRowAction: false,
-						editable: true
 					}
 				],
 			}
 		},
 		
-		created () {
-			var self = this;
-		},
-
 		computed: {
 			isNewRecordFormActive () {
 				return this.$store.state[this.nameSpace].isNewRecordFormActive;

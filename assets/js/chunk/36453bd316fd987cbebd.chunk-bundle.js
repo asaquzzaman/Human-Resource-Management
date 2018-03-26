@@ -1,4 +1,4 @@
-wpSpearHrm([27],{
+wpSpearHrm([21],{
 
 /***/ 271:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -75,11 +75,25 @@ wpSpearHrm([27],{
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	mixins: [HRMMixin.profile],
+	data() {
+		return {
+			isFetchRecord: false
+		};
+	},
 	created() {
 
 		this.getJobLocation({
@@ -124,7 +138,22 @@ wpSpearHrm([27],{
 
 /***/ }),
 
-/***/ 454:
+/***/ 367:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(35)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.hrm-title,\n.hrm-content {\n\tfloat: left;\n}\n.hrm-title {\n\twidth: 20%;\n}\n.hrm-content-wrap {\n\tmargin-bottom: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 455:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -137,160 +166,188 @@ var render = function() {
     [
       _c("profile-menu"),
       _vm._v(" "),
-      _c("div", { staticClass: "metabox-holder" }, [
-        _c(
-          "div",
-          { staticClass: "postbox", attrs: { id: "hrm-hidden-form-warp" } },
-          [
-            _c("h2", { staticClass: "hndle" }, [_vm._v("Job Location")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "inside" }, [
-              _c("div", { staticClass: "main" }, [
-                _vm.jobLocation
-                  ? _c("div", { staticClass: "hrm-content-wrap" }, [
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Name:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.name, "name")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Country:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.country_code, "country")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Province:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.state, "province")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("City:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.city, "city")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Address:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.address, "address")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Zip Code:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.zipcode, "zipcode")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Phone:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.phone, "phone")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Fax:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.fax, "fax")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" }),
-                      _vm._v(" "),
-                      _c("label", { staticClass: "hrm-title" }, [
-                        _vm._v("Notes:")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", {
-                        staticClass: "hrm-content",
-                        domProps: {
-                          innerHTML: _vm._s(
-                            _vm.filter(_vm.jobLocation.note, "note")
-                          )
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "hrm-clear" })
-                    ])
-                  : _c("div", {}, [
-                      _vm._v("\n\t\t\t\t\t\tNo job location found\n\t\t\t\t\t")
-                    ])
-              ])
-            ])
-          ]
-        )
-      ])
+      _c(
+        "div",
+        { staticClass: "metabox-holder", attrs: { id: "hrm-location-wrap" } },
+        [
+          _vm.isFetchRecord
+            ? _c(
+                "div",
+                {
+                  staticClass: "postbox",
+                  attrs: { id: "hrm-hidden-form-warp" }
+                },
+                [
+                  _c("h2", { staticClass: "hndle" }, [_vm._v("Job Location")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "inside" }, [
+                    _vm.jobLocation
+                      ? _c("div", [
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Name:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.name, "name")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Country:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(
+                                    _vm.jobLocation.country_code,
+                                    "country"
+                                  )
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Province:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.state, "province")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("City:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.city, "city")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Address:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.address, "address")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Zip Code:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.zipcode, "zipcode")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Phone:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.phone, "phone")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Fax:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.fax, "fax")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-content-wrap" }, [
+                            _c("label", { staticClass: "hrm-title" }, [
+                              _vm._v("Notes:")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass: "hrm-content",
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.filter(_vm.jobLocation.note, "note")
+                                )
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-clear" })
+                          ])
+                        ])
+                      : _c("div", {}, [
+                          _vm._v("\n\t\t\t\t\tNo job location found\n\t\t\t\t")
+                        ])
+                  ])
+                ]
+              )
+            : _vm._e()
+        ]
+      )
     ],
     1
   )
@@ -308,6 +365,33 @@ if (false) {
 
 /***/ }),
 
+/***/ 492:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(367);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(36)("b6e37308", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7dbe289b\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./job-location.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7dbe289b\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./job-location.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
 /***/ 63:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -315,8 +399,12 @@ if (false) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_job_location_vue__ = __webpack_require__(328);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7dbe289b_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_job_location_vue__ = __webpack_require__(454);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7dbe289b_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_job_location_vue__ = __webpack_require__(455);
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(492)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 
@@ -326,7 +414,7 @@ var normalizeComponent = __webpack_require__(0)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */

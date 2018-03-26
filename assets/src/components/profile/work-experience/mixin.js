@@ -94,23 +94,6 @@ export default {
             this.httpRequest('hrm_update_record', form_data);
 		},
 
-		formValidation (fields, postData) {
-        	var isFormValidate = true;
-
-			fields.forEach(function(val) {
-				if(
-					val.required === true
-						&&
-					!postData[val.name]
-				) {
-					hrm.Toastr.error(val.label + ' is required!');
-					isFormValidate = false;
-				}
-			});
-
-			return isFormValidate;
-        },
-
 		addNewRecord (args) {
 			var self = this;
 

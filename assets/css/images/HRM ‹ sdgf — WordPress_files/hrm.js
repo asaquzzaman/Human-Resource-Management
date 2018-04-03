@@ -2462,115 +2462,19 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
-function setSelectionRange(input, selectionStart, selectionEnd) {
-	if (input.setSelectionRange) {
-		input.focus();
-		input.setSelectionRange(selectionStart, selectionEnd);
-	} else if (input.createTextRange) {
-		var range = input.createTextRange();
-		range.collapse(true);
-		range.moveEnd('character', selectionEnd);
-		range.moveStart('character', selectionStart);
-		range.select();
-	}
-}
-
-function setCaretToPos(input, pos) {
-	setSelectionRange(input, pos, pos);
-}
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
 	data() {
 
-		return {
-			operation: '',
-			functions: {
-				abs: 'ABS(x)',
-				ceil: 'CEIL(x)',
-				floor: 'FLOOR(x)',
-				greatest: 'GREATEST(a1, a2,...,an)',
-				if: 'IF(exp or true or false)',
-				least: 'LEAST(a1, a2,...,an)',
-				mod: 'MOD(x, y)',
-				prorate: 'PRORATE()',
-				round: 'ROUND(exp)',
-				sqrt: 'SQRT(x)',
-				sum: 'SUM()'
-			},
-
-			operators: {
-				plus: '+',
-				minus: '-',
-				multiple: '*',
-				divided: '/',
-				percent: '%',
-				or: 'OR',
-				and: 'AND',
-				notEqual: '!=',
-				equal: '==',
-				less: '<',
-				greater: '>',
-				lessOrequal: '<=',
-				greaterOrequal: '>=',
-				not: '!',
-				power: '^'
-			}
-
-		};
-	},
-
-	watch: {
-		operation(val) {
-			console.log(val);
-		}
+		return {};
 	},
 
 	computed: {},
 	components: {},
 
-	methods: {
-
-		setFunction(fun) {
-
-			this.operation = this.operation + this.functions[fun];
-
-			hrm.Vue.nextTick(function () {
-				var txtarea = document.getElementById("component-textarea");
-				setCaretToPos(txtarea, 4);
-			});
-		},
-
-		setOperator(ope) {
-			console.log(ope);
-		}
-	}
+	methods: {}
 });
 
 /***/ }),
@@ -8309,7 +8213,7 @@ exports = module.exports = __webpack_require__(16)(false);
 
 
 // module
-exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 20px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 30%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 60%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 30%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 97%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 20px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 30%;\n  border: 1px solid #ddd;\n}\n.page-payroll .hrm-right .component-function {\n  width: 60%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 10px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 30%;\n  display: inline-block;\n  padding: 10px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -10446,95 +10350,7 @@ var render = function() {
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "hrm-right postbox" }, [
-        _c("h2", { staticClass: "hndle" }, [_vm._v("Calculation")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "inside" }, [
-          _c("div", [
-            _vm._m(1),
-            _vm._v(" "),
-            _vm._m(2),
-            _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _c("div", { staticClass: "field-wrap" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.operation,
-                    expression: "operation"
-                  }
-                ],
-                staticClass: "component-textarea",
-                attrs: { id: "component-textarea" },
-                domProps: { value: _vm.operation },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.operation = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", [
-              _vm._m(4),
-              _vm._v(" "),
-              _c("div", { staticClass: "component-function" }, [
-                _c(
-                  "ul",
-                  _vm._l(_vm.functions, function(functionEl, key) {
-                    return _c("li", [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "operator-link",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              _vm.setFunction(key)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(functionEl))]
-                      )
-                    ])
-                  })
-                ),
-                _vm._v(" "),
-                _c(
-                  "ul",
-                  _vm._l(_vm.operators, function(operator, key) {
-                    return _c("li", [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "operator-link",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              _vm.setOperator(key)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(operator))]
-                      )
-                    ])
-                  })
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "hrm-clear" })
-            ])
-          ])
-        ])
-      ]),
+      _vm._m(1),
       _vm._v(" "),
       _c("div", { staticClass: "hrm-clear" })
     ],
@@ -10581,49 +10397,51 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "field-wrap" }, [
-      _c("label", [_vm._v("Name")]),
+    return _c("div", { staticClass: "hrm-right postbox" }, [
+      _c("h2", { staticClass: "hndle" }, [_vm._v("Calculation")]),
       _vm._v(" "),
-      _c("input", { attrs: { type: "text" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "field-wrap" }, [
-      _c("label", [_vm._v("Description")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "field-wrap" }, [
-      _c("label", [_vm._v("Salary Type")]),
-      _vm._v(" "),
-      _c("label", [
-        _c("input", { attrs: { type: "radio" } }),
-        _vm._v("\n\t\t\t\t\t\tIncome\n\t\t\t\t\t")
-      ]),
-      _vm._v(" "),
-      _c("label", [
-        _c("input", { attrs: { type: "radio" } }),
-        _vm._v("\n\t\t\t\t\t\tDeduction\n\t\t\t\t\t")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "component-operator" }, [
-      _c("ul", { staticClass: "functions-ul" }, [
-        _c("li", [_vm._v("Functions")]),
-        _vm._v(" "),
-        _c("li", [_vm._v("Operator")])
+      _c("div", { staticClass: "inside" }, [
+        _c("div", [
+          _c("div", { staticClass: "field-wrap" }, [
+            _c("label", [_vm._v("Name")]),
+            _vm._v(" "),
+            _c("input", { attrs: { type: "text" } })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field-wrap" }, [
+            _c("label", [_vm._v("Description")]),
+            _vm._v(" "),
+            _c("input", { attrs: { type: "text" } })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field-wrap" }, [_c("textarea")]),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", { staticClass: "component-operator" }, [
+              _c("ul", { staticClass: "functions-ul" }, [
+                _c("li", [_vm._v("Functions")]),
+                _vm._v(" "),
+                _c("li", [_vm._v("Operator")])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "component-function" }, [
+              _c("ul", [
+                _c("li", [_vm._v("Functions item 1")]),
+                _vm._v(" "),
+                _c("li", [_vm._v("Functions item 2")])
+              ]),
+              _vm._v(" "),
+              _c("ul", [
+                _c("li", [_vm._v("Operator item 1")]),
+                _vm._v(" "),
+                _c("li", [_vm._v("Operator item 2")])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "hrm-clear" })
+          ])
+        ])
       ])
     ])
   }

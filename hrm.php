@@ -229,6 +229,7 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Designation', 'hrm' ), $capability, 'admin.php?page=hr_management#/designation'];
         $submenu[$hrm_page_slug][] = [__( 'Employee', 'hrm' ), $capability, 'admin.php?page=hr_management#/employee'];
         $submenu[$hrm_page_slug][] = [__( 'Profile', 'hrm' ), $capability, 'admin.php?page=hr_management#/employees'];
+        $submenu[$hrm_page_slug][] = [__( 'Payroll', 'hrm' ), $capability, 'admin.php?page=hr_management#/payroll'];
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
         $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];

@@ -21,6 +21,7 @@ class Formula_Transformer extends TransformerAbstract
             'description' => $item->description,
             'type'        => $item->type,
             'formula'     => $item->formula,
+            'status'      => $item->status,
         ];
 
     }

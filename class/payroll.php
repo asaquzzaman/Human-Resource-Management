@@ -22,6 +22,54 @@ class Hrm_Payroll {
 
     function __construct() {
         add_action( 'wp_ajax_hrm_get_formula', array( $this, 'ajax_get_formula' ) );
+        add_action( 'wp_ajax_hrm_update_formula', array( $this, 'ajax_update_formula' ) );
+        add_action( 'wp_ajax_hrm_delete_formula', array( $this, 'ajax_delete_formula' ) );
+    }
+
+    function ajax_update_formula() {
+        check_ajax_referer('hrm_nonce');
+        $formula = self::getInstance()->update_formula( $_POST );
+
+        wp_send_json_success( $formula );
+    }
+
+    function ajax_delete_formula() {
+        check_ajax_referer('hrm_nonce');
+        
+        self::getInstance()->delete_formula( $_POST['delete'] );
+        wp_send_json_success();
+    }
+
+    function delete_formula( $formula_ids ) {
+        foreach ( $formula_ids as $key => $formula_id ) {
+             $update = array(
+                'class'        => 'Formula',
+                'method'       => 'update',
+                'transformers' => 'Formula_Transformer',
+                'status'       => 'disable',
+                'id'           => $formula_id
+            );
+
+            hrm_update_records( $update );
+        }
+    }
+
+    function update_formula( $postdata ) {
+        
+        $update = array(
+            'class'        => 'Formula',
+            'method'       => 'update',
+            'transformers' => 'Formula_Transformer',
+            'status'       => 'disable',
+            'id'           => empty( intval( $postdata[id] ) ) ? false : intval( $postdata[id] )
+        );
+
+        hrm_update_records( $update );
+
+        $postdata['method'] =  'create';
+        unset( $postdata['id'] );
+
+        return hrm_insert_records( $postdata );
     }
 
     function ajax_get_formula() {
@@ -35,6 +83,7 @@ class Hrm_Payroll {
     function get_formula( $postData ) {
 		$name = empty( $postdata['name'] ) ? false : $postdata['name'];
 		$id   = empty( intval( $postdata['id'] ) ) ? false : $postdata['id'];
+        $status = 'enable';
       
 
        if ( $id !== false  ) {
@@ -49,9 +98,12 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
-        $formual = Formula::where( function($q) use( $name ) {
+        $formual = Formula::where( function($q) use( $name, $status ) {
             if ( ! empty(  $name ) ) {
                 $q->where( 'name', 'LIKE', '%' . $name . '%' );
+            }
+            if ( ! empty(  $status ) ) {
+                $q->where( 'status', $status );
             }
         })
         ->orderBy( 'id', 'DESC' )

@@ -15,6 +15,7 @@ class Formula extends Eloquent {
 		'description',
 		'type',
         'formula',
+        'status',
 		'created_by',
         'updated_by',
     ];

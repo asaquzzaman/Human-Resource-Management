@@ -14,6 +14,7 @@ class Create_Formula_Table extends Migration {
                 $table->text( 'description' )->nullable();
                 $table->string( 'type' )->nullable();
                 $table->text( 'formula' )->nullable();
+                $table->string( 'status' )->nullable();
                 $table->unsignedInteger( 'created_by' )->nullable();
                 $table->unsignedInteger( 'updated_by' )->nullable();
                 $table->timestamps();

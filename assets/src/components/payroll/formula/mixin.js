@@ -50,7 +50,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_delete_record', form_data);
+	        this.httpRequest('hrm_delete_formula', form_data);
 		},
 
 		updateRecord (args) {
@@ -61,7 +61,7 @@ export default {
 
                 beforeSend () {
                 	self.loadingStart(
-                		'hrm-edit-form-'+args.data.id, 
+                		'hrm-formula-form', 
                 		{animationClass: 'preloader-update-animation'}
                 	);
                 },
@@ -70,12 +70,11 @@ export default {
                 	self.recordMeta(res.data);
 
                 	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
-                	self.loadingStop('hrm-edit-form-'+res.data.id);
+                	self.loadingStop('hrm-formula-form');
 
                 	if (typeof args.callback === 'function') {
                         args.callback(true, res);
                     } 
-                    
                 },
 
                 error: function(res) {
@@ -91,7 +90,7 @@ export default {
                 }
             };
 
-            this.httpRequest('hrm_update_record', form_data);
+            this.httpRequest('hrm_update_formula', form_data);
 		},
 
 		addNewRecord (args) {
@@ -145,7 +144,7 @@ export default {
 	            data: {},
 
 	            beforeSend () {
-	            	self.loadingStart('hrm-list-table');
+	            	self.loadingStart('hrm-payroll-loader');
 	            },
 
 	            success: function(res) {
@@ -155,7 +154,7 @@ export default {
 
 	            	self.$store.commit(self.nameSpace + '/setRecords', res.data);
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
-	            	self.loadingStop('hrm-list-table');
+	            	self.loadingStop('hrm-payroll-loader');
 	            	self.isFetchRecord = true;
 	            	
 	            	if (typeof args.callback != 'undefined') {

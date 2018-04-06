@@ -1137,7 +1137,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			};
 
-			this.httpRequest('hrm_delete_record', form_data);
+			this.httpRequest('hrm_delete_formula', form_data);
 		},
 
 		updateRecord(args) {
@@ -1147,14 +1147,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				data: args.data,
 
 				beforeSend() {
-					self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+					self.loadingStart('hrm-formula-form', { animationClass: 'preloader-update-animation' });
 				},
 
 				success: function (res) {
 					self.recordMeta(res.data);
 
 					self.$store.commit(self.nameSpace + '/updateRecord', res.data);
-					self.loadingStop('hrm-edit-form-' + res.data.id);
+					self.loadingStop('hrm-formula-form');
 
 					if (typeof args.callback === 'function') {
 						args.callback(true, res);
@@ -1174,7 +1174,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			};
 
-			this.httpRequest('hrm_update_record', form_data);
+			this.httpRequest('hrm_update_formula', form_data);
 		},
 
 		addNewRecord(args) {
@@ -1225,7 +1225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				data: {},
 
 				beforeSend() {
-					self.loadingStart('hrm-list-table');
+					self.loadingStart('hrm-payroll-loader');
 				},
 
 				success: function (res) {
@@ -1235,7 +1235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
-					self.loadingStop('hrm-list-table');
+					self.loadingStop('hrm-payroll-loader');
 					self.isFetchRecord = true;
 
 					if (typeof args.callback != 'undefined') {
@@ -2517,83 +2517,6 @@ hrm.Vue.component('organization-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 function setSelectionRange(input, selectionStart, selectionEnd) {
 	if (input.setSelectionRange) {
@@ -2620,6 +2543,7 @@ function setCaretToPos(input, pos) {
 	data() {
 
 		return {
+			isFetchRecord: false,
 			canSubmit: true,
 			formulaID: false,
 			formula: '',
@@ -2644,7 +2568,7 @@ function setCaretToPos(input, pos) {
 					fun: 'GREATEST()'
 				},
 				if: {
-					label: 'IF(exp or true or false)',
+					label: 'IF(exp, true value, false value)',
 					fun: 'IF()'
 				},
 				least: {
@@ -2855,15 +2779,20 @@ function setCaretToPos(input, pos) {
 			self.canSubmit = false;
 
 			var postData = {
-				employee_id: this.$route.params.employeeId,
 				class: 'Formula',
 				method: 'create',
 				transformers: 'Formula_Transformer',
 				name: self.name,
 				formula: self.formula,
+				status: 'enable',
 				type: self.type,
 				description: self.description
 			};
+
+			if (this.formulaID) {
+				postData.method = 'update';
+				postData.id = parseInt(this.formulaID);
+			}
 
 			var args = {
 				data: postData,
@@ -2875,11 +2804,14 @@ function setCaretToPos(input, pos) {
 					self.formula = '';
 					self.type = '';
 					self.description = '';
-					this.formulaID = false;
+					self.formulaID = false;
 				}
 			};
-
-			this.addNewRecord(args);
+			if (this.formulaID) {
+				this.updateRecord(args);
+			} else {
+				this.addNewRecord(args);
+			}
 		},
 
 		setEditDate(formula) {
@@ -2896,6 +2828,13 @@ function setCaretToPos(input, pos) {
 			this.type = '';
 			this.description = '';
 			this.formulaID = false;
+		},
+
+		deleteFormula(formula) {
+			if (!confirm('Are you sure!')) {
+				return;
+			}
+			this.recordDelete([formula.id]);
 		},
 
 		checkFormulaValidity() {}
@@ -8935,7 +8874,7 @@ exports = module.exports = __webpack_require__(16)(false);
 
 
 // module
-exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 20px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .delete-btn {\n  margin-right: 5px;\n  font-size: 11px;\n  color: #ab4141;\n}\n.page-payroll .formula-display-name {\n  text-decoration: none;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -11092,387 +11031,439 @@ var render = function() {
     [
       _c("payroll-menu"),
       _vm._v(" "),
-      _c("div", { staticClass: "hrm-left postbox" }, [
-        _c("h2", { staticClass: "hndle" }, [_vm._v("Components")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "inside" }, [
-          _c("ul", { staticClass: "net-pay" }, [
-            _c("li", [
-              _vm._v("\n\t\t\t\t\tNet Pay\n\t\t\t\t\t"),
-              _c("ul", { staticClass: "gross-childred-li" }, [
-                _c("li", { staticClass: "gross-li" }, [
-                  _vm._v("\n\t\t\t\t\t\t\tGross\n\t\t\t\t\t\t\t"),
-                  _c(
-                    "ul",
-                    { staticClass: "gross-item-ul" },
-                    _vm._l(_vm.incomeFormulas, function(incomeFormula) {
-                      return _c("li", [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.setEditDate(incomeFormula)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n\t\t\t\t\t\t\t\t\t\t" +
-                                _vm._s(incomeFormula.description) +
-                                "\n\t\t\t\t\t\t\t\t\t"
-                            )
-                          ]
-                        )
+      _c("div", { attrs: { id: "hrm-payroll-loader" } }, [
+        _vm.isFetchRecord
+          ? _c("div", [
+              _c("div", { staticClass: "hrm-left postbox" }, [
+                _c("h2", { staticClass: "hndle" }, [_vm._v("Components")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "inside" }, [
+                  _c("ul", { staticClass: "net-pay" }, [
+                    _c("li", [
+                      _vm._v("\n\t\t\t\t\t\t\tNet Pay\n\t\t\t\t\t\t\t"),
+                      _c("ul", { staticClass: "gross-childred-li" }, [
+                        _c("li", { staticClass: "gross-li" }, [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t\t\tGross\n\t\t\t\t\t\t\t\t\t"
+                          ),
+                          _c(
+                            "ul",
+                            { staticClass: "gross-item-ul" },
+                            _vm._l(_vm.incomeFormulas, function(incomeFormula) {
+                              return _c("li", [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "delete-btn",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.deleteFormula(incomeFormula)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "formula-display-name",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.setEditDate(incomeFormula)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                        _vm._s(incomeFormula.description) +
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                    )
+                                  ]
+                                )
+                              ])
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("li", { staticClass: "deducations-li" }, [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t\t\tTotal Deductions\n\t\t\t\t\t\t\t\t\t"
+                          ),
+                          _c(
+                            "ul",
+                            { staticClass: "deductions-item-ul" },
+                            _vm._l(_vm.deductionFormulas, function(
+                              deductionFormula
+                            ) {
+                              return _c("li", [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "delete-btn",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.deleteFormula(deductionFormula)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "formula-display-name",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.setEditDate(deductionFormula)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                        _vm._s(deductionFormula.description) +
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                    )
+                                  ]
+                                )
+                              ])
+                            })
+                          )
+                        ])
                       ])
-                    })
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", { staticClass: "deducations-li" }, [
-                  _vm._v("\n\t\t\t\t\t\t\tTotal Deductions\n\t\t\t\t\t\t\t"),
-                  _c(
-                    "ul",
-                    { staticClass: "deductions-item-ul" },
-                    _vm._l(_vm.deductionFormulas, function(deductionFormula) {
-                      return _c("li", [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.setEditDate(deductionFormula)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n\t\t\t\t\t\t\t\t\t\t" +
-                                _vm._s(deductionFormula.description) +
-                                "\n\t\t\t\t\t\t\t\t\t"
-                            )
-                          ]
-                        )
-                      ])
-                    })
-                  )
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hrm-right postbox" }, [
-        _c("h2", { staticClass: "hndle" }, [_vm._v("Calculation")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "inside" }, [
-          _c(
-            "form",
-            {
-              attrs: { id: "hrm-formula-form" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  _vm.CreateFormula()
-                }
-              }
-            },
-            [
-              _c("div", [
-                _c("div", { staticClass: "field-wrap" }, [
-                  _c("label", [_vm._v("Name")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.name,
-                        expression: "name"
-                      }
-                    ],
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.name = $event.target.value
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "field-wrap" }, [
-                  _c("label", [_vm._v("Description")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.description,
-                        expression: "description"
-                      }
-                    ],
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.description = $event.target.value
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "field-wrap" }, [
-                  _c("label", [_vm._v("Salary Type")]),
-                  _vm._v(" "),
-                  _c("label", [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.type,
-                          expression: "type"
-                        }
-                      ],
-                      attrs: { value: "income", type: "radio" },
-                      domProps: { checked: _vm._q(_vm.type, "income") },
-                      on: {
-                        change: function($event) {
-                          _vm.type = "income"
-                        }
-                      }
-                    }),
-                    _vm._v("\n\t\t\t\t\t\t\tIncome\n\t\t\t\t\t\t")
-                  ]),
-                  _vm._v(" "),
-                  _c("label", [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.type,
-                          expression: "type"
-                        }
-                      ],
-                      attrs: { value: "deduction", type: "radio" },
-                      domProps: { checked: _vm._q(_vm.type, "deduction") },
-                      on: {
-                        change: function($event) {
-                          _vm.type = "deduction"
-                        }
-                      }
-                    }),
-                    _vm._v("\n\t\t\t\t\t\t\tDeduction\n\t\t\t\t\t\t")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "field-wrap" }, [
-                  _c("label", { staticClass: "label" }, [
-                    _vm._v(_vm._s(_vm.name) + "  =")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "field" }, [
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.formula,
-                          expression: "formula"
-                        }
-                      ],
-                      staticClass: "component-textarea",
-                      attrs: {
-                        id: "component-textarea",
-                        placeholder: "Create formula"
-                      },
-                      domProps: { value: _vm.formula },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.formula = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "help-text" }, [
-                      _vm._v(
-                        "Create formula by click the under following function and operators"
-                      )
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "hrm-clear" })
-                ]),
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-right postbox" }, [
+                _c("h2", { staticClass: "hndle" }, [_vm._v("Calculation")]),
                 _vm._v(" "),
-                _c("div", [
-                  _c("div", { staticClass: "component-operator" }, [
-                    _c("div", { staticClass: "header-text" }, [
-                      _vm._v("Functions")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "ul",
-                      _vm._l(_vm.functions, function(functionEl, key) {
-                        return _c("li", [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "operator-link",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.setFunction(key)
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(functionEl.label))]
-                          )
-                        ])
-                      })
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "component-function" }, [
-                    _c("div", { staticClass: "header-text" }, [
-                      _vm._v("Operator")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "ul",
-                      _vm._l(_vm.operators, function(operator, key) {
-                        return _c("li", [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "operator-link",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.setOperator(key)
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(operator))]
-                          )
-                        ])
-                      })
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "component-function" }, [
-                    _c("div", { staticClass: "header-text" }, [
-                      _vm._v("Variable")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "ul",
-                      _vm._l(_vm.variables, function(variable, key) {
-                        return _c("li", [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "operator-link",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.setVariable(key)
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(variable.name))]
-                          )
-                        ])
-                      })
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "hrm-clear" })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "submi-btn-wrap" }, [
-                  !_vm.formulaID
-                    ? _c("input", {
-                        staticClass: "button button-primary hrm-button-primary",
-                        attrs: {
-                          disabled: !_vm.canSubmit,
-                          type: "submit",
-                          value: "Save Change"
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.formulaID
-                    ? _c("input", {
-                        staticClass: "button button-primary hrm-button-primary",
-                        attrs: {
-                          disabled: !_vm.canSubmit,
-                          type: "submit",
-                          value: "Update"
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.formulaID
-                    ? _c(
-                        "a",
-                        {
-                          staticClass:
-                            "button button-secondary hrm-button-secondary",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              _vm.cancelUpdate()
-                            }
-                          }
-                        },
-                        [_vm._v("Cancel")]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
+                _c("div", { staticClass: "inside" }, [
                   _c(
-                    "a",
+                    "form",
                     {
-                      staticClass:
-                        "button button-secondary hrm-button-secondary",
-                      attrs: { href: "#" },
+                      attrs: { id: "hrm-formula-form" },
                       on: {
-                        click: function($event) {
+                        submit: function($event) {
                           $event.preventDefault()
-                          _vm.checkFormulaValidity()
+                          _vm.CreateFormula()
                         }
                       }
                     },
-                    [_vm._v("Check Formula Validity")]
+                    [
+                      _c("div", [
+                        _c("div", { staticClass: "field-wrap" }, [
+                          _c("label", [_vm._v("Name")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.name,
+                                expression: "name"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.name },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.name = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "field-wrap" }, [
+                          _c("label", [_vm._v("Description")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.description,
+                                expression: "description"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.description },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.description = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "field-wrap" }, [
+                          _c("label", [_vm._v("Salary Type")]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.type,
+                                  expression: "type"
+                                }
+                              ],
+                              attrs: { value: "income", type: "radio" },
+                              domProps: { checked: _vm._q(_vm.type, "income") },
+                              on: {
+                                change: function($event) {
+                                  _vm.type = "income"
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\t\tIncome\n\t\t\t\t\t\t\t\t"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.type,
+                                  expression: "type"
+                                }
+                              ],
+                              attrs: { value: "deduction", type: "radio" },
+                              domProps: {
+                                checked: _vm._q(_vm.type, "deduction")
+                              },
+                              on: {
+                                change: function($event) {
+                                  _vm.type = "deduction"
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\t\tDeduction\n\t\t\t\t\t\t\t\t"
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "field-wrap" }, [
+                          _c("label", { staticClass: "label" }, [
+                            _vm._v(_vm._s(_vm.name) + "  =")
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "field" }, [
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.formula,
+                                  expression: "formula"
+                                }
+                              ],
+                              staticClass: "component-textarea",
+                              attrs: {
+                                id: "component-textarea",
+                                placeholder: "Create formula"
+                              },
+                              domProps: { value: _vm.formula },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.formula = $event.target.value
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "help-text" }, [
+                              _vm._v(
+                                "Create formula by click the under following function and operators"
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-clear" })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("div", { staticClass: "component-operator" }, [
+                            _c("div", { staticClass: "header-text" }, [
+                              _vm._v("Functions")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              _vm._l(_vm.functions, function(functionEl, key) {
+                                return _c("li", [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "operator-link",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.setFunction(key)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(functionEl.label))]
+                                  )
+                                ])
+                              })
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "component-function" }, [
+                            _c("div", { staticClass: "header-text" }, [
+                              _vm._v("Operator")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              _vm._l(_vm.operators, function(operator, key) {
+                                return _c("li", [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "operator-link",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.setOperator(key)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(operator))]
+                                  )
+                                ])
+                              })
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "component-function" }, [
+                            _c("div", { staticClass: "header-text" }, [
+                              _vm._v("Variable")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              _vm._l(_vm.variables, function(variable, key) {
+                                return _c("li", [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "operator-link",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.setVariable(key)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(variable.name))]
+                                  )
+                                ])
+                              })
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "hrm-clear" })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "submi-btn-wrap" }, [
+                          !_vm.formulaID
+                            ? _c("input", {
+                                staticClass:
+                                  "button button-primary hrm-button-primary",
+                                attrs: {
+                                  disabled: !_vm.canSubmit,
+                                  type: "submit",
+                                  value: "Save Change"
+                                }
+                              })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.formulaID
+                            ? _c("input", {
+                                staticClass:
+                                  "button button-primary hrm-button-primary",
+                                attrs: {
+                                  disabled: !_vm.canSubmit,
+                                  type: "submit",
+                                  value: "Update"
+                                }
+                              })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.formulaID
+                            ? _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "button button-secondary hrm-button-secondary",
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.cancelUpdate()
+                                    }
+                                  }
+                                },
+                                [_vm._v("Cancel")]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "button button-secondary hrm-button-secondary",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.checkFormulaValidity()
+                                }
+                              }
+                            },
+                            [_vm._v("Check Formula Validity")]
+                          )
+                        ])
+                      ])
+                    ]
                   )
                 ])
-              ])
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hrm-clear" })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-clear" })
+            ])
+          : _vm._e()
+      ])
     ],
     1
   )

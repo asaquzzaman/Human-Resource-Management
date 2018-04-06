@@ -35,40 +35,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  * **********************************************************************
  */
-
-// function hrm_formula_replace( $string ) {
-//     $string = strtolower( $string );
-//     $search = array(
-//         'if',
-//         'ba_325sic',
-//         'monthly_salary',
-//         'flor'
-//     );
-
-//     $replace = array(
-//         'hrm_if',
-//         'monthly_salary',
-//         '50000',
-//         'hrm_flor'
-//     );
-
-//     return str_replace( $search, $replace, $string );
-// }
-// function hrm_flor( $val ) {
-//     return $val*(20/30);
-// }
-
-// function hrm_if( $condition, $true_val, $false_val ) {
-    
-//     return $condition ? $true_val : $false_val;
-    
-// }
-// $kk = "echo IF(flor(ba_325sic*.5*ba_325sic)>10,20,5);";
-// $kk = hrm_formula_replace( $kk );
-// var_dump($kk);
-// echo eval($kk); die();
-
-
 require_once dirname (__FILE__) . '/vendor/autoload.php';
 
 class WP_Hrm {

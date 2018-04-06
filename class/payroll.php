@@ -24,6 +24,29 @@ class Hrm_Payroll {
         add_action( 'wp_ajax_hrm_get_formula', array( $this, 'ajax_get_formula' ) );
         add_action( 'wp_ajax_hrm_update_formula', array( $this, 'ajax_update_formula' ) );
         add_action( 'wp_ajax_hrm_delete_formula', array( $this, 'ajax_delete_formula' ) );
+        add_action( 'wp_ajax_hrm_generate_salary_statement', array( $this, 'ajax_generate_salary_statement' ) );
+    }
+
+    function ajax_generate_salary_statement() {
+        check_ajax_referer('hrm_nonce');
+        $salary = self::getInstance()->generate_salary_statement( $_POST['salary'] );
+
+        wp_send_json_success( $salary );
+    }
+
+    function generate_salary_statement( $salary ) {
+        $formulas = $this->get_formula();
+        $formulas_name = array();
+
+        foreach ( $formulas['data'] as $key => $formula ) {
+            $formulas_name[$formula['name']] = $formula['formula'];
+        }
+
+        foreach ( $formulas['data'] as $key => $formula ) {
+            $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name );
+        }
+
+        pr($formulas); die();
     }
 
     function ajax_update_formula() {
@@ -80,10 +103,12 @@ class Hrm_Payroll {
     	wp_send_json_success( $formula );
     }
 
-    function get_formula( $postData ) {
-		$name = empty( $postdata['name'] ) ? false : $postdata['name'];
-		$id   = empty( intval( $postdata['id'] ) ) ? false : $postdata['id'];
+    function get_formula( $postData = array() ) {
+		$name = empty( $postData['name'] ) ? false : $postData['name'];
+		$id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
         $status = 'enable';
+        $page = 1;
+        $per_page = 100000;
       
 
        if ( $id !== false  ) {

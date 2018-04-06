@@ -136,48 +136,7 @@ export default {
             this.httpRequest('hrm_insert_record', form_data);
 		},
 
-		getRecords (args) {
-			var self = this;
-			args = args || {};
-	
-			var form_data = {
-	            data: {},
 
-	            beforeSend () {
-	            	self.loadingStart('hrm-payroll-loader');
-	            },
-
-	            success: function(res) {
-	            	res.data.forEach(function(record) {
-                		self.recordMeta(record);
-                	});
-
-	            	self.$store.commit(self.nameSpace + '/setRecords', res.data);
-	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
-	            	self.loadingStop('hrm-payroll-loader');
-	            	self.isFetchRecord = true;
-	            	
-	            	if (typeof args.callback != 'undefined') {
-	                    args.callback(true, res);
-	                } 
-	                
-	            },
-
-	            error: function(res) {
-	            	self.show_spinner = false;
-	            	// Showing error
-	                res.error.map( function( value, index ) {
-	                    hrm.toastr.error(value);
-	                });
-
-	                if (typeof args.callback !== 'function') {
-	                    callback(false, res);
-	                } 
-	            }
-	        };
-
-	        this.httpRequest('hrm_get_formula', form_data);
-		},
 
 		fetchRecords () {
 			var self = this;
@@ -202,10 +161,6 @@ export default {
             };
 
             self.httpRequest('hrm_get_records', request_data);
-		},
-
-		recordMeta (record) {
-			record.editMode = false;
 		},
 
 		editFormValidation (fields, postData) {

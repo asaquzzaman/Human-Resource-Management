@@ -32,7 +32,8 @@
             "include/function.php",
             "include/urls.php",
             "include/page.php",
-            "include/init.php"
+            "include/init.php",
+            "include/payroll_formula.php"
         ]
     }
 }

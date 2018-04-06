@@ -15,6 +15,7 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'fe7c7d731449c3eff362cf473f9f0547' => __DIR__ . '/../..' . '/include/urls.php',
         'ddf7b9acbb859c9f3711670bc2833c05' => __DIR__ . '/../..' . '/include/page.php',
         'c8bd801190d8f774fb87f502d8ac7c97' => __DIR__ . '/../..' . '/include/init.php',
+        'd635c2acc4e2040aa7b9697c6005cba6' => __DIR__ . '/../..' . '/include/payroll_formula.php',
     );
 
     public static $prefixLengthsPsr4 = array (

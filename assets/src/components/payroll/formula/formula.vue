@@ -149,9 +149,10 @@
 	}
 
 	import Mixin from './mixin'
+	import PayrollMixin from '@components/payroll/mixin'
 
 	export default {
-		mixins: [Mixin],
+		mixins: [Mixin, PayrollMixin],
 		
 		data () {
 
@@ -180,13 +181,13 @@
 						label: 'GREATEST(a1, a2,...,an)',
 						fun: 'GREATEST()'
 					},
-					if: {
-						label: 'IF(exp, true value, false value)',
-						fun: 'IF()'
-					},
 					least: {
 						label: 'LEAST(a1, a2,...,an)',
 						fun: 'LEAST()'
+					},
+					if: {
+						label: 'IF(exp, true value, false value)',
+						fun: 'IF()'
 					},
 					mod: {
 						label: 'MOD(x, y)',
@@ -197,7 +198,7 @@
 						fun: 'PRORATE()',
 					},
 					round: {
-						label: 'ROUND(exp)',
+						label: 'ROUND(x)',
 						fun: 'ROUND()'
 					},
 					sqrt: {
@@ -205,7 +206,7 @@
 						fun: 'SQRT()',
 					},
 					sum: {
-						label: 'SUM()',
+						label: 'SUM(a1, a2,...,an)',
 						fun: 'SUM()'
 					}
 				},
@@ -249,7 +250,7 @@
 		},
 
 		created () {
-			this.getRecords();
+			this.getFormulas();
 
 		},
 		
@@ -278,22 +279,6 @@
 				
 
 				return formula;
-			},
-
-			incomeFormulas () {
-				var dbfomulas = this.$store.state[this.nameSpace].records;
-
-				return dbfomulas.filter(function (formula) {
-					return formula.type == 'income';
-				});
-			},
-
-			deductionFormulas () {
-				var dbfomulas = this.$store.state[this.nameSpace].records;
-
-				return dbfomulas.filter(function (formula) {
-					return formula.type == 'deduction';
-				});
 			}
 		},
 		components: {

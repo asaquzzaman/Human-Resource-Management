@@ -79,6 +79,7 @@
 						            deselect-label=""
 						            :taggable="false"
 						            label="title"
+						            track-by="id"
 						            :allow-empty="true">
 
 						        </hrm-multiselect>  
@@ -94,7 +95,7 @@
 							</label>
 							<div class="hrm-multiselect">
 								<hrm-multiselect 
-						            v-model="selectedDesignation" 
+						            v-model="salaryComponentGroup" 
 						            :options="componentGroup" 
 						            :multiple="false" 
 						            :close-on-select="true"
@@ -107,6 +108,7 @@
 						            deselect-label=""
 						            :taggable="false"
 						            label="name"
+						            track-by="id"
 						            :allow-empty="true">
 
 						        </hrm-multiselect>  
@@ -153,12 +155,12 @@
 					        		<td></td>
 					        	</tr>
 					        	<tr class="total-tr">
-					        		<td class="tb-child total">Employee Will Get</td>
+					        		<td class="tb-child total">Net Pay</td>
 					        		<td>{{ meta.employeeGet }}</td>
 					        		<td></td>
 					        	</tr>
 					        	<tr class="tr-main">
-					        		<td class="tb-main">Net Pay</td>
+					        		<td class="tb-main">Salary</td>
 					        		<td>
 					        			<input class="amount" v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any">
 					        		</td>

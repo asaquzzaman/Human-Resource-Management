@@ -82,6 +82,8 @@ class Hrm_Payroll {
     function generate_salary_statement( $salary ) {
         $formulas = $this->get_formula();
         $formulas_name = array();
+        $generate_gross = 0;
+        $deduction = 0;
 
         foreach ( $formulas['data'] as $key => $formula ) {
             $formulas_name[$formula['name']] = $formula['formula'];
@@ -89,9 +91,24 @@ class Hrm_Payroll {
 
         foreach ( $formulas['data'] as $key => $formula ) {
             $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name );
+            
+            if ( $formula['type'] == 'income' ) {
+               $generate_gross = $generate_gross + $formulas['data'][$key]['amount']; 
+            }
+
+            if ( $formula['type'] == 'deduction' ) {
+               $deduction = $deduction + $formulas['data'][$key]['amount']; 
+            }
         }
 
-        pr($formulas); die();
+        if ( $generate_gross <  $salary ) {
+            $formulas['meta']['salaryMeta']['others'] = $salary - $generate_gross;
+            $formulas['meta']['salaryMeta']['incomeTotal'] = $salary;
+            $formulas['meta']['salaryMeta']['deductionTotal'] = $deduction;
+            $formulas['meta']['salaryMeta']['employeeGet'] = $salary - $deduction;
+        }
+
+        wp_send_json_success($formulas);
     }
 
     function ajax_update_formula() {

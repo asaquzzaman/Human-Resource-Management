@@ -524,7 +524,7 @@ wpSpearHrm([9],{
 /***/ 393:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -539,7 +539,7 @@ exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\t
 /***/ 395:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -1545,7 +1545,7 @@ var content = __webpack_require__(393);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("ca48a9dc", content, false, {});
+var update = __webpack_require__(3)("ca48a9dc", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -1572,7 +1572,7 @@ var content = __webpack_require__(395);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("318e5cfb", content, false, {});
+var update = __webpack_require__(3)("318e5cfb", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

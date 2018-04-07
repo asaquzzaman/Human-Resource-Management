@@ -1,6 +1,14 @@
-wpSpearHrm([8],{
+wpSpearHrm([7],{
 
-/***/ 338:
+/***/ 315:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ([{ name: 'Afghanistan', code: 'AF' }, { name: 'Åland Islands', code: 'AX' }, { name: 'Albania', code: 'AL' }, { name: 'Algeria', code: 'DZ' }, { name: 'American Samoa', code: 'AS' }, { name: 'AndorrA', code: 'AD' }, { name: 'Angola', code: 'AO' }, { name: 'Anguilla', code: 'AI' }, { name: 'Antarctica', code: 'AQ' }, { name: 'Antigua and Barbuda', code: 'AG' }, { name: 'Argentina', code: 'AR' }, { name: 'Armenia', code: 'AM' }, { name: 'Aruba', code: 'AW' }, { name: 'Australia', code: 'AU' }, { name: 'Austria', code: 'AT' }, { name: 'Azerbaijan', code: 'AZ' }, { name: 'Bahamas', code: 'BS' }, { name: 'Bahrain', code: 'BH' }, { name: 'Bangladesh', code: 'BD' }, { name: 'Barbados', code: 'BB' }, { name: 'Belarus', code: 'BY' }, { name: 'Belgium', code: 'BE' }, { name: 'Belize', code: 'BZ' }, { name: 'Benin', code: 'BJ' }, { name: 'Bermuda', code: 'BM' }, { name: 'Bhutan', code: 'BT' }, { name: 'Bolivia', code: 'BO' }, { name: 'Bosnia and Herzegovina', code: 'BA' }, { name: 'Botswana', code: 'BW' }, { name: 'Bouvet Island', code: 'BV' }, { name: 'Brazil', code: 'BR' }, { name: 'British Indian Ocean Territory', code: 'IO' }, { name: 'Brunei Darussalam', code: 'BN' }, { name: 'Bulgaria', code: 'BG' }, { name: 'Burkina Faso', code: 'BF' }, { name: 'Burundi', code: 'BI' }, { name: 'Cambodia', code: 'KH' }, { name: 'Cameroon', code: 'CM' }, { name: 'Canada', code: 'CA' }, { name: 'Cape Verde', code: 'CV' }, { name: 'Cayman Islands', code: 'KY' }, { name: 'Central African Republic', code: 'CF' }, { name: 'Chad', code: 'TD' }, { name: 'Chile', code: 'CL' }, { name: 'China', code: 'CN' }, { name: 'Christmas Island', code: 'CX' }, { name: 'Cocos (Keeling) Islands', code: 'CC' }, { name: 'Colombia', code: 'CO' }, { name: 'Comoros', code: 'KM' }, { name: 'Congo', code: 'CG' }, { name: 'Congo, The Democratic Republic of the', code: 'CD' }, { name: 'Cook Islands', code: 'CK' }, { name: 'Costa Rica', code: 'CR' }, { name: 'Cote D\'Ivoire', code: 'CI' }, { name: 'Croatia', code: 'HR' }, { name: 'Cuba', code: 'CU' }, { name: 'Cyprus', code: 'CY' }, { name: 'Czech Republic', code: 'CZ' }, { name: 'Denmark', code: 'DK' }, { name: 'Djibouti', code: 'DJ' }, { name: 'Dominica', code: 'DM' }, { name: 'Dominican Republic', code: 'DO' }, { name: 'Ecuador', code: 'EC' }, { name: 'Egypt', code: 'EG' }, { name: 'El Salvador', code: 'SV' }, { name: 'Equatorial Guinea', code: 'GQ' }, { name: 'Eritrea', code: 'ER' }, { name: 'Estonia', code: 'EE' }, { name: 'Ethiopia', code: 'ET' }, { name: 'Falkland Islands (Malvinas)', code: 'FK' }, { name: 'Faroe Islands', code: 'FO' }, { name: 'Fiji', code: 'FJ' }, { name: 'Finland', code: 'FI' }, { name: 'France', code: 'FR' }, { name: 'French Guiana', code: 'GF' }, { name: 'French Polynesia', code: 'PF' }, { name: 'French Southern Territories', code: 'TF' }, { name: 'Gabon', code: 'GA' }, { name: 'Gambia', code: 'GM' }, { name: 'Georgia', code: 'GE' }, { name: 'Germany', code: 'DE' }, { name: 'Ghana', code: 'GH' }, { name: 'Gibraltar', code: 'GI' }, { name: 'Greece', code: 'GR' }, { name: 'Greenland', code: 'GL' }, { name: 'Grenada', code: 'GD' }, { name: 'Guadeloupe', code: 'GP' }, { name: 'Guam', code: 'GU' }, { name: 'Guatemala', code: 'GT' }, { name: 'Guernsey', code: 'GG' }, { name: 'Guinea', code: 'GN' }, { name: 'Guinea-Bissau', code: 'GW' }, { name: 'Guyana', code: 'GY' }, { name: 'Haiti', code: 'HT' }, { name: 'Heard Island and Mcdonald Islands', code: 'HM' }, { name: 'Holy See (Vatican City State)', code: 'VA' }, { name: 'Honduras', code: 'HN' }, { name: 'Hong Kong', code: 'HK' }, { name: 'Hungary', code: 'HU' }, { name: 'Iceland', code: 'IS' }, { name: 'India', code: 'IN' }, { name: 'Indonesia', code: 'ID' }, { name: 'Iran, Islamic Republic Of', code: 'IR' }, { name: 'Iraq', code: 'IQ' }, { name: 'Ireland', code: 'IE' }, { name: 'Isle of Man', code: 'IM' }, { name: 'Israel', code: 'IL' }, { name: 'Italy', code: 'IT' }, { name: 'Jamaica', code: 'JM' }, { name: 'Japan', code: 'JP' }, { name: 'Jersey', code: 'JE' }, { name: 'Jordan', code: 'JO' }, { name: 'Kazakhstan', code: 'KZ' }, { name: 'Kenya', code: 'KE' }, { name: 'Kiribati', code: 'KI' }, { name: 'Korea, Democratic People\'S Republic of', code: 'KP' }, { name: 'Korea, Republic of', code: 'KR' }, { name: 'Kuwait', code: 'KW' }, { name: 'Kyrgyzstan', code: 'KG' }, { name: 'Lao People\'S Democratic Republic', code: 'LA' }, { name: 'Latvia', code: 'LV' }, { name: 'Lebanon', code: 'LB' }, { name: 'Lesotho', code: 'LS' }, { name: 'Liberia', code: 'LR' }, { name: 'Libyan Arab Jamahiriya', code: 'LY' }, { name: 'Liechtenstein', code: 'LI' }, { name: 'Lithuania', code: 'LT' }, { name: 'Luxembourg', code: 'LU' }, { name: 'Macao', code: 'MO' }, { name: 'Macedonia, The Former Yugoslav Republic of', code: 'MK' }, { name: 'Madagascar', code: 'MG' }, { name: 'Malawi', code: 'MW' }, { name: 'Malaysia', code: 'MY' }, { name: 'Maldives', code: 'MV' }, { name: 'Mali', code: 'ML' }, { name: 'Malta', code: 'MT' }, { name: 'Marshall Islands', code: 'MH' }, { name: 'Martinique', code: 'MQ' }, { name: 'Mauritania', code: 'MR' }, { name: 'Mauritius', code: 'MU' }, { name: 'Mayotte', code: 'YT' }, { name: 'Mexico', code: 'MX' }, { name: 'Micronesia, Federated States of', code: 'FM' }, { name: 'Moldova, Republic of', code: 'MD' }, { name: 'Monaco', code: 'MC' }, { name: 'Mongolia', code: 'MN' }, { name: 'Montserrat', code: 'MS' }, { name: 'Morocco', code: 'MA' }, { name: 'Mozambique', code: 'MZ' }, { name: 'Myanmar', code: 'MM' }, { name: 'Namibia', code: 'NA' }, { name: 'Nauru', code: 'NR' }, { name: 'Nepal', code: 'NP' }, { name: 'Netherlands', code: 'NL' }, { name: 'Netherlands Antilles', code: 'AN' }, { name: 'New Caledonia', code: 'NC' }, { name: 'New Zealand', code: 'NZ' }, { name: 'Nicaragua', code: 'NI' }, { name: 'Niger', code: 'NE' }, { name: 'Nigeria', code: 'NG' }, { name: 'Niue', code: 'NU' }, { name: 'Norfolk Island', code: 'NF' }, { name: 'Northern Mariana Islands', code: 'MP' }, { name: 'Norway', code: 'NO' }, { name: 'Oman', code: 'OM' }, { name: 'Pakistan', code: 'PK' }, { name: 'Palau', code: 'PW' }, { name: 'Palestinian Territory, Occupied', code: 'PS' }, { name: 'Panama', code: 'PA' }, { name: 'Papua New Guinea', code: 'PG' }, { name: 'Paraguay', code: 'PY' }, { name: 'Peru', code: 'PE' }, { name: 'Philippines', code: 'PH' }, { name: 'Pitcairn', code: 'PN' }, { name: 'Poland', code: 'PL' }, { name: 'Portugal', code: 'PT' }, { name: 'Puerto Rico', code: 'PR' }, { name: 'Qatar', code: 'QA' }, { name: 'Reunion', code: 'RE' }, { name: 'Romania', code: 'RO' }, { name: 'Russian Federation', code: 'RU' }, { name: 'RWANDA', code: 'RW' }, { name: 'Saint Helena', code: 'SH' }, { name: 'Saint Kitts and Nevis', code: 'KN' }, { name: 'Saint Lucia', code: 'LC' }, { name: 'Saint Pierre and Miquelon', code: 'PM' }, { name: 'Saint Vincent and the Grenadines', code: 'VC' }, { name: 'Samoa', code: 'WS' }, { name: 'San Marino', code: 'SM' }, { name: 'Sao Tome and Principe', code: 'ST' }, { name: 'Saudi Arabia', code: 'SA' }, { name: 'Senegal', code: 'SN' }, { name: 'Serbia and Montenegro', code: 'CS' }, { name: 'Seychelles', code: 'SC' }, { name: 'Sierra Leone', code: 'SL' }, { name: 'Singapore', code: 'SG' }, { name: 'Slovakia', code: 'SK' }, { name: 'Slovenia', code: 'SI' }, { name: 'Solomon Islands', code: 'SB' }, { name: 'Somalia', code: 'SO' }, { name: 'South Africa', code: 'ZA' }, { name: 'South Georgia and the South Sandwich Islands', code: 'GS' }, { name: 'Spain', code: 'ES' }, { name: 'Sri Lanka', code: 'LK' }, { name: 'Sudan', code: 'SD' }, { name: 'Suriname', code: 'SR' }, { name: 'Svalbard and Jan Mayen', code: 'SJ' }, { name: 'Swaziland', code: 'SZ' }, { name: 'Sweden', code: 'SE' }, { name: 'Switzerland', code: 'CH' }, { name: 'Syrian Arab Republic', code: 'SY' }, { name: 'Taiwan, Province of China', code: 'TW' }, { name: 'Tajikistan', code: 'TJ' }, { name: 'Tanzania, United Republic of', code: 'TZ' }, { name: 'Thailand', code: 'TH' }, { name: 'Timor-Leste', code: 'TL' }, { name: 'Togo', code: 'TG' }, { name: 'Tokelau', code: 'TK' }, { name: 'Tonga', code: 'TO' }, { name: 'Trinidad and Tobago', code: 'TT' }, { name: 'Tunisia', code: 'TN' }, { name: 'Turkey', code: 'TR' }, { name: 'Turkmenistan', code: 'TM' }, { name: 'Turks and Caicos Islands', code: 'TC' }, { name: 'Tuvalu', code: 'TV' }, { name: 'Uganda', code: 'UG' }, { name: 'Ukraine', code: 'UA' }, { name: 'United Arab Emirates', code: 'AE' }, { name: 'United Kingdom', code: 'GB' }, { name: 'United States', code: 'US' }, { name: 'United States Minor Outlying Islands', code: 'UM' }, { name: 'Uruguay', code: 'UY' }, { name: 'Uzbekistan', code: 'UZ' }, { name: 'Vanuatu', code: 'VU' }, { name: 'Venezuela', code: 'VE' }, { name: 'Viet Nam', code: 'VN' }, { name: 'Virgin Islands, British', code: 'VG' }, { name: 'Virgin Islands, U.S.', code: 'VI' }, { name: 'Wallis and Futuna', code: 'WF' }, { name: 'Western Sahara', code: 'EH' }, { name: 'Yemen', code: 'YE' }, { name: 'Zambia', code: 'ZM' }, { name: 'Zimbabwe', code: 'ZW' }]);
+
+/***/ }),
+
+/***/ 364:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89,34 +97,9 @@ wpSpearHrm([8],{
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	mixins: [HRMMixin.employee],
+	mixins: [HRMMixin.location],
 	props: {
 		deleteCheckbox: {
 			type: [Boolean],
@@ -137,7 +120,8 @@ wpSpearHrm([8],{
 			canSubmit: true,
 			loading: false,
 			deleteAllStatus: false,
-			deletedId: []
+			deletedId: [],
+			isFetchRecord: false
 		};
 	},
 
@@ -148,11 +132,6 @@ wpSpearHrm([8],{
 	computed: {
 		records() {
 			return this.$store.state[this.nameSpace].records;
-		},
-		pagination() {
-			var pagination = this.$store.state[this.nameSpace].pagination;
-			pagination['total_pages'] = Math.ceil(pagination.total / pagination.per_page);
-			return pagination;
 		}
 	},
 
@@ -180,7 +159,7 @@ wpSpearHrm([8],{
 				return record[field.name];
 			}
 
-			return field.filterPrintData(record[field.name]);
+			return field.filterPrintData(record[field.name], this);
 		},
 
 		recordEditForm(record, status) {
@@ -196,6 +175,9 @@ wpSpearHrm([8],{
 			var self = this,
 			    data = {};
 
+			data['class'] = self.modelName;
+			data['method'] = 'update';
+			data['transformers'] = self.modelTransformer;
 			data['id'] = record.id;
 
 			self.fields.forEach(function (field) {
@@ -218,13 +200,12 @@ wpSpearHrm([8],{
 				}
 			};
 
-			if (!this.editFormValidation(self.fields, data)) {
+			if (!this.editFormValidation(self.fields, args.data)) {
 				return false;
 			}
 
 			self.canSubmit = false;
 			self.loading = true;
-
 			this.updateRecord(args);
 		},
 		selfDelete(record) {
@@ -242,7 +223,6 @@ wpSpearHrm([8],{
 				}
 
 				if (!hasRecords && typeof self.pagination != 'undefined' && self.pagination.total_pages > 1) {
-
 					self.getRecords();
 				}
 			});
@@ -269,6 +249,14 @@ wpSpearHrm([8],{
 			} else {
 				this.deleteAllStatus = false;
 			}
+		},
+
+		getClass(header) {
+			if (header.tbRowAction === true) {
+				return 'hrm-row-action-header';
+			}
+
+			return '';
 		}
 	}
 
@@ -276,13 +264,13 @@ wpSpearHrm([8],{
 
 /***/ }),
 
-/***/ 339:
+/***/ 365:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__employee_table_vue__ = __webpack_require__(428);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_employee_form_vue__ = __webpack_require__(429);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__employee_form_fields__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__location_table_vue__ = __webpack_require__(442);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_location_form_vue__ = __webpack_require__(443);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__ = __webpack_require__(315);
 //
 //
 //
@@ -342,53 +330,121 @@ wpSpearHrm([8],{
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	mixins: [HRMMixin.employee],
+	mixins: [HRMMixin.location],
 
 	data() {
 
 		return {
 			search: {
 				filter: 'active',
-				name: this.$route.query.name
+				name: this.$route.query.name,
+				from: this.$route.query.from,
+				to: this.$route.query.to
 			},
 			bulkAction: -1,
-			fields: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__employee_form_fields__["a" /* FormFields */])(this)
-		};
-	},
 
-	watch: {
-		search: {
-			handler(obj) {
-				if (obj.name == '') {
-					this.recordSearch();
+			fields: [{
+				type: 'text',
+				model: '',
+				label: 'Name',
+				name: 'name',
+				tableHead: 'Name',
+				tbRowAction: this.manageOrganization(),
+				editable: true,
+				required: true
+			}, {
+				type: 'select',
+				model: '',
+				options: __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__["a" /* default */],
+				label: 'Country',
+				optionLabel: 'name',
+				placeholder: 'Select Country',
+				name: 'country_code',
+				tableHead: 'Country',
+				editable: true,
+				//Filter submited new data
+				filterSubmited(val) {
+					return val.code;
+				},
+				//Table print data
+				filterPrintData(val, self) {
+					let index = self.getIndex(__WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__["a" /* default */], val, 'code');
+
+					if (!val || index === false) {
+						return '&#8211 &#8211';
+					}
+
+					return __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__["a" /* default */][index].name;
+				},
+				// Filter edit form field data
+				filterComputedGet(val, self) {
+					let index = self.getIndex(__WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__["a" /* default */], val, 'code');
+
+					if (!val) {
+						return '';
+					}
+					return __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__["a" /* default */][index];
+				},
+				// Filer edit changable data
+				filterComputedSet(val) {
+					return val.code;
+				},
+				//Filter edit submited data
+				filterEditingData(val) {
+					return val;
 				}
-			},
-			deep: true
-		}
-	},
 
-	created() {
-		var self = this;
-		this.getDepartments({
-			callback(departments) {
-				var index = self.getIndex(self.fields, 'department', 'name');
-				self.fields[index].options = departments.dept_drop_down;
-			}
-		});
-
-		this.getDesignations({
-			callback(designations) {
-				var index = self.getIndex(self.fields, 'designation', 'name');
-				self.fields[index].options = designations.data;
-			}
-		});
-
-		this.getLocations({
-			callback(location) {
-				var index = self.getIndex(self.fields, 'location', 'name');
-				self.fields[index].options = location.data;
-			}
-		});
+			}, {
+				type: 'text',
+				model: '',
+				label: 'State/Province',
+				name: 'province',
+				tableHead: 'State/Province',
+				editable: true
+			}, {
+				type: 'text',
+				model: '',
+				label: 'City',
+				name: 'city',
+				tableHead: 'City',
+				editable: true
+			}, {
+				type: 'text',
+				model: '',
+				label: 'Address Street 1',
+				name: 'address',
+				tableHead: 'Address Street 1',
+				editable: true
+			}, {
+				type: 'text',
+				model: '',
+				label: 'Zip/Postal Code',
+				name: 'zip_code',
+				tableHead: 'Zip/Postal Code',
+				editable: true
+			}, {
+				type: 'text',
+				model: '',
+				label: 'Phone',
+				name: 'phone',
+				tableHead: 'Phone',
+				editable: true
+			}, {
+				type: 'text',
+				model: '',
+				label: 'Fax',
+				name: 'fax',
+				tableHead: 'Fax',
+				editable: true
+			}, {
+				type: 'textarea',
+				model: '',
+				label: 'Note',
+				name: 'notes',
+				tableHead: 'Note',
+				editable: true
+			}]
+		};
 	},
 
 	computed: {
@@ -401,14 +457,12 @@ wpSpearHrm([8],{
 		},
 
 		pagination() {
-			var pagination = this.$store.state[this.nameSpace].pagination;
-			pagination['total_pages'] = Math.ceil(pagination.total / pagination.per_page);
-			return pagination;
+			return this.$store.state[this.nameSpace].pagination;
 		}
 	},
 	components: {
-		'hrm-table': __WEBPACK_IMPORTED_MODULE_0__employee_table_vue__["a" /* default */],
-		'add-new-record-form': __WEBPACK_IMPORTED_MODULE_1__new_employee_form_vue__["a" /* default */]
+		'hrm-table': __WEBPACK_IMPORTED_MODULE_0__location_table_vue__["a" /* default */],
+		'add-new-record-form': __WEBPACK_IMPORTED_MODULE_1__new_location_form_vue__["a" /* default */]
 	},
 
 	methods: {
@@ -443,17 +497,17 @@ wpSpearHrm([8],{
 
 		recordSearch() {
 			this.$router.push({ query: this.search });
+			this.getRecords();
 		}
 	}
 });
 
 /***/ }),
 
-/***/ 340:
+/***/ 366:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
 //
 //
 //
@@ -480,7 +534,7 @@ wpSpearHrm([8],{
 //
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	mixins: [HRMMixin.employee],
+	mixins: [HRMMixin.location],
 	props: {
 		fields: {
 			type: [Array]
@@ -499,7 +553,11 @@ wpSpearHrm([8],{
 	methods: {
 		selfNewRecord() {
 			var self = this;
+
 			var postData = this.generateFieldData(this.fields);
+			postData['class'] = self.modelName;
+			postData['method'] = 'create';
+			postData['transformers'] = self.modelTransformer;
 
 			if (!this.formValidation(this.fields, postData)) {
 				return false;
@@ -507,6 +565,7 @@ wpSpearHrm([8],{
 
 			var args = {
 				data: postData,
+
 				callback(success, res) {
 					self.loading = false;
 					self.canSubmit = true;
@@ -517,7 +576,6 @@ wpSpearHrm([8],{
 
 			self.loading = true;
 			self.canSubmit = false;
-
 			this.addNewRecord(args);
 		},
 
@@ -544,351 +602,10 @@ wpSpearHrm([8],{
 
 /***/ }),
 
-/***/ 387:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FormFields; });
-function FormFields(self) {
-	return [{
-		type: 'text',
-		model: '',
-		label: 'User Name',
-		name: 'userName',
-		//tableHead: 'Title',
-		//tbRowAction: true,
-		editable: false,
-		required: true
-	}, {
-		type: 'email',
-		model: '',
-		label: 'Email',
-		name: 'email',
-		editable: false,
-		required: true
-	}, {
-		type: 'text',
-		model: '',
-		label: 'First Name',
-		name: 'firstName',
-		editable: true,
-		required: true
-	}, {
-		type: 'text',
-		model: '',
-		label: 'Last Name',
-		name: 'lastName',
-		editable: true,
-		required: true
-	}, {
-		type: 'select',
-		model: hrmGetDefaultRole(),
-		options: hrmGetRoles(),
-		label: 'Role',
-		optionLabel: 'display_name',
-		placeholder: 'Select Role',
-		name: 'role',
-		tableHead: 'Role',
-		trackBy: 'name',
-		editable: true,
-		required: true,
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.name;
-		},
-
-		//Table print data
-		filterPrintData(val) {
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.display_name;
-		},
-
-		//Filter edit submited data
-		filterEditingData(val) {
-			if (val) {
-				return val.name;
-			}
-		}
-	}, {
-		type: 'select',
-		model: '',
-		options: [],
-		label: 'Department',
-		optionLabel: 'name',
-		placeholder: 'Select Department',
-		name: 'department',
-		tableHead: 'Department',
-		editable: true,
-		required: true,
-		helpText: '<a href="#/departments">Create Department</a>',
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.id;
-		},
-		//Table print data
-		filterPrintData(val) {
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.data.name;
-		},
-		// Filter edit form field data
-		filterComputedGet(val) {
-			if (!val) {
-				return '';
-			}
-			return val.data;
-		},
-		// Filer edit changable data
-		filterComputedSet(val) {
-			return { data: val };
-		},
-		//Filter edit submited data
-		filterEditingData(val) {
-			if (val) {
-				return val.data.id;
-			}
-		}
-	}, {
-		type: 'select',
-		model: '',
-		options: [],
-		label: 'Designation',
-		optionLabel: 'title',
-		placeholder: 'Select Designation',
-		name: 'designation',
-		tableHead: 'Designation',
-		editable: true,
-		required: true,
-		helpText: '<a href="#/designation">Create Designation</a>',
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.id;
-		},
-		//Table print data
-		filterPrintData(val) {
-
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.data.title;
-		},
-		// Filter edit form field data
-		filterComputedGet(val) {
-
-			if (!val) {
-				return '';
-			}
-			return val.data;
-		},
-		// Filer edit changable data
-		filterComputedSet(val) {
-			return { data: val };
-		},
-		//Filter edit submited data
-		filterEditingData(val) {
-			if (val) {
-				return val.data.id;
-			}
-		}
-	}, {
-		type: 'select',
-		model: '',
-		options: [],
-		label: 'Location',
-		optionLabel: 'name',
-		placeholder: 'Select Location',
-		name: 'location',
-		tableHead: 'Location',
-		editable: true,
-		helpText: '<a href="#/organization/location">Create Location</a>',
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.id;
-		},
-		//Table print data
-		filterPrintData(val) {
-
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.data.name;
-		},
-		// Filter edit form field data
-		filterComputedGet(val) {
-
-			if (!val) {
-				return '';
-			}
-			return val.data;
-		},
-		// Filer edit changable data
-		filterComputedSet(val) {
-			return { data: val };
-		},
-		//Filter edit submited data
-		filterEditingData(val) {
-			if (val) {
-				return val.data.id;
-			}
-		}
-
-	}, {
-		type: 'select',
-		model: hrmGetDefaultStatus(),
-		options: hrmGetStatus(),
-		label: 'Status',
-		optionLabel: 'label',
-		placeholder: 'Select Status',
-		name: 'status',
-		tableHead: 'Status',
-		editable: true,
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.key;
-		},
-		//Filter edit submited data
-		filterEditingData(val) {
-			return val.key;
-		},
-		//Table print data
-		filterPrintData(val) {
-
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.label;
-		}
-
-	}, {
-		type: 'select',
-		model: '',
-		options: hrmGetGender(),
-		label: 'Gender',
-		optionLabel: 'label',
-		placeholder: 'Select Gender',
-		name: 'gender',
-		tableHead: 'Gender',
-		editable: true,
-		//Filter submited new data
-		filterSubmited(val) {
-			return val.key;
-		},
-		//Filter edit submited data
-		filterEditingData(val) {
-			return val ? val.key : '';
-		},
-		//Table print data
-		filterPrintData(val) {
-
-			if (!val) {
-				return '&#8211 &#8211';
-			}
-			return val.label;
-		}
-	}, {
-		type: 'text',
-		model: '',
-		label: 'Mobile Number',
-		name: 'mobileNumber',
-		editable: true
-	}, {
-		type: 'datePickerFrom',
-		model: '',
-		label: 'Joining Date',
-		name: 'joiningDate',
-		editable: true
-	}, {
-		type: 'textarea',
-		model: '',
-		label: 'Description',
-		name: 'description',
-		tableHead: 'Description',
-		editable: true
-	}, {
-		type: 'file',
-		model: [],
-		label: 'Profile Picture',
-		name: 'employee_image',
-		editMode: false,
-		multiple: false,
-		deleted_files: [],
-		attr: {
-			height: '80px',
-			width: '80px'
-		},
-		default: []
-	}];
-}
-
-function hrmGetGender() {
-	return [{
-		key: 1,
-		label: 'Male'
-	}, {
-		key: 2,
-		label: 'Female'
-	}, {
-		key: 3,
-		label: 'Others'
-	}];
-}
-
-function hrmGetStatus() {
-	return [{
-		key: 1,
-		label: 'Active'
-	}, {
-		key: 2,
-		label: 'Disable'
-	}];
-}
-
-function hrmGetRoles() {
-	var roles = [];
-
-	jQuery.each(HRM_Vars.hrm_roles, function (key, val) {
-		roles.push({
-			name: key,
-			display_name: val
-		});
-	});
-
-	return roles;
-}
-
-function hrmGetDefaultRole() {
-	var role = {};
-
-	jQuery.each(HRM_Vars.hrm_roles, function (key, val) {
-		if (key == 'hrm_employee') {
-			role = {
-				name: key,
-				display_name: val
-			};
-		}
-	});
-
-	return role;
-}
-
-function hrmGetDefaultStatus() {
-	return {
-		key: 1,
-		label: 'Active'
-	};
-}
-
-
-
-/***/ }),
-
-/***/ 399:
+/***/ 400:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -900,32 +617,32 @@ exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}
 
 /***/ }),
 
-/***/ 419:
+/***/ 416:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n.hrm-avatar,\n.hrm-profile-link {\n\tfloat: left;\n}\n.hrm-avatar {\n\tmargin-right: 5px;\n}\n.has-row-actions {\n\twidth: 16%;\n}\n\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 428:
+/***/ 442:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_employee_table_vue__ = __webpack_require__(338);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_table_vue__ = __webpack_require__(364);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ebc3d820_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_employee_table_vue__ = __webpack_require__(515);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2c41bb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_table_vue__ = __webpack_require__(508);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(546)
+  __webpack_require__(543)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -942,14 +659,14 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_employee_table_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_ebc3d820_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_employee_table_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_table_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2c41bb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_table_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "assets/src/components/employee/employee-table.vue"
+Component.options.__file = "assets/src/components/organization/location/location-table.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -958,9 +675,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-ebc3d820", Component.options)
+    hotAPI.createRecord("data-v-a2c41bb8", Component.options)
   } else {
-    hotAPI.reload("data-v-ebc3d820", Component.options)
+    hotAPI.reload("data-v-a2c41bb8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -972,13 +689,13 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 429:
+/***/ 443:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_new_employee_form_vue__ = __webpack_require__(340);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_new_location_form_vue__ = __webpack_require__(366);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_65c495b6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_employee_form_vue__ = __webpack_require__(487);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_603dcef1_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_location_form_vue__ = __webpack_require__(485);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -995,14 +712,14 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_new_employee_form_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_65c495b6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_employee_form_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_new_location_form_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_603dcef1_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_new_location_form_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "assets/src/components/employee/new-employee-form.vue"
+Component.options.__file = "assets/src/components/organization/location/new-location-form.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1011,9 +728,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-65c495b6", Component.options)
+    hotAPI.createRecord("data-v-603dcef1", Component.options)
   } else {
-    hotAPI.reload("data-v-65c495b6", Component.options)
+    hotAPI.reload("data-v-603dcef1", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1025,7 +742,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 470:
+/***/ 471:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1035,12 +752,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "page-organization" },
     [
-      _vm.manageEmployee()
-        ? _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Employee")])
+      _vm.manageOrganization()
+        ? _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Locations")])
         : _vm._e(),
       _vm._v(" "),
-      _vm.manageEmployee()
+      _vm.manageOrganization()
         ? _c(
             "a",
             {
@@ -1056,7 +774,9 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.isNewRecordFormActive && _vm.manageEmployee()
+      _c("organization-menu"),
+      _vm._v(" "),
+      _vm.isNewRecordFormActive && _vm.manageOrganization()
         ? _c("add-new-record-form", {
             staticClass: "hrm-toggle",
             attrs: { fields: _vm.fields }
@@ -1064,7 +784,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "hrm-tbl-action-wrap" }, [
-        _vm.manageEmployee()
+        _vm.manageOrganization()
           ? _c("div", { staticClass: "hrm-table-action hrm-bulk-wrap" }, [
               _c(
                 "label",
@@ -1153,11 +873,7 @@ var render = function() {
                       expression: "search.name"
                     }
                   ],
-                  attrs: {
-                    size: "40",
-                    placeholder: "Search by user login, nicename, email",
-                    type: "search"
-                  },
+                  attrs: { placeholder: "Title", type: "search" },
                   domProps: { value: _vm.search.name },
                   on: {
                     input: function($event) {
@@ -1181,14 +897,12 @@ var render = function() {
         _c("div", { staticClass: "hrm-clear" })
       ]),
       _vm._v(" "),
-      _c("hrm-table", {
-        attrs: { id: "hrm-employee-list-table", fields: _vm.fields }
-      }),
+      _c("hrm-table", { attrs: { fields: _vm.fields } }),
       _vm._v(" "),
       _c("hrm-pagination", {
         attrs: {
           total_pages: _vm.pagination.total_pages,
-          component_name: "employee_pagination"
+          component_name: "location_pagination"
         }
       })
     ],
@@ -1202,13 +916,13 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-38baa9ef", esExports)
+    require("vue-hot-reload-api")      .rerender("data-v-393a3f23", esExports)
   }
 }
 
 /***/ }),
 
-/***/ 487:
+/***/ 485:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1221,7 +935,7 @@ var render = function() {
       "div",
       { staticClass: "postbox", attrs: { id: "hrm-hidden-form-warp" } },
       [
-        _c("h2", { staticClass: "hndle" }, [_vm._v("Employee")]),
+        _c("h2", { staticClass: "hndle" }, [_vm._v("Location")]),
         _vm._v(" "),
         _c("div", { staticClass: "inside" }, [
           _c(
@@ -1257,7 +971,7 @@ var render = function() {
                 _c(
                   "a",
                   {
-                    staticClass: "button hrm-button-secondary",
+                    staticClass: "button hrm-button-secondary button-secondary",
                     attrs: { target: "_blank", href: "#" },
                     on: {
                       click: function($event) {
@@ -1289,13 +1003,13 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-65c495b6", esExports)
+    require("vue-hot-reload-api")      .rerender("data-v-603dcef1", esExports)
   }
 }
 
 /***/ }),
 
-/***/ 515:
+/***/ 508:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1303,7 +1017,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { attrs: { id: "hrm-list-table" } }, [
     _vm.isFetchRecord
       ? _c(
           "table",
@@ -1313,7 +1027,7 @@ var render = function() {
               _c(
                 "tr",
                 [
-                  _vm.manageEmployee()
+                  _vm.manageOrganization()
                     ? _c(
                         "td",
                         {
@@ -1371,21 +1085,21 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("th", { staticClass: "has-row-actions" }, [
-                    _vm._v("Name")
-                  ]),
-                  _vm._v(" "),
                   _vm._l(_vm.filterHeader(_vm.fields), function(
                     header,
                     header_index
                   ) {
-                    return _c("th", { key: header_index }, [
-                      _vm._v(
-                        "\n                    \t" +
-                          _vm._s(header.tableHead) +
-                          "\n                    "
-                      )
-                    ])
+                    return _c(
+                      "th",
+                      { key: header_index, class: _vm.getClass(header) },
+                      [
+                        _vm._v(
+                          "\n                    \t" +
+                            _vm._s(header.tableHead) +
+                            "\n                    "
+                        )
+                      ]
+                    )
                   })
                 ],
                 2
@@ -1399,12 +1113,9 @@ var render = function() {
                   return !record.editMode
                     ? _c(
                         "tr",
-                        {
-                          key: record_index,
-                          attrs: { "data-recordId": record.id }
-                        },
+                        { key: record_index },
                         [
-                          _vm.manageEmployee()
+                          _vm.manageOrganization()
                             ? _c(
                                 "th",
                                 {
@@ -1465,43 +1176,22 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _c(
-                            "td",
-                            {},
-                            [
-                              _c("img", {
-                                staticClass: "hrm-avatar",
-                                staticStyle: { height: "32px", width: "32px" },
-                                attrs: { src: record.avatar }
+                          _vm._l(_vm.filterHeader(_vm.fields), function(
+                            field,
+                            field_index
+                          ) {
+                            return _c("td", [
+                              _c("span", {
+                                domProps: {
+                                  innerHTML: _vm._s(
+                                    _vm.printCellData(record, field)
+                                  )
+                                }
                               }),
                               _vm._v(" "),
-                              _c(
-                                "router-link",
-                                {
-                                  staticClass: "hrm-profile-link",
-                                  attrs: {
-                                    to: {
-                                      name: "employee_general_information",
-                                      params: {
-                                        employeeId: record.id
-                                      }
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t" +
-                                      _vm._s(record.display_name) +
-                                      "\n\t\t\t\t\t\t"
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "hrm-clear" }),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "row-actions" }, [
-                                _vm.manageEmployee() || record.can_update
-                                  ? _c("span", { staticClass: "edit" }, [
+                              field.tbRowAction
+                                ? _c("div", { staticClass: "row-actions" }, [
+                                    _c("span", { staticClass: "edit" }, [
                                       _c(
                                         "a",
                                         {
@@ -1514,13 +1204,11 @@ var render = function() {
                                           }
                                         },
                                         [_vm._v("Edit")]
-                                      )
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.manageEmployee()
-                                  ? _c("span", { staticClass: "trash" }, [
-                                      _vm._v(" | "),
+                                      ),
+                                      _vm._v(" | ")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("span", { staticClass: "trash" }, [
                                       _c(
                                         "a",
                                         {
@@ -1535,24 +1223,8 @@ var render = function() {
                                         [_vm._v("Delete")]
                                       )
                                     ])
-                                  : _vm._e()
-                              ])
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _vm._l(_vm.filterHeader(_vm.fields), function(
-                            field,
-                            field_index
-                          ) {
-                            return _c("td", [
-                              _c("span", {
-                                domProps: {
-                                  innerHTML: _vm._s(
-                                    _vm.printCellData(record, field)
-                                  )
-                                }
-                              })
+                                  ])
+                                : _vm._e()
                             ])
                           })
                         ],
@@ -1572,7 +1244,7 @@ var render = function() {
                             "td",
                             {
                               staticClass: "colspanchange",
-                              attrs: { colspan: "9" }
+                              attrs: { colspan: _vm.fields.length + 1 }
                             },
                             [
                               _c(
@@ -1614,20 +1286,23 @@ var render = function() {
                                                   "hrm-edit-field-wrap"
                                               },
                                               [
-                                                _c(
-                                                  "label",
-                                                  { staticClass: "title" },
-                                                  [
-                                                    _vm._v(
-                                                      "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                                        _vm._s(field.label) +
-                                                        " "
-                                                    ),
-                                                    field.required
-                                                      ? _c("em", [_vm._v("*")])
-                                                      : _vm._e()
-                                                  ]
-                                                ),
+                                                _c("label", [
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "title" },
+                                                    [
+                                                      _vm._v(
+                                                        "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                          _vm._s(field.label)
+                                                      ),
+                                                      field.required
+                                                        ? _c("em", [
+                                                            _vm._v("*")
+                                                          ])
+                                                        : _vm._e()
+                                                    ]
+                                                  )
+                                                ]),
                                                 _vm._v(" "),
                                                 _c(
                                                   "span",
@@ -1709,7 +1384,7 @@ var render = function() {
                 _vm._v(" "),
                 !_vm.records.length
                   ? _c("tr", [
-                      _c("td", { attrs: { colspan: "9" } }, [
+                      _c("td", { attrs: { colspan: _vm.fields.length + 1 } }, [
                         _vm._v("\n\t\t\t\t\t\tNo result found!\n\t\t\t\t\t")
                       ])
                     ])
@@ -1738,29 +1413,29 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-ebc3d820", esExports)
+    require("vue-hot-reload-api")      .rerender("data-v-a2c41bb8", esExports)
   }
 }
 
 /***/ }),
 
-/***/ 526:
+/***/ 527:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(399);
+var content = __webpack_require__(400);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("938f1d8e", content, false, {});
+var update = __webpack_require__(3)("58057d5a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-38baa9ef\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./employee.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-38baa9ef\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./employee.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-393a3f23\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./location.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-393a3f23\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./location.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1771,23 +1446,23 @@ if(false) {
 
 /***/ }),
 
-/***/ 546:
+/***/ 543:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(419);
+var content = __webpack_require__(416);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("5b2e88ce", content, false, {});
+var update = __webpack_require__(3)("078a5119", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ebc3d820\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./employee-table.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ebc3d820\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./employee-table.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a2c41bb8\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./location-table.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a2c41bb8\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./location-table.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1798,18 +1473,18 @@ if(false) {
 
 /***/ }),
 
-/***/ 61:
+/***/ 73:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_employee_vue__ = __webpack_require__(339);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_vue__ = __webpack_require__(365);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_38baa9ef_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_employee_vue__ = __webpack_require__(470);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_393a3f23_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_vue__ = __webpack_require__(471);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(526)
+  __webpack_require__(527)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1826,14 +1501,14 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_employee_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_38baa9ef_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_employee_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_location_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_393a3f23_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_location_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "assets/src/components/employee/employee.vue"
+Component.options.__file = "assets/src/components/organization/location/location.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1842,9 +1517,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-38baa9ef", Component.options)
+    hotAPI.createRecord("data-v-393a3f23", Component.options)
   } else {
-    hotAPI.reload("data-v-38baa9ef", Component.options)
+    hotAPI.reload("data-v-393a3f23", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

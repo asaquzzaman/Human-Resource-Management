@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="hrm-salary">
 		<payroll-menu></payroll-menu>
 		<div class="metabox-holder">
 			<div id="hrm-hidden-form-warp" class="postbox">
@@ -117,39 +117,59 @@
 
 				        <table class="wp-list-table widefat fixed striped pages">
 				        	<thead>
-					        	<tr>
-					        		<td>Gross</td>
+					        	<tr class="tr-main">
+					        		<td class="tb-main">Income</td>
+					        		<td></td>
 					        		<td></td>
 					        	</tr>
 					        	<tr v-for="incomeFormula in incomeFormulas">
-					        		<td>{{ incomeFormula.description }}</td>
+					        		<td class="tb-child">{{ incomeFormula.description }}</td>
 					        		<td>{{ executeFormula(incomeFormula) }}</td>
+					        		<td>{{ incomeFormula.formula }}</td>
 					        	</tr>
-					        	<tr>
-					        		<td>Gross Total</td>
-					        		<td>00</td>
+					        	<tr v-if="meta.others">
+					        		<td class="tb-child">Othres</td>
+					        		<td>{{ meta.others }}</td>
+					        		<td></td>
 					        	</tr>
-					        	<tr>
-					        		<td>Deduction</td>
+					        	<tr class="total-tr">
+					        		<td class="tb-child total">Gross Total</td>
+					        		<td>{{ meta.incomeTotal }}</td>
+					        		<td></td>
+					        	</tr>
+					        	<tr class="tr-main">
+					        		<td class="tb-main">Deduction</td>
+					        		<td></td>
 					        		<td></td>
 					        	</tr>
 					        	<tr v-for="deductionFormula in deductionFormulas">
-					        		<td>{{ deductionFormula.description }}</td>
+					        		<td class="tb-child">{{ deductionFormula.description }}</td>
 					        		<td>-{{ executeFormula(deductionFormula) }}</td>
+					        		<td>{{ deductionFormula.formula }}</td>
 					        	</tr>
-					        	<tr>
-					        		<td>Deduction Total</td>
-					        		<td>-00</td>
+					        	<tr class="total-tr">
+					        		<td class="tb-child total">Deduction Total</td>
+					        		<td>-{{ meta.deductionTotal }}</td>
+					        		<td></td>
 					        	</tr>
-					        	<tr>
-					        		<td>Net Pay</td>
-					        		<td><input v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any"></td>
+					        	<tr class="total-tr">
+					        		<td class="tb-child total">Employee Will Get</td>
+					        		<td>{{ meta.employeeGet }}</td>
+					        		<td></td>
+					        	</tr>
+					        	<tr class="tr-main">
+					        		<td class="tb-main">Net Pay</td>
+					        		<td>
+					        			<input class="amount" v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any">
+					        		</td>
+					        		<td></td>
 					        	</tr>
 				        	</thead>
 				        </table>
-
-				        <a href="#" @click.prevent="" class="button button-primary hrm-button-primary">Save</a>
-				        <a href="#" @click.prevent="generateSalaryStatement()" class="button button-secondary hrm-button-secondary">Generate</a>
+				        <div class="action">
+					        <a href="#" @click.prevent="" class="button button-primary hrm-button-primary">Save</a>
+					        <a href="#" @click.prevent="generateSalaryStatement()" class="button button-secondary hrm-button-secondary">Generate</a>
+				    	</div>
 				    </form>
 				</div>
 			</div>
@@ -157,9 +177,35 @@
 	</div>
 </template>
 
-<style>
-	table tr th {
-		
+<style lang="less">
+	.hrm-salary {
+		.tb-child {
+			padding-left: 5%;
+		}
+		.tr-main {
+			background: #eee;
+		}
+		.tb-main {
+			font-weight: 600;
+		}
+		.action {
+			margin-top: 20px;
+		}
+		.total {
+			font-weight: 600;
+		}
+		.total-tr {
+			background: #f9f9f9;
+		}
+		.wp-list-table {
+			margin-top: 10px;
+		}
+		.amount {
+			width: 50% !important;
+			margin: 0 !important;
+			float: none !important;
+			padding: 5px;
+		}
 	}
 
 </style>
@@ -186,9 +232,14 @@
 		},
 
 		created () {
+			var self = this;
 			this.getEmployess();
 			this.getDesignation();
-			this.getFormulas();
+			this.getFormulas({
+				callback (res) {
+					self.$store.commit( 'salary/setFormulas', res.data );
+				}
+			});
 			this.getSalaryGroupRecords({
 
 			});
@@ -205,6 +256,26 @@
 
 			componentGroup () {
 				return this.$store.state.group.records;
+			},
+
+			incomeFormulas () {
+				var dbfomulas = this.$store.state.salary.formulas;
+
+				return dbfomulas.filter(function (formula) {
+					return formula.type == 'income';
+				});
+			},
+
+			deductionFormulas () {
+				var dbfomulas = this.$store.state.salary.formulas;
+
+				return dbfomulas.filter(function (formula) {
+					return formula.type == 'deduction';
+				});
+			},
+
+			meta () {
+				return this.$store.state.salary.meta;
 			}
 		},
 
@@ -250,7 +321,7 @@
 			},
 
 			executeFormula (statement) {
-				if(!this.salary) {
+				if(!statement.amount) {
 					return 0;
 				}
 
@@ -266,7 +337,8 @@
 		            },
 
 		            success: function(res) {
-		            	
+		            	self.$store.commit( 'salary/setFormulas', res.data );
+		            	self.$store.commit( 'salary/setOthers', res.meta );
 		            },
 
 		            error: function(res) {

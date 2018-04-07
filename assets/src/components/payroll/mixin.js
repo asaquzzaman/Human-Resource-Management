@@ -45,7 +45,7 @@ export default {
 	            	self.isFetchRecord = true;
 	            	
 	            	if (typeof args.callback != 'undefined') {
-	                    args.callback(true, res);
+	                    args.callback(res);
 	                } 
 	                
 	            },

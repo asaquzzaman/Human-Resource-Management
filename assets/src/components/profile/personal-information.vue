@@ -248,38 +248,6 @@
 							return val.country;
 						}
 					},
-
-					// {
-					// 	type: 'multiSelect',
-					// 	model: '',
-					// 	options: [],
-					// 	label: 'Country',
-					// 	optionLabel: 'country',
-					// 	name: 'multyCountry',
-					// 	placeholder: 'Select Country',
-					// 	name: '_country_code',
-					// 	editMode: false,
-					// 	trackBy: 'iso'
-					// },
-					// {
-					// 	type: 'checkbox',
-					// 	label: 'Gender',
-					// 	model: [],
-					// 	name: 'genderCheckbox',
-					// 	editMode: false,
-					// 	options: 
-					// 	[
-					// 		{
-					// 			label: 'Male',
-					// 			value: 'rocky'
-					// 		},
-
-					// 		{
-					// 			label: 'Female',
-					// 			value: 'kiron'
-					// 		}
-					// 	]
-					// },
 				],
 
 				loading: false,

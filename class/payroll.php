@@ -6,6 +6,8 @@ use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Formula;
 use HRM\Transformers\Formula_Transformer;
+use HRM\Models\Salary_Group;
+use HRM\Transformers\Salary_Group_Transformer;
 
 class Hrm_Payroll {
     use Transformer_Manager;
@@ -22,9 +24,52 @@ class Hrm_Payroll {
 
     function __construct() {
         add_action( 'wp_ajax_hrm_get_formula', array( $this, 'ajax_get_formula' ) );
+        add_action( 'wp_ajax_hrm_group_filter', array( $this, 'ajax_group_filter' ) );
         add_action( 'wp_ajax_hrm_update_formula', array( $this, 'ajax_update_formula' ) );
         add_action( 'wp_ajax_hrm_delete_formula', array( $this, 'ajax_delete_formula' ) );
         add_action( 'wp_ajax_hrm_generate_salary_statement', array( $this, 'ajax_generate_salary_statement' ) );
+    }
+
+    function ajax_group_filter() {
+        check_ajax_referer('hrm_nonce');
+        $salary = self::getInstance()->group_filter( $_POST );
+
+        wp_send_json_success( $salary );
+    }
+
+    function group_filter( $postData ) {
+        $name = empty( $postData['name'] ) ? false : $postData['name'];
+        $id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
+        $per_page = hrm_per_page();
+        $page   = empty(  $postData['page'] ) ? 1 : intval( $postData['page'] );
+      
+
+        if ( $id !== false  ) {
+
+            $formual = Salary_Group::find( $id );
+            
+            if ( $formual ) {
+                $resource = new Item( $formual, new Salary_Group_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $formual = Salary_Group::where( function($q) use( $name ) {
+            if ( ! empty(  $name ) ) {
+                $q->where( 'name', 'LIKE', '%' . $name . '%' );
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $formual->getCollection();
+
+        $resource = new Collection( $collection, new Salary_Group_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $formual ) );
+
+        return $this->get_response( $resource );
     }
 
     function ajax_generate_salary_statement() {

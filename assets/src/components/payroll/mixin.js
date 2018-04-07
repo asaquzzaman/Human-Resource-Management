@@ -20,7 +20,7 @@ export default {
 			return dbfomulas.filter(function (formula) {
 				return formula.type == 'deduction';
 			});
-		}
+		},
 	},
 	methods: {
 		getFormulas (args) {
@@ -68,6 +68,55 @@ export default {
 
 		recordMeta (record) {
 			record.editMode = false;
+		},
+
+		groupRecordMeta (record) {
+			record.editMode = false;
+		},
+
+		getSalaryGroupRecords (args) {
+			var self = this;
+			args = args || {};
+			this.$route.query['page'] = this.$route.params.current_page_number;
+			this.$route.query['employee_id'] = this.$route.params.employeeId;
+
+			var form_data = {
+	            data: this.$route.query,
+
+	            beforeSend () {
+	            	self.loadingStart('hrm-list-table');
+	            },
+
+	            success: function(res) {
+	            	res.data.forEach(function(record) {
+                		self.groupRecordMeta(record);
+                	});
+
+	            	self.$store.commit('group/setRecords', res.data);
+	            	self.$store.commit('group/setPagination', res.meta.pagination );
+	            	self.loadingStop('hrm-list-table');
+	            	self.isFetchRecord = true;
+	            	
+	            	if (typeof args.callback !== 'undefined') {
+	                    args.callback(true, res);
+	                } 
+	                
+	            },
+
+	            error: function(res) {
+	            	self.show_spinner = false;
+	            	// Showing error
+	                res.error.map( function( value, index ) {
+	                    hrm.toastr.error(value);
+	                });
+
+	                if (typeof args.callback === 'function') {
+	                    callback(false, res);
+	                } 
+	            }
+	        };
+
+	        this.httpRequest('hrm_group_filter', form_data);
 		},
 	}	
 	

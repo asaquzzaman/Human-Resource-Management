@@ -1,7 +1,9 @@
 export default {
 	data () {
 		return {
-			nameSpace: 'formula',
+			nameSpace: 'group',
+			modelName: 'Salary_Group',
+			modelTransformer: 'Salary_Group_Transformer',
 			isFetchRecord: false
 		}
 	},
@@ -28,7 +30,7 @@ export default {
 			var form_data = {
 	            data: {
 	            	delete: deletedId,
-	            	class: 'Formula',
+	            	class: this.modelName,
 					method: 'delete'
 	            },
 
@@ -50,7 +52,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_delete_formula', form_data);
+	        this.httpRequest('hrm_delete_record', form_data);
 		},
 
 		updateRecord (args) {
@@ -61,7 +63,7 @@ export default {
 
                 beforeSend () {
                 	self.loadingStart(
-                		'hrm-formula-form', 
+                		'hrm-edit-form-'+args.data.id, 
                 		{animationClass: 'preloader-update-animation'}
                 	);
                 },
@@ -69,16 +71,13 @@ export default {
                 success: function(res) {
                 	self.recordMeta(res.data);
 
-                	self.$store.commit( self.nameSpace + '/updateRecord', {
-                		id: args.data.id,
-                		record: res.data 
-
-                	});
-                	self.loadingStop('hrm-formula-form');
+                	self.$store.commit( self.nameSpace + '/updateRecord', res.data );
+                	self.loadingStop('hrm-edit-form-'+res.data.id);
 
                 	if (typeof args.callback === 'function') {
                         args.callback(true, res);
                     } 
+                    
                 },
 
                 error: function(res) {
@@ -94,7 +93,7 @@ export default {
                 }
             };
 
-            this.httpRequest('hrm_update_formula', form_data);
+            this.httpRequest('hrm_update_record', form_data);
 		},
 
 		addNewRecord (args) {
@@ -105,7 +104,7 @@ export default {
 
                 beforeSend () {
                 	self.loadingStart(
-                		'hrm-formula-form', 
+                		'hrm-hidden-form', 
                 		{animationClass: 'preloader-update-animation'}
                 	);
                 },
@@ -115,9 +114,9 @@ export default {
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
 
-                	self.loadingStop('hrm-formula-form');
+                	self.loadingStop('hrm-hidden-form');
 
-                	if (typeof args.callback === 'function') {
+                	if (typeof args.callback !== 'undefined') {
                         args.callback(true, res);
                     } 
                     
@@ -140,15 +139,13 @@ export default {
             this.httpRequest('hrm_insert_record', form_data);
 		},
 
-
-
 		fetchRecords () {
 			var self = this;
 
 			var postData = {
-				'class': 'Formula',
+				'class': this.modelName,
 				'method': 'gets',
-				'transformers': 'Formula_Transformer',
+				'transformers': this.modelTransformer,
 				'page': this.$route.params.current_page_number
 			};
 			
@@ -165,6 +162,10 @@ export default {
             };
 
             self.httpRequest('hrm_get_records', request_data);
+		},
+
+		filter (callback) {
+			
 		},
 
 		editFormValidation (fields, postData) {

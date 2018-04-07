@@ -44,7 +44,7 @@
 		<div v-if="field.type == 'multiSelect'" class="hrm-multiselect">
 
 	        <hrm-multiselect 
-	            v-model="record[field.name]" 
+	            v-model="selected" 
 	            :options="field.options" 
 	            :multiple="true" 
 	            :close-on-select="true"

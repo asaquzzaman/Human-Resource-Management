@@ -1,6 +1,7 @@
 
 import './salary/router';
 import './formula/router';
+import './group/router';
 import Empty from './payroll.vue';
 
 

@@ -54,6 +54,7 @@ abstract class Action implements Pattern {
 
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();	
+		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
 		
@@ -90,7 +91,8 @@ abstract class Action implements Pattern {
 
 	public function update() {
 		$model       = $this->get_model();
-		$postdata    = $this->get_post_data();	
+		$postdata    = $this->get_post_data();
+		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
 		$fillable    = $model->getFillable();
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";

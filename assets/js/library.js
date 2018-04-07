@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"ba4e36ac99347517a447","1":"724479b12ad69fdda6fd","29":"3f169483cce1f4883dc0","32":"8e05b9902708590d8f0a","33":"ee2df1e0d0f6222de346","34":"1969a81cd0e028fe6e7c","35":"28a9c95c8a8c810502af","36":"70c8b04d9d8e8ee426bc","37":"84faed4ee1262533cefe","38":"195e10e60ea0fbd65aca","39":"9d56a21d28a6bfd677f7"}[chunkId] + ".chunk-bundle.js";
+/******/ 		script.src = __webpack_require__.p + "chunk/" + {"0":"a4240498600b22896aa2","1":"fab3a382c9e44ebe24c2","29":"8a94c3513ad5996e8cdb","32":"4a51ca00e09385e1559c","33":"dc9dd8d3cd4a7e600736","34":"f4daa86b33439c618db3","35":"fd38f1973a020f371a8a","36":"ec9b54f280532e22f44f","37":"6728c512cff4f4d77010","38":"f198ec1a96c48e9942e8","39":"a5a06b51bc6491a6dbfb"}[chunkId] + ".chunk-bundle.js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -145,12 +145,151 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 122);
+/******/ 	return __webpack_require__(__webpack_require__.s = 133);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 133:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__ = __webpack_require__(48);
+__webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
+
+
+
+// To add to window
+if (!window.Promise) {
+	window.Promise = __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */];
+}
+
+window.hrm = {};
+
+var scriptsLoaded = {
+	'Vue': false,
+	'Vuex': false,
+	'VueRouter': false,
+	'Fullcalendar': false,
+	'Multiselect': false,
+	'NProgress': false,
+	'Moment': false,
+	'Toastr': false,
+	'Uploader': false,
+	'Loading': false,
+	'FontAwesome': false
+};
+
+window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */](function (resolve, reject) {
+	__webpack_require__.e/* require.ensure */(33).then((function (require) {
+		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(18)]; (function (script) {
+			hrm.Vue = script.default;
+		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Vue = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(32).then((function (require) {
+		hrm.Vuex = __webpack_require__(19);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Vuex = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(34).then((function (require) {
+		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(17)]; (function (script) {
+			hrm.VueRouter = script.default;
+		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.VueRouter = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(0).then((function (require) {
+		hrm.Fullcalendar = __webpack_require__(13);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Fullcalendar = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(35).then((function (require) {
+		hrm.Multiselect = __webpack_require__(16);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Multiselect = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(36).then((function (require) {
+		hrm.NProgress = __webpack_require__(14);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.NProgress = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(1).then((function (require) {
+		hrm.Moment = __webpack_require__(7);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Moment = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(29).then((function (require) {
+		hrm.Toastr = __webpack_require__(15);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Toastr = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	// require.ensure(
+	// 	['./jquery-ui-timepicker/jquery-ui-timepicker'],
+	// 	function(require) {
+	// 		hrm.TimePicker = require('./jquery-ui-timepicker/jquery-ui-timepicker');
+	// 	}
+	// ).then(function() {
+	// 	scriptsLoaded.TimePicker = true;
+	// 	hrmIsAllScriptsLoaded(resolve, reject);
+	// });
+
+	__webpack_require__.e/* require.ensure */(37).then((function (require) {
+		hrm.Uploader = __webpack_require__(12);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Uploader = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(38).then((function (require) {
+		hrm.FontAwesome = __webpack_require__(11);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.FontAwesome = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+
+	__webpack_require__.e/* require.ensure */(39).then((function (require) {
+		hrm.Loading = __webpack_require__(10);
+	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
+		scriptsLoaded.Loading = true;
+		hrmIsAllScriptsLoaded(resolve, reject);
+	});
+});
+
+function hrmIsAllScriptsLoaded(resolve, reject) {
+	var loaded = Object.values(scriptsLoaded);
+
+	if (loaded.indexOf(false) === -1) {
+		resolve(true);
+	}
+}
+
+hrmPromise.then(function (result) {
+	hrm.Vue.use(hrm.Vuex);
+	hrm.Vue.use(hrm.VueRouter);
+});
+
+/***/ }),
+
+/***/ 3:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -341,146 +480,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 122:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__ = __webpack_require__(41);
-__webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
-
-
-
-// To add to window
-if (!window.Promise) {
-	window.Promise = __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */];
-}
-
-window.hrm = {};
-
-var scriptsLoaded = {
-	'Vue': false,
-	'Vuex': false,
-	'VueRouter': false,
-	'Fullcalendar': false,
-	'Multiselect': false,
-	'NProgress': false,
-	'Moment': false,
-	'Toastr': false,
-	'Uploader': false,
-	'Loading': false,
-	'FontAwesome': false
-};
-
-window.hrmPromise = new __WEBPACK_IMPORTED_MODULE_0_promise_polyfill__["a" /* default */](function (resolve, reject) {
-	__webpack_require__.e/* require.ensure */(33).then((function (require) {
-		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(14)]; (function (script) {
-			hrm.Vue = script.default;
-		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Vue = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(32).then((function (require) {
-		hrm.Vuex = __webpack_require__(15);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Vuex = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(34).then((function (require) {
-		new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(13)]; (function (script) {
-			hrm.VueRouter = script.default;
-		}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.VueRouter = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(0).then((function (require) {
-		hrm.Fullcalendar = __webpack_require__(9);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Fullcalendar = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(35).then((function (require) {
-		hrm.Multiselect = __webpack_require__(12);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Multiselect = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(36).then((function (require) {
-		hrm.NProgress = __webpack_require__(10);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.NProgress = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(1).then((function (require) {
-		hrm.Moment = __webpack_require__(3);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Moment = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(29).then((function (require) {
-		hrm.Toastr = __webpack_require__(11);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Toastr = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	// require.ensure(
-	// 	['./jquery-ui-timepicker/jquery-ui-timepicker'],
-	// 	function(require) {
-	// 		hrm.TimePicker = require('./jquery-ui-timepicker/jquery-ui-timepicker');
-	// 	}
-	// ).then(function() {
-	// 	scriptsLoaded.TimePicker = true;
-	// 	hrmIsAllScriptsLoaded(resolve, reject);
-	// });
-
-	__webpack_require__.e/* require.ensure */(37).then((function (require) {
-		hrm.Uploader = __webpack_require__(8);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Uploader = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(38).then((function (require) {
-		hrm.FontAwesome = __webpack_require__(7);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.FontAwesome = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-
-	__webpack_require__.e/* require.ensure */(39).then((function (require) {
-		hrm.Loading = __webpack_require__(6);
-	}).bind(null, __webpack_require__)).catch(__webpack_require__.oe).then(function () {
-		scriptsLoaded.Loading = true;
-		hrmIsAllScriptsLoaded(resolve, reject);
-	});
-});
-
-function hrmIsAllScriptsLoaded(resolve, reject) {
-	var loaded = Object.values(scriptsLoaded);
-
-	if (loaded.indexOf(false) === -1) {
-		resolve(true);
-	}
-}
-
-hrmPromise.then(function (result) {
-	hrm.Vue.use(hrm.Vuex);
-	hrm.Vue.use(hrm.VueRouter);
-});
-
-/***/ }),
-
-/***/ 2:
+/***/ 4:
 /***/ (function(module, exports) {
 
 var g;
@@ -508,67 +508,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module, exports, __webpack_require__) {
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(5);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-
-/***/ }),
-
-/***/ 41:
+/***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -798,11 +738,71 @@ Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
 
 /* harmony default export */ __webpack_exports__["a"] = (Promise);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(8).setImmediate))
 
 /***/ }),
 
-/***/ 5:
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(9);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
+
+
+/***/ }),
+
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -992,7 +992,7 @@ Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(3)))
 
 /***/ })
 

@@ -23,38 +23,39 @@ function hrm_additon() {
 
 
 function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary = true ) {
-	global $hrm_monthly_salary, $hrm_annual_salary;
-	
-	$hrm_annual_salary = ! $monthly_salary ? $salary : $salary*12;
-	$hrm_monthly_salary = $monthly_salary ? $salary : $salary/12;
+    global $hrm_monthly_salary, $hrm_annual_salary;
+    
+    $hrm_annual_salary = ! $monthly_salary ? $salary : $salary*12;
+    $hrm_monthly_salary = $monthly_salary ? $salary : $salary/12;
 
     $names    = array_keys( $formulas_name );
     $formulas = array_values( $formulas_name );
 
     $string = strtolower( $formula );
+    //remove all white space
+    $string = preg_replace('/\s+/', '', $string);
     $search = array(
-    	'annual_salary',
+        'annual_salary',
         'monthly_salary',
-        'if',
-        'greatest',
-        'least',
-        'mod',
-        'sum',
-        'prorate'
-    );
+        'if(',
+        'greatest(',
+        'least(',
+        'mod(',
+        'sum(',
+        'prorate('
+     );
 
     $search = array_merge( $search, $names );
 
     $replace = array(
-    	$hrm_annual_salary,
-    	$hrm_monthly_salary,
-        'hrm_condition',
-        'max',
-        'min',
-        'hrm_division_rest',
-        'hrm_additon',
-        'hrm_actual_rate'
-        
+        $hrm_annual_salary,
+        $hrm_monthly_salary,
+        'hrm_condition(',
+        'max(',
+        'min(',
+        'hrm_division_rest(',
+        'hrm_additon(',
+        'hrm_actual_rate('
     );
 
     $replace = array_merge( $replace, $formulas );
@@ -64,15 +65,16 @@ function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary
     $row_fromula = hrm_nested_replace( $search, $replace, $string ); 
 
     return eval( 'return '. $row_fromula . ';' );
-}
+ }
+
 
 
 function hrm_nested_replace( $search, $replace, $old_formula ) {
-     pr($old_formula);
-    
+
     $old_formula = strtolower( $old_formula );
+    $old_formula = preg_replace('/\s+/', '', $old_formula);
     $new_formula = str_replace( $search, $replace, $old_formula );
-   pr($new_formula);
+    
     if ( $new_formula == $old_formula ) {
         return $new_formula;
     }

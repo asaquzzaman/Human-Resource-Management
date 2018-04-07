@@ -1,6 +1,6 @@
 <template>
 	<div>
-        <div v-for="(field, field_index) in fields" class="hrm-form-field ">
+        <div v-for="(field, field_index) in fields" class="hrm-form-field">
 
         	<div v-if="field.type == 'template'">
 	            <label for="title">
@@ -98,6 +98,7 @@
 					{{ field.label }}
 					<em v-if="field.required">*</em>
 				</label>
+				
 				<div class="hrm-multiselect">
 			        <hrm-multiselect 
 			            v-model="field.model" 

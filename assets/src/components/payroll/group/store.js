@@ -39,28 +39,6 @@ export default {
 	    }
 	},
 
-	getters: {
-		incomeFormulas (state) {
-			if (!state.records.length) {
-				return [];
-			}
-
-			return state.records.filter(function (formul) {
-				return formula.type == 'income';
-			});
-		},
-
-		deductionFormuls (state) {
-			if (!state.records.length) {
-				return [];
-			}
-
-			return state.records.filter(function (formul) {
-				return formula.type == 'deduction';
-			});
-		}
-	},
-
 	mutations: {
 		showHideNewRecordForm  (state, status) {
 			if (status === 'toggle') {
@@ -98,7 +76,7 @@ export default {
 		updateRecord (state, record) {
 			let index = state.getIndex( state.records, record.id, 'id' );
 
-			state.records.splice(index, 1, record.record);
+			state.records.splice(index, 1, record);
 		},
 
 		showHideEditForm (state, data) {

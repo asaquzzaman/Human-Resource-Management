@@ -14,6 +14,7 @@ return array(
     'Create_Formula_Table' => $baseDir . '/db/migrations/create_formula_table.php',
     'Create_Migrations_Table' => $baseDir . '/db/migrations/create_migrations_table.php',
     'Create_Salary_Group_Table' => $baseDir . '/db/migrations/create_salary_group_table.php',
+    'Create_Salary_Table' => $baseDir . '/db/migrations/create_salary_table.php',
     'Doctrine\\Common\\Inflector\\Inflector' => $vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
     'HRM\\Core\\Common\\Resource_Editors' => $baseDir . '/core/common/Resource_Editors.php',
     'HRM\\Core\\Common\\Traits\\Transformer_Manager' => $baseDir . '/core/common/Traits/Transformer_Manager.php',

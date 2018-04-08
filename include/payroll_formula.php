@@ -23,7 +23,6 @@ function hrm_additon() {
 
 
 function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary = true ) {
-    global $hrm_monthly_salary, $hrm_annual_salary;
     
     $hrm_annual_salary = ! $monthly_salary ? $salary : $salary*12;
     $hrm_monthly_salary = $monthly_salary ? $salary : $salary/12;

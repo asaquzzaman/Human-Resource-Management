@@ -8,6 +8,7 @@ use HRM\Models\Formula;
 use HRM\Transformers\Formula_Transformer;
 use HRM\Models\Salary_Group;
 use HRM\Transformers\Salary_Group_Transformer;
+use HRM\Models\Salary;
 
 class Hrm_Payroll {
     use Transformer_Manager;
@@ -74,23 +75,35 @@ class Hrm_Payroll {
 
     function ajax_generate_salary_statement() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->generate_salary_statement( $_POST['salary'] );
+        $salary = self::getInstance()->generate_salary_statement( $_POST );
 
         wp_send_json_success( $salary );
     }
 
-    function generate_salary_statement( $salary ) {
-        $formulas = $this->get_formula();
-        $formulas_name = array();
+    function generate_salary_statement( $postData ) {
+        $salary         = $postData['salary'];
+        $group          = empty( $postData['group'] ) ? 0 : $postData['group'];
+        $salary_period  = $postData['salary_period'] == 'monthly' ? true : false;
+        $formulas       = $all_formulas = $this->get_formula();
+        $formulas_name  = array();
         $generate_gross = 0;
-        $deduction = 0;
+        $deduction      = 0;
+        $all_components_id = array();
+        $salary_components_id = array();
 
-        foreach ( $formulas['data'] as $key => $formula ) {
+        if ( $group ) {
+            $get_group     = $this->group_filter(array('id' => $group));
+            $components_id = array_merge( $get_group['data']['income'], $get_group['data']['deduction'] );
+            $formulas = $this->get_formula( array( 'id' => $components_id ) );
+        }
+
+        foreach ( $all_formulas['data'] as $key => $formula ) {
             $formulas_name[$formula['name']] = $formula['formula'];
+            $all_components_id[] = $formula['id'];
         }
 
         foreach ( $formulas['data'] as $key => $formula ) {
-            $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name );
+            $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name, $salary_period );
             
             if ( $formula['type'] == 'income' ) {
                $generate_gross = $generate_gross + $formulas['data'][$key]['amount']; 
@@ -99,16 +112,62 @@ class Hrm_Payroll {
             if ( $formula['type'] == 'deduction' ) {
                $deduction = $deduction + $formulas['data'][$key]['amount']; 
             }
+
+            $salary_components_id[] = $formula['id'];
         }
 
+        $actual_salary = $salary;
+        $salary = $salary_period ? $salary : $salary/12;
+
         if ( $generate_gross <  $salary ) {
-            $formulas['meta']['salaryMeta']['others'] = $salary - $generate_gross;
-            $formulas['meta']['salaryMeta']['incomeTotal'] = $salary;
+            $formulas['meta']['salaryMeta']['others']         = $salary - $generate_gross;
+            $formulas['meta']['salaryMeta']['incomeTotal']    = $salary;
             $formulas['meta']['salaryMeta']['deductionTotal'] = $deduction;
-            $formulas['meta']['salaryMeta']['employeeGet'] = $salary - $deduction;
+            $formulas['meta']['salaryMeta']['employeeGet']    = $salary - $deduction;
+        }
+
+        $store_data = array(
+            'month'                => $postData['month'],
+            'category'             => $postData['category'],
+            'category_id'          => $postData['category_id'],
+            'employee_id'          => $postData['category'] == 'employee' ? $postData['category_id'] : 0,
+            'group_id'             => $group,
+            'salary_components_id' => maybe_serialize( $salary_components_id ),
+            'all_components_id'    => maybe_serialize( $all_components_id ),
+            'info'                 => maybe_serialize( $formulas ),
+            'type'                 => $postData['salary_period'],
+            'salary'               => $actual_salary,
+            'created_by'           => get_current_user_id(),
+            'updated_by'           => get_current_user_id()
+        );
+
+        if ( $postData['save'] == 'true' ) {
+            $this->save_salary( $store_data );
         }
 
         wp_send_json_success($formulas);
+    }
+
+    function save_salary( $store_data ) {
+
+        if ( $store_data['category'] == 'employee' ) {
+            Salary::create( $store_data );
+        }
+
+        $args = array(
+            'meta_key'     => 'hrm_designation',
+            'meta_value'   => $store_data['category_id'],
+            'meta_compare' => '=',
+            'number'       => -1
+        );
+
+        $users = get_users( $args );
+
+        foreach ( $users as $user ) {
+            $store_data['employee_id'] = $user->ID;
+            Salary::create( $store_data );
+        }
+        
     }
 
     function ajax_update_formula() {
@@ -167,13 +226,13 @@ class Hrm_Payroll {
 
     function get_formula( $postData = array() ) {
 		$name = empty( $postData['name'] ) ? false : $postData['name'];
-		$id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
+		$id   = empty( $postData['id'] ) ? false : $postData['id'];
         $status = 'enable';
         $page = 1;
         $per_page = 100000;
       
 
-       if ( $id !== false  ) {
+       if ( $id !== false && !is_array( $id )  ) {
 
             $formual = Formula::find( $id );
             
@@ -185,12 +244,16 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
-        $formual = Formula::where( function($q) use( $name, $status ) {
+        $formual = Formula::where( function($q) use( $name, $status, $id ) {
             if ( ! empty(  $name ) ) {
                 $q->where( 'name', 'LIKE', '%' . $name . '%' );
             }
             if ( ! empty(  $status ) ) {
                 $q->where( 'status', $status );
+            }
+
+            if ( is_array(  $id ) ) {
+                $q->whereIn( 'id', $id );
             }
         })
         ->orderBy( 'id', 'DESC' )

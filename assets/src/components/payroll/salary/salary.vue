@@ -7,7 +7,7 @@
 	        	<h2 class="hndle">Salary</h2>
 
 	        	<div class="inside">
-	        		<form id="hrm-hidden-form">
+	        		<form @submit.prevent="generateSalaryStatement()" id="hrm-hidden-form">
 	        			<div class="hrm-form-field">
 							<label>
 								Salary Day
@@ -38,7 +38,7 @@
 							</label>
 							<div class="hrm-multiselect">
 								<hrm-multiselect 
-						            v-model="selectedEmployees" 
+						            v-model="categoryId" 
 						            :options="employees" 
 						            :multiple="false" 
 						            :close-on-select="true"
@@ -66,7 +66,7 @@
 							</label>
 							<div class="hrm-multiselect">
 								<hrm-multiselect 
-						            v-model="selectedDesignation" 
+						            v-model="categoryId" 
 						            :options="designation" 
 						            :multiple="false" 
 						            :close-on-select="true"
@@ -91,7 +91,7 @@
 					   	<div class="hrm-form-field">
 							<label>
 								Salary Component Group
-								<em>*</em>
+								<em></em>
 							</label>
 							<div class="hrm-multiselect">
 								<hrm-multiselect 
@@ -164,13 +164,18 @@
 					        		<td>
 					        			<input class="amount" v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any">
 					        		</td>
-					        		<td></td>
+					        		<td>
+					        			<select v-model="salaryPeriod">
+					        				<option value="monthly">Monthly</option>
+					        				<option value="annual">Annual</option>
+					        			</select>
+					        		</td>
 					        	</tr>
 				        	</thead>
 				        </table>
 				        <div class="action">
-					        <a href="#" @click.prevent="" class="button button-primary hrm-button-primary">Save</a>
-					        <a href="#" @click.prevent="generateSalaryStatement()" class="button button-secondary hrm-button-secondary">Generate</a>
+					        <input type="submit" value="Save" class="button button-primary hrm-button-primary">
+					        <a href="#" @click.prevent="generateSalaryStatement(false)" class="button button-secondary hrm-button-secondary">Generate</a>
 				    	</div>
 				    </form>
 				</div>
@@ -203,7 +208,7 @@
 			margin-top: 10px;
 		}
 		.amount {
-			width: 50% !important;
+			width: 79% !important;
 			margin: 0 !important;
 			float: none !important;
 			padding: 5px;
@@ -220,12 +225,12 @@
 		mixins: [Mixin, PayrollMixin],
 		data () {
 			return {
-				selectedEmployees: '',
-				selectedDesignation: '',
+				categoryId: '',
 				salary: '',
 				salaryType: 'designation',
 				salaryDay: '',
-				salaryComponentGroup: ''
+				salaryComponentGroup: '',
+				salaryPeriod: 'monthly'
 			}
 		},
 
@@ -330,12 +335,20 @@
 				return statement.amount;
 			},
 
-			generateSalaryStatement () {
+			generateSalaryStatement (save) {
 				var self = this;
+				save = save || true;
 
 				var form_data = {
 		            data: {
-		            	salary: self.salary
+		            	salary: self.salary,
+		            	group: self.salaryComponentGroup.id,
+		            	salary_period: self.salaryPeriod,
+		            	month: self.salaryDay,
+		            	category: self.salaryType,
+			        	category_id: self.categoryId.id,
+			        	save: save
+
 		            },
 
 		            success: function(res) {

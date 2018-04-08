@@ -139,6 +139,7 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'Create_Formula_Table' => __DIR__ . '/../..' . '/db/migrations/create_formula_table.php',
         'Create_Migrations_Table' => __DIR__ . '/../..' . '/db/migrations/create_migrations_table.php',
         'Create_Salary_Group_Table' => __DIR__ . '/../..' . '/db/migrations/create_salary_group_table.php',
+        'Create_Salary_Table' => __DIR__ . '/../..' . '/db/migrations/create_salary_table.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'HRM\\Core\\Common\\Resource_Editors' => __DIR__ . '/../..' . '/core/common/Resource_Editors.php',
         'HRM\\Core\\Common\\Traits\\Transformer_Manager' => __DIR__ . '/../..' . '/core/common/Traits/Transformer_Manager.php',

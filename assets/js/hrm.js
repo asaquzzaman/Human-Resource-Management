@@ -3868,71 +3868,86 @@ var Hrm_Leave_Header = {
                 return [];
             }
         },
-        is_it_child: function () {
+        filterChildren(children) {
+            var menu = [];
 
-            if (this.$route.matched.length > 1) {
-                return true;
-            }
-        },
-        has_child_menu: function () {
-            var path = this.$route.path,
-                has_submenu = false;
-
-            jQuery.each(this.header, function (key, val) {
-
-                if (val.url == path) {
-                    if (typeof val.submenu != 'undefined' && jQuery(val.submenu).length) {
-                        has_submenu = true;
-                    }
+            children.forEach(function (child) {
+                if (typeof child.meta != 'undefined' && typeof child.meta.label != 'undefined') {
+                    menu.push(child);
                 }
             });
 
-            return has_submenu;
-        },
-        get_child_menu: function () {
-            var path = this.$route.path,
-                submenu = [];
-
-            if (this.is_it_child()) {
-                var partent_name = this.$route.matched[0].name;
-
-                jQuery.each(this.header, function (key, val) {
-                    if (val.name == partent_name) {
-                        if (typeof val.submenu != 'undefined' && jQuery(val.submenu).length) {
-                            submenu = val.submenu;
-                        }
-                    }
-                });
-
-                return submenu;
-            }
-
-            jQuery.each(this.header, function (key, val) {
-                if (val.url == path) {
-                    if (typeof val.submenu != 'undefined' && jQuery(val.submenu).length) {
-                        submenu = val.submenu;
-                    }
-                }
-            });
-
-            return submenu;
-        },
-        getHeader: function () {
-            var request_data = {
-                _wpnonce: HRM_Vars.nonce
-            },
-                self = this;
-
-            wp.ajax.send('leave_header', {
-                data: request_data,
-                success: function (res) {
-                    self.header = res.header;
-                    //self.$store.commit( 'header', {'header': res.header} );
-                },
-
-                error: function (res) {}
-            });
+            return menu;
         }
+        // is_it_child: function() {
+
+        //     if( this.$route.matched.length > 1 ) {
+        //         return true;
+        //     }
+        // },
+        // has_child_menu: function() {
+        //     var path = this.$route.path,
+        //         has_submenu = false;
+
+        //     jQuery.each( this.header, function(key, val ) {
+
+        //         if (val.url == path) {
+        //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+        //                 has_submenu = true;
+        //             }
+        //         }
+        //     });
+
+        //     return has_submenu;
+        // },
+        // get_child_menu: function() {
+        //     var path = this.$route.path,
+        //         submenu = [];
+
+        //     if ( this.is_it_child() ) {
+        //         var partent_name = this.$route.matched[0].name;
+
+        //         jQuery.each( this.header, function(key, val ) {
+        //             if (val.name == partent_name) {
+        //                 if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+        //                     submenu = val.submenu;
+        //                 }
+        //             }
+        //         });
+
+        //         return submenu;
+        //     }
+
+
+        //     jQuery.each( this.header, function(key, val ) {
+        //         if (val.url == path) {
+        //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
+        //                 submenu = val.submenu;
+        //             }
+        //         }
+        //     });
+
+        //     return submenu;
+        // },
+        // getHeader: function() {
+        //     var request_data = {
+        //         _wpnonce: HRM_Vars.nonce,
+        //     },
+        //     self  = this;
+
+        //     wp.ajax.send( 'leave_header', {
+        //         data: request_data,
+        //         success: function(res) {
+        //             self.header = res.header;
+        //             //self.$store.commit( 'header', {'header': res.header} );
+
+        //         },
+
+        //         error: function(res) {
+
+        //         }
+        //     });
+        // }
     }
 };
 
@@ -4215,7 +4230,9 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 			salaryType: 'designation',
 			salaryDay: '',
 			salaryComponentGroup: '',
-			salaryPeriod: 'monthly'
+			salaryPeriod: 'monthly',
+			isUpdate: false,
+			id: false
 		};
 	},
 
@@ -4227,12 +4244,14 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 		var self = this;
 		this.getEmployess();
 		this.getDesignation();
-		this.getFormulas({
-			callback(res) {
-				self.$store.commit('salary/setFormulas', res.data);
-			}
-		});
+
 		this.getSalaryGroupRecords({});
+
+		this.getSelfFromulas();
+
+		setTimeout(function () {
+			self.getEmpSalary();
+		}, 1000);
 	},
 
 	computed: {
@@ -4245,7 +4264,17 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 		},
 
 		componentGroup() {
-			return this.$store.state.group.records;
+			var group = [];
+			group.push({
+				id: '',
+				name: 'All'
+			});
+
+			this.$store.state.group.records.forEach(function (grp) {
+				group.push(grp);
+			});
+
+			return group;
 		},
 
 		incomeFormulas() {
@@ -4319,7 +4348,10 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 		generateSalaryStatement(save) {
 			var self = this;
-			save = save || true;
+
+			if (typeof save == 'undefined') {
+				save = false;
+			}
 
 			var form_data = {
 				data: {
@@ -4329,19 +4361,97 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 					month: self.salaryDay,
 					category: self.salaryType,
 					category_id: self.categoryId.id,
+					id: self.id,
 					save: save
 
 				},
 
 				success: function (res) {
-					self.$store.commit('salary/setFormulas', res.data);
-					self.$store.commit('salary/setOthers', res.meta);
+
+					if (save) {
+						self.categoryId = '';
+						self.salary = '';
+						self.salaryType = 'designation';
+						self.salaryDay = '';
+						self.salaryComponentGroup = '';
+						self.salaryPeriod = 'monthly';
+
+						self.$store.commit('salary/setFormulas', []);
+						self.$store.commit('salary/setOthers', {
+							salaryMeta: {
+								others: false,
+								incomeTotal: 0,
+								deductionTotal: 0,
+								employeeGet: 0
+							}
+						});
+
+						hrm.Toastr.success('Salary has been saved!');
+					} else {
+						self.$store.commit('salary/setFormulas', res.data);
+						self.$store.commit('salary/setOthers', res.meta);
+					}
 				},
 
 				error: function (res) {}
 			};
 
 			this.httpRequest('hrm_generate_salary_statement', form_data);
+		},
+
+		getEmpSalary() {
+			var query = this.$route.query;
+			var self = this;
+
+			if (typeof query.update == 'undefined' || typeof query.salary == 'undefined') {
+				return;
+			}
+
+			var self = this;
+			self.isUpdate = true;
+
+			var postData = {
+				salary_id: query.salary
+			};
+
+			var request_data = {
+				data: postData,
+				success: function (res) {
+					self.id = query.salary;
+
+					if (res.data.category == 'designation') {
+						let index = self.getIndex(self.designation, res.data.category_id, 'id');
+						self.categoryId = self.designation[index];
+					} else {
+						let index = self.getIndex(self.employees, res.data.category_id, 'id');
+						self.categoryId = self.employees[index];
+					}
+
+					if (res.data.group_id) {
+						let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
+						self.salaryComponentGroup = self.componentGroup[index];
+					}
+
+					self.salary = res.data.salary;
+					self.salaryType = res.data.category;
+					self.salaryDay = res.data.month;
+					self.salaryPeriod = res.data.type;
+
+					self.$store.commit('salary/setUpdateData', res.data.info);
+				}
+			};
+
+			self.httpRequest('hrm_get_employee_salary', request_data);
+		},
+
+		getSelfFromulas() {
+			var self = this;
+			this.getFormulas({
+				callback(res) {
+
+					self.$store.commit('salary/setFormulas', res.data);
+				}
+			});
 		}
 	}
 });
@@ -8587,6 +8697,10 @@ HRMRegisterChildrenRoute('payroll', [{
     meta: {
         label: 'Salary'
     }
+}, {
+    path: 'salary/employees/:employee_id',
+    component: __WEBPACK_IMPORTED_MODULE_0__salary_vue__["a" /* default */],
+    name: 'salary_update'
 }]);
 
 /***/ }),
@@ -8623,6 +8737,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		setOthers(state, meta) {
 			state.meta = meta.salaryMeta;
+		},
+		setUpdateData(state, data) {
+			state.formulas = data.data;
+			state.meta = data.meta.salaryMeta;
 		}
 	}
 });
@@ -13282,7 +13400,10 @@ var render = function() {
         _c(
           "h2",
           { staticClass: "nav-tab-wrapper" },
-          _vm._l(_vm.menu[0].children, function(item, index) {
+          _vm._l(_vm.filterChildren(_vm.menu[0].children), function(
+            item,
+            index
+          ) {
             return _c(
               "router-link",
               {

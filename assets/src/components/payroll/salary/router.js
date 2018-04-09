@@ -12,6 +12,12 @@ HRMRegisterChildrenRoute ('payroll',
             meta: {
                 label: 'Salary',
             }
+        },
+
+        {
+            path: 'salary/employees/:employee_id', 
+            component: Salary, 
+            name: 'salary_update',
         }
     ]
 );

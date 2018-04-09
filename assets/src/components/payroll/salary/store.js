@@ -26,7 +26,10 @@ export default {
 
 		setOthers (state, meta) {
 			state.meta = meta.salaryMeta;
-			
+		},
+		setUpdateData (state, data) {
+			state.formulas = data.data;
+			state.meta = data.meta.salaryMeta;
 		}
 	}
 }

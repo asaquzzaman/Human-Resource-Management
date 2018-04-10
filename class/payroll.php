@@ -31,7 +31,93 @@ class Hrm_Payroll {
         add_action( 'wp_ajax_hrm_delete_formula', array( $this, 'ajax_delete_formula' ) );
         add_action( 'wp_ajax_hrm_generate_salary_statement', array( $this, 'ajax_generate_salary_statement' ) );
         add_action( 'wp_ajax_hrm_get_employee_salary', array( $this, 'ajax_get_employee_salary' ) );
+        add_action( 'wp_ajax_hrm_fetch_statement', array( $this, 'ajax_fetch_statement' ) );
+        add_action( 'wp_ajax_hrm_get_salary', array( $this, 'ajax_get_salary' ) );
 
+    }
+
+    function ajax_get_salary() {
+        check_ajax_referer('hrm_nonce');
+        $salary = self::getInstance()->get_salary( $_POST );
+
+        wp_send_json_success( $salary );
+    }
+
+    function get_salary( $postData ) {
+        $start_date  = date( 'Y-m-01', strtotime( current_time( 'mysql' ) ) );
+        $end_date    = date( 'Y-m-t', strtotime( current_time( 'mysql' ) ) );
+        $employee_id = empty( $postdata['employee_id'] ) ? '' : $postdata['employee_id'];
+        $page        = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $from        = empty( $postdata['from'] ) ? $start_date : $postdata['from'];
+        $to          = empty( $postdata['to'] ) ? $end_date : $postdata['to'];
+        $id          = empty( $postdata['id'] ) ? false : $postdata['id'];
+
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $location = Salary::find( $id );
+            
+            if ( $location ) {
+                $resource = new Item( $location, new Salary_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        $location = Salary::where( function($q) use( $title, $from, $to ) {
+            if ( ! empty(  $employee_id ) ) {
+                $q->where( 'employee_id', $employee_id );
+            }
+
+            if ( ! empty( $from ) ) {
+                $from = date( 'Y-m-d', strtotime( $from ) );
+                $q->where( 'month', '>=', $from);
+            }
+
+            if ( ! empty( $to ) ) {
+                $to = date( 'Y-m-d', strtotime( $to ) );
+                $q->where( 'month', '<=', $to);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page, ['*'], 'page', $page );
+    
+        $collection = $location->getCollection();
+
+        $resource = new Collection( $collection, new Salary_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $location ) );
+
+        return $this->get_response( $resource );
+    }
+
+    function ajax_fetch_statement() {
+        check_ajax_referer('hrm_nonce');
+        $salary = self::getInstance()->fetch_statement( $_POST );
+
+        wp_send_json_success( $salary );
+    }
+
+    function fetch_statement( $postData ) {
+        $id = $postData['id'];
+        $type = $postData['type'];
+        $date = $postData['salaryDay'];
+
+        $start_date = date( 'Y-m-01', strtotime( $date ) );
+        $end_date = date( 'Y-m-t', strtotime( $date ) );
+
+        $salary = Salary::where('category_id', $id)
+            ->where( 'category', $type )
+            ->where( function($q) use( $start_date, $end_date ) {
+                $q->where( 'month', '>=', $start_date);
+                $q->where( 'month', '<=', $end_date);
+            })->first();
+
+        if ( $salary ) {
+            $resource = new item( $salary, new Salary_Transformer );
+            return $this->get_response( $resource );
+        }
     }
 
     function ajax_get_employee_salary() {
@@ -118,6 +204,8 @@ class Hrm_Payroll {
         $deduction      = 0;
         $all_components_id = array();
         $salary_components_id = array();
+        $is_save = $postData['save'] == 'true' ? true : false;
+        $is_update = $postData['isUpdate'] == 'true' ? true : false;
 
         if ( $group ) {
             $get_group     = $this->group_filter(array('id' => $group));
@@ -154,9 +242,7 @@ class Hrm_Payroll {
             $formulas['meta']['salaryMeta']['employeeGet']    = $salary - $deduction;
         }
 
-
-
-        //if ( $postData['save'] == 'true' ) {
+        if ( $is_save ) {
 
             $store_data = array(
                 'month'                => $postData['month'],
@@ -169,21 +255,19 @@ class Hrm_Payroll {
                 'info'                 => maybe_serialize( $formulas ),
                 'type'                 => $postData['salary_period'],
                 'salary'               => $actual_salary,
+                'is_update'            => $postData['isUpdate'] == 'true' ? true : false,
                 'created_by'           => get_current_user_id(),
                 'updated_by'           => get_current_user_id()
             );
-            //if ( $postData['id'] ) {
-                $this->update_salary( $store_data );
-            //} else {
-               // $this->save_salary( $store_data );
-            //}
             
-       // }
+            $this->update_salary( $store_data );
+        }
 
         wp_send_json_success($formulas);
     }
 
     function update_salary( $store_data ) {
+        $is_update = $store_data['is_update'];
         $start_date = date( 'Y-m-01', strtotime( $store_data['month'] ) );
         $end_date = date( 'Y-m-t', strtotime( $store_data['month'] ) );
 
@@ -197,10 +281,12 @@ class Hrm_Payroll {
                 })->first();
             
             
-            if ( $salary ) {
+            if ( $salary && $is_update ) {
                 $salary = $salary->update( $store_data );
             } else {
-                Salary::create( $store_data );
+                if ( !$salary ) {
+                    Salary::create( $store_data );
+                }
             }
 
             return;
@@ -216,16 +302,20 @@ class Hrm_Payroll {
         $users = get_users( $args );
 
         foreach ( $users as $user ) {
-            $salary = Salary::where('employee_id', $user->ID)
+            $salary = Salary::where( 'employee_id', $user->ID )
+                // ->where( 'category_id', $store_data['category_id'] )
                 ->where( function($q) use( $start_date, $end_date ) {
                     $q->where( 'month', '>=', $start_date);
                     $q->where( 'month', '<=', $end_date);
                 })->first();
-            if ( $salary ) {
+
+            if ( $salary && $is_update ) {
                 $salary->update( $store_data );
             } else {
-                $store_data['employee_id'] = $user->ID;
-                Salary::create( $store_data );
+                if ( !$salary ) {
+                    $store_data['employee_id'] = $user->ID;
+                    Salary::create( $store_data );
+                }
             }
         }
     }

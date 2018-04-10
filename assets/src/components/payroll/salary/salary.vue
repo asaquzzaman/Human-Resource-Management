@@ -7,7 +7,7 @@
 	        	<h2 class="hndle">Salary</h2>
 
 	        	<div class="inside">
-	        		<form @submit.prevent="generateSalaryStatement()" id="hrm-hidden-form">
+	        		<form @submit.prevent="generateSalaryStatement(true)" id="hrm-hidden-form">
 	        			<div class="hrm-form-field">
 							<label>
 								Salary Day
@@ -174,7 +174,8 @@
 				        	</thead>
 				        </table>
 				        <div class="action">
-					        <input type="submit" value="Save" class="button button-primary hrm-button-primary">
+					        <input v-if="!isUpdate" type="submit" value="Save" class="button button-primary hrm-button-primary">
+					        <input v-if="isUpdate" type="submit" value="Update" class="button button-primary hrm-button-primary">
 					        <a href="#" @click.prevent="generateSalaryStatement(false)" class="button button-secondary hrm-button-secondary">Generate</a>
 				    	</div>
 				    </form>
@@ -232,7 +233,6 @@
 				salaryComponentGroup: '',
 				salaryPeriod: 'monthly',
 				isUpdate: false,
-				id: false
 			}
 		},
 
@@ -251,10 +251,20 @@
 
 			this.getSelfFromulas();
 
-			setTimeout(function() {
-				self.getEmpSalary();
-			}, 1000);
+			// setTimeout(function() {
+			// 	self.getEmpSalary();
+			// }, 1000);
 			
+		},
+
+		watch: {
+			categoryId (newVal) {
+				this.fetchStatement();
+			},
+
+			salaryDay (newVal) {
+				this.fetchStatement();
+			}
 		},
 
 		computed: {
@@ -353,10 +363,6 @@
 
 			generateSalaryStatement (save) {
 				var self = this;
-
-				if( typeof save == 'undefined' ) {
-					save = false;
-				}
 				
 				var form_data = {
 		            data: {
@@ -366,7 +372,7 @@
 		            	month: self.salaryDay,
 		            	category: self.salaryType,
 			        	category_id: self.categoryId.id,
-			        	id: self.id,
+			        	isUpdate: self.isUpdate,
 			        	save: save
 
 		            },
@@ -409,64 +415,116 @@
 		        this.httpRequest('hrm_generate_salary_statement', form_data);
 			},
 
-			getEmpSalary () {
-				var query = this.$route.query;
-				var self = this;
+			// getEmpSalary () {
+			// 	var query = this.$route.query;
+			// 	var self = this;
 
-				if ( 
-					typeof query.update == 'undefined'
-						||
-					typeof query.salary == 'undefined'
-				) {
-					return;
-				}
+			// 	if ( 
+			// 		typeof query.update == 'undefined'
+			// 			||
+			// 		typeof query.salary == 'undefined'
+			// 	) {
+			// 		return;
+			// 	}
 
-				var self = this;
-				self.isUpdate = true;
+			// 	var self = this;
+			// 	self.isUpdate = true;
 
-				var postData = {
-					salary_id: query.salary
-				};
+			// 	var postData = {
+			// 		salary_id: query.salary
+			// 	};
 				
-	            var request_data = {
-	                data: postData,
-	                success: function(res) {
-	                	self.id = query.salary;
+	  //           var request_data = {
+	  //               data: postData,
+	  //               success: function(res) {
+	  //               	self.id = query.salary;
 	                	
-	                	if (res.data.category == 'designation') {
-	                		let index = self.getIndex(self.designation, res.data.category_id, 'id');
-	                		self.categoryId = self.designation[index];
-	                	} else {
-	                		let index = self.getIndex(self.employees, res.data.category_id, 'id');
-	                		self.categoryId = self.employees[index];
-	                	}
+	  //               	if (res.data.category == 'designation') {
+	  //               		let index = self.getIndex(self.designation, res.data.category_id, 'id');
+	  //               		self.categoryId = self.designation[index];
+	  //               	} else {
+	  //               		let index = self.getIndex(self.employees, res.data.category_id, 'id');
+	  //               		self.categoryId = self.employees[index];
+	  //               	}
 
-	                	if(res.data.group_id) {
-	                		let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
-	                		self.salaryComponentGroup = self.componentGroup[index];
-	                	}
+	  //               	if(res.data.group_id) {
+	  //               		let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
+	  //               		self.salaryComponentGroup = self.componentGroup[index];
+	  //               	}
 	                    
-						self.salary     = res.data.salary;
-						self.salaryType = res.data.category;
-						self.salaryDay  = res.data.month;
-						self.salaryPeriod =  res.data.type;
+			// 			self.salary     = res.data.salary;
+			// 			self.salaryType = res.data.category;
+			// 			self.salaryDay  = res.data.month;
+			// 			self.salaryPeriod =  res.data.type;
 
-						self.$store.commit( 'salary/setUpdateData', res.data.info );
+			// 			self.$store.commit( 'salary/setUpdateData', res.data.info );
 
-	                }
-	            };
+	  //               }
+	  //           };
 
-	            self.httpRequest('hrm_get_employee_salary', request_data);
-			},
+	  //           self.httpRequest('hrm_get_employee_salary', request_data);
+			// },
 
 			getSelfFromulas () {
 				var self = this;
-				this.getFormulas({
-				callback (res) {
-					
-					self.$store.commit( 'salary/setFormulas', res.data );
+					this.getFormulas({
+					callback (res) {
+						
+						self.$store.commit( 'salary/setFormulas', res.data );
+					}
+				});
+			},
+
+			fetchStatement () {
+			
+				var self = this;
+				if (self.salaryDay == '') {
+					return;
 				}
-			});
+				if (self.categoryId == '') {
+					return;
+				}
+	            var request_data = {
+	                data: {
+	                	type: self.salaryType,
+	                	id: self.categoryId.id,
+	                	salaryDay: self.salaryDay
+	                },
+	                success: function(res) {
+	                	
+	                	if(typeof res == 'undefined') {
+	                		self.$store.commit( 'salary/setFormulas', [] );
+		            		self.$store.commit( 
+		            			'salary/setOthers',  
+		            			{
+		            				salaryMeta: {
+										others: false,
+										incomeTotal: 0,
+										deductionTotal: 0,
+										employeeGet: 0
+									}
+								} 
+							);
+	                		self.isUpdate = false;
+	                		return;
+	                	}
+
+
+	                	self.salary = res.data.salary;
+						self.salaryDay = res.data.month;
+
+						if(res.data.group_id) {
+	                		let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
+	                		self.salaryComponentGroup = self.componentGroup[index];
+	                	}
+						self.isUpdate = true;
+						self.salaryPeriod = res.data.type;
+						self.$store.commit( 'salary/setFormulas', res.data.info.data );
+		            	self.$store.commit( 'salary/setOthers', res.data.info.meta );
+	                }
+	            };
+
+	            self.httpRequest('hrm_fetch_statement', request_data);
 			}
 		}
 	}

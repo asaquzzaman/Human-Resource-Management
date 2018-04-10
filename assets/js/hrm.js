@@ -1576,7 +1576,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__salary_router__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formula_router__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__group_router__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__payroll_vue__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__revision_router__ = __webpack_require__(551);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__payroll_vue__ = __webpack_require__(160);
+
 
 
 
@@ -1586,7 +1588,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 let menu = [{
     path: 'payroll',
     name: 'payroll',
-    component: __WEBPACK_IMPORTED_MODULE_3__payroll_vue__["a" /* default */],
+    component: __WEBPACK_IMPORTED_MODULE_4__payroll_vue__["a" /* default */],
     children: HRMGetRegisterChildrenRoute('payroll'),
     meta: {
         label: 'Payroll',
@@ -4217,6 +4219,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 //
 //
 //
+//
 
 
 
@@ -4231,8 +4234,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 			salaryDay: '',
 			salaryComponentGroup: '',
 			salaryPeriod: 'monthly',
-			isUpdate: false,
-			id: false
+			isUpdate: false
 		};
 	},
 
@@ -4249,9 +4251,19 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 		this.getSelfFromulas();
 
-		setTimeout(function () {
-			self.getEmpSalary();
-		}, 1000);
+		// setTimeout(function() {
+		// 	self.getEmpSalary();
+		// }, 1000);
+	},
+
+	watch: {
+		categoryId(newVal) {
+			this.fetchStatement();
+		},
+
+		salaryDay(newVal) {
+			this.fetchStatement();
+		}
 	},
 
 	computed: {
@@ -4349,10 +4361,6 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 		generateSalaryStatement(save) {
 			var self = this;
 
-			if (typeof save == 'undefined') {
-				save = false;
-			}
-
 			var form_data = {
 				data: {
 					salary: self.salary,
@@ -4361,7 +4369,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 					month: self.salaryDay,
 					category: self.salaryType,
 					category_id: self.categoryId.id,
-					id: self.id,
+					isUpdate: self.isUpdate,
 					save: save
 
 				},
@@ -4399,50 +4407,55 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 			this.httpRequest('hrm_generate_salary_statement', form_data);
 		},
 
-		getEmpSalary() {
-			var query = this.$route.query;
-			var self = this;
+		// getEmpSalary () {
+		// 	var query = this.$route.query;
+		// 	var self = this;
 
-			if (typeof query.update == 'undefined' || typeof query.salary == 'undefined') {
-				return;
-			}
+		// 	if ( 
+		// 		typeof query.update == 'undefined'
+		// 			||
+		// 		typeof query.salary == 'undefined'
+		// 	) {
+		// 		return;
+		// 	}
 
-			var self = this;
-			self.isUpdate = true;
+		// 	var self = this;
+		// 	self.isUpdate = true;
 
-			var postData = {
-				salary_id: query.salary
-			};
+		// 	var postData = {
+		// 		salary_id: query.salary
+		// 	};
 
-			var request_data = {
-				data: postData,
-				success: function (res) {
-					self.id = query.salary;
+		//           var request_data = {
+		//               data: postData,
+		//               success: function(res) {
+		//               	self.id = query.salary;
 
-					if (res.data.category == 'designation') {
-						let index = self.getIndex(self.designation, res.data.category_id, 'id');
-						self.categoryId = self.designation[index];
-					} else {
-						let index = self.getIndex(self.employees, res.data.category_id, 'id');
-						self.categoryId = self.employees[index];
-					}
+		//               	if (res.data.category == 'designation') {
+		//               		let index = self.getIndex(self.designation, res.data.category_id, 'id');
+		//               		self.categoryId = self.designation[index];
+		//               	} else {
+		//               		let index = self.getIndex(self.employees, res.data.category_id, 'id');
+		//               		self.categoryId = self.employees[index];
+		//               	}
 
-					if (res.data.group_id) {
-						let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
-						self.salaryComponentGroup = self.componentGroup[index];
-					}
+		//               	if(res.data.group_id) {
+		//               		let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
+		//               		self.salaryComponentGroup = self.componentGroup[index];
+		//               	}
 
-					self.salary = res.data.salary;
-					self.salaryType = res.data.category;
-					self.salaryDay = res.data.month;
-					self.salaryPeriod = res.data.type;
+		// 			self.salary     = res.data.salary;
+		// 			self.salaryType = res.data.category;
+		// 			self.salaryDay  = res.data.month;
+		// 			self.salaryPeriod =  res.data.type;
 
-					self.$store.commit('salary/setUpdateData', res.data.info);
-				}
-			};
+		// 			self.$store.commit( 'salary/setUpdateData', res.data.info );
 
-			self.httpRequest('hrm_get_employee_salary', request_data);
-		},
+		//               }
+		//           };
+
+		//           self.httpRequest('hrm_get_employee_salary', request_data);
+		// },
 
 		getSelfFromulas() {
 			var self = this;
@@ -4452,6 +4465,54 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 					self.$store.commit('salary/setFormulas', res.data);
 				}
 			});
+		},
+
+		fetchStatement() {
+
+			var self = this;
+			if (self.salaryDay == '') {
+				return;
+			}
+			if (self.categoryId == '') {
+				return;
+			}
+			var request_data = {
+				data: {
+					type: self.salaryType,
+					id: self.categoryId.id,
+					salaryDay: self.salaryDay
+				},
+				success: function (res) {
+
+					if (typeof res == 'undefined') {
+						self.$store.commit('salary/setFormulas', []);
+						self.$store.commit('salary/setOthers', {
+							salaryMeta: {
+								others: false,
+								incomeTotal: 0,
+								deductionTotal: 0,
+								employeeGet: 0
+							}
+						});
+						self.isUpdate = false;
+						return;
+					}
+
+					self.salary = res.data.salary;
+					self.salaryDay = res.data.month;
+
+					if (res.data.group_id) {
+						let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
+						self.salaryComponentGroup = self.componentGroup[index];
+					}
+					self.isUpdate = true;
+					self.salaryPeriod = res.data.type;
+					self.$store.commit('salary/setFormulas', res.data.info.data);
+					self.$store.commit('salary/setOthers', res.data.info.meta);
+				}
+			};
+
+			self.httpRequest('hrm_fetch_statement', request_data);
 		}
 	}
 });
@@ -5102,6 +5163,7 @@ var map = {
 	"./payroll/formula/mixin.js": 21,
 	"./payroll/group/mixin.js": 6,
 	"./payroll/mixin.js": 1,
+	"./payroll/revision/mixin.js": 548,
 	"./payroll/salary/mixin.js": 23,
 	"./profile/education/mixin.js": 119,
 	"./profile/mixin.js": 122,
@@ -5142,6 +5204,7 @@ var map = {
 	"./organization/notice/store.js": 112,
 	"./payroll/formula/store.js": 114,
 	"./payroll/group/store.js": 116,
+	"./payroll/revision/store.js": 549,
 	"./payroll/salary/store.js": 118,
 	"./profile/education/store.js": 121,
 	"./profile/skill/store.js": 125,
@@ -13656,7 +13719,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      _vm.generateSalaryStatement()
+                      _vm.generateSalaryStatement(true)
                     }
                   }
                 },
@@ -14049,10 +14112,21 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "action" }, [
-                    _c("input", {
-                      staticClass: "button button-primary hrm-button-primary",
-                      attrs: { type: "submit", value: "Save" }
-                    }),
+                    !_vm.isUpdate
+                      ? _c("input", {
+                          staticClass:
+                            "button button-primary hrm-button-primary",
+                          attrs: { type: "submit", value: "Save" }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.isUpdate
+                      ? _c("input", {
+                          staticClass:
+                            "button button-primary hrm-button-primary",
+                          attrs: { type: "submit", value: "Update" }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "a",
@@ -25625,6 +25699,1754 @@ Vue$3.compile = compileToFunctions;
 /* harmony default export */ __webpack_exports__["a"] = (Vue$3);
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4), __webpack_require__(5), __webpack_require__(8).setImmediate))
+
+/***/ }),
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */,
+/* 288 */,
+/* 289 */,
+/* 290 */,
+/* 291 */,
+/* 292 */,
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */,
+/* 307 */,
+/* 308 */,
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */,
+/* 337 */,
+/* 338 */,
+/* 339 */,
+/* 340 */,
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */,
+/* 351 */,
+/* 352 */,
+/* 353 */,
+/* 354 */,
+/* 355 */,
+/* 356 */,
+/* 357 */,
+/* 358 */,
+/* 359 */,
+/* 360 */,
+/* 361 */,
+/* 362 */,
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+				data() {
+								return {
+												nameSpace: 'revision',
+												modelName: 'Salary',
+												modelTransformer: 'Salary_Transformer'
+								};
+				},
+				methods: {
+								showHideNewRecordForm(status, experiance) {
+												var experiance = experiance || false,
+												    experiance = jQuery.isEmptyObject(experiance) ? false : experiance;
+
+												if (experiance) {
+																if (status === 'toggle') {
+																				experiance.editMode = experiance.editMode ? false : true;
+																} else {
+																				experiance.editMode = status;
+																}
+												} else {
+
+																this.$store.commit(this.nameSpace + '/showHideNewRecordForm', status);
+												}
+								},
+
+								recordDelete(deletedId, callback) {
+												var self = this;
+
+												var form_data = {
+																data: {
+																				delete: deletedId,
+																				class: self.modelName,
+																				method: 'delete'
+																},
+
+																success: function (res) {
+
+																				self.$store.commit(self.nameSpace + '/afterDelete', deletedId);
+																				if (typeof callback === 'function') {
+																								callback.call(self, deletedId);
+																				}
+																},
+
+																error: function (res) {
+																				self.show_spinner = false;
+																				// Showing error
+																				res.error.map(function (value, index) {
+																								hrm.toastr.error(value);
+																				});
+																}
+												};
+
+												this.httpRequest('hrm_delete_record', form_data);
+								},
+
+								updateRecord(args) {
+												var self = this;
+
+												var form_data = {
+																data: args.data,
+
+																beforeSend() {
+																				self.loadingStart('hrm-edit-form-' + args.data.id, { animationClass: 'preloader-update-animation' });
+																},
+
+																success: function (res) {
+																				self.recordMeta(res.data);
+
+																				self.$store.commit(self.nameSpace + '/updateRecord', res.data);
+																				self.loadingStop('hrm-edit-form-' + res.data.id);
+
+																				if (typeof args.callback === 'function') {
+																								args.callback.call(self, true, res);
+																				}
+																},
+
+																error: function (res) {
+
+																				// Showing error
+																				res.error.map(function (value, index) {
+																								hrm.toastr.error(value);
+																				});
+
+																				if (typeof args.callback === 'function') {
+																								args.callback.call(self, false, res);
+																				}
+																}
+												};
+
+												this.httpRequest('hrm_update_record', form_data);
+								},
+
+								addNewRecord(args) {
+												var self = this;
+
+												var form_data = {
+																data: args.data,
+
+																beforeSend() {
+																				self.loadingStart('hrm-hidden-form', { animationClass: 'preloader-update-animation' });
+																},
+
+																success: function (res) {
+																				self.$store.commit(self.nameSpace + '/setRecord', res.data);
+																				self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
+																				self.loadingStop('hrm-hidden-form');
+
+																				if (typeof args.callback === 'function') {
+																								args.callback.call(self, true, res);
+																				}
+
+																				hrm.Toastr.success(res.message);
+																},
+
+																error: function (res) {
+
+																				// Showing error
+																				res.error.map(function (value, index) {
+																								hrm.Toastr.error(value);
+																				});
+
+																				if (typeof args.callback === 'function') {
+																								args.callback.call(self, false, res);
+																				}
+																}
+												};
+
+												this.httpRequest('hrm_insert_record', form_data);
+								},
+
+								getRecords(args) {
+												var self = this;
+												var postData = {
+																'page': this.$route.params.current_page_number
+												};
+
+												var request_data = {
+																data: postData,
+																beforeSend() {
+																				self.loadingStart('hrm-list-table');
+																},
+																success: function (res) {
+																				res.data.forEach(function (record) {
+																								self.recordMeta(record);
+																				});
+
+																				self.$store.commit(self.nameSpace + '/setRecords', res.data);
+																				self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+																				self.loadingStop('hrm-list-table');
+																				self.isFetchRecord = true;
+																}
+												};
+
+												self.httpRequest('hrm_get_salary', request_data);
+								},
+
+								fetchRecords() {
+												var self = this;
+
+												var postData = {
+																'class': self.modelName,
+																'method': 'gets',
+																'transformers': self.modelTransformer,
+																'page': this.$route.params.current_page_number
+												};
+
+												var request_data = {
+																data: postData,
+																beforeSend() {
+																				self.loadingStart('hrm-list-table');
+																},
+																success: function (res) {
+																				res.data.forEach(function (record) {
+																								self.recordMeta(record);
+																				});
+
+																				self.$store.commit(self.nameSpace + '/setRecords', res.data);
+																				self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+																				self.loadingStop('hrm-list-table');
+																				self.isFetchRecord = true;
+																}
+												};
+
+												self.httpRequest('hrm_get_records', request_data);
+								},
+
+								recordMeta(record) {
+												record['editMode'] = false;
+								},
+
+								filter(callback) {
+												var self = this;
+												this.$route.query['page'] = this.$route.params.current_page_number;
+
+												var form_data = {
+																data: this.$route.query,
+
+																beforeSend() {
+																				self.loadingStart('hrm-list-table');
+																},
+
+																success: function (res) {
+																				res.data.forEach(function (record) {
+																								self.recordMeta(record);
+																				});
+
+																				self.$store.commit(self.nameSpace + '/setRecords', res.data);
+																				self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
+																				self.loadingStop('hrm-list-table');
+																				self.isFetchRecord = true;
+
+																				if (typeof callback === 'function') {
+																								callback.call(self, true, res);
+																				}
+																},
+
+																error: function (res) {
+																				self.show_spinner = false;
+																				// Showing error
+																				res.error.map(function (value, index) {
+																								hrm.toastr.error(value);
+																				});
+
+																				if (typeof args.callback === 'function') {
+																								callback.call(self, false, res);
+																				}
+																}
+												};
+
+												this.httpRequest('hrm_notice_filter', form_data);
+								}
+				}
+});
+
+/***/ }),
+/* 549 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+	state: {
+		isNewRecordFormActive: false,
+		records: [],
+		getIndex: function (itemList, id, slug) {
+			return itemList.findIndex(x => x[slug] == id);
+		},
+		deletedId: [],
+		pagination: {},
+		slideUp(callBack) {
+			jQuery('.hrm-toggle').slideUp(400, function () {
+				callBack();
+			});
+		},
+		slideDwon() {
+			var node = jQuery('.hrm-toggle');
+			node.css({
+				display: 'none'
+			});
+
+			node.slideDown(400);
+		},
+		editSlideUp(id, callBack) {
+			jQuery('#hrm-edit-' + id).find('form').slideUp(400, function () {
+				callBack();
+			});
+		},
+		editSlideDwon(id) {
+			var node = jQuery('#hrm-edit-' + id);
+
+			node.find('form').css({
+				display: 'none'
+			});
+
+			node.find('form').slideDown(400);
+		}
+	},
+
+	mutations: {
+		showHideNewRecordForm(state, status) {
+			if (status === 'toggle') {
+				status = state.isNewRecordFormActive ? false : true;
+			}
+
+			if (status === false) {
+				state.slideUp(function () {
+					state.isNewRecordFormActive = status;
+				});
+			} else {
+				state.isNewRecordFormActive = status;
+				hrm.Vue.nextTick(function () {
+					state.slideDwon();
+				});
+			}
+		},
+
+		setRecords(state, records) {
+			state.records = records;
+		},
+
+		setRecord(state, record) {
+			var per_page = state.pagination.per_page,
+			    length = state.records.length;
+
+			if (per_page <= length) {
+				state.records.splice(0, 0, record);
+				state.records.pop();
+			} else {
+				state.records.splice(0, 0, record);
+			}
+		},
+
+		updateRecord(state, record) {
+			let index = state.getIndex(state.records, record.id, 'id');
+
+			state.records.splice(index, 1, record);
+		},
+
+		showHideEditForm(state, data) {
+			var index = state.getIndex(state.records, data.id, 'id'),
+			    status = data.status,
+			    id = state.records[index].id;
+
+			if (data.status == 'toggle') {
+				status = state.records[index].editMode ? false : true;
+			}
+
+			if (status === false) {
+				state.editSlideUp(id, function () {
+					state.records[index].editMode = status;
+				});
+			} else {
+				state.records[index].editMode = status;
+				hrm.Vue.nextTick(function () {
+					state.editSlideDwon(id);
+				});
+			}
+		},
+
+		setDeletedId(state, deletedId) {
+			state.deletedId = deletedId;
+		},
+
+		setPagination(state, pagination) {
+			state.pagination = pagination;
+		},
+
+		updatePaginationAfterNewRecord(state) {
+			state.pagination.total = state.pagination.total + 1;
+			state.pagination.total_pages = Math.ceil(state.pagination.total / state.pagination.per_page);
+		},
+
+		afterDelete(state, deletedId) {
+			deletedId.forEach(function (id) {
+				let index = state.getIndex(state.records, id, 'id');
+
+				state.records.splice(index, 1);
+			});
+		},
+
+		setSearchResults(state, records) {}
+	}
+});
+
+/***/ }),
+/* 550 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__revision_table_vue__ = __webpack_require__(558);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(548);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	mixins: [__WEBPACK_IMPORTED_MODULE_1__mixin__["default"]],
+
+	data() {
+
+		return {
+			search: {
+				filter: 'active',
+				title: this.$route.query.title,
+				from: this.$route.query.from,
+				to: this.$route.query.to
+			},
+			bulkAction: -1
+		};
+	},
+
+	computed: {
+		isNewRecordFormActive() {
+			return this.$store.state[this.nameSpace].isNewRecordFormActive;
+		},
+
+		total_experiance_page() {
+			return 10;
+		},
+
+		pagination() {
+			return this.$store.state[this.nameSpace].pagination;
+		}
+	},
+	components: {
+		'hrm-table': __WEBPACK_IMPORTED_MODULE_0__revision_table_vue__["a" /* default */]
+	},
+
+	methods: {
+
+		selfBulkAction() {
+			var self = this;
+			switch (this.bulkAction) {
+				case 'delete':
+					this.recordDelete(self.$store.state[self.nameSpace].deletedId, function () {
+						var hasRecords = self.$store.state[self.nameSpace].records.length;
+						var page = self.$route.params.current_page_number;
+
+						if (!hasRecords && page > 1) {
+							self.$router.push({
+								params: {
+									current_page_number: page - 1
+								},
+								query: self.$route.query
+							});
+						}
+						if (!hasRecords && self.pagination.total_pages > 1) {
+							self.getRecords();
+						}
+					});
+					break;
+
+				default:
+
+					break;
+			}
+		},
+
+		recordSearch() {
+			this.$router.push({ query: this.search });
+			this.getRecords();
+		}
+	}
+});
+
+/***/ }),
+/* 551 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__revision_vue__ = __webpack_require__(553);
+HRMRegisterModule('revision', 'payroll/revision');
+
+
+
+HRMRegisterChildrenRoute('payroll', [{
+    path: 'revision',
+    component: __WEBPACK_IMPORTED_MODULE_0__revision_vue__["a" /* default */],
+    name: 'revision',
+    meta: {
+        label: 'Revision'
+    },
+    children: [{
+        path: 'pages/:current_page_number',
+        component: __WEBPACK_IMPORTED_MODULE_0__revision_vue__["a" /* default */],
+        name: 'revision_pagination'
+    }]
+}]);
+
+/***/ }),
+/* 552 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 553 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_revision_vue__ = __webpack_require__(550);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c63989b6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_revision_vue__ = __webpack_require__(554);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(555)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_revision_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c63989b6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_revision_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/payroll/revision/revision.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c63989b6", Component.options)
+  } else {
+    hotAPI.reload("data-v-c63989b6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 554 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "page-organization" },
+    [
+      _c("payroll-menu"),
+      _vm._v(" "),
+      _c("div", { staticClass: "hrm-tbl-action-wrap" }, [
+        _vm.manageOrganization()
+          ? _c("div", { staticClass: "hrm-table-action  hrm-bulk-wrap" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "screen-reader-text",
+                  attrs: { for: "bulk-action-selector-top" }
+                },
+                [_vm._v("\n\t\t\t\t\tSelect bulk action\n\t\t\t\t")]
+              ),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.bulkAction,
+                      expression: "bulkAction"
+                    }
+                  ],
+                  attrs: { name: "action", id: "bulk-action-selector-top" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.bulkAction = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "-1" } }, [
+                    _vm._v("Bulk Actions")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "delete" } }, [
+                    _vm._v("Delete")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "button hrm-button-secondary button-secondary",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.selfBulkAction()
+                    }
+                  }
+                },
+                [_vm._v("Apply")]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "hrm-table-action  hrm-filter-wrap" }, [
+          _c("div", { staticClass: "alignleft actions" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.recordSearch()
+                  }
+                }
+              },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search.title,
+                      expression: "search.title"
+                    }
+                  ],
+                  attrs: { placeholder: "Title", type: "text" },
+                  domProps: { value: _vm.search.title },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.search, "title", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("hrm-date-picker", {
+                  staticClass: "pm-datepickter-to",
+                  attrs: {
+                    placeholder: "From",
+                    dependency: "pm-datepickter-from"
+                  },
+                  model: {
+                    value: _vm.search.from,
+                    callback: function($$v) {
+                      _vm.$set(_vm.search, "from", $$v)
+                    },
+                    expression: "search.from"
+                  }
+                }),
+                _vm._v(" "),
+                _c("hrm-date-picker", {
+                  staticClass: "pm-datepickter-from",
+                  attrs: { placeholder: "To", dependency: "pm-datepickter-to" },
+                  model: {
+                    value: _vm.search.to,
+                    callback: function($$v) {
+                      _vm.$set(_vm.search, "to", $$v)
+                    },
+                    expression: "search.to"
+                  }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "button hrm-button-secondary button-secondary",
+                  attrs: { type: "submit", value: "Filter" }
+                })
+              ],
+              1
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "hrm-clear" })
+      ]),
+      _vm._v(" "),
+      _c("hrm-table"),
+      _vm._v(" "),
+      _c("hrm-pagination", {
+        attrs: {
+          total_pages: _vm.pagination.total_pages,
+          component_name: "notice_pagination"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c63989b6", esExports)
+  }
+}
+
+/***/ }),
+/* 555 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(552);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("73e07d5a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c63989b6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./revision.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c63989b6\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./revision.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 556 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(548);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	mixins: [__WEBPACK_IMPORTED_MODULE_0__mixin__["default"]],
+	props: {
+		deleteCheckbox: {
+			type: [Boolean],
+			default() {
+				return true;
+			}
+		},
+		fields: {
+			type: [Array],
+			default() {
+				return [];
+			}
+		}
+	},
+
+	data() {
+		return {
+			canSubmit: true,
+			loading: false,
+			deleteAllStatus: false,
+			deletedId: [],
+			isFetchRecord: false
+		};
+	},
+
+	created() {
+		this.getRecords();
+	},
+
+	computed: {
+		records() {
+			return this.$store.state[this.nameSpace].records;
+		}
+	},
+
+	watch: {
+		deletedId() {
+			this.$store.commit(this.nameSpace + '/setDeletedId', this.deletedId);
+		},
+		'$route'(to, from) {
+			this.getRecords();
+		}
+	},
+	methods: {
+		filterEditField(fields) {
+			return fields.filter(function (field) {
+				return field.editable ? true : false;
+			});
+		},
+		filterHeader(fields) {
+			return fields.filter(function (field) {
+				return typeof field.tableHead === 'undefined' ? false : true;
+			});
+		},
+		printCellData(record, field) {
+			if (typeof field.filterPrintData == 'undefined') {
+				return record[field.name];
+			}
+
+			return field.filterPrintData(record[field.name]);
+		},
+
+		recordEditForm(record, status) {
+			status = status || 'toggle';
+			this.$store.commit(this.nameSpace + '/showHideEditForm', {
+				id: record.id,
+				status: status
+			});
+		},
+
+		selfUpdate(record) {
+
+			var self = this,
+			    data = {};
+
+			data['class'] = self.modelName;
+			data['method'] = 'update';
+			data['transformers'] = self.modelTransformer;
+			data['id'] = record.id;
+
+			self.fields.forEach(function (field) {
+				if (!field.editable) {
+					return;
+				}
+
+				if (typeof field.filterEditingData != 'undefined') {
+					data[field.name] = field.filterEditingData(record[field.name]);
+				} else {
+					data[field.name] = record[field.name];
+				}
+			});
+
+			var args = {
+				data: data,
+				callback() {
+					self.canSubmit = true;
+					self.loading = false;
+				}
+			};
+			if (!this.editFormValidation(self.fields, args.data)) {
+				return false;
+			}
+			self.canSubmit = false;
+			self.loading = true;
+
+			this.updateRecord(args);
+		},
+		selfDelete(record) {
+			var self = this;
+			this.recordDelete([record.id], function () {
+				var hasRecords = self.$store.state[self.nameSpace].records.length;
+				var page = self.$route.params.current_page_number;
+				if (!hasRecords && page > 1) {
+					self.$router.push({
+						params: {
+							current_page_number: page - 1
+						},
+						query: self.$route.query
+					});
+				}
+
+				if (!hasRecords && typeof self.pagination != 'undefined' && self.pagination.total_pages > 1) {
+					self.getRecords();
+				}
+			});
+		},
+		deleteAll() {
+			if (this.deleteAllStatus) {
+				var deleted_id = [];
+
+				this.$store.state[this.nameSpace].records.map(function (record) {
+					deleted_id.push(record.id);
+				});
+
+				this.deletedId = deleted_id;
+			} else {
+				this.deletedId = [];
+			}
+		},
+
+		actionCheckbox() {
+			let records = this.$store.state[this.nameSpace].records;
+
+			if (records.length == this.deletedId.length) {
+				this.deleteAllStatus = true;
+			} else {
+				this.deleteAllStatus = false;
+			}
+		}
+	}
+
+});
+
+/***/ }),
+/* 557 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 558 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_revision_table_vue__ = __webpack_require__(556);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7f3336b4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_revision_table_vue__ = __webpack_require__(559);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(560)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_revision_table_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7f3336b4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_revision_table_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/payroll/revision/revision-table.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7f3336b4", Component.options)
+  } else {
+    hotAPI.reload("data-v-7f3336b4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 559 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "hrm-list-table" } }, [
+    _vm.isFetchRecord
+      ? _c(
+          "table",
+          { staticClass: "wp-list-table widefat fixed striped pages" },
+          [
+            _c("thead", [
+              _c("tr", [
+                _vm.manageOrganization()
+                  ? _c(
+                      "td",
+                      {
+                        staticClass: "manage-column column-cb check-column",
+                        attrs: { id: "cb" }
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.deleteAllStatus,
+                              expression: "deleteAllStatus"
+                            }
+                          ],
+                          attrs: { id: "cb-select-all-1", type: "checkbox" },
+                          domProps: {
+                            checked: Array.isArray(_vm.deleteAllStatus)
+                              ? _vm._i(_vm.deleteAllStatus, null) > -1
+                              : _vm.deleteAllStatus
+                          },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$a = _vm.deleteAllStatus,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = null,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.deleteAllStatus = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.deleteAllStatus = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.deleteAllStatus = $$c
+                                }
+                              },
+                              function($event) {
+                                $event.preventDefault()
+                                _vm.deleteAll()
+                              }
+                            ]
+                          }
+                        })
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("th", [
+                  _vm._v(
+                    "\n                    \tEmployee Name\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("th", [
+                  _vm._v("\n                    \tDate\n                    ")
+                ]),
+                _vm._v(" "),
+                _c("th", [
+                  _vm._v("\n                    \tGross\n                    ")
+                ]),
+                _vm._v(" "),
+                _c("th", [
+                  _vm._v(
+                    "\n                    \tDeduction\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("th", [
+                  _vm._v(
+                    "\n                    \tNet Pay\n                    "
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              [
+                _vm._l(_vm.records, function(record, record_index) {
+                  return !record.editMode
+                    ? _c("tr", { key: record_index }, [
+                        _vm.manageOrganization()
+                          ? _c(
+                              "th",
+                              {
+                                staticClass: "check-column",
+                                attrs: { scope: "row" }
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.deletedId,
+                                      expression: "deletedId"
+                                    }
+                                  ],
+                                  attrs: {
+                                    id: "cb-select-7",
+                                    type: "checkbox"
+                                  },
+                                  domProps: {
+                                    value: record.id,
+                                    checked: Array.isArray(_vm.deletedId)
+                                      ? _vm._i(_vm.deletedId, record.id) > -1
+                                      : _vm.deletedId
+                                  },
+                                  on: {
+                                    change: [
+                                      function($event) {
+                                        var $$a = _vm.deletedId,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = record.id,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              (_vm.deletedId = $$a.concat([
+                                                $$v
+                                              ]))
+                                          } else {
+                                            $$i > -1 &&
+                                              (_vm.deletedId = $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1)))
+                                          }
+                                        } else {
+                                          _vm.deletedId = $$c
+                                        }
+                                      },
+                                      function($event) {
+                                        _vm.actionCheckbox()
+                                      }
+                                    ]
+                                  }
+                                })
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("span", [
+                            _vm._v(_vm._s(record.employee.data.display_name))
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "row-actions" }, [
+                            _c("span", { staticClass: "trash" }, [
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.selfDelete(record)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Delete")]
+                              )
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                    \t" +
+                              _vm._s(record.month) +
+                              "\n                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                    \t" +
+                              _vm._s(record.info.meta.salaryMeta.incomeTotal) +
+                              "\n                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                    \t(-)" +
+                              _vm._s(
+                                record.info.meta.salaryMeta.deductionTotal
+                              ) +
+                              "\n                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                    \t" +
+                              _vm._s(record.info.meta.salaryMeta.employeeGet) +
+                              "\n                    "
+                          )
+                        ])
+                      ])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                !_vm.records.length
+                  ? _c("tr", [
+                      _c("td", { attrs: { colspan: _vm.fields.length + 1 } }, [
+                        _vm._v("\n\t\t\t\t\t\tNo result found!\n\t\t\t\t\t")
+                      ])
+                    ])
+                  : _vm._e()
+              ],
+              2
+            )
+          ]
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7f3336b4", esExports)
+  }
+}
+
+/***/ }),
+/* 560 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(557);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("e43a6e5c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7f3336b4\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./revision-table.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7f3336b4\",\"scoped\":false,\"hasInlineConfig\":false}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./revision-table.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

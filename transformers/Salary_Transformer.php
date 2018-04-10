@@ -17,10 +17,10 @@ class Salary_Transformer extends TransformerAbstract
     {
         return [
             'id'                   => $item->id,
-            'month'                => $item->month,
+            'month'                => hrm_get_date( $item->month ),
             'category'             => $item->category,
             'category_id'          => $item->category_id,
-            'employee_id'          => $item->employee_id,
+            'employee'             => get_user_by( 'id', $item->employee_id ),
             'group_id'             => $item->group_id,
             'salary_components_id' => maybe_unserialize( $item->salary_components_id ),
             'all_components_id'    => maybe_unserialize( $item->all_components_id ),

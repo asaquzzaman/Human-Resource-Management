@@ -1,6 +1,7 @@
 export default {
 	state: {
 		isNewRecordFormActive: false,
+		employees: [],
 		records: [],
 		getIndex: function ( itemList, id, slug) {
             return itemList.findIndex(x => x[slug]==id);
@@ -40,6 +41,9 @@ export default {
 	},
 
 	mutations: {
+		setEmployees (state, employees) {
+			state.employees = employees;
+		},
 		showHideNewRecordForm  (state, status) {
 			if (status === 'toggle') {
 				status = state.isNewRecordFormActive ? false : true;

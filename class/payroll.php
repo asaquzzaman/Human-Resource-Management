@@ -33,7 +33,95 @@ class Hrm_Payroll {
         add_action( 'wp_ajax_hrm_get_employee_salary', array( $this, 'ajax_get_employee_salary' ) );
         add_action( 'wp_ajax_hrm_fetch_statement', array( $this, 'ajax_fetch_statement' ) );
         add_action( 'wp_ajax_hrm_get_salary', array( $this, 'ajax_get_salary' ) );
+        add_action( 'wp_ajax_hrm_insert_formula', array( $this, 'ajax_insert_formula' ) );
+        add_action( 'wp_ajax_hrm_check_formula_validity', array( $this, 'ajax_check_formula_validity' ) );
 
+    }
+
+    function ajax_insert_formula() {
+        check_ajax_referer('hrm_nonce');
+        $salary = self::getInstance()->insert_formula( $_POST );
+
+        wp_send_json_success( $salary );
+    }
+
+    function insert_formula( $postData ) {
+        
+        $formula_val = $this->formula_validator( $postData['formula'] );
+
+        if ( !floatval( $formula_val ) ) {
+            wp_send_json_error(array(
+                'error' => array(
+                    'Formula is not valid!'
+                )
+            ));
+        }
+        
+        return hrm_insert_records($postData);
+    }
+
+    function update_formula( $postdata ) {
+
+        $formula_val = $this->formula_validator( $postdata['formula'] );
+        
+        if ( !floatval( $formula_val ) ) {
+            wp_send_json_error(array(
+                'error' => array(
+                    'Formula is not valid!'
+                )
+            ));
+        }
+        
+        $update = array(
+            'class'        => 'Formula',
+            'method'       => 'update',
+            'transformers' => 'Formula_Transformer',
+            'status'       => 'disable',
+            'id'           => empty( intval( $postdata[id] ) ) ? false : intval( $postdata[id] )
+        );
+
+        hrm_update_records( $update );
+
+        $postdata['method'] =  'create';
+        unset( $postdata['id'] );
+
+        return hrm_insert_records( $postdata );
+    }
+
+    function formula_validator( $defination ) {
+        $salary         = '1000000';
+        $salary_period  = true;
+        $all_formulas = $this->get_formula();
+        $formulas_name  = array();
+    
+
+        foreach ( $all_formulas['data'] as $key => $formula ) {
+            $formulas_name[$formula['name']] = $formula['formula'];
+        }
+
+ 
+        return hrm_formula_replace( $salary, $defination, $formulas_name, $salary_period );
+      
+    }
+
+    function ajax_check_formula_validity() {
+        check_ajax_referer('hrm_nonce');
+        
+        $formula_val = self::getInstance()->formula_validator( $_POST['formula'] );
+
+        if ( floatval( $formula_val ) ) {
+            wp_send_json_success(
+                array(
+                    'message' =>'Formula is valid!'
+                )
+            );
+        }
+
+        wp_send_json_error(array(
+            'error' => array(
+                'Formula is not valid!'
+            )
+        ));
     }
 
     function ajax_get_salary() {
@@ -44,16 +132,15 @@ class Hrm_Payroll {
     }
 
     function get_salary( $postData ) {
-        $start_date  = date( 'Y-m-01', strtotime( current_time( 'mysql' ) ) );
-        $end_date    = date( 'Y-m-t', strtotime( current_time( 'mysql' ) ) );
-        $employee_id = empty( $postdata['employee_id'] ) ? '' : $postdata['employee_id'];
-        $page        = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
-        $from        = empty( $postdata['from'] ) ? $start_date : $postdata['from'];
-        $to          = empty( $postdata['to'] ) ? $end_date : $postdata['to'];
-        $id          = empty( $postdata['id'] ) ? false : $postdata['id'];
+        $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : $postData['from'];
+        $start_date  = date( 'Y-m-01', strtotime( $salary_date ) );
+        $end_date    = date( 'Y-m-t', strtotime( $salary_date ) );
+        $employee_id = empty( $postData['employee_id'] ) ? '' : $postData['employee_id'];
+        $page        = empty( $postData['page'] ) ? 1 : intval( $postData['page'] );
+        $id          = empty( $postData['id'] ) ? false : $postData['id'];
 
         $per_page = hrm_per_page();
-
+ 
         if ( $id !== false  ) {
 
             $location = Salary::find( $id );
@@ -66,24 +153,24 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
-        $location = Salary::where( function($q) use( $title, $from, $to ) {
+        $location = Salary::where( function($q) use( $start_date, $end_date, $employee_id ) {
             if ( ! empty(  $employee_id ) ) {
                 $q->where( 'employee_id', $employee_id );
             }
 
-            if ( ! empty( $from ) ) {
-                $from = date( 'Y-m-d', strtotime( $from ) );
-                $q->where( 'month', '>=', $from);
+            if ( ! empty( $start_date ) ) {
+                $start_date = date( 'Y-m-d', strtotime( $start_date ) );
+                $q->where( 'month', '>=', $start_date);
             }
 
-            if ( ! empty( $to ) ) {
-                $to = date( 'Y-m-d', strtotime( $to ) );
-                $q->where( 'month', '<=', $to);
+            if ( ! empty( $end_date ) ) {
+                $end_date = date( 'Y-m-d', strtotime( $end_date ) );
+                $q->where( 'month', '<=', $end_date);
             }
         })
         ->orderBy( 'id', 'DESC' )
         ->paginate( $per_page, ['*'], 'page', $page );
-    
+
         $collection = $location->getCollection();
 
         $resource = new Collection( $collection, new Salary_Transformer );
@@ -394,24 +481,6 @@ class Hrm_Payroll {
 
             hrm_update_records( $update );
         }
-    }
-
-    function update_formula( $postdata ) {
-        
-        $update = array(
-            'class'        => 'Formula',
-            'method'       => 'update',
-            'transformers' => 'Formula_Transformer',
-            'status'       => 'disable',
-            'id'           => empty( intval( $postdata[id] ) ) ? false : intval( $postdata[id] )
-        );
-
-        hrm_update_records( $update );
-
-        $postdata['method'] =  'create';
-        unset( $postdata['id'] );
-
-        return hrm_insert_records( $postdata );
     }
 
     function ajax_get_formula() {

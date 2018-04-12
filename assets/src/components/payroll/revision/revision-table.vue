@@ -31,7 +31,7 @@
 					</th>
 					
                     <td>
-                    	<span>{{ record.employee.data.display_name }}</span>
+                    	<span><a href="#" @click.prevent="salaryDetails(record)">{{ record.employee.data.display_name }}</a></span>
                     	<div class="row-actions">
 	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
@@ -52,12 +52,14 @@
                
 
 				<tr v-if="!records.length">
-					<td :colspan="fields.length + 1">
+					<td colspan="6">
 						No result found!
 					</td>
 				</tr>
             </tbody>
         </table>
+
+        <salary-details v-if="popUpDetails" v-hrm-dialog :salary="salary" title="Salary Details"></salary-details>
 	</div>
 </template>
 
@@ -73,6 +75,7 @@
 
 <script>
 	import Mixin from './mixin'
+	import SalaryDetails from './salary-details'
 
 	export default {
 		mixins: [Mixin],	
@@ -97,12 +100,18 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
-				isFetchRecord: false
+				isFetchRecord: false,
+				salary: {},
+				popUpDetails: false
 			}
 		},
 		
 		created () {
 			this.getRecords();
+		},
+
+		components: {
+			'salary-details': SalaryDetails
 		},
 
 		computed: {
@@ -236,6 +245,16 @@
 				} else {
 					this.deleteAllStatus = false;
 				}
+			},
+
+			salaryDetails (record) {
+				this.salary = record;
+				this.popUpDetails = true;
+			},
+
+			afterCloseDialog (self) {
+				self.salary = {};
+				self.popUpDetails = false;
 			}
 		}
 		

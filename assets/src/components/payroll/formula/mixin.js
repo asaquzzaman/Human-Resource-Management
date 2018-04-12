@@ -82,11 +82,12 @@ export default {
                 },
 
                 error: function(res) {
-                	
                 	// Showing error
                     res.error.map( function( value, index ) {
-                        hrm.toastr.error(value);
+                        hrm.Toastr.error(value);
                     });
+
+                    self.loadingStop('hrm-formula-form');
 
                     if (typeof args.callback === 'function') {
                         args.callback(false, res);
@@ -131,16 +132,59 @@ export default {
                         hrm.Toastr.error(value);
                     });
 
+                    self.loadingStop('hrm-formula-form');
+
                     if (typeof args.callback === 'function') {
                         args.callback(false, res);
                     } 
                 }
             };
 
-            this.httpRequest('hrm_insert_record', form_data);
+            this.httpRequest('hrm_insert_formula', form_data);
 		},
 
+		checkFormulaValidity (args) {
+			var self = this;
 
+			var form_data = {
+                data: args.data,
+
+                beforeSend () {
+                	self.loadingStart(
+                		'hrm-formula-form', 
+                		{animationClass: 'preloader-update-animation'}
+                	);
+                },
+
+                success: function(res) {
+             
+                	self.loadingStop('hrm-formula-form');
+
+                    hrm.Toastr.success(res.message);
+
+                	if (typeof args.callback === 'function') {
+                        args.callback(true, res);
+                    } 
+                    
+                },
+
+                error: function(res) {
+
+                	// Showing error
+                    res.error.map( function( value, index ) {
+                        hrm.Toastr.error(value);
+                    });
+
+                    self.loadingStop('hrm-formula-form');
+
+                    if (typeof args.callback === 'function') {
+                        args.callback(false, res);
+                    } 
+                }
+            };
+
+            this.httpRequest('hrm_check_formula_validity', form_data);
+		},
 
 		fetchRecords () {
 			var self = this;

@@ -1,5 +1,5 @@
 <template>
-	<div class="page-organization">
+	<div class="page-revision">
 
 		<payroll-menu></payroll-menu>
 
@@ -18,9 +18,28 @@
 			<div class="hrm-table-action  hrm-filter-wrap">
 				<div class="alignleft actions">
 					<form @submit.prevent="recordSearch()">
-						<input v-model="search.title" placeholder="Title" type="text">
-						<hrm-date-picker placeholder="From" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-						<hrm-date-picker placeholder="To" v-model="search.to" class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
+
+						<div class="hrm-multiselect">
+							<hrm-multiselect 
+					            v-model="employee" 
+					            :options="employees" 
+					            :multiple="false" 
+					            :close-on-select="true"
+					            :clear-on-select="true"
+					            :hide-selected="false"
+					            :show-labels="true"
+					            placeholder="Employees"
+					            select-label=""
+					            selected-label="selected"
+					            deselect-label=""
+					            :taggable="false"
+					            label="display_name"
+					            :allow-empty="true">
+
+					        </hrm-multiselect>  
+				    	</div>
+					    
+						<hrm-date-picker placeholder="Salary date" v-model="search.from"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
 						<input type="submit" class="button hrm-button-secondary button-secondary" value="Filter">
 					</form>
 				</div>
@@ -47,6 +66,9 @@
 	.hrm-tbl-action-wrap {
 		margin-top: 20px;
 	}
+	.page-revision .hrm-multiselect {
+		display: inline-block;
+	}
 </style>
 
 <script>
@@ -60,17 +82,37 @@
 		data () {
 
 			return {
+				employee: '',
 				search: {
 					filter: 'active',
 					title: this.$route.query.title,
 					from: this.$route.query.from,
-					to: this.$route.query.to
+					to: this.$route.query.to,
+					employee_id: ''
 				},
 				bulkAction: -1,
 			}
 		},
+
+		created () {
+			var self = this;
+			this.getEmployess({
+				callback (res) {
+					
+					let empId = self.$route.query.employee_id;
+
+					if(empId) {
+						let index = self.getIndex(res.data, empId, 'id');
+	                	self.employee = res.data[index];
+					}
+				}
+			});
+		},
 		
 		computed: {
+			employees () {
+				return this.$store.state[this.nameSpace].employees;
+			},
 			isNewRecordFormActive () {
 				return this.$store.state[this.nameSpace].isNewRecordFormActive;
 			},
@@ -85,9 +127,31 @@
 		},
 		components: {
 			'hrm-table': Table,
+			'hrm-multiselect': hrm.Multiselect.Multiselect
 		},
 
 		methods: {
+			getEmployess (args) {
+				var self = this;
+
+				var form_data = {
+		            data: {
+		            	number: -1
+		            },
+
+		            success: function(res) {
+		            	self.$store.commit(self.nameSpace + '/setEmployees', res.data);
+		            	if(typeof args.callback != 'undefined') {
+		            		args.callback(res);
+		            	}
+		            },
+
+		            error: function(res) {
+		            }
+		        };
+
+		        this.httpRequest('hrm_employee_filter', form_data);
+			},
 
 			selfBulkAction () {
 				var self = this;
@@ -118,6 +182,11 @@
 			},
 
 			recordSearch () {
+			
+				if(this.employee) {
+					this.search.employee_id = this.employee.id;
+				}
+				
 				this.$router.push({query: this.search});
 				this.getRecords();
 			}

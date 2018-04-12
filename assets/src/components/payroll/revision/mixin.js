@@ -143,7 +143,7 @@ export default {
 			};
 			
             var request_data = {
-                data: postData,
+                data: self.$route.query,
                 beforeSend () {
 	            	self.loadingStart('hrm-list-table');
 	            },
@@ -194,6 +194,7 @@ export default {
 
 		recordMeta (record) {
 			record['editMode'] = false;
+			record['showDetails'] = false;
 		},
 
 		filter (callback) {

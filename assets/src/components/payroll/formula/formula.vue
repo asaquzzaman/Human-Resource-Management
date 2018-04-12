@@ -116,7 +116,7 @@
 									<input v-if="!formulaID" :disabled="!canSubmit" type="submit" class="button button-primary hrm-button-primary" value="Save Change">
 									<input v-if="formulaID" :disabled="!canSubmit" type="submit" class="button button-primary hrm-button-primary" value="Update">
 									<a v-if="formulaID" href="#" @click.prevent="cancelUpdate()" class="button button-secondary hrm-button-secondary">Cancel</a>
-									<a href="#" @click.prevent="checkFormulaValidity()" class="button button-secondary hrm-button-secondary">Check Formula Validity</a>
+									<a href="#" @click.prevent="checkSelfFormulaValidity()" class="button button-secondary hrm-button-secondary">Check Formula Validity</a>
 								</div>
 							</div>
 						</form>
@@ -405,13 +405,15 @@
 					data: postData,
 
 					callback (success, res) {
+						if(success) {
+							self.name = '';
+							self.formula = '';
+							self.type = '';
+							self.description = '';
+							self.formulaID = false;
+						}
 						self.loading = false;
 						self.canSubmit = true;
-						self.name = '';
-						self.formula = '';
-						self.type = '';
-						self.description = '';
-						self.formulaID = false;
 					}
 				}
 				if (this.formulaID) {
@@ -445,8 +447,22 @@
 				this.recordDelete([formula.id]);
 			},
 
-			checkFormulaValidity () {
+			checkSelfFormulaValidity () {
+				if (!this.formula) {
+					hrm.Toastr.error('Formula is required!');
+					return;
+				}
 
+				var args = {
+					data: {
+						formula: this.formula,
+					},
+					callback (res) {
+
+					}
+				}
+
+				this.checkFormulaValidity(args);
 			}
 		}
 	}

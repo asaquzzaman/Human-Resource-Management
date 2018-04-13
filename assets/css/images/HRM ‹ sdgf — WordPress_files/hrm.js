@@ -1486,7 +1486,7 @@ var action = {
 	},
 
 	components: {
-		'hrm-multiselect': hrm.Multiselect.Multiselect
+		'hrm-multiselect': hrm.Multiselect
 	},
 
 	computed: {
@@ -1859,7 +1859,7 @@ hrm.Vue.directive('hrm-uploader', {
 	},
 
 	components: {
-		'hrm-multiselect': hrm.Multiselect.Multiselect
+		'hrm-multiselect': hrm.Multiselect
 	}
 });
 

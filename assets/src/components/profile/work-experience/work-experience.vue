@@ -56,6 +56,7 @@
 <script>
 	import Table from './work-experience-table.vue';
 	import Form from './new-work-experience-form.vue';
+	import Mixin from './mixin'
 
 	export default {
 		data () {
@@ -99,7 +100,7 @@
 				]
 			}
 		},
-		mixins: [HRMMixin.workExperience],
+		mixins: [Mixin],
 	
 
 		computed: {

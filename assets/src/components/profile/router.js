@@ -5,23 +5,27 @@ import './work-experience/router';
 import './education/router';
 import './skill/router';
 
-let personalInformation = resolve => {
-    require.ensure(['./personal-information.vue'], () => {
-        resolve(require('./personal-information.vue'));
-    });
-}
+import personalInformation from './personal-information.vue'
+import jobLocation from './job-location.vue'
+import profile from './profile.vue'
 
-let jobLocation = resolve => {
-    require.ensure(['./job-location.vue'], () => {
-        resolve(require('./job-location.vue'));
-    });
-}
+// let personalInformation = resolve => {
+//     require.ensure(['./personal-information.vue'], () => {
+//         resolve(require('./personal-information.vue'));
+//     });
+// }
 
-let profile = resolve => {
-    require.ensure(['./profile.vue'], () => {
-        resolve(require('./profile.vue'));
-    });
-}
+// let jobLocation = resolve => {
+//     require.ensure(['./job-location.vue'], () => {
+//         resolve(require('./job-location.vue'));
+//     });
+// }
+
+// let profile = resolve => {
+//     require.ensure(['./profile.vue'], () => {
+//         resolve(require('./profile.vue'));
+//     });
+// }
 
 function HRM_URM_Params (self, params) {
     let employeeId = self.$route.params.employeeId 

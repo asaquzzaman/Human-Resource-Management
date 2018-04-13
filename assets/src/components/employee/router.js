@@ -1,12 +1,15 @@
 
 HRMRegisterModule('employee', 'employee');
 
-let employee = resolve => {
+import employee from './employee.vue'
 
-    require.ensure(['./employee.vue'], () => {
-        resolve(require('./employee.vue'));
-    });
-}
+
+// let employee = resolve => {
+
+//     require.ensure(['./employee.vue'], () => {
+//         resolve(require('./employee.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('hrm_root', 
     [

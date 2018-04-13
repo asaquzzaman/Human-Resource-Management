@@ -55,9 +55,10 @@
 	import Table from './location-table.vue';
 	import Form from './new-location-form.vue';
 	import Countires from '@helpers/countries/countries'
+    import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.location],
+		mixins: [Mixin],
 
 		data () {
 

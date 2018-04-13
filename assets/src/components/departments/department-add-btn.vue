@@ -6,7 +6,9 @@
 </template>
 
 <script>
+	import Mixin from './mixin'
+	
 	export default {
-		mixins: [HRMMixin.departments],
+		mixins: [Mixin],
 	}
 </script>

@@ -71,9 +71,10 @@
 
 <script>
 	import Countires from '@helpers/countries/countries'
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [Mixin],
 		data () {
 			return {
 				isFetchRecord: false

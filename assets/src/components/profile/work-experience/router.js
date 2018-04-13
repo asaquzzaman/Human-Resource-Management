@@ -1,11 +1,13 @@
 
 HRMRegisterModule('workExperience', 'profile/work-experience');
 
-let workExperience = resolve => {
-    require.ensure(['./work-experience.vue'], () => {
-        resolve(require('./work-experience.vue'));
-    });
-}
+import workExperience from './work-experience.vue'
+
+// let workExperience = resolve => {
+//     require.ensure(['./work-experience.vue'], () => {
+//         resolve(require('./work-experience.vue'));
+//     });
+// }
 
 function HRM_URM_Params (self, params) {
     let employeeId = self.$route.params.employeeId 

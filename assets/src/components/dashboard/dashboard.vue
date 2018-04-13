@@ -257,9 +257,10 @@
 
 <script>
 	import Directive from './directive'
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.dashboard],
+		mixins: [Mixin],
 
 		data () {
 			return {

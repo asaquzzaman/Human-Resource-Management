@@ -52,10 +52,11 @@
 <script>
 	
 	import EditForm from './holiday-edit-form.vue';
-
+    import Mixin from './mixin'
+	
 	export default {
 
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		
 		data: function() {
 			return {

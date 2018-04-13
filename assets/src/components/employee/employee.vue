@@ -55,9 +55,11 @@
 	import Table from './employee-table.vue';
 	import Form from './new-employee-form.vue';
 	import { FormFields } from './employee-form-fields';
+    import Mixin from './mixin'
+	
 
 	export default {
-		mixins: [HRMMixin.employee],
+		mixins: [Mixin],
 
 		data () {
 

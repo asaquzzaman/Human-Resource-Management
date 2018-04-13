@@ -175,7 +175,7 @@
 		},
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect.Multiselect
+			'hrm-multiselect': hrm.Multiselect
 		}
 	}
 </script>

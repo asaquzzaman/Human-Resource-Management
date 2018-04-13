@@ -24,8 +24,10 @@
 </template>
 
 <script>
+    import Mixin from './mixin'
+	
 	export default {
-		mixins: [HRMMixin.employee],
+		mixins: [Mixin],
 		props: {
 			fields: {
 				type: [Array]

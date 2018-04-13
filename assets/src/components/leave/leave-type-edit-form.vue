@@ -102,11 +102,12 @@
 </style>
 
 <script>
-
+    import Mixin from './mixin'
+	
 	export default {
 		props: ['leaveType'],
 
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 
 		data () {
 			return {
@@ -121,7 +122,7 @@
 		},
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect.default
+			'hrm-multiselect': hrm.Multiselect
 		},
 
 		methods: {

@@ -70,8 +70,10 @@
 </style>
 
 <script>
+	import Mixin from '@components/profile/mixin'
+	
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [Mixin],
 
 		data () {
 			return {

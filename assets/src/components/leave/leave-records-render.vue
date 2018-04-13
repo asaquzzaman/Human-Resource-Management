@@ -94,6 +94,8 @@
 
 <script>
 	import LeaveSearch from './leave-search.vue';
+    import Mixin from './mixin'
+	
 	export default {
 		data() {
 			return {
@@ -104,7 +106,7 @@
 				}
 			}
 		},
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		computed: {
 			financialStart () {
 				return this.$route.query.start_time || HRM_Vars.financial_start;

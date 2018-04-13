@@ -136,7 +136,8 @@
 <script>
 
 	import records_directive from './leave-form-directive';
-
+    import Mixin from './mixin'
+	
 	export default {
 		data: function() {
 			return {
@@ -179,10 +180,10 @@
 			}
 		},
 
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect.default
+			'hrm-multiselect': hrm.Multiselect
 		},
 
 		created: function() {

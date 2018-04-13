@@ -71,8 +71,10 @@
 </style>
 
 <script>
+	import Mixin from './mixin'
+
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [Mixin],
 
 		data () {
 			return {

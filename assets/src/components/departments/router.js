@@ -1,19 +1,23 @@
 
 HRMRegisterModule('departments', 'departments');
 
-let departments = resolve => {
+import departments from './departments.vue'
+import pagination from './department-pagination.vue'
 
-    require.ensure(['./departments.vue'], () => {
-        resolve(require('./departments.vue'));
-    });
-}
 
-let pagination = resolve => {
+// let departments = resolve => {
 
-    require.ensure(['./department-pagination.vue'], () => {
-        resolve(require('./department-pagination.vue'));
-    });
-}
+//     require.ensure(['./departments.vue'], () => {
+//         resolve(require('./departments.vue'));
+//     });
+// }
+
+// let pagination = resolve => {
+
+//     require.ensure(['./department-pagination.vue'], () => {
+//         resolve(require('./department-pagination.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('hrm_root', 
     [

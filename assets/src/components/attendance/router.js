@@ -1,23 +1,28 @@
 
 HRMRegisterModule('attendance', 'attendance');
 
-let hrm_attendace_records = resolve => {
-    require.ensure(['./attendance-records.vue'], () => {
-        resolve(require('./attendance-records.vue'));
-    });
-}
+import hrm_attendace_records from './attendance-records.vue'
+import hrm_attendace_user_search from './attendance-user-search.vue'
+import hrm_attendace_configuration from './attendance-configuration.vue'
 
-let hrm_attendace_user_search = resolve => {
-    require.ensure(['./attendance-user-search.vue'], () => {
-        resolve(require('./attendance-user-search.vue'));
-    });
-}
 
-let hrm_attendace_configuration = resolve => {
-    require.ensure(['./attendance-configuration.vue'], () => {
-        resolve(require('./attendance-configuration.vue'));
-    });
-}
+// let hrm_attendace_records = resolve => {
+//     require.ensure(['./attendance-records.vue'], () => {
+//         resolve(require('./attendance-records.vue'));
+//     });
+// }
+
+// let hrm_attendace_user_search = resolve => {
+//     require.ensure(['./attendance-user-search.vue'], () => {
+//         resolve(require('./attendance-user-search.vue'));
+//     });
+// }
+
+// let hrm_attendace_configuration = resolve => {
+//     require.ensure(['./attendance-configuration.vue'], () => {
+//         resolve(require('./attendance-configuration.vue'));
+//     });
+// }
 
 import Empty from './empty.vue'
 

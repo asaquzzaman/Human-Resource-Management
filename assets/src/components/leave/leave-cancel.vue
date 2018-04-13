@@ -103,13 +103,15 @@
 </style>
 
 <script>
+    import Mixin from './mixin'
+	
 	export default {
 		beforeRouteEnter (to, from, next) {
 			next (vm => {
 				vm.getSelfLeaveRecords();
 			});
 		},
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		computed: {
 			pendingLeaves () {
 				return this.$store.state.leave.cancelLeaves;

@@ -43,9 +43,11 @@
 	import DepartmentDelButton from './department-del-btn.vue';
 	import DepartmentTable from './department-table.vue';
 	import DepartmentPagination from './department-pagination.vue';
+	import Mixin from './mixin'
+	
 
 	export default {
-		mixins: [HRMMixin.departments],
+		mixins: [Mixin],
 		created () {
 			//this.getDepartments();
 		},

@@ -15,7 +15,7 @@ function resolve (dir) {
 module.exports = {
 	entry: {
         'hrm': './assets/src/start.js',
-        'library': './assets/src/helpers/library.js',
+       // 'library': './assets/src/helpers/library.js',
     },
 	
 	output: {

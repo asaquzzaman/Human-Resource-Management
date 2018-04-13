@@ -1,12 +1,15 @@
 
 HRMRegisterModule('dashboard', 'dashboard');
 
-let dashboard = resolve => {
+import dashboard from './dashboard.vue'
 
-    require.ensure(['./dashboard.vue'], () => {
-        resolve(require('./dashboard.vue'));
-    });
-}
+
+// let dashboard = resolve => {
+
+//     require.ensure(['./dashboard.vue'], () => {
+//         resolve(require('./dashboard.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('hrm_root', 
     [

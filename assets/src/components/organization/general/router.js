@@ -1,11 +1,14 @@
 HRMRegisterModule('general', 'organization/general');
 
-let general = resolve => {
+import general from './general-information.vue'
 
-    require.ensure(['./general-information.vue'], () => {
-        resolve(require('./general-information.vue'));
-    });
-}
+
+// let general = resolve => {
+
+//     require.ensure(['./general-information.vue'], () => {
+//         resolve(require('./general-information.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('organization', 
     [

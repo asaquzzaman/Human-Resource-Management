@@ -5,13 +5,15 @@ import mixin from './mixin';
 HRMMixin.settings = mixin;
 
 import Settings from './settings.vue';
+import Hrm_Settings from './general.vue'
 
-const Hrm_Settings = resolve => {
 
-    require.ensure(['./general.vue'], () => {
-        resolve(require('./general.vue'));
-    });
-}
+// const Hrm_Settings = resolve => {
+
+//     require.ensure(['./general.vue'], () => {
+//         resolve(require('./general.vue'));
+//     });
+// }
 
 let settingsMenu = [
 	{ 

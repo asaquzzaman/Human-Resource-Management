@@ -55,9 +55,10 @@
 <script>
 	import Table from './designation-table.vue';
 	import Form from './new-designation-form.vue';
-
+    import Mixin from './mixin'
+	
 	export default {
-		mixins: [HRMMixin.designation],
+		mixins: [Mixin],
 
 		data () {
 

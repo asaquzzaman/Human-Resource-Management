@@ -183,7 +183,7 @@ class WP_Hrm {
 
 
     function instantiate() {
-
+        Hrm_Scripts::getInstance();
         Hrm_Ajax::getInstance();
         Hrm_Admin::getInstance();
         Hrm_Leave::getInstance();

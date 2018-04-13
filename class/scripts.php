@@ -11,189 +11,33 @@ class Hrm_Scripts {
         return self::$_instance;
     }
 
-    public static function get_sub_tab() {
-    	$query_args = hrm_get_query_args();
-
-		$tab     = $query_args['tab'];
-		$sub_tab = $query_args['subtab'] ? $query_args['subtab'] : $tab;
-
-		return $sub_tab;
+    public function __construct() {
+        add_action( 'admin_enqueue_scripts', array ( $this, 'register_scripts' ) );
+        add_action( 'wp_enqueue_scripts', array ( $this, 'register_scripts' ) );
     }
 
-    public static function admin() {
-        self::footer_tag();
-  //   	$sub_tab = self::get_sub_tab();
+    public static function register_scripts() {
+        $scripts = self::scripts();
 
-		// switch ( $sub_tab ) {
-		// 	case 'department':
-		// 		self::department();
-		// 		break;
+        foreach ( $scripts as $script ) {
 
-  //           case 'hrm_attendance':
-  //               self::attendance_scripts();
-  //               break;
-			
-		// 	default:
-		// 		self::admin_default();
-		// 		break;
-		// }
+            wp_register_script( 
+                $script['id'], 
+                $script['url'], 
+                $script['dependency'], 
+                HRM_VERSION, 
+                $script['in_footer'] 
+            );
+        }
     }
 
-    // public static function admin_localize($key) {
-    //     wp_localize_script( $key, 'HRM_Admin', array(
-    //         'ajax_url'    => admin_url( 'admin-ajax.php' ),
-    //         'nonce'       => wp_create_nonce( 'hrm_nonce' ),
-    //         'message'     => hrm_message(),
-    //         'confirm_msg' => __( 'Are you sure!', 'hrm'),
-    //         'success_msg' => __( 'Changed Successfully', 'hrm' )
-    //     ));
-    // }
-
-    // public static function department() {
-
-    //     self::admin_default();
-    //     wp_enqueue_script( 'hrm-main-vue', HRM_URL . '/assets/js/vue/vue.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-main-vuex', HRM_URL . '/assets/js/vue/vuex.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-main-vue-route', HRM_URL . '/assets/js/vue/vue-router.js', array(), false, true);
-    //     self::admin_localize( 'hrm-main-vue' );
-    //     wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/assets/js/hrm-common-mixin.js', array(), time(), true );
-        
-        
-    //     wp_enqueue_script( 'hrm-department-edit-btn', HRM_URL . '/assets/js/components/department/department-edit-btn.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-add-btn', HRM_URL . '/assets/js/components/department/department-add-btn.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-del-btn', HRM_URL . '/assets/js/components/department/department-del-btn.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-search', HRM_URL . '/assets/js/components/department/department-search.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-paginate-drop-dwon', HRM_URL . '/assets/js/components/department/department-paginate-drop-down.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-table', HRM_URL . '/assets/js/components/department/department-table.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-department-pagination', HRM_URL . '/assets/js/components/department/department-pagination.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-new-department-form', HRM_URL . '/assets/js/components/department/new-department-form.js', array(), false, true);
-        
-    //     wp_enqueue_script( 'hrm-admin-store', HRM_URL . '/assets/js/admin/admin-vue-store.js', array(), time(), true );
-    //     wp_enqueue_script( 'hrm-admin-vue', HRM_URL . '/assets/js/admin/admin-vue.js', array(), time(), true );
-    //     wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );
-    // }
-
-    // public static function admin_default() {
-    // 	global $hrm_is_admin;
-
-    // 	wp_enqueue_script( 'jquery' );
-    //     wp_enqueue_script( 'jquery-ui-dialog' );
-    //     wp_enqueue_script( 'jquery-ui-autocomplete');
-    //     wp_enqueue_script( 'jquery-ui-datepicker' );
-    //     wp_enqueue_script( 'jquery-ui-slider' );
-    //     wp_enqueue_script( 'hrm-library', HRM_URL . '/assets/js/library.js', false, false, false );
-    //     wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/js/config.js', array('hrm-library'), false, false );
-    //     wp_enqueue_script( 'hrm_chosen', HRM_URL . '/assets/js/chosen.jquery.min.js', array( 'jquery' ), false, true);
-    //     wp_enqueue_script( 'hrm_datetimepicker', HRM_URL . '/assets/js/jquery-ui-timepicker.js', array( 'jquery' ), false, true);
-    //     wp_enqueue_script( 'hrm-jquery.dataTables', HRM_URL . '/assets/js/jquery.dataTables.min.js', array( 'jquery' ), false, true);
-    //     wp_enqueue_script( 'hrm_admin', HRM_URL . '/assets/js/hrm.js', array( 'jquery' ), false, true);
-
-    //     wp_localize_script( 'hrm_admin', 'HRM_Vars', array(
-    //         'is_admin'    => $hrm_is_admin,
-    //         'confirm_msg' => __( 'Are you sure!', 'hrm'),
-    //         'success_msg' => __( 'Changed Successfully', 'hrm' ),
-    //         'ajax_url'        => admin_url( 'admin-ajax.php' ),
-    //         'nonce'           => wp_create_nonce( 'hrm_nonce' ),
-    //         'time_zone'       => hrm_get_wp_timezone(),
-    //         'wp_date_format'  => get_option( 'date_format' ),
-    //         'wp_time_format'  => get_option( 'time_format' ),
-    //         'message'         => hrm_message(),
-    //         'current_user'    => wp_get_current_user(),
-    //         'settings'        => Hrm_Settings::getInstance()->get_settings(),
-    //         'current_date'    => current_time( 'mysql' ),
-    //         'financial_start' => hrm_financial_start_date(),
-    //         'financial_end'   => hrm_financial_end_date(),
-    //         'user_role' => hrm_current_user_role(),
-    //         'home_url'   => home_url(),
-    //         'hrm_url'     => HRM_URL
-    //     ));
-
-    //     //wp_enqueue_style( 'hrm-jquery.dataTables-style', HRM_URL . '/assets/css/jquery.dataTables.css', false, false, 'all' );
-    //     //wp_enqueue_style( 'hrm-jquery.dataTables_themeroller', HRM_URL . '/assets/css/jquery.dataTables_themeroller.css', false, false, 'all' );
-    //     wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );
-    //     wp_enqueue_style( 'hrm-chosen', HRM_URL . '/assets/css/chosen.min.css', false, false, 'all' );
-    //     wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/assets/css/jquery-ui.css', false, false, 'all' );
-    //     wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/assets/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
-    // }
-
-    /**
-     * Attendance scripts
-     * 
-     * @return void
-     */
-    // public static function attendance_scripts() {
-    //     self::admin_default();
-    //     wp_enqueue_script( 'hrm-main-vue', HRM_URL . '/assets/js/vue/vue.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-main-vuex', HRM_URL . '/assets/js/vue/vuex.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-main-vue-route', HRM_URL . '/assets/js/vue/vue-router.js', array(), false, true);
-    //     self::admin_localize( 'hrm-vue' );
-    //     wp_enqueue_script( 'hrm-root-mixin', HRM_URL . '/assets/js/hrm-common-mixin.js', array(), time(), true );
-    //     wp_enqueue_script( 'hrm-attendance-vue-store', HRM_URL . '/assets/js/attendance/attendance-vue-store.js', array(), false, true );
-        
-    //     wp_enqueue_script( 'hrm-attendance-header', HRM_URL . '/assets/js/components/attendance/attendance-header.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-attendance-punch-in-out-btn', HRM_URL . '/assets/js/components/attendance/attendance-punch-in-out-btn.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-attendance-user-search', HRM_URL . '/assets/js/components/attendance/attendance-user-search.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-attendance-records', HRM_URL . '/assets/js/components/attendance/attendance-records.js', array(), false, true);
-    //     wp_enqueue_script( 'hrm-attendance-configuration', HRM_URL . '/assets/js/components/attendance/attendance-configuration.js', array(), false, true);
-        
-    //     wp_enqueue_script( 'hrm-attendance-vue', HRM_URL . '/assets/js/attendance/attendance-vue.js', array(), false, true );
-    //     wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );
-
-        
-    // }
-
-    /**
-     * Leave scripts
-     * 
-     * @return void
-     */
-    // public static function leave_scripts() {
-    //     self::footer_tag();
-    // }
-
-    /**
-     * Common scripts
-     * 
-     * @return void
-     */
-    // public static function hrm_vue_scripts() {
-    //     wp_enqueue_script( 'hrm-vue-multiselect' );
-    //     wp_enqueue_style( 'hrm-vue-multiselect' );
-    //     wp_enqueue_script( 'hrm-directive', HRM_URL . '/assets/js/hrm-directive.js', array(), time(), true);
-    //     wp_enqueue_script( 'hrm-root-vue', HRM_URL . '/assets/js/hrm-vue.js', false, time(), true);
-    // }
-
-    /**
-     * Header scripts
-     * 
-     * @return void
-     */
-    // public static function init_scripts() {
-    //     wp_enqueue_media();
-    //     wp_enqueue_script( 'hrm-library', HRM_URL . '/assets/js/library.js', false, false, false );
-    //     wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/js/config.js', array('hrm-library'), false, false );
-        
-
-    //     wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), time(), 'all' );
-    //     wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
-    //     wp_register_style( 'hrm-vue-multiselect', HRM_URL . '/assets/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
-    //     wp_register_style( 'hrm-jquery-fullcalendar', HRM_URL . '/assets/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
-    // }
 
     public static function footer_tag() {
 
         wp_enqueue_media();
-        wp_enqueue_script( 'jquery-ui-dialog' );
-        wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'hrm-library', HRM_URL . '/assets/js/library.js', false, false, false );
-        wp_enqueue_script( 'hrm-config', HRM_URL . '/assets/vendor/config.js', array('hrm-library'), false, false );
-        
-        wp_enqueue_script( 'hrm-vue', HRM_URL . '/assets/js/hrm.js', array('jquery','hrm-config'), false, true );
-       // wp_enqueue_script( 'hrm-moment', HRM_URL . '/assets/js/moment/moment.min.js', array('jquery','hrm-config'), false, true );
-        wp_enqueue_script( 'hrm-datetimepicker', HRM_URL . '/assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js', array('jquery','hrm-config'), false, true );
-       // wp_enqueue_script( 'hrm-fullcalendar', HRM_URL . '/assets/js/fullcalendar/fullcalendar.min.js', array('jquery','hrm-config', 'hrm-moment'), false, true );
+        wp_enqueue_script( 'hrm-scripts' );
 
-        wp_localize_script( 'hrm-library', 'HRM_Vars', array(
+        wp_localize_script( 'hrm-const', 'HRM_Vars', array(
             'ajax_url'        => admin_url( 'admin-ajax.php' ),
             'nonce'           => wp_create_nonce( 'hrm_nonce' ),
             'time_zone'       => hrm_get_wp_timezone(),
@@ -233,6 +77,162 @@ class Hrm_Scripts {
         wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/assets/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-preloader', HRM_URL . '/assets/css/Elegant-Loading-Indicator/preloader.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
+    }
+
+
+    public static function scripts() {
+
+        $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+        return [
+            
+
+            'hrm-config' => [
+                'id'         => 'hrm-config',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/config.js',
+                'dependency' => ['jquery'],
+                'in_footer'  => true
+            ],
+
+            'hrm-tiny-mce' => [
+                'id'         => 'hrm-tiny-mce',
+                'url'        => site_url( '/wp-includes/js/tinymce/tinymce.min.js' ),
+                'dependency' => ['hrm-config'],
+                'in_footer'  => true
+            ],
+
+            'hrm-time-picker' => [
+                'id'         => 'hrm-time-picke',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/jquery-ui-timepicker/jquery-ui-timepicker'.$suffix.'.js',
+                'dependency' => ['jquery-ui-datepicker','hrm-tiny-mce'],
+                'in_footer'  => true
+            ],
+
+            'hrm-jed' => [
+                'id'         => 'hrm-jed',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/i18n/jed.js',
+                'dependency' => ['hrm-time-picke'],
+                'in_footer'  => true
+            ],
+            
+            'hrm-i18n' => [
+                'id'         => 'hrm-i18n',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/i18n/i18n.js',
+                'dependency' => ['hrm-jed'],
+                'in_footer'  => true
+            ],
+
+            'hrm-vue' => [
+                'id'         => 'hrm-vue',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/vue/vue'.$suffix.'.js',
+                'dependency' => ['hrm-i18n'],
+                'in_footer'  => true
+            ],
+            'hrm-vuex' => [
+                'id'         => 'hrm-vuex',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/vue/vuex'.$suffix.'.js',
+                'dependency' => ['hrm-vue'],
+                'in_footer'  => true
+            ],
+
+            'hrm-vue-router' => [
+                'id'         => 'hrm-vue-router',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/vue/vue-router'.$suffix.'.js',
+                'dependency' => ['hrm-vuex'],
+                'in_footer'  => true
+            ],
+
+            'hrm-vue-multiselect' => [
+                'id'         => 'hrm-vue-multiselect',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/vue-multiselect/vue-multiselect.min.js',
+                'dependency' => ['hrm-vue-router'],
+                'in_footer'  => true
+            ],
+
+            'hrm-preloader' => [
+                'id'         => 'hrm-preloader',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/Elegant-Loading-Indicator/jquery.preloader'.$suffix.'.js',
+                'dependency' => ['hrm-vue-multiselect'],
+                'in_footer'  => true
+            ],
+            'hrm-moment' => [
+                'id'         => 'hrm-moment',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/moment/moment'.$suffix.'.js',
+                'dependency' => ['hrm-preloader'],
+                'in_footer'  => true
+            ],
+
+            'hrm-fullcalendar' => [
+                'id'         => 'hrm-fullcalendar',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/fullcalendar/fullcalendar'.$suffix.'.js',
+                'dependency' => ['hrm-moment'],
+                'in_footer'  => true
+            ],
+
+            'hrm-toastr' => [
+                'id'         => 'hrm-toastr',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/toastr/toastr'.$suffix.'.js',
+                'dependency' => ['hrm-fullcalendar'],
+                'in_footer'  => true
+            ],
+
+            'hrm-v-autocomplete' => [
+                'id'         => 'hrm-v-autocomplete',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/v-autocomplete/v-autocomplete.min.js',
+                'dependency' => ['hrm-toastr'],
+                'in_footer'  => true
+            ],
+
+            'hrm-vue-library' => [
+                'id'         => 'hrm-vue-library',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/library.js',
+                'dependency' => ['hrm-v-autocomplete'],
+                'in_footer'  => true
+            ],
+
+            'hrm-uploader' => [
+                'id'         => 'hrm-uploader',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/uploader/uploader.js',
+                'dependency' => ['hrm-vue-library'],
+                'in_footer'  => true
+            ],
+
+            'font-awesome' => [
+                'id'         => 'font-awesome',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/font-awesome/font-awesome.min.js',
+                'dependency' => ['hrm-uploader'],
+                'in_footer'  => true
+            ],
+
+
+            'hrm-const' => [
+                'id'         => 'hrm-const',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/const.js',
+                'dependency' => [
+                    'jquery', 
+                    'underscore',
+                    'plupload-handlers',
+                    'jquery-ui-dialog',
+                    'jquery-ui-progressbar',
+                    'jquery-ui-datepicker',
+                    'jquery-ui-dialog', 
+                    'jquery-ui-autocomplete',
+                    'jquery-ui-sortable',
+                    'font-awesome'
+                ],
+                'in_footer'  => true
+            ],
+
+            'hrm' => [
+                'id'         => 'hrm-scripts',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/hrm.js',
+                'dependency' => [
+                    'hrm-const'
+                ],
+                'in_footer'  => true
+            ]
+        ];
+
     }
 }
 

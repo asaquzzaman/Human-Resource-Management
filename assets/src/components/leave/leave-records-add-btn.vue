@@ -5,9 +5,11 @@
 </template>
 
 <script>
+    import Mixin from './mixin'
+	
 	export default {
 		methods: {
-			mixins: [HRMMixin.leave],
+			mixins: [Mixin],
 			
 			showHideLeaveRecordsForm: function() {
 				this.$store.commit('leave/isNewLeaveRecordsFormVisible', {is_visible: true});

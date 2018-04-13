@@ -1,11 +1,13 @@
 HRMRegisterModule('location', 'organization/location');
 
-let location = resolve => {
+import location from './location.vue'
 
-    require.ensure(['./location.vue'], () => {
-        resolve(require('./location.vue'));
-    });
-}
+// let location = resolve => {
+
+//     require.ensure(['./location.vue'], () => {
+//         resolve(require('./location.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('organization', 
     [

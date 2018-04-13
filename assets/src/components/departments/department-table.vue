@@ -69,9 +69,10 @@
 <script>
     import EditBtn from './department-edit-btn.vue';
     import DelBtn from './department-del-btn.vue';
-
+    import Mixin from './mixin'
+    
     export default {
-        mixins: [HRMMixin.departments],
+        mixins: [Mixin],
 
         data: function() {
             return {

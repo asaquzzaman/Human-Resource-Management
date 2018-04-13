@@ -33,9 +33,10 @@
 <script>
 	import date_picker from './date-picker.vue';
     import Header from './header.vue';
-
+    import Mixin from './mixin'
+    
     export default {
-        mixins: [HRMMixin.settings],
+        mixins: [Mixin],
         data () {
             return {
                hrm_financial_year: this.getSettings('hrm_financial_year'),

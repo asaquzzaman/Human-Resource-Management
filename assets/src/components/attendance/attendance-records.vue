@@ -53,10 +53,11 @@
 	import hrm_attendace_punch_in_out_btn from './attendance-punch-in-out-btn.vue';
 	import hrm_attendace_user_search from './attendance-user-search.vue';
 	import hrm_attendance_header from './attendance-header.vue';
+	import Mixin from './mixin'
 
 	export default {
 
-		mixins: [HRMMixin.attendance],
+		mixins: [Mixin],
 		
 		components: {
 		    'hrm-attendace-punch-in-out-btn': hrm_attendace_punch_in_out_btn,

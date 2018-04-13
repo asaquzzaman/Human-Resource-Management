@@ -127,7 +127,7 @@
 		},
 		components: {
 			'hrm-table': Table,
-			'hrm-multiselect': hrm.Multiselect.Multiselect
+			'hrm-multiselect': hrm.Multiselect
 		},
 
 		methods: {

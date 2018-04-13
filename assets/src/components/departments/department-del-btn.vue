@@ -5,11 +5,12 @@
     </div>
 </template>
 <script>
+    import Mixin from './mixin'
     
     export default {
     	props: ['type', 'department_id'],
 
-    	mixins: [HRMMixin.departments],
+    	mixins: [Mixin],
 
     	methods: {
     		departmentGroupDelete: function() {

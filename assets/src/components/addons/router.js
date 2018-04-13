@@ -1,12 +1,15 @@
 
 HRMRegisterModule('addons', 'addons');
 
-let addons = resolve => {
+import addons from './addons.vue'
 
-    require.ensure(['./addons.vue'], () => {
-        resolve(require('./addons.vue'));
-    });
-}
+
+// let addons = resolve => {
+
+//     require.ensure(['./addons.vue'], () => {
+//         resolve(require('./addons.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('hrm_root', 
     [

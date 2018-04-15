@@ -8,12 +8,11 @@
 					<div class="inside">
 						<ul class="net-pay">
 							<li>
-								Net Pay
 								<ul class="gross-childred-li">
 									<li class="gross-li">
-										Gross
+										<strong>Income</strong>
 										<ul class="gross-item-ul">
-											<li v-for="incomeFormula in incomeFormulas">
+											<li v-if="incomeFormulas.length" v-for="incomeFormula in incomeFormulas">
 												<a class="delete-btn" href="#" @click.prevent="deleteFormula(incomeFormula)">
 													<i class="far fa-trash-alt"></i>
 												</a>
@@ -22,13 +21,14 @@
 												</a>
 												
 											</li>
+											<li v-if="!incomeFormulas.length">No component found</li>
 											
 										</ul>
 									</li>
 									<li class="deducations-li">
-										Total Deductions
+										<strong>Deductions</strong>
 										<ul class="deductions-item-ul">
-											<li v-for="deductionFormula in deductionFormulas">
+											<li v-if="deductionFormulas.length" v-for="deductionFormula in deductionFormulas">
 												<a class="delete-btn" href="#" @click.prevent="deleteFormula(deductionFormula)">
 													<i class="far fa-trash-alt"></i>
 												</a>
@@ -37,6 +37,7 @@
 												</a>
 												
 											</li>
+											<li v-if="!deductionFormulas.length">No component found</li>
 										</ul>
 									</li>
 								</ul>
@@ -502,7 +503,7 @@
 		.hrm-left {
 			width: 29%;
 			.gross-childred-li {
-				padding-left: 15px;
+				// padding-left: 15px;
     			padding-top: 5px;
 			}
 			.gross-item-ul,

@@ -1059,58 +1059,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__ = __webpack_require__(65);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__ = __webpack_require__(297);
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "assets/src/components/leave/leave-header.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0385a22a", Component.options)
-  } else {
-    hotAPI.reload("data-v-0385a22a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data() {
@@ -1234,6 +1182,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	}
 
 });
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__ = __webpack_require__(65);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__ = __webpack_require__(297);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leave_header_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0385a22a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_leave_header_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/leave/leave-header.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0385a22a", Component.options)
+  } else {
+    hotAPI.reload("data-v-0385a22a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
 
 /***/ }),
 /* 7 */
@@ -6055,8 +6055,6 @@ hrm.Vue.directive('hrm-uploader', {
 //
 //
 //
-//
-//
 
 
 
@@ -6086,12 +6084,21 @@ hrm.Vue.directive('hrm-uploader', {
 			},
 			leaves: [],
 			birthday: [],
-			notices: []
+			notices: [],
+			isFetchHeaderAllData: false,
+			loadingEvents: {
+				headerBlock: false,
+				headerAttendance: false,
+				headerLeaves: false,
+				headerNotice: false,
+				headerBirthdays: false
+			}
 		};
 	},
 
 	created() {
 		var self = this;
+		self.loadingStart('hrm-header-loading');
 
 		this.getHeaderBlock({
 			callback(args) {
@@ -6100,6 +6107,8 @@ hrm.Vue.directive('hrm-uploader', {
 				self.employees = args.employees;
 				self.males = args.males;
 				self.females = args.females;
+				self.loadingEvents.headerBlock = true;
+				self.checkAllLoad();
 			}
 		});
 
@@ -6110,11 +6119,15 @@ hrm.Vue.directive('hrm-uploader', {
 				self.earlyEnter = res.early_enter;
 				self.earlyLeave = res.early_leave;
 				self.lateLeave = res.late_leave;
+				self.loadingEvents.headerAttendance = true;
+				self.checkAllLoad();
 			}
 		});
 		this.getDashboardLeaves({
 			callback(res) {
 				self.leaves = res;
+				self.loadingEvents.headerLeaves = true;
+				self.checkAllLoad();
 			}
 		});
 		this.getDashboardNotices({
@@ -6123,11 +6136,15 @@ hrm.Vue.directive('hrm-uploader', {
 					notice.popup = false;
 				});
 				self.notices = res.data;
+				self.loadingEvents.headerNotice = true;
+				self.checkAllLoad();
 			}
 		});
 		this.getDashboardBirthdays({
 			callback(res) {
 				self.birthday = res;
+				self.loadingEvents.headerBirthdays = true;
+				self.checkAllLoad();
 			}
 		});
 	},
@@ -6166,6 +6183,20 @@ hrm.Vue.directive('hrm-uploader', {
 
 		popUpNotice(notice) {
 			notice.popup = true;
+		},
+		checkAllLoad() {
+			var status = true;
+			jQuery.each(this.loadingEvents, function (key, load) {
+				if (load === false) {
+					status = false;
+					return;
+				}
+			});
+
+			if (status) {
+				this.isFetchHeaderAllData = true;
+				this.loadingStop('hrm-header-loading');
+			}
 		}
 	}
 });
@@ -8397,7 +8428,7 @@ hrm.Vue.directive('hrm-uploader', {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
 //
@@ -8431,7 +8462,7 @@ var Hrm_Leave_Configuration = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
 //
@@ -9082,7 +9113,7 @@ var Hrm_Leave_Header = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_holidays_form_vue__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_holidays_record_vue__ = __webpack_require__(247);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_holidays_add_btn_vue__ = __webpack_require__(245);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixin__ = __webpack_require__(3);
 //
 //
@@ -9994,7 +10025,7 @@ var Hrm_Leave_Holidays = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_records_add_btn_vue__ = __webpack_require__(250);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_records_form_vue__ = __webpack_require__(251);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_records_render_vue__ = __webpack_require__(252);
@@ -10044,7 +10075,7 @@ var Hrm_Leave_Holidays = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
 //
@@ -10814,7 +10845,7 @@ var Hrm_Leave_Type_Records = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_type_form_vue__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__leave_type_records_vue__ = __webpack_require__(259);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__leave_type_add_btn_vue__ = __webpack_require__(256);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixin__ = __webpack_require__(3);
 //
 //
@@ -10878,7 +10909,7 @@ var Hrm_Leave_Type_Records = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_header_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
 //
@@ -12691,7 +12722,8 @@ hrm.Vue.component('organization-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
+//
 //
 //
 //
@@ -13154,7 +13186,7 @@ function setCaretToPos(input, pos) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_payroll_group_mixin__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 //
 //
 //
@@ -13452,7 +13484,7 @@ function setCaretToPos(input, pos) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_payroll_group_mixin__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__group_table_vue__ = __webpack_require__(272);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__new_group_form_vue__ = __webpack_require__(274);
 //
@@ -13740,7 +13772,7 @@ function setCaretToPos(input, pos) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_payroll_group_mixin__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 //
 //
 //
@@ -14015,7 +14047,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__salary_details__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(5);
 //
 //
 //
@@ -14274,7 +14306,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__revision_table_vue__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(5);
 //
 //
 //
@@ -14696,7 +14728,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 //
 //
 //
@@ -15115,17 +15147,21 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 			if (!self.salaryDay) {
 				hrm.Toastr.error('Salary day required!');
+				return;
 			}
 
 			if (!self.salaryType) {
 				hrm.Toastr.error('Salary type required!');
+				return;
 			}
 
 			if (!self.categoryId) {
 				hrm.Toastr.error('Employee/Designation required!');
+				return;
 			}
 			if (!self.salary) {
 				hrm.Toastr.error('Monthly/Annual salary required!');
+				return;
 			}
 
 			var form_data = {
@@ -18181,7 +18217,7 @@ var map = {
 	"./organization/notice/mixin.js": 11,
 	"./payroll/formula/mixin.js": 23,
 	"./payroll/group/mixin.js": 12,
-	"./payroll/mixin.js": 6,
+	"./payroll/mixin.js": 5,
 	"./payroll/revision/mixin.js": 18,
 	"./payroll/salary/mixin.js": 25,
 	"./profile/education/mixin.js": 13,
@@ -22702,7 +22738,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .delete-btn {\n  margin-right: 5px;\n  font-size: 11px;\n  color: #ab4141;\n}\n.page-payroll .formula-display-name {\n  text-decoration: none;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .delete-btn {\n  margin-right: 5px;\n  font-size: 11px;\n  color: #ab4141;\n}\n.page-payroll .formula-display-name {\n  text-decoration: none;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -33181,678 +33217,860 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "hrm-block hrm-block-1" }, [
-      _c("div", { staticClass: "hrm-block-content-wrap" }, [
-        _c(
-          "div",
-          { staticClass: "hrm-block-image-wrap" },
-          _vm._l(_vm.administrators, function(administrator) {
-            return _vm.administrators.length
-              ? _c("div", { staticClass: "hrm-img" }, [
-                  _c("img", {
-                    staticStyle: { height: "46px", width: "46px" },
-                    attrs: { src: administrator.data.avatar }
-                  }),
+    _c("div", { attrs: { id: "hrm-header-loading" } }, [
+      _vm.isFetchHeaderAllData
+        ? _c("div", [
+            _c("div", { attrs: { id: "hrm-dashboard-heder-block" } }, [
+              _c("div", { staticClass: "hrm-block hrm-block-1" }, [
+                _c("div", { staticClass: "hrm-block-content-wrap" }, [
+                  _c(
+                    "div",
+                    { staticClass: "hrm-block-image-wrap" },
+                    _vm._l(_vm.administrators, function(administrator) {
+                      return _vm.administrators.length
+                        ? _c("div", { staticClass: "hrm-img" }, [
+                            _c("img", {
+                              staticStyle: { height: "46px", width: "46px" },
+                              attrs: { src: administrator.data.avatar }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "hrm-admin-name" }, [
+                              _vm._v(_vm._s(administrator.data.display_name))
+                            ])
+                          ])
+                        : _vm._e()
+                    })
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "hrm-admin-name" }, [
-                    _vm._v(_vm._s(administrator.data.display_name))
-                  ])
-                ])
-              : _vm._e()
-          })
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-clear" })
-      ]),
-      _vm._v(" "),
-      _vm._m(0)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "hrm-block hrm-block-2" }, [
-      _c("div", { staticClass: "hrm-block-content-wrap" }, [
-        _c(
-          "div",
-          { staticClass: "hrm-block-image-wrap" },
-          [
-            _vm._l(_vm.managers, function(manager) {
-              return _vm.managers.length
-                ? _c("div", { staticClass: "hrm-img" }, [
-                    _c("img", {
-                      staticStyle: { height: "46px", width: "46px" },
-                      attrs: { src: manager.data.avatar }
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "hrm-admin-name" }, [
-                      _vm._v(_vm._s(manager.data.display_name))
-                    ])
-                  ])
-                : _vm._e()
-            }),
-            _vm._v(" "),
-            !_vm.managers.length ? _c("div", [_vm._m(1)]) : _vm._e()
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-clear" })
-      ]),
-      _vm._v(" "),
-      _vm._m(2)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "hrm-block hrm-block-3" }, [
-      _c("div", { staticClass: "hrm-block-content-wrap" }, [
-        _c("i", { staticClass: "far fa-user" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-count" }, [
-          _c("span", [_vm._v(_vm._s(_vm.employees))]),
-          _vm._v(" Employess")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-clear" })
-      ]),
-      _vm._v(" "),
-      _vm._m(3)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "hrm-block hrm-block-4" }, [
-      _c("div", { staticClass: "hrm-block-content-wrap" }, [
-        _c("i", { staticClass: "fas fa-transgender" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "hrm-count" }, [
-          _c("div", [_vm._v(_vm._s(_vm.males) + " Males")]),
-          _vm._v(" "),
-          _c("div", [_vm._v(_vm._s(_vm.females) + " Females")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "hrm-clear" })
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(4)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "hrm-clear" }),
-    _vm._v(" "),
-    _c("div", { attrs: { id: "dashboard-widgets-wrap" } }, [
-      _c(
-        "div",
-        { staticClass: "metabox-holder", attrs: { id: "dashboard-widgets" } },
-        [
-          _c(
-            "div",
-            {
-              staticClass: "postbox-container",
-              attrs: { id: "postbox-container-1" }
-            },
-            [
-              _c("div", { staticClass: "meta-box-sortables ui-sortable" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "postbox ",
-                    attrs: { id: "dashboard_activity" }
-                  },
-                  [
-                    _c("h2", { staticClass: "hndle ui-sortable-handle" }, [
-                      _c("span", [_vm._v(_vm._s(_vm.attendanceLabel))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "inside" }, [
-                      _c("div", { staticClass: "pm-present-body" }, [
-                        _vm.attendance.present
-                          ? _c(
-                              "div",
-                              [
-                                _vm._l(_vm.present, function(punchIn) {
-                                  return _c(
-                                    "ul",
-                                    { staticClass: "hrm-attendance-ul" },
-                                    [
-                                      _c("li", [
-                                        _c("img", {
-                                          staticClass: "hrm-dashboard-avatar",
-                                          attrs: { src: punchIn.avatar_url }
-                                        }),
-                                        _vm._v(
-                                          "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                            _vm._s(punchIn.display_name) +
-                                            "\n\t\t\t\t\t\t\t\t\t\t"
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("li", [
-                                        _vm._v(_vm._s(punchIn.punch_in_time))
-                                      ])
-                                    ]
-                                  )
-                                }),
-                                _vm._v(" "),
-                                !_vm.present.length
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "pm-attendance-nothing-found"
-                                      },
-                                      [_vm._v("Nothing found")]
-                                    )
-                                  : _vm._e()
-                              ],
-                              2
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.attendance.absent
-                          ? _c(
-                              "div",
-                              [
-                                _vm._l(_vm.absent, function(punchOut) {
-                                  return _c(
-                                    "ul",
-                                    { staticClass: "hrm-attendance-ul" },
-                                    [
-                                      _c("li", [
-                                        _c("img", {
-                                          staticClass: "hrm-dashboard-avatar",
-                                          attrs: { src: punchOut.avatar_url }
-                                        }),
-                                        _vm._v(
-                                          "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                            _vm._s(punchOut.display_name) +
-                                            "\n\t\t\t\t\t\t\t\t\t\t"
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("li", [_vm._v("No Time Available")])
-                                    ]
-                                  )
-                                }),
-                                _vm._v(" "),
-                                !_vm.absent.length
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "pm-attendance-nothing-found"
-                                      },
-                                      [_vm._v("Nothing found")]
-                                    )
-                                  : _vm._e()
-                              ],
-                              2
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.attendance.earlyEnter
-                          ? _c(
-                              "div",
-                              [
-                                _vm._l(_vm.earlyEnter, function(firstEntry) {
-                                  return _c(
-                                    "ul",
-                                    { staticClass: "hrm-attendance-ul" },
-                                    [
-                                      _c("li", [
-                                        _c("img", {
-                                          staticClass: "hrm-dashboard-avatar",
-                                          attrs: { src: firstEntry.avatar_url }
-                                        }),
-                                        _vm._v(
-                                          "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                            _vm._s(firstEntry.display_name) +
-                                            "\n\t\t\t\t\t\t\t\t\t\t"
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("li", [
-                                        _vm._v(_vm._s(firstEntry.punch_in_time))
-                                      ])
-                                    ]
-                                  )
-                                }),
-                                _vm._v(" "),
-                                !_vm.earlyEnter.length
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "pm-attendance-nothing-found"
-                                      },
-                                      [_vm._v("Nothing found")]
-                                    )
-                                  : _vm._e()
-                              ],
-                              2
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.attendance.earlyLeave
-                          ? _c(
-                              "div",
-                              [
-                                _vm._l(_vm.earlyLeave, function(firstLeave) {
-                                  return _c(
-                                    "ul",
-                                    { staticClass: "hrm-attendance-ul" },
-                                    [
-                                      _c("li", [
-                                        _c("img", {
-                                          staticClass: "hrm-dashboard-avatar",
-                                          attrs: { src: firstLeave.avatar_url }
-                                        }),
-                                        _vm._v(
-                                          "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                            _vm._s(firstLeave.display_name) +
-                                            "\n\t\t\t\t\t\t\t\t\t\t"
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("li", [
-                                        _vm._v(
-                                          _vm._s(firstLeave.punch_out_time)
-                                        )
-                                      ])
-                                    ]
-                                  )
-                                }),
-                                _vm._v(" "),
-                                !_vm.earlyLeave.length
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "pm-attendance-nothing-found"
-                                      },
-                                      [_vm._v("Nothing found")]
-                                    )
-                                  : _vm._e()
-                              ],
-                              2
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.attendance.lateLeave
-                          ? _c(
-                              "div",
-                              [
-                                _vm._l(_vm.lateLeave, function(firstOut) {
-                                  return _c(
-                                    "ul",
-                                    { staticClass: "hrm-attendance-ul" },
-                                    [
-                                      _c("li", [
-                                        _c("img", {
-                                          staticClass: "hrm-dashboard-avatar",
-                                          attrs: { src: firstOut.avatar_url }
-                                        }),
-                                        _vm._v(
-                                          "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                            _vm._s(firstOut.display_name) +
-                                            "\n\t\t\t\t\t\t\t\t\t\t"
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("li", [
-                                        _vm._v(_vm._s(firstOut.punch_out_time))
-                                      ])
-                                    ]
-                                  )
-                                }),
-                                _vm._v(" "),
-                                !_vm.lateLeave.length
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "pm-attendance-nothing-found"
-                                      },
-                                      [_vm._v("Nothing found")]
-                                    )
-                                  : _vm._e()
-                              ],
-                              2
-                            )
-                          : _vm._e()
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { attrs: { id: "" } }, [
-                        _c(
-                          "div",
-                          { staticClass: "activity-block", attrs: { id: "" } },
-                          [
-                            _c("ul", { staticClass: "subsubsub" }, [
-                              _c("li", { staticClass: "all" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#l" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.attendanceTab("present")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v("Present"),
-                                    _c("span", { staticClass: "count" }, [
-                                      _vm._v("("),
-                                      _c("span", { staticClass: "all-count" }, [
-                                        _vm._v(_vm._s(_vm.present.length))
-                                      ]),
-                                      _vm._v(")")
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t")
-                              ]),
+                  _c("div", { staticClass: "hrm-clear" })
+                ]),
+                _vm._v(" "),
+                _vm._m(0)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-block hrm-block-2" }, [
+                _c("div", { staticClass: "hrm-block-content-wrap" }, [
+                  _c(
+                    "div",
+                    { staticClass: "hrm-block-image-wrap" },
+                    [
+                      _vm._l(_vm.managers, function(manager) {
+                        return _vm.managers.length
+                          ? _c("div", { staticClass: "hrm-img" }, [
+                              _c("img", {
+                                staticStyle: { height: "46px", width: "46px" },
+                                attrs: { src: manager.data.avatar }
+                              }),
                               _vm._v(" "),
-                              _c("li", { staticClass: "moderated" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.attendanceTab("absent")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v("Absent"),
-                                    _c("span", { staticClass: "count" }, [
-                                      _vm._v("("),
-                                      _c(
-                                        "span",
-                                        { staticClass: "pending-count" },
-                                        [_vm._v(_vm._s(_vm.absent.length))]
-                                      ),
-                                      _vm._v(")")
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t")
-                              ]),
-                              _vm._v(" "),
-                              _c("li", { staticClass: "approved" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.attendanceTab("earlyEnter")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v("Early Enter"),
-                                    _c("span", { staticClass: "count" }, [
-                                      _vm._v("("),
-                                      _c(
-                                        "span",
-                                        { staticClass: "approved-count" },
-                                        [_vm._v(_vm._s(_vm.earlyEnter.length))]
-                                      ),
-                                      _vm._v(")")
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t")
-                              ]),
-                              _vm._v(" "),
-                              _c("li", { staticClass: "spam" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.attendanceTab("earlyLeave")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v("Early Leave"),
-                                    _c("span", { staticClass: "count" }, [
-                                      _vm._v("("),
-                                      _c(
-                                        "span",
-                                        { staticClass: "spam-count" },
-                                        [_vm._v(_vm._s(_vm.earlyLeave.length))]
-                                      ),
-                                      _vm._v(")")
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t")
-                              ]),
-                              _vm._v(" "),
-                              _c("li", { staticClass: "spam" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.attendanceTab("lateLeave")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v("Late Leave"),
-                                    _c("span", { staticClass: "count" }, [
-                                      _vm._v("("),
-                                      _c(
-                                        "span",
-                                        { staticClass: "spam-count" },
-                                        [_vm._v(_vm._s(_vm.lateLeave.length))]
-                                      ),
-                                      _vm._v(")")
-                                    ])
-                                  ]
-                                )
+                              _c("div", { staticClass: "hrm-admin-name" }, [
+                                _vm._v(_vm._s(manager.data.display_name))
                               ])
                             ])
-                          ]
-                        )
-                      ])
-                    ])
-                  ]
-                ),
+                          : _vm._e()
+                      }),
+                      _vm._v(" "),
+                      !_vm.managers.length ? _c("div", [_vm._m(1)]) : _vm._e()
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "hrm-clear" })
+                ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "postbox " }, [
-                  _vm._m(5),
+                _vm._m(2)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-block hrm-block-3" }, [
+                _c("div", { staticClass: "hrm-block-content-wrap" }, [
+                  _c("i", { staticClass: "far fa-user" }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "inside" }, [
-                    _c(
-                      "div",
-                      { staticClass: "pm-birthday-body" },
-                      [
-                        _vm._l(_vm.birthday, function(birth) {
-                          return _c(
-                            "ul",
-                            { staticClass: "hrm-attendance-ul" },
-                            [
-                              _c("li", [
-                                _c("img", {
-                                  staticClass: "hrm-dashboard-avatar",
-                                  attrs: { src: birth.data.avatar_url }
-                                }),
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(birth.data.display_name) +
-                                    "\n\t\t\t\t\t\t\t\t\t"
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("li", [_vm._v(_vm._s(birth.data.birthday))])
-                            ]
-                          )
-                        }),
-                        _vm._v(" "),
-                        !_vm.birthday.length
-                          ? _c(
-                              "div",
-                              { staticClass: "pm-birthday-nothing-found" },
-                              [_vm._v("Nothing found")]
-                            )
-                          : _vm._e()
-                      ],
-                      2
-                    )
-                  ])
-                ])
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "postbox-container",
-              attrs: { id: "postbox-container-2" }
-            },
-            [
-              _c("div", { staticClass: "meta-box-sortables ui-sortable" }, [
-                _c("div", { staticClass: "postbox " }, [
-                  _vm._m(6),
+                  _c("div", { staticClass: "hrm-count" }, [
+                    _c("span", [_vm._v(_vm._s(_vm.employees))]),
+                    _vm._v(" Employess")
+                  ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "inside" }, [
-                    _c(
-                      "div",
-                      { staticClass: "pm-leave-body" },
-                      [
-                        _vm._l(_vm.leaves, function(leave) {
-                          return _c(
-                            "ul",
-                            { staticClass: "hrm-attendance-ul" },
-                            [
-                              _c("li", [
-                                _c("img", {
-                                  staticClass: "hrm-dashboard-avatar",
-                                  attrs: { src: leave.employee.data.avatar_url }
-                                }),
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(leave.employee.data.display_name) +
-                                    "\n\t\t\t\t\t\t\t\t\t"
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("li", [
-                                _vm._v(_vm._s(leave.leave_type.data.name))
-                              ])
-                            ]
-                          )
-                        }),
-                        _vm._v(" "),
-                        !_vm.leaves.length
-                          ? _c(
-                              "div",
-                              { staticClass: "pm-leave-nothing-found" },
-                              [_vm._v("Nothing found")]
-                            )
-                          : _vm._e()
-                      ],
-                      2
-                    )
+                  _c("div", { staticClass: "hrm-clear" })
+                ]),
+                _vm._v(" "),
+                _vm._m(3)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-block hrm-block-4" }, [
+                _c("div", { staticClass: "hrm-block-content-wrap" }, [
+                  _c("i", { staticClass: "fas fa-transgender" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "hrm-count" }, [
+                    _c("div", [_vm._v(_vm._s(_vm.males) + " Males")]),
+                    _vm._v(" "),
+                    _c("div", [_vm._v(_vm._s(_vm.females) + " Females")]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "hrm-clear" })
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "postbox " }, [
-                  _vm._m(7),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "inside" }, [
-                    _c("div", { staticClass: "pm-notice-body" }, [
-                      _vm.notices.length
-                        ? _c(
-                            "ul",
-                            { staticClass: "hrm-notice-ul" },
-                            _vm._l(_vm.notices, function(notice) {
-                              return _c("li", [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.popUpNotice(notice)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v(_vm._s(notice.title))]
-                                ),
-                                _vm._v(" "),
-                                _c("span", [
-                                  _c("i", {
-                                    staticClass: "far fa-calendar-alt"
-                                  }),
-                                  _vm._v(_vm._s(notice.date))
+                _vm._m(4)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "hrm-clear" })
+            ]),
+            _vm._v(" "),
+            _c("div", { attrs: { id: "dashboard-widgets-wrap" } }, [
+              _c(
+                "div",
+                {
+                  staticClass: "metabox-holder",
+                  attrs: { id: "dashboard-widgets" }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "postbox-container",
+                      attrs: { id: "postbox-container-1" }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "meta-box-sortables ui-sortable" },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "postbox ",
+                              attrs: { id: "dashboard_activity" }
+                            },
+                            [
+                              _c(
+                                "h2",
+                                { staticClass: "hndle ui-sortable-handle" },
+                                [
+                                  _c("span", [
+                                    _vm._v(_vm._s(_vm.attendanceLabel))
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "inside" }, [
+                                _c("div", { staticClass: "pm-present-body" }, [
+                                  _vm.attendance.present
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _vm._l(_vm.present, function(
+                                            punchIn
+                                          ) {
+                                            return _c(
+                                              "ul",
+                                              {
+                                                staticClass: "hrm-attendance-ul"
+                                              },
+                                              [
+                                                _c("li", [
+                                                  _c("img", {
+                                                    staticClass:
+                                                      "hrm-dashboard-avatar",
+                                                    attrs: {
+                                                      src: punchIn.avatar_url
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                      _vm._s(
+                                                        punchIn.display_name
+                                                      ) +
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("li", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      punchIn.punch_in_time
+                                                    )
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          }),
+                                          _vm._v(" "),
+                                          !_vm.present.length
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pm-attendance-nothing-found"
+                                                },
+                                                [_vm._v("Nothing found")]
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.attendance.absent
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _vm._l(_vm.absent, function(
+                                            punchOut
+                                          ) {
+                                            return _c(
+                                              "ul",
+                                              {
+                                                staticClass: "hrm-attendance-ul"
+                                              },
+                                              [
+                                                _c("li", [
+                                                  _c("img", {
+                                                    staticClass:
+                                                      "hrm-dashboard-avatar",
+                                                    attrs: {
+                                                      src: punchOut.avatar_url
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                      _vm._s(
+                                                        punchOut.display_name
+                                                      ) +
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("li", [
+                                                  _vm._v("No Time Available")
+                                                ])
+                                              ]
+                                            )
+                                          }),
+                                          _vm._v(" "),
+                                          !_vm.absent.length
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pm-attendance-nothing-found"
+                                                },
+                                                [_vm._v("Nothing found")]
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.attendance.earlyEnter
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _vm._l(_vm.earlyEnter, function(
+                                            firstEntry
+                                          ) {
+                                            return _c(
+                                              "ul",
+                                              {
+                                                staticClass: "hrm-attendance-ul"
+                                              },
+                                              [
+                                                _c("li", [
+                                                  _c("img", {
+                                                    staticClass:
+                                                      "hrm-dashboard-avatar",
+                                                    attrs: {
+                                                      src: firstEntry.avatar_url
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                      _vm._s(
+                                                        firstEntry.display_name
+                                                      ) +
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("li", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      firstEntry.punch_in_time
+                                                    )
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          }),
+                                          _vm._v(" "),
+                                          !_vm.earlyEnter.length
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pm-attendance-nothing-found"
+                                                },
+                                                [_vm._v("Nothing found")]
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.attendance.earlyLeave
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _vm._l(_vm.earlyLeave, function(
+                                            firstLeave
+                                          ) {
+                                            return _c(
+                                              "ul",
+                                              {
+                                                staticClass: "hrm-attendance-ul"
+                                              },
+                                              [
+                                                _c("li", [
+                                                  _c("img", {
+                                                    staticClass:
+                                                      "hrm-dashboard-avatar",
+                                                    attrs: {
+                                                      src: firstLeave.avatar_url
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                      _vm._s(
+                                                        firstLeave.display_name
+                                                      ) +
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("li", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      firstLeave.punch_out_time
+                                                    )
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          }),
+                                          _vm._v(" "),
+                                          !_vm.earlyLeave.length
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pm-attendance-nothing-found"
+                                                },
+                                                [_vm._v("Nothing found")]
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.attendance.lateLeave
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _vm._l(_vm.lateLeave, function(
+                                            firstOut
+                                          ) {
+                                            return _c(
+                                              "ul",
+                                              {
+                                                staticClass: "hrm-attendance-ul"
+                                              },
+                                              [
+                                                _c("li", [
+                                                  _c("img", {
+                                                    staticClass:
+                                                      "hrm-dashboard-avatar",
+                                                    attrs: {
+                                                      src: firstOut.avatar_url
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                      _vm._s(
+                                                        firstOut.display_name
+                                                      ) +
+                                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("li", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      firstOut.punch_out_time
+                                                    )
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          }),
+                                          _vm._v(" "),
+                                          !_vm.lateLeave.length
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pm-attendance-nothing-found"
+                                                },
+                                                [_vm._v("Nothing found")]
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e()
                                 ]),
                                 _vm._v(" "),
-                                notice.popup
-                                  ? _c("div", [
-                                      _c(
-                                        "div",
-                                        {
-                                          directives: [
-                                            {
-                                              name: "hrm-dialog",
-                                              rawName: "v-hrm-dialog"
-                                            }
-                                          ],
-                                          attrs: { title: notice.title }
-                                        },
-                                        [
+                                _c("div", { attrs: { id: "" } }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "activity-block",
+                                      attrs: { id: "" }
+                                    },
+                                    [
+                                      _c("ul", { staticClass: "subsubsub" }, [
+                                        _c("li", { staticClass: "all" }, [
                                           _c(
-                                            "p",
-                                            { staticClass: "hrm-popup-date" },
+                                            "a",
+                                            {
+                                              attrs: { href: "#l" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.attendanceTab("present")
+                                                }
+                                              }
+                                            },
                                             [
-                                              _c("i", {
-                                                staticClass:
-                                                  "far fa-calendar-alt"
-                                              }),
-                                              _vm._v(_vm._s(notice.date))
+                                              _vm._v("Present"),
+                                              _c(
+                                                "span",
+                                                { staticClass: "count" },
+                                                [
+                                                  _vm._v("("),
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass: "all-count"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.present.length
+                                                        )
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(")")
+                                                ]
+                                              )
                                             ]
                                           ),
-                                          _vm._v(" "),
-                                          _c("p", {
-                                            domProps: {
-                                              innerHTML: _vm._s(
-                                                notice.description
+                                          _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", { staticClass: "moderated" }, [
+                                          _c(
+                                            "a",
+                                            {
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.attendanceTab("absent")
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v("Absent"),
+                                              _c(
+                                                "span",
+                                                { staticClass: "count" },
+                                                [
+                                                  _vm._v("("),
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "pending-count"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.absent.length
+                                                        )
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(")")
+                                                ]
                                               )
+                                            ]
+                                          ),
+                                          _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", { staticClass: "approved" }, [
+                                          _c(
+                                            "a",
+                                            {
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.attendanceTab(
+                                                    "earlyEnter"
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v("Early Enter"),
+                                              _c(
+                                                "span",
+                                                { staticClass: "count" },
+                                                [
+                                                  _vm._v("("),
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "approved-count"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.earlyEnter.length
+                                                        )
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(")")
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", { staticClass: "spam" }, [
+                                          _c(
+                                            "a",
+                                            {
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.attendanceTab(
+                                                    "earlyLeave"
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v("Early Leave"),
+                                              _c(
+                                                "span",
+                                                { staticClass: "count" },
+                                                [
+                                                  _vm._v("("),
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass: "spam-count"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.earlyLeave.length
+                                                        )
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(")")
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" |\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", { staticClass: "spam" }, [
+                                          _c(
+                                            "a",
+                                            {
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.attendanceTab("lateLeave")
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v("Late Leave"),
+                                              _c(
+                                                "span",
+                                                { staticClass: "count" },
+                                                [
+                                                  _vm._v("("),
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass: "spam-count"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          _vm.lateLeave.length
+                                                        )
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(")")
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ])
+                                      ])
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "postbox " }, [
+                            _vm._m(5),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "inside" }, [
+                              _c(
+                                "div",
+                                { staticClass: "pm-birthday-body" },
+                                [
+                                  _vm._l(_vm.birthday, function(birth) {
+                                    return _c(
+                                      "ul",
+                                      { staticClass: "hrm-attendance-ul" },
+                                      [
+                                        _c("li", [
+                                          _c("img", {
+                                            staticClass: "hrm-dashboard-avatar",
+                                            attrs: {
+                                              src: birth.data.avatar_url
                                             }
-                                          })
-                                        ]
+                                          }),
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                              _vm._s(birth.data.display_name) +
+                                              "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", [
+                                          _vm._v(_vm._s(birth.data.birthday))
+                                        ])
+                                      ]
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  !_vm.birthday.length
+                                    ? _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "pm-birthday-nothing-found"
+                                        },
+                                        [_vm._v("Nothing found")]
                                       )
-                                    ])
+                                    : _vm._e()
+                                ],
+                                2
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "postbox-container",
+                      attrs: { id: "postbox-container-2" }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "meta-box-sortables ui-sortable" },
+                        [
+                          _c("div", { staticClass: "postbox " }, [
+                            _vm._m(6),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "inside" }, [
+                              _c(
+                                "div",
+                                { staticClass: "pm-leave-body" },
+                                [
+                                  _vm._l(_vm.leaves, function(leave) {
+                                    return _c(
+                                      "ul",
+                                      { staticClass: "hrm-attendance-ul" },
+                                      [
+                                        _c("li", [
+                                          _c("img", {
+                                            staticClass: "hrm-dashboard-avatar",
+                                            attrs: {
+                                              src:
+                                                leave.employee.data.avatar_url
+                                            }
+                                          }),
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                              _vm._s(
+                                                leave.employee.data.display_name
+                                              ) +
+                                              "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("li", [
+                                          _vm._v(
+                                            _vm._s(leave.leave_type.data.name)
+                                          )
+                                        ])
+                                      ]
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  !_vm.leaves.length
+                                    ? _c(
+                                        "div",
+                                        {
+                                          staticClass: "pm-leave-nothing-found"
+                                        },
+                                        [_vm._v("Nothing found")]
+                                      )
+                                    : _vm._e()
+                                ],
+                                2
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "postbox " }, [
+                            _vm._m(7),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "inside" }, [
+                              _c("div", { staticClass: "pm-notice-body" }, [
+                                _vm.notices.length
+                                  ? _c(
+                                      "ul",
+                                      { staticClass: "hrm-notice-ul" },
+                                      _vm._l(_vm.notices, function(notice) {
+                                        return _c("li", [
+                                          _c(
+                                            "a",
+                                            {
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  _vm.popUpNotice(notice)
+                                                }
+                                              }
+                                            },
+                                            [_vm._v(_vm._s(notice.title))]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _c("i", {
+                                              staticClass: "far fa-calendar-alt"
+                                            }),
+                                            _vm._v(_vm._s(notice.date))
+                                          ]),
+                                          _vm._v(" "),
+                                          notice.popup
+                                            ? _c("div", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    directives: [
+                                                      {
+                                                        name: "hrm-dialog",
+                                                        rawName: "v-hrm-dialog"
+                                                      }
+                                                    ],
+                                                    attrs: {
+                                                      title: notice.title
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "p",
+                                                      {
+                                                        staticClass:
+                                                          "hrm-popup-date"
+                                                      },
+                                                      [
+                                                        _c("i", {
+                                                          staticClass:
+                                                            "far fa-calendar-alt"
+                                                        }),
+                                                        _vm._v(
+                                                          _vm._s(notice.date)
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("p", {
+                                                      domProps: {
+                                                        innerHTML: _vm._s(
+                                                          notice.description
+                                                        )
+                                                      }
+                                                    })
+                                                  ]
+                                                )
+                                              ])
+                                            : _vm._e()
+                                        ])
+                                      })
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.notices.length
+                                  ? _c(
+                                      "div",
+                                      {
+                                        staticClass: "pm-notice-nothing-found"
+                                      },
+                                      [_vm._v("Nothing found")]
+                                    )
                                   : _vm._e()
                               ])
-                            })
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.notices.length
-                        ? _c(
-                            "div",
-                            { staticClass: "pm-notice-nothing-found" },
-                            [_vm._v("Nothing found")]
-                          )
-                        : _vm._e()
-                    ])
-                  ])
-                ])
-              ])
-            ]
-          )
-        ]
-      )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            ])
+          ])
+        : _vm._e()
     ])
   ])
 }
@@ -41236,105 +41454,136 @@ var render = function() {
                 _c("div", { staticClass: "inside" }, [
                   _c("ul", { staticClass: "net-pay" }, [
                     _c("li", [
-                      _vm._v("\n\t\t\t\t\t\t\tNet Pay\n\t\t\t\t\t\t\t"),
                       _c("ul", { staticClass: "gross-childred-li" }, [
                         _c("li", { staticClass: "gross-li" }, [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\t\t\tGross\n\t\t\t\t\t\t\t\t\t"
-                          ),
+                          _c("strong", [_vm._v("Income")]),
+                          _vm._v(" "),
                           _c(
                             "ul",
                             { staticClass: "gross-item-ul" },
-                            _vm._l(_vm.incomeFormulas, function(incomeFormula) {
-                              return _c("li", [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "delete-btn",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.deleteFormula(incomeFormula)
-                                      }
-                                    }
-                                  },
-                                  [_c("i", { staticClass: "far fa-trash-alt" })]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "formula-display-name",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.setEditDate(incomeFormula)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
-                                        _vm._s(incomeFormula.description) +
-                                        "\n\t\t\t\t\t\t\t\t\t\t\t"
-                                    )
-                                  ]
-                                )
-                              ])
-                            })
+                            [
+                              _vm._l(_vm.incomeFormulas, function(
+                                incomeFormula
+                              ) {
+                                return _vm.incomeFormulas.length
+                                  ? _c("li", [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "delete-btn",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.deleteFormula(incomeFormula)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "far fa-trash-alt"
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "formula-display-name",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.setEditDate(incomeFormula)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                              _vm._s(
+                                                incomeFormula.description
+                                              ) +
+                                              "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e()
+                              }),
+                              _vm._v(" "),
+                              !_vm.incomeFormulas.length
+                                ? _c("li", [_vm._v("No component found")])
+                                : _vm._e()
+                            ],
+                            2
                           )
                         ]),
                         _vm._v(" "),
                         _c("li", { staticClass: "deducations-li" }, [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\t\t\tTotal Deductions\n\t\t\t\t\t\t\t\t\t"
-                          ),
+                          _c("strong", [_vm._v("Deductions")]),
+                          _vm._v(" "),
                           _c(
                             "ul",
                             { staticClass: "deductions-item-ul" },
-                            _vm._l(_vm.deductionFormulas, function(
-                              deductionFormula
-                            ) {
-                              return _c("li", [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "delete-btn",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.deleteFormula(deductionFormula)
-                                      }
-                                    }
-                                  },
-                                  [_c("i", { staticClass: "far fa-trash-alt" })]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "formula-display-name",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        _vm.setEditDate(deductionFormula)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
-                                        _vm._s(deductionFormula.description) +
-                                        "\n\t\t\t\t\t\t\t\t\t\t\t"
-                                    )
-                                  ]
-                                )
-                              ])
-                            })
+                            [
+                              _vm._l(_vm.deductionFormulas, function(
+                                deductionFormula
+                              ) {
+                                return _vm.deductionFormulas.length
+                                  ? _c("li", [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "delete-btn",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.deleteFormula(
+                                                deductionFormula
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "far fa-trash-alt"
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "formula-display-name",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.setEditDate(deductionFormula)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                              _vm._s(
+                                                deductionFormula.description
+                                              ) +
+                                              "\n\t\t\t\t\t\t\t\t\t\t\t"
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e()
+                              }),
+                              _vm._v(" "),
+                              !_vm.deductionFormulas.length
+                                ? _c("li", [_vm._v("No component found")])
+                                : _vm._e()
+                            ],
+                            2
                           )
                         ])
                       ])

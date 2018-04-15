@@ -418,17 +418,21 @@
 
 				if(!self.salaryDay) {
 					hrm.Toastr.error('Salary day required!');
+					return;
 				}
 
 				if(!self.salaryType) {
 					hrm.Toastr.error('Salary type required!');
+					return;
 				}
 
 				if(!self.categoryId) {
 					hrm.Toastr.error('Employee/Designation required!');
+					return;
 				}
 				if(!self.salary) {
 					hrm.Toastr.error('Monthly/Annual salary required!');
+					return;
 				}
 				
 				var form_data = {

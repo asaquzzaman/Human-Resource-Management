@@ -67,29 +67,29 @@ class Hrm_Dashboard {
     }
 
     function total_male_employess() {
-        $male_employees = new WP_User_Query([
-            'role'   => hrm_employee_role_key(),
-            'number' => 1,
-            'meta_query' => [
-                [
-                    'key'     => 'gender',
-                    'value'   => 'male',
+        $male_employees = new WP_User_Query(array(
+            'role__in'   => array( hrm_manager_role_key(), hrm_employee_role_key() ),
+            'number' => -1,
+            'meta_query' => array(
+                array(
+                    'key'     => 'hrm_gender',
+                    'value'   => '1',
                     'compare' => '='
-                ]
-            ]
-        ]);
-
+                )
+            )
+        ));
+        
         return $male_employees->total_users;
     }
 
     function total_female_employees() {
         $female_employees = new WP_User_Query([
-            'role'   => hrm_employee_role_key(),
-            'number' => 1,
+            'role__in'   => array( hrm_manager_role_key(), hrm_employee_role_key() ),
+            'number' => -1,
             'meta_query' => [
                 [
-                    'key'     => 'gender',
-                    'value'   => 'female',
+                    'key'     => 'hrm_gender',
+                    'value'   => '2',
                     'compare' => '='
                 ]
             ]

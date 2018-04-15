@@ -162,7 +162,7 @@ export default {
             var request_data = {
                 data: postData,
                 beforeSend () {
-	            	self.loadingStart('hrm-list-table');
+	            	self.loadingStart('hrm-list-table'); 
 	            },
                 success: function(res) {
                 	res.data.forEach(function(record) {

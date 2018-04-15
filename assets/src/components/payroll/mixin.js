@@ -118,6 +118,9 @@ export default {
 
 	        this.httpRequest('hrm_group_filter', form_data);
 		},
+		managePayroll() {
+            return hrm_user_can('manage_payroll');
+        }
 	}	
 	
 }

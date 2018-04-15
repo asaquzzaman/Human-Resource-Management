@@ -135,11 +135,16 @@ class Hrm_Payroll {
         $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : $postData['from'];
         $start_date  = date( 'Y-m-01', strtotime( $salary_date ) );
         $end_date    = date( 'Y-m-t', strtotime( $salary_date ) );
-        $employee_id = empty( $postData['employee_id'] ) ? '' : $postData['employee_id'];
         $page        = empty( $postData['page'] ) ? 1 : intval( $postData['page'] );
         $id          = empty( $postData['id'] ) ? false : $postData['id'];
 
         $per_page = hrm_per_page();
+
+        if ( hrm_user_can( 'manage_payroll' ) ) {
+            $employee_id = empty( $postData['employee_id'] ) ? '' : $postData['employee_id'];
+        } else {
+            $employee_id = get_current_user_id();
+        }
  
         if ( $id !== false  ) {
 
@@ -322,12 +327,12 @@ class Hrm_Payroll {
         $actual_salary = $salary;
         $salary = $salary_period ? $salary : $salary/12;
 
-        if ( $generate_gross <  $salary ) {
-            $formulas['meta']['salaryMeta']['others']         = $salary - $generate_gross;
+        //if ( $generate_gross <  $salary ) {
+            $formulas['meta']['salaryMeta']['others']         = ( $generate_gross <  $salary ) ? $salary - $generate_gross : 0;
             $formulas['meta']['salaryMeta']['incomeTotal']    = $salary;
             $formulas['meta']['salaryMeta']['deductionTotal'] = $deduction;
             $formulas['meta']['salaryMeta']['employeeGet']    = $salary - $deduction;
-        }
+        //}
 
         if ( $is_save ) {
 

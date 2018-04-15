@@ -1,3 +1,4 @@
+
 var leaveCalendar;
 
 var HRM_Leave_Apply_Calendar = {
@@ -8,7 +9,7 @@ var HRM_Leave_Apply_Calendar = {
 			emp_leave_with_type_record = context.emp_leave_with_type_record,
 			el = $(el);
 
-		leaveCalendar = el.fullCalendar({
+		leaveCalendar = new hrm.Fullcalendar.Calendar(el, {
 			header: {
 				left: 'prev,next',
 				center: 'title',
@@ -118,7 +119,7 @@ var HRM_Leave_Apply_Calendar = {
 
 		context.leaveCalendar = leaveCalendar;
 		
-		//leaveCalendar.render();
+		leaveCalendar.render();
 	},
 
 	remove_event_when_leave_type_exist: function(context, calEvent, jsEvent, view) {

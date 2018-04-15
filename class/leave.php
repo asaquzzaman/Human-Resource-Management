@@ -137,9 +137,15 @@ class Hrm_Leave {
 
             $leaves = Leave::with('leaveType');
 
-            if ( !empty( $args['emp_id'] ) ) {
-                $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+            if ( hrm_user_can( 'manage_leave' ) ) {
+                if ( !empty( $args['emp_id'] ) ) {
+                    $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+                }
+            } else {
+                $emp_id = get_current_user_id();
+                $leaves = $leaves->where( 'emp_id', $emp_id );
             }
+            
 
             if ( !empty( $args['start_time'] ) ) {
                 $leaves = $leaves->where( 'start_time', '>=', $args['start_time'] );

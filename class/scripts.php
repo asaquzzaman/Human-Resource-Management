@@ -37,7 +37,7 @@ class Hrm_Scripts {
         wp_enqueue_media();
         wp_enqueue_script( 'hrm-scripts' );
 
-        wp_localize_script( 'hrm-const', 'HRM_Vars', array(
+        wp_localize_script( 'hrm-uploader', 'HRM_Vars', array(
             'ajax_url'        => admin_url( 'admin-ajax.php' ),
             'nonce'           => wp_create_nonce( 'hrm_nonce' ),
             'time_zone'       => hrm_get_wp_timezone(),

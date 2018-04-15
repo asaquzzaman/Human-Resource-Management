@@ -1,8 +1,8 @@
 <template>
 	<div class="hrm-salary">
 		<payroll-menu></payroll-menu>
-		<div class="metabox-holder">
-			<div id="hrm-hidden-form-warp" class="postbox">
+		<div class="metabox-holder" id="hrm-hidden-form-warp">
+			<div v-if="isLoaded"  class="postbox">
 	        
 	        	<h2 class="hndle">Salary</h2>
 
@@ -117,7 +117,7 @@
 				    		<span class="description">Select salary component group</span>
 					    </div>
 
-				        <table class="wp-list-table widefat fixed striped pages">
+				        <table id="hrm-salary-lists" class="wp-list-table widefat fixed striped pages">
 				        	<thead>
 					        	<tr class="tr-main">
 					        		<td class="tb-main">Income</td>
@@ -162,7 +162,7 @@
 					        	<tr class="tr-main">
 					        		<td class="tb-main">Salary</td>
 					        		<td>
-					        			<input class="amount" v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any">
+					        			<input class="amount" required="required" v-model="salary" type="number" placeholder="Monthly/Annual salary" step="any">
 					        		</td>
 					        		<td>
 					        			<select v-model="salaryPeriod">
@@ -214,6 +214,9 @@
 			float: none !important;
 			padding: 5px;
 		}
+		.inside {
+			margin: 11px 0;
+		}
 	}
 
 </style>
@@ -230,9 +233,19 @@
 				salary: '',
 				salaryType: 'designation',
 				salaryDay: '',
-				salaryComponentGroup: '',
+				salaryComponentGroup: {
+					id: '',
+					name: 'All'
+				},
 				salaryPeriod: 'monthly',
 				isUpdate: false,
+				isLoaded: false,
+				allLoad: {
+					getEmployee: false,
+					getDesignation: false,
+					getGroup: false,
+					getFormula: false
+				}
 			}
 		},
 
@@ -242,19 +255,33 @@
 
 		created () {
 			var self = this;
-			this.getEmployess();
-			this.getDesignation();
+			self.loadingStart('hrm-hidden-form-warp');
+			this.getEmployess({
+				callback () {
+					self.allLoad.getEmployee = true;
+					self.checkAllLoad();
+				}
+			});
+			this.getDesignation({
+				callback () {
+					self.allLoad.getDesignation = true;
+					self.checkAllLoad();
+				}
+			});
 			
 			this.getSalaryGroupRecords({
-
+				callback () {
+					self.allLoad.getGroup = true;
+					self.checkAllLoad();
+				}
 			});
 
-			this.getSelfFromulas();
-
-			// setTimeout(function() {
-			// 	self.getEmpSalary();
-			// }, 1000);
-			
+			this.getSelfFromulas({
+				callback () {
+					self.allLoad.getFormula = true;
+					self.checkAllLoad();
+				}
+			});
 		},
 
 		watch: {
@@ -308,12 +335,29 @@
 			},
 
 			meta () {
+				if(!this.$store.state.salary.meta) {
+					return 0;
+				}
 				return this.$store.state.salary.meta;
 			}
 		},
 
 		methods: {
-			getEmployess () {
+			checkAllLoad () {
+				var status = true;
+				jQuery.each(this.allLoad, function(key, load) {
+					if (load === false) {
+						status = false;
+						return;
+					}
+				});
+
+				if( status ) {
+					this.isLoaded = true;
+					this.loadingStop('hrm-hidden-form-warp');
+				}
+ 			},
+			getEmployess (args) {
 				var self = this;
 
 				var form_data = {
@@ -323,6 +367,10 @@
 
 		            success: function(res) {
 		            	self.$store.commit(self.nameSpace + '/setEmployees', res.data);
+		            	
+		            	if(typeof args.callback != 'undefined') {
+		            		args.callback();
+		            	}
 		            },
 
 		            error: function(res) {
@@ -332,7 +380,7 @@
 		        this.httpRequest('hrm_employee_filter', form_data);
 			},
 
-			getDesignation () {
+			getDesignation (args) {
 				var self = this;
 
 				var postData = {
@@ -347,6 +395,10 @@
 	                data: postData,
 	                success: function(res) {
 	                    self.$store.commit( self.nameSpace + '/setDesignation', res.data );
+
+	                 	if(typeof args.callback != 'undefined') {
+		            		args.callback();
+		            	}
 	                }
 	            };
 
@@ -363,6 +415,21 @@
 
 			generateSalaryStatement (save) {
 				var self = this;
+
+				if(!self.salaryDay) {
+					hrm.Toastr.error('Salary day required!');
+				}
+
+				if(!self.salaryType) {
+					hrm.Toastr.error('Salary type required!');
+				}
+
+				if(!self.categoryId) {
+					hrm.Toastr.error('Employee/Designation required!');
+				}
+				if(!self.salary) {
+					hrm.Toastr.error('Monthly/Annual salary required!');
+				}
 				
 				var form_data = {
 		            data: {
@@ -415,62 +482,15 @@
 		        this.httpRequest('hrm_generate_salary_statement', form_data);
 			},
 
-			// getEmpSalary () {
-			// 	var query = this.$route.query;
-			// 	var self = this;
 
-			// 	if ( 
-			// 		typeof query.update == 'undefined'
-			// 			||
-			// 		typeof query.salary == 'undefined'
-			// 	) {
-			// 		return;
-			// 	}
-
-			// 	var self = this;
-			// 	self.isUpdate = true;
-
-			// 	var postData = {
-			// 		salary_id: query.salary
-			// 	};
-				
-	  //           var request_data = {
-	  //               data: postData,
-	  //               success: function(res) {
-	  //               	self.id = query.salary;
-	                	
-	  //               	if (res.data.category == 'designation') {
-	  //               		let index = self.getIndex(self.designation, res.data.category_id, 'id');
-	  //               		self.categoryId = self.designation[index];
-	  //               	} else {
-	  //               		let index = self.getIndex(self.employees, res.data.category_id, 'id');
-	  //               		self.categoryId = self.employees[index];
-	  //               	}
-
-	  //               	if(res.data.group_id) {
-	  //               		let index = self.getIndex(self.componentGroup, res.data.group_id, 'id');
-	  //               		self.salaryComponentGroup = self.componentGroup[index];
-	  //               	}
-	                    
-			// 			self.salary     = res.data.salary;
-			// 			self.salaryType = res.data.category;
-			// 			self.salaryDay  = res.data.month;
-			// 			self.salaryPeriod =  res.data.type;
-
-			// 			self.$store.commit( 'salary/setUpdateData', res.data.info );
-
-	  //               }
-	  //           };
-
-	  //           self.httpRequest('hrm_get_employee_salary', request_data);
-			// },
-
-			getSelfFromulas () {
+			getSelfFromulas (args) {
 				var self = this;
 					this.getFormulas({
 					callback (res) {
-						
 						self.$store.commit( 'salary/setFormulas', res.data );
+						if(typeof args.callback != 'undefined') {
+		            		args.callback();
+		            	}
 					}
 				});
 			},
@@ -490,8 +510,11 @@
 	                	id: self.categoryId.id,
 	                	salaryDay: self.salaryDay
 	                },
+	                beforeSend () {
+	                	self.loadingStart('hrm-salary-lists');
+	                },
 	                success: function(res) {
-	                	
+	                	self.loadingStop('hrm-salary-lists');
 	                	if(typeof res == 'undefined') {
 	                		self.$store.commit( 'salary/setFormulas', [] );
 		            		self.$store.commit( 
@@ -506,6 +529,7 @@
 								} 
 							);
 	                		self.isUpdate = false;
+	                		self.salary = '';
 	                		return;
 	                	}
 

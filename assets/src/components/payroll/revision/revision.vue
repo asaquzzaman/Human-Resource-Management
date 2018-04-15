@@ -4,7 +4,7 @@
 		<payroll-menu></payroll-menu>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div v-if="manageOrganization()" class="hrm-table-action  hrm-bulk-wrap">
+			<div v-if="managePayroll()" class="hrm-table-action  hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -19,7 +19,7 @@
 				<div class="alignleft actions">
 					<form @submit.prevent="recordSearch()">
 
-						<div class="hrm-multiselect">
+						<div v-if="managePayroll()" class="hrm-multiselect">
 							<hrm-multiselect 
 					            v-model="employee" 
 					            :options="employees" 
@@ -74,10 +74,11 @@
 <script>
 	import Table from './revision-table.vue';
 	import Mixin from './mixin';
+	import PayrollMixin from './../mixin';
 
 	
 	export default {
-		mixins: [Mixin],
+		mixins: [Mixin, PayrollMixin],
 
 		data () {
 

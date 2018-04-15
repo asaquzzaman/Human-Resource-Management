@@ -4,7 +4,7 @@ namespace HRM\Core\Crud;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use HRM\Core\Crud\Pattern;
-use HRM\Core\Crud\Validation;
+//use HRM\Core\Crud\Validation;
 use HRM\Core\Common\Traits\Transformer_Manager;
 use League\Fractal;
 use League\Fractal\Resource\Item as Item;
@@ -13,7 +13,7 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 abstract class Action implements Pattern {
 
-	use Validation, Transformer_Manager;
+	use Transformer_Manager;
 
 	private $postdata = array();
 	private $class;
@@ -46,11 +46,11 @@ abstract class Action implements Pattern {
 	}
 
 	public function create() {
-		$this->create_validation();
+		// $this->create_validation();
 
-		if ( is_wp_error( $this->error ) ) {
-			return $this->error;
-		}
+		// if ( is_wp_error( $this->error ) ) {
+		// 	return $this->error;
+		// }
 
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();	

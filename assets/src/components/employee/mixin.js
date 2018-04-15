@@ -235,7 +235,7 @@ export default {
 			var postData = {
 				'class': 'Designation',
 				'method': 'gets',
-				'transformers': 'designation_Transformer',
+				'transformers': 'Designation_Transformer',
 				'per_page': '1000'
 			};
 			

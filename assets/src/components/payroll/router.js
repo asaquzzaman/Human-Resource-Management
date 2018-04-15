@@ -17,7 +17,7 @@ let menu = [
         	order: 2
         },
         redirect: {
-            name: 'salary_components'
+            name: hrm_user_can('manage_payroll') ? 'salary' : 'revision'
         }
     }
 ];

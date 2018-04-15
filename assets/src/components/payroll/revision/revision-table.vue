@@ -32,7 +32,7 @@
 					
                     <td>
                     	<span><a href="#" @click.prevent="salaryDetails(record)">{{ record.employee.data.display_name }}</a></span>
-                    	<div class="row-actions">
+                    	<div v-if="managePayroll()" class="row-actions">
 	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
                     </td>
@@ -76,9 +76,10 @@
 <script>
 	import Mixin from './mixin'
 	import SalaryDetails from './salary-details'
+	import PayrollMixin from './../mixin';
 
 	export default {
-		mixins: [Mixin],	
+		mixins: [Mixin, PayrollMixin],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],

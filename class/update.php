@@ -96,7 +96,7 @@ class Hrm_Update {
      * @return void
      */
     public static function show_update_notice() {
-        if ( ! current_user_can( 'update_plugins' ) || ! $this->is_needs_update() ) {
+        if ( ! current_user_can( 'update_plugins' ) || ! self::is_needs_update() ) {
             return;
         }
         

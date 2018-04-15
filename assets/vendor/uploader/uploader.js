@@ -5,7 +5,7 @@
      * @param string browse_button ID of the pickfile
      * @param string container ID of the wrapper
      */
-    window.PM_Uploader = function (browse_button, container, component) {
+    window.HRM_Uploader = function (browse_button, container, component) {
         this.container = container;
         this.browse_button = browse_button;
 
@@ -19,7 +19,7 @@
         //instantiate the uploader
         this.uploader = new plupload.Uploader({
             dragdrop: true,
-            drop_element: 'pm-upload-container',
+            drop_element: 'hrm-upload-container',
             runtimes: 'html5,silverlight,flash,html4',
             browse_button: browse_button,
             container: container,
@@ -28,12 +28,12 @@
             multiple_queues: false,
             urlstream_upload: true,
             file_data_name: 'files',
-            max_file_size: PM_Vars.plupload.max_file_size,
-            url: PM_Vars.plupload.url,
-            flash_swf_url: PM_Vars.plupload.flash_swf_url,
-            silverlight_xap_url: PM_Vars.plupload.silverlight_xap_url,
-            filters: PM_Vars.plupload.filters,
-            resize: PM_Vars.plupload.resize,
+            max_file_size: HRM_Vars.plupload.max_file_size,
+            url: HRM_Vars.plupload.url,
+            flash_swf_url: HRM_Vars.plupload.flash_swf_url,
+            silverlight_xap_url: HRM_Vars.plupload.silverlight_xap_url,
+            filters: HRM_Vars.plupload.filters,
+            resize: HRM_Vars.plupload.resize,
         });
 
         //attach event handlers
@@ -48,7 +48,7 @@
 
     };
 
-    PM_Uploader.prototype = {
+    HRM_Uploader.prototype = {
 
         init: function (up, params) {
 

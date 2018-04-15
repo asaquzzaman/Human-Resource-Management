@@ -682,13 +682,16 @@ function hrm_manager_capability() {
         'manage_department',
         'manage_settings',
         'manage_designation',
+        'manage_payroll',
+        'payroll_revistion',
     );
 }
 
 function hrm_employee_capability() {
     return array(
         'edit_employee',
-        'hrm_employee'
+        'hrm_employee',
+        'payroll_revistion',
     );
 }
 

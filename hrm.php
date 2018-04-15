@@ -35,6 +35,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  * **********************************************************************
  */
+
+// if ( version_compare( phpversion(), '7', '<'  ) ) {
+//     echo 'Minimum PHP Version Requirement 7';
+//     exit();
+// }
+
 require_once dirname (__FILE__) . '/vendor/autoload.php';
 
 class WP_Hrm {
@@ -62,7 +68,7 @@ class WP_Hrm {
 
     function __construct() {
         $this->define_constants();
-        $this->include();
+        $this->includes();
 
         $this->instantiate();
         $this->init_action();
@@ -71,7 +77,7 @@ class WP_Hrm {
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
-    function include() {
+    function includes() {
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
 
         $this->migrate_db();

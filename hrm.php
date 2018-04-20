@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.0.1
+ * Version: 2.1.0
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -73,15 +73,12 @@ class WP_Hrm {
         $this->instantiate();
         $this->init_action();
         $this->init_filter();
-        
+
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
     function includes() {
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
-
-        $this->migrate_db();
-    
     }
 
     function migrate_db() {
@@ -110,7 +107,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.0.1' );
+        $this->define( 'HRM_VERSION', '2.1.0' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -157,7 +154,8 @@ class WP_Hrm {
     }
 
     function init() {
-
+        $this->migrate_db();
+        
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;
             $hrm_is_admin = is_admin() ? 1 : 0;

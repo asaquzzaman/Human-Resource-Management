@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
+class ComposerStaticInit5b33ae8cd41b08b5d036965c8c45e439
 {
     public static $files = array (
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
@@ -44,10 +44,6 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
             'HRM\\Models\\' => 11,
             'HRM\\Include\\' => 12,
             'HRM\\Core\\' => 9,
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Inflector\\' => 26,
         ),
         'C' => 
         array (
@@ -108,13 +104,19 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         array (
             0 => __DIR__ . '/../..' . '/core',
         ),
-        'Doctrine\\Common\\Inflector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
-        ),
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'D' => 
+        array (
+            'Doctrine\\Common\\Inflector\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
         ),
     );
 
@@ -371,6 +373,7 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
         'Illuminate\\Database\\Seeder' => __DIR__ . '/..' . '/illuminate/database/Seeder.php',
         'Illuminate\\Database\\SqlServerConnection' => __DIR__ . '/..' . '/illuminate/database/SqlServerConnection.php',
         'Illuminate\\Events\\CallQueuedHandler' => __DIR__ . '/..' . '/illuminate/events/CallQueuedHandler.php',
+        'Illuminate\\Events\\CallQueuedListener' => __DIR__ . '/..' . '/illuminate/events/CallQueuedListener.php',
         'Illuminate\\Events\\Dispatcher' => __DIR__ . '/..' . '/illuminate/events/Dispatcher.php',
         'Illuminate\\Events\\EventServiceProvider' => __DIR__ . '/..' . '/illuminate/events/EventServiceProvider.php',
         'Illuminate\\Pagination\\AbstractPaginator' => __DIR__ . '/..' . '/illuminate/pagination/AbstractPaginator.php',
@@ -534,9 +537,10 @@ class ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit56cf970b4fd2e269b433a50b9028edcc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5b33ae8cd41b08b5d036965c8c45e439::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5b33ae8cd41b08b5d036965c8c45e439::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit5b33ae8cd41b08b5d036965c8c45e439::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit5b33ae8cd41b08b5d036965c8c45e439::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,28 +5,16 @@
 	        <div  class="hrm-descriptive-content" v-html="record[field.name]"></div>
 	    </div>
 	
-	
-
         <input :required="field.required" v-if="field.type == 'text'" type="text" v-model="record[field.name]">
-
-
 
     	<hrm-date-picker :required="field.required" v-if="field.type == 'datePickerFrom'" placeholder="From" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
     
-
-
     	<hrm-date-picker :required="field.required" v-if="field.type == 'datePickerTo'" placeholder="To" v-model="record[field.name]"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
   
-
-	
 		<textarea :required="field.required" v-if="field.type == 'textarea'" name="description" v-model="record[field.name]" class="hrm-des-field" id="description"></textarea>
-	
-
 	
 		<hrm-file-uploader v-if="field.type == 'file'" :files="record[field.name]" :multiple="field.multiple" :attr="field.attr" :delete="field.deleted_files"></hrm-file-uploader>
 	
-
-
 		<span v-if="field.type == 'radio'" class="hrm-radio-wrap" v-for="(option, optKey) in field.options" :key="optKey">
 			<input :required="field.required" type="radio" :value="option.value" v-model="record[field.name]" :id="option.name">
 			<label class="hrm-radio" :for="option.name">{{ option.label }}</label>

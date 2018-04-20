@@ -2,10 +2,13 @@
 
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
-Requires at least: 4
-Tested up to: 4.9.1
+Requires at least: 4.4
+Tested up to: 4.9.5
+Requires PHP: 5.6.4
 Stable tag: trunk
+License: GPLv2
 License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Organization, Industries and Office management
 
@@ -65,6 +68,14 @@ Here are some notable features that you may consider before diving in.
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
+
+= 2.1.0 - March 15, 2018 =
+
+ * [new] Payroll
+ * [update] Dashboard male/female count
+ * [update] Permission for requested leave tab
+ * [update] Reduce all js file size
+ * [update] Make compitable with php lower version
 
 = 2.0.1 - March 26, 2018 =
 

@@ -19,6 +19,5 @@ return array(
     'HRM\\Models\\' => array($baseDir . '/models'),
     'HRM\\Include\\' => array($baseDir . '/include'),
     'HRM\\Core\\' => array($baseDir . '/core'),
-    'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
 );

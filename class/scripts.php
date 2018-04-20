@@ -19,6 +19,8 @@ class Hrm_Scripts {
     public static function register_scripts() {
         $scripts = self::scripts();
 
+        do_action( 'hrm_before_load_script' );
+
         foreach ( $scripts as $script ) {
 
             wp_register_script( 
@@ -68,15 +70,15 @@ class Hrm_Scripts {
             ),
         ));
 
-        wp_enqueue_style( 'hrm-vue-multiselect', HRM_URL . '/assets/css/vue-multiselect/vue-multiselect.min.css', array(), time(), 'all' );
-        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), time(), 'all' );
-        wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/assets/css/jquery-fullcalendar/fullcalendar.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'hrm-vue-multiselect', HRM_URL . '/assets/css/vue-multiselect/vue-multiselect.min.css', array(), HRM_VERSION, 'all' );
+        wp_enqueue_style( 'hrm-toastr', HRM_URL . '/assets/css/toastr/toastr.min.css', array(), HRM_VERSION, 'all' );
+        wp_enqueue_style( 'hrm-jquery-fullcalendar', HRM_URL . '/assets/css/jquery-fullcalendar/fullcalendar.min.css', array(), HRM_VERSION, 'all' );
         wp_enqueue_style( 'hrm-admin', HRM_URL . '/assets/css/admin.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-chosen', HRM_URL . '/assets/css/chosen.min.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui', HRM_URL . '/assets/css/jquery-ui.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-ui-timepicker', HRM_URL . '/assets/css/jquery-ui-timepicker-addon.css', false, false, 'all' );
         wp_enqueue_style( 'hrm-jquery-preloader', HRM_URL . '/assets/css/Elegant-Loading-Indicator/preloader.css', false, false, 'all' );
-        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'hrm-fontawesome', HRM_URL . '/assets/css/fontawesome/font-awesome.min.css', array(), HRM_VERSION, 'all' );
     }
 
 
@@ -84,7 +86,7 @@ class Hrm_Scripts {
 
         $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-        return [
+        $scripts = [
             
 
             'hrm-config' => [
@@ -233,6 +235,7 @@ class Hrm_Scripts {
             ]
         ];
 
+        return apply_filters( 'hrm_scripts', $scripts );
     }
 }
 

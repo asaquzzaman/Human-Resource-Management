@@ -258,6 +258,7 @@ return array(
     'Illuminate\\Database\\Seeder' => $vendorDir . '/illuminate/database/Seeder.php',
     'Illuminate\\Database\\SqlServerConnection' => $vendorDir . '/illuminate/database/SqlServerConnection.php',
     'Illuminate\\Events\\CallQueuedHandler' => $vendorDir . '/illuminate/events/CallQueuedHandler.php',
+    'Illuminate\\Events\\CallQueuedListener' => $vendorDir . '/illuminate/events/CallQueuedListener.php',
     'Illuminate\\Events\\Dispatcher' => $vendorDir . '/illuminate/events/Dispatcher.php',
     'Illuminate\\Events\\EventServiceProvider' => $vendorDir . '/illuminate/events/EventServiceProvider.php',
     'Illuminate\\Pagination\\AbstractPaginator' => $vendorDir . '/illuminate/pagination/AbstractPaginator.php',

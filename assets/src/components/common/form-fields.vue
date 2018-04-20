@@ -15,7 +15,16 @@
 	            <label for="title">
 	                {{ field.label }}<em v-if="field.required">*</em>
 	            </label>
-	            <input type="text" :required="field.required" v-model="field.model">
+	            <input :disabled="field.disabled" type="text" :required="field.required" v-model="field.model">
+	            <span class="hrm-clear"></span>
+	            <span class="description"></span>
+        	</div>
+
+        	<div v-if="field.type == 'number'">
+	            <label for="title">
+	                {{ field.label }}<em v-if="field.required">*</em>
+	            </label>
+	            <input :disabled="field.disabled" type="number" :step="field.step" :required="field.required" v-model="field.model">
 	            <span class="hrm-clear"></span>
 	            <span class="description"></span>
         	</div>
@@ -42,7 +51,7 @@
         		<label for="title">
 	                {{ field.label }}<em v-if="field.required">*</em>
 	            </label>
-	        	<hrm-date-picker :required="field.required" placeholder="To" v-model="field.model"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
+	        	<hrm-date-picker :required="field.required" placeholder="To" v-model="field.model"  class="pm-datepickter-from" dependency="pm-datepickter-to"></hrm-date-picker>
 	          	<span class="hrm-clear"></span>
             	<span class="description"></span>
         	</div>
@@ -147,6 +156,20 @@
 			            :allow-empty="false">
 
 			        </hrm-multiselect>               
+			    </div>
+			    <div class="hrm-clear"></div>
+			    <span v-if="field.helpText" class="description" v-html="field.helpText"></span>
+			</div>
+
+			<div v-if="field.type == 'htmlSelect'" class="hrm-form-field hrm-leave-type-wrap">
+				<label>
+					{{ field.label }}
+					<em v-if="field.required">*</em>
+				</label>
+				<div class="hrm-multiselect">
+			        <select v-model="field.model">
+			        	<option v-for="option in field.options" :value="option.value">{{ option.label }}</option>
+			        </select>              
 			    </div>
 			    <div class="hrm-clear"></div>
 			    <span v-if="field.helpText" class="description" v-html="field.helpText"></span>

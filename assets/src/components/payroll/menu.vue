@@ -2,6 +2,7 @@
     <div v-if="menu.length">
         <h2 class="nav-tab-wrapper">
             <router-link v-for="(item, index) in filterChildren(menu[0].children)" :key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
+            <do-action hook="hrm-payroll-tab"></do-action>
         </h2>
 
         <h3 class="hrm-sub-nav">
@@ -10,6 +11,8 @@
                 <li v-for="children in childrens()">
                     <router-link  :to="{name: children.name}">{{ children.meta.label }}</router-link> |&nbsp; 
                 </li> 
+
+                <do-action hook="hrm-payroll-subtab"></do-action>
               
             </ul>
         </h3>
@@ -20,6 +23,7 @@
 <script>
    
     import Menu from './router';
+    import DoAction from '@components/common/do-action.vue';
 
     var Hrm_Leave_Header = {
         
@@ -31,6 +35,10 @@
 
         created () {
             this.menu = Menu;
+        },
+
+        components: {
+            'do-action': DoAction
         },
 
         methods: {

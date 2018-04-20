@@ -86,14 +86,12 @@
 						type: 'select',
 						model: '',
 						options: [],
-						label: 'Department',
-						optionLabel: 'name',
-						placeholder: 'Select Department',
-						name: 'department',
-						tableHead: 'Department',
+						label: 'Employee',
+						optionLabel: 'display_name',
+						placeholder: 'Select Employee',
+						name: 'employee',
 						editable: true,
 						required: true,
-						helpText: '<a href="#/departments">Create Department</a>',
 						//Filter submited new data
 						filterSubmited (val) {
 							return val.id;

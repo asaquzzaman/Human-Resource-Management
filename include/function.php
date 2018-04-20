@@ -48,90 +48,6 @@ function hrm_update_records($postdata) {
     return Crud::data_process( $postdata );
 }
 
-function hrm_user_can_access( $page = null, $tab = null, $subtab = null, $access_point = null, $user_id = null ) {
-    if( ! apply_filters( 'hrm_free_permission', false ) ) {
-        return true;
-    }
-
-    if ( $user_id === null ) {
-        $user_id = get_current_user_id();
-    }
-
-    $current_user = get_user_by( 'id', $user_id );
-
-    $super_admin = get_option( 'hrm_admin', true );
-    $user_role = reset( $current_user->roles );
-
-    if ( $user_id == $super_admin ) {
-        return true;
-    }
-
-    if ( $user_role == 'administrator' ) {
-        return true;
-    }
-
-    $get_role = get_role( $user_role );
-    $get_role_cap = $get_role->capabilities;
-
-    if ( ! array_key_exists( $page, $get_role_cap ) ) {
-        return false;
-    }
-
-    if ( $tab === null ) {
-        return true;
-    }
-
-    $menu = hrm_page();
-
-    //if tab has no access role
-    if ( isset( $menu[$page][$tab]['follow_access_role'] ) && ! $menu[$page][$tab]['follow_access_role'] ) {
-        return true;
-    }
-
-    //for custom access role
-    $inside_tab_role = false;
-    $inside_subtab_role = false;
-
-    if ( isset( $menu[$page][$tab]['role'] ) && is_array( $menu[$page][$tab]['role'] ) ) {
-        $inside_tab_role = array_key_exists( $access_point, $menu[$page][$tab]['role'] ) ? true : false;
-    }
-
-    if ( isset( $menu[$page][$tab]['submenu'] ) && isset( $menu[$page][$tab]['submenu']['role'] ) ) {
-        if ( is_array( $menu[$page][$tab]['submenu']['role'] ) && array_key_exists( $access_point, $menu[$page][$tab]['submenu']['role'] ) ) {
-            $inside_subtab_role = true;
-        }
-    }
-
-    if ( $inside_tab_role ) {
-       if ( user_can( $user_id, $tab .'_'. $access_point ) ) {
-            return true;
-        }
-    }
-
-    if ( $inside_subtab_role ) {
-       if ( user_can( $user_id, $subtab .'_'. $access_point ) ) {
-            return true;
-        }
-    }
-    //end
-
-    //check permission for view, edit, delete
-    if ( $subtab == null && user_can( $user_id, $tab .'_'. $access_point ) ) {
-        return true;
-    } else if ( $subtab == null && ! user_can( $user_id, $tab .'_'. $access_point ) ) {
-        return false;
-    }
-
-    if ( ! user_can( $user_id, $tab .'_'. $access_point ) ) {
-        return false;
-    }
-
-    if ( user_can( $user_id, $subtab .'_'. $access_point ) ) {
-        return true;
-    }
-
-    return false;
-}
 
 function hrm_user_can( $cap, $user_id = false) {
 
@@ -354,67 +270,6 @@ function hrm_get_employee_id() {
     return $employee_id;
 }
 
-function hrm_get_query_args( $page = false ) {
-
-    $menu     = hrm_page();
-    $get_page = empty( $_GET['page'] ) ? false : $_GET['page'];
-    $page     = $page ? $page : $get_page;
-
-    if ( !$page ) {
-        $query = array(
-            'page'   => false,
-            'tab'    => false,
-            'subtab' => false,
-        );
-        return apply_filters( 'hrm_query_var', $query );
-    }
-
-    if ( isset( $_GET['tab'] ) && !empty( $_GET['tab'] ) ) {
-        $tab = $_GET['tab'];
-    } else if ( isset( $menu[$page] ) && is_array( $menu[$page] ) ) {
-        $tab = array_keys( $menu[$page] );
-        $tab = reset( $tab );
-        $tab = isset( $menu[$page]['tab'] ) && ( $menu[$page]['tab'] === false ) ? false : $tab;
-    } else {
-        $tab = false;
-    }
-
-    if ( !$tab ) {
-        $query = array(
-            'page' => $page,
-            'tab'  => false,
-            'subtab' => false,
-        );
-
-        return apply_filters( 'hrm_query_var', $query );
-    }
-
-    if ( isset( $_GET['sub_tab'] ) && !empty( $_GET['sub_tab'] ) ) {
-        $subtab = $_GET['sub_tab'];
-    } else if ( isset( $menu[$page][$tab]['submenu'] ) && count( $menu[$page][$tab]['submenu'] ) ) {
-        $subtab = array_keys( $menu[$page][$tab]['submenu'] );
-        $subtab = reset( $subtab );
-    } else {
-        $subtab = false;
-    }
-    if ( !$subtab ) {
-        $query = array(
-            'page'   => $page,
-            'tab'    => $tab,
-            'subtab' => false,
-        );
-        return apply_filters( 'hrm_query_var', $query );
-    } else {
-        $query = array(
-            'page'   => $page,
-            'tab'    => $tab,
-            'subtab' => $subtab,
-        );
-
-        return apply_filters( 'hrm_query_var', $query );
-    }
-}
-
 function hrm_pagenum() {
     return isset( $_REQUEST['pagenum'] ) ? intval( $_REQUEST['pagenum'] ) : 1;
 }
@@ -614,6 +469,8 @@ function hrm_financial_end_date() {
 function hrm_load_schema() {
     $contents = [];
     $files = glob( __DIR__ . "/../db/migrations/*.php" );
+    
+    $files = apply_filters( 'hrm_load_schema_files', $files );
 
     if ( $files === false ) {
         throw new RuntimeException( "Failed to glob for migration files" );

@@ -19,10 +19,8 @@
 
 <script>
     import Menu from './router';
-    import Mixin from './mixin'
     
     var Hrm_Leave_Header = {
-        mixins: [Mixin],
 
         data: function() {
             return {
@@ -31,7 +29,18 @@
         },
 
         created () {
+            this.menu = this.menu.filter(function(child) {
+                    
+                if(
+                    typeof child.meta != 'undefined'
+                        &&
+                    typeof child.meta.label != 'undefined'
+                ) {
 
+                    return child;
+                }
+
+            });
         },
 
         methods: {

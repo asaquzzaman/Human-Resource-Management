@@ -8712,7 +8712,6 @@ var Hrm_Leave_Configuration = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
 //
 //
@@ -8732,12 +8731,10 @@ var Hrm_Leave_Configuration = {
 //
 //
 //
-
 
 
 
 var Hrm_Leave_Header = {
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixin__["default"]],
 
     data: function () {
         return {
@@ -8745,7 +8742,15 @@ var Hrm_Leave_Header = {
         };
     },
 
-    created() {},
+    created() {
+        this.menu = this.menu.filter(function (child) {
+
+            if (typeof child.meta != 'undefined' && typeof child.meta.label != 'undefined') {
+
+                return child;
+            }
+        });
+    },
 
     methods: {
         childrens() {
@@ -13896,7 +13901,6 @@ function setCaretToPos(input, pos) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_common_do_action_vue__ = __webpack_require__(122);
 //
 //
 //
@@ -13916,11 +13920,6 @@ function setCaretToPos(input, pos) {
 //
 //
 //
-//
-//
-//
-
-
 
 
 
@@ -13928,26 +13927,28 @@ var Hrm_Leave_Header = {
 
     data: function () {
         return {
-            menu: []
+            menu: __WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */][0].children
         };
     },
 
     created() {
-        this.menu = __WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */];
-    },
+        this.menu = this.menu.filter(function (child) {
 
-    components: {
-        'do-action': __WEBPACK_IMPORTED_MODULE_1__components_common_do_action_vue__["a" /* default */]
+            if (typeof child.meta != 'undefined' && typeof child.meta.label != 'undefined') {
+
+                return child;
+            }
+        });
     },
 
     methods: {
         childrens() {
-            if (!this.menu.length) {
+            if (!this.has_child) {
                 return [];
             }
-            let root_menu = this.$route.matched[1].name;
 
-            let index = this.getIndex(this.menu[0].children, root_menu, 'name');
+            let root_menu = this.getParentName();
+            let index = this.getIndex(this.menu, root_menu, 'name');
 
             if (index === false) {
                 return [];
@@ -13961,86 +13962,21 @@ var Hrm_Leave_Header = {
                 return [];
             }
         },
-        filterChildren(children) {
-            var menu = [];
 
-            children.forEach(function (child) {
-                if (typeof child.meta != 'undefined' && typeof child.meta.label != 'undefined') {
-                    menu.push(child);
-                }
-            });
+        has_child: function () {
 
-            return menu;
+            if (this.$route.matched.length > 1) {
+                return true;
+            }
+
+            return false;
+        },
+
+        getParentName() {
+            let index = this.getIndex(this.$route.matched, this.$route.name, 'name');
+            index = parseInt(index) - 1;
+            return this.$route.matched[index].name;
         }
-        // is_it_child: function() {
-
-        //     if( this.$route.matched.length > 1 ) {
-        //         return true;
-        //     }
-        // },
-        // has_child_menu: function() {
-        //     var path = this.$route.path,
-        //         has_submenu = false;
-
-        //     jQuery.each( this.header, function(key, val ) {
-
-        //         if (val.url == path) {
-        //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-        //                 has_submenu = true;
-        //             }
-        //         }
-        //     });
-
-        //     return has_submenu;
-        // },
-        // get_child_menu: function() {
-        //     var path = this.$route.path,
-        //         submenu = [];
-
-        //     if ( this.is_it_child() ) {
-        //         var partent_name = this.$route.matched[0].name;
-
-        //         jQuery.each( this.header, function(key, val ) {
-        //             if (val.name == partent_name) {
-        //                 if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-        //                     submenu = val.submenu;
-        //                 }
-        //             }
-        //         });
-
-        //         return submenu;
-        //     }
-
-
-        //     jQuery.each( this.header, function(key, val ) {
-        //         if (val.url == path) {
-        //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-        //                 submenu = val.submenu;
-        //             }
-        //         }
-        //     });
-
-        //     return submenu;
-        // },
-        // getHeader: function() {
-        //     var request_data = {
-        //         _wpnonce: HRM_Vars.nonce,
-        //     },
-        //     self  = this;
-
-        //     wp.ajax.send( 'leave_header', {
-        //         data: request_data,
-        //         success: function(res) {
-        //             self.header = res.header;
-        //             //self.$store.commit( 'header', {'header': res.header} );
-
-        //         },
-
-        //         error: function(res) {
-
-        //         }
-        //     });
-        // }
     }
 };
 
@@ -35472,59 +35408,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.menu.length
-    ? _c("div", [
-        _c(
-          "h2",
-          { staticClass: "nav-tab-wrapper" },
-          [
-            _vm._l(_vm.filterChildren(_vm.menu[0].children), function(
-              item,
-              index
-            ) {
-              return _c(
-                "router-link",
-                {
-                  key: index,
-                  staticClass: "nav-tab",
-                  attrs: { to: { name: item.name } }
-                },
-                [_vm._v(_vm._s(item.meta.label))]
-              )
-            }),
-            _vm._v(" "),
-            _c("do-action", { attrs: { hook: "hrm-payroll-tab" } })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("h3", { staticClass: "hrm-sub-nav" }, [
-          _c(
-            "ul",
-            { staticClass: "hrm-subsubsub" },
+  return _c("div", [
+    _c(
+      "h2",
+      { staticClass: "nav-tab-wrapper" },
+      _vm._l(_vm.menu, function(item, index) {
+        return _c(
+          "router-link",
+          {
+            key: index,
+            staticClass: "nav-tab",
+            attrs: { to: { name: item.name } }
+          },
+          [_vm._v(_vm._s(item.meta.label))]
+        )
+      })
+    ),
+    _vm._v(" "),
+    _c("h3", { staticClass: "hrm-sub-nav" }, [
+      _c(
+        "ul",
+        { staticClass: "hrm-subsubsub" },
+        _vm._l(_vm.childrens(), function(children, child_key) {
+          return _c(
+            "li",
+            { key: child_key },
             [
-              _vm._l(_vm.childrens(), function(children) {
-                return _c(
-                  "li",
-                  [
-                    _c(
-                      "router-link",
-                      { attrs: { to: { name: children.name } } },
-                      [_vm._v(_vm._s(children.meta.label))]
-                    ),
-                    _vm._v(" |  \n            ")
-                  ],
-                  1
-                )
-              }),
-              _vm._v(" "),
-              _c("do-action", { attrs: { hook: "hrm-payroll-subtab" } })
+              _c("router-link", { attrs: { to: { name: children.name } } }, [
+                _vm._v(_vm._s(children.meta.label))
+              ]),
+              _vm._v(" |  \n            ")
             ],
-            2
+            1
           )
-        ])
-      ])
-    : _vm._e()
+        })
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -1,18 +1,15 @@
 <template>
-    <div v-if="menu.length">
+    <div>
         <h2 class="nav-tab-wrapper">
-            <router-link v-for="(item, index) in filterChildren(menu[0].children)" :key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
-            <do-action hook="hrm-payroll-tab"></do-action>
+            <router-link v-for="(item, index) in menu" :key="index" class="nav-tab" :to="{name: item.name}">{{ item.meta.label }}</router-link>
         </h2>
 
         <h3 class="hrm-sub-nav">
             <ul class="hrm-subsubsub">
 
-                <li v-for="children in childrens()">
+                <li v-for="(children, child_key) in childrens()" :key="child_key">
                     <router-link  :to="{name: children.name}">{{ children.meta.label }}</router-link> |&nbsp; 
                 </li> 
-
-                <do-action hook="hrm-payroll-subtab"></do-action>
               
             </ul>
         </h3>
@@ -21,34 +18,40 @@
 </template>
 
 <script>
-   
     import Menu from './router';
-    import DoAction from '@components/common/do-action.vue';
 
+    
     var Hrm_Leave_Header = {
-        
+
         data: function() {
             return {
-                menu: [],
+                menu: Menu[0].children,
             }
         },
 
         created () {
-            this.menu = Menu;
-        },
+            this.menu = this.menu.filter(function(child) {
+                    
+                if(
+                    typeof child.meta != 'undefined'
+                        &&
+                    typeof child.meta.label != 'undefined'
+                ) {
 
-        components: {
-            'do-action': DoAction
+                    return child;
+                }
+
+            });
         },
 
         methods: {
             childrens () {
-                if (!this.menu.length) {
+                if (!this.has_child) {
                     return [];
                 }
-                let root_menu = this.$route.matched[1].name;
 
-                let index = this.getIndex(this.menu[0].children, root_menu, 'name');
+                let root_menu = this.getParentName();
+                let index = this.getIndex(this.menu, root_menu, 'name');
                 
                 if (index === false) {
                     return [];
@@ -62,93 +65,30 @@
                     return [];
                 }
             },
-            filterChildren(children) {
-                var menu = [];
 
-                children.forEach(function(child) {
-                    if( 
-                        typeof child.meta != 'undefined' 
-                            &&
-                        typeof child.meta.label != 'undefined'
-                    ) {
-                        menu.push(child);
-                    }
-                });
-                
-                return menu;
+            has_child: function() {
+
+                if( this.$route.matched.length > 1 ) {
+                    return true;
+                } 
+
+                return false;
+            },
+
+            getParentName () {
+                let index = this.getIndex(this.$route.matched, this.$route.name, 'name');
+                    index = parseInt(index) - 1;
+                return this.$route.matched[index].name;
             }
-            // is_it_child: function() {
-
-            //     if( this.$route.matched.length > 1 ) {
-            //         return true;
-            //     }
-            // },
-            // has_child_menu: function() {
-            //     var path = this.$route.path,
-            //         has_submenu = false;
-                
-            //     jQuery.each( this.header, function(key, val ) {
-                    
-            //         if (val.url == path) {
-            //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-            //                 has_submenu = true;
-            //             }
-            //         }
-            //     });
-
-            //     return has_submenu;
-            // },
-            // get_child_menu: function() {
-            //     var path = this.$route.path,
-            //         submenu = [];
-
-            //     if ( this.is_it_child() ) {
-            //         var partent_name = this.$route.matched[0].name;
-                    
-            //         jQuery.each( this.header, function(key, val ) {
-            //             if (val.name == partent_name) {
-            //                 if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-            //                     submenu = val.submenu;
-            //                 }
-            //             }
-            //         });
-
-            //         return submenu;
-            //     }
-                
-                
-            //     jQuery.each( this.header, function(key, val ) {
-            //         if (val.url == path) {
-            //             if( typeof val.submenu != 'undefined' && jQuery(val.submenu).length ) {
-            //                 submenu = val.submenu;
-            //             }
-            //         }
-            //     });
-
-            //     return submenu;
-            // },
-            // getHeader: function() {
-            //     var request_data = {
-            //         _wpnonce: HRM_Vars.nonce,
-            //     },
-            //     self  = this;
-
-            //     wp.ajax.send( 'leave_header', {
-            //         data: request_data,
-            //         success: function(res) {
-            //             self.header = res.header;
-            //             //self.$store.commit( 'header', {'header': res.header} );
-                    
-            //         },
-
-            //         error: function(res) {
-                        
-            //         }
-            //     });
-            // }
         }
     };
 
     export default Hrm_Leave_Header;
 </script>
+
+
+
+
+
+
 

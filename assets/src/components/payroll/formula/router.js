@@ -12,6 +12,7 @@ if(hrm_user_can('manage_payroll')) {
                 name: 'salary_components',
                 meta: {
                     label: 'Salary Components',
+                    order: 2
                 }
             }
         ]

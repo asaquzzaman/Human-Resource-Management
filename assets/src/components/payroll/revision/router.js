@@ -11,6 +11,7 @@ HRMRegisterChildrenRoute ('payroll',
             name: 'revision',
             meta: {
                 label: 'Revision',
+                order: 4
             },
             children: [
                 {

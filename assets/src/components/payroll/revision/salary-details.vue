@@ -159,42 +159,26 @@
 				return statement.amount;
 			},
 			incomeTotal (salary) {
-				if(typeof salary.info == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta.salaryMeta == 'undefined') {
-					return 0;
-				}
-				return salary.info.meta.salaryMeta.incomeTotal;
+				return salary.salary;
 			},
 
 			deductionTotal (salary) {
-				if(typeof salary.info == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta.salaryMeta == 'undefined') {
-					return 0;
-				}
-				return salary.info.meta.salaryMeta.deductionTotal;
+				var total = 0;
+
+				salary.info.data.forEach(function(salaryObj) {
+					if(salaryObj.type == 'deduction') {
+						total = total + parseFloat(salaryObj.amount);
+					}
+				});
+
+				return total.toFixed(2);
 			},
 
 			employeeGet (salary) {
-				if(typeof salary.info == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta == 'undefined') {
-					return 0;
-				}
-				if(typeof salary.info.meta.salaryMeta == 'undefined') {
-					return 0;
-				}
-				return salary.info.meta.salaryMeta.employeeGet;
+				let totalDeduct = this.deductionTotal(salary);
+				let emp_get = parseFloat(salary.salary) - parseFloat(totalDeduct);
+
+				return emp_get.toFixed(2);
 			},
 
 			others (salary) {

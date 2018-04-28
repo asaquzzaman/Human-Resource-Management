@@ -86,19 +86,20 @@
 						type: 'select',
 						model: '',
 						options: [],
-						label: 'Employee',
-						optionLabel: 'display_name',
-						placeholder: 'Select Employee',
-						name: 'employee',
+						label: 'Department',
+						optionLabel: 'name',
+						placeholder: 'Select Department',
+						name: 'department',
+						tableHead: 'Department',
 						editable: true,
 						required: true,
+						helpText: '<a href="#/departments">Create Department</a>',
 						//Filter submited new data
 						filterSubmited (val) {
 							return val.id;
 						},
 						//Table print data
 						filterPrintData (val) {
-
 							if (!val) {
 								return '&#8211 &#8211';
 							}
@@ -106,7 +107,6 @@
 						},
 						// Filter edit form field data
 						filterComputedGet (val) {
-
 							if (!val) {
 								return '';
 							}

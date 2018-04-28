@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 175);
+/******/ 	return __webpack_require__(__webpack_require__.s = 174);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -3248,7 +3248,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 																}
 												};
 
-												this.httpRequest('hrm_delete_record', form_data);
+												this.httpRequest('hrm_delete_salary', form_data);
 								},
 
 								updateRecord(args) {
@@ -3436,10 +3436,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attendance_records_vue__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attendance_records_vue__ = __webpack_require__(220);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__attendance_user_search_vue__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_configuration_vue__ = __webpack_require__(219);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__empty_vue__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_configuration_vue__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__empty_vue__ = __webpack_require__(221);
 
 HRMRegisterModule('attendance', 'attendance');
 
@@ -3809,9 +3809,9 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_router__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__location_router__ = __webpack_require__(149);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notice_router__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_router__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__location_router__ = __webpack_require__(148);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notice_router__ = __webpack_require__(150);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__organization_vue__ = __webpack_require__(272);
 
 
@@ -4061,10 +4061,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__salary_router__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formula_router__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__group_router__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__revision_router__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__salary_router__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formula_router__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__group_router__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__revision_router__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__payroll_vue__ = __webpack_require__(277);
 
 
@@ -4112,9 +4112,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_experience_router__ = __webpack_require__(167);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__education_router__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_router__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__work_experience_router__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__education_router__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_router__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__personal_information_vue__ = __webpack_require__(287);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__job_location_vue__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__profile_vue__ = __webpack_require__(288);
@@ -4277,8 +4277,8 @@ if (hrm_user_can('manage_settings')) {
 
             HRMModules.forEach(function (module) {
 
-                let mixin = __webpack_require__(128)("./" + module.path + '/mixin.js');
-                let store = __webpack_require__(129)("./" + module.path + '/store.js');
+                let mixin = __webpack_require__(127)("./" + module.path + '/mixin.js');
+                let store = __webpack_require__(128)("./" + module.path + '/store.js');
 
                 HRMMixin[module.name] = mixin.default;
 
@@ -4634,7 +4634,7 @@ var Hrm_Leave_Header = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_clock_vue__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_clock_vue__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(7);
 //
 //
@@ -4790,7 +4790,7 @@ var Hrm_Leave_Header = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attendance_punch_in_out_btn_vue__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attendance_punch_in_out_btn_vue__ = __webpack_require__(219);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__attendance_user_search_vue__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_header_vue__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixin__ = __webpack_require__(7);
@@ -5815,7 +5815,7 @@ hrm.Vue.directive('hrm-uploader', {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__directive__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(20);
 //
@@ -6458,7 +6458,7 @@ hrm.Vue.directive('hrm-uploader', {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__department_edit_btn_vue__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__department_del_btn_vue__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__department_del_btn_vue__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(4);
 //
 //
@@ -6620,9 +6620,9 @@ hrm.Vue.directive('hrm-uploader', {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__department_add_btn_vue__ = __webpack_require__(230);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_department_form_vue__ = __webpack_require__(234);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__department_del_btn_vue__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__department_del_btn_vue__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__department_table_vue__ = __webpack_require__(232);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__department_pagination_vue__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__department_pagination_vue__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mixin__ = __webpack_require__(4);
 //
 //
@@ -7216,19 +7216,20 @@ hrm.Vue.directive('hrm-uploader', {
 				type: 'select',
 				model: '',
 				options: [],
-				label: 'Employee',
-				optionLabel: 'display_name',
-				placeholder: 'Select Employee',
-				name: 'employee',
+				label: 'Department',
+				optionLabel: 'name',
+				placeholder: 'Select Department',
+				name: 'department',
+				tableHead: 'Department',
 				editable: true,
 				required: true,
+				helpText: '<a href="#/departments">Create Department</a>',
 				//Filter submited new data
 				filterSubmited(val) {
 					return val.id;
 				},
 				//Table print data
 				filterPrintData(val) {
-
 					if (!val) {
 						return '&#8211 &#8211';
 					}
@@ -7236,7 +7237,6 @@ hrm.Vue.directive('hrm-uploader', {
 				},
 				// Filter edit form field data
 				filterComputedGet(val) {
-
 					if (!val) {
 						return '';
 					}
@@ -7724,7 +7724,7 @@ hrm.Vue.directive('hrm-uploader', {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__employee_table_vue__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_employee_form_vue__ = __webpack_require__(240);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__employee_form_fields__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__employee_form_fields__ = __webpack_require__(140);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixin__ = __webpack_require__(9);
 //
 //
@@ -9469,7 +9469,7 @@ var Hrm_Leave_Holidays = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_form_directive__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_form_directive__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leave_form_directive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__leave_form_directive__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(3);
 //
@@ -13939,10 +13939,17 @@ var Hrm_Leave_Header = {
                 return child;
             }
         });
+
+        this.menu = _.sortBy(this.menu, function (menu) {
+            if (typeof menu.meta != 'undefined') {
+                return menu.meta.order;
+            }
+        });
     },
 
     methods: {
         childrens() {
+            var childrens = [];
             if (!this.has_child) {
                 return [];
             }
@@ -13956,11 +13963,21 @@ var Hrm_Leave_Header = {
 
             if (this.menu[index].hasOwnProperty('children')) {
                 if (this.menu[index].children.length) {
-                    return this.menu[index].children;
+                    childrens = this.menu[index].children;
                 }
             } else {
                 return [];
             }
+
+            var menu = [];
+
+            childrens.forEach(function (val) {
+                if (typeof val.meta != 'undefined' && typeof val.meta.label != 'undefined') {
+                    menu.push(val);
+                }
+            });
+
+            return menu;
         },
 
         has_child: function () {
@@ -13987,7 +14004,7 @@ var Hrm_Leave_Header = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__menu_vue__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__menu_vue__ = __webpack_require__(124);
 //
 //
 //
@@ -14467,7 +14484,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive__ = __webpack_require__(156);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__directive__);
 //
 //
@@ -14630,42 +14647,26 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 			return statement.amount;
 		},
 		incomeTotal(salary) {
-			if (typeof salary.info == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta.salaryMeta == 'undefined') {
-				return 0;
-			}
-			return salary.info.meta.salaryMeta.incomeTotal;
+			return salary.salary;
 		},
 
 		deductionTotal(salary) {
-			if (typeof salary.info == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta.salaryMeta == 'undefined') {
-				return 0;
-			}
-			return salary.info.meta.salaryMeta.deductionTotal;
+			var total = 0;
+
+			salary.info.data.forEach(function (salaryObj) {
+				if (salaryObj.type == 'deduction') {
+					total = total + parseFloat(salaryObj.amount);
+				}
+			});
+
+			return total.toFixed(2);
 		},
 
 		employeeGet(salary) {
-			if (typeof salary.info == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta == 'undefined') {
-				return 0;
-			}
-			if (typeof salary.info.meta.salaryMeta == 'undefined') {
-				return 0;
-			}
-			return salary.info.meta.salaryMeta.employeeGet;
+			let totalDeduct = this.deductionTotal(salary);
+			let emp_get = parseFloat(salary.salary) - parseFloat(totalDeduct);
+
+			return emp_get.toFixed(2);
 		},
 
 		others(salary) {
@@ -17604,7 +17605,7 @@ hrm.Vue.component('profile-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__date_picker_vue__ = __webpack_require__(295);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__header_vue__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__header_vue__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixin__ = __webpack_require__(17);
 //
 //
@@ -17974,57 +17975,6 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__ = __webpack_require__(39);
-/* unused harmony namespace reexport */
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-
-/* template */
-var __vue_template__ = null
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__["a" /* default */],
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "assets/src/components/common/do-action.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-18ba2f78", Component.options)
-  } else {
-    hotAPI.reload("data-v-18ba2f78", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 123 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_department_del_btn_vue__ = __webpack_require__(47);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1156286_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_department_del_btn_vue__ = __webpack_require__(374);
@@ -18073,7 +18023,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18125,7 +18075,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18177,7 +18127,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18229,19 +18179,19 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_store__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_router__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_mixin__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_store__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_router__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_mixin__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives__ = __webpack_require__(169);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_directives___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__directives_directives__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_common_components__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(217);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_common_components__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__ = __webpack_require__(171);
 __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 
@@ -18251,6 +18201,8 @@ __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 
 
+
+window.hrmBus = new hrm.Vue();
 
 var wpspear_hrm = {
 	el: '#wpspear-hrm',
@@ -18265,18 +18217,18 @@ new hrm.Vue(wpspear_hrm);
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__["a" /* default */])('hr_management');
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./addons/mixin.js": 130,
+	"./addons/mixin.js": 129,
 	"./attendance/mixin.js": 7,
 	"./dashboard/mixin.js": 20,
 	"./departments/mixin.js": 4,
 	"./designation/mixin.js": 8,
 	"./employee/mixin.js": 9,
 	"./leave/mixin.js": 3,
-	"./organization/general/mixin.js": 146,
+	"./organization/general/mixin.js": 145,
 	"./organization/location/mixin.js": 10,
 	"./organization/notice/mixin.js": 11,
 	"./payroll/formula/mixin.js": 23,
@@ -18304,32 +18256,32 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 128;
+webpackContext.id = 127;
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./addons/store.js": 132,
-	"./attendance/store.js": 133,
-	"./dashboard/store.js": 136,
-	"./departments/store.js": 138,
-	"./designation/store.js": 140,
-	"./employee/store.js": 143,
-	"./leave/store.js": 145,
-	"./organization/general/store.js": 148,
-	"./organization/location/store.js": 150,
-	"./organization/notice/store.js": 152,
-	"./payroll/formula/store.js": 154,
-	"./payroll/group/store.js": 156,
-	"./payroll/revision/store.js": 159,
-	"./payroll/salary/store.js": 161,
-	"./profile/education/store.js": 163,
-	"./profile/skill/store.js": 165,
-	"./profile/store.js": 166,
-	"./profile/work-experience/store.js": 168,
-	"./settings/store.js": 169
+	"./addons/store.js": 131,
+	"./attendance/store.js": 132,
+	"./dashboard/store.js": 135,
+	"./departments/store.js": 137,
+	"./designation/store.js": 139,
+	"./employee/store.js": 142,
+	"./leave/store.js": 144,
+	"./organization/general/store.js": 147,
+	"./organization/location/store.js": 149,
+	"./organization/notice/store.js": 151,
+	"./payroll/formula/store.js": 153,
+	"./payroll/group/store.js": 155,
+	"./payroll/revision/store.js": 158,
+	"./payroll/salary/store.js": 160,
+	"./profile/education/store.js": 162,
+	"./profile/skill/store.js": 164,
+	"./profile/store.js": 165,
+	"./profile/work-experience/store.js": 167,
+	"./settings/store.js": 168
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -18345,10 +18297,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 129;
+webpackContext.id = 128;
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18573,11 +18525,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addons_vue__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addons_vue__ = __webpack_require__(217);
 
 HRMRegisterModule('addons', 'addons');
 
@@ -18597,7 +18549,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18727,7 +18679,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18811,7 +18763,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, exports) {
 
 var HRM_Dashboard = {
@@ -18835,7 +18787,7 @@ hrm.Vue.directive('hrm-dialog', {
 });
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18863,7 +18815,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18875,12 +18827,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__departments_vue__ = __webpack_require__(233);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__department_pagination_vue__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__department_pagination_vue__ = __webpack_require__(123);
 
 HRMRegisterModule('departments', 'departments');
 
@@ -18918,7 +18870,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18977,7 +18929,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19011,7 +18963,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19141,7 +19093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19481,7 +19433,7 @@ function hrmGetDefaultStatus() {
 
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19515,7 +19467,7 @@ HRMRegisterChildrenRoute('hrm_root', [{
 }]);
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19653,7 +19605,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, exports) {
 
 
@@ -20080,7 +20032,7 @@ hrm.Vue.directive('hrm-leave-jquery-fullcalendar', {
 });
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20311,7 +20263,7 @@ let HRM_Leave_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Leave_Store);
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20319,7 +20271,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20345,7 +20297,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20367,7 +20319,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20399,7 +20351,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20529,7 +20481,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20561,7 +20513,7 @@ HRMRegisterChildrenRoute('organization', [{
 }]);
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20691,7 +20643,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20706,13 +20658,14 @@ if (hrm_user_can('manage_payroll')) {
         component: __WEBPACK_IMPORTED_MODULE_0__formula_vue__["a" /* default */],
         name: 'salary_components',
         meta: {
-            label: 'Salary Components'
+            label: 'Salary Components',
+            order: 2
         }
     }]);
 }
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20864,7 +20817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20879,7 +20832,8 @@ if (hrm_user_can('manage_payroll')) {
         component: __WEBPACK_IMPORTED_MODULE_0__group_vue__["a" /* default */],
         name: 'group',
         meta: {
-            label: 'Component Group'
+            label: 'Component Group',
+            order: 3
         },
         children: [{
             path: 'pages/:current_page_number',
@@ -20890,7 +20844,7 @@ if (hrm_user_can('manage_payroll')) {
 }
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21020,7 +20974,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, exports) {
 
 var HRM_Dashboard = {
@@ -21043,7 +20997,7 @@ hrm.Vue.directive('hrm-dialog', {
 });
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21057,7 +21011,8 @@ HRMRegisterChildrenRoute('payroll', [{
     component: __WEBPACK_IMPORTED_MODULE_0__revision_vue__["a" /* default */],
     name: 'revision',
     meta: {
-        label: 'Revision'
+        label: 'Revision',
+        order: 4
     },
     children: [{
         path: 'pages/:current_page_number',
@@ -21067,7 +21022,7 @@ HRMRegisterChildrenRoute('payroll', [{
 }]);
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21201,7 +21156,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21217,7 +21172,8 @@ if (hrm_user_can('manage_payroll')) {
         component: __WEBPACK_IMPORTED_MODULE_0__salary_vue__["a" /* default */],
         name: 'salary',
         meta: {
-            label: 'Salary'
+            label: 'Salary',
+            order: 1
         }
     }, {
         path: 'salary/employees/:employee_id',
@@ -21227,7 +21183,7 @@ if (hrm_user_can('manage_payroll')) {
 }
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21269,7 +21225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21312,7 +21268,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21442,7 +21398,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21486,7 +21442,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21616,7 +21572,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21642,7 +21598,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21685,7 +21641,7 @@ HRMRegisterChildrenRoute('profile', [{
 }]);
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21815,7 +21771,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21829,7 +21785,7 @@ let HRM_Settings_Store = {
 /* harmony default export */ __webpack_exports__["default"] = (HRM_Settings_Store);
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, exports) {
 
 /**
@@ -21926,18 +21882,18 @@ hrm.Vue.directive('hrm-slide-down', {
 });
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_common_do_action_vue__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_settings_header_vue__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_common_date_picker_vue__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_common_form_fields_vue__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_common_pagination_vue__ = __webpack_require__(228);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_common_file_uploader_vue__ = __webpack_require__(226);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_common_edit_fields_vue__ = __webpack_require__(224);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_payroll_menu_vue__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_payroll_menu_vue__ = __webpack_require__(124);
 
 
 
@@ -21957,7 +21913,7 @@ hrm.Vue.component('hrm-edit-field', __WEBPACK_IMPORTED_MODULE_6__components_comm
 hrm.Vue.component('hrm-payroll-menu', __WEBPACK_IMPORTED_MODULE_7__components_payroll_menu_vue__["a" /* default */]);
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21997,7 +21953,7 @@ function menuFix(slug) {
 /* harmony default export */ __webpack_exports__["a"] = (menuFix);
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22029,7 +21985,7 @@ function menuFix(slug) {
             };
 
             property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
-            property.data._wpnonce = HRM_Vars.nonce;
+            property.data['_wpnonce'] = HRM_Vars.nonce;
 
             wp.ajax.send(hook, property);
         },
@@ -22250,20 +22206,20 @@ function menuFix(slug) {
 }));
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_organization_router__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_attendance_router__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_leave_router__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_settings_router__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router__ = __webpack_require__(142);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_addons_router__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_addons_router__ = __webpack_require__(130);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_payroll_router__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_common_empty_vue__ = __webpack_require__(225);
 
@@ -22295,17 +22251,17 @@ var router = new hrm.VueRouter({
 /* harmony default export */ __webpack_exports__["a"] = (router);
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__.p = HRM_Vars.hrm_url + '/assets/js/';
 
 //hrmPromise.then(function(result) {
-__webpack_require__(127);
+__webpack_require__(126);
 //});
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22321,7 +22277,7 @@ __webpack_require__(127);
 }));
 
 /***/ }),
-/* 177 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22335,7 +22291,7 @@ exports.push([module.i, "\n.hrm-td-editble-wrap .inline-edit-legend {\n\tmargin:
 
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22349,7 +22305,7 @@ exports.push([module.i, "\n.hrm-image, .hrm-employee-name {\n\t\tfloat: left;\n}
 
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22363,7 +22319,7 @@ exports.push([module.i, "\n.hrm-input-width {\n\twidth: 50% !important;\n}\n.hrm
 
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22377,7 +22333,7 @@ exports.push([module.i, "\n.hrm-tbl-action-btn-sibling {\n\twidth: 6%;\n}\n.hrm-
 
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22391,7 +22347,7 @@ exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\t
 
 
 /***/ }),
-/* 182 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -22400,6 +22356,20 @@ exports = module.exports = __webpack_require__(1)(false);
 
 // module
 exports.push([module.i, "\n.hrm-leave-employee-search-wrap .multiselect__input, \n.hrm-leave-employee-search-wrap .multiselect__input:focus,\n.hrm-leave-type-wrap .multiselect__input,\n.hrm-leave-type-wrap .multiselect__input:focus {\n\ttop: -5px;\n\tborder: none;\n\tbox-shadow: none;\n}\n.hrm-leave-employee-search-wrap .multiselect__content,\n.hrm-leave-type-wrap .multiselect__content {\n\tmargin-top: 0 !important;\n\tz-index: 99999 !important;\n}\n.hrm-leave-jquery-fullcalendar {\n\tmargin-left: 21%;\n\twidth: 50%;\n}\n.fc-center h2 {\n\tfont-size: 14px !important;\n\tfont-weight: 600 !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22427,7 +22397,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22441,7 +22411,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm .hrm-pagination-btn,\n#hrm .hrm-pagination-btn {\n    display: inline-block;\n    text-decoration: none;\n    font-size: 13px;\n    line-height: 26px;\n    height: 28px;\n    margin: 0;\n    padding: 0 10px 1px;\n    cursor: pointer;\n    border-width: 1px;\n    border-style: solid;\n    -webkit-appearance: none;\n    border-radius: 3px;\n    white-space: nowrap;\n    box-sizing: border-box;\n    color: #555;\n    border-color: #ccc;\n    background: #f7f7f7;\n    vertical-align: top;\n    margin-right: 3px;\n}\n.hrm .router-link-exact-active,\n#hrm .router-link-exact-active {\n    background: #f1f1f1;\n}\n.hrm-pagination-wrap {\n    margin-top: 8px;\n}\n", ""]);
 
 // exports
 
@@ -22455,7 +22425,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm .hrm-pagination-btn,\n#hrm .hrm-pagination-btn {\n    display: inline-block;\n    text-decoration: none;\n    font-size: 13px;\n    line-height: 26px;\n    height: 28px;\n    margin: 0;\n    padding: 0 10px 1px;\n    cursor: pointer;\n    border-width: 1px;\n    border-style: solid;\n    -webkit-appearance: none;\n    border-radius: 3px;\n    white-space: nowrap;\n    box-sizing: border-box;\n    color: #555;\n    border-color: #ccc;\n    background: #f7f7f7;\n    vertical-align: top;\n    margin-right: 3px;\n}\n.hrm .router-link-exact-active,\n#hrm .router-link-exact-active {\n    background: #f1f1f1;\n}\n.hrm-pagination-wrap {\n    margin-top: 8px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-input-width {\n\twidth: 50% !important;\n}\n.hrm-multiselect .multiselect {\n\twidth: 50% !important;\n}\n.hrm-field-wrap {\n\tdisplay: block;\n\twidth: 100%;\n}\n.hrm-inline-edit-label, .hrm-inline-edit-field {\n\tfloat: left;\n}\n.hrm-inline-edit-label {\n\twidth: 15%;\n}\n.hrm-inline-edit-field {\n\twidth: 60%;\n}\n.hrm-field-wrap .title {\n\twidth: 100% !important;\n}\n.hrm-field-wrap:after {\n\tvisibility: hidden;\n\tdisplay: block;\n\tfont-size: 0;\n\tcontent: \" \";\n\tclear: both;\n\theight: 0;\n}\n", ""]);
 
 // exports
 
@@ -22469,7 +22439,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-input-width {\n\twidth: 50% !important;\n}\n.hrm-multiselect .multiselect {\n\twidth: 50% !important;\n}\n.hrm-field-wrap {\n\tdisplay: block;\n\twidth: 100%;\n}\n.hrm-inline-edit-label, .hrm-inline-edit-field {\n\tfloat: left;\n}\n.hrm-inline-edit-label {\n\twidth: 15%;\n}\n.hrm-inline-edit-field {\n\twidth: 60%;\n}\n.hrm-field-wrap .title {\n\twidth: 100% !important;\n}\n.hrm-field-wrap:after {\n\tvisibility: hidden;\n\tdisplay: block;\n\tfont-size: 0;\n\tcontent: \" \";\n\tclear: both;\n\theight: 0;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-h1 {\n    padding: 0 !important;\n}\n", ""]);
 
 // exports
 
@@ -22483,7 +22453,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-h1 {\n    padding: 0 !important;\n}\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22497,7 +22467,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-title, .hrm-content {\n\tfloat: left;\n}\n.hrm-content {\n\twidth: 65%;\n}\n.hrm-content-wrap {\n\tdisplay: block;\n\tmargin-bottom: 10px;\n\twidth: 100%;\n}\n", ""]);
 
 // exports
 
@@ -22511,7 +22481,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-title, .hrm-content {\n\tfloat: left;\n}\n.hrm-content {\n\twidth: 65%;\n}\n.hrm-content-wrap {\n\tdisplay: block;\n\tmargin-bottom: 10px;\n\twidth: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22539,7 +22509,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n#hrm-hidden-form span {\n\tdisplay: block !important;\n}\n.multiselect__tags {\n\tdisplay: inline-block !important;\n\twidth: 100%;\n}\n.multiselect__input {\n\tborder: none !important;\n\tbox-shadow: none !important;\n}\n\n", ""]);
 
 // exports
 
@@ -22553,7 +22523,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n#hrm-hidden-form span {\n\tdisplay: block !important;\n}\n.multiselect__tags {\n\tdisplay: inline-block !important;\n\twidth: 100%;\n}\n.multiselect__input {\n\tborder: none !important;\n\tbox-shadow: none !important;\n}\n\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22567,7 +22537,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-start-date, .hrm-end-date {\n\tfont-size: 11px;\n\tcolor: #333;\n\tfont-weight: 800;\n}\n.page-title-action {\n\tmargin-top: 14px;\n    padding: 4px 8px;\n    position: relative;\n    text-decoration: none;\n    border: none;\n    border: 1px solid #ccc;\n    -webkit-border-radius: 2px;\n    border-radius: 2px;\n    background: #f7f7f7;\n    text-shadow: none;\n    font-weight: 600;\n    font-size: 13px;\n    line-height: normal;\n    color: #0073aa;\n    outline: 0;\n    display: inline-block;\n}\n.wrap .page-title-action:hover {\n\tbackground: #f7f7f7;\n\tcolor: #0073aa;\n\tborder: 1px solid #ccc;\n}\n.ui-sortable-handle {\n\tborder: none !important;\n}\n.postbox .inside {\n\tmargin: 0 !important;\n}\n#wpbody-content .metabox-holder {\n\tpadding-top: 0 !important;\n}\n.metabox-holder {\n\tmargin-top: 8px;\n}\n", ""]);
 
 // exports
 
@@ -22581,7 +22551,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-start-date, .hrm-end-date {\n\tfont-size: 11px;\n\tcolor: #333;\n\tfont-weight: 800;\n}\n.page-title-action {\n\tmargin-top: 14px;\n    padding: 4px 8px;\n    position: relative;\n    text-decoration: none;\n    border: none;\n    border: 1px solid #ccc;\n    -webkit-border-radius: 2px;\n    border-radius: 2px;\n    background: #f7f7f7;\n    text-shadow: none;\n    font-weight: 600;\n    font-size: 13px;\n    line-height: normal;\n    color: #0073aa;\n    outline: 0;\n    display: inline-block;\n}\n.wrap .page-title-action:hover {\n\tbackground: #f7f7f7;\n\tcolor: #0073aa;\n\tborder: 1px solid #ccc;\n}\n.ui-sortable-handle {\n\tborder: none !important;\n}\n.postbox .inside {\n\tmargin: 0 !important;\n}\n#wpbody-content .metabox-holder {\n\tpadding-top: 0 !important;\n}\n.metabox-holder {\n\tmargin-top: 8px;\n}\n", ""]);
+exports.push([module.i, "\n.fa-transgender,\n.fa-user {\n\tfloat: left;\n\tpadding-left: 25px;\n}\n.hrm-count {\n\tfloat: right;\n    padding-right: 44px;\n    font-size: 14px;\n}\n.hrm-block-3 .hrm-count {\n\tpadding-top: 16px;\n}\n.hrm-block-4 .hrm-count {\n\tpadding-top: 13px;\n}\n.hrm-block-1 {\n\tbackground: #f7f7f7; /*#30ddbc;*/\n}\n.hrm-block-2 {\n\tbackground: #f7f7f7; /*#01bcd4;*/\n}\n.hrm-block-3 {\n\tbackground: #f7f7f7; /*#7e57c2;*/\n}\n.hrm-block-4 {\n\tbackground: #f7f7f7; /*#2b6a93;*/\n\tborder-right: 1px solid #ddd;\n}\n.hrm-block {\n\tfloat: left;\n\twidth: 24.8%;\n\tborder-left: 1px solid #ddd;\n\tborder-top: 1px solid #dddddd8f;\n}\n.hrm-block-content-wrap {\n\theight: 120px;\n}\n.hrm-block-3 .hrm-block-content-wrap,\n.hrm-block-4 .hrm-block-content-wrap {\n\tpadding-top: 16px;\n}\n.hrm-block-image-wrap {\n\theight: 86px;\n    overflow-x: hidden;\n    overflow-y: scroll;\n    text-align: center;\n    padding-top: 16px;\n}\n.hrm-block-image-wrap img {\n\tborder-radius: 25px;\n\tdisplay: block;\n\tmargin: auto;\n}\n.hrm-block-1 .fa-user-circle {\n\tcolor: #55555569;\n}\n.hrm-block-2 .fa-users {\n\tcolor: #ffffff63;\n}\n.hrm-block-3 .fa-user,\n.hrm-block-4 .fa-transgender {\n\tcolor: #a0a5aa;\n}\n.hrm-img {\n\theight: 90px;\n}\n.hrm-admin-name {\n\tline-height: 30px;\n}\n.hrm-block-1 .fa-user-circle,\n.hrm-block-2 .fa-users,\n.hrm-block-3 .fa-user,\n.hrm-block-4 .fa-transgender {\n\t/*margin-left: 7%;\n    margin-top: 5%;*/\n    font-size: 46px;\n}\n.hrm-block-1,\n.hrm-block-2,\n.hrm-block-3,\n.hrm-block-4 {\n\tposition: relative;\n\theight: 120px;\n}\n.hrm-block-1 footer,\n.hrm-block-2 footer,\n.hrm-block-3 footer,\n.hrm-block-4 footer {\n\tposition: absolute;\n\tbottom: 0;\n    background: rgba(197, 196, 196, 0.34);\n    width: 100%;\n    text-align: center;\n    color: #555;\n    font-weight: 600;\n    padding: 2px 0;\n}\n.hrm-dashboard-avatar {\n\theight: 32px;\n\twidth: 32px;\n\t/*border-radius: 100%;*/\n\tfloat: left;\n\tmargin-right: 10px;\n}\n.hrm-dashboard-avatar:after {\n\tvisibility: hidden;\n\tfont-size: 0;\n\tcontent: \" \";\n\tclear: both;\n\theight: 0;\n}\n.hrm-attendance-ul li {\n\tdisplay: inline-block;\n}\n.hrm-attendance-ul li:nth-child(1) {\n\twidth: 72%;\n}\n.hrm-leave-h2 span {\n\tfloat: left;\n}\n.hrm-leave-h2 span:first-child {\n\twidth: 72%;\n}\n#dashboard-widgets-wrap {\n\tmargin-top: 20px;\n}\n.pm-present-body,\n.pm-birthday-body,\n.pm-leave-body,\n.pm-notice-body {\n\tmin-height: 50px;\n}\n.pm-attendance-nothing-found {\n\tpadding-top: 20px;\n}\n.pm-birthday-nothing-found,\n.pm-leave-nothing-found,\n.pm-notice-nothing-found {\n\tpadding-top: 15px;\n}\n.pm-notice-body .hrm-notice-ul {\n\tmargin: 0;\n\tpadding: 0;\n}\n.pm-notice-body .hrm-notice-ul li {\n\tdisplay: block;\n\tpadding-top: 5px;\n}\n.hrm-notice-ul .fa-calendar-alt {\n\tmargin-left: 10px;\n\tmargin-right: 5px;\n}\n.hrm-popup-date {\n\tdisplay: block;\n\tmargin-left: 50%;\n}\n.hrm-popup-date .fa-calendar-alt {\n\tmargin-right: 5px;\n}\n\n", ""]);
 
 // exports
 
@@ -22595,7 +22565,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.fa-transgender,\n.fa-user {\n\tfloat: left;\n\tpadding-left: 25px;\n}\n.hrm-count {\n\tfloat: right;\n    padding-right: 44px;\n    font-size: 14px;\n}\n.hrm-block-3 .hrm-count {\n\tpadding-top: 16px;\n}\n.hrm-block-4 .hrm-count {\n\tpadding-top: 13px;\n}\n.hrm-block-1 {\n\tbackground: #f7f7f7; /*#30ddbc;*/\n}\n.hrm-block-2 {\n\tbackground: #f7f7f7; /*#01bcd4;*/\n}\n.hrm-block-3 {\n\tbackground: #f7f7f7; /*#7e57c2;*/\n}\n.hrm-block-4 {\n\tbackground: #f7f7f7; /*#2b6a93;*/\n\tborder-right: 1px solid #ddd;\n}\n.hrm-block {\n\tfloat: left;\n\twidth: 24.8%;\n\tborder-left: 1px solid #ddd;\n\tborder-top: 1px solid #dddddd8f;\n}\n.hrm-block-content-wrap {\n\theight: 120px;\n}\n.hrm-block-3 .hrm-block-content-wrap,\n.hrm-block-4 .hrm-block-content-wrap {\n\tpadding-top: 16px;\n}\n.hrm-block-image-wrap {\n\theight: 86px;\n    overflow-x: hidden;\n    overflow-y: scroll;\n    text-align: center;\n    padding-top: 16px;\n}\n.hrm-block-image-wrap img {\n\tborder-radius: 25px;\n\tdisplay: block;\n\tmargin: auto;\n}\n.hrm-block-1 .fa-user-circle {\n\tcolor: #55555569;\n}\n.hrm-block-2 .fa-users {\n\tcolor: #ffffff63;\n}\n.hrm-block-3 .fa-user,\n.hrm-block-4 .fa-transgender {\n\tcolor: #a0a5aa;\n}\n.hrm-img {\n\theight: 90px;\n}\n.hrm-admin-name {\n\tline-height: 30px;\n}\n.hrm-block-1 .fa-user-circle,\n.hrm-block-2 .fa-users,\n.hrm-block-3 .fa-user,\n.hrm-block-4 .fa-transgender {\n\t/*margin-left: 7%;\n    margin-top: 5%;*/\n    font-size: 46px;\n}\n.hrm-block-1,\n.hrm-block-2,\n.hrm-block-3,\n.hrm-block-4 {\n\tposition: relative;\n\theight: 120px;\n}\n.hrm-block-1 footer,\n.hrm-block-2 footer,\n.hrm-block-3 footer,\n.hrm-block-4 footer {\n\tposition: absolute;\n\tbottom: 0;\n    background: rgba(197, 196, 196, 0.34);\n    width: 100%;\n    text-align: center;\n    color: #555;\n    font-weight: 600;\n    padding: 2px 0;\n}\n.hrm-dashboard-avatar {\n\theight: 32px;\n\twidth: 32px;\n\t/*border-radius: 100%;*/\n\tfloat: left;\n\tmargin-right: 10px;\n}\n.hrm-dashboard-avatar:after {\n\tvisibility: hidden;\n\tfont-size: 0;\n\tcontent: \" \";\n\tclear: both;\n\theight: 0;\n}\n.hrm-attendance-ul li {\n\tdisplay: inline-block;\n}\n.hrm-attendance-ul li:nth-child(1) {\n\twidth: 72%;\n}\n.hrm-leave-h2 span {\n\tfloat: left;\n}\n.hrm-leave-h2 span:first-child {\n\twidth: 72%;\n}\n#dashboard-widgets-wrap {\n\tmargin-top: 20px;\n}\n.pm-present-body,\n.pm-birthday-body,\n.pm-leave-body,\n.pm-notice-body {\n\tmin-height: 50px;\n}\n.pm-attendance-nothing-found {\n\tpadding-top: 20px;\n}\n.pm-birthday-nothing-found,\n.pm-leave-nothing-found,\n.pm-notice-nothing-found {\n\tpadding-top: 15px;\n}\n.pm-notice-body .hrm-notice-ul {\n\tmargin: 0;\n\tpadding: 0;\n}\n.pm-notice-body .hrm-notice-ul li {\n\tdisplay: block;\n\tpadding-top: 5px;\n}\n.hrm-notice-ul .fa-calendar-alt {\n\tmargin-left: 10px;\n\tmargin-right: 5px;\n}\n.hrm-popup-date {\n\tdisplay: block;\n\tmargin-left: 50%;\n}\n.hrm-popup-date .fa-calendar-alt {\n\tmargin-right: 5px;\n}\n\n", ""]);
+exports.push([module.i, "\n.hrm-employee-leave-records {\n\twidth: 50%;\n}\n", ""]);
 
 // exports
 
@@ -22609,7 +22579,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-employee-leave-records {\n\twidth: 50%;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22623,7 +22593,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-title, .hrm-content {\n\tfloat: left;\n}\n.hrm-content {\n\twidth: 65%;\n}\n.hrm-content-wrap {\n\tdisplay: block;\n\tmargin-bottom: 10px;\n\twidth: 100%;\n}\n", ""]);
 
 // exports
 
@@ -22637,7 +22607,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-title, .hrm-content {\n\tfloat: left;\n}\n.hrm-content {\n\twidth: 65%;\n}\n.hrm-content-wrap {\n\tdisplay: block;\n\tmargin-bottom: 10px;\n\twidth: 100%;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -22651,7 +22621,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22665,7 +22635,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-image, .hrm-employee-name {\n\t\tfloat: left;\n}\n.hrm-employee-name  {\n\t\twidth: 60%;\n    \tmargin-left: 5px;\n    \tmargin-top: -3px;\n    \tword-wrap: break-word;\n}\n.hrm-td-content, .leave-action-wrap {\n\t\tdisplay: block;\n}\n.leave-action-wrap {\n\t\theight: 5px;\n\t\tmargin-top: 5px;\n\t\tmargin-bottom: 10px;\n}\n.hrm-employee-name {\n\t\tfont-weight: 600;\n}\n.leave-action {\n\t\tfont-size: 12px;\n\t\tdisplay: none;\n}\n.leave-action-tr:hover .leave-action {\n\t\tdisplay: block;\n}\n", ""]);
 
 // exports
 
@@ -22679,7 +22649,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-image, .hrm-employee-name {\n\t\tfloat: left;\n}\n.hrm-employee-name  {\n\t\twidth: 60%;\n    \tmargin-left: 5px;\n    \tmargin-top: -3px;\n    \tword-wrap: break-word;\n}\n.hrm-td-content, .leave-action-wrap {\n\t\tdisplay: block;\n}\n.leave-action-wrap {\n\t\theight: 5px;\n\t\tmargin-top: 5px;\n\t\tmargin-bottom: 10px;\n}\n.hrm-employee-name {\n\t\tfont-weight: 600;\n}\n.leave-action {\n\t\tfont-size: 12px;\n\t\tdisplay: none;\n}\n.leave-action-tr:hover .leave-action {\n\t\tdisplay: block;\n}\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22693,7 +22663,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-title,\n.hrm-content {\n\tfloat: left;\n}\n.hrm-title {\n\twidth: 20%;\n}\n.hrm-content-wrap {\n\tmargin-bottom: 10px;\n}\n", ""]);
 
 // exports
 
@@ -22707,7 +22677,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-title,\n.hrm-content {\n\tfloat: left;\n}\n.hrm-title {\n\twidth: 20%;\n}\n.hrm-content-wrap {\n\tmargin-bottom: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-salary-details .tb-child {\n  padding-left: 5%;\n}\n.hrm-salary-details .tr-main {\n  background: #eee;\n}\n.hrm-salary-details .tb-main {\n  font-weight: 600;\n}\n.hrm-salary-details .action {\n  margin-top: 20px;\n}\n.hrm-salary-details .total {\n  font-weight: 600;\n}\n.hrm-salary-details .total-tr {\n  background: #f9f9f9;\n}\n.hrm-salary-details .wp-list-table {\n  margin-top: 10px;\n}\n.hrm-salary-details .amount {\n  width: 79% !important;\n  margin: 0 !important;\n  float: none !important;\n  padding: 5px;\n}\n", ""]);
 
 // exports
 
@@ -22721,7 +22691,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-salary-details .tb-child {\n  padding-left: 5%;\n}\n.hrm-salary-details .tr-main {\n  background: #eee;\n}\n.hrm-salary-details .tb-main {\n  font-weight: 600;\n}\n.hrm-salary-details .action {\n  margin-top: 20px;\n}\n.hrm-salary-details .total {\n  font-weight: 600;\n}\n.hrm-salary-details .total-tr {\n  background: #f9f9f9;\n}\n.hrm-salary-details .wp-list-table {\n  margin-top: 10px;\n}\n.hrm-salary-details .amount {\n  width: 79% !important;\n  margin: 0 !important;\n  float: none !important;\n  padding: 5px;\n}\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22749,7 +22719,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22763,7 +22733,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-salary .tb-child {\n  padding-left: 5%;\n}\n.hrm-salary .tr-main {\n  background: #eee;\n}\n.hrm-salary .tb-main {\n  font-weight: 600;\n}\n.hrm-salary .action {\n  margin-top: 20px;\n}\n.hrm-salary .total {\n  font-weight: 600;\n}\n.hrm-salary .total-tr {\n  background: #f9f9f9;\n}\n.hrm-salary .wp-list-table {\n  margin-top: 10px;\n}\n.hrm-salary .amount {\n  width: 79% !important;\n  margin: 0 !important;\n  float: none !important;\n  padding: 5px;\n}\n.hrm-salary .inside {\n  margin: 11px 0;\n}\n", ""]);
 
 // exports
 
@@ -22777,7 +22747,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-salary .tb-child {\n  padding-left: 5%;\n}\n.hrm-salary .tr-main {\n  background: #eee;\n}\n.hrm-salary .tb-main {\n  font-weight: 600;\n}\n.hrm-salary .action {\n  margin-top: 20px;\n}\n.hrm-salary .total {\n  font-weight: 600;\n}\n.hrm-salary .total-tr {\n  background: #f9f9f9;\n}\n.hrm-salary .wp-list-table {\n  margin-top: 10px;\n}\n.hrm-salary .amount {\n  width: 79% !important;\n  margin: 0 !important;\n  float: none !important;\n  padding: 5px;\n}\n.hrm-salary .inside {\n  margin: 11px 0;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-image, .hrm-employee-name {\n\t\tfloat: left;\n}\n.hrm-employee-name  {\n\t\twidth: 60%;\n    \tmargin-left: 5px;\n    \tmargin-top: -3px;\n    \tword-wrap: break-word;\n}\n.hrm-td-content, .leave-action-wrap {\n\t\tdisplay: block;\n}\n.leave-action-wrap {\n\t\theight: 5px;\n\t\tmargin-top: 5px;\n\t\tmargin-bottom: 10px;\n}\n.hrm-employee-name {\n\t\tfont-weight: 600;\n}\n.leave-action {\n\t\tfont-size: 12px;\n\t\tdisplay: none;\n}\n.leave-action-tr:hover .leave-action {\n\t\tdisplay: block;\n}\n", ""]);
 
 // exports
 
@@ -22791,7 +22761,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-image, .hrm-employee-name {\n\t\tfloat: left;\n}\n.hrm-employee-name  {\n\t\twidth: 60%;\n    \tmargin-left: 5px;\n    \tmargin-top: -3px;\n    \tword-wrap: break-word;\n}\n.hrm-td-content, .leave-action-wrap {\n\t\tdisplay: block;\n}\n.leave-action-wrap {\n\t\theight: 5px;\n\t\tmargin-top: 5px;\n\t\tmargin-bottom: 10px;\n}\n.hrm-employee-name {\n\t\tfont-weight: 600;\n}\n.leave-action {\n\t\tfont-size: 12px;\n\t\tdisplay: none;\n}\n.leave-action-tr:hover .leave-action {\n\t\tdisplay: block;\n}\n", ""]);
+exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
 
 // exports
 
@@ -22805,7 +22775,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n", ""]);
+exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .delete-btn {\n  margin-right: 5px;\n  font-size: 11px;\n  color: #ab4141;\n}\n.page-payroll .formula-display-name {\n  text-decoration: none;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -22819,7 +22789,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.page-payroll {\n  width: 100%;\n}\n.page-payroll .help-text {\n  font-style: italic;\n  font-size: 12px;\n}\n.page-payroll .header-text {\n  font-size: 1.2em;\n}\n.page-payroll .submi-btn-wrap {\n  display: block;\n  margin-top: 10px;\n}\n.page-payroll .delete-btn {\n  margin-right: 5px;\n  font-size: 11px;\n  color: #ab4141;\n}\n.page-payroll .formula-display-name {\n  text-decoration: none;\n}\n.page-payroll .hrm-left,\n.page-payroll .hrm-right,\n.page-payroll .component-operator,\n.page-payroll .component-function {\n  float: left;\n}\n.page-payroll .operator-link {\n  text-decoration: none;\n}\n.page-payroll .hrm-left {\n  width: 29%;\n}\n.page-payroll .hrm-left .gross-childred-li {\n  padding-top: 5px;\n}\n.page-payroll .hrm-left .gross-item-ul,\n.page-payroll .hrm-left .deductions-item-ul {\n  padding-left: 15px;\n  padding-top: 5px;\n}\n.page-payroll .hrm-right {\n  width: 65%;\n  margin-left: 5%;\n}\n.page-payroll .hrm-right .component-operator {\n  width: 28%;\n  border: 1px solid #ddd;\n  padding: 8px;\n}\n.page-payroll .hrm-right .component-function {\n  width: 28%;\n  border: 1px solid #ddd;\n  margin-left: 15px;\n  padding: 8px;\n}\n.page-payroll .hrm-right .field-wrap {\n  display: block;\n  margin-bottom: 10px;\n}\n.page-payroll .hrm-right .field-wrap label {\n  width: 25%;\n  display: inline-block;\n  padding: 10px;\n  padding-left: 0;\n}\n.page-payroll .hrm-right .field-wrap .label {\n  word-wrap: break-word;\n}\n.page-payroll .hrm-right .field-wrap .field {\n  width: 70%;\n}\n.page-payroll .hrm-right .field-wrap .field,\n.page-payroll .hrm-right .field-wrap .label {\n  float: left;\n}\n.page-payroll .hrm-right .field-wrap .component-textarea {\n  width: 100%;\n  min-height: 160px;\n}\n.page-payroll .hrm-right .functions-ul,\n.page-payroll .hrm-right .operator-ul {\n  margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -22833,7 +22803,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n.page-revision .hrm-multiselect {\n\tdisplay: inline-block;\n}\n", ""]);
 
 // exports
 
@@ -22847,7 +22817,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.hrm-bulk-wrap, .hrm-filter-wrap {\n\tfloat: left;\n}\n.hrm-tbl-action-wrap {\n\tmargin-top: 20px;\n}\n.page-revision .hrm-multiselect {\n\tdisplay: inline-block;\n}\n", ""]);
+exports.push([module.i, "\n.text {\n\tdisplay: block;\n\tmargin: 10px 0;\n}\n.title h1 {\n\tmargin: 0;\n\tpadding: 0;\n}\n.metabox-holder {\n\twidth: 100%\n}\n.hrm-addon-block {\n\tfloat: left;\n\twidth: 48%;\n}\n.hrm-block-content {\n\tpadding: 10px;\n\tmargin: 10px;\n\tbackground: #fff;\n\tborder: 1px solid #e5e5e5;\n}\n", ""]);
 
 // exports
 
@@ -22861,27 +22831,13 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.text {\n\tdisplay: block;\n\tmargin: 10px 0;\n}\n.title h1 {\n\tmargin: 0;\n\tpadding: 0;\n}\n.metabox-holder {\n\twidth: 100%\n}\n.hrm-addon-block {\n\tfloat: left;\n\twidth: 48%;\n}\n.hrm-block-content {\n\tpadding: 10px;\n\tmargin: 10px;\n\tbackground: #fff;\n\tborder: 1px solid #e5e5e5;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 216 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
 exports.push([module.i, "\n.alignright {\n\tfloat: right;\n}\n.hrm-spinner {\n\tmargin-right: 10px;\n\tmargin-top: 6px;\n}\n.hrm-avatar,\n.hrm-profile-link {\n\tfloat: left;\n}\n.hrm-avatar {\n\tmargin-right: 5px;\n}\n.has-row-actions {\n\twidth: 16%;\n}\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 217 */
+/* 216 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22937,7 +22893,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 218 */
+/* 217 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22993,7 +22949,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 219 */
+/* 218 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23045,7 +23001,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 220 */
+/* 219 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23097,7 +23053,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 221 */
+/* 220 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23149,7 +23105,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 222 */
+/* 221 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23201,7 +23157,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 223 */
+/* 222 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23243,6 +23199,57 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-3e30099a", Component.options)
   } else {
     hotAPI.reload("data-v-3e30099a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 223 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__ = __webpack_require__(39);
+/* unused harmony namespace reexport */
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_do_action_vue__["a" /* default */],
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/components/common/do-action.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-18ba2f78", Component.options)
+  } else {
+    hotAPI.reload("data-v-18ba2f78", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -43514,7 +43521,7 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(177);
+var content = __webpack_require__(176);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43540,7 +43547,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(178);
+var content = __webpack_require__(177);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43566,7 +43573,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(179);
+var content = __webpack_require__(178);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43592,7 +43599,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(180);
+var content = __webpack_require__(179);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43618,7 +43625,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(181);
+var content = __webpack_require__(180);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43644,7 +43651,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(182);
+var content = __webpack_require__(181);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43670,7 +43677,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(183);
+var content = __webpack_require__(182);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43696,7 +43703,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(184);
+var content = __webpack_require__(183);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43722,7 +43729,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(185);
+var content = __webpack_require__(184);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43748,7 +43755,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(186);
+var content = __webpack_require__(185);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43774,7 +43781,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(187);
+var content = __webpack_require__(186);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43800,7 +43807,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(188);
+var content = __webpack_require__(187);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43826,7 +43833,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(189);
+var content = __webpack_require__(188);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43852,7 +43859,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(190);
+var content = __webpack_require__(189);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43878,7 +43885,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(191);
+var content = __webpack_require__(190);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43904,7 +43911,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(192);
+var content = __webpack_require__(191);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43930,7 +43937,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(193);
+var content = __webpack_require__(192);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43956,7 +43963,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(194);
+var content = __webpack_require__(193);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43982,7 +43989,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(195);
+var content = __webpack_require__(194);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44008,7 +44015,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(196);
+var content = __webpack_require__(195);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44034,7 +44041,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(197);
+var content = __webpack_require__(196);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44060,7 +44067,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(198);
+var content = __webpack_require__(197);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44086,7 +44093,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(199);
+var content = __webpack_require__(198);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44112,7 +44119,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(200);
+var content = __webpack_require__(199);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44138,7 +44145,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(201);
+var content = __webpack_require__(200);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44164,7 +44171,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(202);
+var content = __webpack_require__(201);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44190,7 +44197,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(203);
+var content = __webpack_require__(202);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44216,7 +44223,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(204);
+var content = __webpack_require__(203);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44242,7 +44249,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(205);
+var content = __webpack_require__(204);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44268,7 +44275,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(206);
+var content = __webpack_require__(205);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44294,7 +44301,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(207);
+var content = __webpack_require__(206);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44320,7 +44327,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(208);
+var content = __webpack_require__(207);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44346,7 +44353,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(209);
+var content = __webpack_require__(208);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44372,7 +44379,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(210);
+var content = __webpack_require__(209);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44398,7 +44405,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(211);
+var content = __webpack_require__(210);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44424,7 +44431,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(212);
+var content = __webpack_require__(211);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44450,7 +44457,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(213);
+var content = __webpack_require__(212);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44476,7 +44483,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(214);
+var content = __webpack_require__(213);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44502,7 +44509,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(215);
+var content = __webpack_require__(214);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -44528,7 +44535,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(216);
+var content = __webpack_require__(215);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM

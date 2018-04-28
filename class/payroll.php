@@ -10,6 +10,7 @@ use HRM\Models\Salary_Group;
 use HRM\Transformers\Salary_Group_Transformer;
 use HRM\Models\Salary;
 use HRM\Transformers\Salary_Transformer;
+use HRM\Core\Crud\Crud;
 
 class Hrm_Payroll {
     use Transformer_Manager;
@@ -35,7 +36,21 @@ class Hrm_Payroll {
         add_action( 'wp_ajax_hrm_get_salary', array( $this, 'ajax_get_salary' ) );
         add_action( 'wp_ajax_hrm_insert_formula', array( $this, 'ajax_insert_formula' ) );
         add_action( 'wp_ajax_hrm_check_formula_validity', array( $this, 'ajax_check_formula_validity' ) );
+        add_action( 'wp_ajax_hrm_delete_salary', array( $this, 'ajax_delete_salary' ) );
 
+    }
+
+    function ajax_delete_salary() {
+        check_ajax_referer('hrm_nonce');
+        $records = self::getInstance()->delete_salary( $_POST );
+        wp_send_json_success($records);
+    }
+
+    function delete_salary( $postdata ) {
+        $delete = Crud::data_process( $postdata );
+        do_action( 'hrm_after_delete_salary', $postdata );
+
+        return $delete;
     }
 
     function ajax_insert_formula() {
@@ -159,6 +174,7 @@ class Hrm_Payroll {
         }
 
         $location = Salary::where( function($q) use( $start_date, $end_date, $employee_id ) {
+
             if ( ! empty(  $employee_id ) ) {
                 $q->where( 'employee_id', $employee_id );
             }
@@ -199,13 +215,21 @@ class Hrm_Payroll {
         $start_date = date( 'Y-m-01', strtotime( $date ) );
         $end_date = date( 'Y-m-t', strtotime( $date ) );
 
-        $salary = Salary::where('category_id', $id)
-            ->where( 'category', $type )
-            ->where( function($q) use( $start_date, $end_date ) {
-                $q->where( 'month', '>=', $start_date);
-                $q->where( 'month', '<=', $end_date);
-            })->first();
-
+        if ( $type == 'employee' ) {
+             $salary = Salary::where('employee_id', $id)
+                ->where( function($q) use( $start_date, $end_date ) {
+                    $q->where( 'month', '>=', $start_date);
+                    $q->where( 'month', '<=', $end_date);
+                })->first();
+        } else {
+             $salary = Salary::where('category_id', $id)
+                ->where( 'category', $type )
+                ->where( function($q) use( $start_date, $end_date ) {
+                    $q->where( 'month', '>=', $start_date);
+                    $q->where( 'month', '<=', $end_date);
+                })->first();
+        }
+        
         if ( $salary ) {
             $resource = new item( $salary, new Salary_Transformer );
             return $this->get_response( $resource );
@@ -334,10 +358,12 @@ class Hrm_Payroll {
             $formulas['meta']['salaryMeta']['employeeGet']    = $salary - $deduction;
         //}
 
+        $formulas = apply_filters( 'hrm_salary_generator', $formulas, $postData );
+
         if ( $is_save ) {
 
             $store_data = array(
-                'month'                => $postData['month'],
+                'month'                => date( 'Y-m-d', strtotime( $postData['month'] ) ),
                 'category'             => $postData['category'],
                 'category_id'          => $postData['category_id'],
                 'employee_id'          => $postData['category'] == 'employee' ? $postData['category_id'] : 0,
@@ -374,10 +400,12 @@ class Hrm_Payroll {
             
             
             if ( $salary && $is_update ) {
+                $store_data = apply_filters( 'hrm_before_update_salary', $store_data, $salary );
                 $salary = $salary->update( $store_data );
             } else {
                 if ( !$salary ) {
-                    Salary::create( $store_data );
+                    $record = Salary::create( $store_data );
+                    do_action( 'hrm_after_create_salary', $store_data, $record );
                 }
             }
 
@@ -394,6 +422,7 @@ class Hrm_Payroll {
         $users = get_users( $args );
 
         foreach ( $users as $user ) {
+            $salary_data = $store_data;
             $salary = Salary::where( 'employee_id', $user->ID )
                 // ->where( 'category_id', $store_data['category_id'] )
                 ->where( function($q) use( $start_date, $end_date ) {
@@ -402,11 +431,15 @@ class Hrm_Payroll {
                 })->first();
 
             if ( $salary && $is_update ) {
-                $salary->update( $store_data );
+                $salary_data['employee_id'] = $user->ID;
+                $salary_data = apply_filters( 'hrm_before_update_salary', $salary_data, $salary );
+                $salary->update( $salary_data );
             } else {
                 if ( !$salary ) {
-                    $store_data['employee_id'] = $user->ID;
-                    Salary::create( $store_data );
+                    $salary_data['employee_id'] = $user->ID;
+                    $salary_data = apply_filters( 'hrm_group_salary_generator', $salary_data );
+                    $record = Salary::create( $salary_data );
+                    do_action( 'hrm_after_create_salary', $salary_data, $record );
                 }
             }
         }

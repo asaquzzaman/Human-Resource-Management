@@ -12,6 +12,7 @@ if(hrm_user_can('manage_payroll')) {
                 name: 'group',
                 meta: {
                     label: 'Component Group',
+                    order: 3
                 },
                 children: [
                     {

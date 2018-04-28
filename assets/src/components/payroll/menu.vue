@@ -42,10 +42,17 @@
                 }
 
             });
+
+            this.menu = _.sortBy(this.menu, function(menu) { 
+                if( typeof menu.meta != 'undefined' ) {
+                    return menu.meta.order; 
+                } 
+            });
         },
 
         methods: {
             childrens () {
+                var childrens = [];
                 if (!this.has_child) {
                     return [];
                 }
@@ -59,11 +66,21 @@
 
                 if (this.menu[index].hasOwnProperty('children')) {
                     if (this.menu[index].children.length) {
-                        return this.menu[index].children;
+                        childrens = this.menu[index].children;
                     }
                 } else {
                     return [];
                 }
+
+                var menu = [];
+
+                childrens.forEach(function(val) {
+                    if(typeof val.meta != 'undefined' && typeof val.meta.label != 'undefined') {
+                        menu.push(val);
+                    }
+                });
+
+                return menu;
             },
 
             has_child: function() {

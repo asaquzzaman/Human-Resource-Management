@@ -25,7 +25,7 @@ export default {
 
 		recordDelete (deletedId, callback) {
 			var self = this;
-
+			
 			var form_data = {
 	            data: {
 	            	delete: deletedId,
@@ -51,7 +51,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_delete_record', form_data);
+	        this.httpRequest('hrm_delete_salary', form_data);
 		},
 
 		updateRecord (args) {

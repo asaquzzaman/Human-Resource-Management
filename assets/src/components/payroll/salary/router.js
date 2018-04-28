@@ -13,6 +13,7 @@ if(hrm_user_can('manage_payroll')) {
                 name: 'salary',
                 meta: {
                     label: 'Salary',
+                    order: 1
                 }
             },
 

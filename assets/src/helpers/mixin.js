@@ -26,7 +26,7 @@ export default hrm.Vue.mixin({
 			};
             
 			property.beforeSend = typeof property.beforeSend === 'undefined' ? before : property.beforeSend;
-			property.data._wpnonce = HRM_Vars.nonce;
+			property.data['_wpnonce'] = HRM_Vars.nonce;
 
 			wp.ajax.send(hook, property);
 		},

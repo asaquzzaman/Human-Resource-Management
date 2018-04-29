@@ -1474,9 +1474,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 					self.$store.commit(self.nameSpace + '/setRecords', res.data);
 					self.$store.commit(self.nameSpace + '/setPagination', res.meta.pagination);
-
-					if (typeof callback === 'function') {
-						callback.call(self, true, res);
+					self.isFetchRecord = true;
+					if (typeof callback != 'undefined') {
+						callback(self, true, res);
 					}
 				},
 
@@ -1487,13 +1487,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						hrm.toastr.error(value);
 					});
 
-					if (typeof args.callback === 'function') {
-						callback.call(self, false, res);
+					if (typeof callback != 'undefined') {
+						callback(self, false, res);
 					}
 				}
 			};
 
-			this.httpRequest('hrm_experiance_filter', form_data);
+			this.httpRequest('hrm_designation_filter', form_data);
 		},
 
 		manageDesignation() {
@@ -1617,8 +1617,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
 					self.loadingStop('hrm-hidden-form');
 
-					if (typeof args.callback === 'function') {
-						args.callback.call(self, true, res);
+					if (typeof args.callback != 'undefined') {
+						args.callback(self, true, res);
 					}
 
 					hrm.Vue.nextTick(function () {
@@ -2048,6 +2048,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		recordDelete(deletedId, callback) {
+			if (!confirm('Are you sure!')) {
+				return;
+			}
 			var self = this;
 
 			var form_data = {
@@ -2125,6 +2128,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				},
 
 				success: function (res) {
+					self.recordMeta(res.data);
 					self.$store.commit(self.nameSpace + '/setRecord', res.data);
 					self.$store.commit(self.nameSpace + '/updatePaginationAfterNewRecord');
 					self.loadingStop('hrm-hidden-form');
@@ -3436,6 +3440,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony default export */ __webpack_exports__["a"] = ([{ name: 'Afghanistan', code: 'AF' }, { name: 'Åland Islands', code: 'AX' }, { name: 'Albania', code: 'AL' }, { name: 'Algeria', code: 'DZ' }, { name: 'American Samoa', code: 'AS' }, { name: 'AndorrA', code: 'AD' }, { name: 'Angola', code: 'AO' }, { name: 'Anguilla', code: 'AI' }, { name: 'Antarctica', code: 'AQ' }, { name: 'Antigua and Barbuda', code: 'AG' }, { name: 'Argentina', code: 'AR' }, { name: 'Armenia', code: 'AM' }, { name: 'Aruba', code: 'AW' }, { name: 'Australia', code: 'AU' }, { name: 'Austria', code: 'AT' }, { name: 'Azerbaijan', code: 'AZ' }, { name: 'Bahamas', code: 'BS' }, { name: 'Bahrain', code: 'BH' }, { name: 'Bangladesh', code: 'BD' }, { name: 'Barbados', code: 'BB' }, { name: 'Belarus', code: 'BY' }, { name: 'Belgium', code: 'BE' }, { name: 'Belize', code: 'BZ' }, { name: 'Benin', code: 'BJ' }, { name: 'Bermuda', code: 'BM' }, { name: 'Bhutan', code: 'BT' }, { name: 'Bolivia', code: 'BO' }, { name: 'Bosnia and Herzegovina', code: 'BA' }, { name: 'Botswana', code: 'BW' }, { name: 'Bouvet Island', code: 'BV' }, { name: 'Brazil', code: 'BR' }, { name: 'British Indian Ocean Territory', code: 'IO' }, { name: 'Brunei Darussalam', code: 'BN' }, { name: 'Bulgaria', code: 'BG' }, { name: 'Burkina Faso', code: 'BF' }, { name: 'Burundi', code: 'BI' }, { name: 'Cambodia', code: 'KH' }, { name: 'Cameroon', code: 'CM' }, { name: 'Canada', code: 'CA' }, { name: 'Cape Verde', code: 'CV' }, { name: 'Cayman Islands', code: 'KY' }, { name: 'Central African Republic', code: 'CF' }, { name: 'Chad', code: 'TD' }, { name: 'Chile', code: 'CL' }, { name: 'China', code: 'CN' }, { name: 'Christmas Island', code: 'CX' }, { name: 'Cocos (Keeling) Islands', code: 'CC' }, { name: 'Colombia', code: 'CO' }, { name: 'Comoros', code: 'KM' }, { name: 'Congo', code: 'CG' }, { name: 'Congo, The Democratic Republic of the', code: 'CD' }, { name: 'Cook Islands', code: 'CK' }, { name: 'Costa Rica', code: 'CR' }, { name: 'Cote D\'Ivoire', code: 'CI' }, { name: 'Croatia', code: 'HR' }, { name: 'Cuba', code: 'CU' }, { name: 'Cyprus', code: 'CY' }, { name: 'Czech Republic', code: 'CZ' }, { name: 'Denmark', code: 'DK' }, { name: 'Djibouti', code: 'DJ' }, { name: 'Dominica', code: 'DM' }, { name: 'Dominican Republic', code: 'DO' }, { name: 'Ecuador', code: 'EC' }, { name: 'Egypt', code: 'EG' }, { name: 'El Salvador', code: 'SV' }, { name: 'Equatorial Guinea', code: 'GQ' }, { name: 'Eritrea', code: 'ER' }, { name: 'Estonia', code: 'EE' }, { name: 'Ethiopia', code: 'ET' }, { name: 'Falkland Islands (Malvinas)', code: 'FK' }, { name: 'Faroe Islands', code: 'FO' }, { name: 'Fiji', code: 'FJ' }, { name: 'Finland', code: 'FI' }, { name: 'France', code: 'FR' }, { name: 'French Guiana', code: 'GF' }, { name: 'French Polynesia', code: 'PF' }, { name: 'French Southern Territories', code: 'TF' }, { name: 'Gabon', code: 'GA' }, { name: 'Gambia', code: 'GM' }, { name: 'Georgia', code: 'GE' }, { name: 'Germany', code: 'DE' }, { name: 'Ghana', code: 'GH' }, { name: 'Gibraltar', code: 'GI' }, { name: 'Greece', code: 'GR' }, { name: 'Greenland', code: 'GL' }, { name: 'Grenada', code: 'GD' }, { name: 'Guadeloupe', code: 'GP' }, { name: 'Guam', code: 'GU' }, { name: 'Guatemala', code: 'GT' }, { name: 'Guernsey', code: 'GG' }, { name: 'Guinea', code: 'GN' }, { name: 'Guinea-Bissau', code: 'GW' }, { name: 'Guyana', code: 'GY' }, { name: 'Haiti', code: 'HT' }, { name: 'Heard Island and Mcdonald Islands', code: 'HM' }, { name: 'Holy See (Vatican City State)', code: 'VA' }, { name: 'Honduras', code: 'HN' }, { name: 'Hong Kong', code: 'HK' }, { name: 'Hungary', code: 'HU' }, { name: 'Iceland', code: 'IS' }, { name: 'India', code: 'IN' }, { name: 'Indonesia', code: 'ID' }, { name: 'Iran, Islamic Republic Of', code: 'IR' }, { name: 'Iraq', code: 'IQ' }, { name: 'Ireland', code: 'IE' }, { name: 'Isle of Man', code: 'IM' }, { name: 'Israel', code: 'IL' }, { name: 'Italy', code: 'IT' }, { name: 'Jamaica', code: 'JM' }, { name: 'Japan', code: 'JP' }, { name: 'Jersey', code: 'JE' }, { name: 'Jordan', code: 'JO' }, { name: 'Kazakhstan', code: 'KZ' }, { name: 'Kenya', code: 'KE' }, { name: 'Kiribati', code: 'KI' }, { name: 'Korea, Democratic People\'S Republic of', code: 'KP' }, { name: 'Korea, Republic of', code: 'KR' }, { name: 'Kuwait', code: 'KW' }, { name: 'Kyrgyzstan', code: 'KG' }, { name: 'Lao People\'S Democratic Republic', code: 'LA' }, { name: 'Latvia', code: 'LV' }, { name: 'Lebanon', code: 'LB' }, { name: 'Lesotho', code: 'LS' }, { name: 'Liberia', code: 'LR' }, { name: 'Libyan Arab Jamahiriya', code: 'LY' }, { name: 'Liechtenstein', code: 'LI' }, { name: 'Lithuania', code: 'LT' }, { name: 'Luxembourg', code: 'LU' }, { name: 'Macao', code: 'MO' }, { name: 'Macedonia, The Former Yugoslav Republic of', code: 'MK' }, { name: 'Madagascar', code: 'MG' }, { name: 'Malawi', code: 'MW' }, { name: 'Malaysia', code: 'MY' }, { name: 'Maldives', code: 'MV' }, { name: 'Mali', code: 'ML' }, { name: 'Malta', code: 'MT' }, { name: 'Marshall Islands', code: 'MH' }, { name: 'Martinique', code: 'MQ' }, { name: 'Mauritania', code: 'MR' }, { name: 'Mauritius', code: 'MU' }, { name: 'Mayotte', code: 'YT' }, { name: 'Mexico', code: 'MX' }, { name: 'Micronesia, Federated States of', code: 'FM' }, { name: 'Moldova, Republic of', code: 'MD' }, { name: 'Monaco', code: 'MC' }, { name: 'Mongolia', code: 'MN' }, { name: 'Montserrat', code: 'MS' }, { name: 'Morocco', code: 'MA' }, { name: 'Mozambique', code: 'MZ' }, { name: 'Myanmar', code: 'MM' }, { name: 'Namibia', code: 'NA' }, { name: 'Nauru', code: 'NR' }, { name: 'Nepal', code: 'NP' }, { name: 'Netherlands', code: 'NL' }, { name: 'Netherlands Antilles', code: 'AN' }, { name: 'New Caledonia', code: 'NC' }, { name: 'New Zealand', code: 'NZ' }, { name: 'Nicaragua', code: 'NI' }, { name: 'Niger', code: 'NE' }, { name: 'Nigeria', code: 'NG' }, { name: 'Niue', code: 'NU' }, { name: 'Norfolk Island', code: 'NF' }, { name: 'Northern Mariana Islands', code: 'MP' }, { name: 'Norway', code: 'NO' }, { name: 'Oman', code: 'OM' }, { name: 'Pakistan', code: 'PK' }, { name: 'Palau', code: 'PW' }, { name: 'Palestinian Territory, Occupied', code: 'PS' }, { name: 'Panama', code: 'PA' }, { name: 'Papua New Guinea', code: 'PG' }, { name: 'Paraguay', code: 'PY' }, { name: 'Peru', code: 'PE' }, { name: 'Philippines', code: 'PH' }, { name: 'Pitcairn', code: 'PN' }, { name: 'Poland', code: 'PL' }, { name: 'Portugal', code: 'PT' }, { name: 'Puerto Rico', code: 'PR' }, { name: 'Qatar', code: 'QA' }, { name: 'Reunion', code: 'RE' }, { name: 'Romania', code: 'RO' }, { name: 'Russian Federation', code: 'RU' }, { name: 'RWANDA', code: 'RW' }, { name: 'Saint Helena', code: 'SH' }, { name: 'Saint Kitts and Nevis', code: 'KN' }, { name: 'Saint Lucia', code: 'LC' }, { name: 'Saint Pierre and Miquelon', code: 'PM' }, { name: 'Saint Vincent and the Grenadines', code: 'VC' }, { name: 'Samoa', code: 'WS' }, { name: 'San Marino', code: 'SM' }, { name: 'Sao Tome and Principe', code: 'ST' }, { name: 'Saudi Arabia', code: 'SA' }, { name: 'Senegal', code: 'SN' }, { name: 'Serbia and Montenegro', code: 'CS' }, { name: 'Seychelles', code: 'SC' }, { name: 'Sierra Leone', code: 'SL' }, { name: 'Singapore', code: 'SG' }, { name: 'Slovakia', code: 'SK' }, { name: 'Slovenia', code: 'SI' }, { name: 'Solomon Islands', code: 'SB' }, { name: 'Somalia', code: 'SO' }, { name: 'South Africa', code: 'ZA' }, { name: 'South Georgia and the South Sandwich Islands', code: 'GS' }, { name: 'Spain', code: 'ES' }, { name: 'Sri Lanka', code: 'LK' }, { name: 'Sudan', code: 'SD' }, { name: 'Suriname', code: 'SR' }, { name: 'Svalbard and Jan Mayen', code: 'SJ' }, { name: 'Swaziland', code: 'SZ' }, { name: 'Sweden', code: 'SE' }, { name: 'Switzerland', code: 'CH' }, { name: 'Syrian Arab Republic', code: 'SY' }, { name: 'Taiwan, Province of China', code: 'TW' }, { name: 'Tajikistan', code: 'TJ' }, { name: 'Tanzania, United Republic of', code: 'TZ' }, { name: 'Thailand', code: 'TH' }, { name: 'Timor-Leste', code: 'TL' }, { name: 'Togo', code: 'TG' }, { name: 'Tokelau', code: 'TK' }, { name: 'Tonga', code: 'TO' }, { name: 'Trinidad and Tobago', code: 'TT' }, { name: 'Tunisia', code: 'TN' }, { name: 'Turkey', code: 'TR' }, { name: 'Turkmenistan', code: 'TM' }, { name: 'Turks and Caicos Islands', code: 'TC' }, { name: 'Tuvalu', code: 'TV' }, { name: 'Uganda', code: 'UG' }, { name: 'Ukraine', code: 'UA' }, { name: 'United Arab Emirates', code: 'AE' }, { name: 'United Kingdom', code: 'GB' }, { name: 'United States', code: 'US' }, { name: 'United States Minor Outlying Islands', code: 'UM' }, { name: 'Uruguay', code: 'UY' }, { name: 'Uzbekistan', code: 'UZ' }, { name: 'Vanuatu', code: 'VU' }, { name: 'Venezuela', code: 'VE' }, { name: 'Viet Nam', code: 'VN' }, { name: 'Virgin Islands, British', code: 'VG' }, { name: 'Virgin Islands, U.S.', code: 'VI' }, { name: 'Wallis and Futuna', code: 'WF' }, { name: 'Western Sahara', code: 'EH' }, { name: 'Yemen', code: 'YE' }, { name: 'Zambia', code: 'ZM' }, { name: 'Zimbabwe', code: 'ZW' }]);
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attendance_records_vue__ = __webpack_require__(220);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__attendance_user_search_vue__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_configuration_vue__ = __webpack_require__(218);
@@ -3510,7 +3521,7 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /* harmony default export */ __webpack_exports__["a"] = (menu);
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3608,7 +3619,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3804,7 +3815,7 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /* harmony default export */ __webpack_exports__["a"] = (menu);
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3834,7 +3845,7 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /* harmony default export */ __webpack_exports__["default"] = (menu);
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4057,7 +4068,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4092,7 +4103,7 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /* harmony default export */ __webpack_exports__["a"] = (menu);
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4107,7 +4118,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4192,7 +4203,7 @@ HRMRegisterChildrenRoute('hrm_root', menu);
 /* harmony default export */ __webpack_exports__["default"] = (menu);
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4236,13 +4247,6 @@ if (hrm_user_can('manage_settings')) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (settingsMenu);
-
-/***/ }),
-/* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ([{ name: 'Afghanistan', code: 'AF' }, { name: 'Åland Islands', code: 'AX' }, { name: 'Albania', code: 'AL' }, { name: 'Algeria', code: 'DZ' }, { name: 'American Samoa', code: 'AS' }, { name: 'AndorrA', code: 'AD' }, { name: 'Angola', code: 'AO' }, { name: 'Anguilla', code: 'AI' }, { name: 'Antarctica', code: 'AQ' }, { name: 'Antigua and Barbuda', code: 'AG' }, { name: 'Argentina', code: 'AR' }, { name: 'Armenia', code: 'AM' }, { name: 'Aruba', code: 'AW' }, { name: 'Australia', code: 'AU' }, { name: 'Austria', code: 'AT' }, { name: 'Azerbaijan', code: 'AZ' }, { name: 'Bahamas', code: 'BS' }, { name: 'Bahrain', code: 'BH' }, { name: 'Bangladesh', code: 'BD' }, { name: 'Barbados', code: 'BB' }, { name: 'Belarus', code: 'BY' }, { name: 'Belgium', code: 'BE' }, { name: 'Belize', code: 'BZ' }, { name: 'Benin', code: 'BJ' }, { name: 'Bermuda', code: 'BM' }, { name: 'Bhutan', code: 'BT' }, { name: 'Bolivia', code: 'BO' }, { name: 'Bosnia and Herzegovina', code: 'BA' }, { name: 'Botswana', code: 'BW' }, { name: 'Bouvet Island', code: 'BV' }, { name: 'Brazil', code: 'BR' }, { name: 'British Indian Ocean Territory', code: 'IO' }, { name: 'Brunei Darussalam', code: 'BN' }, { name: 'Bulgaria', code: 'BG' }, { name: 'Burkina Faso', code: 'BF' }, { name: 'Burundi', code: 'BI' }, { name: 'Cambodia', code: 'KH' }, { name: 'Cameroon', code: 'CM' }, { name: 'Canada', code: 'CA' }, { name: 'Cape Verde', code: 'CV' }, { name: 'Cayman Islands', code: 'KY' }, { name: 'Central African Republic', code: 'CF' }, { name: 'Chad', code: 'TD' }, { name: 'Chile', code: 'CL' }, { name: 'China', code: 'CN' }, { name: 'Christmas Island', code: 'CX' }, { name: 'Cocos (Keeling) Islands', code: 'CC' }, { name: 'Colombia', code: 'CO' }, { name: 'Comoros', code: 'KM' }, { name: 'Congo', code: 'CG' }, { name: 'Congo, The Democratic Republic of the', code: 'CD' }, { name: 'Cook Islands', code: 'CK' }, { name: 'Costa Rica', code: 'CR' }, { name: 'Cote D\'Ivoire', code: 'CI' }, { name: 'Croatia', code: 'HR' }, { name: 'Cuba', code: 'CU' }, { name: 'Cyprus', code: 'CY' }, { name: 'Czech Republic', code: 'CZ' }, { name: 'Denmark', code: 'DK' }, { name: 'Djibouti', code: 'DJ' }, { name: 'Dominica', code: 'DM' }, { name: 'Dominican Republic', code: 'DO' }, { name: 'Ecuador', code: 'EC' }, { name: 'Egypt', code: 'EG' }, { name: 'El Salvador', code: 'SV' }, { name: 'Equatorial Guinea', code: 'GQ' }, { name: 'Eritrea', code: 'ER' }, { name: 'Estonia', code: 'EE' }, { name: 'Ethiopia', code: 'ET' }, { name: 'Falkland Islands (Malvinas)', code: 'FK' }, { name: 'Faroe Islands', code: 'FO' }, { name: 'Fiji', code: 'FJ' }, { name: 'Finland', code: 'FI' }, { name: 'France', code: 'FR' }, { name: 'French Guiana', code: 'GF' }, { name: 'French Polynesia', code: 'PF' }, { name: 'French Southern Territories', code: 'TF' }, { name: 'Gabon', code: 'GA' }, { name: 'Gambia', code: 'GM' }, { name: 'Georgia', code: 'GE' }, { name: 'Germany', code: 'DE' }, { name: 'Ghana', code: 'GH' }, { name: 'Gibraltar', code: 'GI' }, { name: 'Greece', code: 'GR' }, { name: 'Greenland', code: 'GL' }, { name: 'Grenada', code: 'GD' }, { name: 'Guadeloupe', code: 'GP' }, { name: 'Guam', code: 'GU' }, { name: 'Guatemala', code: 'GT' }, { name: 'Guernsey', code: 'GG' }, { name: 'Guinea', code: 'GN' }, { name: 'Guinea-Bissau', code: 'GW' }, { name: 'Guyana', code: 'GY' }, { name: 'Haiti', code: 'HT' }, { name: 'Heard Island and Mcdonald Islands', code: 'HM' }, { name: 'Holy See (Vatican City State)', code: 'VA' }, { name: 'Honduras', code: 'HN' }, { name: 'Hong Kong', code: 'HK' }, { name: 'Hungary', code: 'HU' }, { name: 'Iceland', code: 'IS' }, { name: 'India', code: 'IN' }, { name: 'Indonesia', code: 'ID' }, { name: 'Iran, Islamic Republic Of', code: 'IR' }, { name: 'Iraq', code: 'IQ' }, { name: 'Ireland', code: 'IE' }, { name: 'Isle of Man', code: 'IM' }, { name: 'Israel', code: 'IL' }, { name: 'Italy', code: 'IT' }, { name: 'Jamaica', code: 'JM' }, { name: 'Japan', code: 'JP' }, { name: 'Jersey', code: 'JE' }, { name: 'Jordan', code: 'JO' }, { name: 'Kazakhstan', code: 'KZ' }, { name: 'Kenya', code: 'KE' }, { name: 'Kiribati', code: 'KI' }, { name: 'Korea, Democratic People\'S Republic of', code: 'KP' }, { name: 'Korea, Republic of', code: 'KR' }, { name: 'Kuwait', code: 'KW' }, { name: 'Kyrgyzstan', code: 'KG' }, { name: 'Lao People\'S Democratic Republic', code: 'LA' }, { name: 'Latvia', code: 'LV' }, { name: 'Lebanon', code: 'LB' }, { name: 'Lesotho', code: 'LS' }, { name: 'Liberia', code: 'LR' }, { name: 'Libyan Arab Jamahiriya', code: 'LY' }, { name: 'Liechtenstein', code: 'LI' }, { name: 'Lithuania', code: 'LT' }, { name: 'Luxembourg', code: 'LU' }, { name: 'Macao', code: 'MO' }, { name: 'Macedonia, The Former Yugoslav Republic of', code: 'MK' }, { name: 'Madagascar', code: 'MG' }, { name: 'Malawi', code: 'MW' }, { name: 'Malaysia', code: 'MY' }, { name: 'Maldives', code: 'MV' }, { name: 'Mali', code: 'ML' }, { name: 'Malta', code: 'MT' }, { name: 'Marshall Islands', code: 'MH' }, { name: 'Martinique', code: 'MQ' }, { name: 'Mauritania', code: 'MR' }, { name: 'Mauritius', code: 'MU' }, { name: 'Mayotte', code: 'YT' }, { name: 'Mexico', code: 'MX' }, { name: 'Micronesia, Federated States of', code: 'FM' }, { name: 'Moldova, Republic of', code: 'MD' }, { name: 'Monaco', code: 'MC' }, { name: 'Mongolia', code: 'MN' }, { name: 'Montserrat', code: 'MS' }, { name: 'Morocco', code: 'MA' }, { name: 'Mozambique', code: 'MZ' }, { name: 'Myanmar', code: 'MM' }, { name: 'Namibia', code: 'NA' }, { name: 'Nauru', code: 'NR' }, { name: 'Nepal', code: 'NP' }, { name: 'Netherlands', code: 'NL' }, { name: 'Netherlands Antilles', code: 'AN' }, { name: 'New Caledonia', code: 'NC' }, { name: 'New Zealand', code: 'NZ' }, { name: 'Nicaragua', code: 'NI' }, { name: 'Niger', code: 'NE' }, { name: 'Nigeria', code: 'NG' }, { name: 'Niue', code: 'NU' }, { name: 'Norfolk Island', code: 'NF' }, { name: 'Northern Mariana Islands', code: 'MP' }, { name: 'Norway', code: 'NO' }, { name: 'Oman', code: 'OM' }, { name: 'Pakistan', code: 'PK' }, { name: 'Palau', code: 'PW' }, { name: 'Palestinian Territory, Occupied', code: 'PS' }, { name: 'Panama', code: 'PA' }, { name: 'Papua New Guinea', code: 'PG' }, { name: 'Paraguay', code: 'PY' }, { name: 'Peru', code: 'PE' }, { name: 'Philippines', code: 'PH' }, { name: 'Pitcairn', code: 'PN' }, { name: 'Poland', code: 'PL' }, { name: 'Portugal', code: 'PT' }, { name: 'Puerto Rico', code: 'PR' }, { name: 'Qatar', code: 'QA' }, { name: 'Reunion', code: 'RE' }, { name: 'Romania', code: 'RO' }, { name: 'Russian Federation', code: 'RU' }, { name: 'RWANDA', code: 'RW' }, { name: 'Saint Helena', code: 'SH' }, { name: 'Saint Kitts and Nevis', code: 'KN' }, { name: 'Saint Lucia', code: 'LC' }, { name: 'Saint Pierre and Miquelon', code: 'PM' }, { name: 'Saint Vincent and the Grenadines', code: 'VC' }, { name: 'Samoa', code: 'WS' }, { name: 'San Marino', code: 'SM' }, { name: 'Sao Tome and Principe', code: 'ST' }, { name: 'Saudi Arabia', code: 'SA' }, { name: 'Senegal', code: 'SN' }, { name: 'Serbia and Montenegro', code: 'CS' }, { name: 'Seychelles', code: 'SC' }, { name: 'Sierra Leone', code: 'SL' }, { name: 'Singapore', code: 'SG' }, { name: 'Slovakia', code: 'SK' }, { name: 'Slovenia', code: 'SI' }, { name: 'Solomon Islands', code: 'SB' }, { name: 'Somalia', code: 'SO' }, { name: 'South Africa', code: 'ZA' }, { name: 'South Georgia and the South Sandwich Islands', code: 'GS' }, { name: 'Spain', code: 'ES' }, { name: 'Sri Lanka', code: 'LK' }, { name: 'Sudan', code: 'SD' }, { name: 'Suriname', code: 'SR' }, { name: 'Svalbard and Jan Mayen', code: 'SJ' }, { name: 'Swaziland', code: 'SZ' }, { name: 'Sweden', code: 'SE' }, { name: 'Switzerland', code: 'CH' }, { name: 'Syrian Arab Republic', code: 'SY' }, { name: 'Taiwan, Province of China', code: 'TW' }, { name: 'Tajikistan', code: 'TJ' }, { name: 'Tanzania, United Republic of', code: 'TZ' }, { name: 'Thailand', code: 'TH' }, { name: 'Timor-Leste', code: 'TL' }, { name: 'Togo', code: 'TG' }, { name: 'Tokelau', code: 'TK' }, { name: 'Tonga', code: 'TO' }, { name: 'Trinidad and Tobago', code: 'TT' }, { name: 'Tunisia', code: 'TN' }, { name: 'Turkey', code: 'TR' }, { name: 'Turkmenistan', code: 'TM' }, { name: 'Turks and Caicos Islands', code: 'TC' }, { name: 'Tuvalu', code: 'TV' }, { name: 'Uganda', code: 'UG' }, { name: 'Ukraine', code: 'UA' }, { name: 'United Arab Emirates', code: 'AE' }, { name: 'United Kingdom', code: 'GB' }, { name: 'United States', code: 'US' }, { name: 'United States Minor Outlying Islands', code: 'UM' }, { name: 'Uruguay', code: 'UY' }, { name: 'Uzbekistan', code: 'UZ' }, { name: 'Vanuatu', code: 'VU' }, { name: 'Venezuela', code: 'VE' }, { name: 'Viet Nam', code: 'VN' }, { name: 'Virgin Islands, British', code: 'VG' }, { name: 'Virgin Islands, U.S.', code: 'VI' }, { name: 'Wallis and Futuna', code: 'WF' }, { name: 'Western Sahara', code: 'EH' }, { name: 'Yemen', code: 'YE' }, { name: 'Zambia', code: 'ZM' }, { name: 'Zimbabwe', code: 'ZW' }]);
 
 /***/ }),
 /* 29 */
@@ -4551,7 +4555,7 @@ if (hrm_user_can('manage_settings')) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_leave_mixin__ = __webpack_require__(3);
 //
 //
@@ -5510,8 +5514,7 @@ hrm.Vue.directive('hrm-uploader', {
                 self.files.splice(index, 1);
                 this.delete.push(file_id);
             }
-        },
-        test() {}
+        }
     }
 });
 
@@ -5817,7 +5820,7 @@ hrm.Vue.directive('hrm-uploader', {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__directive__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(21);
 //
 //
 //
@@ -6811,7 +6814,7 @@ hrm.Vue.directive('hrm-uploader', {
             var dept_index = this.getIndex(this.$store.state.departments.departments, department_id, 'id'),
                 department = this.$store.state.departments.departments[dept_index];
 
-            //console.log(department);
+            //console.log('alksjhfaksjdh');
 
             this.department_id = department_id;
             this.title = department.name;
@@ -6857,6 +6860,12 @@ hrm.Vue.directive('hrm-uploader', {
                         departments: res.departments,
                         dept_drop_down: res.dept_drop_down
                     });
+
+                    self.title = '';
+                    self.description = '';
+                    self.status = '1';
+                    self.parent = '-1';
+                    self.department_id = false;
                 },
 
                 error: function (res) {
@@ -7921,7 +7930,6 @@ hrm.Vue.directive('hrm-uploader', {
 //
 //
 //
-//
 
 
 
@@ -7981,8 +7989,15 @@ hrm.Vue.directive('hrm-uploader', {
 			return formated;
 		},
 		makeEmptyField(data) {
+
 			data.forEach(function (val) {
-				val.model = '';
+				if (val.model instanceof Array) {
+					val.model = [];
+				} else if (typeof val.model == 'object') {
+					val.model = {};
+				} else {
+					val.model = '';
+				}
 			});
 		}
 	}
@@ -8711,7 +8726,7 @@ var Hrm_Leave_Configuration = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(22);
 //
 //
 //
@@ -9607,6 +9622,8 @@ var Hrm_Leave_Holidays = {
 //
 //
 //
+//
+//
 
 
 
@@ -9806,9 +9823,9 @@ var Hrm_Leave_Holidays = {
 			if (query.length < 3) {
 				return [];
 			}
-			var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
+			var start = this.leaveCalendar.view.start;
 			var start = hrm.Moment(start._d).format('YYYY-MM-DD');
-			var end = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
+			var end = this.leaveCalendar.view.end;
 			var end = hrm.Moment(end._d).format('YYYY-MM-DD');
 
 			var http_data = {
@@ -9819,6 +9836,7 @@ var Hrm_Leave_Holidays = {
 				},
 				type: 'POST',
 				success(res) {
+					console.log(res);
 					self.employees = res;
 				}
 			};
@@ -11720,7 +11738,7 @@ var Hrm_Leave_Work_Week = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__location_table_vue__ = __webpack_require__(265);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_location_form_vue__ = __webpack_require__(267);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_countries_countries__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixin__ = __webpack_require__(10);
 //
 //
@@ -12081,7 +12099,7 @@ var Hrm_Leave_Work_Week = {
 
 var Menu = [];
 
-new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(22)]; (function (script) {
+new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(23)]; (function (script) {
     Menu = script.default[0].children;
 }.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
 
@@ -12742,7 +12760,7 @@ hrm.Vue.component('organization-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 //
 //
@@ -13900,7 +13918,7 @@ function setCaretToPos(input, pos) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(25);
 //
 //
 //
@@ -14689,7 +14707,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_payroll_mixin__ = __webpack_require__(5);
 //
 //
@@ -15792,7 +15810,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_countries_countries__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_countries_countries__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(14);
 //
 //
@@ -15945,7 +15963,7 @@ hrm.Vue.component('payroll-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 
 var Menu = [];
 
-new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(26)]; (function (script) {
+new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(27)]; (function (script) {
     Menu = script.default[0].children;
 }.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
 
@@ -16146,7 +16164,7 @@ var Hrm_Leave_Header = {
 				type: 'file',
 				model: [],
 				label: 'Profile Picture',
-				name: '_hrm_user_image_id',
+				name: 'hrm_user_image_id',
 				editMode: false,
 				multiple: false,
 				deleted_files: [],
@@ -16162,25 +16180,38 @@ var Hrm_Leave_Header = {
 				name: 'department',
 				default: '&#8211 &#8211'
 			}, {
+				type: 'template',
+				label: 'Designation',
+				model: '',
+				name: 'designation',
+				default: '&#8211 &#8211'
+			}, {
 				type: 'radio',
 				model: '',
 				label: 'Gender',
-				name: '_gender',
+				name: 'hrm_gender',
 				editMode: false,
 				default: '&#8211 &#8211',
 				options: [{
 					label: 'Male',
-					value: 'male'
+					value: '1'
 				}, {
 					label: 'Female',
-					value: 'female'
+					value: '2'
+				}, {
+					label: 'Others',
+					value: '3'
 				}],
 				filter(val) {
-					if (val == 'male') {
+					if (val == '1') {
 						return 'Male';
 					}
-					if (val == 'female') {
+					if (val == '2') {
 						return 'Female';
+					}
+
+					if (val == '3') {
+						return 'Others';
 					}
 				}
 			}, {
@@ -16303,7 +16334,7 @@ var Hrm_Leave_Header = {
 						field.options = info.country_list;
 					}
 
-					if (field.name == '_hrm_user_image_id') {
+					if (field.name == 'hrm_user_image_id') {
 						field.default = info.default_profile_pic;
 					}
 				});
@@ -16353,6 +16384,11 @@ var Hrm_Leave_Header = {
 			self.canSubmit = true;
 
 			var postData = this.generateFieldData(this.fields);
+
+			postData.push({
+				name: 'user_id',
+				value: self.$route.params.employeeId
+			});
 
 			var args = {
 				data: postData,
@@ -17686,7 +17722,7 @@ hrm.Vue.component('profile-menu', __WEBPACK_IMPORTED_MODULE_0__menu_vue__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin__ = __webpack_require__(17);
 //
 //
@@ -18223,7 +18259,7 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers_menu_fix__["a" /* def
 var map = {
 	"./addons/mixin.js": 129,
 	"./attendance/mixin.js": 7,
-	"./dashboard/mixin.js": 20,
+	"./dashboard/mixin.js": 21,
 	"./departments/mixin.js": 4,
 	"./designation/mixin.js": 8,
 	"./employee/mixin.js": 9,
@@ -18231,11 +18267,11 @@ var map = {
 	"./organization/general/mixin.js": 145,
 	"./organization/location/mixin.js": 10,
 	"./organization/notice/mixin.js": 11,
-	"./payroll/formula/mixin.js": 23,
+	"./payroll/formula/mixin.js": 24,
 	"./payroll/group/mixin.js": 12,
 	"./payroll/mixin.js": 5,
 	"./payroll/revision/mixin.js": 18,
-	"./payroll/salary/mixin.js": 25,
+	"./payroll/salary/mixin.js": 26,
 	"./profile/education/mixin.js": 13,
 	"./profile/mixin.js": 14,
 	"./profile/skill/mixin.js": 15,
@@ -18916,6 +18952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 
 			state.dept_drop_down = department.dept_drop_down;
+			state.department_id = false;
 		},
 
 		departmentDelId: function (state, del_dept) {
@@ -19085,6 +19122,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -19597,6 +19635,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -20473,6 +20512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -20635,6 +20675,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -20809,6 +20850,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -20966,6 +21008,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -21148,6 +21191,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -21390,6 +21434,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -21564,6 +21609,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -21763,6 +21809,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 
@@ -22210,17 +22257,17 @@ function menuFix(slug) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_organization_router__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_profile_router__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_organization_router__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_designation_router__ = __webpack_require__(138);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_dashboard_router__ = __webpack_require__(134);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_departments_router__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_attendance_router__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_leave_router__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_settings_router__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_attendance_router__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_leave_router__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_settings_router__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_employee_router__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_addons_router__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_payroll_router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_payroll_router__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_common_empty_vue__ = __webpack_require__(225);
 
 
@@ -29381,28 +29428,6 @@ var render = function() {
                                     input: _vm.changeEmployee,
                                     "search-change": _vm.asyncFind
                                   },
-                                  scopedSlots: _vm._u([
-                                    {
-                                      key: "clear",
-                                      fn: function(props) {
-                                        return [
-                                          _vm.selectedEmployee.length
-                                            ? _c("div", {
-                                                staticClass:
-                                                  "multiselect__clear",
-                                                on: {
-                                                  mousedown: function($event) {
-                                                    $event.preventDefault()
-                                                    $event.stopPropagation()
-                                                    _vm.clearAll(props.search)
-                                                  }
-                                                }
-                                              })
-                                            : _vm._e()
-                                        ]
-                                      }
-                                    }
-                                  ]),
                                   model: {
                                     value: _vm.selectedEmployee,
                                     callback: function($$v) {
@@ -38564,7 +38589,10 @@ var render = function() {
                               staticClass: "hrm-content",
                               domProps: {
                                 innerHTML: _vm._s(
-                                  _vm.filter(_vm.jobLocation.state, "province")
+                                  _vm.filter(
+                                    _vm.jobLocation.province,
+                                    "province"
+                                  )
                                 )
                               }
                             }),
@@ -38615,7 +38643,10 @@ var render = function() {
                               staticClass: "hrm-content",
                               domProps: {
                                 innerHTML: _vm._s(
-                                  _vm.filter(_vm.jobLocation.zipcode, "zipcode")
+                                  _vm.filter(
+                                    _vm.jobLocation.zip_code,
+                                    "zip_code"
+                                  )
                                 )
                               }
                             }),
@@ -38666,7 +38697,7 @@ var render = function() {
                               staticClass: "hrm-content",
                               domProps: {
                                 innerHTML: _vm._s(
-                                  _vm.filter(_vm.jobLocation.note, "note")
+                                  _vm.filter(_vm.jobLocation.notes, "notes")
                                 )
                               }
                             }),
@@ -43244,7 +43275,7 @@ var render = function() {
                               _c("img", {
                                 staticClass: "hrm-avatar",
                                 staticStyle: { height: "32px", width: "32px" },
-                                attrs: { src: record.avatar }
+                                attrs: { src: record.avatar.url }
                               }),
                               _vm._v(" "),
                               _c(

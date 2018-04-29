@@ -1,32 +1,18 @@
-<?php
-
-namespace Illuminate\Support\Facades;
-
-use Illuminate\Support\Testing\Fakes\BusFake;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
+<?php namespace Illuminate\Support\Facades;
 
 /**
- * @see \Illuminate\Contracts\Bus\Dispatcher
+ * @see \Illuminate\Bus\Dispatcher
  */
-class Bus extends Facade
-{
-    /**
-     * Replace the bound instance with a fake.
-     *
-     * @return void
-     */
-    public static function fake()
-    {
-        static::swap(new BusFake);
-    }
+class Bus extends Facade {
 
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor()
-    {
-        return BusDispatcherContract::class;
-    }
+	/**
+	 * Get the registered name of the component.
+	 *
+	 * @return string
+	 */
+	protected static function getFacadeAccessor()
+	{
+		return 'Illuminate\Contracts\Bus\Dispatcher';
+	}
+
 }

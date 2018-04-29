@@ -85,7 +85,7 @@
 						type: 'file',
 						model: [],
 						label: 'Profile Picture',
-						name: '_hrm_user_image_id',
+						name: 'hrm_user_image_id',
 						editMode: false,
 						multiple: false,
 						deleted_files: [],
@@ -104,30 +104,45 @@
 						default: '&#8211 &#8211'
 					},
 					{
+						type: 'template',
+						label: 'Designation',
+						model: '',
+						name: 'designation',
+						default: '&#8211 &#8211'
+					},
+					{
 						type: 'radio',
 						model: '',
 						label: 'Gender',
-						name: '_gender',
+						name: 'hrm_gender',
 						editMode: false,
 						default: '&#8211 &#8211',
 						options: 
 						[
 							{
 								label: 'Male',
-								value: 'male',
+								value: '1',
 							},
 
 							{
 								label: 'Female',
-								value: 'female',
+								value: '2',
+							},
+							{
+								label: 'Others',
+								value: '3',
 							}
 						],
 						filter (val) {
-							if(val == 'male' ) {
+							if(val == '1' ) {
 								return 'Male';
 							} 
-							if(val == 'female' ) {
+							if(val == '2' ) {
 								return 'Female';
+							} 
+
+							if(val == '3' ) {
+								return 'Others';
 							} 
 						}
 					},
@@ -271,7 +286,7 @@
 							field.options = info.country_list;
 						}
 
-						if (field.name == '_hrm_user_image_id') {
+						if (field.name == 'hrm_user_image_id') {
 							field.default = info.default_profile_pic;
 						}
 					});
@@ -321,6 +336,11 @@
 				self.canSubmit = true;
 
 				var postData = this.generateFieldData(this.fields);
+
+				postData.push({
+					name: 'user_id',
+					value: self.$route.params.employeeId
+				})
 
 				var args = {
 					data: postData,

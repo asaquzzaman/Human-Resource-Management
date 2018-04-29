@@ -1,10 +1,5 @@
-<?php
-
-namespace Illuminate\Contracts\Encryption;
+<?php namespace Illuminate\Contracts\Encryption;
 
 use RuntimeException;
 
-class DecryptException extends RuntimeException
-{
-    //
-}
+class DecryptException extends RuntimeException {}

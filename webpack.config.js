@@ -77,9 +77,7 @@ module.exports = {
 	},
 
 	plugins: [
-	  new webpack.optimize.LimitChunkCountPlugin({
-	    maxChunks: 0
-	  }),
+
 	  //new UglifyJsPlugin()
 	]
 }

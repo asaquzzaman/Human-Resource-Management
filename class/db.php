@@ -194,7 +194,7 @@ class Hrm_Db {
     }
 
     function personal() {
-        $this->salary();
+        //$this->salary();
         $this->work_exp();
         $this->personal_education();
         $this->personal_skill();
@@ -345,31 +345,31 @@ class Hrm_Db {
       dbDelta( $sql );
     }
 
-    function salary() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_salary';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `emp_id` int(11) NOT NULL,
-          `pay_grade` varchar(50) NOT NULL,
-          `component` varchar(100) NOT NULL,
-          `frequency` int(11) NOT NULL,
-          `currency` varchar(10) NOT NULL,
-          `amount` float NOT NULL,
-          `comments` text NOT NULL,
-          `direct_deposit` varchar(3) NOT NULL,
-          `account_number` int(11) NOT NULL,
-          `account_type` int(11) NOT NULL,
-          `specify` varchar(200) NOT NULL,
-          `routing` int(11) NOT NULL,
-          `dipo_amount` int(11) NOT NULL,
-           `billing_date` TIMESTAMP NOT NULL,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+    // function salary() {
+    //     global $wpdb;
+    //     $table_name = $wpdb->prefix . 'hrm_salary';
+    //     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+    //       `id` int(11) NOT NULL AUTO_INCREMENT,
+    //       `emp_id` int(11) NOT NULL,
+    //       `pay_grade` varchar(50) NOT NULL,
+    //       `component` varchar(100) NOT NULL,
+    //       `frequency` int(11) NOT NULL,
+    //       `currency` varchar(10) NOT NULL,
+    //       `amount` float NOT NULL,
+    //       `comments` text NOT NULL,
+    //       `direct_deposit` varchar(3) NOT NULL,
+    //       `account_number` int(11) NOT NULL,
+    //       `account_type` int(11) NOT NULL,
+    //       `specify` varchar(200) NOT NULL,
+    //       `routing` int(11) NOT NULL,
+    //       `dipo_amount` int(11) NOT NULL,
+    //        `billing_date` TIMESTAMP NOT NULL,
+    //       PRIMARY KEY (`id`)
+    //     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-    }
+    //     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    //     dbDelta( $sql );
+    // }
 
     function leave_summary() {
         global $wpdb;

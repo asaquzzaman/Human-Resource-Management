@@ -1,38 +1,41 @@
-<?php
+<?php namespace Illuminate\Database\Schema;
 
-namespace Illuminate\Database\Schema;
+class MySqlBuilder extends Builder {
 
-class MySqlBuilder extends Builder
-{
-    /**
-     * Determine if the given table exists.
-     *
-     * @param  string  $table
-     * @return bool
-     */
-    public function hasTable($table)
-    {
-        $table = $this->connection->getTablePrefix().$table;
+	/**
+	 * Determine if the given table exists.
+	 *
+	 * @param  string  $table
+	 * @return bool
+	 */
+	public function hasTable($table)
+	{
+		$sql = $this->grammar->compileTableExists();
 
-        return count($this->connection->select(
-            $this->grammar->compileTableExists(), [$this->connection->getDatabaseName(), $table]
-        )) > 0;
-    }
+		$database = $this->connection->getDatabaseName();
 
-    /**
-     * Get the column listing for a given table.
-     *
-     * @param  string  $table
-     * @return array
-     */
-    public function getColumnListing($table)
-    {
-        $table = $this->connection->getTablePrefix().$table;
+		$table = $this->connection->getTablePrefix().$table;
 
-        $results = $this->connection->select(
-            $this->grammar->compileColumnListing(), [$this->connection->getDatabaseName(), $table]
-        );
+		return count($this->connection->select($sql, array($database, $table))) > 0;
+	}
 
-        return $this->connection->getPostProcessor()->processColumnListing($results);
-    }
+	/**
+	 * Get the column listing for a given table.
+	 *
+	 * @param  string  $table
+	 * @return array
+	 */
+	public function getColumnListing($table)
+	{
+		$sql = $this->grammar->compileColumnExists();
+
+		$database = $this->connection->getDatabaseName();
+
+		$table = $this->connection->getTablePrefix().$table;
+
+		$results = $this->connection->select($sql, array($database, $table));
+
+		return $this->connection->getPostProcessor()->processColumnListing($results);
+	}
+
 }

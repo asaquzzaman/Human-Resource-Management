@@ -1,105 +1,115 @@
-<?php
+<?php namespace Illuminate\Contracts\Routing;
 
-namespace Illuminate\Contracts\Routing;
+use Closure;
 
-interface Registrar
-{
-    /**
-     * Register a new GET route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function get($uri, $action);
+interface Registrar {
 
-    /**
-     * Register a new POST route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function post($uri, $action);
+	/**
+	 * Register a new GET route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function get($uri, $action);
 
-    /**
-     * Register a new PUT route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function put($uri, $action);
+	/**
+	 * Register a new POST route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function post($uri, $action);
 
-    /**
-     * Register a new DELETE route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function delete($uri, $action);
+	/**
+	 * Register a new PUT route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function put($uri, $action);
 
-    /**
-     * Register a new PATCH route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function patch($uri, $action);
+	/**
+	 * Register a new DELETE route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function delete($uri, $action);
 
-    /**
-     * Register a new OPTIONS route with the router.
-     *
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function options($uri, $action);
+	/**
+	 * Register a new PATCH route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function patch($uri, $action);
 
-    /**
-     * Register a new route with the given verbs.
-     *
-     * @param  array|string  $methods
-     * @param  string  $uri
-     * @param  \Closure|array|string  $action
-     * @return \Illuminate\Routing\Route
-     */
-    public function match($methods, $uri, $action);
+	/**
+	 * Register a new OPTIONS route with the router.
+	 *
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function options($uri, $action);
 
-    /**
-     * Route a resource to a controller.
-     *
-     * @param  string  $name
-     * @param  string  $controller
-     * @param  array   $options
-     * @return void
-     */
-    public function resource($name, $controller, array $options = []);
+	/**
+	 * Register a new route with the given verbs.
+	 *
+	 * @param  array|string  $methods
+	 * @param  string  $uri
+	 * @param  \Closure|array|string  $action
+	 * @return void
+	 */
+	public function match($methods, $uri, $action);
 
-    /**
-     * Create a route group with shared attributes.
-     *
-     * @param  array  $attributes
-     * @param  \Closure|string  $routes
-     * @return void
-     */
-    public function group(array $attributes, $routes);
+	/**
+	 * Route a resource to a controller.
+	 *
+	 * @param  string  $name
+	 * @param  string  $controller
+	 * @param  array   $options
+	 * @return void
+	 */
+	public function resource($name, $controller, array $options = array());
 
-    /**
-     * Substitute the route bindings onto the route.
-     *
-     * @param  \Illuminate\Routing\Route  $route
-     * @return \Illuminate\Routing\Route
-     */
-    public function substituteBindings($route);
+	/**
+	 * Create a route group with shared attributes.
+	 *
+	 * @param  array     $attributes
+	 * @param  \Closure  $callback
+	 * @return void
+	 */
+	public function group(array $attributes, Closure $callback);
 
-    /**
-     * Substitute the implicit Eloquent model bindings for the route.
-     *
-     * @param  \Illuminate\Routing\Route  $route
-     * @return void
-     */
-    public function substituteImplicitBindings($route);
+	/**
+	 * Register a new "before" filter with the router.
+	 *
+	 * @param  string|callable  $callback
+	 * @return void
+	 */
+	public function before($callback);
+
+	/**
+	 * Register a new "after" filter with the router.
+	 *
+	 * @param  string|callable  $callback
+	 * @return void
+	 */
+	public function after($callback);
+
+	/**
+	 * Register a new filter with the router.
+	 *
+	 * @param  string  $name
+	 * @param  string|callable  $callback
+	 * @return void
+	 */
+	public function filter($name, $callback);
+
 }

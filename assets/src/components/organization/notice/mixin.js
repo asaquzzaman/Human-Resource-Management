@@ -24,6 +24,9 @@ export default {
 		},
 
 		recordDelete (deletedId, callback) {
+			if(!confirm('Are you sure!')) {
+				return;
+			}
 			var self = this;
 
 			var form_data = {
@@ -109,6 +112,7 @@ export default {
                 },
 
                 success: function(res) {
+                	self.recordMeta(res.data);
                 	self.$store.commit( self.nameSpace + '/setRecord', res.data );
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
                 	self.loadingStop('hrm-hidden-form');

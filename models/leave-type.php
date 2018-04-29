@@ -21,7 +21,7 @@ class Leave_Type extends Eloquent {
     ];
 
     public function departments() {
-    	return $this->belongsToMany( Department::class, 'hrm_relation', 'to', 'from' );
+    	return $this->belongsToMany( 'HRM\Models\Department', 'hrm_relation', 'to', 'from' );
     }
 
 }

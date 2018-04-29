@@ -1,69 +1,69 @@
-<?php
-
-namespace Illuminate\Support\Traits;
+<?php namespace Illuminate\Support\Traits;
 
 use Illuminate\Support\Fluent;
 use Illuminate\Contracts\Container\Container;
 
-trait CapsuleManagerTrait
-{
-    /**
-     * The current globally used instance.
-     *
-     * @var object
-     */
-    protected static $instance;
+trait CapsuleManagerTrait {
 
-    /**
-     * The container instance.
-     *
-     * @var \Illuminate\Contracts\Container\Container
-     */
-    protected $container;
+	/**
+	 * The current globally used instance.
+	 *
+	 * @var object
+	 */
+	protected static $instance;
 
-    /**
-     * Setup the IoC container instance.
-     *
-     * @param  \Illuminate\Contracts\Container\Container  $container
-     * @return void
-     */
-    protected function setupContainer(Container $container)
-    {
-        $this->container = $container;
+	/**
+	 * The container instance.
+	 *
+	 * @var \Illuminate\Contracts\Container\Container
+	 */
+	protected $container;
 
-        if (! $this->container->bound('config')) {
-            $this->container->instance('config', new Fluent);
-        }
-    }
+	/**
+	 * Setup the IoC container instance.
+	 *
+	 * @param  \Illuminate\Contracts\Container\Container  $container
+	 * @return void
+	 */
+	protected function setupContainer(Container $container)
+	{
+		$this->container = $container;
 
-    /**
-     * Make this capsule instance available globally.
-     *
-     * @return void
-     */
-    public function setAsGlobal()
-    {
-        static::$instance = $this;
-    }
+		if ( ! $this->container->bound('config'))
+		{
+			$this->container->instance('config', new Fluent);
+		}
+	}
 
-    /**
-     * Get the IoC container instance.
-     *
-     * @return \Illuminate\Contracts\Container\Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
+	/**
+	 * Make this capsule instance available globally.
+	 *
+	 * @return void
+	 */
+	public function setAsGlobal()
+	{
+		static::$instance = $this;
+	}
 
-    /**
-     * Set the IoC container instance.
-     *
-     * @param  \Illuminate\Contracts\Container\Container  $container
-     * @return void
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-    }
+	/**
+	 * Get the IoC container instance.
+	 *
+	 * @return \Illuminate\Contracts\Container\Container
+	 */
+	public function getContainer()
+	{
+		return $this->container;
+	}
+
+	/**
+	 * Set the IoC container instance.
+	 *
+	 * @param  \Illuminate\Contracts\Container\Container  $container
+	 * @return void
+	 */
+	public function setContainer(Container $container)
+	{
+		$this->container = $container;
+	}
+
 }

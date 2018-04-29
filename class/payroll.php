@@ -11,6 +11,7 @@ use HRM\Transformers\Salary_Group_Transformer;
 use HRM\Models\Salary;
 use HRM\Transformers\Salary_Transformer;
 use HRM\Core\Crud\Crud;
+use Illuminate\Pagination\Paginator;
 
 class Hrm_Payroll {
     use Transformer_Manager;
@@ -86,13 +87,15 @@ class Hrm_Payroll {
                 )
             ));
         }
+
+        $postdata['id'] = intval( $postdata['id'] );
         
         $update = array(
             'class'        => 'Formula',
             'method'       => 'update',
             'transformers' => 'Formula_Transformer',
             'status'       => 'disable',
-            'id'           => empty( intval( $postdata[id] ) ) ? false : intval( $postdata[id] )
+            'id'           => empty( $postdata['id'] ) ? false : intval( $postdata['id'] )
         );
 
         hrm_update_records( $update );
@@ -173,6 +176,10 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $location = Salary::where( function($q) use( $start_date, $end_date, $employee_id ) {
 
             if ( ! empty(  $employee_id ) ) {
@@ -190,7 +197,7 @@ class Hrm_Payroll {
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
 
         $collection = $location->getCollection();
 
@@ -216,7 +223,7 @@ class Hrm_Payroll {
         $end_date = date( 'Y-m-t', strtotime( $date ) );
 
         if ( $type == 'employee' ) {
-             $salary = Salary::where('employee_id', $id)
+             $salary = Salary::where('category_id', $id)
                 ->where( function($q) use( $start_date, $end_date ) {
                     $q->where( 'month', '>=', $start_date);
                     $q->where( 'month', '<=', $end_date);
@@ -287,13 +294,17 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $formual = Salary_Group::where( function($q) use( $name ) {
             if ( ! empty(  $name ) ) {
                 $q->where( 'name', 'LIKE', '%' . $name . '%' );
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $formual->getCollection();
 
@@ -549,6 +560,10 @@ class Hrm_Payroll {
             return $this->get_response( null );
         }
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $formual = Formula::where( function($q) use( $name, $status, $id ) {
             if ( ! empty(  $name ) ) {
                 $q->where( 'name', 'LIKE', '%' . $name . '%' );
@@ -562,7 +577,7 @@ class Hrm_Payroll {
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $formual->getCollection();
 

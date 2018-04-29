@@ -112,7 +112,7 @@
                 var dept_index = this.getIndex(this.$store.state.departments.departments, department_id, 'id' ),
                     department = this.$store.state.departments.departments[dept_index];
 
-                //console.log(department);
+                //console.log('alksjhfaksjdh');
 
                 this.department_id = department_id;
                 this.title         = department.name;
@@ -162,6 +162,13 @@
                             departments: res.departments,
                             dept_drop_down: res.dept_drop_down
                         });
+
+                        self.title = '';
+                        self.description = '';
+                        self.status = '1';
+                        self.parent = '-1';
+                        self.department_id = false;
+                        
                     },
 
                     error: function(res) {

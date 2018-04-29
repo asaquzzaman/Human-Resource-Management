@@ -1,21 +1,18 @@
-<?php
-
-namespace Illuminate\Support\Facades;
-
-use Psr\Log\LoggerInterface;
+<?php namespace Illuminate\Support\Facades;
 
 /**
  * @see \Illuminate\Log\Writer
  */
-class Log extends Facade
-{
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor()
-    {
-        return LoggerInterface::class;
-    }
+class Log extends Facade {
+
+	/**
+	 * Get the registered name of the component.
+	 *
+	 * @return string
+	 */
+	protected static function getFacadeAccessor()
+	{
+		return 'log';
+	}
+
 }

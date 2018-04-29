@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
+    'Stringy\\' => array($vendorDir . '/danielstjules/stringy/src'),
     'League\\Fractal\\' => array($vendorDir . '/league/fractal/src'),
     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),
     'Illuminate\\Pagination\\' => array($vendorDir . '/illuminate/pagination'),
@@ -19,5 +20,5 @@ return array(
     'HRM\\Models\\' => array($baseDir . '/models'),
     'HRM\\Include\\' => array($baseDir . '/include'),
     'HRM\\Core\\' => array($baseDir . '/core'),
-    'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+    '' => array($vendorDir . '/nesbot/carbon/src'),
 );

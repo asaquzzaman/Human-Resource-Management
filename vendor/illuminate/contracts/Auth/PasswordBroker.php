@@ -1,76 +1,76 @@
-<?php
-
-namespace Illuminate\Contracts\Auth;
+<?php namespace Illuminate\Contracts\Auth;
 
 use Closure;
 
-interface PasswordBroker
-{
-    /**
-     * Constant representing a successfully sent reminder.
-     *
-     * @var string
-     */
-    const RESET_LINK_SENT = 'passwords.sent';
+interface PasswordBroker {
 
-    /**
-     * Constant representing a successfully reset password.
-     *
-     * @var string
-     */
-    const PASSWORD_RESET = 'passwords.reset';
+	/**
+	 * Constant representing a successfully sent reminder.
+	 *
+	 * @var string
+	 */
+	const RESET_LINK_SENT = 'passwords.sent';
 
-    /**
-     * Constant representing the user not found response.
-     *
-     * @var string
-     */
-    const INVALID_USER = 'passwords.user';
+	/**
+	 * Constant representing a successfully reset password.
+	 *
+	 * @var string
+	 */
+	const PASSWORD_RESET = 'passwords.reset';
 
-    /**
-     * Constant representing an invalid password.
-     *
-     * @var string
-     */
-    const INVALID_PASSWORD = 'passwords.password';
+	/**
+	 * Constant representing the user not found response.
+	 *
+	 * @var string
+	 */
+	const INVALID_USER = 'passwords.user';
 
-    /**
-     * Constant representing an invalid token.
-     *
-     * @var string
-     */
-    const INVALID_TOKEN = 'passwords.token';
+	/**
+	 * Constant representing an invalid password.
+	 *
+	 * @var string
+	 */
+	const INVALID_PASSWORD = 'passwords.password';
 
-    /**
-     * Send a password reset link to a user.
-     *
-     * @param  array  $credentials
-     * @return string
-     */
-    public function sendResetLink(array $credentials);
+	/**
+	 * Constant representing an invalid token.
+	 *
+	 * @var string
+	 */
+	const INVALID_TOKEN = 'passwords.token';
 
-    /**
-     * Reset the password for the given token.
-     *
-     * @param  array     $credentials
-     * @param  \Closure  $callback
-     * @return mixed
-     */
-    public function reset(array $credentials, Closure $callback);
+	/**
+	 * Send a password reset link to a user.
+	 *
+	 * @param  array  $credentials
+	 * @param  \Closure|null  $callback
+	 * @return string
+	 */
+	public function sendResetLink(array $credentials, Closure $callback = null);
 
-    /**
-     * Set a custom password validator.
-     *
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public function validator(Closure $callback);
+	/**
+	 * Reset the password for the given token.
+	 *
+	 * @param  array     $credentials
+	 * @param  \Closure  $callback
+	 * @return mixed
+	 */
+	public function reset(array $credentials, Closure $callback);
 
-    /**
-     * Determine if the passwords match for the request.
-     *
-     * @param  array  $credentials
-     * @return bool
-     */
-    public function validateNewPassword(array $credentials);
+	/**
+	 * Set a custom password validator.
+	 *
+	 * @param  \Closure  $callback
+	 * @return void
+	 */
+	public function validator(Closure $callback);
+
+	/**
+	 * Determine if the passwords match for the request.
+	 *
+	 * @param  array  $credentials
+	 * @return bool
+	 */
+	public function validateNewPassword(array $credentials);
+
 }

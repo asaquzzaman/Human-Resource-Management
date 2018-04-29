@@ -15,6 +15,6 @@ class User extends Eloquent {
     ];
 
     public function leave_types() {
-        return $this->belongsToMany( Leave_Type::class, 'hrm_leave', 'emp_id', 'type' );
+        return $this->belongsToMany( 'HRM\Models\Leave_Type', 'hrm_leave', 'emp_id', 'type' );
     }
 }

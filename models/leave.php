@@ -67,11 +67,11 @@ class Leave extends Eloquent {
     }
 
     public function leaveType() {
-        return $this->hasOne( Leave_Type::class, 'id', 'type' );
+        return $this->hasOne( 'HRM\Models\Leave_Type', 'id', 'type' );
     }
 
     public function user() {
-        return $this->hasOne( User::class, 'ID', 'emp_id' );
+        return $this->hasOne( 'HRM\Models\User', 'ID', 'emp_id' );
     }
 }
 

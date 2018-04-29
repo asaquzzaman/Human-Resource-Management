@@ -1,14 +1,13 @@
-<?php
+<?php namespace Illuminate\Contracts\Queue;
 
-namespace Illuminate\Contracts\Queue;
+interface Factory {
 
-interface Factory
-{
-    /**
-     * Resolve a queue connection instance.
-     *
-     * @param  string  $name
-     * @return \Illuminate\Contracts\Queue\Queue
-     */
-    public function connection($name = null);
+	/**
+	 * Resolve a queue connection instance.
+	 *
+	 * @param  string  $name
+	 * @return \Illuminate\Contracts\Queue\Queue
+	 */
+	public function connection($name = null);
+
 }

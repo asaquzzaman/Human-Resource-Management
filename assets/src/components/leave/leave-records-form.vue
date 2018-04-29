@@ -14,6 +14,7 @@
 							Employee
 							<em>*</em>
 						</label>
+
 						<div class="hrm-multiselect">
 							<hrm-multiselect 
 					            select-label=""
@@ -30,14 +31,15 @@
 								:searchable="true" 
 								@input="changeEmployee"
 								@search-change="asyncFind">
-
+<!-- 
 									<template slot="clear" scope="props">
 										<div class="multiselect__clear" 
 											v-if="selectedEmployee.length" 
 											@mousedown.prevent.stop="clearAll(props.search)">
 											
 										</div>
-									</template><span slot="noResult">No user found.</span>
+									</template>-->
+									<span slot="noResult">No user found.</span> 
 
 							</hrm-multiselect>
              
@@ -177,7 +179,7 @@
 			leave_proxy (proxy) {
 				this.refresh();
 				this.change_leve_type_statue();
-			}
+			},
 		},
 
 		mixins: [Mixin],
@@ -339,9 +341,9 @@
 		    	if (query.length < 3) {
 		    		return [];
 		    	}
-				var start = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').start;
+				var start = this.leaveCalendar.view.start;
 				var start = hrm.Moment(start._d).format('YYYY-MM-DD');
-				var end   = jQuery('.hrm-leave-jquery-fullcalendar').fullCalendar('getView').end;
+				var end   = this.leaveCalendar.view.end;
 				var end   = hrm.Moment(end._d).format('YYYY-MM-DD');
 		    	
 		    	var http_data = {
@@ -352,6 +354,7 @@
 		    		},
 		    		type: 'POST',
 		    		success (res) {
+		    			console.log(res);
 		    			self.employees = res;
 		    		}
 		    	};

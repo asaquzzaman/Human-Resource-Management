@@ -20,7 +20,7 @@
 					</th>
 
 					<td class="">
-						<img class="hrm-avatar" :src="record.avatar" style="height:32px; width: 32px;">
+						<img class="hrm-avatar" :src="record.avatar.url" style="height:32px; width: 32px;">
 						<router-link class="hrm-profile-link" :to="{
 							name: 'employee_general_information',
 							params: {

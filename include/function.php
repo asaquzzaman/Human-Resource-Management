@@ -541,6 +541,7 @@ function hrm_manager_capability() {
         'manage_designation',
         'manage_payroll',
         'payroll_revistion',
+        'manage_loan'
     );
 }
 

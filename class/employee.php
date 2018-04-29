@@ -6,12 +6,15 @@ use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Models\Work_Experience;
 use HRM\Models\Education;
+use HRM\Models\Department;
+use HRM\Models\Designation;
 use HRM\Models\Skill;
 use HRM\Transformers\Work_Experiance_Transformer;
 use HRM\Transformers\Education_Transformer;
 use HRM\Transformers\Skill_Transformer;
 use HRM\Core\File_System\File_System;
 use HRM\Transformers\Employee_Transformer;
+use Illuminate\Pagination\Paginator;
 
 class Hrm_Employee {
     use Transformer_Manager;
@@ -58,11 +61,11 @@ class Hrm_Employee {
 
     public function ajax_employee_filter() {
         check_ajax_referer('hrm_nonce');
-
+        $_POST['page'] = absint( $_POST['page'] );
         $postdata = [];
         $postdata['search']         = '*' . $_POST['name'] . '*';
         $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
-        $postdata['page']  = empty( absint( $_POST['page'] ) ) ? 1 : absint( $_POST['page'] );
+        $postdata['page']  = empty( $_POST['page'] ) ? 1 : absint( $_POST['page'] );
         
         $employees = self::getInstance()->get_employees( $postdata );
         
@@ -259,7 +262,7 @@ class Hrm_Employee {
 
     function emp_upload_image($employee_id) {
 
-        $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
+        $image_id        = get_user_meta( $employee_id, 'hrm_user_image_id', true );
         $image_attchment = $this->get_image( $image_id );
 
         ?>
@@ -287,7 +290,7 @@ class Hrm_Employee {
         }
         $file_id = $response['file_id'];
         $employee_id = $post['employee_id'];
-        update_user_meta( $employee_id, '_hrm_user_image_id', $file_id );
+        update_user_meta( $employee_id, 'hrm_user_image_id', $file_id );
     }
 
     function pim_to_employer( $page = null ) {
@@ -340,6 +343,10 @@ class Hrm_Employee {
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $experiance = Work_Experience::where('employee_id', $employee_id)
             ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
@@ -357,7 +364,7 @@ class Hrm_Employee {
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $experiance->getCollection();
 
@@ -381,6 +388,10 @@ class Hrm_Employee {
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $experiance = Education::where('employee_id', $employee_id)
             ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
@@ -398,7 +409,7 @@ class Hrm_Employee {
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $experiance->getCollection();
 
@@ -422,6 +433,10 @@ class Hrm_Employee {
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $experiance = Skill::where('employee_id', $employee_id)
             ->where( function($q) use($title, $from, $to) {
             if ( ! empty(  $title ) ) {
@@ -439,7 +454,7 @@ class Hrm_Employee {
             // }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $experiance->getCollection();
 
@@ -495,9 +510,10 @@ class Hrm_Employee {
     
         return [
             'country_list'    => $lists,
-            '_hrm_user_image_id' => $profile_pic,
+            'hrm_user_image_id' => $profile_pic,
             'department'      => $this->get_employee_department( $user_id ),
-            '_gender'         => get_user_meta( $user_id, '_gender', true ),
+            'designation'      => $this->get_employee_designation( $user_id ),
+            'hrm_gender'         => get_user_meta( $user_id, 'hrm_gender', true ),
             '_marital_status' => get_user_meta( $user_id, '_marital_status', true ),
             '_national_code'  => get_user_meta( $user_id, '_national_code', true ),
             '_birthday'       => hrm_get_date2mysql( get_user_meta( $user_id, '_birthday', true ) ),
@@ -514,8 +530,8 @@ class Hrm_Employee {
     }
 
     function get_profile_picture( $user_id ) {
-        $image_ids = get_user_meta( $user_id, '_hrm_user_image_id', true );
-        $image_ids = $image_ids ? $image_ids : [];
+        $image_ids = get_user_meta( $user_id, 'hrm_user_image_id', true );
+        $image_ids = $image_ids ? array($image_ids) : [];
         $imaegs = [];
 
         foreach ( $image_ids as $key => $image_id ) {
@@ -525,16 +541,25 @@ class Hrm_Employee {
         return $imaegs;
     }
 
-    function get_employee_department( $employee_id ) {
-        $role = get_user_meta( $employee_id, 'role', true );
-        $designation = hrm_current_user_display_role();
+    function get_employee_designation( $employee_id ) {
+        $designation_id = get_user_meta( $employee_id, 'hrm_designation', true );
+        $designation = Designation::find( $designation_id );
 
-        return $designation ? $designation : '&#8211 &#8211';
+        return $designation ? $designation->title : '&#8211 &#8211';
+    }
+
+    function get_employee_department( $employee_id ) {
+        $department_id = get_user_meta( $employee_id, 'hrm_job_category', true );
+        $department = Department::find( $department_id );
+
+        return $department ? $department->name : '&#8211 &#8211';
     }
 
     public static function ajax_save_personal_info() {
         //check_ajax_referer('hrm_nonce');
-        $user_id = empty( $_POST['user_id'] ) ? get_current_user_id() : intval( $_POST['user_id'] );
+        $user_id = json_decode( stripslashes( $_POST['user_id'] ) );
+        $user_id = empty( $user_id ) ? get_current_user_id() : intval( $user_id );
+        
         $result = self::getInstance()->save_personal_info( $_POST, $_FILES, $user_id );
         wp_send_json_success( $result );
     }
@@ -547,7 +572,7 @@ class Hrm_Employee {
 
             if ( empty( $postData['is_multiple_file'] ) || $postData['is_multiple_file'] == 'false' ) {
                 
-                update_user_meta( $user_id, $meta_name, $file_ids );
+                update_user_meta( $user_id, $meta_name, reset( $file_ids ) );
             } else {
                 $dbids = get_user_meta( $user_id, $meta_name, true );
                 update_user_meta( $user_id, $meta_name, array_merge( $dbids, $file_ids ) );
@@ -559,6 +584,9 @@ class Hrm_Employee {
             foreach ( $postData['deleted_files'] as $delted_files) {
                 
                 $files = json_decode( stripslashes( $delted_files ) );
+                if ( empty( $files->files ) ) {
+                    continue;
+                }
                 $dbids = get_user_meta( $user_id, $files->name, true );
                 $id_diff = array_diff( $dbids, $files->files );
                 
@@ -566,7 +594,7 @@ class Hrm_Employee {
                     File_System::delete( $file_id );
                 }
 
-                update_user_meta( $user_id, $files->name, $id_diff );
+                update_user_meta( $user_id, $files->name, reset($id_diff) );
             }
         }
         
@@ -577,11 +605,11 @@ class Hrm_Employee {
         return $this->get_personal_info($user_id);
     }
     function add_new_employee( $postdata ) {
-        
+        $postdata['id'] = absint($postdata['id'] );
         if ( 
             isset( $postdata['id'] ) 
                 && 
-            ! empty( absint($postdata['id'] ) ) 
+            ! empty( $postdata['id'] ) 
         ) {
             $user_id = $postdata['id'];
             $this->update_empoyee( $user_id, $postdata );
@@ -779,7 +807,6 @@ class Hrm_Employee {
         return $this->get_response( $resource );
     }
 }
-
 
 
 

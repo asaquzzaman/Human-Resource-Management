@@ -1,40 +1,39 @@
-<?php
-
-namespace Illuminate\Contracts\Validation;
+<?php namespace Illuminate\Contracts\Validation;
 
 use Illuminate\Contracts\Support\MessageProvider;
 
-interface Validator extends MessageProvider
-{
-    /**
-     * Determine if the data fails the validation rules.
-     *
-     * @return bool
-     */
-    public function fails();
+interface Validator extends MessageProvider {
 
-    /**
-     * Get the failed validation rules.
-     *
-     * @return array
-     */
-    public function failed();
+	/**
+	 * Determine if the data fails the validation rules.
+	 *
+	 * @return bool
+	 */
+	public function fails();
 
-    /**
-     * Add conditions to a given field based on a Closure.
-     *
-     * @param  string  $attribute
-     * @param  string|array  $rules
-     * @param  callable  $callback
-     * @return $this
-     */
-    public function sometimes($attribute, $rules, callable $callback);
+	/**
+	 * Get the failed validation rules.
+	 *
+	 * @return array
+	 */
+	public function failed();
 
-    /**
-     * After an after validation callback.
-     *
-     * @param  callable|string  $callback
-     * @return $this
-     */
-    public function after($callback);
+	/**
+	 * Add conditions to a given field based on a Closure.
+	 *
+	 * @param  string  $attribute
+	 * @param  string|array  $rules
+	 * @param  callable  $callback
+	 * @return void
+	 */
+	public function sometimes($attribute, $rules, callable $callback);
+
+	/**
+	 * After an after validation callback.
+	 *
+	 * @param  callable|string  $callback
+	 * @return $this
+	 */
+	public function after($callback);
+
 }

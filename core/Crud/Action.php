@@ -10,6 +10,7 @@ use League\Fractal;
 use League\Fractal\Resource\Item as Item;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Pagination\Paginator;
 
 abstract class Action implements Pattern {
 
@@ -34,8 +35,12 @@ abstract class Action implements Pattern {
 		$transformers = "HRM\\Transformers\\$transformers";
 		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : $postdata['per_page'];
 
+		Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
 		$data = $model::orderBy( 'id', 'DESC' )
-            ->paginate( $per_page, ['*'], 'page', $page );
+            ->paginate( $per_page );
 
         $collection = $data->getCollection();
 

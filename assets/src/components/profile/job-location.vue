@@ -23,7 +23,7 @@
 			        	</div>
 			        	<div class="hrm-content-wrap">
 			        		<label class="hrm-title">Province:</label> 
-			        		<div class="hrm-content" v-html="filter(jobLocation.state, 'province' )"></div>
+			        		<div class="hrm-content" v-html="filter(jobLocation.province, 'province' )"></div>
 			        		<div class="hrm-clear"></div>
 			        	</div>
 			        	<div class="hrm-content-wrap">
@@ -38,7 +38,7 @@
 			        	</div>
 			        	<div class="hrm-content-wrap">
 			        		<label class="hrm-title">Zip Code:</label> 
-			        		<div class="hrm-content" v-html="filter(jobLocation.zipcode, 'zipcode' )"></div>
+			        		<div class="hrm-content" v-html="filter(jobLocation.zip_code, 'zip_code' )"></div>
 			        		<div class="hrm-clear"></div>
 			        	</div>
 			        	<div class="hrm-content-wrap">
@@ -53,7 +53,7 @@
 			        	</div>
 			        	<div class="hrm-content-wrap">
 			        		<label class="hrm-title">Notes:</label> 
-			        		<div class="hrm-content" v-html="filter(jobLocation.note, 'note' )"></div>
+			        		<div class="hrm-content" v-html="filter(jobLocation.notes, 'notes' )"></div>
 			        		<div class="hrm-clear"></div>
 
 						</div>

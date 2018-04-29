@@ -13,7 +13,7 @@
         if(!$('#'+browse_button).length) {
             return;
         }
-        console.log(browse_button);
+
         this.component = component;
 
         //instantiate the uploader

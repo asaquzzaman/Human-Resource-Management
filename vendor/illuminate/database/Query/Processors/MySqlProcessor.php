@@ -1,19 +1,23 @@
-<?php
+<?php namespace Illuminate\Database\Query\Processors;
 
-namespace Illuminate\Database\Query\Processors;
+class MySqlProcessor extends Processor {
 
-class MySqlProcessor extends Processor
-{
-    /**
-     * Process the results of a column listing query.
-     *
-     * @param  array  $results
-     * @return array
-     */
-    public function processColumnListing($results)
-    {
-        return array_map(function ($result) {
-            return with((object) $result)->column_name;
-        }, $results);
-    }
+	/**
+	 * Process the results of a column listing query.
+	 *
+	 * @param  array  $results
+	 * @return array
+	 */
+	public function processColumnListing($results)
+	{
+		$mapping = function($r)
+		{
+			$r = (object) $r;
+
+			return $r->column_name;
+		};
+
+		return array_map($mapping, $results);
+	}
+
 }

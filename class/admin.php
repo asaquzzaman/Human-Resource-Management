@@ -8,6 +8,9 @@ use HRM\Models\Location;
 use HRM\Transformers\Location_Transformer;
 use HRM\Models\Notice;
 use HRM\Transformers\Notice_Transformer;
+use Illuminate\Pagination\Paginator;
+use HRM\Models\Designation;
+use HRM\Transformers\Designation_Transformer;
 
 class Hrm_Admin {
     use Transformer_Manager;
@@ -29,6 +32,7 @@ class Hrm_Admin {
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
         add_action( 'wp_ajax_hrm_organization_location_filter', array( $this, 'ajax_location_filter' ) );
         add_action( 'wp_ajax_hrm_notice_filter', array( $this, 'ajax_notice_filter' ) );
+        add_action( 'wp_ajax_hrm_designation_filter', array( $this, 'ajax_designation_filter' ) );
 
         $this->setup_actions();
     }
@@ -49,6 +53,53 @@ class Hrm_Admin {
         add_action( 'edit_user_profile', array( $this, 'role_display' ) );
         add_action( 'show_user_profile', array( $this, 'role_display' ) );
         add_action( 'profile_update', array( $this, 'profile_update_role' ) );
+    }
+
+    function ajax_designation_filter() {
+        check_ajax_referer('hrm_nonce');
+        $locations = $this->designation_filter($_POST);
+
+        wp_send_json_success($locations);
+    }
+
+    function designation_filter( $postdata = [], $id = false  ) {
+            
+        $title     = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+
+        $per_page = hrm_per_page();
+
+        if ( $id !== false  ) {
+
+            $designation = Designation::find( $id );
+            
+            if ( $designation ) {
+                $resource = new Item( $designation, new Designation_Transformer );
+                return $this->get_response( $resource );
+            }
+            
+            return $this->get_response( null );
+        }
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $designation = Designation::where( function($q) use( $title ) {
+            if ( ! empty(  $title ) ) {
+                $q->where( 'title', 'LIKE', '%' . $title . '%' );
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page );
+    
+        $collection = $designation->getCollection();
+
+        $resource = new Collection( $collection, new Designation_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $designation ) );
+
+        return $this->get_response( $resource );
+    
     }
 
     function ajax_notice_filter() {
@@ -78,6 +129,10 @@ class Hrm_Admin {
             return $this->get_response( null );
         }
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $location = Notice::where( function($q) use( $title, $from, $to ) {
             if ( ! empty(  $title ) ) {
                 $q->where( 'title', 'LIKE', '%' . $title . '%' );
@@ -94,7 +149,7 @@ class Hrm_Admin {
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $location->getCollection();
 
@@ -130,13 +185,17 @@ class Hrm_Admin {
             return $this->get_response( null );
         }
 
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
         $location = Location::where( function($q) use( $name ) {
             if ( ! empty(  $name ) ) {
                 $q->where( 'name', 'LIKE', '%' . $name . '%' );
             }
         })
         ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page, ['*'], 'page', $page );
+        ->paginate( $per_page );
     
         $collection = $location->getCollection();
 
@@ -2156,7 +2215,7 @@ class Hrm_Admin {
 
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
-        $department     = self::update_department( $_POST );
+        $department  = self::update_department( $_POST );
         $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
         //$departments    = self::get_departments(false, true);
         //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );

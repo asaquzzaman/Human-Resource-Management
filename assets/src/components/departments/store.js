@@ -39,6 +39,7 @@ export default {
 			}
 
 			state.dept_drop_down = department.dept_drop_down;
+			state.department_id = false;
 		},
 
 		departmentDelId: function(state, del_dept) {

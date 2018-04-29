@@ -3,7 +3,6 @@
 		<div id="hrm-hidden-form-warp" class="postbox">
 	        
 	        <h2 class="hndle">Employee</h2>
-
 	        <div class="inside">
 		        <form id="hrm-hidden-form" action="" @submit.prevent="selfNewRecord()">
 		            <div id="hrm-form-field">
@@ -85,8 +84,16 @@
 				return formated;
 			},
 			makeEmptyField (data) {
+
 				data.forEach(function(val) {
-					val.model = '';
+					if(val.model instanceof Array) {
+						val.model = [];
+					} else if(typeof val.model == 'object') {
+						val.model = {};
+					} else {
+						val.model = '';
+					}
+					
 				});
 			}
 		}

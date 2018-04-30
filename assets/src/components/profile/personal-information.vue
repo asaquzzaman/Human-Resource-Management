@@ -57,13 +57,13 @@
 </template>
 
 <style type="text/css">
-	.hrm-title, .hrm-content {
+	#hrm-general-info .hrm-title, #hrm-general-info .hrm-content {
 		float: left;
 	}
-	.hrm-content {
+	#hrm-general-info .hrm-content {
 		width: 65%;
 	}
-	.hrm-content-wrap {
+	#hrm-general-info .hrm-content-wrap {
 		display: block;
 		margin-bottom: 10px;
 		width: 100%;

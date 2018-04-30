@@ -56,7 +56,8 @@
 </template>
 
 <style type="text/css">
-	.hrm-title, .hrm-content {
+	.page-organization .hrm-title, 
+	.page-organization .hrm-content {
 		float: left;
 	}
 	.hrm-content {

@@ -3,7 +3,9 @@ var HRM_Dashboard = {
 		jQuery(el).dialog({
 			'width': '60%',
 			close () {
-				vnode.context.afterCloseDialog(vnode.context);
+				if(typeof vnode.context.afterCloseDialog != 'undefined') {
+					vnode.context.afterCloseDialog(vnode.context);
+				}
 			}
 		});
 	}

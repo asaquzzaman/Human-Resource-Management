@@ -126,14 +126,14 @@
 </script>
 
 <style>
-	.hrm-title,
-	.hrm-content {
+	#hrm-location-wrap .hrm-title,
+	#hrm-location-wrap .hrm-content {
 		float: left;
 	}
-	.hrm-title {
+	#hrm-location-wrap .hrm-title {
 		width: 20%;
 	}
-	.hrm-content-wrap {
+	#hrm-location-wrap .hrm-content-wrap {
 		margin-bottom: 10px;
 	}
 </style>

@@ -10,9 +10,10 @@
 					), 
 					admin_url('admin.php')
 				);
+				$active = !empty($_GET['tab']) && ($_GET['tab'] == $addon['key']) ? 'nav-tab-active' : '';
 				?>
 
-				<a href="<?php echo $url; ?>" class="router-link-exact-active router-link-active nav-tab">
+				<a href="<?php echo $url; ?>" class="<?php echo $active; ?>  nav-tab">
 					<?php echo $addon['label']; ?>
 				</a>
 				<?php
@@ -22,6 +23,6 @@
 	    
 	</h2>
 
-	<?php do_action( 'hrm_addons_content' ); ?>
+	<?php do_action( 'hrm_addons_content', $addons ); ?>
 
 </div>

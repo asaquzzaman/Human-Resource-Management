@@ -1,3 +1,5 @@
+hrm.Fullcalendar = require('fullcalendar');
+			console.log(hrm.Fullcalendar);
 __webpack_public_path__ = HRM_Vars.hrm_url+ '/assets/js/';
 
 import Promise from 'promise-polyfill'; 
@@ -62,6 +64,7 @@ window.hrmPromise = new Promise(function(resolve, reject) {
 		['fullcalendar'],
 		function(require) {
 			hrm.Fullcalendar = require('fullcalendar');
+			console.log(hrm.Fullcalendar);
 		}
 	).then(function() {
 		scriptsLoaded.Fullcalendar = true;

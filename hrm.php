@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.0.1
+ * Version: 2.1.1
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -45,6 +45,7 @@ class WP_Hrm {
      * @since 0.1
      */
     protected static $_instance = null;
+    protected $addons = array();
 
     /**
      * Main HRM Instance
@@ -63,20 +64,17 @@ class WP_Hrm {
 
     function __construct() {
         $this->define_constants();
-        $this->include();
+        $this->includes();
 
         $this->instantiate();
         $this->init_action();
         $this->init_filter();
-        
+
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
-    function include() {
+    function includes() {
         spl_autoload_register( array( __CLASS__, 'autoload' ) );
-
-        $this->migrate_db();
-    
     }
 
     function migrate_db() {
@@ -105,7 +103,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.0.1' );
+        $this->define( 'HRM_VERSION', '2.1.1' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -152,7 +150,8 @@ class WP_Hrm {
     }
 
     function init() {
-
+        $this->migrate_db();
+        
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;
             $hrm_is_admin = is_admin() ? 1 : 0;
@@ -184,7 +183,7 @@ class WP_Hrm {
 
 
     function instantiate() {
-
+        Hrm_Scripts::getInstance();
         Hrm_Ajax::getInstance();
         Hrm_Admin::getInstance();
         Hrm_Leave::getInstance();
@@ -192,6 +191,7 @@ class WP_Hrm {
         Hrm_Update::getInstance();
         Hrm_Dashboard::getInstance();
         Hrm_Attendance::getInstance();
+        Hrm_Payroll::getInstance();
     }
 
     function install() {
@@ -229,18 +229,27 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Designation', 'hrm' ), $capability, 'admin.php?page=hr_management#/designation'];
         $submenu[$hrm_page_slug][] = [__( 'Employee', 'hrm' ), $capability, 'admin.php?page=hr_management#/employee'];
         $submenu[$hrm_page_slug][] = [__( 'Profile', 'hrm' ), $capability, 'admin.php?page=hr_management#/employees'];
+        $submenu[$hrm_page_slug][] = [__( 'Payroll', 'hrm' ), $capability, 'admin.php?page=hr_management#/payroll'];
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
         $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
         $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
-        
+        $this->addons = apply_filters( 'hrm_addons', array() );
+
+        if ( !empty( $this->addons ) ) {
+            add_submenu_page( 'hr_management', __( 'Updates', 'hrm' ), __( 'Updates', 'hrm' ), 'activate_plugins', 'hrm_addons_update', array( $this, 'addons_update' ) );
+        }
+
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
+    }
+
+    function addons_update() {
+        HRM_Addons::init( $this->addons );
     }
 
     function admin_page_handler() {
         require_once HRM_PATH . '/templates/index.html';
-     
     }
 }
 

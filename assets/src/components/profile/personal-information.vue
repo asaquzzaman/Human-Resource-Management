@@ -57,13 +57,13 @@
 </template>
 
 <style type="text/css">
-	.hrm-title, .hrm-content {
+	#hrm-general-info .hrm-title, #hrm-general-info .hrm-content {
 		float: left;
 	}
-	.hrm-content {
+	#hrm-general-info .hrm-content {
 		width: 65%;
 	}
-	.hrm-content-wrap {
+	#hrm-general-info .hrm-content-wrap {
 		display: block;
 		margin-bottom: 10px;
 		width: 100%;
@@ -71,8 +71,10 @@
 </style>
 
 <script>
+	import Mixin from './mixin'
+
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [Mixin],
 
 		data () {
 			return {
@@ -83,7 +85,7 @@
 						type: 'file',
 						model: [],
 						label: 'Profile Picture',
-						name: '_hrm_user_image_id',
+						name: 'hrm_user_image_id',
 						editMode: false,
 						multiple: false,
 						deleted_files: [],
@@ -102,30 +104,45 @@
 						default: '&#8211 &#8211'
 					},
 					{
+						type: 'template',
+						label: 'Designation',
+						model: '',
+						name: 'designation',
+						default: '&#8211 &#8211'
+					},
+					{
 						type: 'radio',
 						model: '',
 						label: 'Gender',
-						name: '_gender',
+						name: 'hrm_gender',
 						editMode: false,
 						default: '&#8211 &#8211',
 						options: 
 						[
 							{
 								label: 'Male',
-								value: 'male',
+								value: '1',
 							},
 
 							{
 								label: 'Female',
-								value: 'female',
+								value: '2',
+							},
+							{
+								label: 'Others',
+								value: '3',
 							}
 						],
 						filter (val) {
-							if(val == 'male' ) {
+							if(val == '1' ) {
 								return 'Male';
 							} 
-							if(val == 'female' ) {
+							if(val == '2' ) {
 								return 'Female';
+							} 
+
+							if(val == '3' ) {
+								return 'Others';
 							} 
 						}
 					},
@@ -248,38 +265,6 @@
 							return val.country;
 						}
 					},
-
-					// {
-					// 	type: 'multiSelect',
-					// 	model: '',
-					// 	options: [],
-					// 	label: 'Country',
-					// 	optionLabel: 'country',
-					// 	name: 'multyCountry',
-					// 	placeholder: 'Select Country',
-					// 	name: '_country_code',
-					// 	editMode: false,
-					// 	trackBy: 'iso'
-					// },
-					// {
-					// 	type: 'checkbox',
-					// 	label: 'Gender',
-					// 	model: [],
-					// 	name: 'genderCheckbox',
-					// 	editMode: false,
-					// 	options: 
-					// 	[
-					// 		{
-					// 			label: 'Male',
-					// 			value: 'rocky'
-					// 		},
-
-					// 		{
-					// 			label: 'Female',
-					// 			value: 'kiron'
-					// 		}
-					// 	]
-					// },
 				],
 
 				loading: false,
@@ -301,7 +286,7 @@
 							field.options = info.country_list;
 						}
 
-						if (field.name == '_hrm_user_image_id') {
+						if (field.name == 'hrm_user_image_id') {
 							field.default = info.default_profile_pic;
 						}
 					});
@@ -351,6 +336,11 @@
 				self.canSubmit = true;
 
 				var postData = this.generateFieldData(this.fields);
+
+				postData.push({
+					name: 'user_id',
+					value: self.$route.params.employeeId
+				})
 
 				var args = {
 					data: postData,

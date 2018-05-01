@@ -1,3 +1,20 @@
+= 2.1.1 - May 01, 2018 =
+
+ * [Fix] Dashboard notice popup not working.
+ * [Fix] Profile and organization tab menu is not showing after page relode.
+ * [Fix] Employee default information is not showing in proile page.
+ * [Fix] Multiple profile picture uploaded in profile informaiton page.
+ * [Fix] Department was not editable.
+ * [Fix] All pagination after delete any record.
+
+= 2.1.0 - March 15, 2018 =
+
+ * [new] Payroll
+ * [update] Dashboard male/female count
+ * [update] Permission for requested leave tab
+ * [update] Reduce all js file size
+ * [update] Make compitable with php lower version
+
 = 2.0.1 - March 26, 2018 =
 
  * [new] Overall included loading effect

@@ -83,8 +83,10 @@
 </style>
 
 <script>
+	import Mixin from './mixin'
+
 	export default {
-		mixins: [HRMMixin.education],	
+		mixins: [Mixin],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],

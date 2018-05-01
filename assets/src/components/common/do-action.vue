@@ -1,5 +1,5 @@
 <script>
-    import Vue from 'vue/dist/vue.esm.js';
+    
     function HRMGetComponents() {
         var components = {};
         

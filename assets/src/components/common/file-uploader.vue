@@ -76,7 +76,6 @@
             }
         },
 
-
         methods: {
             /**
              * Set the uploaded file
@@ -113,9 +112,6 @@
                     this.delete.push(file_id);
                 }  
             },
-            test () {
-
-            }
         }
     }
 </script>

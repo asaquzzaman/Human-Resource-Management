@@ -1,12 +1,14 @@
 
 HRMRegisterModule('skill', 'profile/skill');
 
-let skill = resolve => {
+import skill from './skill.vue'
 
-    require.ensure(['./skill.vue'], () => {
-        resolve(require('./skill.vue'));
-    });
-}
+// let skill = resolve => {
+
+//     require.ensure(['./skill.vue'], () => {
+//         resolve(require('./skill.vue'));
+//     });
+// }
 
 function HRM_URM_Params (self, params) {
     let employeeId = self.$route.params.employeeId 

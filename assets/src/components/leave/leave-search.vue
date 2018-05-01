@@ -47,7 +47,8 @@
 <script>
 	
 	import DatePicker from './../common/date-picker.vue';
-
+    import Mixin from './mixin'
+	
 	export default {
 		data () {
 			return {
@@ -59,7 +60,7 @@
 		created () {
 			this.selfEmployeeDropDown();
 		},
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		computed: {
 			emp_id: {
 				get () {
@@ -95,7 +96,7 @@
 			}
 		},
 		components: {
-			'hrm-multiselect': hrm.Multiselect.default,
+			'hrm-multiselect': hrm.Multiselect,
 			'date-picker': DatePicker
 		},
 		methods: {

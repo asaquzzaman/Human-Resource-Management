@@ -21,9 +21,10 @@
 
 <script>
     import Menu from './router';
+    import Mixin from './mixin'
     
     var Hrm_Settings_Header = {
-        mixins: [HRMMixin.settings],
+        mixins: [Mixin],
 
         data: function() {
             return {

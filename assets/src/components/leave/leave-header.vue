@@ -19,9 +19,8 @@
 
 <script>
     import Menu from './router';
-
+    
     var Hrm_Leave_Header = {
-        mixins: [HRMMixin.leave],
 
         data: function() {
             return {
@@ -30,7 +29,18 @@
         },
 
         created () {
+            this.menu = this.menu.filter(function(child) {
+                    
+                if(
+                    typeof child.meta != 'undefined'
+                        &&
+                    typeof child.meta.label != 'undefined'
+                ) {
 
+                    return child;
+                }
+
+            });
         },
 
         methods: {

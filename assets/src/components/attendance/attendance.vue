@@ -9,9 +9,10 @@
 
 <script>
 	import hrm_attendance_header from './attendance-header.vue';
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.attendance],
+		mixins: [Mixin],
 		
 		data: function() {
 			return {

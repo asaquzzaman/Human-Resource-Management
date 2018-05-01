@@ -1,12 +1,15 @@
 
 HRMRegisterModule('designation', 'designation');
 
-let designation = resolve => {
+import designation from './designation.vue'
 
-    require.ensure(['./designation.vue'], () => {
-        resolve(require('./designation.vue'));
-    });
-}
+
+// let designation = resolve => {
+
+//     require.ensure(['./designation.vue'], () => {
+//         resolve(require('./designation.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('hrm_root', 
     [

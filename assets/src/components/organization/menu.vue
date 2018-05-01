@@ -18,19 +18,16 @@
 </template>
 
 <script>
-    var Menu = [];
 
-    require(['./router'], function(script) {
-        Menu = script.default[0].children;
-    });
-     
     var Hrm_Leave_Header = {
         
-        data: function() {
-            return {
-                menu: Menu,
+        computed: {
+            menu () {
+                let menu = require('./router');
+                return menu.default[0].children;
             }
         },
+
 
         methods: {
             childrens () {

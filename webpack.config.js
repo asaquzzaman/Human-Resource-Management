@@ -1,6 +1,8 @@
-const path = require('path');
-const shell = require('shelljs');
-const outputPath = path.resolve( __dirname, 'assets/js')
+const path           = require('path');
+const webpack        = require('webpack');
+const shell          = require('shelljs');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const outputPath     = path.resolve( __dirname, 'assets/js')
 
 
 //Remove all webpack build file
@@ -13,7 +15,7 @@ function resolve (dir) {
 module.exports = {
 	entry: {
         'hrm': './assets/src/start.js',
-        'library': './assets/src/helpers/library.js',
+       // 'library': './assets/src/helpers/library.js',
     },
 	
 	output: {
@@ -60,9 +62,24 @@ module.exports = {
 				options: {
 					name: '[name].[ext]?[hash]'
 				}
-			}
+			},
+			{
+	            test: /\.less$/,
+	            use: [{
+	                loader: "style-loader" // creates style nodes from JS strings
+	            }, {
+	                loader: "css-loader" // translates CSS into CommonJS
+	            }, {
+	                loader: "less-loader" // compiles Less to CSS
+	            }]
+	        }
 		]
 	},
+
+	plugins: [
+
+	  //new UglifyJsPlugin()
+	]
 }
 
 

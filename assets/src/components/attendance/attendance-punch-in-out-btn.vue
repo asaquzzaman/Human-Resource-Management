@@ -27,9 +27,10 @@
 
 <script>
 	import Clock from './../common/clock.vue';
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.attendance],
+		mixins: [Mixin],
 		data: function() {
 			return {
 				press_punch_in_btn: false,

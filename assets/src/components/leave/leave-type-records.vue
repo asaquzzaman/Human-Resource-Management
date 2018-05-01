@@ -83,11 +83,12 @@
 
 <script>
 	import Edit from './leave-type-edit-form.vue';
+    import Mixin from './mixin'
 	
 	var Hrm_Leave_Type_Records = {
 
 		
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		
 		data: function() {
 			return {

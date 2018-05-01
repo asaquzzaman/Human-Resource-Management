@@ -59,7 +59,7 @@ class Hrm_Db {
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
           `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `user_id` bigint(20) NOT NULL,
-          `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           `punch_in` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           `punch_out` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           `total` int(11) NOT NULL,
@@ -194,7 +194,7 @@ class Hrm_Db {
     }
 
     function personal() {
-        $this->salary();
+        //$this->salary();
         $this->work_exp();
         $this->personal_education();
         $this->personal_skill();
@@ -303,42 +303,27 @@ class Hrm_Db {
 
     function personal_education() {
 
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'hrm_personal_education';
-    $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+      global $wpdb;
+      $table_name = $wpdb->prefix . 'hrm_personal_education';
+      $sql = "DROP TABLE IF EXISTS $table_name";
+      $wpdb->query($sql);
 
-    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `employee_id` int(11) NOT NULL,
-      `education` varchar(255) NOT NULL,
-      `institute` varchar(100) DEFAULT NULL,
-      `major` varchar(100) DEFAULT NULL,
-      `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
-      `score` varchar(25) DEFAULT NULL,
-      `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
-      `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP(),
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+      $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `employee_id` int(11) NOT NULL,
+        `education` varchar(255) NOT NULL,
+        `institute` varchar(100) DEFAULT NULL,
+        `major` varchar(100) DEFAULT NULL,
+        `year` timestamp NULL DEFAULT NULL,
+        `score` varchar(25) DEFAULT NULL,
+        `start_date` timestamp NULL DEFAULT NULL,
+        `end_date` timestamp NULL DEFAULT NULL,
+        PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
+      require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+      dbDelta( $sql );
 
-    $table_option['table_name'] = 'hrm_personal_education';
-    $table_option['table_format'] = array( '%d', '%s', '%s', '%s', '%s', '%f', '%s', '%s' );
-    $table_option['table_option'] = array(
-        'emp_id'       => 'emp_id',
-        'education'    => 'education',
-        'institute'    => 'institute',
-        'major'        => 'major',
-        'year'         => 'year',
-        'score'        => 'score',
-        'start_date'   => 'start_date',
-        'end_date'     => 'end_date',
-    );
-    $table_option_name = 'hrm_personal_education';
-
-    hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
     function work_exp() {
@@ -360,31 +345,31 @@ class Hrm_Db {
       dbDelta( $sql );
     }
 
-    function salary() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_salary';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `emp_id` int(11) NOT NULL,
-          `pay_grade` varchar(50) NOT NULL,
-          `component` varchar(100) NOT NULL,
-          `frequency` int(11) NOT NULL,
-          `currency` varchar(10) NOT NULL,
-          `amount` float NOT NULL,
-          `comments` text NOT NULL,
-          `direct_deposit` varchar(3) NOT NULL,
-          `account_number` int(11) NOT NULL,
-          `account_type` int(11) NOT NULL,
-          `specify` varchar(200) NOT NULL,
-          `routing` int(11) NOT NULL,
-          `dipo_amount` int(11) NOT NULL,
-           `billing_date` TIMESTAMP NOT NULL,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+    // function salary() {
+    //     global $wpdb;
+    //     $table_name = $wpdb->prefix . 'hrm_salary';
+    //     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+    //       `id` int(11) NOT NULL AUTO_INCREMENT,
+    //       `emp_id` int(11) NOT NULL,
+    //       `pay_grade` varchar(50) NOT NULL,
+    //       `component` varchar(100) NOT NULL,
+    //       `frequency` int(11) NOT NULL,
+    //       `currency` varchar(10) NOT NULL,
+    //       `amount` float NOT NULL,
+    //       `comments` text NOT NULL,
+    //       `direct_deposit` varchar(3) NOT NULL,
+    //       `account_number` int(11) NOT NULL,
+    //       `account_type` int(11) NOT NULL,
+    //       `specify` varchar(200) NOT NULL,
+    //       `routing` int(11) NOT NULL,
+    //       `dipo_amount` int(11) NOT NULL,
+    //        `billing_date` TIMESTAMP NOT NULL,
+    //       PRIMARY KEY (`id`)
+    //     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-    }
+    //     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    //     dbDelta( $sql );
+    // }
 
     function leave_summary() {
         global $wpdb;
@@ -495,7 +480,6 @@ class Hrm_Db {
 
     function qualification() {
         $this->skills();
-        $this->education();
         $this->language();
     }
 
@@ -522,26 +506,26 @@ class Hrm_Db {
         hrm_Settings::getInstance()->update_table_option( $table_option_name, $table_option );
     }
 
-    function education() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hrm_personal_education';
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `employee_id` int(11) NOT NULL,
-          `education` varchar(255) NOT NULL,
-          `institute` varchar(100) DEFAULT NULL,
-          `major` varchar(100) DEFAULT NULL,
-          `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-          `score` varchar(25) DEFAULT NULL,
-          `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-          `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    // function education() {
+    //     global $wpdb;
+    //     $table_name = $wpdb->prefix . 'hrm_personal_education';
+    //     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+    //       `id` int(11) NOT NULL AUTO_INCREMENT,
+    //       `employee_id` int(11) NOT NULL,
+    //       `education` varchar(255) NOT NULL,
+    //       `institute` varchar(100) DEFAULT NULL,
+    //       `major` varchar(100) DEFAULT NULL,
+    //       `year` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    //       `score` varchar(25) DEFAULT NULL,
+    //       `start_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    //       `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    //       PRIMARY KEY (`id`)
+    //     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+    //     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    //     dbDelta( $sql );
 
-    }
+    // }
 
     function skills() {
 

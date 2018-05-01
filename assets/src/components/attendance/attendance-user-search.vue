@@ -21,8 +21,10 @@
 </template>
 
 <script>
+	import Mixin from './mixin'
+
 	export default {
-		mixins: [HRMMixin.attendance],
+		mixins: [Mixin],
 		
 		data: function() {
 			return {

@@ -9,8 +9,10 @@
 
 
 <script>
+    import Mixin from './mixin'
+	
 	export default {
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		
 		methods: {
 			showHideNewHolidayForm: function() {

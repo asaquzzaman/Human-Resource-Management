@@ -56,9 +56,10 @@
 <script>
 	import Table from './education-table.vue';
 	import Form from './new-education-form.vue';
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.education],
+		mixins: [Mixin],
 
 		data () {
 

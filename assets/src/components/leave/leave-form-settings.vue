@@ -128,7 +128,8 @@
 
 <script>
 	import leave_header from './leave-header.vue';
-
+    import Mixin from './mixin'
+	
 	export default {
 		beforeRouteEnter (to, form, next) {
 			next (vm => {
@@ -143,9 +144,9 @@
 				roles: []
 			}
 		},
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		components: {
-			'hrm-multiselect': hrm.Multiselect.default,
+			'hrm-multiselect': hrm.Multiselect,
 			'leave-header': leave_header
 		},
 

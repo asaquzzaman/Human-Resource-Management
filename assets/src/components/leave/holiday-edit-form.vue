@@ -37,10 +37,11 @@
 </template>
 
 <script>
-
+    import Mixin from './mixin'
+	
 	export default {
 		props: ['holiday'],
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		data () {
 			return {
 				canSubmit: true

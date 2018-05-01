@@ -8,6 +8,8 @@ import Components from '@helpers/common-components';
 import HRM from './App.vue';
 import MenuFix from '@helpers/menu-fix';
 
+window.hrmBus =  new hrm.Vue();
+
 var wpspear_hrm = {
 	el: '#wpspear-hrm',
 	store,

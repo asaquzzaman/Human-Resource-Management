@@ -118,6 +118,7 @@ export default {
 				let index = state.getIndex(state.records, id, 'id');
 
 				state.records.splice(index, 1);
+				state.pagination.total = parseInt(state.pagination.total) - 1;
 			});
 		},
 

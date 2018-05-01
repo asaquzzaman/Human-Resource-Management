@@ -99,7 +99,7 @@ trait Validation {
 		
 	}
 
-	function default( $arg ) {
+	function defaults( $arg ) {
 		$value 			 = array_shift( $arg );
 		$postdata        = $this->postdata;
 		$name            = $this->name;

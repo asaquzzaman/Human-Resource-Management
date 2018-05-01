@@ -56,9 +56,10 @@
 <script>
 	import Table from './notice-table.vue';
 	import Form from './new-notice-form.vue';
+    import Mixin from './mixin'
 	
 	export default {
-		mixins: [HRMMixin.notice],
+		mixins: [Mixin],
 
 		data () {
 

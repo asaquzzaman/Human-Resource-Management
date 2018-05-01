@@ -37,7 +37,18 @@ class Employee_Transformer extends TransformerAbstract
             'role'         => $this->get_role( $item ),
             'designation'  => $this->get_designation( $item ),
             'avatar'       => $this->get_avatar( $item ),
-            'can_update'   => hrm_user_can( 'edit_employee', $item->ID )
+            'can_update'   => hrm_user_can( 'edit_employee', $item->ID ),
+            'marital_status' => get_user_meta( $item->ID, 'hrm_marital_status', true ),
+            'national_code'  => get_user_meta( $item->ID, 'hrm_national_code', true ),
+            'birthday'       => hrm_get_date2mysql( get_user_meta( $item->ID, 'hrm_birthday', true ) ),
+            'street1'        => get_user_meta( $item->ID, 'hrm_street1', true ),
+            'street2'        => get_user_meta( $item->ID, 'hrm_street2', true ),
+            'city_code'      => get_user_meta( $item->ID, 'hrm_city_code', true ),
+            'state'          => get_user_meta( $item->ID, 'hrm_state', true ),
+            'zip'            => get_user_meta( $item->ID, 'hrm_zip', true ),
+            'work_mobile'    => get_user_meta( $item->ID, 'hrm_work_mobile', true ),
+            'country_code'   => get_user_meta( $item->ID, 'hrm_country_code', true ),
+            //'default_profile_pic' => get_avatar_url( $item->ID )
         ];
     }
 
@@ -71,12 +82,14 @@ class Employee_Transformer extends TransformerAbstract
         $image_id = get_user_meta( $item->ID, 'hrm_user_image_id', true );
         
         if ( empty( $image_id ) ) {
-            return get_avatar_url( $item->user_email );
+            return array(
+                'url' => get_avatar_url( $item->user_email )
+            );
         }
 
         $file = File_System::get_file( $image_id );
         
-        return $file['url'];
+        return $file;
     }
 
     public function get_designation( $item ) {

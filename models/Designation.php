@@ -19,6 +19,6 @@ class Designation extends Eloquent {
     ];
 
     public function dept() {
-        return $this->hasOne( Department::class, 'id', 'department' );
+        return $this->hasOne( 'HRM\Models\Department', 'id', 'department' );
     }
 }

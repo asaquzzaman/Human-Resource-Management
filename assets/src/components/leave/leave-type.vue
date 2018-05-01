@@ -17,10 +17,11 @@
 	import Hrm_Leave_Type_Records from './leave-type-records.vue';
 	import HRM_Leave_Type_Add_Btn from './leave-type-add-btn.vue';
 	import leave_header from './leave-header.vue';
+    import Mixin from './mixin'
 	
 	export default {
 
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 		
 		components: {
 			'leave-type-form': Hrm_Leave_Type_Form,

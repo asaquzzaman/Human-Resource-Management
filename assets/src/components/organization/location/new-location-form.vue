@@ -23,8 +23,10 @@
 </template>
 
 <script>
+    import Mixin from './mixin'
+
 	export default {
-		mixins: [HRMMixin.location],
+		mixins: [Mixin],
 		props: {
 			fields: {
 				type: [Array]

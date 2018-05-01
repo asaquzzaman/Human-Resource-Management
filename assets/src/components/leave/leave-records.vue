@@ -20,11 +20,12 @@ import header from './leave-header.vue';
 import leave_record_add_btn from './leave-records-add-btn.vue';
 import leave_records_form from './leave-records-form.vue';
 import leave_records_render from './leave-records-render.vue';
+import Mixin from './mixin'
 
 
 
 export default {
-	mixins: [HRMMixin.leave],
+	mixins: [Mixin],
 	
 	computed: {
 		is_leave_form_active: function() {

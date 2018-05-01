@@ -4,11 +4,12 @@
 	</div>
 </template>
 <script>
+	import Mixin from './mixin'
 	
 	export default {
 		props: ['department_id'],
 
-		mixins: [HRMMixin.departments],
+		mixins: [Mixin],
 
 		methods: {
 			departmentEdit: function() {

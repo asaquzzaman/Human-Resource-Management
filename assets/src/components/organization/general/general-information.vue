@@ -56,7 +56,8 @@
 </template>
 
 <style type="text/css">
-	.hrm-title, .hrm-content {
+	.page-organization .hrm-title, 
+	.page-organization .hrm-content {
 		float: left;
 	}
 	.hrm-content {
@@ -70,8 +71,10 @@
 </style>
 
 <script>
+	import Mixin from '@components/profile/mixin'
+	
 	export default {
-		mixins: [HRMMixin.profile],
+		mixins: [Mixin],
 
 		data () {
 			return {

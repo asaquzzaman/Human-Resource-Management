@@ -4,16 +4,17 @@ namespace HRM\Core\Crud;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use HRM\Core\Crud\Pattern;
-use HRM\Core\Crud\Validation;
+//use HRM\Core\Crud\Validation;
 use HRM\Core\Common\Traits\Transformer_Manager;
 use League\Fractal;
 use League\Fractal\Resource\Item as Item;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Illuminate\Pagination\Paginator;
 
 abstract class Action implements Pattern {
 
-	use Validation, Transformer_Manager;
+	use Transformer_Manager;
 
 	private $postdata = array();
 	private $class;
@@ -34,8 +35,12 @@ abstract class Action implements Pattern {
 		$transformers = "HRM\\Transformers\\$transformers";
 		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : $postdata['per_page'];
 
+		Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
 		$data = $model::orderBy( 'id', 'DESC' )
-            ->paginate( $per_page, ['*'], 'page', $page );
+            ->paginate( $per_page );
 
         $collection = $data->getCollection();
 
@@ -46,18 +51,20 @@ abstract class Action implements Pattern {
 	}
 
 	public function create() {
-		$this->create_validation();
+		// $this->create_validation();
 
-		if ( is_wp_error( $this->error ) ) {
-			return $this->error;
-		}
+		// if ( is_wp_error( $this->error ) ) {
+		// 	return $this->error;
+		// }
 
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();	
+		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
 		
 		$crated = $model::create( $postdata );
+		
 		$resource  = new Item( $crated, new $transformers );
 
         $message = [
@@ -89,7 +96,8 @@ abstract class Action implements Pattern {
 
 	public function update() {
 		$model       = $this->get_model();
-		$postdata    = $this->get_post_data();	
+		$postdata    = $this->get_post_data();
+		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
 		$fillable    = $model->getFillable();
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";

@@ -16,10 +16,11 @@
 	import Hrm_Leave_Holidays_Record from './leave-holidays-record.vue';
 	import HRM_Leave_Holidays_Add_Btn from './leave-holidays-add-btn.vue';
 	import leave_header from './leave-header.vue';
+    import Mixin from './mixin'
 	
 	var Hrm_Leave_Holidays = {
 
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 
 		//store: HRM_Leave_Store,
 		

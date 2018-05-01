@@ -8,9 +8,10 @@
 
 <script>
 	import leave_header from './leave-header.vue';
+    import Mixin from './mixin'
 	
 	var Hrm_Leave_Request = {
-		mixins: [HRMMixin.leave],
+		mixins: [Mixin],
 
 		watch: {
 			'$route' (to, from) {

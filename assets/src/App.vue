@@ -1,10 +1,17 @@
 <template>
     <div id="hrm" class="wrap">
+        <h1 class="hrm-h1"></h1>
         <hrm-do-action :hook="'hrm-before-router-view'"></hrm-do-action>
         <router-view></router-view>
         <hrm-do-action :hook="'hrm-after-router-view'"></hrm-do-action>
     </div>
 </template>
+
+<style>
+    .hrm-h1 {
+        padding: 0 !important;
+    }
+</style>
 
 <script>
 
@@ -44,5 +51,6 @@
     
     }
 </script>
+
 
 

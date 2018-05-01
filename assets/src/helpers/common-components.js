@@ -5,6 +5,7 @@ import FormFields from '@components/common/form-fields.vue';
 import Pagination from '@components/common/pagination.vue';
 import HRMUploader from '@components/common/file-uploader.vue';
 import EditFields from '@components/common/edit-fields.vue';
+import PayrollMenu from '@components/payroll/menu.vue';
 
 
 
@@ -15,3 +16,4 @@ hrm.Vue.component('hrm-form-fields', FormFields);
 hrm.Vue.component('hrm-pagination', Pagination);
 hrm.Vue.component('hrm-file-uploader', HRMUploader);
 hrm.Vue.component('hrm-edit-field', EditFields);
+hrm.Vue.component('hrm-payroll-menu', PayrollMenu);

@@ -1,11 +1,13 @@
 HRMRegisterModule('notice', 'organization/notice');
 
-let notice = resolve => {
+import notice from './notice.vue'
 
-    require.ensure(['./notice.vue'], () => {
-        resolve(require('./notice.vue'));
-    });
-}
+// let notice = resolve => {
+
+//     require.ensure(['./notice.vue'], () => {
+//         resolve(require('./notice.vue'));
+//     });
+// }
 
 HRMRegisterChildrenRoute ('organization', 
     [

@@ -89,10 +89,11 @@
 
 
 <script>
+import Mixin from './mixin'
 
 var Hrm_Leave_Type_Form = {
 	
-	mixins: [HRMMixin.leave],
+	mixins: [Mixin],
 
 	data: function() {
 		return {
@@ -120,7 +121,7 @@ var Hrm_Leave_Type_Form = {
 	},
 
 	components: {
-		'hrm-multiselect': hrm.Multiselect.default
+		'hrm-multiselect': hrm.Multiselect
 	},
 	methods: {
 		setDateTime: function(date) {

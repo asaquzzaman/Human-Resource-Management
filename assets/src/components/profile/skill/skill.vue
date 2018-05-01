@@ -56,9 +56,10 @@
 <script>
 	import Table from './skill-table.vue';
 	import Form from './new-skill-form.vue';
+	import Mixin from './mixin'
 
 	export default {
-		mixins: [HRMMixin.skill],
+		mixins: [Mixin],
 
 		data () {
 			return {

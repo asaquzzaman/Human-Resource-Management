@@ -114,8 +114,8 @@ export default {
                 	self.$store.commit( self.nameSpace + '/updatePaginationAfterNewRecord' );
                 	self.loadingStop('hrm-hidden-form');
 
-                	if (typeof args.callback === 'function') {
-                        args.callback.call(self, true, res);
+                	if (typeof args.callback != 'undefined') {
+                        args.callback(self, true, res);
                     } 
                     
                     hrm.Vue.nextTick(function() {
@@ -235,7 +235,7 @@ export default {
 			var postData = {
 				'class': 'Designation',
 				'method': 'gets',
-				'transformers': 'designation_Transformer',
+				'transformers': 'Designation_Transformer',
 				'per_page': '1000'
 			};
 			

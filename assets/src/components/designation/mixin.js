@@ -162,7 +162,7 @@ export default {
             var request_data = {
                 data: postData,
                 beforeSend () {
-	            	self.loadingStart('hrm-list-table');
+	            	self.loadingStart('hrm-list-table'); 
 	            },
                 success: function(res) {
                 	res.data.forEach(function(record) {
@@ -197,9 +197,9 @@ export default {
 
 	            	self.$store.commit(self.nameSpace + '/setRecords', res.data);
 	            	self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
-
-	            	if (typeof callback === 'function') {
-	                    callback.call(self, true, res);
+	            	self.isFetchRecord = true;
+	            	if (typeof callback != 'undefined') {
+	                    callback(self, true, res);
 	                } 
 	                
 	            },
@@ -211,13 +211,13 @@ export default {
 	                    hrm.toastr.error(value);
 	                });
 
-	                if (typeof args.callback === 'function') {
-	                    callback.call(self, false, res);
+	                if (typeof callback != 'undefined') {
+	                    callback(self, false, res);
 	                } 
 	            }
 	        };
 
-	        this.httpRequest('hrm_experiance_filter', form_data);
+	        this.httpRequest('hrm_designation_filter', form_data);
 		},
 
 		manageDesignation() {

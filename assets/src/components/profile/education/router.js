@@ -1,11 +1,13 @@
 
 HRMRegisterModule('education', 'profile/education');
 
-let education = resolve => {
-    require.ensure(['./education.vue'], () => {
-        resolve(require('./education.vue'));
-    });
-}
+import education from './education.vue'
+
+// let education = resolve => {
+//     require.ensure(['./education.vue'], () => {
+//         resolve(require('./education.vue'));
+//     });
+// }
 
 function HRM_URM_Params (self, params) {
     let employeeId = self.$route.params.employeeId 

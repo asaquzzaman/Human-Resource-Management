@@ -20,6 +20,11 @@ class Hrm_Update {
      * @return void
      */
     function __construct() {
+        self::$updates = array(
+            '1.1' => HRM_PATH . '/include/updates/update-1.1.php',
+            '1.2' => HRM_PATH . '/include/updates/update-1.2.php',
+            '2.0' => HRM_PATH . '/include/updates/update-2.0.php',
+        );
         $this->init();
     }
 
@@ -48,11 +53,7 @@ class Hrm_Update {
     
 
     /** @var array DB updates that need to be run */
-    private static $updates = [
-        '1.1' => HRM_PATH . '/include/updates/update-1.1.php',
-        '1.2' => HRM_PATH . '/include/updates/update-1.2.php',
-        '2.0' => HRM_PATH . '/include/updates/update-2.0.php',
-    ];
+    private static $updates = array();
 
     /**
      * Binding all events
@@ -96,7 +97,7 @@ class Hrm_Update {
      * @return void
      */
     public static function show_update_notice() {
-        if ( ! current_user_can( 'update_plugins' ) || ! $this->is_needs_update() ) {
+        if ( ! current_user_can( 'update_plugins' ) || ! self::is_needs_update() ) {
             return;
         }
         

@@ -1,3 +1,4 @@
+
 var leaveCalendar;
 
 var HRM_Leave_Apply_Calendar = {

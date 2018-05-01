@@ -15,6 +15,7 @@ use HRM\Models\Meta;
 use HRM\Core\Crud\Crud;
 use HRM\Models\Relation;
 use HRM\Models\Holiday;
+use Illuminate\Pagination\Paginator;
 
 
 class Hrm_Leave {
@@ -132,14 +133,25 @@ class Hrm_Leave {
         $args      = wp_parse_args( $args, $defaults );
         $cache_key = 'hrm-leave' . md5( serialize( $args ) ) . get_current_user_id();
         $items     = wp_cache_get( $cache_key, 'hrm' );
+        $page = $args['page'];
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
         
         if ( false === $items ) { 
 
             $leaves = Leave::with('leaveType');
 
-            if ( !empty( $args['emp_id'] ) ) {
-                $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+            if ( hrm_user_can( 'manage_leave' ) ) {
+                if ( !empty( $args['emp_id'] ) ) {
+                    $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+                }
+            } else {
+                $emp_id = get_current_user_id();
+                $leaves = $leaves->where( 'emp_id', $emp_id );
             }
+            
 
             if ( !empty( $args['start_time'] ) ) {
                 $leaves = $leaves->where( 'start_time', '>=', $args['start_time'] );
@@ -154,7 +166,7 @@ class Hrm_Leave {
             }
   
             if ( empty( $args['id'] ) ) {
-                $leaves           = $leaves->paginate( $args['per_page'], ['*'], $args['page'] );
+                $leaves           = $leaves->paginate( $args['per_page'] );
                 $leave_collection = $leaves->getCollection();
 
                 $resource = new Collection( $leave_collection, new Leave_Transformer );

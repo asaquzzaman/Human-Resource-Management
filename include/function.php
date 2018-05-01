@@ -560,7 +560,7 @@ function hrm_employee_role_key() {
 function hrm_get_roles( $role = false ) {
     $roles = array(
         hrm_employee_role_key() => 'Employee',
-        hrm_manager_role_key()  => 'Manager'
+        hrm_manager_role_key()  => 'Manager',
     );
 
     if ( $role ) {
@@ -634,7 +634,7 @@ function hrm_get_client_ip() {
 
 function hrm_validateDate($date, $format = 'Y-m-d H:i:s'){
     $date = date( $format, strtotime( $date ) );
-    $d = DateTime::createFromFormat($format, $date);
+    $d    = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
 
@@ -668,7 +668,7 @@ function hrm_employee_status( $status = false ) {
     $data = array(
         1 => 'Active',
         2 => 'Disable',
-        3 => 'Trminate'
+        3 => 'Trminate',
     );
 
     return $status ? $data[$status] : $data;
@@ -683,9 +683,5 @@ function hrm_employee_gender( $gender = false ) {
 
     return $gender ? $data[$gender] : $data;
 }
-
-
-
-
 
 

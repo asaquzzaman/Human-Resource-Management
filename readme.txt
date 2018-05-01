@@ -4,7 +4,7 @@ Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
 Tested up to: 4.9.5
-Requires PHP: 5.6.4
+Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2
 License: GPLv2 or later

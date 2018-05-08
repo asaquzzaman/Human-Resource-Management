@@ -46,6 +46,8 @@ class WP_Hrm {
      */
     protected static $_instance = null;
     protected $addons = array();
+    protected $addons_license = array();
+
 
     /**
      * Main HRM Instance
@@ -236,9 +238,14 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
         $this->addons = apply_filters( 'hrm_addons', array() );
+        $this->addons_license = apply_filters( 'hrm_addons_license', array() );
 
         if ( !empty( $this->addons ) ) {
             add_submenu_page( 'hr_management', __( 'Updates', 'hrm' ), __( 'Updates', 'hrm' ), 'activate_plugins', 'hrm_addons_update', array( $this, 'addons_update' ) );
+        }
+
+        if ( !empty( $this->addons_license ) ) {
+            add_submenu_page( 'hr_management', __( 'License', 'hrm' ), __( 'License', 'hrm' ), 'activate_plugins', 'hrm_addons_license', array( $this, 'addons_license' ) );
         }
 
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
@@ -246,6 +253,10 @@ class WP_Hrm {
 
     function addons_update() {
         HRM_Addons::init( $this->addons );
+    }
+
+    function addons_license() {
+        HRM_Addons::licenses( $this->addons_license );
     }
 
     function admin_page_handler() {

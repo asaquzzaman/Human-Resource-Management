@@ -71,7 +71,12 @@ module.exports = function(grunt) {
             reset: {
                 cmd: 'npm',
                 args: ['run', 'reset']
-            }
+            },
+
+            dumpautoload:{
+                cmd: 'composer',
+                args: ['dumpautoload', '-o']
+            },
         }
     });
 

@@ -15,4 +15,8 @@ class HRM_Addons {
     public static function init( $addons ) {
     	require_once HRM_TEMPLATE_PATH . '/addons/menu.php';
     }
+
+    public static function licenses( $licenses ) {
+        require_once HRM_TEMPLATE_PATH . '/addons/licenses.php';
+    }
 }

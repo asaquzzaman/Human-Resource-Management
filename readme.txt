@@ -69,6 +69,17 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.1.3 - May 08, 2018 =
+
+ * [New] Include license management system
+ * [Fix] Generate composer autoload for leave
+ * [Fix] Leave menu did not rendering
+ * [Fix] Leave apply time error message
+
+= 2.1.2 - May 01, 2018 =
+
+ * [Fix] Missing autoload file
+
 = 2.1.1 - May 01, 2018 =
 
  * [Fix] Dashboard notice popup not working.

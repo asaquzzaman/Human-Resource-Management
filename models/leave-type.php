@@ -1,7 +1,7 @@
 <?php
 namespace HRM\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Core\Database\Model as Eloquent;
 use HRM\Models\Leave;
 use HRM\Models\Relation;
 use HRM\Models\Department;
@@ -21,7 +21,7 @@ class Leave_Type extends Eloquent {
     ];
 
     public function departments() {
-    	return $this->belongsToMany( 'HRM\Models\Department', 'hrm_relation', 'to', 'from' );
+    	return $this->belongsToMany( 'HRM\Models\Department', hrm_tb_prefix() . 'hrm_relation', 'to', 'from' );
     }
 
 }

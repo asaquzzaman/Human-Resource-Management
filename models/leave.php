@@ -1,7 +1,7 @@
 <?php
 namespace HRM\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Core\Database\Model as Eloquent;
 use HRM\Models\Leave_Type;
 use HRM\Models\User;
 

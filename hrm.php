@@ -152,7 +152,7 @@ class WP_Hrm {
     }
 
     function init() {
-        $this->migrate_db();
+        //$this->migrate_db();
         
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;

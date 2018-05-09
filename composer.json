@@ -12,11 +12,8 @@
     ],
     "require": {
         "php": "<=5.4.45",
-        "illuminate/database": "<=5.4",
-        "illuminate/pagination": "<=5.4",
-        "illuminate/events": "<=5.4",
         "league/fractal": "<=0.17.0",
-        "symfony/translation": "<=3.4.1"
+        "tareq1988/wp-eloquent": "0.9"
     },
     "autoload": {
         "classmap": [
@@ -34,7 +31,6 @@
             "include/function.php",
             "include/urls.php",
             "include/page.php",
-            "include/init.php",
             "include/payroll_formula.php"
         ]
     }

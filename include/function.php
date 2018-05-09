@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use HRM\Core\Crud\Crud;
 
@@ -330,20 +329,6 @@ function hrm_get_js_template( $file_path, $id ) {
     }
 }
 
-function hrm_load_orm() {
-    $capsule = new Capsule;
-   
-    $status = $capsule->addConnection( config('db') );
-
-    // Setup eloquent model events
-    $capsule->setEventDispatcher(new Dispatcher(new Container));
-
-    // Make this Capsule instance available globally via static methods... (optional)
-    $capsule->setAsGlobal();
-
-    // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
-    $capsule->bootEloquent();
-}
 
 function pr($data) {
     echo '<pre>'; print_r($data); '</pre>';
@@ -682,6 +667,12 @@ function hrm_employee_gender( $gender = false ) {
     );
 
     return $gender ? $data[$gender] : $data;
+}
+
+function hrm_tb_prefix() {
+    global $wpdb;
+
+    return $wpdb->prefix;
 }
 
 

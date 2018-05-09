@@ -1,7 +1,7 @@
 <?php
 namespace HRM\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Core\Database\Model as Eloquent;
 
 class Work_Experience extends Eloquent {
 

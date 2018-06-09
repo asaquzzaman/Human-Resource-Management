@@ -1,5 +1,13 @@
 = 2.1.3 - May 09, 2018 =
 
+ * [New] Include tareq1988/wp-eloquent
+ * [Update] Remove illuminate/database
+ * [Update] Remove illuminate/pagination
+ * [Update] Remove illuminate/events
+ * [Update] Remove symfony/translation
+
+= 2.1.3 - May 09, 2018 =
+
  * [New] Include license management system
  * [Fix] Generate composer autoload for leave
  * [Fix] Leave menu did not rendering

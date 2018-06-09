@@ -456,7 +456,7 @@ function hrm_load_schema() {
     $files = glob( __DIR__ . "/../db/migrations/*.php" );
     
     $files = apply_filters( 'hrm_load_schema_files', $files );
-
+    
     if ( $files === false ) {
         throw new RuntimeException( "Failed to glob for migration files" );
     }

@@ -1,6 +1,8 @@
 
 HRMRegisterModule('attendance', 'attendance');
 
+import './shift/router';
+
 import hrm_attendace_records from './attendance-records.vue'
 import hrm_attendace_user_search from './attendance-user-search.vue'
 import hrm_attendace_configuration from './attendance-configuration.vue'
@@ -36,24 +38,26 @@ let menu = [
             order: 7
         },
 
-        children: [
-            {
-                path: 'records', 
-                component: hrm_attendace_records, 
-                name: 'attendance_records',
-                meta: {
-                    label: 'Attendance',
+        children: HRMGetRegisterChildrenRoute('attendance',
+            [
+                {
+                    path: 'records', 
+                    component: hrm_attendace_records, 
+                    name: 'attendance_records',
+                    meta: {
+                        label: 'Attendance',
+                    },
                 },
-            },
-            { 
-                path: 'search', 
-                component: hrm_attendace_user_search, 
-                name: 'attendance_search',
-                meta: {
-                    label: false,
+                { 
+                    path: 'search', 
+                    component: hrm_attendace_user_search, 
+                    name: 'attendance_search',
+                    meta: {
+                        label: false,
+                    },
                 },
-            },
-        ]   
+            ] 
+        )  
 
     }
 ];
@@ -66,6 +70,7 @@ if ( hrm_user_can('manage_attendance') ) {
             name: 'attendance_configuration',
             meta: {
                 label: 'Configuration',
+                order: 1
             }
         }
     );

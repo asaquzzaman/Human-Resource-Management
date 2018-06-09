@@ -248,7 +248,8 @@ class WP_Hrm {
         if ( !empty( $this->addons_license ) ) {
             add_submenu_page( 'hr_management', __( 'License', 'hrm' ), __( 'License', 'hrm' ), 'activate_plugins', 'hrm_addons_license', array( $this, 'addons_license' ) );
         }
-
+        do_action( 'hrm_menu_before_load_scripts', $menu );
+        
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
     }
 

@@ -39,8 +39,9 @@ abstract class Action implements Pattern {
             return $page;
         });
 
-		$data = $model::orderBy( 'id', 'DESC' )
-            ->paginate( $per_page );
+		$data = $model::orderBy( 'id', 'DESC' );
+        $data = apply_filters( 'before_'. $model->getTable().'_get', $data, $postdata );
+        $data = $data->paginate( $per_page );
 
         $collection = $data->getCollection();
 
@@ -64,6 +65,8 @@ abstract class Action implements Pattern {
 		$transformers = "HRM\\Transformers\\$transformers";
 		
 		$crated = $model::create( $postdata );
+
+		$crated = apply_filters( 'after_'. $model->getTable().'_create', $crated, $postdata );
 		
 		$resource  = new Item( $crated, new $transformers );
 
@@ -104,6 +107,8 @@ abstract class Action implements Pattern {
 		$update_data = [];
 		$record      = $model::where( 'id', $postdata['id'] )->first();
 
+		$postdata = apply_filters( 'before_'. $model->getTable().'_update', $postdata );
+
 		if ( $record ) {
 			foreach ( $postdata as $key => $value ) {
 	            if ( in_array( $key, $fillable ) ) {
@@ -112,6 +117,8 @@ abstract class Action implements Pattern {
 	        }
 
 			$record->update( $update_data );
+			
+			$record = apply_filters( 'after_'. $model->getTable().'_update', $record, $postdata );
 
 			$resource = new Item( $record, new $transformers );
 
@@ -130,11 +137,10 @@ abstract class Action implements Pattern {
 		$postdata = $this->get_post_data();
 		$delete   = $postdata['delete'];
 
-		if ( is_array( $delete ) ) {
-	        $model::destroy( $delete );
-	    } else {
-	        $model::findOrFail( $delete )->delete();
-	    }
+		$Object =  $model::where( 'id', $delete );
+		$Object = apply_filters( 'before_'. $model->getTable().'_delete', $Object,  $postdata );
+
+	    $Object->delete();
 	}
 
 	private function get_model() {

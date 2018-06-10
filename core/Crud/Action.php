@@ -50,7 +50,20 @@ abstract class Action implements Pattern {
 
         return $this->get_response( $resource );
 	}
+	public function show() {
+		$model        = $this->get_model();
+		$postdata     = $this->get_post_data();
+		$id           = (int) $postdata['id'];
+		$transformers = $postdata['transformers'];
+		$transformers = "HRM\\Transformers\\$transformers";
 
+
+		$data = $model::where('id', $id);
+        $data = apply_filters( 'before_'. $model->getTable().'_show', $data, $postdata );
+        $data = $data->first();
+		$resource = new Item( $data, new $transformers );
+        return $this->get_response( $resource );
+	}
 	public function create() {
 		// $this->create_validation();
 
@@ -141,6 +154,12 @@ abstract class Action implements Pattern {
 		$Object = apply_filters( 'before_'. $model->getTable().'_delete', $Object,  $postdata );
 
 	    $Object->delete();
+
+	    $message = [
+            'message' => 'Delete successfully!'
+        ];
+
+        return $this->get_response( null, $message );
 	}
 
 	private function get_model() {

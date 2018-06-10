@@ -45598,7 +45598,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		filterUpdated(shift) {
 
-			var shiftEnd = new Date(shift.puch_start);
+			var shiftEnd = new Date(shift.punch_start);
 			shift.start = hrm.Moment(shiftEnd).format("kk:mm");
 		},
 		checkValidTime(time, key) {
@@ -45706,7 +45706,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		generateFieldData() {
 			var formated = {
 				name: this.shift.name,
-				puch_start: this.shift.start,
+				punch_start: this.shift.start,
 				status: this.shift.status ? 1 : 0,
 				departments: this.filterDepartmentId(this.shift.departments.data),
 				times: this.shift.times

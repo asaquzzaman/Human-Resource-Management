@@ -13,7 +13,7 @@ class Shift extends Eloquent {
     protected $fillable = [
         'name',
         'status',
-        'puch_start',
+        'punch_start',
         'times',
         'created_at',
         'updated_at',

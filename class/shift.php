@@ -29,7 +29,86 @@ class HRM_Shift {
         add_action( 'wp_ajax_hrm_insert_shift', array( $this, 'ajax_add_shift' ) );
         add_action( 'wp_ajax_hrm_update_shift', array( $this, 'ajax_update_shift' ) );
         add_action( 'wp_ajax_hrm_delete_shift', array( $this, 'ajax_delete_shift' ) );
+        $this->migrate();
 	}
+
+    function migrate() {
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'hrm_office_time';
+        $shift_tb = $wpdb->prefix . 'hrm_time_shift';
+        $attendance = $wpdb->prefix . 'hrm_attendance'; 
+
+        $office_times = $wpdb->get_results("Select * From $table");
+
+        if ( $office_times ) {
+            $active = end( $office_times );
+            $data = $this->shift_data_formating( $active, 1,  'Office Time');
+
+            $shift_id = $wpdb->insert( $shift_tb, $data );
+            $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $active->id] );
+
+            array_pop( $office_times );
+        }
+
+        foreach ( $office_times as $time ) {
+            $data = $this->shift_data_formating( $active, 0,  'Office Time');
+
+            $shift_id = $wpdb->insert( $shift_tb, $data );
+            $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $time->id] );
+        }
+    }
+
+    function shift_data_formating( $shift, $status, $name ) {
+        return [
+            'name'        => $name,
+            'status'      => $status,
+            'punch_start' => $shift->start,
+            'created_at'  => date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ),
+            'updated_at'  => date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ),
+            'times' => maybe_serialize(
+                [
+                    [
+                        'begin'       => date( 'H:i', strtotime( $shift->start ) ),
+                        'end'         => date( 'H:i', strtotime( $shift->end ) ),
+                        'workHours'   => $this->get_hours( $shift->start, $shift->end ),
+                        'workMinutes' => $this->get_minutes( $shift->start, $shift->end ),
+                        'breakStatus' => false,
+                        'breaks' => [
+                            [
+                                'breakBeing'   => '',
+                                'breakEnd'     => '',
+                                'breakHours'   => '',
+                                'breakMinutes' => ''
+                            ]
+                        ]
+                    ]
+                ]
+            )
+        ];
+    }
+
+    function get_hours( $start, $end ) {
+        // Create two new DateTime-objects...
+        $date1 = new DateTime( $end );
+        $date2 = new DateTime( $start );
+
+        // The diff-methods returns a new DateInterval-object...
+        $diff = $date2->diff($date1);
+
+        return $diff->format('%h'); 
+    }
+    
+    function get_minutes( $start, $end ) {
+        // Create two new DateTime-objects...
+        $date1 = new DateTime( $end );
+        $date2 = new DateTime( $start );
+
+        // The diff-methods returns a new DateInterval-object...
+        $diff = $date2->diff($date1);
+
+        return $diff->format('%m'); 
+    }
 
     function ajax_delete_shift() {
         check_ajax_referer('hrm_nonce');
@@ -63,7 +142,7 @@ class HRM_Shift {
 
     function add_shift( $postData ) {
         $validation = $this->validation( $postData );
-        
+        pr($postData); die();
         if ( ! is_wp_error( $validation ) ) {
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);

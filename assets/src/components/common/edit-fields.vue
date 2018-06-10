@@ -72,12 +72,19 @@
 
 	        </hrm-multiselect>               
 	    </div>
+
+	    <div v-if="field.type == 'texteditor'" class="hrm-form-field hrm-leave-type-wrap">
+			<div class="hrm-texteditor">
+				<text-editor :editor_id="record.id" v-model="record.description"></text-editor>             
+		    </div>
+		</div>
 	    
 	</span>
 </template>
 
 <script>
-	
+	import doAction from './form-fields.vue';
+	import textEditor from './text-editor.vue';
 	export default {
 		props: {
 			field: {
@@ -104,7 +111,9 @@
 		},
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect
+			'hrm-multiselect': hrm.Multiselect,
+			'hrmDoAction': doAction,
+			'textEditor': textEditor
 		},
 
 		computed: {

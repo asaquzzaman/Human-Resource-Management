@@ -152,6 +152,10 @@ label em {
   margin-bottom: 5px;
   width: 100%;
 }
+.hrm-texteditor {
+    width: 65%;
+    float: left;
+}
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action {
   width: 100%;
 }

@@ -1063,8 +1063,32 @@ label em {
 .preloader-container {
   top: calc(50% - 3.25em) !important;
 }
-
-
+.hrm-field-sets {
+  border: 1px solid #eee;
+}
+.hrm-field-sets .hrm-form-field-wrap {
+  float: left;
+  width: 50%;
+}
+.hrm-field-sets .hrm-field-set-content {
+  padding: 10px;
+}
+.hrm-field-sets .hrm-field-set-title {
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.hrm-field-sets .hrm-child-field input {
+  float: none !important;
+  display: block;
+}
+.hrm-field-sets .hrm-child-field {
+  margin-left: 21%;
+}
+#hrm-hidden-form .hrm-action-wrap {
+  margin-top: 15px;
+}
 
 
 

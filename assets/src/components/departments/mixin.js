@@ -39,7 +39,9 @@ export default {
                     self.$store.commit( 
                         'departments/setDepartments', 
                         { 
-                            departments: res.departments
+                            departments: res.departments,
+                            total: res.total_dept,
+                            dept_drop_down: res.dept_drop_down
                         } 
                     );
                     self.isFetchRecord = true;

@@ -194,6 +194,7 @@ class WP_Hrm {
         Hrm_Dashboard::getInstance();
         Hrm_Attendance::getInstance();
         Hrm_Payroll::getInstance();
+        Hrm_Shift::getInstance();
     }
 
     function install() {

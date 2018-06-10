@@ -2,6 +2,7 @@
 namespace HRM\Models;
 
 use HRM\Core\Database\Model as Eloquent;
+use HRM\Models\Relation;
 
 class Department extends Eloquent {
 
@@ -15,4 +16,5 @@ class Department extends Eloquent {
         'description',
         'parent',
     ];
+
 }

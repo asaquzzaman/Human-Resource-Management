@@ -72,11 +72,11 @@ export default hrm.Vue.mixin({
             wp.ajax.send('get_departments', {
                 data: request_data,
                 success (res) {
-                    // self.$store.commit( 'departments/setDepartments', { 
-                    //     departments: res.departments, 
-                    //     'total_dept': res.total_dept,
-                    //     'dept_drop_down': res.dept_drop_down
-                    // });
+                    self.$store.commit( 'departments/setDepartments', { 
+                        departments: res.departments, 
+                        'total_dept': res.total_dept,
+                        'dept_drop_down': res.dept_drop_down
+                    });
                     
                     if ( typeof args.callback === 'function') {
                         args.callback(res);

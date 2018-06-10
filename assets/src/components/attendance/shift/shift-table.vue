@@ -42,62 +42,7 @@
                 
                 <tr v-else :id="'hrm-edit-'+record.id" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle">
                 	<td colspan="5" class="colspanchange">
-                		<form :id="'hrm-edit-form-'+record.id" class="hrm-edit-form" action="" @submit.prevent="selfUpdate(record)">
-							<fieldset class="inline-edit-col-left">
-								<legend class="inline-edit-legend">Quick Edit</legend>
-								<div class="inline-edit-col">
-									
-									<div class="hrm-edit-field-wrap">
-										<label class="title">
-											Title<em>*</em>
-										</label>
-
-										<span class="input-text-wrap">
-											<input type="text" required="required" v-model="record.title" class="ptitle">
-										</span>
-										<div class="hrm-clear"></div>
-									</div>
-										
-									<div class="hrm-edit-field-wrap">
-										<label class="title">
-											From<em>*</em>
-										</label>
-										<span class="input-text-wrap">
-											<hrm-date-picker required="required" placeholder="From" v-model="record.start"  class="pm-datepickter-to" dependency="pm-datepickter-from"></hrm-date-picker>
-										</span>
-										<div class="hrm-clear"></div>
-									</div>
-
-									<div class="hrm-edit-field-wrap">
-										<label class="title">
-											To<em>*</em>
-										</label>
-										<span class="input-text-wrap">
-											<hrm-date-picker required="required" placeholder="To" v-model="record.end"  class="pm-datepickter-to" dependency="pm-datepickter-to"></hrm-date-picker>
-										</span>
-										<div class="hrm-clear"></div>
-									</div>
-
-									<div class="hrm-edit-field-wrap">
-										<label class="title">
-											Comments
-										</label>
-										<span class="input-text-wrap">
-											<textarea v-model="record.description"></textarea>
-										</span>
-										<div class="hrm-clear"></div>
-									</div>
-								</div>
-							</fieldset>
-
-
-							<div class="submit inline-edit-save">
-								<button @click.prevent="recordEditForm(record, false)" type="button" class="button hrm-button-secondary cancel alignleft">Cancel</button>
-								<input :disabled="!canSubmit" type="submit" class="button hrm-button-primary button-primary save alignright" value="Update">
-								<div v-if="loading" class="hrm-spinner alignright"></div>
-								<br class="clear">
-							</div>
-						</form>
+                		<update-form :shift="record"></update-form>
 					</td>
 				</tr>
 
@@ -123,6 +68,7 @@
 
 <script>
 	import Mixin from './mixin'
+	import UpdateForm from './new-shift-form.vue'
 
 	export default {
 		mixins: [Mixin],	
@@ -169,6 +115,10 @@
 		
 		created () {
 			this.getRecords();
+		},
+
+		components: {
+			'update-form': UpdateForm
 		},
 
 		computed: {

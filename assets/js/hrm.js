@@ -44763,7 +44763,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             };
 
-            this.httpRequest('hrm_delete_record', form_data);
+            this.httpRequest('hrm_delete_shift', form_data);
         },
 
         updateRecord(args) {
@@ -44800,7 +44800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             };
 
-            this.httpRequest('hrm_update_record', form_data);
+            this.httpRequest('hrm_update_shift', form_data);
         },
 
         addNewRecord(args) {
@@ -45525,6 +45525,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -45538,7 +45539,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					start: '',
 					name: '',
 					status: true,
-					departments: [],
+					departments: {
+						data: []
+					},
 					times: [{
 						begin: '',
 						end: '',
@@ -45561,21 +45564,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data() {
 		return {
 			loading: false,
-			canSubmit: true,
-			timeClone: {
-				begin: '',
-				end: '',
-				workHours: '',
-				workMinutes: '',
-				breakStatus: false,
-				breaks: [{
-					breakBeing: '',
-					breakEnd: '',
-					breakHours: '',
-					breakMinutes: ''
-				}]
-
-			}
+			canSubmit: true
 		};
 	},
 
@@ -45583,6 +45572,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.getDepartments({
 			data: {}
 		});
+
+		if (this.shift.id) {
+			this.filterUpdated(this.shift);
+		}
 	},
 
 	computed: {
@@ -45596,6 +45589,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	methods: {
+		recordEditForm(record, status) {
+			status = status || 'toggle';
+			this.$store.commit(this.nameSpace + '/showHideEditForm', {
+				id: record.id,
+				status: status
+			});
+		},
+		filterUpdated(shift) {
+
+			var shiftEnd = new Date(shift.puch_start);
+			shift.start = hrm.Moment(shiftEnd).format("kk:mm");
+		},
 		checkValidTime(time, key) {
 			if (!time) {
 				return;
@@ -45669,9 +45674,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			postData['method'] = 'create';
 			postData['transformers'] = self.modelTransformer;
 
-			if (!this.selfFormValidation()) {
-				return false;
-			}
+			// if (!this.selfFormValidation()) {
+			// 	return false;
+			// }	
 
 			var args = {
 				data: postData,
@@ -45689,7 +45694,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			//self.loading = true;
 			//self.canSubmit = false;
-			this.addNewRecord(args);
+			if (this.shift.id) {
+				args.data.method = 'update';
+				args.data.id = this.shift.id;
+				this.updateRecord(args);
+			} else {
+				this.addNewRecord(args);
+			}
 		},
 
 		generateFieldData() {
@@ -45697,7 +45708,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				name: this.shift.name,
 				puch_start: this.shift.start,
 				status: this.shift.status ? 1 : 0,
-				departments: this.filterDepartmentId(this.shift.departments),
+				departments: this.filterDepartmentId(this.shift.departments.data),
 				times: this.shift.times
 			};
 
@@ -45995,6 +46006,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixin__ = __webpack_require__(430);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__new_shift_form_vue__ = __webpack_require__(439);
 //
 //
 //
@@ -46063,61 +46075,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -46160,6 +46118,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	created() {
 		this.getRecords();
+	},
+
+	components: {
+		'update-form': __WEBPACK_IMPORTED_MODULE_1__new_shift_form_vue__["a" /* default */]
 	},
 
 	computed: {
@@ -46924,292 +46886,8 @@ var render = function() {
                               staticClass: "colspanchange",
                               attrs: { colspan: "5" }
                             },
-                            [
-                              _c(
-                                "form",
-                                {
-                                  staticClass: "hrm-edit-form",
-                                  attrs: {
-                                    id: "hrm-edit-form-" + record.id,
-                                    action: ""
-                                  },
-                                  on: {
-                                    submit: function($event) {
-                                      $event.preventDefault()
-                                      _vm.selfUpdate(record)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "fieldset",
-                                    { staticClass: "inline-edit-col-left" },
-                                    [
-                                      _c(
-                                        "legend",
-                                        { staticClass: "inline-edit-legend" },
-                                        [_vm._v("Quick Edit")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "inline-edit-col" },
-                                        [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "hrm-edit-field-wrap"
-                                            },
-                                            [
-                                              _vm._m(0),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass: "input-text-wrap"
-                                                },
-                                                [
-                                                  _c("input", {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value: record.title,
-                                                        expression:
-                                                          "record.title"
-                                                      }
-                                                    ],
-                                                    staticClass: "ptitle",
-                                                    attrs: {
-                                                      type: "text",
-                                                      required: "required"
-                                                    },
-                                                    domProps: {
-                                                      value: record.title
-                                                    },
-                                                    on: {
-                                                      input: function($event) {
-                                                        if (
-                                                          $event.target
-                                                            .composing
-                                                        ) {
-                                                          return
-                                                        }
-                                                        _vm.$set(
-                                                          record,
-                                                          "title",
-                                                          $event.target.value
-                                                        )
-                                                      }
-                                                    }
-                                                  })
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("div", {
-                                                staticClass: "hrm-clear"
-                                              })
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "hrm-edit-field-wrap"
-                                            },
-                                            [
-                                              _vm._m(1),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass: "input-text-wrap"
-                                                },
-                                                [
-                                                  _c("hrm-date-picker", {
-                                                    staticClass:
-                                                      "pm-datepickter-to",
-                                                    attrs: {
-                                                      required: "required",
-                                                      placeholder: "From",
-                                                      dependency:
-                                                        "pm-datepickter-from"
-                                                    },
-                                                    model: {
-                                                      value: record.start,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          record,
-                                                          "start",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression: "record.start"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              ),
-                                              _vm._v(" "),
-                                              _c("div", {
-                                                staticClass: "hrm-clear"
-                                              })
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "hrm-edit-field-wrap"
-                                            },
-                                            [
-                                              _vm._m(2),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass: "input-text-wrap"
-                                                },
-                                                [
-                                                  _c("hrm-date-picker", {
-                                                    staticClass:
-                                                      "pm-datepickter-to",
-                                                    attrs: {
-                                                      required: "required",
-                                                      placeholder: "To",
-                                                      dependency:
-                                                        "pm-datepickter-to"
-                                                    },
-                                                    model: {
-                                                      value: record.end,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          record,
-                                                          "end",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression: "record.end"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              ),
-                                              _vm._v(" "),
-                                              _c("div", {
-                                                staticClass: "hrm-clear"
-                                              })
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "hrm-edit-field-wrap"
-                                            },
-                                            [
-                                              _c(
-                                                "label",
-                                                { staticClass: "title" },
-                                                [
-                                                  _vm._v(
-                                                    "\n\t\t\t\t\t\t\t\t\t\t\tComments\n\t\t\t\t\t\t\t\t\t\t"
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass: "input-text-wrap"
-                                                },
-                                                [
-                                                  _c("textarea", {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value:
-                                                          record.description,
-                                                        expression:
-                                                          "record.description"
-                                                      }
-                                                    ],
-                                                    domProps: {
-                                                      value: record.description
-                                                    },
-                                                    on: {
-                                                      input: function($event) {
-                                                        if (
-                                                          $event.target
-                                                            .composing
-                                                        ) {
-                                                          return
-                                                        }
-                                                        _vm.$set(
-                                                          record,
-                                                          "description",
-                                                          $event.target.value
-                                                        )
-                                                      }
-                                                    }
-                                                  })
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("div", {
-                                                staticClass: "hrm-clear"
-                                              })
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "submit inline-edit-save" },
-                                    [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "button hrm-button-secondary cancel alignleft",
-                                          attrs: { type: "button" },
-                                          on: {
-                                            click: function($event) {
-                                              $event.preventDefault()
-                                              _vm.recordEditForm(record, false)
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Cancel")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("input", {
-                                        staticClass:
-                                          "button hrm-button-primary button-primary save alignright",
-                                        attrs: {
-                                          disabled: !_vm.canSubmit,
-                                          type: "submit",
-                                          value: "Update"
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _vm.loading
-                                        ? _c("div", {
-                                            staticClass:
-                                              "hrm-spinner alignright"
-                                          })
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c("br", { staticClass: "clear" })
-                                    ]
-                                  )
-                                ]
-                              )
-                            ]
+                            [_c("update-form", { attrs: { shift: record } })],
+                            1
                           )
                         ]
                       )
@@ -47230,35 +46908,7 @@ var render = function() {
       : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "title" }, [
-      _vm._v("\n\t\t\t\t\t\t\t\t\t\t\tTitle"),
-      _c("em", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "title" }, [
-      _vm._v("\n\t\t\t\t\t\t\t\t\t\t\tFrom"),
-      _c("em", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "title" }, [
-      _vm._v("\n\t\t\t\t\t\t\t\t\t\t\tTo"),
-      _c("em", [_vm._v("*")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -47457,11 +47107,11 @@ var render = function() {
                                 "allow-empty": true
                               },
                               model: {
-                                value: _vm.shift.departments,
+                                value: _vm.shift.departments.data,
                                 callback: function($$v) {
-                                  _vm.$set(_vm.shift, "departments", $$v)
+                                  _vm.$set(_vm.shift.departments, "data", $$v)
                                 },
-                                expression: "shift.departments"
+                                expression: "shift.departments.data"
                               }
                             })
                           ],
@@ -48099,20 +47749,39 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "button hrm-button-secondary",
-                    attrs: { target: "_blank", href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.showHideNewRecordForm(false)
-                      }
-                    }
-                  },
-                  [_vm._v("Cancel")]
-                ),
+                _vm.shift.id
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "button hrm-button-secondary",
+                        attrs: { target: "_blank", href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.recordEditForm(_vm.shift, false)
+                          }
+                        }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.shift.id
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "button hrm-button-secondary",
+                        attrs: { target: "_blank", href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.showHideNewRecordForm(false)
+                          }
+                        }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  : _vm._e(),
                 _vm._v(" "),
                 _vm.loading
                   ? _c("div", { staticClass: "hrm-spinner" }, [

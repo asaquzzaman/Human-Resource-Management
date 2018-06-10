@@ -50,7 +50,7 @@
 		                            
 		                            <div class="hrm-multiselect">
 										<hrm-multiselect 
-										    v-model="shift.departments" 
+										    v-model="shift.departments.data" 
 										    :options="deptDropDown" 
 										    :multiple="true" 
 										    :close-on-select="true"
@@ -215,8 +215,9 @@
 
 		            <div class="hrm-action-wrap">
 		                <input :disabled="!canSubmit" type="submit" class="button hrm-button-primary button-primary" name="requst" value="Submit">
-
-		                <a @click.prevent="showHideNewRecordForm(false)"  target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
+		                
+		                <a v-if="shift.id" @click.prevent="recordEditForm(shift, false)"  target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
+		                <a v-if="!shift.id" @click.prevent="showHideNewRecordForm(false)"  target="_blank" href="#" class="button hrm-button-secondary">Cancel</a>
 		                <div class="hrm-spinner" v-if="loading">Saving....</div>
 		            </div>
 		        </form>
@@ -294,7 +295,9 @@
 						start: '',
 						name: '',
 						status: true,
-						departments: [],
+						departments: {
+							data: []
+						},
 						times: [
 							{
 								begin: '',
@@ -322,22 +325,6 @@
 			return {
 				loading: false,
 				canSubmit: true,
-				timeClone: {
-					begin: '',
-					end: '',
-					workHours: '',
-					workMinutes: '',
-					breakStatus: false,
-					breaks: [
-						{
-							breakBeing: '',
-							breakEnd: '',
-							breakHours: '',
-							breakMinutes: '',
-						}
-					]
-					
-				}
 			}
 		},
 
@@ -345,6 +332,11 @@
 			this.getDepartments({
 				data: {}
 			});
+
+			if(this.shift.id) {
+				this.filterUpdated(this.shift);
+			}
+			
 		},
 
 		computed: {
@@ -358,6 +350,21 @@
 		},
 
 		methods: {
+			recordEditForm (record, status) {
+				status = status || 'toggle';
+				this.$store.commit( this.nameSpace+'/showHideEditForm', 
+					{
+						id: record.id,
+						status: status
+					} 
+				);
+			},
+			filterUpdated (shift) {
+
+				var shiftEnd = new Date(shift.puch_start);
+				shift.start = hrm.Moment(shiftEnd).format("kk:mm");
+				
+			},
 			checkValidTime (time, key) {
 				if(!time) {
 					return;
@@ -433,9 +440,9 @@
 				postData['method']       = 'create';
 				postData['transformers'] = self.modelTransformer;
 
-				if (!this.selfFormValidation()) {
-					return false;
-				}	
+				// if (!this.selfFormValidation()) {
+				// 	return false;
+				// }	
 
 				var args = {
 					data: postData,
@@ -453,7 +460,14 @@
 				
 				//self.loading = true;
 				//self.canSubmit = false;
-				this.addNewRecord(args);
+				if(this.shift.id) {
+					args.data.method = 'update';
+					args.data.id = this.shift.id;
+					this.updateRecord(args);
+				} else {
+					this.addNewRecord(args);
+				}
+				
 			},
 
 			generateFieldData () {
@@ -461,7 +475,7 @@
 					name: this.shift.name,
 					puch_start: this.shift.start,
 					status: this.shift.status ? 1 : 0,
-					departments: this.filterDepartmentId(this.shift.departments),
+					departments: this.filterDepartmentId(this.shift.departments.data),
 					times: this.shift.times
 				};
 

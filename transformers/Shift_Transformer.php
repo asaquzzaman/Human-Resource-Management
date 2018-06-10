@@ -16,7 +16,7 @@ class Shift_Transformer extends TransformerAbstract {
     use Resource_Editors;
 
     protected $defaultIncludes = [
-        //'department'
+        'departments'
     ];
 
     public function transform( Shift $item ) {
@@ -32,11 +32,12 @@ class Shift_Transformer extends TransformerAbstract {
         ];
     }
 
-    public function includeDepartment( Shift $item ) {
-        $department = $item->department()->first();
-
-        if ( $department ) {
-            return $this->item( $department, new Department_Transformer );
+    public function includeDepartments( Shift $item ) {
+        $departments = $item->departments()
+            ->get();
+        
+        if ( $departments ) {
+            return $this->collection( $departments, new Department_Transformer );
         }
 
         return null;

@@ -20,6 +20,10 @@ class Model extends \WeDevs\ORM\Eloquent\Model {
         return $this->getConnection()->db->prefix . $this->table;
     }
 
+    public function getTableName() {
+        return  $this->table;
+    }
+
     /**
      * Set the value of the "created at" attribute.
      *

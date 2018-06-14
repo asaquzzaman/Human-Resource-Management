@@ -29,7 +29,7 @@ class HRM_Shift {
         add_action( 'wp_ajax_hrm_insert_shift', array( $this, 'ajax_add_shift' ) );
         add_action( 'wp_ajax_hrm_update_shift', array( $this, 'ajax_update_shift' ) );
         add_action( 'wp_ajax_hrm_delete_shift', array( $this, 'ajax_delete_shift' ) );
-        $this->migrate();
+        //$this->migrate();
 	}
 
     function migrate() {
@@ -142,7 +142,7 @@ class HRM_Shift {
 
     function add_shift( $postData ) {
         $validation = $this->validation( $postData );
-        pr($postData); die();
+        
         if ( ! is_wp_error( $validation ) ) {
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);

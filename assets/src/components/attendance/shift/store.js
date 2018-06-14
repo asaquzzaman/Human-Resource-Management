@@ -124,6 +124,14 @@ export default {
 
 		setSearchResults (state, records) {
 
+		},
+
+		closePopUp (state) {
+			state.records.forEach(function(record) {
+				record.times.forEach(function(time) {
+					time.popup = false;
+				});
+			});
 		}
 	}
 };

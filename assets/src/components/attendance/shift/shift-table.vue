@@ -26,28 +26,67 @@
 	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
                     </td>
-                    <td>
-                    	{{ getWorkTime(record) }}
+                    <td colspan="1">
+                    	<div v-for="time in record.times">
+                    		<div>Duration: {{ time.begin }} <span v-html="'&ndash;'"></span> {{ time.end }} ({{getDurationHours(time)}}h {{getDurationMinutes(time)}}m)</div>
+	                    	<table>
+	                    		<tr >
+	                    			<td><div>Work Time: {{ getWorkTime(time) }}</div></td>
+	                    			<td>
+	                    				
+				                    	<div>Total Break Time: {{ getTotalBreakTime(time.breaks) }}</div>
+				                    	<div>
+				                    		<a @click.prevent="breadkDetails(time)" href="#">Details</a>
+				                    	</div>
+				                    	<div v-hrm-break-dialog v-if="time.popup">
+					                    	<ul>
+					                    		<li v-for="brak in time.breaks">
+					                    			<div>Beak Duration: {{ brak.breakBeing }} <span v-html="'&ndash;'"></span> {{ brak.breakEnd }}</div>
+					                    			<div>Break Time: {{ getBreakTime(brak) }}</div>
+					                    		</li>
+					                    		</li>Total Break Time: {{ getTotalBreakTime(time.breaks) }}</li>
+					                    	</ul>
+
+					                    	
+				                    	</div>
+	                    			</td>
+	                    			<td>Net Work Time: {{ getNetWorkTime(time) }}</td>
+	                    		</tr>
+	                    	</table>
+                    	</div>
+                    </td>
+                    <!-- <td>
+                    	<ul>
+                    		<li v-for="time in record.times">
+                    			<div>Duration: {{ time.begin }} <span v-html="'&ndash;'"></span> {{ time.end }}</div>
+                    			<div>Time: {{ getWorkTime(time) }}</div>
+                    		</li>
+                    	</ul>
+                    	<div>Total Time: {{ getTotalWorkTime(record) }}</div>
                     </td>
                     <td>
                     	{{ getBreakTime(record) }}
                     </td>
                     <td>
                     	{{ getNetTime(record) }}
-                    </td>
+                    </td>-->
                     <td>
-                    	{{ record.description }}
-                    </td>
+                    	<ul>
+                    		<li v-for="dept in record.departments.data">
+                    			{{ dept.name }}
+                    		</li>
+                    	</ul>
+                    </td> 
                 </tr>
                 
                 <tr v-else :id="'hrm-edit-'+record.id" :data-recordId="record.id" class="inline-edit-row hrm-edit-toggle">
-                	<td colspan="5" class="colspanchange">
+                	<td colspan="4" class="colspanchange">
                 		<update-form :shift="record"></update-form>
 					</td>
 				</tr>
 
 				<tr v-if="!records.length">
-					<td colspan="5">
+					<td colspan="3">
 						No result found!
 					</td>
 				</tr>
@@ -68,6 +107,7 @@
 
 <script>
 	import Mixin from './mixin'
+	import PopUp from './directive'
 	import UpdateForm from './new-shift-form.vue'
 
 	export default {
@@ -98,14 +138,8 @@
 						label: 'Name',
 					},
 					{
-						label: 'Work Time',
+						label: 'Work',
 					},
-					{
-						label: 'Break Time',
-					}, 
-					{
-						label: 'Net Time',
-					}, 
 					{
 						label: 'Department',
 					}
@@ -221,50 +255,103 @@
 				})
 			},
 
-			getWorkTime(record) {
-				var time = new Date(this.currentDate()+','+record.work_duration);
-				
-				// let being = hrm.Moment(record.shift_being).format('k:m');
-				// let end = hrm.Moment(record.shift_end).format('k:m');
+			getWorkHoursMinutes(record) {
+				var hours = 0;
+				var minutes = 0;
+				record.times.forEach(function(time) {
+					hours = hours + parseInt(time.workHours);
+					minutes = minutes + parseInt(time.workMinutes);
+				});
+				hours = hours ? hours : '0';
+				minutes = minutes ? minutes : '0';
 
-				// let shiftDuration = this.shiftDuration(being, end);
-
-				let text = time.getHours() + ' (hours) ' + time.getMinutes() + ' (minutes)';
-				
-				if(record.break_deduct == 1) {
-					text = text + ' - Deduct with break time';
-				} else {
-					text = text + ' - Without break time';
+				return {
+					hours: hours,
+					minutes: minutes
 				}
-
-				return text;
-
-				// this.shift_duration_hour = shiftDuration.hours;
-				// this.shift_duration_minute = shiftDuration.minutes;
 			},
 
-			getBreakTime (record) {
-				let being = hrm.Moment(record.break_being).format('k:m');
-				let end = hrm.Moment(record.break_end).format('k:m');
+			getBreakTimeMinutes (record) {
+				var hours = 0;
+				var minutes = 0;
 
-				let breakDuration = this.breakDuration(being, end);
+				record.forEach(function(time) {
+					hours = hours + parseInt(time.breakHours);
+					minutes = minutes + parseInt(time.breakMinutes);
+				});
 
-				let text = breakDuration.hours + ' (hours) ' + breakDuration.minutes + ' (minutes)';
-
-				return text;
+				return {
+					hours: hours,
+					minutes: minutes
+				}
 			},
 
-			getNetTime (record) {
-				let being = hrm.Moment(record.break_being).format('k:m');
-				let end = hrm.Moment(record.break_end).format('k:m');
-				let breakDuration = this.breakDuration(being, end);
+			getTotalWorkTime(record) {
+				let time = this.getWorkHoursMinutes(record);
+				
+				let netTime = time.hours + ':' + time.minutes;
+				let workTime = new Date(this.currentDate()+','+netTime);
 
-				let workTime = new Date(this.currentDate()+','+record.work_duration);
-				let breakTime = new Date(this.currentDate()+','+breakDuration.hours+':'+breakDuration.minutes);
+				return hrm.Moment(workTime).format('HH:mm');
+			},
 
-				let net_time = hrm.Moment(workTime).add(breakDuration.hours, 'hours').add(breakDuration.minutes, 'minutes');
+			getWorkTime (time) {
+				let netTime = time.workHours + ':' + time.workMinutes;
+				let standard = new Date(this.currentDate()+','+netTime);
 
-				return net_time.hours() + ' (hours) ' + net_time.minutes() + ' (minutes)';
+				return hrm.Moment(standard).format('HH:mm');
+			},
+
+			getTotalBreakTime (record) {
+				let time = this.getBreakTimeMinutes(record);
+				let fake = new Date(this.currentDate()+', 0:0');
+				
+				let actualTime = hrm.Moment(fake).add(time.hours, 'hours').add(time.minutes, 'minutes');
+
+				return hrm.Moment(actualTime).format('HH:mm');
+			},
+
+			getBreakTime(brak) {
+				let netTime = brak.breakHours + ':' + brak.breakMinutes;
+				let standard = new Date(this.currentDate()+','+netTime);
+
+				return hrm.Moment(standard).format('HH:mm');
+			},
+
+			getNetWorkTime (record) {
+				var workTime = record.workHours +':'+ record.workMinutes;
+				    workTime = new Date(this.currentDate()+','+workTime);
+				
+				let breakTime = this.getBreakTimeMinutes(record.breaks);
+
+				let total = hrm.Moment(workTime).subtract(breakTime.hours, 'hours').subtract(breakTime.minutes, 'minutes');
+
+				return hrm.Moment(total).format('HH:mm');
+
+			},
+
+			getDepartments (record) {
+				var department = '';
+				record.departments.data.forEach(function(dept) {
+					console.log(department);
+					department = department + dept.name + ', ';
+				});
+
+				return department;
+			},
+
+			breadkDetails (time) {
+				time.popup = true;
+			},
+
+			getDurationHours (record) {
+				let hours = this.getDurationHourMinute(record.begin, record.end);
+				return hours.hours
+			},
+
+			getDurationMinutes (record) {
+				let minutes = this.getDurationHourMinute(record.begin, record.end);
+				return minutes.minutes
 			}
 		}
 		

@@ -183,6 +183,9 @@ export default {
 
 		recordMeta (record) {
 			record.editMode = false;
+            record.times.forEach(function(time) {
+                time.popup = false;
+            });
 		},
 
 		filter (callback) {

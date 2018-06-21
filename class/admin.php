@@ -11,6 +11,7 @@ use HRM\Transformers\Notice_Transformer;
 use Illuminate\Pagination\Paginator;
 use HRM\Models\Designation;
 use HRM\Transformers\Designation_Transformer;
+use HRM\Models\Department;
 
 class Hrm_Admin {
     use Transformer_Manager;
@@ -2312,6 +2313,19 @@ class Hrm_Admin {
         }
 
         return $fromated_depts;
+    }
+
+    public static function get_employee_department( $employee_id = false ) {
+        $employee_id = $employee_id ? $employee_id : wp_current_user_id();
+        $dept_id = get_user_meta( $employee_id, 'hrm_job_category', true );
+
+        if ( $dept_id ) {
+            return Department::where('active', '1')
+                ->where('id', $dept_id)
+                ->first();
+        }
+
+       return false; 
     }
 
     public static function get_departments( 

@@ -1,4 +1,5 @@
 <?php
+use HRM\Core\Database\Model as Eloquent;
 
 class Hrm_Attendance {
     private static $_instance;
@@ -16,6 +17,109 @@ class Hrm_Attendance {
 
     function __construct() {
         add_action('wp_ajax_hrm_get_dashboard_attendance', array( $this, 'get_dashboard_attendance' ) );
+        add_action( 'wp_ajax_punch_in', array( $this, 'ajax_save_punch_in' ) );
+    }
+
+    function ajax_save_punch_in() {
+        check_ajax_referer('hrm_nonce');
+        $post = array();
+        $post = $_POST;
+        $punch = self::getInstance()->new_punch_in($post);
+        $url = $post['url'];
+
+        if ( $punch ) {
+            $page    = $_POST['page'];
+            $tab     = $_POST['tab'];
+            $subtab  = $_POST['subtab'];
+            $req_frm = urldecode( $_POST['req_frm'] );
+            ob_start();
+                require_once $req_frm;
+             wp_send_json_success( array(
+                'content' => ob_get_clean(),
+                'success_msg' => __( 'Successfully update puch', 'hrm' ),
+            ));
+        }
+    }
+
+    function punch_in_validation( $post ) {
+        global $current_user;
+        $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+        
+        if ( !in_array( hrm_employee_role_key(), $current_user->roles ) ) {
+            //return new WP_Error('hrm_user_role', __( 'Are you employee?', 'hrm' ) );
+        }
+
+        $dpartment = Hrm_Admin::get_employee_department( $user_id );
+
+        if ( ! $dpartment ) {
+            //return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
+        }
+
+        if ( ! $this->has_policy( $dpartment->id ) ) {
+            //return new WP_Error('hrm_user_role', __( 'Please apply the schedule policy', 'hrm' ) );
+        }
+    }
+
+    function has_policy( $dept_id ) {
+        global $wpdb;
+
+        $shift    = 'hrm_time_shift';
+        $relation = hrm_tb_prefix() . 'hrm_relation';
+        $db       = \WeDevs\ORM\Eloquent\Facades\DB::instance();
+
+        $shift = $db->table( $shift . ' as shift' )
+            ->leftJoin( $relation . ' as relation', 'relation.from', '=', 'shift.id')
+            ->where( 'shift.status', '1' )
+            ->where( 'relation.type', 'time_shift_department' )
+            ->where( 'relation.to', $dept_id )
+            ->get();
+
+        if ( $shift ) {
+            return $shift;
+        }
+
+        return false;
+    }
+
+    function new_punch_in( $post ) {
+        $has_error = $this->punch_in_validation( $post );
+        wp_send_json_error( array( 'error' => $has_error->get_error_messages() ) );
+        $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+
+        $post_arg = array(
+            'post_type' => 'hrm_punch',
+            'post_status' => 'publish',
+            'post_content' => $post['note'],
+            'post_author' => $user_id
+        );
+
+        $arg = array(
+            'post_type' => 'hrm_punch',
+            'post_status'=> 'publish',
+            'author' => $user_id,
+            'meta_query' => array(
+                array(
+                    'key' => '_puch_in_status',
+                    'value' => '1',
+                    'compear' => '='
+                ),
+            )
+        );
+        $query = new WP_Query( $arg );
+
+        if ( isset( $query->posts[0] ) ) {
+            return false;
+        }
+
+        $post_id = wp_insert_post( $post_arg );
+
+        if ( $post_id ) {
+            update_post_meta( $post_id, '_puch_user', $user_id );
+            update_post_meta( $post_id, '_puch_in_status', '1' );
+            update_user_meta( $user_id, '_puch_in_status', '1' );
+        }
+
+        return true;
     }
 
     public function get_dashboard_attendance() {

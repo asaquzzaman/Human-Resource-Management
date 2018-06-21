@@ -16,8 +16,8 @@
 							<time><i class="far fa-clock"></i></i> <clock></clock></time>
 						</strong>
 					</div>
-					
-					<button :disabled="isDisabled()" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
+					<!-- :disabled="isDisabled()" -->
+					<button  class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
 					<button :disabled="punch_out_disable" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
 				</div>
 			</div>

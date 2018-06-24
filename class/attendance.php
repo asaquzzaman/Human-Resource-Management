@@ -80,12 +80,12 @@ class Hrm_Attendance {
         if( ! $punch ) {
             return true;
         }
+        
+        $punch_shift = $this->has_punch_shift( $schedule );
 
-        $has_schedule = $this->has_punch_schedule( $times, $schedule );
-
-        if ( $has_schedule ) {
-            $punch_schedule = $this->has_punch_in_within_schedule( $has_schedule, $shift_id, $user_id );
-
+        if ( $punch_shift ) {
+            $punch_schedule = $this->has_punch_in_within_schedule( $punch_shift, $schedule, $shift_id, $user_id );
+            
             if ( $punch_schedule ) {
                 return false;
             }
@@ -94,38 +94,49 @@ class Hrm_Attendance {
         return false;
     }
 
-    function has_punch_in_within_schedule( $has_schedule, $shift_id, $user_id = false ) {
+    function has_punch_in_within_schedule( $punch_shift, $schedule, $shift_id, $user_id = false ) {
         global $wpdb;
         $table   = $wpdb->prefix . 'hrm_attendance';
         $user_id = $user_id ? $user_id : get_current_user_id();
 
-        $start  = date( 'H:i', strtotime( $time['begin'] ) );
-        $end    = date( 'H:i', strtotime( $time['end'] ) );
+        $start  = date( 'H:i:s', strtotime( $punch_shift['begin'] ) );
+        $end    = date( 'H:i:s', strtotime( $punch_shift['end'] ) );
 
-        if ( $end > $start ) {
-            $start1 = date( 'Y-m-d H:i', strtotime( $start ) );
-            $end1   = date( 'Y-m-d H:i', strtotime( '23:59' ) );
+        $punch_prev_shift = $this->get_prev_shift( $schedule );
 
-            $is_in1 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start1' AND punch_out <= '$end1' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
+        $prev_end  = date( 'Y-m-d H:i:s', strtotime( $punch_prev_shift['end'] ) );
+        $prev_start  = date( 'Y-m-d H:i:s', strtotime( $start ) );
+
+        $is_in = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in > '$prev_end' AND punch_in <= '$prev_start' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
+
+        if( $is_in ) {
+            return true;
+        }
+
+        if ( $start > $end ) {
+            $start1 = date( 'Y-m-d H:i:s', strtotime( $start ) );
+            $end1   = date( 'Y-m-d H:i:s', strtotime( '23:59' ) );
+
+            $is_in1 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start1' AND punch_in <= '$end1' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
 
             if( $is_in1 ) {
                 return true;
             }
 
-            $start2 = date( 'Y-m-d H:i', strtotime( '00:00' ) );
-            $end2   = date( 'Y-m-d H:i', strtotime( $end . ' +1 day' ) );
+            $start2 = date( 'Y-m-d H:i:s', strtotime( '00:00' ) );
+            $end2   = date( 'Y-m-d H:i:s', strtotime( $end . ' +1 day' ) );
 
-            $is_in2 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start2' AND punch_out <= '$end2' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
+            $is_in2 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start2' AND punch_in <= '$end2' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
 
             if ( $is_in2 ) {
                 return true;
             }
         } else {
-            $start = date( 'Y-m-d H:i', strtotime( $start ) );
-            $end   = date( 'Y-m-d H:i', strtotime( $end ) );
+            $start = date( 'Y-m-d H:i:s', strtotime( $start ) );
+            $end   = date( 'Y-m-d H:i:s', strtotime( $end ) );
 
-            $is_in = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start' AND punch_out <= '$end' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
-
+            $is_in = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start' AND punch_in <= '$end' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
+ 
             if( $is_in ) {
                 return true;
             }
@@ -134,8 +145,10 @@ class Hrm_Attendance {
         return false;
     }
 
-    function has_punch_schedule( $times, $schedule ) {
+    function has_punch_shift( $schedule ) {
         $shift = false;
+        $times = maybe_unserialize( $schedule->times );
+
         foreach ( $times as $key => $time ) {
             $is_time = call_user_func( array( $this, 'get_current_shift_interval' ), $time);
 
@@ -146,15 +159,16 @@ class Hrm_Attendance {
         }
 
         if ( ! $shift ) {
-            $shift = $this->get_current_shift_interval_from_outer( $times, $schedule );
+            $shift = $this->get_next_shift( $schedule );
         }
 
         return $shift ;
     }
 
-    function get_current_shift_interval_from_outer( $times, $schedule ) {
-        $all_shifts = [];
-        $punch_start = date( 'H:i', strtotime( $schedule->punch_start ) );
+    function get_next_shift( $schedule ) {
+        $times        = maybe_unserialize( $schedule->times );
+        $all_shifts   = [];
+        $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
         $target_shift = false;
         $current_date = current_time( 'mysql' );
         $current_time = date( 'H:i', strtotime( $current_date ) ); 
@@ -184,9 +198,42 @@ class Hrm_Attendance {
                 break;
             }
         }
-        
+
         return $target_shift;
     }
+
+    function get_prev_shift( $schedule ) {
+        $times        = maybe_unserialize( $schedule->times );
+        $all_shifts   = [];
+        $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
+        $target_shift = false;
+        $current_date = current_time( 'mysql' );
+        $current_time = date( 'H:i', strtotime( $current_date ) ); 
+
+        if($current_time > $punch_start) {
+            $punch_start = strtotime( date( 'Y-m-d H:i', strtotime( $punch_start . ' +1 day' ) ) );
+        }
+
+        foreach ( $times as $key => $time ) {
+            $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
+            $shift_end  = date( 'H:i', strtotime( $time['end'] ) );
+
+            if ( $current_time > $shift_end && $punch_start > $shift_end ) {
+                $shift_end  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_end . ' +1 day' ) ) );
+                $all_shifts[$shift_end] = $time;
+            } else {
+                $shift_end  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_end ) ) );
+                $all_shifts[$shift_end] = $time;
+            }
+        }
+
+        $current_time_str = strtotime( $current_time );
+        ksort($all_shifts);
+
+        return end( $all_shifts );
+    }
+
+
 
     function get_current_shift_interval( $time ) {
         $current_date = current_time( 'mysql' );

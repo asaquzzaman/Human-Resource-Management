@@ -57,6 +57,9 @@ class HRM_Shift {
             $shift_id = $wpdb->insert( $shift_tb, $data );
             $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $time->id] );
         }
+
+        $sql = "alter table {$attendance} change config_id shift_id BIGINT";
+        $wpdb->query($sql) ;
     }
 
     function shift_data_formating( $shift, $status, $name ) {
@@ -185,7 +188,7 @@ class HRM_Shift {
         
         if ( ! is_wp_error( $validation ) ) {
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);
+            $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
             $postData['times'] = maybe_serialize( $postData['times'] ); 
 
 

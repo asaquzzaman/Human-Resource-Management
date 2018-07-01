@@ -16,7 +16,7 @@ class Shift_Transformer extends TransformerAbstract {
     use Resource_Editors;
 
     protected $defaultIncludes = [
-        //'department'
+        'departments'
     ];
 
     public function transform( Shift $item ) {
@@ -25,18 +25,19 @@ class Shift_Transformer extends TransformerAbstract {
             'id'            => $item->id,
             'name'          => $item->name,
             'status'        => $item->status,
-            'puch_start'    => $item->puch_start,
+            'punch_start'   => $item->punch_start,
             'times'         => maybe_unserialize( $item->times ),
             'created_at'    => $item->created_at,
             'updated_at'    => $item->updated_at
         ];
     }
 
-    public function includeDepartment( Shift $item ) {
-        $department = $item->department()->first();
-
-        if ( $department ) {
-            return $this->item( $department, new Department_Transformer );
+    public function includeDepartments( Shift $item ) {
+        $departments = $item->departments()
+            ->get();
+        
+        if ( $departments ) {
+            return $this->collection( $departments, new Department_Transformer );
         }
 
         return null;

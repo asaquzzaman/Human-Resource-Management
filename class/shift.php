@@ -27,8 +27,110 @@ class HRM_Shift {
 	function __construct() {
 		add_action( 'wp_ajax_hrm_shift_filter', array( $this, 'ajax_get_shift' ) );
         add_action( 'wp_ajax_hrm_insert_shift', array( $this, 'ajax_add_shift' ) );
-
+        add_action( 'wp_ajax_hrm_update_shift', array( $this, 'ajax_update_shift' ) );
+        add_action( 'wp_ajax_hrm_delete_shift', array( $this, 'ajax_delete_shift' ) );
+        //$this->migrate();
 	}
+
+    function migrate() {
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'hrm_office_time';
+        $shift_tb = $wpdb->prefix . 'hrm_time_shift';
+        $attendance = $wpdb->prefix . 'hrm_attendance'; 
+
+        $office_times = $wpdb->get_results("Select * From $table");
+
+        if ( $office_times ) {
+            $active = end( $office_times );
+            $data = $this->shift_data_formating( $active, 1,  'Office Time');
+
+            $shift_id = $wpdb->insert( $shift_tb, $data );
+            $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $active->id] );
+
+            array_pop( $office_times );
+        }
+
+        foreach ( $office_times as $time ) {
+            $data = $this->shift_data_formating( $active, 0,  'Office Time');
+
+            $shift_id = $wpdb->insert( $shift_tb, $data );
+            $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $time->id] );
+        }
+
+        $sql = "alter table {$attendance} change config_id shift_id BIGINT";
+        $wpdb->query($sql) ;
+    }
+
+    function shift_data_formating( $shift, $status, $name ) {
+        return [
+            'name'        => $name,
+            'status'      => $status,
+            'punch_start' => $shift->start,
+            'created_at'  => date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ),
+            'updated_at'  => date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ),
+            'times' => maybe_serialize(
+                [
+                    [
+                        'begin'       => date( 'H:i', strtotime( $shift->start ) ),
+                        'end'         => date( 'H:i', strtotime( $shift->end ) ),
+                        'workHours'   => $this->get_hours( $shift->start, $shift->end ),
+                        'workMinutes' => $this->get_minutes( $shift->start, $shift->end ),
+                        'breakStatus' => false,
+                        'breaks' => [
+                            [
+                                'breakBegin'   => '',
+                                'breakEnd'     => '',
+                                'breakHours'   => '',
+                                'breakMinutes' => ''
+                            ]
+                        ]
+                    ]
+                ]
+            )
+        ];
+    }
+
+    function get_hours( $start, $end ) {
+        // Create two new DateTime-objects...
+        $date1 = new DateTime( $end );
+        $date2 = new DateTime( $start );
+
+        // The diff-methods returns a new DateInterval-object...
+        $diff = $date2->diff($date1);
+
+        return $diff->format('%h'); 
+    }
+    
+    function get_minutes( $start, $end ) {
+        // Create two new DateTime-objects...
+        $date1 = new DateTime( $end );
+        $date2 = new DateTime( $start );
+
+        // The diff-methods returns a new DateInterval-object...
+        $diff = $date2->diff($date1);
+
+        return $diff->format('%m'); 
+    }
+
+    function ajax_delete_shift() {
+        check_ajax_referer('hrm_nonce');
+        $shift = self::getInstance()->delete_shift( $_POST );
+        
+        wp_send_json_success( $shift );
+    }
+
+    function delete_shift( $postData ) {
+        
+        foreach ( $postData['delete'] as $key => $id ) {
+            $shift = Shift::find($id);
+            $shift->update(array(
+                'status' => 0,
+            ));
+        }
+
+        return true;
+    }   
 
     function ajax_add_shift() {
         check_ajax_referer('hrm_nonce');
@@ -37,7 +139,7 @@ class HRM_Shift {
         if (  isset( $shift['success'] ) &&  $shift['success'] === false ) {
             wp_send_json_error( $shift );
         }
-        
+
         wp_send_json_success( $shift );
     }
 
@@ -45,9 +147,10 @@ class HRM_Shift {
         $validation = $this->validation( $postData );
         
         if ( ! is_wp_error( $validation ) ) {
-            $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $current_date           = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);
-            $postData['times'] = maybe_serialize( $postData['times'] ); 
+            $postData['puch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['puch_start'] ) );
+            $postData['times']      = maybe_serialize( $postData['times'] ); 
 
             $store = hrm_insert_records( $postData );
             
@@ -70,9 +173,68 @@ class HRM_Shift {
 
     }
 
+    function ajax_update_shift() {
+        check_ajax_referer('hrm_nonce');
+        $shift = self::getInstance()->update_shift( $_POST );
+        
+        if (  isset( $shift['success'] ) &&  $shift['success'] === false ) {
+            wp_send_json_error( $shift );
+        }
+
+        wp_send_json_success( $shift );
+    }
+
+    function update_shift( $postData ) {
+        $validation = $this->validation( $postData );
+        
+        if ( ! is_wp_error( $validation ) ) {
+            $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
+            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
+            $postData['times'] = maybe_serialize( $postData['times'] ); 
+
+
+            $hasRelations = Relation::where('from', $postData['id'])
+                ->where('type', 'time_shift_department')
+                ->get()
+                ->toArray();
+
+            $hasRelations = wp_list_pluck( $hasRelations, 'to' );
+            
+            $insert = array_diff( $postData['departments'], $hasRelations );
+            $delete = array_diff( $hasRelations, $postData['departments'] );
+            
+            foreach ( $insert as $key => $department_id) {
+                Relation::create(array(
+                    'type' => 'time_shift_department',
+                    'from' => $postData['id'],
+                    'to'   => $department_id
+                ));
+            }
+
+            if ( $delete ) {
+                Relation::whereIn('to', $delete)
+                    ->where('type', 'time_shift_department')
+                    ->where('from', $postData['id'])
+                    ->delete();
+            }
+            
+            $store = hrm_update_records( $postData );
+
+            return $store;
+            
+        } else {
+            return [
+                'success' => false,
+                'error' => [$validation->get_error_message()]
+            ];
+        }
+    }
+
     function validation( $postData ) {
         global $wpdb;
         $departments = $postData['departments'];
+        $shift_id = isset( $postData['id'] ) ? $postData['id'] : false;
 
         $time_shift = hrm_tb_prefix() . 'hrm_time_shift';
         $relation_tb = hrm_tb_prefix() . 'hrm_relation';
@@ -88,6 +250,10 @@ class HRM_Shift {
             ->toArray();
         
         foreach ( $hasDepts as $key => $hasDept ) {
+            if ( $shift_id == $hasDept['id'] ) {
+                continue;
+            }
+
             if ( count( $hasDept['departments'] ) ) {
                 $message = $hasDept['departments'][0]['name'] . ' department already exist in ' . $hasDept['name'];
                 return new WP_Error('time', $message );

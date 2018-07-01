@@ -24,6 +24,7 @@ class Hrm_Update {
             '1.1' => HRM_PATH . '/include/updates/update-1.1.php',
             '1.2' => HRM_PATH . '/include/updates/update-1.2.php',
             '2.0' => HRM_PATH . '/include/updates/update-2.0.php',
+            '2.1' => HRM_PATH . '/include/updates/update-2.1.php',
         );
         $this->init();
     }

@@ -64,7 +64,6 @@ window.hrmPromise = new Promise(function(resolve, reject) {
 		['fullcalendar'],
 		function(require) {
 			hrm.Fullcalendar = require('fullcalendar');
-			console.log(hrm.Fullcalendar);
 		}
 	).then(function() {
 		scriptsLoaded.Fullcalendar = true;
@@ -95,6 +94,10 @@ window.hrmPromise = new Promise(function(resolve, reject) {
 		['moment'],
 		function(require) {
 			hrm.Moment = require('moment');
+			//var MomentRange = require('moment-range');
+
+			//hrm.MomentRange = MomentRange.extendMoment(hrm.Moment);
+			console.log('asfdhjshjd');
 		}
 	).then(function() {
 		scriptsLoaded.Moment = true;

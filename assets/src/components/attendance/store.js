@@ -5,7 +5,7 @@ export default {
 		punch_in_date: '',
 		punch_out_date: '',
 		search_user_id: '-1',
-		punch_in_status: 'disable',
+		punch_in_status: false,
 		punch_in_formated_date: '',
 		punch_out_formated_date: '',
 		hrm_is_multi_attendance: 0,

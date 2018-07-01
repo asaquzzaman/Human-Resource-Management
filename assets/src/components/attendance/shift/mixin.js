@@ -40,7 +40,6 @@ export default {
 	            	if (typeof callback === 'function') {
 	                    callback(deletedId);
 	                } 
-	                
 	            },
 
 	            error: function(res) {
@@ -52,7 +51,7 @@ export default {
 	            }
 	        };
 
-	        this.httpRequest('hrm_delete_record', form_data);
+	        this.httpRequest('hrm_delete_shift', form_data);
 		},
 
 		updateRecord (args) {
@@ -93,7 +92,7 @@ export default {
                 }
             };
 
-            this.httpRequest('hrm_update_record', form_data);
+            this.httpRequest('hrm_update_shift', form_data);
 		},
 
 		addNewRecord (args) {
@@ -184,6 +183,9 @@ export default {
 
 		recordMeta (record) {
 			record.editMode = false;
+            record.times.forEach(function(time) {
+                time.popup = false;
+            });
 		},
 
 		filter (callback) {

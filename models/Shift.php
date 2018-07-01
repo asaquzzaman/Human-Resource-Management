@@ -3,6 +3,7 @@ namespace HRM\Models;
 
 use HRM\Core\Database\Model as Eloquent;
 use HRM\Models\Department;
+use HRM\Models\Relation;
 
 class Shift extends Eloquent {
 
@@ -13,7 +14,7 @@ class Shift extends Eloquent {
     protected $fillable = [
         'name',
         'status',
-        'puch_start',
+        'punch_start',
         'times',
         'created_at',
         'updated_at',

@@ -251,44 +251,6 @@ class Hrm_Time {
         return true;
     }
 
-    function new_punch_in( $post ) {
-        $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
-
-        $post_arg = array(
-            'post_type' => 'hrm_punch',
-            'post_status' => 'publish',
-            'post_content' => $post['note'],
-            'post_author' => $user_id
-        );
-
-        $arg = array(
-            'post_type' => 'hrm_punch',
-            'post_status'=> 'publish',
-            'author' => $user_id,
-            'meta_query' => array(
-                array(
-                    'key' => '_puch_in_status',
-                    'value' => '1',
-                    'compear' => '='
-                ),
-            )
-        );
-        $query = new WP_Query( $arg );
-
-        if ( isset( $query->posts[0] ) ) {
-            return false;
-        }
-
-        $post_id = wp_insert_post( $post_arg );
-
-        if ( $post_id ) {
-            update_post_meta( $post_id, '_puch_user', $user_id );
-            update_post_meta( $post_id, '_puch_in_status', '1' );
-            update_user_meta( $user_id, '_puch_in_status', '1' );
-        }
-
-        return true;
-    }
 
     function new_punch_out($post) {
         $post_id = isset( $post['post_id'] ) ? intval( $post['post_id'] ) : false;

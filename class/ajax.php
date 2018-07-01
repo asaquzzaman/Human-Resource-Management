@@ -53,7 +53,7 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_employee_delete', array( $this, 'delete_employee' ) );
         add_action( 'wp_ajax_delete_project', array( $this, 'project_delete' ) );
         add_action( 'wp_ajax_change_admin_status', array( $this, 'change_admin_status' ) );
-        add_action( 'wp_ajax_create_punch_in', array( $this, 'new_punch_in' ) );
+        
         add_action( 'wp_ajax_create_punch_out', array( $this, 'new_punch_out' ) );
         add_action( 'wp_ajax_edit_attendance', array( $this, 'time_editable' ) );
         add_action( 'wp_ajax_edit_attendance_save', array( $this, 'edit_attendance_save' ) );
@@ -93,8 +93,8 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_get_departments', array( 'Hrm_Admin', 'ajax_get_departments' ) );
         add_action( 'wp_ajax_delete_department', array( 'Hrm_Admin', 'ajax_delete_department' ) );
 
-        add_action( 'wp_ajax_punch_in', array( 'Hrm_Attendance', 'ajax_punch_in' ) );
-        add_action( 'wp_ajax_attendance_init', array( 'Hrm_Attendance', 'attendance_init' ) );
+        //add_action( 'wp_ajax_punch_in', array( 'Hrm_Attendance', 'ajax_punch_in' ) );
+        
         add_action( 'wp_ajax_punch_out', array( 'Hrm_Attendance', 'ajax_punch_out' ) );
         add_action( 'wp_ajax_get_attendance', array( 'Hrm_Attendance', 'ajax_get_attendance' ) );
         add_action( 'wp_ajax_attendance_configuration', array( 'Hrm_Attendance', 'ajax_attendance_configuration' ) );
@@ -548,27 +548,6 @@ class Hrm_Ajax {
                 'content' => ob_get_clean(),
                 'success_msg' => __( 'Successfully update punch', 'hrm' ),
                 'redirect' => $url
-            ));
-        }
-    }
-
-    function new_punch_in() {
-        check_ajax_referer('hrm_nonce');
-        $post = array();
-        $post = $_POST;
-        $punch = Hrm_Time::getInstance()->new_punch_in($post);
-        $url = $post['url'];
-
-        if ( $punch ) {
-            $page    = $_POST['page'];
-            $tab     = $_POST['tab'];
-            $subtab  = $_POST['subtab'];
-            $req_frm = urldecode( $_POST['req_frm'] );
-            ob_start();
-                require_once $req_frm;
-             wp_send_json_success( array(
-                'content' => ob_get_clean(),
-                'success_msg' => __( 'Successfully update puch', 'hrm' ),
             ));
         }
     }

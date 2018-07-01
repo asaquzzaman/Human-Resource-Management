@@ -17,9 +17,7 @@ class Education extends Eloquent {
 		'year',
 		'score',
 		'start_date',
-		'end_date',
-		'created_by',
-		'updated_by'
+		'end_date'
     ];
 }
 

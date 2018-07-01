@@ -7,7 +7,7 @@ class Work_Experience extends Eloquent {
 
     protected $primaryKey = 'id';
     protected $table      = 'hrm_work_experience';
-    public $timestamps    = false;
+    public $timestamps    = true;
 
     protected $fillable = [
     	'employee_id',

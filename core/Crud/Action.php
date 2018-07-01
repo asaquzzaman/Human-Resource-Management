@@ -150,7 +150,7 @@ abstract class Action implements Pattern {
 		$postdata = $this->get_post_data();
 		$delete   = $postdata['delete'];
 
-		$Object =  $model::where( 'id', $delete );
+		$Object =  $model::whereIn( 'id', $delete );
 		$Object = apply_filters( 'before_'. $model->getTableName().'_delete', $Object,  $postdata );
 
 	    $Object->delete();

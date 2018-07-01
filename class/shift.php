@@ -79,7 +79,7 @@ class HRM_Shift {
                         'breakStatus' => false,
                         'breaks' => [
                             [
-                                'breakBeing'   => '',
+                                'breakBegin'   => '',
                                 'breakEnd'     => '',
                                 'breakHours'   => '',
                                 'breakMinutes' => ''
@@ -147,9 +147,10 @@ class HRM_Shift {
         $validation = $this->validation( $postData );
         
         if ( ! is_wp_error( $validation ) ) {
-            $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $current_date           = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);
-            $postData['times'] = maybe_serialize( $postData['times'] ); 
+            $postData['puch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['puch_start'] ) );
+            $postData['times']      = maybe_serialize( $postData['times'] ); 
 
             $store = hrm_insert_records( $postData );
             
@@ -189,6 +190,7 @@ class HRM_Shift {
         if ( ! is_wp_error( $validation ) ) {
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
+            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
             $postData['times'] = maybe_serialize( $postData['times'] ); 
 
 
@@ -216,7 +218,7 @@ class HRM_Shift {
                     ->where('from', $postData['id'])
                     ->delete();
             }
-
+            
             $store = hrm_update_records( $postData );
 
             return $store;

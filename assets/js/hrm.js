@@ -5134,7 +5134,11 @@ var Hrm_Leave_Header = {
 			punch_id: 0
 		};
 	},
-	created() {},
+	computed: {
+		punchInIsDisabled() {
+			return this.$store.state.attendance.punch_in_status ? false : true;
+		}
+	},
 	components: {
 		'clock': __WEBPACK_IMPORTED_MODULE_0__common_clock_vue__["a" /* default */]
 	},
@@ -5162,12 +5166,13 @@ var Hrm_Leave_Header = {
 					hrm.Toastr.success(res.success);
 					//self.punch_id = res.punch_id;
 					//self.punch_id = res.punch_in_status;
-
-					self.$store.commit('attendance/setAttendance', {
-						records: res.attendance,
-						totalOfficeTime: res.total_time
-					});
-					self.$store.commit('attendance/punch_in', { status: 'disable' });
+					console.log(res);
+					//               self.$store.commit( 'attendance/setAttendance', 
+					//               	{
+					// 	records: res.attendance,
+					// } 
+					//               );
+					self.$store.commit('attendance/punch_in', { status: res.can_punch_in });
 
 					//for preventing multipule submit
 					self.press_punch_in_btn = false;
@@ -5834,6 +5839,7 @@ var Hrm_Leave_Header = {
 //
 //
 //
+//
 
 
 
@@ -5857,7 +5863,7 @@ var Hrm_Leave_Header = {
 						workMinutes: '',
 						breakStatus: false,
 						breaks: [{
-							breakBeing: '',
+							breakBegin: '',
 							breakEnd: '',
 							breakHours: '',
 							breakMinutes: ''
@@ -5877,6 +5883,7 @@ var Hrm_Leave_Header = {
 	},
 
 	created() {
+		this.filterShift(this.shift);
 		this.getDepartments({
 			data: {}
 		});
@@ -5897,6 +5904,11 @@ var Hrm_Leave_Header = {
 	},
 
 	methods: {
+		filterShift(shift) {
+			shift.times.forEach(function (time) {
+				time.breakStatus = time.breakStatus == 'false' || time.breakStatus === false ? false : true;
+			});
+		},
 		recordEditForm(record, status) {
 			status = status || 'toggle';
 			this.$store.commit(this.nameSpace + '/showHideEditForm', {
@@ -5921,53 +5933,55 @@ var Hrm_Leave_Header = {
 			}
 		},
 
-		validateBreakDuration(shift_begin, shift_end, break_begin, break_end, shift_work_hours, shift_work_minutes) {
-			var shift_vaid = this.getDurationHourMinute(shift_begin, shift_end);
-			shift_work_minutes = parseInt(shift_work_minutes) ? shift_work_minutes : 0;
+		// validateBreakDuration (shift_begin,  shift_end, break_begin, break_end, shift_work_hours, shift_work_minutes) {
+		// 	var shift_vaid = this.getDurationHourMinute(shift_begin, shift_end);
+		// 	shift_work_minutes = parseInt(shift_work_minutes) ? shift_work_minutes : 0;
 
-			if (!shift_vaid) {
-				return {
-					status: false,
-					error: 'Shift duration is not valid'
-				};
-			}
+		// 	if(!shift_vaid) {
+		// 		return {
+		// 			status: false,
+		// 			error: 'Shift duration is not valid'
+		// 		};
+		// 	}
 
-			var break_vaid = this.getDurationHourMinute(break_begin, break_end);
+		// 	var break_vaid = this.getDurationHourMinute(break_begin, break_end);
 
-			if (!break_vaid) {
-				return {
-					status: false,
-					error: 'Break duration is not valid'
-				};
-			}
+		// 	if(!break_vaid) {
+		// 		return {
+		// 			status: false,
+		// 			error: 'Break duration is not valid'
+		// 		};
+		// 	}
 
-			var shiftEnd = new Date(this.currentDate() + ',' + shift_end);
-			var breakEnd = new Date(this.currentDate() + ',' + break_end);
+		// 	var shiftEnd = new Date(this.currentDate()+','+shift_end);
+		//           var breakEnd   = new Date(this.currentDate()+','+break_end);
 
-			var breakRange = hrm.Moment(breakEnd).isAfter(hrm.Moment(shiftEnd));
-			var sameBreakRange = hrm.Moment(breakEnd).isSame(hrm.Moment(shiftEnd));
+		//           var breakRange = hrm.Moment(breakEnd).isAfter(hrm.Moment(shiftEnd));
+		//           var sameBreakRange = hrm.Moment(breakEnd).isSame(hrm.Moment(shiftEnd));
 
-			if (breakRange || sameBreakRange) {
-				return {
-					status: false,
-					error: 'Break duration is not valid'
-				};
-			}
+		//           if(breakRange || sameBreakRange) {
+		//           	return {
+		// 			status: false,
+		// 			error: 'Break duration is not valid'
+		// 		}
+		//           }
 
-			var totalShiftMinutes = parseInt(shift_work_hours) * 60 + parseInt(shift_work_minutes);
-			var totalBreakMinutes = parseInt(break_vaid.hours) * 60 + parseInt(break_vaid.minutes);
 
-			if (totalShiftMinutes <= totalBreakMinutes) {
-				return {
-					status: false,
-					error: 'Break duration is not valid'
-				};
-			}
+		// 	var totalShiftMinutes = (parseInt(shift_work_hours) * 60) + parseInt(shift_work_minutes);
+		// 	var totalBreakMinutes = (parseInt(break_vaid.hours) * 60) + parseInt(break_vaid.minutes);
 
-			return {
-				status: true
-			};
-		},
+		// 	if( totalShiftMinutes <= totalBreakMinutes ) {
+		// 		return {
+		// 			status: false,
+		// 			error: 'Break duration is not valid'
+		// 		};
+		// 	}
+
+		//           return {
+		//           	status: true
+		//           }
+
+		// },
 
 		selfNewRecord() {
 			var self = this;
@@ -6087,7 +6101,7 @@ var Hrm_Leave_Header = {
 				workMinutes: '',
 				breakStatus: false,
 				breaks: [{
-					breakBeing: '',
+					breakBegin: '',
 					breakEnd: '',
 					breakHours: '',
 					breakMinutes: ''
@@ -6101,12 +6115,12 @@ var Hrm_Leave_Header = {
 		},
 
 		breakDurationHours(time) {
-			if (!time.breakBeing || !time.breakEnd) {
+			if (!time.breakBegin || !time.breakEnd) {
 				return '';
 			}
 
-			if (time.breakBeing.trim() && time.breakEnd.trim()) {
-				let duration = this.getDurationHourMinute(time.breakBeing, time.breakEnd);
+			if (time.breakBegin.trim() && time.breakEnd.trim()) {
+				let duration = this.getDurationHourMinute(time.breakBegin, time.breakEnd);
 				time.breakHours = duration.hours;
 				return duration.hours;
 			}
@@ -6115,12 +6129,12 @@ var Hrm_Leave_Header = {
 		},
 
 		breakDurationMinutes(time) {
-			if (!time.breakBeing || !time.breakEnd) {
+			if (!time.breakBegin || !time.breakEnd) {
 				return '';
 			}
 
-			if (time.breakBeing.trim() && time.breakEnd.trim()) {
-				let duration = this.getDurationHourMinute(time.breakBeing, time.breakEnd);
+			if (time.breakBegin.trim() && time.breakEnd.trim()) {
+				let duration = this.getDurationHourMinute(time.breakBegin, time.breakEnd);
 				time.breakMinutes = duration.minutes;
 				return duration.minutes;
 			}
@@ -6138,7 +6152,7 @@ var Hrm_Leave_Header = {
 		},
 
 		validation() {
-			return;
+
 			var self = this;
 
 			if (!this.shift.start.trim()) {
@@ -6187,7 +6201,7 @@ var Hrm_Leave_Header = {
 				});
 			}
 
-			this.shift.times.forEach(function (time) {
+			this.shift.times.forEach(function (time, key) {
 
 				if (time.begin.trim() && time.end.trim()) {
 
@@ -6252,9 +6266,18 @@ var Hrm_Leave_Header = {
 						});
 					}
 
+					var isOverLap = self.isOverLapTime(self.shift.times, time, key);
+
+					if (isOverLap) {
+						error_log.push({
+							status: false,
+							error: 'Shift is overlap with others shift'
+						});
+					}
+
 					//Work hour validate
 					if (time.workHours.trim()) {
-						let work = self.workDurationValidation(time.begin, time.end, time.workHours, time.workMinutes);
+						var work = self.workDurationValidation(time.begin, time.end, time.workHours, time.workMinutes);
 
 						if (work.status === false) {
 							error_log.push(work);
@@ -6263,21 +6286,37 @@ var Hrm_Leave_Header = {
 
 					//is Break active
 					if (time.breakStatus) {
-						if (time.breakBeing.trim() && time.breakEnd.trim()) {
-							//Check break duration validity
-							var breakDuration = self.getDurationHourMinute(time.breakBeing, time.breakEnd);
-							if (!breakDuration) {
-								error_log.push({
-									status: false,
-									error: 'Break duration is not valid'
-								});
-							}
+						var totalBreakTime = new Date(self.currentDate() + ', 00:00');
+						totalBreakTime = hrm.Moment(totalBreakTime);
 
-							let valBreakDuration = self.validateBreakDuration(time.begin, time.end, time.breakBeing, time.breakEnd, time.workHours, time.workMinutes);
+						time.breaks.forEach(function (brek) {
+							if (brek.breakBegin.trim() && brek.breakEnd.trim()) {
+								//Check break duration validity
+								var breakDuration = self.getDurationHourMinute(brek.breakBegin, brek.breakEnd);
+								if (!breakDuration) {
+									error_log.push({
+										status: false,
+										error: 'Break duration is not valid'
+									});
+								}
 
-							if (!valBreakDuration.status) {
-								error_log.push(valBreakDuration);
+								totalBreakTime = hrm.Moment(totalBreakTime).add(breakDuration.hours, 'hours').add(breakDuration.minutes, 'minutes');
+
+								// let valBreakDuration = self.validateBreakDuration(break.begin, break.end, break.breakBegin, break.breakEnd, break.workHours, break.workMinutes);
+
+								// if(!valBreakDuration.status) {
+								// 	error_log.push(valBreakDuration);
+								// }
 							}
+						});
+
+						let isWorkGraterThan = self.compareTime({ hours: time.workHours, minutes: time.workMinutes }, { hours: totalBreakTime.hours(), minutes: totalBreakTime.minutes() });
+
+						if (!isWorkGraterThan) {
+							error_log.push({
+								status: false,
+								error: 'Total break duration should be less than shift duration'
+							});
 						}
 					}
 				}
@@ -6292,9 +6331,106 @@ var Hrm_Leave_Header = {
 			};
 		},
 
+		isOverLapTime(times, time, key) {
+			var self = this;
+			var errorCount = [];
+
+			times.forEach(function (shiftTime, newKey) {
+
+				if (newKey == key) {
+					return;
+				}
+
+				if (!shiftTime.begin.trim() || !shiftTime.end.trim()) {
+					return;
+				}
+
+				//Is end less than being
+				var shiftStart1 = new Date(self.currentDate() + ',' + shiftTime.begin);
+				var shiftEnd1 = new Date(self.currentDate() + ',' + shiftTime.end);
+				var shiftStart2 = '';
+				var shiftEnd2 = '';
+
+				var shiftTimeIsafter = moment(shiftEnd1).isAfter(shiftStart1);
+
+				if (!shiftTimeIsafter) {
+					var shiftStart1 = new Date(self.currentDate() + ',' + shiftTime.begin);
+					var shiftEnd1 = new Date(self.currentDate() + ', 23:00');
+
+					var shiftStart2 = new Date(self.currentDate() + ', 00:00');
+					var shiftEnd2 = new Date(self.currentDate() + ',' + shiftTime.end);
+				}
+
+				var timeStart1 = new Date(self.currentDate() + ',' + time.begin);
+				var timeEnd1 = new Date(self.currentDate() + ',' + time.end);
+				var timeStart2 = '';
+				var timeEnd2 = '';
+
+				var timeIsafter = moment(timeEnd1).isAfter(timeStart1);
+
+				if (!timeIsafter) {
+					var timeStart1 = new Date(self.currentDate() + ',' + time.begin);
+					var timeEnd1 = new Date(self.currentDate() + ', 23:00');
+
+					var timeStart2 = new Date(self.currentDate() + ', 00:00');
+					var timeEnd2 = new Date(self.currentDate() + ',' + time.end);
+				}
+
+				var timeStart1Between1 = self.isBetween(timeStart1, shiftStart1, shiftEnd1);
+				var timeStart1Between2 = self.isBetween(timeStart1, shiftStart2, shiftEnd2);
+
+				var timeEnd1Between1 = self.isBetween(timeEnd1, shiftStart1, shiftEnd1);
+				var timeEnd1Between2 = self.isBetween(timeEnd1, shiftStart2, shiftEnd2);
+
+				var timeStart2Between1 = self.isBetween(timeStart2, shiftStart1, shiftEnd1);
+				var timeStart2Between2 = self.isBetween(timeStart2, shiftStart2, shiftEnd2);
+
+				var timeEnd2Between1 = self.isBetween(timeEnd2, shiftStart1, shiftEnd1);
+				var timeEnd2Between2 = self.isBetween(timeEnd2, shiftStart2, shiftEnd2);
+
+				if (timeStart1Between1 === true || timeStart1Between2 === true || timeEnd1Between1 === true || timeEnd1Between2 || timeStart2Between1 === true || timeStart2Between2 || timeEnd2Between1 === true || timeEnd2Between2) {
+					console.log('overlap');
+					errorCount.push(1);
+				}
+			});
+
+			if (errorCount.length) {
+				return true;
+			}
+
+			return false;
+		},
+
+		isBetween(compare, start, end) {
+			compare = hrm.Moment(compare);
+			start = hrm.Moment(start);
+			end = hrm.Moment(end);
+
+			var compareCond = hrm.Moment(compare).isBetween(start, end);
+			var startCond = hrm.Moment(compare).isSame(start);
+			var endCond = hrm.Moment(compare).isSame(end);
+
+			if (compareCond === true || startCond === true || endCond === true) {
+				return true;
+			}
+
+			return false;
+		},
+
+		compareTime(wth, to) {
+
+			if (parseInt(wth.hours) < parseInt(to.hours)) {
+				return false;
+			} else if (parseInt(wth.hours) == parseInt(to.hours) && parseInt(wth.minutes) < parseInt(to.minutes)) {
+				return false;
+			}
+
+			return true;
+		},
+
 		moreBreak(time) {
 			time.breaks.push({
-				breakBeing: '',
+				breakBegin: '',
 				breakEnd: '',
 				breakHours: '',
 				breakMinutes: ''
@@ -20648,7 +20784,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		punch_in_date: '',
 		punch_out_date: '',
 		search_user_id: '-1',
-		punch_in_status: 'disable',
+		punch_in_status: false,
 		punch_in_formated_date: '',
 		punch_out_formated_date: '',
 		hrm_is_multi_attendance: 0,
@@ -32159,6 +32295,7 @@ var render = function() {
             "button",
             {
               staticClass: "button hrm-button-primary button-primary",
+              attrs: { disabled: _vm.punchInIsDisabled },
               on: {
                 click: function($event) {
                   $event.preventDefault()
@@ -34806,7 +34943,7 @@ var render = function() {
                                                       _vm._v(
                                                         "Beak Duration: " +
                                                           _vm._s(
-                                                            brak.breakBeing
+                                                            brak.breakBegin
                                                           ) +
                                                           " "
                                                       ),
@@ -35548,9 +35685,9 @@ var render = function() {
                                                     {
                                                       name: "model",
                                                       rawName: "v-model",
-                                                      value: rest.breakBeing,
+                                                      value: rest.breakBegin,
                                                       expression:
-                                                        "rest.breakBeing"
+                                                        "rest.breakBegin"
                                                     }
                                                   ],
                                                   attrs: {
@@ -35559,7 +35696,7 @@ var render = function() {
                                                     type: "text"
                                                   },
                                                   domProps: {
-                                                    value: rest.breakBeing
+                                                    value: rest.breakBegin
                                                   },
                                                   on: {
                                                     blur: function($event) {
@@ -35573,7 +35710,7 @@ var render = function() {
                                                       }
                                                       _vm.$set(
                                                         rest,
-                                                        "breakBeing",
+                                                        "breakBegin",
                                                         $event.target.value
                                                       )
                                                     }

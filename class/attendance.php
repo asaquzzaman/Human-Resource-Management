@@ -18,27 +18,20 @@ class Hrm_Attendance {
     function __construct() {
         add_action('wp_ajax_hrm_get_dashboard_attendance', array( $this, 'get_dashboard_attendance' ) );
         add_action( 'wp_ajax_punch_in', array( $this, 'ajax_save_punch_in' ) );
+        add_action( 'wp_ajax_attendance_init', array( $this, 'attendance_init' ) );
     }
 
     function ajax_save_punch_in() {
         check_ajax_referer('hrm_nonce');
-        $post = array();
-        $post = $_POST;
-        $punch = self::getInstance()->new_punch_in($post);
-        $url = $post['url'];
 
-        if ( $punch ) {
-            $page    = $_POST['page'];
-            $tab     = $_POST['tab'];
-            $subtab  = $_POST['subtab'];
-            $req_frm = urldecode( $_POST['req_frm'] );
-            ob_start();
-                require_once $req_frm;
-             wp_send_json_success( array(
-                'content' => ob_get_clean(),
-                'success_msg' => __( 'Successfully update puch', 'hrm' ),
-            ));
-        }
+        $post = $_POST;
+        $punch = self::getInstance()->punch_in($post);
+        
+         wp_send_json_success( array(
+            'can_punch_in' => self::getInstance()->can_punch_in(),
+            'success' => __( 'Punch in active', 'hrm' ),
+        ));
+        
     }
 
     function punch_in_validation( $post ) {
@@ -46,40 +39,43 @@ class Hrm_Attendance {
         $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
         
         if ( !in_array( hrm_employee_role_key(), $current_user->roles ) ) {
-            //return new WP_Error('hrm_user_role', __( 'Are you employee?', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'Are you employee?', 'hrm' ) );
         }
 
         $dpartment = Hrm_Admin::get_employee_department( $user_id );
 
         if ( ! $dpartment ) {
-            //return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
         }
 
         $schedule = $this->has_policy( $dpartment->id );
 
         if ( ! $schedule ) {
-            //return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
         }
 
-        if ( $this->can_punch_in( $schedule, $user_id ) ) {
-
+        if ( !$this->can_punch_in( $user_id ) ) {
+            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
         }
     }
 
-    function can_punch_in( $schedule, $user_id = false ) {
+    function can_punch_in( $user_id = false ) {
         global $wpdb;
 
         $user_id      = $user_id ? $user_id : get_current_user_id();
+        $dpartment    = Hrm_Admin::get_employee_department( $user_id );
+        $schedule = $this->has_policy( $dpartment->id );
+
         $times        = maybe_unserialize( $schedule->times );
         $current_time = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );
         $shift_id     = $schedule->id;
         $table        = $wpdb->prefix . 'hrm_attendance';
 
-        $punch = $wpdb->get_row( "SELECT * FROM $table WHERE punch_out = '0000-00-00 00:00:00' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
+        // $punch = $wpdb->get_row( "SELECT * FROM $table WHERE punch_out = '0000-00-00 00:00:00' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
         
-        if( ! $punch ) {
-            return true;
-        }
+        // if( ! $punch ) {
+        //     return true;
+        // }
         
         $punch_shift = $this->has_punch_shift( $schedule );
 
@@ -91,7 +87,7 @@ class Hrm_Attendance {
             }
         }
 
-        return false;
+        return true;
     }
 
     function has_punch_in_within_schedule( $punch_shift, $schedule, $shift_id, $user_id = false ) {
@@ -289,45 +285,31 @@ class Hrm_Attendance {
         return false;
     }
 
-    function new_punch_in( $post ) {
+    function punch_in( $post ) {
+        global $wpdb;
         $has_error = $this->punch_in_validation( $post );
-        wp_send_json_error( array( 'error' => $has_error->get_error_messages() ) );
-        $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
 
-        $post_arg = array(
-            'post_type' => 'hrm_punch',
-            'post_status' => 'publish',
-            'post_content' => $post['note'],
-            'post_author' => $user_id
-        );
-
-        $arg = array(
-            'post_type' => 'hrm_punch',
-            'post_status'=> 'publish',
-            'author' => $user_id,
-            'meta_query' => array(
-                array(
-                    'key' => '_puch_in_status',
-                    'value' => '1',
-                    'compear' => '='
-                ),
-            )
-        );
-        $query = new WP_Query( $arg );
-
-        if ( isset( $query->posts[0] ) ) {
-            return false;
+        if ( is_wp_error( $has_error ) ) {
+           wp_send_json_error( array( 'error' => $has_error->get_error_messages() ) ); 
         }
+        
+        $user_id   = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+        $dpartment = Hrm_Admin::get_employee_department( $user_id );
+        $schedule  = $this->has_policy( $dpartment->id );
+        $table     = $wpdb->prefix . 'hrm_attendance';
+        $data    = array(
+            'user_id'  => $user_id,
+            'date'     => current_time( 'mysql' ),
+            'punch_in' => current_time( 'mysql' ),
+            'shift_id' => $schedule->id
+        );
+        $format = array( '%d', '%s', '%s' );
 
-        $post_id = wp_insert_post( $post_arg );
+        $insert = $wpdb->insert( $table, $data, $format );
 
-        if ( $post_id ) {
-            update_post_meta( $post_id, '_puch_user', $user_id );
-            update_post_meta( $post_id, '_puch_in_status', '1' );
-            update_user_meta( $user_id, '_puch_in_status', '1' );
+        if ( $insert ) {
+            return $wpdb->insert_id;
         }
-
-        return true;
     }
 
     public function get_dashboard_attendance() {
@@ -543,7 +525,7 @@ class Hrm_Attendance {
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');
         
-        $punch_in    = self::getInstance()->punch_in_status();
+        $punch_in    = self::getInstance()->can_punch_in();
         $office_time = self::getInstance()->get_office_time();
         
         $office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
@@ -569,16 +551,16 @@ class Hrm_Attendance {
 
         wp_send_json_success(array(
             'punch_in'                     => $punch_in,
-            'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
-            'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-            'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
-            'punch_out_formated_date'      => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
-            'search_user_id'               => get_current_user_id(),
-            'hrm_is_multi_attendance'      => $multi_attend,
-            'office_start'                 => $office_start,
-            'office_closed'                => $office_closed,
-            'office_start_with_date_time'  => $office_start_with_date,
-            'office_closed_with_date_time' => $office_closed_with_date,
+            // 'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
+            // 'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+            // 'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
+            // 'punch_out_formated_date'      => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
+            // 'search_user_id'               => get_current_user_id(),
+            // 'hrm_is_multi_attendance'      => $multi_attend,
+            // 'office_start'                 => $office_start,
+            // 'office_closed'                => $office_closed,
+            // 'office_start_with_date_time'  => $office_start_with_date,
+            // 'office_closed_with_date_time' => $office_closed_with_date,
             'allow_ip'                     => self::getInstance()->process_ip( $office_time->ip ),
             'employees_dropdown'           => Hrm_Employeelist::getInstance()->get_employee_drop_down()
         ));
@@ -694,7 +676,7 @@ class Hrm_Attendance {
     }
 
 
-    function punch_in( $user_id = false ) {
+    function old_punch_in( $user_id = false ) {
         $validator = $this->punch_validator();
 
         if ( is_wp_error( $validator ) ) {
@@ -743,56 +725,102 @@ class Hrm_Attendance {
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been updated successfully', 'hrm' ),
             'attendance'      => $attendance,
-            'punch_in_status' => self::getInstance()->punch_in_status(),
-            'total_time'      => self::getInstance()->count_office_time( $attendance )
+            //'punch_in_status' => self::getInstance()->punch_in_status(),
+            //'total_time'      => self::getInstance()->count_office_time( $attendance )
         ) );
     }
 
-    function punch_out( $punch_id = false, $user_id = false ) {
-        $validator = $this->punch_validator();
+    function punch_out( $user_id = false ) {
+        global $wpdb;
 
-        if ( is_wp_error( $validator ) ) {
-            return $validator;
+        $user_id = $user_id ? $user_id : get_current_user_id();
+
+        $dpartment = Hrm_Admin::get_employee_department( $user_id );
+
+        if ( ! $dpartment ) {
+            return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
         }
 
-        global $wpdb;
+        $table    = $wpdb->prefix . 'hrm_attendance';
+        $schedule = $this->has_policy( $dpartment->id );
+        $shift_id = $schedule->id;
+
+        $schedule_start = date( 'Y-m-d H:i:s', strtotime( $schedule->punch_start ) );
+        $last_hour      = date('H', strtotime( $schedule_start . '-1 hour') );
+        $schedule_end   = date('Y-m-d ' . $last_hour .':59:59', strtotime(current_time('mysql') . '+1 day') );
+
+        $punch = $wpdb->get_row( "
+            SELECT * FROM $table 
+            WHERE ( punch_in >= '$schedule_start' AND punch_in <= '$schedule_end' ) 
+            AND user_id = $user_id 
+            AND punch_out = '0000-00-00 00:00:00' 
+            AND shift_id = $shift_id 
+            ORDER BY id DESC LIMIT 1" 
+        );
+
+        if ( $punch ) {
+
+            $punch_in   = $punch->punch_in;
+            $punch_id   = $punch->id;
+            $total_time = strtotime( current_time( 'mysql' ) ) - strtotime( $punch->punch_in );
+            $total_time = ( $total_time <= 0 ) ? 0 : $total_time;
+
+            $data = array(
+                'punch_out' => current_time( 'mysql' ),
+                'total'     => $total_time,
+            );
+
+            $where = array(
+                'id' => $punch_id
+            );
+
+            $data_format  = array( '%s', '%d' );
+            $where_format = array( '%d' );
+
+            $update = $wpdb->update( $table, $data, $where, $data_format, $where_format );
+
+            if ( $update ) {
+                return true;
+            }
+
+        }
         
-        $user_id    = $user_id ? absint( $user_id ) : get_current_user_id();
-        $punch_out  = current_time( 'mysql' );
-        $today_date = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );
-        $table      = $wpdb->prefix . 'hrm_attendance';
+        // $user_id    = $user_id ? absint( $user_id ) : get_current_user_id();
+        // $punch_out  = current_time( 'mysql' );
+        // $today_date = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );
+        
 
         //Get last row for current date according with user id
-        $punch_in_row = $wpdb->get_row( "SELECT * FROM $table WHERE date >= '$today_date' AND user_id = $user_id ORDER BY id DESC LIMIT 1" );
+        // $punch_in_row = $wpdb->get_row( "SELECT * FROM $table WHERE date >= '$today_date' AND user_id = $user_id ORDER BY id DESC LIMIT 1" );
 
-        if ( ! $punch_in_row ) {
-            return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
-        }
+        // if ( ! $punch_in_row ) {
+        //     return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
+        // }
 
-        $punch_in   = $punch_in_row->punch_in;
-        $punch_id   = absint( $punch_id ) ? $punch_id : $punch_in_row->id;
-        $total_time = strtotime( $punch_out ) - strtotime( $punch_in );
-        $total_time = ( $total_time <= 0 ) ? 0 : $total_time;
+        // $punch_in   = $punch_in_row->punch_in;
+        // $punch_id   = absint( $punch_id ) ? $punch_id : $punch_in_row->id;
+        // $total_time = strtotime( $punch_out ) - strtotime( $punch_in );
+        // $total_time = ( $total_time <= 0 ) ? 0 : $total_time;
 
-        $data = array(
-            'punch_out' => current_time( 'mysql' ),
-            'total'     => $total_time,
-        );
+        // $data = array(
+        //     'punch_out' => current_time( 'mysql' ),
+        //     'total'     => $total_time,
+        // );
 
-        $where = array(
-            'id' => $punch_id
-        );
+        // $where = array(
+        //     'id' => $punch_id
+        // );
 
-        $data_format  = array( '%s', '%d' );
-        $where_format = array( '%d' );
+        // $data_format  = array( '%s', '%d' );
+        // $where_format = array( '%d' );
 
-        $update = $wpdb->update( $table, $data, $where, $data_format, $where_format );
+        // $update = $wpdb->update( $table, $data, $where, $data_format, $where_format );
 
-        if ( $update ) {
-            return true;
-        }
+        // if ( $update ) {
+        //     return true;
+        // }
 
-        return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
+        // return new WP_Error( 'error', __( 'Error occured', 'hrm' ) );
     }
 
     public static function ajax_get_attendance() {
@@ -831,7 +859,7 @@ class Hrm_Attendance {
 
         wp_send_json_success( array(
             'attendance' => $attendance,
-            'total_time' => self::getInstance()->count_office_time($attendance)
+            //'total_time' => self::getInstance()->count_office_time($attendance)
         ) );
     }
 
@@ -896,17 +924,17 @@ class Hrm_Attendance {
         return $items;
     }
 
-    function count_office_time( $attendance ) {
-        $total_time = 0;
-        foreach ( $attendance as $key => $value ) {
-            $total_time = $value->row_total + $total_time;
-        }
+    // function count_office_time( $attendance ) {
+    //     $total_time = 0;
+    //     foreach ( $attendance as $key => $value ) {
+    //         $total_time = $value->row_total + $total_time;
+    //     }
 
-        $total  = hrm_second_to_time( $total_time );
-        $time   = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
+    //     $total  = hrm_second_to_time( $total_time );
+    //     $time   = $total['hour'] .':'. $total['minute'] .':'. $total['second'];
 
-        return $time;
-    }
+    //     return $time;
+    // }
 
     function get_attendance_meta( $attendance ) {
 

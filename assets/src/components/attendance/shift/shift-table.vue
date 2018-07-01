@@ -41,7 +41,7 @@
 				                    	<div v-hrm-break-dialog v-if="time.popup">
 					                    	<ul>
 					                    		<li v-for="brak in time.breaks">
-					                    			<div>Beak Duration: {{ brak.breakBeing }} <span v-html="'&ndash;'"></span> {{ brak.breakEnd }}</div>
+					                    			<div>Beak Duration: {{ brak.breakBegin }} <span v-html="'&ndash;'"></span> {{ brak.breakEnd }}</div>
 					                    			<div>Break Time: {{ getBreakTime(brak) }}</div>
 					                    		</li>
 					                    		</li>Total Break Time: {{ getTotalBreakTime(time.breaks) }}</li>

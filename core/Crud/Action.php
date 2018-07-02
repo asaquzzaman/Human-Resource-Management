@@ -38,9 +38,9 @@ abstract class Action implements Pattern {
 		Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
-
+        
 		$data = $model::orderBy( 'id', 'DESC' );
-        $data = apply_filters( 'before_'. $model->getTable().'_get', $data, $postdata );
+        $data = apply_filters( 'before_'. $model->getTableName().'_get', $data, $postdata );
         $data = $data->paginate( $per_page );
 
         $collection = $data->getCollection();
@@ -50,7 +50,20 @@ abstract class Action implements Pattern {
 
         return $this->get_response( $resource );
 	}
+	public function show() {
+		$model        = $this->get_model();
+		$postdata     = $this->get_post_data();
+		$id           = (int) $postdata['id'];
+		$transformers = $postdata['transformers'];
+		$transformers = "HRM\\Transformers\\$transformers";
 
+
+		$data = $model::where('id', $id);
+        $data = apply_filters( 'before_'. $model->getTableName().'_show', $data, $postdata );
+        $data = $data->first();
+		$resource = new Item( $data, new $transformers );
+        return $this->get_response( $resource );
+	}
 	public function create() {
 		// $this->create_validation();
 
@@ -66,7 +79,7 @@ abstract class Action implements Pattern {
 		
 		$crated = $model::create( $postdata );
 
-		$crated = apply_filters( 'after_'. $model->getTable().'_create', $crated, $postdata );
+		$crated = apply_filters( 'after_'. $model->getTableName().'_create', $crated, $postdata );
 		
 		$resource  = new Item( $crated, new $transformers );
 
@@ -107,7 +120,7 @@ abstract class Action implements Pattern {
 		$update_data = [];
 		$record      = $model::where( 'id', $postdata['id'] )->first();
 
-		$postdata = apply_filters( 'before_'. $model->getTable().'_update', $postdata );
+		$postdata = apply_filters( 'before_'. $model->getTableName().'_update', $postdata );
 
 		if ( $record ) {
 			foreach ( $postdata as $key => $value ) {
@@ -118,7 +131,7 @@ abstract class Action implements Pattern {
 
 			$record->update( $update_data );
 			
-			$record = apply_filters( 'after_'. $model->getTable().'_update', $record, $postdata );
+			$record = apply_filters( 'after_'. $model->getTableName().'_update', $record, $postdata );
 
 			$resource = new Item( $record, new $transformers );
 
@@ -137,10 +150,16 @@ abstract class Action implements Pattern {
 		$postdata = $this->get_post_data();
 		$delete   = $postdata['delete'];
 
-		$Object =  $model::where( 'id', $delete );
-		$Object = apply_filters( 'before_'. $model->getTable().'_delete', $Object,  $postdata );
+		$Object =  $model::whereIn( 'id', $delete );
+		$Object = apply_filters( 'before_'. $model->getTableName().'_delete', $Object,  $postdata );
 
 	    $Object->delete();
+
+	    $message = [
+            'message' => 'Delete successfully!'
+        ];
+
+        return $this->get_response( null, $message );
 	}
 
 	private function get_model() {

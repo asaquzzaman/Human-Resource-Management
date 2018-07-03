@@ -84,7 +84,9 @@ class Hrm_Db {
           `punch_in` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           `punch_out` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           `total` int(11) NOT NULL,
-          `config_id` BIGINT(20) NOT NULL,
+          `shift_id` BIGINT(20) NOT NULL,
+          `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 

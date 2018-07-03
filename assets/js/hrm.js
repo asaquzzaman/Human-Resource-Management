@@ -5933,56 +5933,6 @@ var Hrm_Leave_Header = {
 			}
 		},
 
-		// validateBreakDuration (shift_begin,  shift_end, break_begin, break_end, shift_work_hours, shift_work_minutes) {
-		// 	var shift_vaid = this.getDurationHourMinute(shift_begin, shift_end);
-		// 	shift_work_minutes = parseInt(shift_work_minutes) ? shift_work_minutes : 0;
-
-		// 	if(!shift_vaid) {
-		// 		return {
-		// 			status: false,
-		// 			error: 'Shift duration is not valid'
-		// 		};
-		// 	}
-
-		// 	var break_vaid = this.getDurationHourMinute(break_begin, break_end);
-
-		// 	if(!break_vaid) {
-		// 		return {
-		// 			status: false,
-		// 			error: 'Break duration is not valid'
-		// 		};
-		// 	}
-
-		// 	var shiftEnd = new Date(this.currentDate()+','+shift_end);
-		//           var breakEnd   = new Date(this.currentDate()+','+break_end);
-
-		//           var breakRange = hrm.Moment(breakEnd).isAfter(hrm.Moment(shiftEnd));
-		//           var sameBreakRange = hrm.Moment(breakEnd).isSame(hrm.Moment(shiftEnd));
-
-		//           if(breakRange || sameBreakRange) {
-		//           	return {
-		// 			status: false,
-		// 			error: 'Break duration is not valid'
-		// 		}
-		//           }
-
-
-		// 	var totalShiftMinutes = (parseInt(shift_work_hours) * 60) + parseInt(shift_work_minutes);
-		// 	var totalBreakMinutes = (parseInt(break_vaid.hours) * 60) + parseInt(break_vaid.minutes);
-
-		// 	if( totalShiftMinutes <= totalBreakMinutes ) {
-		// 		return {
-		// 			status: false,
-		// 			error: 'Break duration is not valid'
-		// 		};
-		// 	}
-
-		//           return {
-		//           	status: true
-		//           }
-
-		// },
-
 		selfNewRecord() {
 			var self = this;
 
@@ -6289,7 +6239,7 @@ var Hrm_Leave_Header = {
 						var totalBreakTime = new Date(self.currentDate() + ', 00:00');
 						totalBreakTime = hrm.Moment(totalBreakTime);
 
-						time.breaks.forEach(function (brek) {
+						time.breaks.forEach(function (brek, breKey) {
 							if (brek.breakBegin.trim() && brek.breakEnd.trim()) {
 								//Check break duration validity
 								var breakDuration = self.getDurationHourMinute(brek.breakBegin, brek.breakEnd);
@@ -6302,11 +6252,14 @@ var Hrm_Leave_Header = {
 
 								totalBreakTime = hrm.Moment(totalBreakTime).add(breakDuration.hours, 'hours').add(breakDuration.minutes, 'minutes');
 
-								// let valBreakDuration = self.validateBreakDuration(break.begin, break.end, break.breakBegin, break.breakEnd, break.workHours, break.workMinutes);
+								var isOverLapBreak = self.isOverLapBreakTime(time.breaks, brek, breKey);
 
-								// if(!valBreakDuration.status) {
-								// 	error_log.push(valBreakDuration);
-								// }
+								if (isOverLapBreak) {
+									error_log.push({
+										status: false,
+										error: 'Break is overlap with others break'
+									});
+								}
 							}
 						});
 
@@ -6329,6 +6282,75 @@ var Hrm_Leave_Header = {
 			return {
 				status: true
 			};
+		},
+
+		isOverLapBreakTime(times, time, key) {
+			var self = this;
+			var errorCount = [];
+
+			times.forEach(function (shiftTime, newKey) {
+
+				if (newKey == key) {
+					return;
+				}
+
+				if (!shiftTime.breakBegin.trim() || !shiftTime.breakEnd.trim()) {
+					return;
+				}
+
+				//Is end less than being
+				var shiftStart1 = new Date(self.currentDate() + ',' + shiftTime.breakBegin);
+				var shiftEnd1 = new Date(self.currentDate() + ',' + shiftTime.breakEnd);
+				var shiftStart2 = '';
+				var shiftEnd2 = '';
+
+				var shiftTimeIsafter = moment(shiftEnd1).isAfter(shiftStart1);
+
+				if (!shiftTimeIsafter) {
+					var shiftStart1 = new Date(self.currentDate() + ',' + shiftTime.breakBegin);
+					var shiftEnd1 = new Date(self.currentDate() + ', 23:00');
+
+					var shiftStart2 = new Date(self.currentDate() + ', 00:00');
+					var shiftEnd2 = new Date(self.currentDate() + ',' + shiftTime.breakEnd);
+				}
+
+				var timeStart1 = new Date(self.currentDate() + ',' + time.breakBegin);
+				var timeEnd1 = new Date(self.currentDate() + ',' + time.breakEnd);
+				var timeStart2 = '';
+				var timeEnd2 = '';
+
+				var timeIsafter = moment(timeEnd1).isAfter(timeStart1);
+
+				if (!timeIsafter) {
+					var timeStart1 = new Date(self.currentDate() + ',' + time.breakBegin);
+					var timeEnd1 = new Date(self.currentDate() + ', 23:00');
+
+					var timeStart2 = new Date(self.currentDate() + ', 00:00');
+					var timeEnd2 = new Date(self.currentDate() + ',' + time.breakEnd);
+				}
+
+				var timeStart1Between1 = self.isBetween(timeStart1, shiftStart1, shiftEnd1);
+				var timeStart1Between2 = self.isBetween(timeStart1, shiftStart2, shiftEnd2);
+
+				var timeEnd1Between1 = self.isBetween(timeEnd1, shiftStart1, shiftEnd1);
+				var timeEnd1Between2 = self.isBetween(timeEnd1, shiftStart2, shiftEnd2);
+
+				var timeStart2Between1 = self.isBetween(timeStart2, shiftStart1, shiftEnd1);
+				var timeStart2Between2 = self.isBetween(timeStart2, shiftStart2, shiftEnd2);
+
+				var timeEnd2Between1 = self.isBetween(timeEnd2, shiftStart1, shiftEnd1);
+				var timeEnd2Between2 = self.isBetween(timeEnd2, shiftStart2, shiftEnd2);
+
+				if (timeStart1Between1 === true || timeStart1Between2 === true || timeEnd1Between1 === true || timeEnd1Between2 || timeStart2Between1 === true || timeStart2Between2 || timeEnd2Between1 === true || timeEnd2Between2) {
+					errorCount.push(1);
+				}
+			});
+
+			if (errorCount.length) {
+				return true;
+			}
+
+			return false;
 		},
 
 		isOverLapTime(times, time, key) {
@@ -6389,7 +6411,6 @@ var Hrm_Leave_Header = {
 				var timeEnd2Between2 = self.isBetween(timeEnd2, shiftStart2, shiftEnd2);
 
 				if (timeStart1Between1 === true || timeStart1Between2 === true || timeEnd1Between1 === true || timeEnd1Between2 || timeStart2Between1 === true || timeStart2Between2 || timeEnd2Between1 === true || timeEnd2Between2) {
-					console.log('overlap');
 					errorCount.push(1);
 				}
 			});

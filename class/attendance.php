@@ -64,7 +64,7 @@ class Hrm_Attendance {
 
         $user_id      = $user_id ? $user_id : get_current_user_id();
         $dpartment    = Hrm_Admin::get_employee_department( $user_id );
-        $schedule = $this->has_policy( $dpartment->id );
+        $schedule     = $this->has_policy( $dpartment->id );
 
         $times        = maybe_unserialize( $schedule->times );
         $current_time = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );

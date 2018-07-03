@@ -174,12 +174,30 @@
 			    <div class="hrm-clear"></div>
 			    <span v-if="field.helpText" class="description" v-html="field.helpText"></span>
 			</div>
+
+
+			<div v-if="field.type == 'texteditor'" class="hrm-form-field hrm-leave-type-wrap">
+				<label>
+					{{ field.label }}
+					<em v-if="field.required">*</em>
+				</label>
+				<div class="hrm-texteditor">
+					<text-editor :editor_id="field.editor_id" v-model="field.model"></text-editor>             
+			    </div>
+			    <div class="hrm-clear"></div>
+			    <span v-if="field.helpText" class="description" v-html="field.helpText"></span>
+			</div>
+
+			<hrm-do-action v-if="field.doAction" hook="hrm--form-field" :actionData="field"></hrm-do-action>	
+
         </div>
 	</div>
 </template>
 
 <script>
-	
+	import doAction from './form-fields.vue';
+	import textEditor from './text-editor.vue';
+
 	export default {
 		props: {
 			fields: {
@@ -198,7 +216,9 @@
 		},
 
 		components: {
-			'hrm-multiselect': hrm.Multiselect
+			'hrm-multiselect': hrm.Multiselect,
+			'hrmDoAction': doAction,
+			'textEditor': textEditor
 		}
 	}
 </script>

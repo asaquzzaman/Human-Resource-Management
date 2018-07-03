@@ -13,9 +13,7 @@ class Skill extends Eloquent {
 		'employee_id',
 		'skill',
 		'years_of_exp',
-		'comments',
-		'created_by',
-		'updated_by'
+		'comments'
     ];
 }
 

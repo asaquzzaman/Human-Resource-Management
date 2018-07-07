@@ -1,7 +1,16 @@
 <?php
 use HRM\Core\Database\Model as Eloquent;
+use HRM\Models\Attendance;
+use HRM\Transformers\Attendance_Transformer;
+use Illuminate\Pagination\Paginator;
+use HRM\Core\Common\Traits\Transformer_Manager;
+use League\Fractal;
+use League\Fractal\Resource\Item as Item;
+use League\Fractal\Resource\Collection as Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class Hrm_Attendance {
+    use Transformer_Manager;
     private static $_instance;
 
     public $unique_ids = array();
@@ -19,6 +28,141 @@ class Hrm_Attendance {
         add_action('wp_ajax_hrm_get_dashboard_attendance', array( $this, 'get_dashboard_attendance' ) );
         add_action( 'wp_ajax_punch_in', array( $this, 'ajax_save_punch_in' ) );
         add_action( 'wp_ajax_attendance_init', array( $this, 'attendance_init' ) );
+        add_action( 'wp_ajax_hrm_get_attendance', array( $this, 'ajax_filter_attendance' ) );
+    }
+
+    function get_total_working_days( $start, $end ) {
+
+    }
+
+    function ajax_filter_attendance() {
+        check_ajax_referer('hrm_nonce');
+
+        $user_id   = empty( $_POST['user_id'] ) ? get_current_user_id() : $_POST['user_id'];
+        $punch_in = empty(  $_POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : $_POST['punch_in'];
+        $punch_out = empty(  $_POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : $_POST['punch_out'];
+        $interval_array = $this->date_to_array( $punch_in, $punch_out );
+
+        $leaves = Hrm_Leave::getInstance()->get_leaves_array(
+            array(
+                'start_time' => $punch_in,
+                'end_time'   => $punch_out,
+                'per_page'   =>  1000,
+                'status'     => 2,
+                'emp_id'     => $user_id
+            )
+        );
+        
+
+        $holidays = Hrm_Leave::getInstance()->get_holidays_array( 
+            array(
+                'from' => $punch_in, 
+                'to'  => $punch_out 
+            )
+        );
+        
+        $work_week = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
+        
+        $exclud_dates = array_merge( $leaves, $holidays, $work_week );
+
+        $attendance = $this->get_attendance( $_POST );
+        $presents = $this->get_in_date_array( $attendance['data'] );
+        $absents = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
+
+        $totalShit = $this->get_total_shift( $attendance['data'], $user_id );
+        
+        $results = [
+            'days'      => count( $interval_array ),
+            'work_days' => count( $interval_array ) - count( $exclud_dates ) - count( $absents ),
+            'leaves'    => count( $leaves ),
+            'holidays'  => count( $holidays ),
+            'weekends'  => count( $work_week ),
+            'presents'  => count( $presents ),
+            'absents'   => count( $absents )
+        ];
+
+        var_dump( $results ); die();
+
+        wp_send_json_success( $attendance );
+    }
+
+    function get_total_shift( $attendance, $user_id ) {
+        $shift_id = wp_list_pluck( $attendance, 'shift_id' );
+        $shift_ids = array_unique( $shift_id );
+        $department = Hrm_Admin::get_employee_department( $user_id );
+        $dept_id = $department ? $department->id : false;
+
+        $shifts = HRM_Shift::getInstance()->get_shift(
+            [
+                'id' => $shift_ids,
+                'status' => false,
+                'per_page' => 5000
+            ]
+        );
+
+        $hours = 0;
+        $minutes = 0;
+
+        foreach ( $shifts['data'] as $key => $shift ) {
+
+            foreach ( $shift['times'] as $key2 => $time ) {
+                $dept_ids = wp_list_pluck( $time['departments'], 'id' );
+
+                if ( ! in_array( $dept_id, $dept_ids ) ) {
+                    continue;
+                }
+                
+                $hours = $hours + $time['workHours'];
+                $minutes = $minutes + $time['workMinutes'];
+            }
+        }
+ 
+        $second = ($hours*60*60)+($minutes*60);
+
+        var_dump( $this->second_to($second), $second); die();
+        
+    }
+
+    function second_to($seconds) {
+      $t = round($seconds);
+      return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+    }
+
+    function get_out_date_array( $interval_array, $presents, $exclud_dates ) {
+        
+        $exclud_dates = array_merge( $exclud_dates, $presents );
+        $absents  = array_diff( $interval_array, $exclud_dates);
+        
+        return $absents;
+    }
+
+    function get_in_date_array( $attendance ) {
+        $array = [];
+
+        foreach ( $attendance as $key => $atend ) {
+            $date = date( 'Y-m-d', strtotime( $atend['punch_in'] ) );
+            $array[$date] = $date;
+        }
+
+        return $array;
+    }
+
+    function date_to_array( $start, $end ) {
+        $start = date('Y-m-d', strtotime( $start) );
+        $end = date('Y-m-d', strtotime( $end) );
+
+        $begin = new DateTime( $start );
+        $end   = new DateTime( $end );
+
+        $array = [];
+
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $date = $i->format("Y-m-d");
+
+            $array[$date] = $date;
+        }
+
+        return $array;
     }
 
     function ajax_save_punch_in() {
@@ -976,78 +1120,62 @@ class Hrm_Attendance {
         $attendance = $this->get_attendance( $defaults );
     }
 
-    function get_attendance( $args = array() ) {
-        
-        global $wpdb;
+    function get_attendance( $postdata ) {
 
-        $defaults = array(
-            'user_id'   => get_current_user_id(),
-            'punch_in'  => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
-            'punch_out' => date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) )
-        );
+        $id        = empty( $postdata['id'] ) ? false : $postdata['id'];
+        $user_id   = empty( $postdata['user_id'] ) ? get_current_user_id() : $postdata['user_id'];
+        $punch_in  = empty(  $postdata['punch_in'] ) 
+            ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
+            : $postdata['punch_in'];
 
-        if ( 
-            ! empty( $args['user_id'] ) 
-                &&
-            $args['user_id'] === 'all'
-        ) {
-            unset( $defaults['user_id'] );
-            unset( $args['user_id'] );
-        }
+        $punch_out = empty(  $postdata['punch_out'] ) 
+            ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
+            : $postdata['punch_out'];
 
-        $args = wp_parse_args( $args, $defaults );
+        if ( $id !== false  ) {
 
-        if ( $args['punch_in'] > $args['punch_out'] ) {
-            return false;
-        }
-
-        $cache_key  = 'hrm-get-attendance' . md5( serialize( $args ) );
-        $items      = wp_cache_get( $cache_key, 'erp' );
-        $query_args = array( 'relation' => 'AND' );
-     
-        if ( false === $items ) {
-            $items = $this->generate_query( $args );
-
-            foreach ( $args as $key => $arg ) {
-                switch ( $key ) {
-                    case 'user_id':
-                        $query_args[] = array(
-                            'field'     => 'user_id',
-                            'value'     => $arg,
-                            'condition' => '='
-                        );
-                        break;
-
-                    case 'punch_in':
-                        $query_args[] = array(
-                            'field'     => 'punch_in',
-                            'value'     => $arg,
-                            'condition' => '>='
-                        );
-                        break;
-
-                    case 'punch_out':
-                        $query_args[] = array(
-                            'field'     => 'punch_out',
-                            'value'     => $arg,
-                            'condition' => '<='
-                        );
-                        break;
-                }
-            }
-
-            $query = $this->generate_query( $query_args );
-            $table = $wpdb->prefix . 'hrm_attendance';
-
-            $items = $wpdb->get_results( "SELECT * FROM {$table} WHERE 1=1 AND $query" );
+            $location = Attendance::find( $id );
             
-            if ( $items ) {
-                $items = $this->get_attendance_meta( $items );
-                wp_cache_set( $cache_key, $items, 'hrm' );
+            if ( $location ) {
+                $resource = new Item( $location, new Location_Transformer );
+                return $this->get_response( $resource );
             }
-        }        
-        
-        return $items;
+            
+            return $this->get_response( null );
+        }
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $attendance = Attendance::where( function($q) use( $user_id, $punch_in, $punch_out ) {
+            if ( is_array(  $user_id ) ) {
+                $q->whereIn( 'user_id', $user_id );
+            }
+
+            if ( $user_id && ! is_array( $user_id ) ) {
+                $q->where( 'user_id', $user_id );
+            }
+
+            if ( ! empty( $punch_in ) ) {
+                $punch_in = date( 'Y-m-d', strtotime( $punch_in ) );
+                $q->where( 'punch_in', '>=', $punch_in);
+            }
+
+            if ( ! empty( $punch_out ) ) {
+                $punch_out = date( 'Y-m-d', strtotime( $punch_out ) );
+                $q->where( 'punch_out', '<=', $punch_out);
+            }
+        })
+        ->orderBy( 'id', 'DESC' )
+        ->paginate( $per_page );
+    
+        $collection = $attendance->getCollection();
+
+        $resource = new Collection( $collection, new Attendance_Transformer );
+        $resource->setPaginator( new IlluminatePaginatorAdapter( $attendance ) );
+
+        return $this->get_response( $resource );
     }
 
 

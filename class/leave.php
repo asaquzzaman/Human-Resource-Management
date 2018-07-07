@@ -119,6 +119,25 @@ class Hrm_Leave {
         wp_send_json_success( self::getInstance()->get_leaves( $args ) );
     }
 
+    function get_leaves_array( $args = array() ) {
+        $leaves = $this->get_leaves( $args );
+        $array = [];
+
+        foreach ( $leaves['data'] as $key => $leave ) {
+            
+            $begin = new DateTime( $leave['start_time'] );
+            $end   = new DateTime( $leave['end_time'] );
+
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $date = $i->format("Y-m-d");
+
+                $array[$date] = $date;
+            }
+        }
+        
+        return $array;
+    }
+
     public function get_leaves( $args = array() ) {
 
         global $wpdb;
@@ -687,6 +706,26 @@ class Hrm_Leave {
         ));
     }
 
+    function get_holidays_array( $args = array() ) {
+        $holidays = $this->get_holidays( $args );
+
+        $array = [];
+
+        foreach ( $holidays as $key => $holiday ) {
+
+            $begin = new DateTime( $holiday->from );
+            $end   = new DateTime( $holiday->to );
+
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $date = $i->format("Y-m-d");
+
+                $array[$date] = $date;
+            }
+        }
+
+        return $array;
+    }
+
     function get_holidays( $args = array() ) {
         global $wpdb;
 
@@ -794,6 +833,42 @@ class Hrm_Leave {
 
     public static function get_work_week() {
        return get_option( 'hrm_work_week' );
+    }
+
+    function work_week_array( $start, $end ) {
+        $work_weeks = Hrm_Leave::getInstance()->get_work_week();
+        $weekend = [];
+
+        foreach ( $work_weeks as $key => $work_week ) {
+            if( $key == 'field_dif' ) {
+                continue;
+            }
+
+            if( $work_week == 'non' ) {
+                $weekend[$key] = date( 'N', strtotime( $key ) );
+            }
+        }
+
+        $start  = new DateTime( $start );
+        $end    = new DateTime( $end );
+        $oneday = new DateInterval("P1D");
+
+        $weekends = array();
+
+        /* Iterate from $start up to $end+1 day, one day in each iteration.
+           We add one day to the $end date, because the DatePeriod only iterates up to,
+           not including, the end date. */
+        foreach( new DatePeriod( $start, $oneday, $end->add($oneday) ) as $day ) {
+            $lday = strtolower( $day->format('l') );
+            
+            if( array_key_exists( $lday, $weekend) ) {
+                $date = $day->format('Y-m-d');
+                $weekends[$date] = $date;
+            }
+            
+        } 
+        
+        return $weekends;
     }
 
 

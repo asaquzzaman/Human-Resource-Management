@@ -44,13 +44,11 @@
 					                </div>
 					            </div>
 
-					            <div class="hrm-form-field-wrap hrm-shirft-mtsl">
+					            <!-- <div class="hrm-form-field-wrap hrm-shirft-mtsl">
 		                            <label>Department<em>*</em></label>
-		                            
-		                            
 		                            <div class="hrm-multiselect">
 										<hrm-multiselect 
-										    v-model="shift.departments.data" 
+										    v-model="shiftDepartments" 
 										    :options="deptDropDown" 
 										    :multiple="true" 
 										    :close-on-select="true"
@@ -71,7 +69,7 @@
 		
 		                            <span class="hrm-clear"></span>
 		                            <span class="description">Choose Parent Department</span>
-		                        </div>
+		                        </div> -->
 					            
 					            <span class="hrm-clear"></span>
 				            </div> 
@@ -112,6 +110,33 @@
 						                </div>
 						              
 						            </div>
+
+						            <div class="hrm-form-field-wrap hrm-shirft-mtsl">
+			                            <label>Departments<em>*</em></label>
+			                            <div class="hrm-multiselect">
+											<hrm-multiselect 
+											    v-model="time.departments" 
+											    :options="deptDropDown" 
+											    :multiple="true" 
+											    :close-on-select="true"
+											    :clear-on-select="true"
+											    :hide-selected="false"
+											    :show-labels="true"
+											    placeholder="Select Department"
+											    select-label=""
+											    selected-label="selected"
+											    deselect-label=""
+											    :taggable="false"
+											    label="name"
+											    track-by="id"
+											    :allow-empty="true">
+
+											</hrm-multiselect>               
+										</div>
+			
+			                            <span class="hrm-clear"></span>
+			                            <span class="description">Choose Parent Department</span>
+			                        </div>
 					        	</div>
 
 					        	<div class="hrm-time-left">
@@ -306,6 +331,7 @@
 								workHours: '',
 								workMinutes: '',
 								breakStatus: false,
+								departments: [],
 								breaks: [
 									{
 										breakBegin: '',
@@ -344,6 +370,29 @@
 		computed: {
 			deptDropDown: function() {
                 return this.$store.state.departments.departments;  
+            },
+
+            shiftDepartments: {
+            	get () {
+
+            		if(typeof this.shift.departments != 'undefined') {
+            			return this.shift.departments.data;
+            		} 
+
+            		return [];
+            		
+            	},
+
+            	set (departments) {
+
+            		if(typeof this.shift.departments == 'undefined') {
+            			this.shift.departments = {
+            				data: [departments]
+            			};
+            		} else {
+            			this.shift.departments.data = departments;
+            		}
+            	}
             }
 		},
 
@@ -368,7 +417,7 @@
 			},
 			filterUpdated (shift) {
 
-				var shiftEnd = new Date(shift.punch_start);
+				var shiftEnd = new Date(shift.start);
 				shift.start = hrm.Moment(shiftEnd).format("kk:mm");
 				
 			},
@@ -420,6 +469,7 @@
 				if(this.shift.id) {
 					args.data.method = 'update';
 					args.data.id = this.shift.id;
+
 					this.updateRecord(args);
 				} else {
 					this.addNewRecord(args);
@@ -432,7 +482,7 @@
 					name: this.shift.name,
 					punch_start: this.shift.start,
 					status: this.shift.status ? 1 : 0,
-					departments: this.filterDepartmentId(this.shift.departments.data),
+					//departments: this.filterDepartmentId(this.shift.departments.data),
 					times: this.shift.times
 				};
 
@@ -504,6 +554,7 @@
 					workHours: '',
 					workMinutes: '',
 					breakStatus: false,
+					departments: [],
 					breaks: [
 						{
 							breakBegin: '',

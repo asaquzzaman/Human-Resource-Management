@@ -5391,7 +5391,7 @@ var Hrm_Leave_Header = {
 			return this.$store.state.attendance.totalOfficeTime;
 		},
 		attendace_records: function () {
-			return this.$store.state.attendance.attendance;
+			return this.$store.state.attendance.attendance.data;
 		},
 		punchInFormatedDate: function () {
 			let date = this.$store.state.attendance.punch_in_formated_date;
@@ -5404,6 +5404,11 @@ var Hrm_Leave_Header = {
 		}
 	},
 	methods: {
+		punchFormat(dateTime) {
+			dateTime = new Date(dateTime);
+			return hrm.Moment(dateTime).format('kk:mm');
+		},
+
 		attendanceInit: function () {
 			var request_data = {
 				_wpnonce: HRM_Vars.nonce
@@ -5521,11 +5526,11 @@ var Hrm_Leave_Header = {
 			return this.$store.state.attendance.employessDropDown;
 		},
 		punch_in_date: function () {
-			return this.$store.state.attendance.punch_in_date;
+			return this.$route.query.punch_in;
 		},
 
 		punch_out_date: function () {
-			return this.$store.state.attendance.punch_out_date;
+			return this.$route.query.punch_out;
 		},
 
 		search_user_id: {
@@ -40252,35 +40257,21 @@ var render = function() {
                           return _c("tr", [
                             _c("td", [_vm._v(_vm._s(attendace.date))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(attendace.punch_in))]),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.punchFormat(attendace.punch_in))
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", {
-                              domProps: {
-                                innerHTML: _vm._s(attendace.punch_out)
-                              }
-                            }),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.punchFormat(attendace.punch_out))
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", {
-                              domProps: { innerHTML: _vm._s(attendace.total) }
-                            })
+                            _c("td", [_vm._v(_vm._s(attendace.second_to_time))])
                           ])
                         }),
-                        _vm._v(" "),
-                        _vm.attendace_records.length
-                          ? _c("tr", [
-                              _vm._m(2),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("– –")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("– –")]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _c("strong", [
-                                  _vm._v(_vm._s(_vm.totalOfficeTime))
-                                ])
-                              ])
-                            ])
-                          : _vm._e(),
                         _vm._v(" "),
                         !_vm.attendace_records.length
                           ? _c("tr", [
@@ -40331,12 +40322,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Duration")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [_c("strong", [_vm._v("Total Duration")])])
   }
 ]
 render._withStripped = true

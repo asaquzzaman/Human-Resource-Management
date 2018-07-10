@@ -295,7 +295,7 @@ class HRM_Shift {
         $status   = empty( $postData['status'] ) ? false : $postData['status'];
         $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : $postData['per_page'];
         $id       = empty( $postData['id'] ) ? false : $postData['id'];
-        $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;

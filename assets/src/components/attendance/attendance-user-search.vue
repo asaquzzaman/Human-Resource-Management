@@ -46,11 +46,11 @@
 				return this.$store.state.attendance.employessDropDown;
 			},
 			punch_in_date: function() {
-				return this.$store.state.attendance.punch_in_date;
+				return this.$route.query.punch_in;
 			},
 
 			punch_out_date: function() {
-				return this.$store.state.attendance.punch_out_date;
+				return this.$route.query.punch_out;
 			},
 
 			search_user_id: {

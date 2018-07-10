@@ -1,11 +1,11 @@
 <?php
 namespace HRM\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Core\Database\Model as Eloquent;
 
 class Attendance extends Eloquent {
 
-    protected $table      = 'wp_hrm_attendance';
+    protected $table      = 'hrm_attendance';
     protected $primaryKey = 'id';
     public $timestamps    = true;
 
@@ -16,5 +16,7 @@ class Attendance extends Eloquent {
         'punch_out',
         'total',
         'shift_id',
+        'updated_at',
+        'created_at'
     ];
 }

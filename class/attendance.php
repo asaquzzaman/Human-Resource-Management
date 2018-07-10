@@ -8,6 +8,7 @@ use League\Fractal;
 use League\Fractal\Resource\Item as Item;
 use League\Fractal\Resource\Collection as Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use HRM\Models\Shift;
 
 class Hrm_Attendance {
     use Transformer_Manager;
@@ -15,6 +16,8 @@ class Hrm_Attendance {
 
     public $unique_ids = array();
     private $relation = 'AND';
+    public $total_over_time = 0;
+    public $total_worked_time = 0;
 
     public static function getInstance() {
         if ( ! self::$_instance ) {
@@ -31,9 +34,7 @@ class Hrm_Attendance {
         add_action( 'wp_ajax_hrm_get_attendance', array( $this, 'ajax_filter_attendance' ) );
     }
 
-    function get_total_working_days( $start, $end ) {
 
-    }
 
     function ajax_filter_attendance() {
         check_ajax_referer('hrm_nonce');
@@ -61,32 +62,146 @@ class Hrm_Attendance {
             )
         );
         
-        $work_week = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
+        $work_week    = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
         
         $exclud_dates = array_merge( $leaves, $holidays, $work_week );
+        
+        $attendance   = $this->get_attendance( $_POST );
+        $presents     = $this->get_in_date_array( $attendance['data'] );
+        $absents      = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
 
-        $attendance = $this->get_attendance( $_POST );
-        $presents = $this->get_in_date_array( $attendance['data'] );
-        $absents = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
-
-        $totalShit = $this->get_total_shift( $attendance['data'], $user_id );
+        $total_off_days     = count( $work_week ) + count( $holidays ) + count( $leaves );
+        $total_work_days    = count( $interval_array ) - $total_off_days;
+        $total_shift_second = $this->get_total_shift_second( $attendance['data'], $user_id );
+        $net_shift_second   = $total_shift_second * $total_work_days;
+        $table              = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
         
         $results = [
             'days'      => count( $interval_array ),
-            'work_days' => count( $interval_array ) - count( $exclud_dates ) - count( $absents ),
+            'work_days' => $total_work_days,
+            'total_worked_time' => $this->second_to( $this->total_worked_time ),
             'leaves'    => count( $leaves ),
             'holidays'  => count( $holidays ),
             'weekends'  => count( $work_week ),
             'presents'  => count( $presents ),
-            'absents'   => count( $absents )
+            'absents'   => count( $absents ),
+            'over_time' => $this->second_to( $this->total_over_time ),
+            'total_working_hours' => $this->second_to( $net_shift_second ),
+            'avg_working_hours' => $this->second_to( $total_shift_second ),
+            'table' => $table
         ];
 
-        var_dump( $results ); die();
-
-        wp_send_json_success( $attendance );
+        wp_send_json_success( $results );
     }
 
-    function get_total_shift( $attendance, $user_id ) {
+    function get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance, $user_id ) {
+        $paresent_day_array = [];
+        $table = [];
+
+        foreach ( $attendance as $attend ) {
+            $punch_in = date( 'Y-m-d', strtotime( $attend['punch_in'] ) );
+
+            $paresent_day_array[$punch_in][] = $attend;
+        }
+
+        foreach ( $interval_array as $date => $interval ) {
+            $shift = [];
+            $day_status = 'absent';
+
+            if ( array_key_exists( $date, $holidays ) ) {
+                $day_status = 'holiday';
+            }
+            if ( array_key_exists( $date, $work_week ) ) {
+                $day_status = 'weekend';
+            }
+
+            if ( array_key_exists( $date, $leaves ) ) {
+                $day_status = 'leave';
+            }
+
+            if ( array_key_exists( $date, $paresent_day_array ) ) {
+                $shift = $this->generate_shift_table( $paresent_day_array[$date], $user_id, $date );
+                $day_status = 'present';
+            }
+
+            $table[$date] = [
+                'date' => $date,
+                'data' => $shift,
+                'day_status' => $day_status,
+
+            ];
+        }
+        
+        return $table;
+    }
+
+    function get_second( $start, $end ) {
+        $start = date( 'H:i', strtotime( $start ) );
+        $end = date( 'H:i', strtotime( $end ) );
+
+        if (  $start > $end ) {
+            $end = date( 'Y-m-d H:i', strtotime( $end . '+1 day' ) );
+            $start = date( 'Y-m-d H:i', strtotime( $start ) );
+        } else {
+            $end = date( 'Y-m-d H:i', strtotime( $end ) );
+            $start = date( 'Y-m-d H:i', strtotime( $start ) );
+        }
+
+        return strtotime( $end ) - strtotime( $start );
+    }
+
+    function generate_shift_table( $attendance, $user_id, $date ) {
+        $shift_id = wp_list_pluck( $attendance, 'shift_id' );
+        $shift_id = array_unique( $shift_id );
+        $return_data = [];
+
+        $schedule = Shift::find($shift_id[0]);
+            
+        $times = maybe_unserialize( $schedule['data']['times'] );
+        $department = Hrm_Admin::getInstance()->get_employee_department( $user_id );
+        
+
+        
+        foreach ( $attendance as $key => $attand ) {
+            
+            $punch_in_shift = $this->get_punch_in_shift( $schedule, $department->id, $attand['punch_in'] );
+            $shift_work_second = ( $punch_in_shift['workHours'] * 60 * 60 ) + ( $punch_in_shift['workMinutes'] * 60 );
+
+            $attend_second = $this->get_second( $attand['punch_in'], $attand['punch_out'] );
+
+            $this->total_worked_time = $this->total_worked_time + $attend_second;
+            
+            if ( $attend_second > $shift_work_second ) {
+                
+                $this->total_over_time = $this->total_over_time + ($attend_second - $shift_work_second);
+                $work_status = [
+                    'status' => 'over_time',
+                    'time'  => $this->second_to( $attend_second - $shift_work_second )
+                ];
+            } else if ( $attend_second < $shift_work_second ) {
+                $work_status = [
+                    'status' => 'less_work',
+                    'time'  => $this->second_to( $shift_work_second - $attend_second )
+                ];
+            } else {
+                $work_status = [
+                    'status' => '',
+                    'time'  => ''
+                ];
+            }
+
+            $return_data[] = [
+                'shift' => $punch_in_shift,
+                'attendance' => $attand,
+                'per_day_worked_time' => $this->second_to( $attend_second ),
+                'work_status' => $work_status
+            ];
+        }
+
+        return $return_data;
+    }
+
+    function get_total_shift_second( $attendance, $user_id ) {
         $shift_id = wp_list_pluck( $attendance, 'shift_id' );
         $shift_ids = array_unique( $shift_id );
         $department = Hrm_Admin::get_employee_department( $user_id );
@@ -111,7 +226,7 @@ class Hrm_Attendance {
                 if ( ! in_array( $dept_id, $dept_ids ) ) {
                     continue;
                 }
-                
+
                 $hours = $hours + $time['workHours'];
                 $minutes = $minutes + $time['workMinutes'];
             }
@@ -119,8 +234,21 @@ class Hrm_Attendance {
  
         $second = ($hours*60*60)+($minutes*60);
 
-        var_dump( $this->second_to($second), $second); die();
+        return $second;
         
+    }
+
+    function filter_times_according_department( $times, $dept_id ) {
+        
+        foreach ( $times as $key => $time ) {
+            $dept_ids = wp_list_pluck( $time['departments'], 'id' );
+
+            if ( ! in_array( $dept_id, $dept_ids ) ) {
+                unset( $times[$key] );
+            }
+        }
+
+        return $times;
     }
 
     function second_to($seconds) {
@@ -214,14 +342,8 @@ class Hrm_Attendance {
         $current_time = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );
         $shift_id     = $schedule->id;
         $table        = $wpdb->prefix . 'hrm_attendance';
-
-        // $punch = $wpdb->get_row( "SELECT * FROM $table WHERE punch_out = '0000-00-00 00:00:00' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
         
-        // if( ! $punch ) {
-        //     return true;
-        // }
-        
-        $punch_shift = $this->has_punch_shift( $schedule );
+        $punch_shift = $this->get_punch_in_shift( $schedule, $dpartment->id );
 
         if ( $punch_shift ) {
             $punch_schedule = $this->has_punch_in_within_schedule( $punch_shift, $schedule, $shift_id, $user_id );
@@ -241,8 +363,9 @@ class Hrm_Attendance {
 
         $start  = date( 'H:i:s', strtotime( $punch_shift['begin'] ) );
         $end    = date( 'H:i:s', strtotime( $punch_shift['end'] ) );
+        $department = Hrm_Admin::getInstance()->get_employee_department( $user_id );
 
-        $punch_prev_shift = $this->get_prev_shift( $schedule );
+        $punch_prev_shift = $this->get_prev_shift( $schedule, $department->id );
 
         $prev_end  = date( 'Y-m-d H:i:s', strtotime( $punch_prev_shift['end'] ) );
         $prev_start  = date( 'Y-m-d H:i:s', strtotime( $start ) );
@@ -285,12 +408,15 @@ class Hrm_Attendance {
         return false;
     }
 
-    function has_punch_shift( $schedule ) {
+    function get_punch_in_shift( $schedule, $dept_id, $punch_in = false ) {
         $shift = false;
         $times = maybe_unserialize( $schedule->times );
+        $times = $this->filter_times_according_department( $times, $dept_id );
+
+        $punch_in = $punch_in ? $punch_in : current_time( 'mysql' );
 
         foreach ( $times as $key => $time ) {
-            $is_time = call_user_func( array( $this, 'get_current_shift_interval' ), $time);
+            $is_time = call_user_func( array( $this, 'get_current_shift_interval' ), $time, $punch_in);
 
             if ( $is_time ) {
                 $shift = $time;
@@ -299,18 +425,21 @@ class Hrm_Attendance {
         }
 
         if ( ! $shift ) {
-            $shift = $this->get_next_shift( $schedule );
+            $shift = $this->get_next_shift( $schedule, $dept_id );
         }
 
-        return $shift ;
+        return $shift;
     }
 
-    function get_next_shift( $schedule ) {
-        $times        = maybe_unserialize( $schedule->times );
+    function get_next_shift( $schedule, $dept_id, $current_date = false ) {
+        $times    = maybe_unserialize( $schedule->times );
+
+        $times = $this->filter_times_according_department( $times, $dept_id );
+        
         $all_shifts   = [];
         $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
         $target_shift = false;
-        $current_date = current_time( 'mysql' );
+        $current_date = $current_date ? $current_date : current_time( 'mysql' );
         $current_time = date( 'H:i', strtotime( $current_date ) ); 
 
         if($current_time > $punch_start) {
@@ -342,8 +471,9 @@ class Hrm_Attendance {
         return $target_shift;
     }
 
-    function get_prev_shift( $schedule ) {
+    function get_prev_shift( $schedule, $dept_id ) {
         $times        = maybe_unserialize( $schedule->times );
+        $times       = $this->filter_times_according_department( $times, $dept_id );
         $all_shifts   = [];
         $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
         $target_shift = false;
@@ -375,8 +505,8 @@ class Hrm_Attendance {
 
 
 
-    function get_current_shift_interval( $time ) {
-        $current_date = current_time( 'mysql' );
+    function get_current_shift_interval( $time, $current_date = false ) {
+        $current_date = $current_date ? $current_date : current_time( 'mysql' );
         $current_time = date( 'H:i', strtotime( $current_date ) ); 
         $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
         $shift_end    = date( 'H:i', strtotime( $time['end'] ) );
@@ -386,14 +516,14 @@ class Hrm_Attendance {
             $start1 = $shift_start;
             $end1   = '23:59';
 
-            if ( $start1 < $current_time && $end1 > $current_time ) {
+            if ( $start1 <= $current_time && $end1 >= $current_time ) {
                 return true;
             }
 
             $start2 = '00:00';
             $end2   = $shift_end;
 
-            if ( $start2 < $current_time && $end2 > $current_time ) {
+            if ( $start2 <= $current_time && $end2 >= $current_time ) {
                 return true;
             }
 
@@ -401,7 +531,7 @@ class Hrm_Attendance {
         }
         //End
 
-        if ( $shift_start < $current_time && $shift_end > $current_time ) {
+        if ( $shift_start <= $current_time && $shift_end >= $current_time ) {
             return true;
         }
 
@@ -996,8 +1126,8 @@ class Hrm_Attendance {
                 'punch_in_formated_date'  => hrm_get_date( $args['punch_in'] ),
                 'punch_out_formated_date' => hrm_get_date( $postdata['punch_out'] ),
                 'punch_in_date'           => $postdata['punch_in'],
-                'punch_out_date'          => $postdata['punch_out'],
-                'total_time'              => self::getInstance()->count_office_time( $attendance )
+                'punch_out_date'          => $postdata['punch_out']
+                //'total_time'              => self::getInstance()->count_office_time( $attendance )
             ) );
         }
 

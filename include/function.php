@@ -204,6 +204,26 @@ function hrm_second_to_time( $seconds ) {
     return $obj;
 }
 
+function hrm_second_to_time_short_form( $seconds ) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+}
+
+function hrm_get_second( $start, $end ) {
+    $start = date( 'H:i', strtotime( $start ) );
+    $end = date( 'H:i', strtotime( $end ) );
+
+    if (  $start > $end ) {
+        $end = date( 'Y-m-d H:i', strtotime( $end . '+1 day' ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    } else {
+        $end = date( 'Y-m-d H:i', strtotime( $end ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    }
+
+    return strtotime( $end ) - strtotime( $start );
+}
+
 function hrm_get_header( $page, $tab, $subtab = false ) {
     $menu = hrm_page();
     ?>

@@ -65,11 +65,6 @@ abstract class Action implements Pattern {
         return $this->get_response( $resource );
 	}
 	public function create() {
-		// $this->create_validation();
-
-		// if ( is_wp_error( $this->error ) ) {
-		// 	return $this->error;
-		// }
 
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();	
@@ -111,14 +106,14 @@ abstract class Action implements Pattern {
 	}
 
 	public function update() {
-		$model       = $this->get_model();
-		$postdata    = $this->get_post_data();
+		$model        = $this->get_model();
+		$postdata     = $this->get_post_data();
 		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
-		$fillable    = $model->getFillable();
+		$fillable     = $model->getFillable();
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
-		$update_data = [];
-		$record      = $model::where( 'id', $postdata['id'] )->first();
+		$update_data  = [];
+		$record       = $model::where( 'id', $postdata['id'] )->first();
 
 		$postdata = apply_filters( 'before_'. $model->getTableName().'_update', $postdata );
 

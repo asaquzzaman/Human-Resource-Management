@@ -361,44 +361,43 @@ class Hrm_Attendance {
     function can_punch_in( $user_id = false ) {
         global $wpdb;
 
-        $attendance_table   = $wpdb->prefix . 'hrm_attendance';
+        $attendance_table = $wpdb->prefix . 'hrm_attendance';
         $user_id      = $user_id ? $user_id : get_current_user_id();
         $dpartment    = Hrm_Admin::get_employee_department( $user_id );
         $schedule     = $this->has_policy( $dpartment->id );
+        $shift_id     = $schedule->id;
         
         //if no schedule. Then check the last punch_out record. If last punch_out 0 then user can't punch_in. 
         //Otherwise user can punch_in 
-        if( $schedule->status == '0' ) {
-            $lst_atd = $wpdb->get_row( "SELECT * FROM $table WHERE `user_id` = $user_id ORDER BY id DESC LIMIT 1" );
+        $lst_atd = $wpdb->get_row( "SELECT * FROM $attendance_table WHERE `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
 
+        if ( !$lst_atd ) {
+            return true;
+        }
+         
+        if( !$schedule ||  ( $schedule && $schedule->status == '0' ) ) {
             if ( $lst_atd && ( strtotime( $lst_atd->punch_out ) <= 0 ) ) {
                 return false;
             }
-
             return true;
         }
         //end
         
-        $times        = maybe_unserialize( $schedule->times );
-        $current_time = date( 'Y-m-d 00:00:00', strtotime( current_time( 'mysql' ) ) );
-        $shift_id     = $schedule->id;
-        $table        = $wpdb->prefix . 'hrm_attendance';
-        
         //Get the closest shift from the current time
         $punch_shift = $this->get_punch_in_shift( $schedule, $dpartment->id );
         //end
-
+        
         if ( $punch_shift ) {
             //Has punch_in within and outside of the shift
-            $punch_schedule = $this->has_punch_in_within_shift( $punch_shift, $schedule, $shift_id, $user_id );
+            $punch_schedule = $this->has_punch_in_within_shift( $punch_shift, $schedule, $lst_atd );
             //end
+            $punch_out = strtotime( $lst_atd->punch_out );
 
-            if ( $punch_schedule ) {
+            if ( $punch_schedule && $punch_out <= 0 ) {
                 return false;
             }
         } else {
-            $last_in = $wpdb->get_row( "SELECT * FROM $attendance_table WHERE `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
-            $punch_out = strtotime( $last_in->punch_out );
+            $punch_out = strtotime( $lst_atd->punch_out );
 
             if ( $punch_out <= 0 ) {
                 return false;
@@ -408,80 +407,82 @@ class Hrm_Attendance {
         return true;
     }
 
-    function has_punch_in_within_shift( $punch_shift, $schedule, $shift_id, $user_id = false ) {
-        global $wpdb;
-        $table   = $wpdb->prefix . 'hrm_attendance';
-        $user_id = $user_id ? $user_id : get_current_user_id();
+    function get_shift_range ( $shift, $work_day ) {
+        $start  = date( 'H:i', strtotime( $shift['begin'] ) );
+        $end    = date( 'H:i', strtotime( $shift['end'] ) );
+        $work_day = date( 'H:i', strtotime( $work_day ) );
+        $current_date = date( 'Y-m-d', strtotime( current_time('mysql') ) );
+        
+        if( $work_day > $start ) {
+            $start   = date( $current_date . ' H:i:s', strtotime( $start . ' +1 day' ) );
+        }
 
-        $start  = date( 'H:i:s', strtotime( $punch_shift['begin'] ) );
-        $end    = date( 'H:i:s', strtotime( $punch_shift['end'] ) );
+        if( $work_day > $end ) {
+            $end   = date( $current_date . ' H:i:s', strtotime( $end . ' +1 day' ) );
+        }
+
+        if ( $start > $end ) {
+            $end   = date( $current_date . ' H:i:s', strtotime( $end . ' +1 day' ) );
+        }
+
+        return [
+            'start' => date( $current_date . ' H:i:s', strtotime( $start ) ),
+            'end'   => date( $current_date . ' H:i:s', strtotime( $end ) )
+        ];
+    }
+
+    function has_punch_in_within_shift( $punch_shift, $schedule, $lst_atd ) {
+        
+        $punch_in = $lst_atd->punch_in;
+        $punch_shift_range = $this->get_shift_range( $punch_shift, $schedule->punch_start );
+        $start  = $punch_shift_range['start'];
+        $end    = $punch_shift_range['end'];
+        $current_date = date( 'Y-m-d', strtotime( current_time('mysql') ) );
+
         $department = Hrm_Admin::getInstance()->get_employee_department( $user_id );
 
         //If has the previous shift then check the punch_in status from previoust shift 'end' to
         //current time closest shift start.     'prev_end < current_time <= closest_shift_start'
         $punch_prev_shift = $this->get_prev_shift( $schedule, $department->id );
-        
+  
         if ( $punch_prev_shift ) {
-            $prev_end  = date( 'Y-m-d H:i:s', strtotime( $punch_prev_shift['end'] ) );
-            $prev_start  = date( 'Y-m-d H:i:s', strtotime( $start ) );
+            $prev_end   = date( $current_date . ' H:i:s', strtotime( $punch_prev_shift['end'] ) );
 
-            $is_in = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in > '$prev_end' AND punch_in <= '$prev_start' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
-
-            if ( $is_in ) {
-                return true;
-            }
-        }
-        //end
-
-        if ( $start > $end ) {
-            $start1 = date( 'Y-m-d H:i:s', strtotime( $start ) );
-            $end1   = date( 'Y-m-d H:i:s', strtotime( '23:59' ) );
-
-            $is_in1 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start1' AND punch_in <= '$end1' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
-
-            if( $is_in1 ) {
-                return true;
-            }
-
-            $start2 = date( 'Y-m-d H:i:s', strtotime( '00:00' ) );
-            $end2   = date( 'Y-m-d H:i:s', strtotime( $end . ' +1 day' ) );
-
-            $is_in2 = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start2' AND punch_in <= '$end2' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
-
-            if ( $is_in2 ) {
+            if ( $punch_in > $prev_end && $punch_in <= $end ) {
                 return true;
             }
         } else {
-            $start = date( 'Y-m-d H:i:s', strtotime( $start ) );
-            $end   = date( 'Y-m-d H:i:s', strtotime( $end ) );
-
-            $is_in = $wpdb->get_row( "SELECT * FROM $table WHERE punch_in >= '$start' AND punch_in <= '$end' AND `user_id` = $user_id AND shift_id = $shift_id ORDER BY id DESC LIMIT 1" );
- 
-            if( $is_in ) {
+            if ( $punch_in <= $end ) {
                 return true;
             }
         }
-
+        
         return false;
+        //end
+
     }
 
-    function get_punch_in_shift( $schedule, $dept_id, $punch_in = false ) {
+    function get_punch_in_shift( $schedule, $dept_id, $current_date = false ) {
         $shift = false;
         $times = maybe_unserialize( $schedule->times );
         $times = $this->filter_times_according_department( $times, $dept_id );
 
-        $punch_in = $punch_in ? $punch_in : current_time( 'mysql' );
+        $current_date = $current_date ? date( 'Y-m-d H:i:s', strtotime( $current_date ) ) 
+            : date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) );
 
         foreach ( $times as $key => $time ) {
-            $is_time = call_user_func( array( $this, 'get_current_shift_interval' ), $time, $punch_in);
+            $range = $this->get_shift_range( $time, $schedule->punch_start );
 
-            if ( $is_time ) {
+            $shift_start= $range['start'];
+            $shift_end  = $range['end'];
+
+            if ( $shift_start <= $current_date && $shift_end >= $current_date ) {
                 $shift = $time;
                 break;
             }
         }
 
-        if ( ! $shift ) {
+        if ( !$shift ) {
             $shift = $this->get_next_shift( $schedule, $dept_id );
         }
 
@@ -489,150 +490,111 @@ class Hrm_Attendance {
     }
 
     function get_next_shift( $schedule, $dept_id, $current_date = false ) {
-        $times    = maybe_unserialize( $schedule->times );
-
-        $times = $this->filter_times_according_department( $times, $dept_id );
-        
+        $times        = maybe_unserialize( $schedule->times );
+        $times        = $this->filter_times_according_department( $times, $dept_id );
         $all_shifts   = [];
-        $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
-        $target_shift = false;
-        $current_date = $current_date ? $current_date : current_time( 'mysql' );
-        $current_time = date( 'H:i', strtotime( $current_date ) ); 
-
-        if($current_time > $punch_start) {
-            $punch_start = strtotime( date( 'Y-m-d H:i', strtotime( $punch_start . ' +1 day' ) ) );
-        }
+        $current_date = $current_date ? date( 'Y-m-d H:i:s', strtotime( $current_date ) ) 
+            : date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ); 
 
         foreach ( $times as $key => $time ) {
-            $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
+            $range = $this->get_shift_range( $time, $schedule->punch_start );
+            
+            $shift_start= $range['start'];
+            $shift_end  = $range['end'];
 
-            if ( $current_time > $shift_start && $punch_start > $shift_start ) {
-                $shift_start  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start . ' +1 day' ) ) );
-                $all_shifts[$shift_start] = $time;
-            } else {
-                $shift_start  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start ) ) );
-                $all_shifts[$shift_start] = $time;
+            if ( $current_date > $shift_start ) {
+                continue;
             }
+
+            $shift_end  = strtotime( $shift_end );
+            $all_shifts[$shift_end] = $time;
+          
         }
 
-        $current_time_str = strtotime( $current_time );
         ksort($all_shifts);
 
-        foreach ( $all_shifts as $shift_key => $shift ) {
-            if ( ( $current_time_str < $shift_key ) &&  ( $punch_start > $shift_key ) ) {
-                $target_shift = $shift;
-                break;
-            }
-        }
-
-        return $target_shift;
+        return reset( $all_shifts );
     }
 
     function get_prev_shift( $schedule, $dept_id ) {
         $times        = maybe_unserialize( $schedule->times );
         $times        = $this->filter_times_according_department( $times, $dept_id );
         $all_shifts   = [];
-        $punch_start  = date( 'H:i', strtotime( $schedule->punch_start ) );
-        $target_shift = false;
-        $current_date = current_time( 'mysql' );
-        $current_time = date( 'H:i', strtotime( $current_date ) ); 
-
-        // punch in within  8:00 to first shirt 9:00-12:00. So there is no shift 
-        $first_shirft = $this->get_first_shift( $times, $schedule->punch_start );
-
-        $first_end = $first_shirft['end'];
-
-        if ( $first_end < $current_time ) {
-            $first_end = date( 'Y-m-d H:i', strtotime( $first_end . ' +1 day' ) );
-        } else {
-            $first_end = date( 'Y-m-d H:i', strtotime( $first_end ) );
-        }
-
-        $frist_start = date( 'Y-m-d H:i', strtotime( $current_date ) );
-
-        if ( $frist_start <= $current_date && $first_end >= $current_date ) {
-            return false;
-        }
-        //end
-
-        if($current_time > $punch_start) {
-            $punch_start = strtotime( date( 'Y-m-d H:i', strtotime( $punch_start . ' +1 day' ) ) );
-        }
+        $current_date = date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ); 
 
         foreach ( $times as $key => $time ) {
-            $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
-            $shift_end  = date( 'H:i', strtotime( $time['end'] ) );
+            $range = $this->get_shift_range( $time, $schedule->punch_start );
+            
+            $shift_start= $range['start'];
+            $shift_end  = $range['end'];
 
-            if ( $current_time > $shift_end && $punch_start > $shift_end ) {
-                $shift_end  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_end . ' +1 day' ) ) );
-                $all_shifts[$shift_end] = $time;
-            } else {
-                $shift_end  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_end ) ) );
-                $all_shifts[$shift_end] = $time;
+            if ( $current_date < $shift_end ) {
+                continue;
             }
+
+            $shift_end  = strtotime( $shift_end );
+            $all_shifts[$shift_end] = $time;
+          
         }
 
-        $current_time_str = strtotime( $current_time, $schedule->punch_start );
         ksort($all_shifts);
 
         return end( $all_shifts );
     }
 
-    function get_first_shift( $times, $punch_start ) {
-        $array = [];
-        $punch_start  = ( date( 'H:i', strtotime( $punch_start ) ) );
+    // function get_first_shift( $times, $punch_start ) {
+    //     $array = [];
+    //     $punch_start  = ( date( 'H:i', strtotime( $punch_start ) ) );
 
-        foreach ( $times as $key => $time ) {
-            $shift_start  = ( date( 'H:i', strtotime( $time['begin'] ) ) );
+    //     foreach ( $times as $key => $time ) {
+    //         $shift_start  = ( date( 'H:i', strtotime( $time['begin'] ) ) );
 
-            if ( $punch_start > $shift_start ) {
-                $shift_start = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start . ' +1 day' ) ) );
-            } else {
-                $shift_start  = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start ) ) );
-            }
+    //         if ( $punch_start > $shift_start ) {
+    //             $shift_start = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start . ' +1 day' ) ) );
+    //         } else {
+    //             $shift_start = strtotime( date( 'Y-m-d H:i', strtotime( $shift_start ) ) );
+    //         }
             
-            $array[$shift_start] = $time;
-        }
+    //         $array[$shift_start] = $time;
+    //     }
         
-        ksort($array);
+    //     ksort($array);
 
-        return reset( $array );
-    }
+    //     return reset( $array );
+    // }
 
+    // function get_current_shift_interval( $time, $current_date = false ) {
+    //     $current_date = $current_date ? $current_date : current_time( 'mysql' );
+    //     $current_time = date( 'H:i', strtotime( $current_date ) ); 
+    //     $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
+    //     $shift_end    = date( 'H:i', strtotime( $time['end'] ) );
 
+    //     //if shift duration 22:00 to 9:00
+    //     if ( $shift_start >  $shift_end ) {
+    //         $start1 = $shift_start;
+    //         $end1   = '23:59';
 
-    function get_current_shift_interval( $time, $current_date = false ) {
-        $current_date = $current_date ? $current_date : current_time( 'mysql' );
-        $current_time = date( 'H:i', strtotime( $current_date ) ); 
-        $shift_start  = date( 'H:i', strtotime( $time['begin'] ) );
-        $shift_end    = date( 'H:i', strtotime( $time['end'] ) );
+    //         if ( $start1 <= $current_time && $end1 >= $current_time ) {
+    //             return true;
+    //         }
 
-        //if shift duration 22:00 to 9:00
-        if ( $shift_start >  $shift_end ) {
-            $start1 = $shift_start;
-            $end1   = '23:59';
+    //         $start2 = '00:00';
+    //         $end2   = $shift_end;
 
-            if ( $start1 <= $current_time && $end1 >= $current_time ) {
-                return true;
-            }
+    //         if ( $start2 <= $current_time && $end2 >= $current_time ) {
+    //             return true;
+    //         }
 
-            $start2 = '00:00';
-            $end2   = $shift_end;
+    //         return false;
+    //     }
+    //     //End
 
-            if ( $start2 <= $current_time && $end2 >= $current_time ) {
-                return true;
-            }
+    //     if ( $shift_start <= $current_time && $shift_end >= $current_time ) {
+    //         return true;
+    //     }
 
-            return false;
-        }
-        //End
-
-        if ( $shift_start <= $current_time && $shift_end >= $current_time ) {
-            return true;
-        }
-
-        return false;
-    }
+    //     return false;
+    // }
 
     function has_policy( $dept_id ) {
         global $wpdb;

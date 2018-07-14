@@ -402,6 +402,8 @@
 
 		methods: {
 			filterShift (shift) {
+				shift.status = shift.status == '1' ? true : false;
+				
 				shift.times.forEach(function(time) {
 					time.breakStatus = ( time.breakStatus == 'false' || time.breakStatus === false ) ? false : true; 
 				});

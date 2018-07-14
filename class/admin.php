@@ -2316,7 +2316,7 @@ class Hrm_Admin {
     }
 
     public static function get_employee_department( $employee_id = false ) {
-        $employee_id = $employee_id ? $employee_id : wp_current_user_id();
+        $employee_id = $employee_id ? $employee_id : get_current_user_id();
         $dept_id = get_user_meta( $employee_id, 'hrm_job_category', true );
 
         if ( $dept_id ) {

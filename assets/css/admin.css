@@ -25,9 +25,7 @@ label em {
   clear: both;
   height: 0;
 }
-.hrm-clear {
-  
-}
+
 /* start commented backslash hack \*/
 .hrm-clear {
   height: 1%;
@@ -1088,6 +1086,13 @@ label em {
 }
 #hrm-hidden-form .hrm-action-wrap {
   margin-top: 15px;
+}
+
+.hrm-left, .hrm-label, .hrm-label-content {
+  float: left;
+}
+.hrm-label {
+  width: 30%;
 }
 
 

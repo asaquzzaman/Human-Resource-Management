@@ -54,7 +54,6 @@ class Hrm_Attendance {
             )
         );
         
-
         $holidays = Hrm_Leave::getInstance()->get_holidays_array( 
             array(
                 'from' => $punch_in, 
@@ -65,7 +64,6 @@ class Hrm_Attendance {
         $work_week    = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
         
         $exclud_dates = array_merge( $leaves, $holidays, $work_week );
-        
         $attendance   = $this->get_attendance( $_POST );
         $presents     = $this->get_in_date_array( $attendance['data'] );
         $absents      = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
@@ -75,7 +73,8 @@ class Hrm_Attendance {
         $total_shift_second = $this->get_total_shift_second( $attendance['data'], $user_id );
         $net_shift_second   = $total_shift_second * $total_work_days;
         $table              = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
-        
+        $avg_work           = $this->total_worked_time/$total_work_days;
+
         $results = [
             'days'      => count( $interval_array ),
             'work_days' => $total_work_days,
@@ -86,8 +85,8 @@ class Hrm_Attendance {
             'presents'  => count( $presents ),
             'absents'   => count( $absents ),
             'over_time' => $this->second_to( $this->total_over_time ),
-            'total_working_hours' => $this->second_to( $net_shift_second ),
-            'avg_working_hours' => $this->second_to( $total_shift_second ),
+            'total_working_hours' => $total_shift_second === false ? __( 'You have assigned no shfit', 'hrm' ) : $this->second_to( $net_shift_second ),
+            'avg_working_hours' => $this->second_to( $avg_work ),
             'table' => $table
         ];
 
@@ -192,6 +191,7 @@ class Hrm_Attendance {
 
             $return_data[] = [
                 'shift' => $punch_in_shift,
+                'dept_id' => $department->id,
                 'attendance' => $attand,
                 'per_day_worked_time' => $this->second_to( $attend_second ),
                 'work_status' => $work_status
@@ -210,14 +210,18 @@ class Hrm_Attendance {
         $shifts = HRM_Shift::getInstance()->get_shift(
             [
                 'id' => $shift_ids,
-                'status' => false,
+                'status' => true,
                 'per_page' => 5000
             ]
         );
+        
+        if( ! $shifts['data'] ) {
+            return false;
+        }
 
         $hours = 0;
         $minutes = 0;
-
+        
         foreach ( $shifts['data'] as $key => $shift ) {
 
             foreach ( $shift['times'] as $key2 => $time ) {
@@ -322,7 +326,7 @@ class Hrm_Attendance {
             'user_id'  => $user_id,
             'date'     => current_time( 'mysql' ),
             'punch_in' => current_time( 'mysql' ),
-            'shift_id' => $schedule->id
+            'shift_id' => empty( $schedule->id ) ? 0 : $schedule->id
         );
         $format = array( '%d', '%s', '%s' );
 
@@ -350,7 +354,7 @@ class Hrm_Attendance {
         $schedule = $this->has_policy( $dpartment->id );
 
         if ( ! $schedule ) {
-            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+            //return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
         }
 
         if ( ! $this->can_punch_in( $user_id ) ) {
@@ -365,7 +369,11 @@ class Hrm_Attendance {
         $user_id      = $user_id ? $user_id : get_current_user_id();
         $dpartment    = Hrm_Admin::get_employee_department( $user_id );
         $schedule     = $this->has_policy( $dpartment->id );
-        $shift_id     = $schedule->id;
+        $shift_id     = isset( $schedule->id ) ? intval( $schedule->id ) : false;
+
+        if ( ! $shift_id ) {
+            return true;
+        }
         
         //if no schedule. Then check the last punch_out record. If last punch_out 0 then user can't punch_in. 
         //Otherwise user can punch_in 
@@ -386,7 +394,7 @@ class Hrm_Attendance {
         //Get the closest shift from the current time
         $punch_shift = $this->get_punch_in_shift( $schedule, $dpartment->id );
         //end
-        
+
         if ( $punch_shift ) {
             //Has punch_in within and outside of the shift
             $punch_schedule = $this->has_punch_in_within_shift( $punch_shift, $schedule, $lst_atd );
@@ -605,11 +613,12 @@ class Hrm_Attendance {
 
         $shift = $db->table( $shift . ' as shift' )
             ->leftJoin( $relation . ' as relation', 'relation.from', '=', 'shift.id')
+            ->select( 'shift.*' )
             ->where( 'shift.status', '1' )
             ->where( 'relation.type', 'time_shift_department' )
             ->where( 'relation.to', $dept_id )
             ->first();
-
+        
         if ( $shift ) {
             return $shift;
         }
@@ -1048,8 +1057,6 @@ class Hrm_Attendance {
         }
 
         $table    = $wpdb->prefix . 'hrm_attendance';
-        $schedule = $this->has_policy( $dpartment->id );
-        $shift_id = $schedule->id;
 
         $schedule_start = date( 'Y-m-d H:i:s', strtotime( $schedule->punch_start ) );
         $last_hour      = date('H', strtotime( $schedule_start . '-1 hour') );
@@ -1060,7 +1067,6 @@ class Hrm_Attendance {
             WHERE ( punch_in >= '$schedule_start' AND punch_in <= '$schedule_end' ) 
             AND user_id = $user_id 
             AND punch_out = '0000-00-00 00:00:00' 
-            AND shift_id = $shift_id 
             ORDER BY id DESC LIMIT 1" 
         );
 
@@ -1311,6 +1317,7 @@ class Hrm_Attendance {
         });
 
         $attendance = Attendance::where( function($q) use( $user_id, $punch_in, $punch_out ) {
+
             if ( is_array(  $user_id ) ) {
                 $q->whereIn( 'user_id', $user_id );
             }

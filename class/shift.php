@@ -300,7 +300,7 @@ class HRM_Shift {
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
-        
+      
         if ( $id ) {
 
             if ( is_array( $id ) ) {
@@ -317,6 +317,7 @@ class HRM_Shift {
                 $resource->setPaginator( new IlluminatePaginatorAdapter( $shift ) );
 
             } else {
+
                 $shift_collection = Shift::find( $id );
                 $resource = new Item( $shift_collection, new Shift_Transformer );
             }
@@ -324,7 +325,7 @@ class HRM_Shift {
         } else {
             $shift = Shift::where( function($q) use( $status ) {
                 if ( ! empty(  $status ) ) {
-                    $q->where( 'status', $status );
+                    $q->where( 'status', intval($status) );
                 }
             })
             ->orderBy( 'id', 'DESC' )

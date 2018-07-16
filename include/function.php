@@ -350,8 +350,12 @@ function hrm_get_js_template( $file_path, $id ) {
 }
 
 
-function pr($data) {
-    echo '<pre>'; print_r($data); '</pre>';
+function pr() {
+    $args = func_get_args();
+
+    foreach ( $args as $arg ) {
+        echo '<pre>'; print_r( $arg ); '</pre>';
+    }
 }
 
 /**

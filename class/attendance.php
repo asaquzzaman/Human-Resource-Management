@@ -38,10 +38,28 @@ class Hrm_Attendance {
 
     function ajax_filter_attendance() {
         check_ajax_referer('hrm_nonce');
-
-        $user_id   = empty( $_POST['user_id'] ) ? get_current_user_id() : $_POST['user_id'];
-        $punch_in = empty(  $_POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : $_POST['punch_in'];
+        
+        $results = [];
+        $punch_in  = empty(  $_POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : $_POST['punch_in'];
         $punch_out = empty(  $_POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : $_POST['punch_out'];
+       
+        
+        if ( $_POST['allEmployees'] == 'true' ) {
+            $employees = Hrm_Employeelist::getInstance()->get_employee( true );
+
+            foreach ( $employees as $key => $employee ) {
+                $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out );
+            }
+
+        } else {
+            $user_id   = empty( $_POST['user_id'] ) ? get_current_user_id() : $_POST['user_id'];
+            $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out );
+        }
+        
+        wp_send_json_success( $results );
+    }
+
+    function filter_attendance( $user_id, $punch_in, $punch_out ) {
         $interval_array = $this->date_to_array( $punch_in, $punch_out );
 
         $leaves = Hrm_Leave::getInstance()->get_leaves_array(
@@ -76,6 +94,7 @@ class Hrm_Attendance {
         $avg_work           = $this->total_worked_time/$total_work_days;
 
         $results = [
+            'user'      => get_user_by( 'id', $user_id ),
             'days'      => count( $interval_array ),
             'work_days' => $total_work_days,
             'total_worked_time' => $this->second_to( $this->total_worked_time ),
@@ -90,7 +109,7 @@ class Hrm_Attendance {
             'table' => $table
         ];
 
-        wp_send_json_success( $results );
+        return $results;
     }
 
     function get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance, $user_id ) {
@@ -188,7 +207,7 @@ class Hrm_Attendance {
                     'time'  => ''
                 ];
             }
-
+            
             $return_data[] = [
                 'shift' => $punch_in_shift,
                 'dept_id' => $department->id,

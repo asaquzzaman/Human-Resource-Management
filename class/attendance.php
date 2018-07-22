@@ -409,7 +409,9 @@ class Hrm_Attendance {
             return true;
         }
         //end
-        
+        $shift = $this->get_shift( $schedule, $dpartment->id, false );
+
+        var_dump( $shift ); die(); 
         //Get the closest shift from the current time
         $punch_shift = $this->get_punch_in_shift( $schedule, $dpartment->id );
         //end
@@ -418,6 +420,7 @@ class Hrm_Attendance {
             //Has punch_in within and outside of the shift
             $punch_schedule = $this->has_punch_in_within_shift( $punch_shift, $schedule, $lst_atd );
             //end
+
             $punch_out = strtotime( $lst_atd->punch_out );
 
             if ( $punch_schedule && $punch_out <= 0 ) {
@@ -434,59 +437,159 @@ class Hrm_Attendance {
         return true;
     }
 
+    // $begin is the shift first time. 
+    function get_shift( $schedule, $dept_id, $begin = true, $current_date_time = false ) {
+        $times             = maybe_unserialize( $schedule->times );
+        $times             = $this->filter_times_according_department( $times, $dept_id );
+        $current_date_time = $current_date_time ? date( 'Y-m-d H:i:s', strtotime( $current_date_time ) ) : date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) );
+        $current_date      = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $punch_start       = date( $current_date . ' H:i:s', strtotime( $schedule->punch_start ) );
+
+        $greater_than = []; // From punch start
+        $less_than    = []; // From punch start
+        $ranges       = [];
+
+        foreach ( $times as $key => $time ) {
+            $compare_time = $begin ? $time['beign'] : $time['end'];
+            $comp_date_time =  date( 'Y-m-d H:i:s', strtotime( $current_date . $compare_time ) );
+            $str_time = strtotime( $comp_date_time );
+            
+            if ( $punch_start <= $comp_date_time ) {
+                $greater_than[$str_time] = [
+                    'shift' => $time,
+                    'time' => $comp_date_time,
+                ];
+            }
+
+            if ( $punch_start > $comp_date_time ) {
+                $less_than[$str_time] = [
+                    'shift' => $time,
+                    'time' => $comp_date_time,
+                ];
+            }
+
+        }
+
+        ksort( $greater_than );
+        ksort( $less_than );
+        $new_greater_than = [];
+        $new_less_than = [];
+
+        foreach ( $less_than as $less ) {
+            $new_less_than[] = $less;
+        }
+
+        foreach ( $greater_than as $greater ) {
+            $new_greater_than[] = $greater;
+        }
+
+        foreach ( $new_greater_than as $grater_key => $greater ) {
+            if ( $grater_key == '0' ) {
+                $start = $punch_start;
+            } else {
+                $key = $grater_key - 1;
+                $start = $new_greater_than[$key]['time'];
+
+            }
+            
+            $ranges[] = [
+                'shift' => $greater['shift'],
+                'start' =>  $start,
+                'end'   => $greater['time']
+            ];
+        }
+
+        $ranges[] = [
+            'shift' => $greater['shift'],
+            'start' => $greater['time'],
+            'end'   => $current_date . ' 23:59:59'
+        ];
+
+        foreach ( $new_less_than as $less_key => $less ) {
+            
+            if ( $less_key == '0' ) {
+                $start = date( 'Y-m-d H:i:s', strtotime( $current_date . ' 00:00:00' ) );
+            } else {
+                $key = $less_key - 1;
+                $start = date( 'Y-m-d H:i:s', strtotime( $new_less_than[$key]['time'] ) );
+
+            }
+            
+            $ranges[] = [
+                'shift' => $less['shift'],
+                'start' => $start,
+                'end'   => date( 'Y-m-d H:i:s', strtotime( $less['time'] ) )
+            ];
+        }
+
+        $ranges[] = [
+            'shift' => $less['shift'],
+            'start' =>  date( 'Y-m-d H:i:s', strtotime( $new_less_than[$less_key]['time'] ) ),
+            'end'   => date( 'Y-m-d H:i:s', strtotime( $punch_start ) )
+        ];
+
+
+        foreach ( $ranges as $key => $range ) {
+            if ( $range['start'] < $current_date_time && $range['end'] >= $current_date_time ) {
+                return $range['shift'];
+            }
+        }
+
+        return false;
+    }
+
     function get_shift_range ( $shift, $work_day ) {
-        $start  = date( 'H:i', strtotime( $shift['begin'] ) );
-        $end    = date( 'H:i', strtotime( $shift['end'] ) );
-        $work_day = date( 'H:i', strtotime( $work_day ) );
+        $start  = date( 'Y-m-d H:i', strtotime( $shift['begin'] ) );
+        $end    = date( 'Y-m-d H:i', strtotime( $shift['end'] ) );
+        $work_day = date( 'Y-m-d H:i', strtotime( $work_day ) );
         $current_date = date( 'Y-m-d', strtotime( current_time('mysql') ) );
-        
+
+        if ( $start > $end ) {
+            $end = date( 'Y-m-d H:i:s', strtotime( $end . ' +1 day' ) );
+        }
+       
         if( $work_day > $start ) {
-            $start   = date( $current_date . ' H:i:s', strtotime( $start . ' +1 day' ) );
+            $start = date( 'Y-m-d H:i:s', strtotime( $start . ' +1 day' ) );
         }
 
         if( $work_day > $end ) {
-            $end   = date( $current_date . ' H:i:s', strtotime( $end . ' +1 day' ) );
-        }
-
-        if ( $start > $end ) {
-            $end   = date( $current_date . ' H:i:s', strtotime( $end . ' +1 day' ) );
+            $end = date( 'Y-m-d H:i:s', strtotime( $end . ' +1 day') );
         }
 
         return [
-            'start' => date( $current_date . ' H:i:s', strtotime( $start ) ),
-            'end'   => date( $current_date . ' H:i:s', strtotime( $end ) )
+            'start' => $start,
+            'end'   => $end
         ];
     }
 
     function has_punch_in_within_shift( $punch_shift, $schedule, $lst_atd ) {
-        
-        $punch_in = $lst_atd->punch_in;
+        $punch_in          = $lst_atd->punch_in;
         $punch_shift_range = $this->get_shift_range( $punch_shift, $schedule->punch_start );
-        $start  = $punch_shift_range['start'];
-        $end    = $punch_shift_range['end'];
-        $current_date = date( 'Y-m-d', strtotime( current_time('mysql') ) );
+        $start             = $punch_shift_range['start'];
+        $end               = date( 'Y-m-d H:i:s', strtotime( $punch_shift_range['end'] ) );
+        $current_date      = date( 'Y-m-d', strtotime( current_time('mysql') ) );
+        $punch_start       = date( $current_date . ' H:i:s', strtotime( $schedule->punch_start ) );
 
         $department = Hrm_Admin::getInstance()->get_employee_department( $user_id );
 
         //If has the previous shift then check the punch_in status from previoust shift 'end' to
         //current time closest shift start.     'prev_end < current_time <= closest_shift_start'
         $punch_prev_shift = $this->get_prev_shift( $schedule, $department->id );
-  
+     
         if ( $punch_prev_shift ) {
-            $prev_end   = date( $current_date . ' H:i:s', strtotime( $punch_prev_shift['end'] ) );
+            $prev_end   = date( 'Y-m-d H:i:s', strtotime( $current_date . $punch_prev_shift['end'] ) );
 
             if ( $punch_in > $prev_end && $punch_in <= $end ) {
                 return true;
             }
         } else {
-            if ( $punch_in <= $end ) {
+            if ( $punch_start <= $punch_in && $punch_in <= $end ) {
                 return true;
             }
         }
         
         return false;
         //end
-
     }
 
     function get_punch_in_shift( $schedule, $dept_id, $current_date = false ) {
@@ -547,15 +650,21 @@ class Hrm_Attendance {
         $times        = maybe_unserialize( $schedule->times );
         $times        = $this->filter_times_according_department( $times, $dept_id );
         $all_shifts   = [];
-        $current_date = date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ); 
+        $current_date_time = date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) );
+        $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ); 
+        $punch_start  = date( $current_date . ' H:i:s', strtotime( $schedule->punch_start ) );
 
         foreach ( $times as $key => $time ) {
             $range = $this->get_shift_range( $time, $schedule->punch_start );
             
-            $shift_start= $range['start'];
-            $shift_end  = $range['end'];
+            $shift_start = $range['start'];
+            $shift_end   = date( 'Y-m-d H:i:s', strtotime( $range['end'] ) );
 
-            if ( $current_date < $shift_end ) {
+            if ( $punch_start > $shift_end ) {
+                continue;
+            }
+
+            if ( $current_date_time < $shift_end ) {
                 continue;
             }
 

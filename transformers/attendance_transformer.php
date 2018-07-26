@@ -15,7 +15,6 @@ class Attendance_Transformer extends TransformerAbstract {
     use Resource_Editors;
 
     public function transform( Attendance $item ) {
-        
         return [
             'id'        => $item->id,
             'user_id'   => $item->user_id,

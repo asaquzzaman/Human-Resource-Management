@@ -18,7 +18,7 @@
 					</div>
 					<!-- :disabled="isDisabled()" -->
 					<button :disabled="punchInIsDisabled" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
-					<button :disabled="punch_out_disable" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
+					<button :disabled="!punchInIsDisabled" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
 				</div>
 			</div>
 		</div>
@@ -71,12 +71,12 @@
 	                    hrm.Toastr.success(res.success);
 	                    //self.punch_id = res.punch_id;
 	                    //self.punch_id = res.punch_in_status;
-	                    console.log(res);
-	      //               self.$store.commit( 'attendance/setAttendance', 
-	      //               	{
-							// 	records: res.attendance,
-							// } 
-	      //               );
+	                    
+	                    self.$store.commit( 'attendance/setAttendance', 
+	                    	{
+								records: res.attendance,
+							} 
+	                    );
 	                    self.$store.commit( 'attendance/punch_in', { status: res.can_punch_in } );
 
 	                    //for preventing multipule submit
@@ -125,7 +125,7 @@
 							} 
 						);
 
-	                    self.$store.commit( 'attendance/punch_in', { status: res.punch_in_status } );
+	                    self.$store.commit( 'attendance/punch_in', { status: res.can_punch_in } );
 
 	                    //for preventing multipule submit
 						self.press_punch_our_btn = false;

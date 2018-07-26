@@ -5218,12 +5218,10 @@ var Hrm_Leave_Header = {
 					hrm.Toastr.success(res.success);
 					//self.punch_id = res.punch_id;
 					//self.punch_id = res.punch_in_status;
-					console.log(res);
-					//               self.$store.commit( 'attendance/setAttendance', 
-					//               	{
-					// 	records: res.attendance,
-					// } 
-					//               );
+
+					self.$store.commit('attendance/setAttendance', {
+						records: res.attendance
+					});
 					self.$store.commit('attendance/punch_in', { status: res.can_punch_in });
 
 					//for preventing multipule submit
@@ -5270,7 +5268,7 @@ var Hrm_Leave_Header = {
 						totalOfficeTime: res.total_time
 					});
 
-					self.$store.commit('attendance/punch_in', { status: res.punch_in_status });
+					self.$store.commit('attendance/punch_in', { status: res.can_punch_in });
 
 					//for preventing multipule submit
 					self.press_punch_our_btn = false;
@@ -5391,6 +5389,7 @@ var Hrm_Leave_Header = {
 			return this.$store.state.attendance.totalOfficeTime;
 		},
 		attendace_records: function () {
+			console.log(this.$store.state.attendance.attendance.data);
 			return this.$store.state.attendance.attendance.data;
 		},
 		punchInFormatedDate: function () {
@@ -5406,7 +5405,13 @@ var Hrm_Leave_Header = {
 	methods: {
 		punchFormat(dateTime) {
 			dateTime = new Date(dateTime);
-			return hrm.Moment(dateTime).format('kk:mm');
+			let date = hrm.Moment(dateTime).format('MMM D, kk:mm');
+
+			if (date == 'Invalid date') {
+				return '00:00';
+			}
+
+			return date;
 		},
 
 		attendanceInit: function () {
@@ -32609,7 +32614,7 @@ var render = function() {
             "button",
             {
               staticClass: "button hrm-button-secondary button-secondary",
-              attrs: { disabled: _vm.punch_out_disable },
+              attrs: { disabled: !_vm.punchInIsDisabled },
               on: {
                 click: function($event) {
                   $event.preventDefault()

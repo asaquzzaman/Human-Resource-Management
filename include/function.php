@@ -210,6 +210,14 @@ function hrm_second_to_time_short_form( $seconds ) {
 }
 
 function hrm_get_second( $start, $end ) {
+    if( strtotime( $start ) < 0 ) {
+        return 0;
+    }
+
+    if( strtotime( $end ) < 0 ) {
+        return 0;
+    }
+
     $start = date( 'H:i', strtotime( $start ) );
     $end = date( 'H:i', strtotime( $end ) );
 

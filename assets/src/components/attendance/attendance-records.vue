@@ -81,6 +81,7 @@
 				return this.$store.state.attendance.totalOfficeTime;
 			},
 			attendace_records: function() {
+				console.log(this.$store.state.attendance.attendance.data);
 				return this.$store.state.attendance.attendance.data;
 			},
 			punchInFormatedDate: function() {
@@ -96,7 +97,13 @@
 		methods: {
 			punchFormat (dateTime) {
 				dateTime = new Date(dateTime);
-				return hrm.Moment(dateTime).format('kk:mm');
+				let date = hrm.Moment(dateTime).format('MMM D, kk:mm');
+
+				if( date == 'Invalid date' ) {
+					return '00:00'
+				}
+
+				return date;
 			},
 
 			attendanceInit: function() {

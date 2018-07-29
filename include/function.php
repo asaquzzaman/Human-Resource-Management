@@ -707,4 +707,9 @@ function hrm_tb_prefix() {
     return $wpdb->prefix;
 }
 
+function hrm_get_avater( $user_id ) {
+    $profile_pic = Hrm_Employee::getInstance()->get_profile_picture( $user_id );
+    return empty( $profile_pic ) ? get_avatar_url( $user_id ) : $profile_pic[0]['thumb'];
+}
+
 

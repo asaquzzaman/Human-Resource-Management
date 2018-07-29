@@ -80,23 +80,32 @@
 
 								<div id="dashboard_activity" class="postbox ">
 									<h2 class="hndle ui-sortable-handle">
-										<span>{{ attendanceLabel }}</span>
+										<span>{{ attendanceLabel }} ({{ Object.keys(present).length }})</span>
 									</h2>
 									<div class="inside">
 										<div class="pm-present-body">
+											
 											<div v-if="attendance.present">
 												<ul v-for="punchIn in present" class="hrm-attendance-ul">
 													<li>
 														<img class="hrm-dashboard-avatar" :src="punchIn.avatar_url">
-														{{ punchIn.display_name }}
+														<router-link class="hrm-profile-link" :to="{
+																name: 'employee_general_information',
+																params: {
+																	employeeId: punchIn.user.data.ID
+																}
+															}">
+																{{ punchIn.user.data.display_name }}
+														</router-link>
+														
 													</li>
-													<li>{{ punchIn.punch_in_time }}</li>
+													<li>{{ dateTimeFormat(punchIn.punch_in) }}</li>
 												</ul>
 
-												<div class="pm-attendance-nothing-found" v-if="!present.length">Nothing found</div>
+												<!-- <div class="pm-attendance-nothing-found" v-if="!present.length">Nothing found</div> -->
 											</div>
 											
-											<div v-if="attendance.absent">
+											<!-- <div v-if="attendance.absent">
 												<ul v-for="punchOut in absent" class="hrm-attendance-ul">
 													<li>
 														<img class="hrm-dashboard-avatar" :src="punchOut.avatar_url">
@@ -138,10 +147,10 @@
 													<li>{{ firstOut.punch_out_time }}</li>
 												</ul>
 												<div class="pm-attendance-nothing-found" v-if="!lateLeave.length">Nothing found</div>
-											</div>
+											</div> -->
 										</div>
 
-										<div id="">
+										<!-- <div id="">
 											<div id="" class="activity-block">
 												<ul class="subsubsub">
 													<li class="all">
@@ -162,7 +171,7 @@
 												</ul>
 											</div>
 										</div>
-									</div>
+ -->									</div>
 								</div>
 
 
@@ -197,7 +206,7 @@
 
 								<div class="postbox ">
 									<h2 class="hndle ui-sortable-handle hrm-leave-h2">
-										<span class="">Leave</span> 
+										<span class="">Pending Leave</span> 
 										<span class="">Type</span> 
 										<div class="hrm-clear"></div>
 									</h2>

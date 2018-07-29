@@ -207,6 +207,7 @@
 						'status': 1
 					},
 					callback: function(res) {
+						console.log(res);
 						self.$store.commit('leave/setPendingLeaves', res.data);
 					}
 				}

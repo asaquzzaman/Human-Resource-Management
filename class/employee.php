@@ -100,14 +100,14 @@ class Hrm_Employee {
 
             'meta_query' => array(
                 array(
-                    'key' => 'hrm_birthday',
+                    'key' => '_birthday',
                     'value' => $today,
                     'type' => 'DATE',
                     'compare' => '>=' 
                 ),
 
                 array(
-                    'key' => 'hrm_birthday',
+                    'key' => '_birthday',
                     'type' => 'DATE',
                     'value' => $next_day,
                     'compare' => '<=' 
@@ -116,9 +116,9 @@ class Hrm_Employee {
         ));
 
         foreach ( $users->results as $key => $result ) {
-            $birthday                 = get_user_meta( $result->ID, 'hrm_birthday', true );
+            $birthday                 = get_user_meta( $result->ID, '_birthday', true );
             $result->data->birthday   = hrm_get_date( $birthday );
-            $result->data->avatar_url = get_avatar_url( $result->ID );
+            $result->data->avatar_url = hrm_get_avater( $result->ID );
         }
 
         wp_send_json_success( $users->results );
@@ -139,97 +139,6 @@ class Hrm_Employee {
 
             Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender );
         }
-    }
-
-    function get_salary_message_body( $last_recored, $post, $to_user ) {
-        $employer = wp_get_current_user();
-        $pay_grade = json_decode( stripcslashes( $post['pay_grade_js'] ), true );
-        $direct_deposit = $last_recored->direct_deposit != 'yes' ? __( 'Nothing', 'hrm' ) : $last_recored->direct_deposit;
-        ob_start();
-        ?>
-        <div style="width: 600px; background: #eee; padding: 5px;">
-        <table width="600" style="background: #fff; padding: 10px;">
-        <tr>
-            <td style="padding: 10px;"><?php sprintf( 'Hello, %s', $to_user->display_name ); ?></td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;"><?php _e( 'Your salaray details', 'hrm' ); ?></td>
-        </tr>
-        </table>
-        <table width="600" style="background: #fff; padding: 10px;">
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Employer Name', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $employer->display_name; ?></td>
-            </tr>
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Date', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo hrm_get_date2mysql( $last_recored->billing_date ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Grade', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $pay_grade[$last_recored->pay_grade]; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Salary Component', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->component; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Frequency', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->pay_frequency( $last_recored->frequency ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Currency', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->currency; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Amount', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->amount; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Comments', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->comments; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Direct Deposit Details', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $direct_deposit; ?></td>
-            </tr>
-        <?php
-        if ( $last_recored->direct_deposit == 'yes' ) {
-            ?>
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Number', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->account_number; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Type', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->account_type( $last_recored->account_type ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Routing Number', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->routing; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Deposit Amount', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->dipo_amount; ?></td>
-            </tr>
-
-            <?php
-        }
-            ?>
-        </table>
-        </div>
-        <?php
-        return ob_get_clean();
     }
 
     function delete_file( $file_id, $force = true, $employee_id ) {

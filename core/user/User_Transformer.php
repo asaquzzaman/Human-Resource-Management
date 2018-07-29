@@ -15,7 +15,7 @@ class User_Transformer extends TransformerAbstract {
             'email'        => $user->user_email,
             'profile_url'  => $user->user_url,
             'display_name' => $user->display_name,
-            'avatar_url'   => get_avatar_url( $user->user_email ),
+            'avatar_url'   => hrm_get_avater($user->ID)
         ];
 
         return $data;

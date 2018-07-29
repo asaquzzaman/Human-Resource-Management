@@ -115,7 +115,7 @@ class Hrm_Attendance {
             'total_working_hours' => $total_shift_second === false ? __( 'You have assigned no shfit', 'hrm' ) : $this->second_to( $net_shift_second ),
             'avg_working_hours' => $this->second_to( $avg_work ),
             'table' => $table,
-            'department' => $department->toArray()
+            'department' => $department ? $department->toArray() : []
         ];
 
         return $results;
@@ -219,7 +219,7 @@ class Hrm_Attendance {
             $return_data[] = [
                 'shift'               => $punch_in_shift,
                 //'dept_id'           => $department->id,
-                'department'          => $department->toArray(),
+                'department'          => $department ? $department->toArray() : [],
                 'attendance'          => $attand,
                 'per_day_worked_time' => $this->second_to( $attend_second ),
                 'work_status'         => $work_status
@@ -369,6 +369,14 @@ class Hrm_Attendance {
     function punch_in_validation( $post ) {
         global $current_user;
         $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+
+        $office_time = $this->get_office_time();
+        $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
+        $client_ip = hrm_get_client_ip();
+
+        if ( $allow_ip && !in_array( $client_ip, $allow_ip) ) {
+            return new WP_Error('hrm_user_role', __( 'Your ip is not valid for punch in', 'hrm' ) );
+        }
         
         if ( !in_array( hrm_employee_role_key(), $current_user->roles ) ) {
             return new WP_Error('hrm_user_role', __( 'Are you employee?', 'hrm' ) );
@@ -802,36 +810,35 @@ class Hrm_Attendance {
 
         $employees = Hrm_Employeelist::getInstance()->get_employee(true);
 
-        $attendances = $this->get_attendance(
-            array (
-                'user_id'  => 'all',
-                'punch_in' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-            )
-        );
+        $attendances = $this->get_attendance([
+           'punch_in'  => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+           'user_id'   => false,
+           'punch_out' => false,
+           'order_by'  => 'punch_in'
+        ]);
 
-        $leaves = Hrm_Leave::getInstance()->get_leaves(
-            array(
-                'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-                'end_time'   => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-                'per_page'   =>  1000,
-                'status'     => 1
-            )
-        );
+        $new_attendances = [];
 
-        $office_time = self::getInstance()->get_office_time();
+        foreach ( $attendances['data'] as $attendance ) {
+            $id = $attendance['user_id'];
+            $new_attendances[$id] = $attendance;
+        }
 
-        $presents    = $this->get_presents( $employees, $attendances, $leaves['data'] );
-        $absents     = $this->get_absents( $employees, $attendances, $leaves['data'] );
-        $early_enter = $this->get_early_enter( $employees, $attendances, $leaves['data'], $office_time );
-        $early_leave = $this->get_early_leave( $employees, $attendances, $leaves['data'], $office_time );
-        $late_leave  = $this->get_late_leave( $employees, $attendances, $leaves['data'], $office_time );
+        foreach ( $new_attendances as $key => $new_attendance ) {
+            $profile_pic = Hrm_Employee::getInstance()->get_profile_picture( $new_attendance['user_id'] );
+            $profile_pic = empty( $profile_pic ) ? get_avatar_url($new_attendance['user_id'] ) : $profile_pic[0]['thumb'];
+            $new_attendances[$key]['user'] = get_user_by('id', $new_attendance['user_id'] );
+            $new_attendances[$key]['avatar_url'] = $profile_pic;
+        }
 
+        $send_data = [];
+
+        foreach ( $new_attendances as $key => $value) {
+            $send_data[] = $value;
+        }
+        
         wp_send_json_success(array(
-            'present'    => $presents,
-            'absent'     => $absents,
-            'early_enter' => $early_enter,
-            'early_leave' => $early_leave,
-            'late_leave'  => $late_leave
+            'present' => $send_data,
         ));
         
     }
@@ -1010,28 +1017,28 @@ class Hrm_Attendance {
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');
         
-        $punch_in    = self::getInstance()->can_punch_in();
+        $punch_in    = self::getInstance()->punch_in_validation();
         $office_time = self::getInstance()->get_office_time();
         
-        $office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
-        $office_closed_with_date = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
+        //$office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
+        //$office_closed_with_date = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
 
         // Attendance default configuration saved
-        if ( empty( $office_time ) ) {
-            $args = array(
-                'hrm_is_multi_attendance' => false,
-                'office_start'            => $office_start_with_date,
-                'office_closed'           => $office_closed_with_date
-            );
+        // if ( empty( $office_time ) ) {
+        //     $args = array(
+        //         'hrm_is_multi_attendance' => false,
+        //         'office_start'            => $office_start_with_date,
+        //         'office_closed'           => $office_closed_with_date
+        //     );
 
-            self::getInstance()->update_attendance_configuration( $args );
-        }
+        //     self::getInstance()->update_attendance_configuration( $args );
+        // }
 
         $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
-        $office_start            = empty( $office_time->start ) ? '10:00 am' : hrm_get_time( $office_time->start );
-        $office_closed           = empty( $office_time->end ) ? '06:00 pm' : hrm_get_time( $office_time->end );
-        $office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
-        $office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
+        //$office_start            = empty( $office_time->start ) ? '10:00 am' : hrm_get_time( $office_time->start );
+        //$office_closed           = empty( $office_time->end ) ? '06:00 pm' : hrm_get_time( $office_time->end );
+        //$office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
+        //$office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
 
 
         wp_send_json_success(array(
@@ -1422,16 +1429,18 @@ class Hrm_Attendance {
     }
 
     function get_attendance( $postdata = [] ) {
-
+        global $wpdb;
         $id        = empty( $postdata['id'] ) ? false : $postdata['id'];
-        $user_id   = empty( $postdata['user_id'] ) ? get_current_user_id() : $postdata['user_id'];
-        $punch_in  = empty(  $postdata['punch_in'] ) 
+        $user_id   = !isset( $postdata['user_id'] ) ? get_current_user_id() : $postdata['user_id'];
+        $punch_in  = !isset(  $postdata['punch_in'] ) 
             ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
             : $postdata['punch_in'];
 
-        $punch_out = empty(  $postdata['punch_out'] ) 
+        $punch_out = !isset(  $postdata['punch_out'] ) 
             ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
             : $postdata['punch_out'];
+
+        $order_by = isset( $postdata['order_by'] ) ? $postdata['order_by'] : 'id';
 
         if ( $id !== false  ) {
 
@@ -1469,9 +1478,9 @@ class Hrm_Attendance {
                 $q->where( 'punch_out', '<=', $punch_out);
             }
         })
-        ->orderBy( 'id', 'ASC' )
+        ->orderBy( $order_by, 'ASC' )
         ->paginate( $per_page );
-    
+        
         $collection = $attendance->getCollection();
 
         $resource = new Collection( $collection, new Attendance_Transformer );
@@ -1719,38 +1728,38 @@ class Hrm_Attendance {
         global $wpdb;
 
         $table  = $wpdb->prefix . 'hrm_office_time';
-        $closed = $postdata['office_closed'];
+        // $closed = $postdata['office_closed'];
 
-        if ( empty( $postdata['office_start'] ) ) {
-            return new WP_Error( 'office_start', __( 'Required office start time', 'hrm' ) );
-        }
+        // if ( empty( $postdata['office_start'] ) ) {
+        //     return new WP_Error( 'office_start', __( 'Required office start time', 'hrm' ) );
+        // }
 
-        if ( ! hrm_validateDate( $postdata['office_start'], 'Y-m-d H:i' ) ) {
-            return new WP_Error( 'office_start', __( 'Invalid office start time', 'hrm' ) );
-        }
+        // if ( ! hrm_validateDate( $postdata['office_start'], 'Y-m-d H:i' ) ) {
+        //     return new WP_Error( 'office_start', __( 'Invalid office start time', 'hrm' ) );
+        // }
 
-        if ( empty( $closed ) ) {
-            $closed = current_time( 'mysql' );
-        }
+        // if ( empty( $closed ) ) {
+        //     $closed = current_time( 'mysql' );
+        // }
 
-        if ( ! hrm_validateDate( $closed, 'Y-m-d H:i' ) ) {
-            $closed = current_time( 'mysql' );
-        }
+        // if ( ! hrm_validateDate( $closed, 'Y-m-d H:i' ) ) {
+        //     $closed = current_time( 'mysql' );
+        // }
 
-        if ( 
-            isset( $postdata['hrm_is_multi_attendance'] ) 
-            &&
-            ( 
-                $postdata['hrm_is_multi_attendance'] == 'true' 
-                || 
-                $postdata['hrm_is_multi_attendance'] == 1 
-            )
-        ) {
+        // if ( 
+        //     isset( $postdata['hrm_is_multi_attendance'] ) 
+        //     &&
+        //     ( 
+        //         $postdata['hrm_is_multi_attendance'] == 'true' 
+        //         || 
+        //         $postdata['hrm_is_multi_attendance'] == 1 
+        //     )
+        // ) {
             
-            $is_multi = 1;
-        } else {
-            $is_multi = 0;
-        }
+        //     $is_multi = 1;
+        // } else {
+        //     $is_multi = 0;
+        // }
 
         $ip       = $postdata['allow_ip'];
         $string   = str_replace(' ', '', $ip);
@@ -1760,9 +1769,9 @@ class Hrm_Attendance {
         } );
 
         $data = array(
-            'start'    => date( 'Y-m-d H:i:s', strtotime( $postdata['office_start'] ) ),
-            'end'      => date( 'Y-m-d H:i:s', strtotime( $closed ) ),
-            'is_multi' => $is_multi,
+            'start'    => date( 'Y-m-d H:i:s', strtotime( current_time('mysql') ) ),
+            'end'      => date( 'Y-m-d H:i:s', strtotime( current_time('mysql') ) ),
+            'is_multi' => 1,
             'ip'       => maybe_serialize( $allow_ip )
         );
 

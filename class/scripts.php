@@ -19,8 +19,6 @@ class Hrm_Scripts {
     public static function register_scripts() {
         $scripts = self::scripts();
 
-        do_action( 'hrm_before_load_script' );
-
         foreach ( $scripts as $script ) {
 
             wp_register_script( 
@@ -37,6 +35,7 @@ class Hrm_Scripts {
     public static function footer_tag() {
 
         wp_enqueue_media();
+        do_action( 'hrm_before_load_script' );
         wp_enqueue_script( 'hrm-scripts' );
 
         wp_localize_script( 'hrm-uploader', 'HRM_Vars', array(

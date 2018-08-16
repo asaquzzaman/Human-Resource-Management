@@ -111,31 +111,33 @@
 						              
 						            </div>
 
-						            <div class="hrm-form-field-wrap hrm-shirft-mtsl">
-			                            <label>Departments<em>*</em></label>
-			                            <div class="hrm-multiselect">
-											<hrm-multiselect 
-											    v-model="time.departments" 
-											    :options="deptDropDown" 
-											    :multiple="true" 
-											    :close-on-select="true"
-											    :clear-on-select="true"
-											    :hide-selected="false"
-											    :show-labels="true"
-											    placeholder="Select Department"
-											    select-label=""
-											    selected-label="selected"
-											    deselect-label=""
-											    :taggable="false"
-											    label="name"
-											    track-by="id"
-											    :allow-empty="true">
+						            <div class="hrm-time-form-field-wrap hrm-shirft-mtsl">
+						            	<div>
+				                            <label>Departments<em>*</em></label>
+				                            <div class="hrm-multiselect">
+												<hrm-multiselect 
+												    v-model="time.departments" 
+												    :options="deptDropDown" 
+												    :multiple="true" 
+												    :close-on-select="true"
+												    :clear-on-select="true"
+												    :hide-selected="false"
+												    :show-labels="true"
+												    placeholder="Select Department"
+												    select-label=""
+												    selected-label="selected"
+												    deselect-label=""
+												    :taggable="false"
+												    label="name"
+												    track-by="id"
+												    :allow-empty="true">
 
-											</hrm-multiselect>               
-										</div>
-			
-			                            <span class="hrm-clear"></span>
-			                            <span class="description">Choose Parent Department</span>
+												</hrm-multiselect>               
+											</div>
+				
+				                            <span class="hrm-clear"></span>
+				                            <span class="description">Choose Parent Department</span>
+			                        	</div>
 			                        </div>
 					        	</div>
 

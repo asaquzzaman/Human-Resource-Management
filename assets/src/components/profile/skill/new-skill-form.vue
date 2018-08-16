@@ -24,9 +24,10 @@
 
 <script>
 	import Mixin from './mixin'
+	import MainMixin from '@components/profile/mixin'
 
 	export default {
-		mixins: [Mixin],
+		mixins: [Mixin, MainMixin],
 		props: {
 			fields: {
 				type: [Array]

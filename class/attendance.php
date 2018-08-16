@@ -45,7 +45,7 @@ class Hrm_Attendance {
        
         
         if ( $_POST['allEmployees'] == 'true' ) {
-            $employees = Hrm_Employeelist::getInstance()->get_employee( true );
+            $employees = Hrm_Employeelist::getInstance()->get_employee();
 
             foreach ( $employees as $key => $employee ) {
                 $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out );
@@ -378,7 +378,11 @@ class Hrm_Attendance {
             return new WP_Error('hrm_user_role', __( 'Your ip is not valid for punch in', 'hrm' ) );
         }
         
-        if ( !in_array( hrm_employee_role_key(), $current_user->roles ) ) {
+        if ( 
+            !in_array( hrm_employee_role_key(), $current_user->roles ) 
+                &&
+            !in_array( hrm_manager_role_key(), $current_user->roles )
+        ) {
             return new WP_Error('hrm_user_role', __( 'Are you employee?', 'hrm' ) );
         }
 
@@ -397,6 +401,8 @@ class Hrm_Attendance {
         if ( ! $this->can_punch_in( $user_id ) ) {
             return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
         }
+
+        return true;
     }
 
     function can_punch_in( $user_id = false ) {
@@ -1042,7 +1048,7 @@ class Hrm_Attendance {
 
 
         wp_send_json_success(array(
-            'punch_in'                     => $punch_in,
+            'punch_in'                     => is_wp_error( $punch_in ) ? false : true,
             // 'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
             // 'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
             // 'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
@@ -1223,6 +1229,14 @@ class Hrm_Attendance {
     }
 
     function punch_out( $user_id = false ) {
+        $office_time = $this->get_office_time();
+        $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
+        $client_ip = hrm_get_client_ip();
+
+        if ( $allow_ip && !in_array( $client_ip, $allow_ip) ) {
+            return new WP_Error('hrm_user_role', __( 'Your ip is not valid for punch in', 'hrm' ) );
+        }
+
         global $wpdb;
 
         $user_id = $user_id ? $user_id : get_current_user_id();

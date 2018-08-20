@@ -145,11 +145,13 @@ class HRM_Shift {
 
     function add_shift( $postData ) {
         $validation = $this->validation( $postData );
+
+        $postData['departments'] = $this->filter_departments( $postData['times'] );
         
         if ( ! is_wp_error( $validation ) ) {
             $current_date           = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['puch_start'] = $current_date .' '. trim($postData['puch_start']);
-            $postData['puch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['puch_start'] ) );
+            $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
+            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
             $postData['times']      = maybe_serialize( $postData['times'] ); 
 
             $store = hrm_insert_records( $postData );
@@ -176,6 +178,7 @@ class HRM_Shift {
     function ajax_update_shift() {
         check_ajax_referer('hrm_nonce');
         $shift = self::getInstance()->update_shift( $_POST );
+
         
         if (  isset( $shift['success'] ) &&  $shift['success'] === false ) {
             wp_send_json_error( $shift );
@@ -184,8 +187,24 @@ class HRM_Shift {
         wp_send_json_success( $shift );
     }
 
+    function filter_departments( $times ) {
+        $departments = [];
+        
+        foreach ( $times as $key => $time ) {
+            foreach ( $time['departments'] as $key2 => $department ) {
+                $departments[] = $department['id'];
+            }
+        }
+
+        $departments = array_unique( $departments );
+        
+        return $departments;
+    }
+
     function update_shift( $postData ) {
         $validation = $this->validation( $postData );
+
+        $postData['departments'] = $this->filter_departments( $postData['times'] );
         
         if ( ! is_wp_error( $validation ) ) {
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
@@ -218,7 +237,7 @@ class HRM_Shift {
                     ->where('from', $postData['id'])
                     ->delete();
             }
-            
+
             $store = hrm_update_records( $postData );
 
             return $store;
@@ -273,25 +292,49 @@ class HRM_Shift {
 
 	function get_shift( $postData ) {
         
-        $status      = empty( $postData['status'] ) ? 1 : $postData['status'];
-        $per_page    = hrm_per_page();
+        $status   = empty( $postData['status'] ) ? false : $postData['status'];
+        $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : $postData['per_page'];
+        $id       = empty( $postData['id'] ) ? false : $postData['id'];
+        $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
-        
-		$shift = Shift::where( function($q) use( $status ) {
-            if ( ! empty(  $status ) ) {
-                $q->where( 'status', $status );
+      
+        if ( $id ) {
+
+            if ( is_array( $id ) ) {
+                $shift = Shift::where( function($q) use( $id ) {
+
+                    $q->whereIn( 'id', $id );
+
+                })
+                ->orderBy( 'id', 'DESC' )
+                ->paginate( $per_page );
+                
+                $collection = $shift->getCollection();
+                $resource = new Collection( $collection, new Shift_Transformer );
+                $resource->setPaginator( new IlluminatePaginatorAdapter( $shift ) );
+
+            } else {
+
+                $shift_collection = Shift::find( $id );
+                $resource = new Item( $shift_collection, new Shift_Transformer );
             }
-        })
-        ->orderBy( 'id', 'DESC' )
-        ->paginate( $per_page );
+        
+        } else {
+            $shift = Shift::where( function($q) use( $status ) {
+                if ( ! empty(  $status ) ) {
+                    $q->where( 'status', intval($status) );
+                }
+            })
+            ->orderBy( 'id', 'DESC' )
+            ->paginate( $per_page );
 
-        $collection = $shift->getCollection();
-
-        $resource = new Collection( $collection, new Shift_Transformer );
-        $resource->setPaginator( new IlluminatePaginatorAdapter( $shift ) );
+            $collection = $shift->getCollection();
+            $resource = new Collection( $collection, new Shift_Transformer );
+            $resource->setPaginator( new IlluminatePaginatorAdapter( $shift ) );
+        }
 
         return $this->get_response( $resource );
 	}

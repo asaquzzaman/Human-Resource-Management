@@ -44,13 +44,11 @@
 					                </div>
 					            </div>
 
-					            <div class="hrm-form-field-wrap hrm-shirft-mtsl">
+					            <!-- <div class="hrm-form-field-wrap hrm-shirft-mtsl">
 		                            <label>Department<em>*</em></label>
-		                            
-		                            
 		                            <div class="hrm-multiselect">
 										<hrm-multiselect 
-										    v-model="shift.departments.data" 
+										    v-model="shiftDepartments" 
 										    :options="deptDropDown" 
 										    :multiple="true" 
 										    :close-on-select="true"
@@ -71,7 +69,7 @@
 		
 		                            <span class="hrm-clear"></span>
 		                            <span class="description">Choose Parent Department</span>
-		                        </div>
+		                        </div> -->
 					            
 					            <span class="hrm-clear"></span>
 				            </div> 
@@ -112,6 +110,35 @@
 						                </div>
 						              
 						            </div>
+
+						            <div class="hrm-time-form-field-wrap hrm-shirft-mtsl">
+						            	<div>
+				                            <label>Departments<em>*</em></label>
+				                            <div class="hrm-multiselect">
+												<hrm-multiselect 
+												    v-model="time.departments" 
+												    :options="deptDropDown" 
+												    :multiple="true" 
+												    :close-on-select="true"
+												    :clear-on-select="true"
+												    :hide-selected="false"
+												    :show-labels="true"
+												    placeholder="Select Department"
+												    select-label=""
+												    selected-label="selected"
+												    deselect-label=""
+												    :taggable="false"
+												    label="name"
+												    track-by="id"
+												    :allow-empty="true">
+
+												</hrm-multiselect>               
+											</div>
+				
+				                            <span class="hrm-clear"></span>
+				                            <span class="description">Choose Parent Department</span>
+			                        	</div>
+			                        </div>
 					        	</div>
 
 					        	<div class="hrm-time-left">
@@ -306,6 +333,7 @@
 								workHours: '',
 								workMinutes: '',
 								breakStatus: false,
+								departments: [],
 								breaks: [
 									{
 										breakBegin: '',
@@ -344,6 +372,29 @@
 		computed: {
 			deptDropDown: function() {
                 return this.$store.state.departments.departments;  
+            },
+
+            shiftDepartments: {
+            	get () {
+
+            		if(typeof this.shift.departments != 'undefined') {
+            			return this.shift.departments.data;
+            		} 
+
+            		return [];
+            		
+            	},
+
+            	set (departments) {
+
+            		if(typeof this.shift.departments == 'undefined') {
+            			this.shift.departments = {
+            				data: [departments]
+            			};
+            		} else {
+            			this.shift.departments.data = departments;
+            		}
+            	}
             }
 		},
 
@@ -353,6 +404,8 @@
 
 		methods: {
 			filterShift (shift) {
+				shift.status = shift.status == '1' ? true : false;
+				
 				shift.times.forEach(function(time) {
 					time.breakStatus = ( time.breakStatus == 'false' || time.breakStatus === false ) ? false : true; 
 				});
@@ -368,7 +421,7 @@
 			},
 			filterUpdated (shift) {
 
-				var shiftEnd = new Date(shift.punch_start);
+				var shiftEnd = new Date(shift.start);
 				shift.start = hrm.Moment(shiftEnd).format("kk:mm");
 				
 			},
@@ -383,56 +436,6 @@
 					hrm.Toastr.error('Please insert valid time!');
 				}
 			},
-
-			// validateBreakDuration (shift_begin,  shift_end, break_begin, break_end, shift_work_hours, shift_work_minutes) {
-			// 	var shift_vaid = this.getDurationHourMinute(shift_begin, shift_end);
-			// 	shift_work_minutes = parseInt(shift_work_minutes) ? shift_work_minutes : 0;
-
-			// 	if(!shift_vaid) {
-			// 		return {
-			// 			status: false,
-			// 			error: 'Shift duration is not valid'
-			// 		};
-			// 	}
-
-			// 	var break_vaid = this.getDurationHourMinute(break_begin, break_end);
-
-			// 	if(!break_vaid) {
-			// 		return {
-			// 			status: false,
-			// 			error: 'Break duration is not valid'
-			// 		};
-			// 	}
-
-			// 	var shiftEnd = new Date(this.currentDate()+','+shift_end);
-	  //           var breakEnd   = new Date(this.currentDate()+','+break_end);
-
-	  //           var breakRange = hrm.Moment(breakEnd).isAfter(hrm.Moment(shiftEnd));
-	  //           var sameBreakRange = hrm.Moment(breakEnd).isSame(hrm.Moment(shiftEnd));
-	            
-	  //           if(breakRange || sameBreakRange) {
-	  //           	return {
-			// 			status: false,
-			// 			error: 'Break duration is not valid'
-			// 		}
-	  //           }
-
-
-			// 	var totalShiftMinutes = (parseInt(shift_work_hours) * 60) + parseInt(shift_work_minutes);
-			// 	var totalBreakMinutes = (parseInt(break_vaid.hours) * 60) + parseInt(break_vaid.minutes);
-
-			// 	if( totalShiftMinutes <= totalBreakMinutes ) {
-			// 		return {
-			// 			status: false,
-			// 			error: 'Break duration is not valid'
-			// 		};
-			// 	}
-
-	  //           return {
-	  //           	status: true
-	  //           }
-
-			// },
 
 			selfNewRecord () {
 				var self = this;
@@ -470,6 +473,7 @@
 				if(this.shift.id) {
 					args.data.method = 'update';
 					args.data.id = this.shift.id;
+
 					this.updateRecord(args);
 				} else {
 					this.addNewRecord(args);
@@ -482,7 +486,7 @@
 					name: this.shift.name,
 					punch_start: this.shift.start,
 					status: this.shift.status ? 1 : 0,
-					departments: this.filterDepartmentId(this.shift.departments.data),
+					//departments: this.filterDepartmentId(this.shift.departments.data),
 					times: this.shift.times
 				};
 
@@ -554,6 +558,7 @@
 					workHours: '',
 					workMinutes: '',
 					breakStatus: false,
+					departments: [],
 					breaks: [
 						{
 							breakBegin: '',
@@ -751,7 +756,7 @@
 
 
 			            	
-			            	time.breaks.forEach(function(brek) {
+			            	time.breaks.forEach(function(brek, breKey) {
 			            		if(brek.breakBegin.trim() && brek.breakEnd.trim()) {
 				            		//Check break duration validity
 				            		var breakDuration = self.getDurationHourMinute(brek.breakBegin, brek.breakEnd);
@@ -764,11 +769,14 @@
 				            		
 				            		totalBreakTime = hrm.Moment(totalBreakTime).add(breakDuration.hours, 'hours').add(breakDuration.minutes, 'minutes');
 
-				            		// let valBreakDuration = self.validateBreakDuration(break.begin, break.end, break.breakBegin, break.breakEnd, break.workHours, break.workMinutes);
+				            		var isOverLapBreak = self.isOverLapBreakTime(time.breaks, brek, breKey);
 
-				            		// if(!valBreakDuration.status) {
-				            		// 	error_log.push(valBreakDuration);
-				            		// }
+						            if (isOverLapBreak) {
+						            	error_log.push({
+											status: false,
+											error: 'Break is overlap with others break'
+										});
+						            }
 				            	}
 
 			            	});
@@ -796,6 +804,85 @@
 				return {
 					status: true
 				}
+			},
+
+			isOverLapBreakTime (times, time, key) {
+				var self = this;
+				var errorCount = [];
+				
+				times.forEach(function(shiftTime, newKey) {
+					
+					if(newKey == key) {
+						return;
+					}
+
+					if(!shiftTime.breakBegin.trim() || !shiftTime.breakEnd.trim()) { 
+						return;
+					}
+
+					//Is end less than being
+					var shiftStart1 = new Date(self.currentDate()+','+shiftTime.breakBegin);
+					var shiftEnd1 = new Date(self.currentDate()+','+shiftTime.breakEnd);
+					var shiftStart2 = '';
+					var shiftEnd2 = '';
+
+					var shiftTimeIsafter = moment(shiftEnd1).isAfter(shiftStart1);
+					
+					if(!shiftTimeIsafter) {
+            			var shiftStart1 = new Date(self.currentDate()+','+shiftTime.breakBegin);
+            			var shiftEnd1 = new Date(self.currentDate()+', 23:00');
+
+            			var shiftStart2 = new Date(self.currentDate()+', 00:00');
+            			var shiftEnd2 = new Date(self.currentDate()+','+shiftTime.breakEnd);
+            		}
+
+					var timeStart1 = new Date(self.currentDate()+','+time.breakBegin);
+					var timeEnd1 = new Date(self.currentDate()+','+time.breakEnd);
+					var timeStart2 = '';
+					var timeEnd2 = '';
+
+            		
+            		var timeIsafter = moment(timeEnd1).isAfter(timeStart1);
+
+            		if(!timeIsafter) {
+            			var timeStart1 = new Date(self.currentDate()+','+time.breakBegin);
+            			var timeEnd1 = new Date(self.currentDate()+', 23:00');
+
+            			var timeStart2 = new Date(self.currentDate()+', 00:00');
+            			var timeEnd2 = new Date(self.currentDate()+','+time.breakEnd);
+            		}
+
+            		var timeStart1Between1 = self.isBetween(timeStart1, shiftStart1, shiftEnd1);
+            		var timeStart1Between2 = self.isBetween(timeStart1, shiftStart2, shiftEnd2);
+
+            		var timeEnd1Between1 = self.isBetween(timeEnd1, shiftStart1, shiftEnd1);
+            		var timeEnd1Between2 = self.isBetween(timeEnd1, shiftStart2, shiftEnd2);
+
+            		var timeStart2Between1 = self.isBetween(timeStart2, shiftStart1, shiftEnd1);
+            		var timeStart2Between2 = self.isBetween(timeStart2, shiftStart2, shiftEnd2);
+
+            		var timeEnd2Between1 = self.isBetween(timeEnd2, shiftStart1, shiftEnd1);
+            		var timeEnd2Between2 = self.isBetween(timeEnd2, shiftStart2, shiftEnd2);
+
+            		if(
+            			timeStart1Between1 === true || timeStart1Between2 === true
+            			||
+            			timeEnd1Between1 === true || timeEnd1Between2
+            			||
+            			timeStart2Between1 === true || timeStart2Between2
+            			||
+            			timeEnd2Between1 === true || timeEnd2Between2
+
+            		) {
+            			errorCount.push(1);
+            		}
+				});
+
+				if(errorCount.length) {
+					return true;
+				}
+
+				return false;
 			},
 
 			isOverLapTime (times, time, key) {
@@ -866,7 +953,6 @@
             			timeEnd2Between1 === true || timeEnd2Between2
 
             		) {
-            			console.log('overlap');
             			errorCount.push(1);
             		}
 				});

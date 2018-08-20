@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<h1 class="wp-heading-inline">Skill</h1>
-		<a @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
+		<a v-if="hasProfileEditPermission()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<profile-menu></profile-menu>
 
 		<add-new-record-form class="hrm-toggle" v-if="isNewRecordFormActive" :fields="fields"></add-new-record-form>
 
 	    <div class="hrm-tbl-action-wrap">
-			<div class="hrm-table-action hrm-bulk-wrap">
+			<div v-if="hasProfileEditPermission()" class="hrm-table-action hrm-bulk-wrap">
 				<label for="bulk-action-selector-top" class="screen-reader-text">
 					Select bulk action
 				</label>
@@ -57,9 +57,11 @@
 	import Table from './skill-table.vue';
 	import Form from './new-skill-form.vue';
 	import Mixin from './mixin'
+	import MainMixin from '@components/profile/mixin'
+
 
 	export default {
-		mixins: [Mixin],
+		mixins: [Mixin, MainMixin],
 
 		data () {
 			return {

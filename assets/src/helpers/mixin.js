@@ -88,6 +88,15 @@ export default hrm.Vue.mixin({
                 }
             });
 		},
+        dateTimeFormat(date) {
+            if ( typeof date === 'undefined' ) {
+                date = hrm.Moment().format();
+            }
+
+            date = new Date(date);
+
+            return hrm.Moment( date ).format('kk:mm');
+        },
 		/**
          * WP settings date format convert to hrm.Moment date format with time zone
          * 

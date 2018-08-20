@@ -1,5 +1,19 @@
 export default {
 	methods: {
+        hasProfileEditPermission () {
+            let employeeId = this.$route.params ? this.$route.params.employeeId : false;
+            let currentUserId = HRM_Vars.current_user.ID;
+
+            if(employeeId == currentUserId) {
+                return true;
+            }
+            
+            if(hrm_user_can('manage_employee_profile')) {
+                return true;
+            }
+
+            return false;
+        },
 		getPersonalInfo (args) {
 			var self = this;
 			

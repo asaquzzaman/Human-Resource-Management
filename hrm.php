@@ -80,10 +80,10 @@ class WP_Hrm {
     }
 
     function migrate_db() {
-        $migrater = new \HRM\Core\Database\Migrater();
+        // $migrater = new HRM\Core\Database();
         
-        $migrater->create_migrations_table();
-        $migrater->build_schema();
+        // $migrater->create_migrations_table();
+        // $migrater->build_schema();
     }
 
     function autoload( $class ) {

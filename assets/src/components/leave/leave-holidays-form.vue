@@ -36,12 +36,12 @@
 							<span class="description"></span>
 						</div>
 
-						<div  class="hrm-form-field">
+						<!-- <div  class="hrm-form-field">
 							<label for="hrm-leave-entitlement-text-field">Validaty</label>
 							<div>From <strong>{{ dateFormat(financial_start) }}</strong> to <strong>{{ dateFormat(financial_end) }}</strong></div>
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
-						</div>
+						</div> -->
 
 						<div class="hrm-form-field ">
 							<label for="hrm-leave-description-textarea-field">

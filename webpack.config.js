@@ -52,8 +52,15 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/	
+                loader: 'babel-loader',
+                include: [
+                    resolve(''),
+                    path.resolve('node_modules/vue-color'),
+                    path.resolve('node_modules/vue-multiselect')
+                ],
+                query: {
+                    presets:[ "env", "stage-3" , "es2015" ]
+                }	
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,

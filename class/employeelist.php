@@ -5,7 +5,7 @@ class Hrm_Employeelist {
 
     public static function getInstance() {
         if( ! self::$_instance ) {
-            self::$_instance = new hrm_Employeelist();
+            self::$_instance = new self();
         }
 
         return self::$_instance;

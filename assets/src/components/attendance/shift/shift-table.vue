@@ -72,7 +72,7 @@
                     </td>-->
                     <td>
                     	<ul>
-                    		<li v-for="dept in record.departments.data">
+                    		<li v-for="dept in hasDepartment(record)">
                     			{{ dept.name }}
                     		</li>
                     	</ul>
@@ -170,6 +170,13 @@
 			}
 		},
 		methods: {
+			hasDepartment (record) {
+				if(typeof record.departments != 'undefined') {
+					return record.departments.data;
+				}
+
+				return [];
+			},
 			recordEditForm (record, status) {
 				status = status || 'toggle';
 				this.$store.commit( this.nameSpace+'/showHideEditForm', 
@@ -333,7 +340,6 @@
 			getDepartments (record) {
 				var department = '';
 				record.departments.data.forEach(function(dept) {
-					console.log(department);
 					department = department + dept.name + ', ';
 				});
 

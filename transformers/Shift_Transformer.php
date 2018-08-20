@@ -25,7 +25,7 @@ class Shift_Transformer extends TransformerAbstract {
             'id'            => $item->id,
             'name'          => $item->name,
             'status'        => $item->status,
-            'punch_start'   => $item->punch_start,
+            'start'         => $item->punch_start,
             'times'         => maybe_unserialize( $item->times ),
             'created_at'    => $item->created_at,
             'updated_at'    => $item->updated_at

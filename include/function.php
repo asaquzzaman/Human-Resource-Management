@@ -204,6 +204,34 @@ function hrm_second_to_time( $seconds ) {
     return $obj;
 }
 
+function hrm_second_to_time_short_form( $seconds ) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+}
+
+function hrm_get_second( $start, $end ) {
+    if( strtotime( $start ) < 0 ) {
+        return 0;
+    }
+
+    if( strtotime( $end ) < 0 ) {
+        return 0;
+    }
+
+    $start = date( 'H:i', strtotime( $start ) );
+    $end = date( 'H:i', strtotime( $end ) );
+
+    if (  $start > $end ) {
+        $end = date( 'Y-m-d H:i', strtotime( $end . '+1 day' ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    } else {
+        $end = date( 'Y-m-d H:i', strtotime( $end ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    }
+
+    return strtotime( $end ) - strtotime( $start );
+}
+
 function hrm_get_header( $page, $tab, $subtab = false ) {
     $menu = hrm_page();
     ?>
@@ -330,8 +358,12 @@ function hrm_get_js_template( $file_path, $id ) {
 }
 
 
-function pr($data) {
-    echo '<pre>'; print_r($data); '</pre>';
+function pr() {
+    $args = func_get_args();
+
+    foreach ( $args as $arg ) {
+        echo '<pre>'; print_r( $arg ); '</pre>';
+    }
 }
 
 /**
@@ -673,6 +705,11 @@ function hrm_tb_prefix() {
     global $wpdb;
 
     return $wpdb->prefix;
+}
+
+function hrm_get_avater( $user_id ) {
+    $profile_pic = Hrm_Employee::getInstance()->get_profile_picture( $user_id );
+    return empty( $profile_pic ) ? get_avatar_url( $user_id ) : $profile_pic[0]['thumb'];
 }
 
 

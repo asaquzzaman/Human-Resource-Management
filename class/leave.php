@@ -94,13 +94,9 @@ class Hrm_Leave {
         check_ajax_referer('hrm_nonce');
         
         $args = array (
-            'start_time' => empty( $_POST['query']['start_time'] ) 
-                ? hrm_financial_start_date() 
-                : $_POST['query']['start_time'],
+            'start_time' => empty( $_POST['query']['start_time'] ) ? false : $_POST['query']['start_time'],
 
-            'end_time' => empty( $_POST['query']['end_time'] ) 
-                ? hrm_financial_end_date() 
-                : $_POST['query']['end_time'],
+            'end_time' =>  empty( $_POST['query']['end_time'] ) ? false : $_POST['query']['end_time'],
 
             'emp_id' => empty( $_POST['query']['emp_id'] ) 
                 ? $_POST['emp_id'] 
@@ -119,13 +115,32 @@ class Hrm_Leave {
         wp_send_json_success( self::getInstance()->get_leaves( $args ) );
     }
 
+    function get_leaves_array( $args = array() ) {
+        $leaves = $this->get_leaves( $args );
+        $array = [];
+
+        foreach ( $leaves['data'] as $key => $leave ) {
+            
+            $begin = new DateTime( $leave['start_time'] );
+            $end   = new DateTime( $leave['end_time'] );
+
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $date = $i->format("Y-m-d");
+
+                $array[$date] = $date;
+            }
+        }
+        
+        return $array;
+    }
+
     public function get_leaves( $args = array() ) {
 
         global $wpdb;
         
         $defaults = array(
-            'start_time' => hrm_financial_start_date(),
-            'end_time'   => hrm_financial_end_date(),
+            //'start_time' => hrm_financial_start_date(),
+            //'end_time'   => hrm_financial_end_date(),
             'per_page'   => 50,  
             'page'       => 1    
         );
@@ -148,7 +163,7 @@ class Hrm_Leave {
                     $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
                 }
             } else {
-                $emp_id = get_current_user_id();
+                $emp_id = empty( $args['emp_id'] ) ? get_current_user_id() : absint( $args['emp_id'] );
                 $leaves = $leaves->where( 'emp_id', $emp_id );
             }
             
@@ -454,39 +469,36 @@ class Hrm_Leave {
 
     function add_relation( $type, $relations, $is_update ) {
        
-
         if ( $is_update ) {
-            
-            $db_relation = Relation::where('to', $is_update)
-                ->pluck('from')
+            $hasRelations = Relation::where('from', $is_update )
+                ->where('type', 'leave_type')
+                ->get()
                 ->toArray();
+
+            $hasRelations = wp_list_pluck( $hasRelations, 'to' );
             
-
-            $delete = array_filter( $db_relation, function( $dept_id ) use( $relations ) {
-                return array_key_exists($dept_id, $relations) ? false : true;         
-            });
-
-            $new = array_filter( $relations, function( $dept_id ) use( $db_relation ) {
-                return in_array( $dept_id, $db_relation ) ? false : true;      
-            }, ARRAY_FILTER_USE_KEY);
-
-            if ( $new ) {
-                $this->create_relation( 'leave_type', $new );
+            $insert = array_diff( $relations, $hasRelations );
+            $delete = array_diff( $hasRelations, $relations );
+            
+            foreach ( $insert as $key => $department_id) {
+                Relation::create(array(
+                    'type' => 'leave_type',
+                    'from' => $is_update,
+                    'to'   => $department_id
+                ));
             }
-            
+
             if ( $delete ) {
-                Relation::whereIn('from', $delete)
-                    ->where('to', $is_update)
+                Relation::whereIn('to', $delete)
+                    ->where('type', 'leave_type')
+                    ->where('from', $is_update)
                     ->delete();
-            }
-            
-        } else {
-            $this->create_relation( 'leave_type', $relations );
-        }
+            }        
+        } 
     }
 
-    function create_relation( $type, $relations ) {
-        foreach( $relations as $from => $to ) {
+    function create_relation( $type, $relations, $from ) {
+        foreach( $relations as $key => $to ) {
 
             Relation::create(array(
                 'type' => $type,
@@ -519,6 +531,7 @@ class Hrm_Leave {
         $table     = $wpdb->prefix . 'hrm_leave_type';
         $id        = empty( $postdata['id'] ) ? false : absint( $postdata['id'] );
         $next_year = filter_var( $postdata['nextYear'], FILTER_VALIDATE_BOOLEAN);
+        $departments = wp_list_pluck( $postdata['departments'], 'id' );
 
 
         if ( $id ) {
@@ -549,13 +562,9 @@ class Hrm_Leave {
 
             $result     = $wpdb->insert( $table, $data, $format );
             $data['id'] = $wpdb->insert_id;
+            
+            $this->create_relation( 'leave_type', $departments, $wpdb->insert_id );
         }
-
-        $departments = array();
-
-        foreach ( $postdata['departments'] as $key => $dept ) {
-            $departments[$dept['id']] = $data['id'];
-        };
         
         $this->add_relation( 'leave_type', $departments, $id );
 
@@ -565,9 +574,9 @@ class Hrm_Leave {
 
         $send = $this->get_response( $resource );
 
-        if ( $result ) {
+       // if ( $result ) {
             return $send;
-        }
+       // }
 
         return new WP_Error( 'unknoen', __( 'Something went wrong!', 'hrm' ), array(501) );
 
@@ -582,15 +591,16 @@ class Hrm_Leave {
     }
 
     function get_leave_types( $args = array() ) {
+        global $wpdb;
         $defaults = array(
-            'start_time' => hrm_financial_start_date(),
-            'end_time'   => hrm_financial_end_date(),
+            //'start_time' => hrm_financial_start_date(),
+            //'end_time'   => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
         );
 
         $args      = wp_parse_args( $args, $defaults );
         $cache_key = 'hrm-leave-types' . md5( serialize( $args ) ) . get_current_user_id();
         $send     = wp_cache_get( $cache_key, 'hrm' );
-        
+        //var_dump( $args );
         if ( false === $send ) { 
 
             $leave_types = new Leave_Type();
@@ -600,17 +610,21 @@ class Hrm_Leave {
                     $q->where( 'id', $args['id'] );
                 }
 
-                if ( !empty( $args['start_time'] ) ) {
-                    $q->where( 'entitle_from', '>=', $args['start_time'] );
-                }
+                // if ( !empty( $args['start_time'] ) ) {
+                //     $q->where( 'entitle_from', '>=', $args['start_time'] );
+                // }
 
                 if ( !empty( $args['end_time'] ) ) {
-                    $q->where( 'entitle_to', '<=', $args['end_time'] );
+                    $q->where( 'entitle_to', '>=', $args['end_time'] );
+                }
+
+                if ( !empty( $args['carry'] ) ) {
+                    $q->orWhere( 'carry', 1 );
                 }
             });
 
-            $leave_types = $leave_types->orWhere( 'carry', 1 );
             $leave_types = $leave_types->get();
+            //pr($wpdb->last_query); die();
             $leave_types = new Collection( $leave_types, new Leave_Type_Transform );
             $send = $this->get_response( $leave_types );
 
@@ -685,6 +699,26 @@ class Hrm_Leave {
         wp_send_json_success(array( 
             'holidays'  => $holidays, 
         ));
+    }
+
+    function get_holidays_array( $args = array() ) {
+        $holidays = $this->get_holidays( $args );
+
+        $array = [];
+
+        foreach ( $holidays as $key => $holiday ) {
+
+            $begin = new DateTime( $holiday->from );
+            $end   = new DateTime( $holiday->to );
+
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $date = $i->format("Y-m-d");
+
+                $array[$date] = $date;
+            }
+        }
+
+        return $array;
     }
 
     function get_holidays( $args = array() ) {
@@ -796,6 +830,42 @@ class Hrm_Leave {
        return get_option( 'hrm_work_week' );
     }
 
+    function work_week_array( $start, $end ) {
+        $work_weeks = Hrm_Leave::getInstance()->get_work_week();
+        $weekend = [];
+
+        foreach ( $work_weeks as $key => $work_week ) {
+            if( $key == 'field_dif' ) {
+                continue;
+            }
+
+            if( $work_week == 'non' ) {
+                $weekend[$key] = date( 'N', strtotime( $key ) );
+            }
+        }
+
+        $start  = new DateTime( $start );
+        $end    = new DateTime( $end );
+        $oneday = new DateInterval("P1D");
+
+        $weekends = array();
+
+        /* Iterate from $start up to $end+1 day, one day in each iteration.
+           We add one day to the $end date, because the DatePeriod only iterates up to,
+           not including, the end date. */
+        foreach( new DatePeriod( $start, $oneday, $end->add($oneday) ) as $day ) {
+            $lday = strtolower( $day->format('l') );
+            
+            if( array_key_exists( $lday, $weekend) ) {
+                $date = $day->format('Y-m-d');
+                $weekends[$date] = $date;
+            }
+            
+        } 
+        
+        return $weekends;
+    }
+
 
     public static function holiday_get_by_index() {
         $holidays_from = date('Y-m-01 00:00:00');
@@ -824,7 +894,10 @@ class Hrm_Leave {
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
         
-        $leave_types = self::getInstance()->get_leave_types();
+        $leave_types = self::getInstance()->get_leave_types([
+            'end_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
+            'carry' => 1
+        ]);
         $holidays = self::getInstance()->get_holidays();
         $work_week = self::getInstance()->get_work_week();
         $apply_to    = new WP_User_Query( array(

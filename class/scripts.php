@@ -49,6 +49,9 @@ class Hrm_Scripts {
             'success_msg'     => __( 'Changed Successfully', 'hrm' ),
             'current_user'    => wp_get_current_user(),
             'settings'        => Hrm_Settings::getInstance()->get_settings(),
+            "email_settings"  => get_option( 'hrm_email_settings', [
+                'form_email' => get_bloginfo( 'admin_email' )
+            ] ),
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
             'financial_end'   => hrm_financial_end_date(),

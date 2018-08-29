@@ -6,6 +6,7 @@ HRMMixin.settings = mixin;
 
 import Settings from './settings.vue';
 import Hrm_Settings from './general.vue'
+import EmailSettings from './email-settings.vue'
 
 
 // const Hrm_Settings = resolve => {
@@ -31,6 +32,14 @@ let settingsMenu = [
 					name: 'hrm_general_settings',
 					meta: {
 						label: 'General'
+					}
+				},
+				{
+					path: 'email-settings', 
+					component: EmailSettings,
+					name: 'hrm_email_settings_settings',
+					meta: {
+						label: 'Email'
 					}
 				},
 			]

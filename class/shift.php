@@ -202,6 +202,7 @@ class HRM_Shift {
     }
 
     function update_shift( $postData ) {
+        global $wpdb;
         $validation = $this->validation( $postData );
 
         $postData['departments'] = $this->filter_departments( $postData['times'] );
@@ -237,7 +238,7 @@ class HRM_Shift {
                     ->where('from', $postData['id'])
                     ->delete();
             }
-
+            
             $store = hrm_update_records( $postData );
 
             return $store;

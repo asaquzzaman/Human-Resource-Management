@@ -1,3 +1,11 @@
+= 2.2.0 - August 23, 2018 =
+
+ * [New] Attendance management system.
+ * [Fix] Dashboard notice and birthday.
+ * [Fix] Child department hierarchy.
+ * [Fix] Peanding leave does not appear.
+ * [Fix] JS make compitable for IE>8
+ 
 = 2.1.3 - May 09, 2018 =
 
  * [New] Include tareq1988/wp-eloquent

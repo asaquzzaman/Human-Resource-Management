@@ -97,6 +97,27 @@ export default hrm.Vue.mixin({
 
             return hrm.Moment( date ).format('kk:mm');
         },
+                /**
+         * WP settings date format convert to pm.Moment date format with time zone
+         * 
+         * @param  string date 
+         * 
+         * @return string      
+         */
+        shortDateFormat ( date ) {
+            if ( date == '' ) {
+                return;
+            }      
+
+            date = new Date(date);
+            date = hrm.Moment(date).format('YYYY-MM-DD');
+            if(date == 'Invalid date') {
+                return '';
+            }
+            var format = 'DD MMM';
+
+            return hrm.Moment( date ).format( String( format ) );
+        },
 		/**
          * WP settings date format convert to hrm.Moment date format with time zone
          * 

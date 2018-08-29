@@ -139,7 +139,7 @@ class Hrm_Db {
           `name` varchar(255) DEFAULT NULL,
           `status` tinyint(4) DEFAULT NULL, 
           `department` int(11) NOT NULL,
-          `puch_start` timestamp NULL DEFAULT NULL,
+          `punch_start` timestamp NULL DEFAULT NULL,
           `times` text,
           `created_at` datetime NOT NULL,
           `updated_at` datetime NOT NULL,

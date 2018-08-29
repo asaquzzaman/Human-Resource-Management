@@ -535,7 +535,7 @@ class Hrm_Employee {
         $first_name      = sanitize_text_field( $postdata['firstName'] );
         $last_name       = sanitize_text_field( $postdata['lastName'] );
         $display_name    = $first_name .' '. $last_name;
-
+        
         $userdata = array(
             'user_login'   => $postdata['userName'],
             'user_pass'    => $random_password,

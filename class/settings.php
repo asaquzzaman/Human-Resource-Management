@@ -1672,4 +1672,18 @@ class Hrm_Settings {
         }
     }
 
+    public function hrm_email_settings () {
+        check_ajax_referer('hrm_nonce');
+
+        $settings = get_option( 'hrm_email_settings', [
+            'form_email' => get_bloginfo( 'admin_email' )
+        ]);
+
+        $settings['form_email'] = (!empty($_POST['form_email']) && is_email( $_POST['form_email'] ) ) ? $_POST['form_email']: $settings['form_email'];
+        $settings['email_type'] = (!empty($_POST['email_type']) ) ? esc_attr( $_POST['email_type'] ) : $settings['email_type'];
+
+        update_option( 'hrm_email_settings', $settings);
+        wp_send_json_success(true);
+    }
+
 }

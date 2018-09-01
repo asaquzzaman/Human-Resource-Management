@@ -64,12 +64,17 @@ function hrm_create_department() {
 }
 
 function hrm_create_designation() {
-	$designations = hrm_unique_name_generator( 'Designation' );
+	$designations = array( "Conquest","Terra",
+        "Continuity","RedSky",
+        "Concepts","Starboard",
+        "Capstone","Wonder");
+
 	$departements = Hrm_Admin::get_departments();
 
-	foreach ( $designations as $key => $designation_name ) {
+	foreach ( $designations as $key => $name) {
+	
 		$designation = [
-			'title'        => $designation_name,
+			'title'        => $name,
 			'department'   => hrm_get_random_dept_id( $departements ),
 			'description'  => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
 			'class'        => 'Designation',

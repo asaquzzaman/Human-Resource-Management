@@ -31,6 +31,7 @@ function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary
     $formulas = array_values( $formulas_name );
 
     $string = strtolower( $formula );
+
     //remove all white space
     $string = preg_replace('/\s+/', '', $string);
     $search = array(
@@ -41,7 +42,8 @@ function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary
         'least(',
         'mod(',
         'sum(',
-        'prorate('
+        'prorate(',
+        '%'
      );
 
     $search = array_merge( $search, $names );
@@ -54,7 +56,8 @@ function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary
         'min(',
         'hrm_division_rest(',
         'hrm_additon(',
-        'hrm_actual_rate('
+        'hrm_actual_rate(',
+        '/100'
     );
 
     $replace = array_merge( $replace, $formulas );
@@ -62,7 +65,7 @@ function hrm_formula_replace( $salary, $formula, $formulas_name, $monthly_salary
 
     $formula = str_replace( $search, $replace, $string );
     $row_fromula = hrm_nested_replace( $search, $replace, $string ); 
-
+    
     return eval( 'return '. $row_fromula . ';' );
  }
 

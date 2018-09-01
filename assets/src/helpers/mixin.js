@@ -290,6 +290,30 @@ export default hrm.Vue.mixin({
             });
 
             return isFormValidate;
-        }
+        },
+
+        getDesignation (args) {
+            var self = this;
+
+            var postData = {
+                'class': 'Designation',
+                'method': 'gets',
+                'transformers': 'Designation_Transformer',
+                'page': 1,
+                'per_page': 1000
+            };
+            
+            var request_data = {
+                data: postData,
+                success: function(res) {
+
+                    if(typeof args.callback != 'undefined') {
+                        args.callback(res);
+                    }
+                }
+            };
+
+            self.httpRequest('hrm_get_records', request_data);
+        },
 	},
 });

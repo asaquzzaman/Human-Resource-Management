@@ -57,7 +57,7 @@
 									<input type="text" v-model="name">
 								</div>
 								<div class="field-wrap">
-									<label>Description</label>
+									<label>Label</label>
 									<input v-model="description" type="text">
 								</div>
 								<div class="field-wrap">

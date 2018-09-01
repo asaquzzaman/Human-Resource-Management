@@ -116,8 +116,7 @@ class Hrm_Payroll {
         foreach ( $all_formulas['data'] as $key => $formula ) {
             $formulas_name[$formula['name']] = $formula['formula'];
         }
-
- 
+        
         return hrm_formula_replace( $salary, $defination, $formulas_name, $salary_period );
       
     }
@@ -412,7 +411,9 @@ class Hrm_Payroll {
             
             if ( $salary && $is_update ) {
                 $store_data = apply_filters( 'hrm_before_update_salary', $store_data, $salary );
-                $salary = $salary->update( $store_data );
+                if( $salary->category != 'designation' ) {
+                    $salary = $salary->update( $store_data );
+                }
             } else {
                 if ( !$salary ) {
                     $record = Salary::create( $store_data );
@@ -435,16 +436,19 @@ class Hrm_Payroll {
         foreach ( $users as $user ) {
             $salary_data = $store_data;
             $salary = Salary::where( 'employee_id', $user->ID )
-                // ->where( 'category_id', $store_data['category_id'] )
                 ->where( function($q) use( $start_date, $end_date ) {
                     $q->where( 'month', '>=', $start_date);
                     $q->where( 'month', '<=', $end_date);
                 })->first();
-
+            
             if ( $salary && $is_update ) {
                 $salary_data['employee_id'] = $user->ID;
                 $salary_data = apply_filters( 'hrm_before_update_salary', $salary_data, $salary );
-                $salary->update( $salary_data );
+                
+                if( $salary->category != 'employee' ) {
+                    $salary->update( $salary_data );
+                }
+                
             } else {
                 if ( !$salary ) {
                     $salary_data['employee_id'] = $user->ID;

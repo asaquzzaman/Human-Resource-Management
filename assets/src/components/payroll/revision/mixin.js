@@ -155,7 +155,7 @@ export default {
                     self.$store.commit( self.nameSpace + '/setRecords', res.data );
                     self.$store.commit( self.nameSpace + '/setPagination', res.meta.pagination );
                     self.loadingStop('hrm-list-table');
-                    self.isFetchRecord = true;
+                    //self.isFetchRecord = true;
                 }
             };
 

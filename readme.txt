@@ -73,6 +73,9 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
  * [Fix] Menu order
  * [Fix] Unicode as html for payroll component group record table.
+ * [Update] Description filed change by label for payroll formula create form.
+ * [Fix] % is not working at payroll formula create time.
+ * [Fix] Payroll group salary update conflict with individual employee salary
  
 
 = 2.2.0 - August 23, 2018 =

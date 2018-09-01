@@ -66,6 +66,7 @@ class Hrm_Employee {
         $postdata['search']         = '*' . $_POST['name'] . '*';
         $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
         $postdata['page']  = empty( $_POST['page'] ) ? 1 : absint( $_POST['page'] );
+        $postdata['number'] = empty( $_POST['number'] ) ? hrm_per_page() : $_POST['number'];
         
         $employees = self::getInstance()->get_employees( $postdata );
         

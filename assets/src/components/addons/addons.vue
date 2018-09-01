@@ -25,6 +25,18 @@
 					</a>
 				</div>
 			</div>
+
+			<div class="hrm-block-content">
+				<div class="title">
+					<h1>Recruitment</h1>
+				</div>
+				<div class="hrm-block-description">
+					<span class="text">Recruitment (hiring) refers to the overall process of attracting, shortlisting, selecting and appointing suitable candidates for jobs.</span>
+					<a href="http://wpspear.com/hrm/recruitment/" target="_blank" class="button button-primary hrm-link">
+						Get it now!
+					</a>
+				</div>
+			</div>
 		</div>
 
 	</div>

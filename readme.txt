@@ -69,6 +69,12 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.2.1 - August 23, 2018 =
+
+ * [Fix] Menu order
+ * [Fix] Unicode as html for payroll component group record table.
+ 
+
 = 2.2.0 - August 23, 2018 =
 
  * [New] Attendance management system.

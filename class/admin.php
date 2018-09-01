@@ -2249,7 +2249,7 @@ class Hrm_Admin {
         }
 
         global $wpdb;
-
+        
         $dept_id = empty( $postdata['dept_id'] ) ? false : absint( $postdata['dept_id'] );
         $dept_id = $dept_id ? $dept_id : false;
 
@@ -2266,6 +2266,7 @@ class Hrm_Admin {
             $result = $wpdb->update( $table, $data, array( 'id' => $dept_id ), $format, array( '%d' ) );
 
         } else {
+
             $result  = $wpdb->insert( $table, $data, $format );
             $dept_id = $wpdb->insert_id;
         }
@@ -2333,7 +2334,7 @@ class Hrm_Admin {
         $dept_id  = false, 
         $show_all = false,
         $pagenum  = 1,
-        $limit    = 50
+        $limit    = 100
     ) {
         
         global $wpdb;

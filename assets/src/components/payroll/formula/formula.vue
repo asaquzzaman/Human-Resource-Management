@@ -227,7 +227,7 @@
 					lessOrequal: '<=',
 					greaterOrequal: '>=',
 					not: '!',
-					power: '^',
+					//power: '^',
 				},
 				
 				// variables: {

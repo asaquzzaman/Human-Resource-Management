@@ -293,7 +293,7 @@ class HRM_Shift {
 
 	function get_shift( $postData ) {
         
-        $status   = empty( $postData['status'] ) ? false : $postData['status'];
+        $status   = empty( $postData['status'] ) ? 1 : $postData['status'];
         $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : $postData['per_page'];
         $id       = empty( $postData['id'] ) ? false : $postData['id'];
         $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );

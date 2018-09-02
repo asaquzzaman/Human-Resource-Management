@@ -5,7 +5,7 @@ Tags: hrm, human resource, human resource management, office management, industr
 Requires at least: 4.4
 Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -69,7 +69,12 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
-= 2.2.1 - August 23, 2018 =
+= 2.2.2 - September 1, 2018 =
+
+ * [Update] Punch in/out validation message
+ * [Fix] Attendance shift is not deleted
+
+= 2.2.1 - September 1, 2018 =
 
  * [Fix] Menu order
  * [Fix] Unicode as html for payroll component group record table.

@@ -433,8 +433,25 @@ class Hrm_Attendance {
     }
 
     function punch_in_validation( $post ) {
-        global $current_user;
         $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+
+        $common = $this->common_punch_validation( $user_id );
+        
+        if( is_wp_error( $common ) ) {
+            return $common;
+        }
+        
+
+        if ( ! $this->can_punch_in( $user_id ) ) {
+            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+        }
+
+        return true;
+    }
+
+    function common_punch_validation( $user_id = false ) {
+        global $current_user;
+        $user_id = $user_id ? intval( $user_id ) : get_current_user_id();
 
         $office_time = $this->get_office_time();
         $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
@@ -461,14 +478,8 @@ class Hrm_Attendance {
         $schedule = $this->has_policy( $dpartment->id );
 
         if ( ! $schedule ) {
-            //return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'You have no attendance shift policy', 'hrm' ) );
         }
-
-        if ( ! $this->can_punch_in( $user_id ) ) {
-            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
-        }
-
-        return true;
     }
 
     function can_punch_in( $user_id = false ) {
@@ -478,7 +489,7 @@ class Hrm_Attendance {
         $user_id      = $user_id ? $user_id : get_current_user_id();
         $dpartment    = Hrm_Admin::get_employee_department( $user_id );
         $schedule     = $this->has_policy( $dpartment->id );
-        $shift_id     = isset( $schedule->id ) ? intval( $schedule->id ) : false;
+        $shift_id     = isset( $schedule->id ) ? intval( $schedule->id ) : 0;
         $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
         
         //if no schedule. Then check the last punch_out record. If last punch_out 0 then user can't punch_in. 
@@ -649,7 +660,7 @@ class Hrm_Attendance {
         //         'end'   => date( 'Y-m-d H:i:s', strtotime( $punch_start ) )
         //     ];
         // }
-        var_dump( $ranges );
+        
         foreach ( $ranges as $key => $range ) {
 
             if ( $range['start'] < $current_date_time && $range['end'] >= $current_date_time ) {
@@ -1113,7 +1124,7 @@ class Hrm_Attendance {
 
 
         wp_send_json_success(array(
-            'punch_in'                     => is_wp_error( $punch_in ) ? false : true,
+            'punch_in'                     => is_wp_error( $punch_in ) ? $punch_in->get_error_message() : true,
             // 'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
             // 'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
             // 'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
@@ -1294,23 +1305,15 @@ class Hrm_Attendance {
     }
 
     function punch_out( $user_id = false ) {
-        $office_time = $this->get_office_time();
-        $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
-        $client_ip = hrm_get_client_ip();
 
-        if ( $allow_ip && !in_array( $client_ip, $allow_ip) ) {
-            return new WP_Error('hrm_user_role', __( 'Your ip is not valid for punch in', 'hrm' ) );
+        $user_id = $user_id ? $user_id : get_current_user_id();
+        $validation = $this->common_punch_validation( $user_id );
+
+        if( is_wp_error( $validation ) ) {
+            return $validation;
         }
 
         global $wpdb;
-
-        $user_id = $user_id ? $user_id : get_current_user_id();
-
-        $dpartment = Hrm_Admin::get_employee_department( $user_id );
-
-        if ( ! $dpartment ) {
-            return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
-        }
 
         $table    = $wpdb->prefix . 'hrm_attendance';
 

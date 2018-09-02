@@ -201,6 +201,23 @@ class HRM_Shift {
         return $departments;
     }
 
+    function filter_shift_data( $postData ) {
+        
+        foreach ( $postData['times'] as $key => $time ) {
+
+            if( empty( $time['breakStatus'] ) || $time['breakStatus'] == 'false' ) {
+                $postData['times'][$key]['breaks'][0] = [
+                    'breakBegin'   => '',
+                    'breakEnd'     => '',
+                    'breakHours'   => '',
+                    'breakMinutes' => ''
+                ];
+            }
+        }
+        
+        return $postData;
+    }
+
     function update_shift( $postData ) {
         global $wpdb;
         $validation = $this->validation( $postData );
@@ -208,6 +225,7 @@ class HRM_Shift {
         $postData['departments'] = $this->filter_departments( $postData['times'] );
         
         if ( ! is_wp_error( $validation ) ) {
+            $postData = $this->filter_shift_data( $postData );
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
             $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );

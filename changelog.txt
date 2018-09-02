@@ -1,3 +1,10 @@
+= 2.2.2 - September 2, 2018 =
+
+ * [Update] Punch in/out validation message.
+ * [Fix] Attendance shift is not deleted.
+ * [Fix] Attendance shift break is not update.
+ * [Fix] Leave type fatal error.
+ 
 = 2.2.1 - August 23, 2018 =
 
  * [Fix] Menu order

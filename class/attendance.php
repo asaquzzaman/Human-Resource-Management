@@ -80,44 +80,37 @@ class Hrm_Attendance {
             'to' => $punch_out
         ]);
 
-        // foreach ( $holidays as $key => $holiday ) {
-        //     if ( $punch_in <= $holiday && $holiday <= $punch_out) {
-
-        //     } else {
-        //         unset( $holidays[$key] );
-        //     }
-        // }
-
-        $department         = Hrm_Admin::getInstance()->get_employee_department( $user_id );
-        $work_week          = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
-        $exclud_dates       = array_merge( $leaves, $holidays, $work_week );
-        $attendance         = $this->get_attendance( $postdata );
-        $presents           = $this->get_in_date_array( $attendance['data'] );
-        $absents            = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
-        $total_off_days     = count( $work_week ) + count( $holidays ) + count( $leaves );
-        $total_work_days    = count( $interval_array ) - $total_off_days;
-        $table              = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
-        $total_worked_second  = $this->get_total_worked_second( $attendance );
-        $avg_work           = $total_worked_second/$total_work_days;
-        $shift_second       = $this->get_total_shift_second( $user_id, $interval_array, $exclud_dates );
-        $total_shift_second = $total_work_days * $shift_second;
-        $over_time          = $total_worked_second - $total_shift_second;
+        
+        $department          = Hrm_Admin::getInstance()->get_employee_department( $user_id );
+        $work_week           = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
+        $exclud_dates        = array_merge( $leaves, $holidays, $work_week );
+        $attendance          = $this->get_attendance( $postdata );
+        $presents            = $this->get_in_date_array( $attendance['data'] );
+        $absents             = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
+        $total_off_days      = count( $work_week ) + count( $holidays ) + count( $leaves );
+        $total_work_days     = count( $interval_array ) - $total_off_days;
+        $table               = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
+        $total_worked_second = $this->get_total_worked_second( $attendance );
+        $avg_work            = $total_worked_second/$total_work_days;
+        $shift_second        = $this->get_total_shift_second( $user_id, $interval_array, $exclud_dates );
+        $total_shift_second  = $total_work_days * $shift_second;
+        $over_time           = $total_worked_second - $total_shift_second;
         
         $results = [
-            'user'      => get_user_by( 'id', $user_id ),
-            'days'      => count( $interval_array ),
-            'work_days' => $total_work_days,
-            'total_worked_time' => $this->second_to( $total_worked_second ),
-            'leaves'    => count( $leaves ),
-            'holidays'  => count( $holidays ),
-            'weekends'  => count( $work_week ),
-            'presents'  => count( $presents ),
-            'absents'   => $absents,
-            'over_time' => $over_time > 0 ? $this->second_to( $over_time ) : '00:00:00',
+            'user'                => get_user_by( 'id', $user_id ),
+            'days'                => count( $interval_array ),
+            'work_days'           => $total_work_days,
+            'total_worked_time'   => $this->second_to( $total_worked_second ),
+            'leaves'              => count( $leaves ),
+            'holidays'            => count( $holidays ),
+            'weekends'            => count( $work_week ),
+            'presents'            => count( $presents ),
+            'absents'             => $absents,
+            'over_time'           => $over_time > 0 ? $this->second_to( $over_time ) : '00:00:00',
             'total_working_hours' => $total_shift_second === false ? __( 'You have assigned no shfit', 'hrm' ) : $this->second_to( $total_shift_second ),
-            'avg_working_hours' => $this->second_to( $avg_work ),
-            'table' => $table,
-            'department' => $department ? $department->toArray() : []
+            'avg_working_hours'   => $this->second_to( $avg_work ),
+            'table'               => $table,
+            'department'          => $department ? $department->toArray() : []
         ];
 
         return $results;
@@ -440,10 +433,9 @@ class Hrm_Attendance {
         if( is_wp_error( $common ) ) {
             return $common;
         }
-        
 
         if ( ! $this->can_punch_in( $user_id ) ) {
-            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+            return new WP_Error('hrm_punch_in_disabled', __( 'hrm_punch_in_disabled', 'hrm' ) );
         }
 
         return true;
@@ -726,6 +718,7 @@ class Hrm_Attendance {
     }
 
     function get_punch_in_shift( $schedule, $dept_id, $current_date = false ) {
+
         $shift = false;
         $times = maybe_unserialize( $schedule->times );
         $times = $this->filter_times_according_department( $times, $dept_id );

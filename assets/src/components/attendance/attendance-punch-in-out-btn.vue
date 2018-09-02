@@ -66,7 +66,14 @@
 			},
 
 			hasPunchInError () {
-				if(this.$store.state.attendance.punch_in_status !== true) {
+			
+				if(
+					this.$store.state.attendance.punch_in_status !== false
+						&&
+					this.$store.state.attendance.punch_in_status !== true
+						&&
+					this.$store.state.attendance.punch_in_status != 'hrm_punch_in_disabled'
+				) {
 					return this.$store.state.attendance.punch_in_status;
 				}
 			}

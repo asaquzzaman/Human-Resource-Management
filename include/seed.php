@@ -2,7 +2,8 @@
 use HRM\Models\Designation;
 use HRM\Models\Location;
 
-function hrm_attendance( $email, $start, $last ) {
+//demo hrm_create_attendance('acclaim@wpspear.com','2018-08-01','2018-08-31');
+function hrm_create_attendance( $email, $start, $last ) {
 	global $wpdb;
 
 	$user = get_user_by( 'email', $email );
@@ -27,7 +28,7 @@ function hrm_attendance( $email, $start, $last ) {
 			'punch_in'  => date( 'Y-m-d H:i:s', $start ),
 			'punch_out' => date( 'Y-m-d H:i:s', $end ),
 			'total'     => $end - $start,
-			'shift_id'  => 1
+			'shift_id'  => 2
         );
 
         $wpdb->insert( $table, $data );

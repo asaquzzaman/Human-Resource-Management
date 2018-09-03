@@ -1,6 +1,6 @@
 <template>
 	<div id="hrm-list-table">
-		<table v-if="isFetchRecord" class="wp-list-table widefat fixed striped pages">
+		<table class="wp-list-table widefat fixed striped pages">
             <thead>
                 <tr>
                 	<td v-if="manageOrganization()" id="cb" class="manage-column column-cb check-column">
@@ -53,7 +53,7 @@
 
 				<tr v-if="!records.length">
 					<td colspan="6">
-						No result found!
+						No result found! Please search for salary revision.
 					</td>
 				</tr>
             </tbody>
@@ -101,14 +101,14 @@
 				loading: false,
 				deleteAllStatus: false,
 				deletedId: [],
-				isFetchRecord: false,
+				//isFetchRecord: false,
 				salary: {},
 				popUpDetails: false
 			}
 		},
 		
 		created () {
-			this.getRecords();
+			//this.getRecords();
 		},
 
 		components: {

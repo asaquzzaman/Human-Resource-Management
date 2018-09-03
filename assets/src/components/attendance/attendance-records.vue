@@ -81,7 +81,6 @@
 				return this.$store.state.attendance.totalOfficeTime;
 			},
 			attendace_records: function() {
-				console.log(this.$store.state.attendance.attendance.data);
 				return this.$store.state.attendance.attendance.data;
 			},
 			punchInFormatedDate: function() {

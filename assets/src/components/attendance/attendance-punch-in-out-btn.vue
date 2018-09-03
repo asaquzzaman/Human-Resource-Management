@@ -19,11 +19,32 @@
 					<!-- :disabled="isDisabled()" -->
 					<button :disabled="punchInIsDisabled" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
 					<button :disabled="!punchInIsDisabled" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
+					<div class="message-punch-in-out">
+						<div class="error-punch-in-out" v-if="punchInIsDisabled">{{ hasPunchInError }}</div>
+						<div class="error-punch-in-out" v-if="!is_employee()">
+							(Only HRM emaployee and manager can punch in/out)
+						</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
 </template>
+
+<style lang="less">
+	.hrm-punch-in-out-wrap {
+		.message-punch-in-out {
+			margin-top: 20px;
+			font-size: 12px;
+
+			.error-punch-in-out {
+				color: #cc3838;
+			}
+		}
+	}
+
+</style>
 
 <script>
 	import Clock from './../common/clock.vue';
@@ -41,14 +62,38 @@
 		},
 		computed: {
 			punchInIsDisabled () {
-				return this.$store.state.attendance.punch_in_status ? false : true;
+				return this.$store.state.attendance.punch_in_status === true ? false : true;
+			},
+
+			hasPunchInError () {
+			
+				if(
+					this.$store.state.attendance.punch_in_status !== false
+						&&
+					this.$store.state.attendance.punch_in_status !== true
+						&&
+					this.$store.state.attendance.punch_in_status != 'hrm_punch_in_disabled'
+				) {
+					return this.$store.state.attendance.punch_in_status;
+				}
 			}
 		},
 		components: {
 			'clock': Clock
 		},
 		methods: {
+			is_employee () {
+				var roles = HRM_Vars.current_user.roles;
+				var status = false;
 
+				roles.forEach(function(role) {
+					if(role == 'hrm_employee' || role == 'hrm_manager') {
+						status = true;
+					}
+				});
+
+				return status;
+			},
 			punchIn: function() {
 
 				//for preventing multipule submit

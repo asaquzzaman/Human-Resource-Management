@@ -80,45 +80,46 @@ class Hrm_Attendance {
             'to' => $punch_out
         ]);
 
-        // foreach ( $holidays as $key => $holiday ) {
-        //     if ( $punch_in <= $holiday && $holiday <= $punch_out) {
-
-        //     } else {
-        //         unset( $holidays[$key] );
-        //     }
-        // }
-
-        $department         = Hrm_Admin::getInstance()->get_employee_department( $user_id );
-        $work_week          = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
-        $exclud_dates       = array_merge( $leaves, $holidays, $work_week );
-        $attendance         = $this->get_attendance( $postdata );
-        $presents           = $this->get_in_date_array( $attendance['data'] );
-        $absents            = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
-        $total_off_days     = count( $work_week ) + count( $holidays ) + count( $leaves );
-        $total_work_days    = count( $interval_array ) - $total_off_days;
-        $total_shift_second = $this->get_total_shift_second( $attendance['data'], $user_id );
-        $net_shift_second   = $total_shift_second * $total_work_days;
-        $table              = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
-        $avg_work           = $this->total_worked_time/$total_work_days;
-
+        
+        $department          = Hrm_Admin::getInstance()->get_employee_department( $user_id );
+        $work_week           = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
+        $exclud_dates        = array_merge( $leaves, $holidays, $work_week );
+        $attendance          = $this->get_attendance( $postdata );
+        $presents            = $this->get_in_date_array( $attendance['data'] );
+        $absents             = $this->get_out_date_array( $interval_array, $presents, $exclud_dates );
+        $total_off_days      = count( $work_week ) + count( $holidays ) + count( $leaves );
+        $total_work_days     = count( $interval_array ) - $total_off_days;
+        $table               = $this->get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance['data'], $user_id );
+        $total_worked_second = $this->get_total_worked_second( $attendance );
+        $avg_work            = $total_worked_second/$total_work_days;
+        $shift_second        = $this->get_total_shift_second( $user_id, $interval_array, $exclud_dates );
+        $total_shift_second  = $total_work_days * $shift_second;
+        $over_time           = $total_worked_second - $total_shift_second;
+        
         $results = [
-            'user'      => get_user_by( 'id', $user_id ),
-            'days'      => count( $interval_array ),
-            'work_days' => $total_work_days,
-            'total_worked_time' => $this->second_to( $this->total_worked_time ),
-            'leaves'    => count( $leaves ),
-            'holidays'  => count( $holidays ),
-            'weekends'  => count( $work_week ),
-            'presents'  => count( $presents ),
-            'absents'   => absint( $total_work_days - count( $presents ) ),
-            'over_time' => $this->second_to( $this->total_over_time ),
-            'total_working_hours' => $total_shift_second === false ? __( 'You have assigned no shfit', 'hrm' ) : $this->second_to( $net_shift_second ),
-            'avg_working_hours' => $this->second_to( $avg_work ),
-            'table' => $table,
-            'department' => $department ? $department->toArray() : []
+            'user'                => get_user_by( 'id', $user_id ),
+            'days'                => count( $interval_array ),
+            'work_days'           => $total_work_days,
+            'total_worked_time'   => $this->second_to( $total_worked_second ),
+            'leaves'              => count( $leaves ),
+            'holidays'            => count( $holidays ),
+            'weekends'            => count( $work_week ),
+            'presents'            => count( $presents ),
+            'absents'             => $absents,
+            'over_time'           => $over_time > 0 ? $this->second_to( $over_time ) : '00:00:00',
+            'total_working_hours' => $total_shift_second === false ? __( 'You have assigned no shfit', 'hrm' ) : $this->second_to( $total_shift_second ),
+            'avg_working_hours'   => $this->second_to( $avg_work ),
+            'table'               => $table,
+            'department'          => $department ? $department->toArray() : []
         ];
 
         return $results;
+    }
+
+    function get_total_worked_second( $attendance ) {
+        $second_array = wp_list_pluck( $attendance['data'], 'total_second' );
+
+        return array_sum( $second_array );
     }
 
     function get_individual_day_records( $interval_array, $leaves, $holidays, $work_week, $attendance, $user_id ) {
@@ -187,12 +188,12 @@ class Hrm_Attendance {
             
         $times = maybe_unserialize( $schedule['data']['times'] );
         $department = Hrm_Admin::getInstance()->get_employee_department( $user_id );
-        
+         
         foreach ( $attendance as $key => $attand ) {
-            
             $punch_in_shift = $this->get_punch_in_shift( $schedule, $department->id, $attand['punch_in'] );
-            $shift_work_second = ( $punch_in_shift['workHours'] * 60 * 60 ) + ( $punch_in_shift['workMinutes'] * 60 );
 
+            $shift_work_second = ( $punch_in_shift['workHours'] * 60 * 60 ) + ( $punch_in_shift['workMinutes'] * 60 );
+            
             $attend_second = $attand['total_second']; //$this->get_second( $attand['punch_in'], $attand['punch_out'] );
 
             $this->total_worked_time = $this->total_worked_time + $attend_second;
@@ -225,15 +226,64 @@ class Hrm_Attendance {
                 'work_status'         => $work_status
             ];
         }
-
+        
         return $return_data;
     }
 
-    function get_total_shift_second( $attendance, $user_id ) {
-        $shift_id = wp_list_pluck( $attendance, 'shift_id' );
-        $shift_ids = array_unique( $shift_id );
+    function get_total_shift_second( $user_id ) {
         $department = Hrm_Admin::get_employee_department( $user_id );
-        $dept_id = $department ? $department->id : false;
+        $total_work_second = 0;
+        
+        $shifts = HRM_Shift::getInstance()->get_shift(
+            [
+                'status' => true,
+                'per_page' => 5000
+            ]
+        );
+        
+        foreach ( $shifts['data'] as $key => $shift ) {
+            foreach ( $shift['times'] as $key => $time ) {
+                $dept_ids = wp_list_pluck($time['departments'], 'id');
+
+                if ( in_array( $department->id, $dept_ids ) ) {
+                    $hours = $time['workHours'] * 60 * 60;
+                    $minutes = $time['workMinutes'] * 60;
+                    $total_work_second = $total_work_second + ( $hours + $minutes );
+                }
+            }
+        }
+
+        return $total_work_second;
+
+        
+        // foreach ( $attendance as $key => $attend ) {
+        //     $punch = date( 'Y-m-d', strtotime( $attend['punch_in'] ) );
+            
+        //     if ( in_array( $punch, $all_leaves_array ) ) {
+        //         unset( $attendance[$key] );
+        //     }
+        // }
+
+
+
+        // pr($attendance, $all_leaves_array); die();
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $shift_id   = wp_list_pluck( $attendance, 'shift_id' );
+        $shift_ids  = array_unique( $shift_id );
+        $department = Hrm_Admin::get_employee_department( $user_id );
+        $dept_id    = $department ? $department->id : false;
 
         $shifts = HRM_Shift::getInstance()->get_shift(
             [
@@ -289,9 +339,18 @@ class Hrm_Attendance {
     }
 
     function get_out_date_array( $interval_array, $presents, $exclud_dates ) {
+
+        $absents = 0;
         
-        $exclud_dates = array_merge( $exclud_dates, $presents );
-        $absents  = array_diff( $interval_array, $exclud_dates);
+        foreach ( $interval_array as $key => $interval ) {
+            if ( in_array( $interval, $exclud_dates) ) {
+                continue;
+            }
+
+            if ( ! in_array( $interval, $presents) ) {
+                $absents = $absents + 1;
+            }
+        }
         
         return $absents;
     }
@@ -367,8 +426,24 @@ class Hrm_Attendance {
     }
 
     function punch_in_validation( $post ) {
-        global $current_user;
         $user_id = ( isset( $post['user_id'] ) && $post['user_id'] ) ? intval( $post['user_id'] ) : get_current_user_id();
+
+        $common = $this->common_punch_validation( $user_id );
+        
+        if( is_wp_error( $common ) ) {
+            return $common;
+        }
+
+        if ( ! $this->can_punch_in( $user_id ) ) {
+            return new WP_Error('hrm_punch_in_disabled', __( 'hrm_punch_in_disabled', 'hrm' ) );
+        }
+
+        return true;
+    }
+
+    function common_punch_validation( $user_id = false ) {
+        global $current_user;
+        $user_id = $user_id ? intval( $user_id ) : get_current_user_id();
 
         $office_time = $this->get_office_time();
         $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
@@ -395,14 +470,8 @@ class Hrm_Attendance {
         $schedule = $this->has_policy( $dpartment->id );
 
         if ( ! $schedule ) {
-            //return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'You have no attendance shift policy', 'hrm' ) );
         }
-
-        if ( ! $this->can_punch_in( $user_id ) ) {
-            return new WP_Error('hrm_user_role', __( 'You have no time schedule policy', 'hrm' ) );
-        }
-
-        return true;
     }
 
     function can_punch_in( $user_id = false ) {
@@ -412,7 +481,7 @@ class Hrm_Attendance {
         $user_id      = $user_id ? $user_id : get_current_user_id();
         $dpartment    = Hrm_Admin::get_employee_department( $user_id );
         $schedule     = $this->has_policy( $dpartment->id );
-        $shift_id     = isset( $schedule->id ) ? intval( $schedule->id ) : false;
+        $shift_id     = isset( $schedule->id ) ? intval( $schedule->id ) : 0;
         $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
         
         //if no schedule. Then check the last punch_out record. If last punch_out 0 then user can't punch_in. 
@@ -583,7 +652,7 @@ class Hrm_Attendance {
         //         'end'   => date( 'Y-m-d H:i:s', strtotime( $punch_start ) )
         //     ];
         // }
-        var_dump( $ranges );
+        
         foreach ( $ranges as $key => $range ) {
 
             if ( $range['start'] < $current_date_time && $range['end'] >= $current_date_time ) {
@@ -649,6 +718,7 @@ class Hrm_Attendance {
     }
 
     function get_punch_in_shift( $schedule, $dept_id, $current_date = false ) {
+
         $shift = false;
         $times = maybe_unserialize( $schedule->times );
         $times = $this->filter_times_according_department( $times, $dept_id );
@@ -669,7 +739,7 @@ class Hrm_Attendance {
         }
 
         if ( !$shift ) {
-            $shift = $this->get_next_shift( $schedule, $dept_id );
+            $shift = $this->get_next_shift( $schedule, $dept_id, $current_date );
         }
 
         return $shift;
@@ -679,26 +749,25 @@ class Hrm_Attendance {
         $times        = maybe_unserialize( $schedule->times );
         $times        = $this->filter_times_according_department( $times, $dept_id );
         $all_shifts   = [];
-        $current_date = $current_date ? date( 'Y-m-d H:i:s', strtotime( $current_date ) ) 
+        $today = date('Y-m-d', strtotime(current_time('mysql')));
+        $current_date = $current_date ? date( "$today H:i:s", strtotime( $current_date ) ) 
             : date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) ); 
 
         foreach ( $times as $key => $time ) {
             $range = $this->get_shift_range( $time, $schedule->punch_start );
             
             $shift_start= $range['start'];
-            $shift_end  = $range['end'];
+            $shift_end  = date( 'Y-m-d H:i', strtotime( $range['end'] ) );
+            $current_date  = date( 'Y-m-d H:i', strtotime( $current_date ) );
 
-            if ( $current_date > $shift_start ) {
-                continue;
+            if ( $current_date <= $shift_end ) {
+                $shift_end  = strtotime( $shift_end );
+                $all_shifts[$shift_end] = $time;
             }
-
-            $shift_end  = strtotime( $shift_end );
-            $all_shifts[$shift_end] = $time;
-          
         }
 
         ksort($all_shifts);
-
+        
         return reset( $all_shifts );
     }
 
@@ -1048,7 +1117,7 @@ class Hrm_Attendance {
 
 
         wp_send_json_success(array(
-            'punch_in'                     => is_wp_error( $punch_in ) ? false : true,
+            'punch_in'                     => is_wp_error( $punch_in ) ? $punch_in->get_error_message() : true,
             // 'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
             // 'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
             // 'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
@@ -1229,23 +1298,15 @@ class Hrm_Attendance {
     }
 
     function punch_out( $user_id = false ) {
-        $office_time = $this->get_office_time();
-        $allow_ip  = empty( $office_time->ip ) ? [] : maybe_unserialize( $office_time->ip );
-        $client_ip = hrm_get_client_ip();
 
-        if ( $allow_ip && !in_array( $client_ip, $allow_ip) ) {
-            return new WP_Error('hrm_user_role', __( 'Your ip is not valid for punch in', 'hrm' ) );
+        $user_id = $user_id ? $user_id : get_current_user_id();
+        $validation = $this->common_punch_validation( $user_id );
+
+        if( is_wp_error( $validation ) ) {
+            return $validation;
         }
 
         global $wpdb;
-
-        $user_id = $user_id ? $user_id : get_current_user_id();
-
-        $dpartment = Hrm_Admin::get_employee_department( $user_id );
-
-        if ( ! $dpartment ) {
-            return new WP_Error('hrm_user_role', __( 'Do you have assign any department?', 'hrm' ) );
-        }
 
         $table    = $wpdb->prefix . 'hrm_attendance';
 
@@ -1484,12 +1545,12 @@ class Hrm_Attendance {
 
             if ( ! empty( $punch_in ) ) {
                 $punch_in = date( 'Y-m-d', strtotime( $punch_in ) );
-                $q->where( 'punch_in', '>=', $punch_in);
+                $q->whereDate( 'punch_in', '>=', $punch_in);
             }
 
             if ( ! empty( $punch_out ) ) {
                 $punch_out = date( 'Y-m-d', strtotime( $punch_out ) );
-                $q->where( 'punch_out', '<=', $punch_out);
+                $q->whereDate( 'punch_out', '<=', $punch_out);
             }
         })
         ->orderBy( $order_by, 'ASC' )

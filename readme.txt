@@ -3,9 +3,9 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
-Tested up to: 4.9.5
+Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: trunk
+Stable tag: 2.2.2
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -68,6 +68,30 @@ Here are some notable features that you may consider before diving in.
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
+
+= 2.2.2 - September 2, 2018 =
+
+ * [Update] Punch in/out validation message.
+ * [Fix] Attendance shift is not deleted.
+ * [Fix] Attendance shift break is not update.
+ * [Fix] Leave type fatal error.
+
+= 2.2.1 - September 1, 2018 =
+
+ * [Fix] Menu order
+ * [Fix] Unicode as html for payroll component group record table.
+ * [Update] Description filed change by label for payroll formula create form.
+ * [Fix] % is not working at payroll formula create time.
+ * [Fix] Payroll group salary update conflict with individual employee salary
+ 
+
+= 2.2.0 - August 23, 2018 =
+
+ * [New] Attendance management system.
+ * [Fix] Dashboard notice and birthday.
+ * [Fix] Child department hierarchy.
+ * [Fix] Peanding leave does not appear.
+ * [Fix] JS make compitable for IE>8
 
 = 2.1.3 - May 09, 2018 =
 

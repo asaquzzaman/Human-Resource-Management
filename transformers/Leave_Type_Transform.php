@@ -4,9 +4,9 @@ namespace HRM\Transformers;
 use HRM\Models\Leave_Type;
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Resource\Collection as Collection;
-use HRM\Core\Department\Department_Transformer;
 use HRM\Core\Transformer_Manager;
 use HRM\Core\Common\Resource_Editors;
+use HRM\Transformers\Department_Transformer;
 
 class Leave_Type_Transform extends TransformerAbstract {
 	use Transformer_Manager, Resource_Editors;

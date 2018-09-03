@@ -29,6 +29,7 @@
             "include/loaders.php",
             "include/configurations.php",
             "include/function.php",
+            "include/seed.php",
             "include/urls.php",
             "include/page.php",
             "include/payroll_formula.php"

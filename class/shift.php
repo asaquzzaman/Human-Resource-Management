@@ -201,12 +201,31 @@ class HRM_Shift {
         return $departments;
     }
 
+    function filter_shift_data( $postData ) {
+        
+        foreach ( $postData['times'] as $key => $time ) {
+
+            if( empty( $time['breakStatus'] ) || $time['breakStatus'] == 'false' ) {
+                $postData['times'][$key]['breaks'][0] = [
+                    'breakBegin'   => '',
+                    'breakEnd'     => '',
+                    'breakHours'   => '',
+                    'breakMinutes' => ''
+                ];
+            }
+        }
+        
+        return $postData;
+    }
+
     function update_shift( $postData ) {
+        global $wpdb;
         $validation = $this->validation( $postData );
 
         $postData['departments'] = $this->filter_departments( $postData['times'] );
         
         if ( ! is_wp_error( $validation ) ) {
+            $postData = $this->filter_shift_data( $postData );
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
             $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
             $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
@@ -237,7 +256,7 @@ class HRM_Shift {
                     ->where('from', $postData['id'])
                     ->delete();
             }
-
+            
             $store = hrm_update_records( $postData );
 
             return $store;
@@ -292,7 +311,7 @@ class HRM_Shift {
 
 	function get_shift( $postData ) {
         
-        $status   = empty( $postData['status'] ) ? false : $postData['status'];
+        $status   = empty( $postData['status'] ) ? 1 : $postData['status'];
         $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : $postData['per_page'];
         $id       = empty( $postData['id'] ) ? false : $postData['id'];
         $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );

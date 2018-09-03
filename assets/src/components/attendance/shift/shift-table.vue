@@ -35,8 +35,8 @@
 	                    			<td>
 	                    				
 				                    	<div>Total Break Time: {{ getTotalBreakTime(time.breaks) }}</div>
-				                    	<div>
-				                    		<a @click.prevent="breadkDetails(time)" href="#">Details</a>
+				                    	<div v-if="hasBreakTime(time.breaks)">
+				                    		<a @click.prevent="breadkDetails(time)" href="#">Break Details</a>
 				                    	</div>
 				                    	<div v-hrm-break-dialog v-if="time.popup">
 					                    	<ul>
@@ -55,21 +55,7 @@
 	                    	</table>
                     	</div>
                     </td>
-                    <!-- <td>
-                    	<ul>
-                    		<li v-for="time in record.times">
-                    			<div>Duration: {{ time.begin }} <span v-html="'&ndash;'"></span> {{ time.end }}</div>
-                    			<div>Time: {{ getWorkTime(time) }}</div>
-                    		</li>
-                    	</ul>
-                    	<div>Total Time: {{ getTotalWorkTime(record) }}</div>
-                    </td>
-                    <td>
-                    	{{ getBreakTime(record) }}
-                    </td>
-                    <td>
-                    	{{ getNetTime(record) }}
-                    </td>-->
+
                     <td>
                     	<ul>
                     		<li v-for="dept in hasDepartment(record)">
@@ -170,6 +156,15 @@
 			}
 		},
 		methods: {
+			hasBreakTime (breakTime) {
+				let breakt = this.getTotalBreakTime(breakTime);
+
+				if( breakt == '00:00' ) {
+					return false;
+				}
+
+				return true;
+			},
 			hasDepartment (record) {
 				if(typeof record.departments != 'undefined') {
 					return record.departments.data;
@@ -237,6 +232,9 @@
 			},
 
 			selfDelete (record) {
+				if(!confirm('Are your sure!')) {
+					return false;
+				}
 				var self = this;
 				this.recordDelete([record.id], function() {
 					var hasRecords = self.$store.state[self.nameSpace].records.length;

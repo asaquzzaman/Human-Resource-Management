@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.1.3
+ * Version: 2.2.2
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.1.3' );
+        $this->define( 'HRM_VERSION', '2.2.2' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -235,20 +235,19 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Payroll', 'hrm' ), $capability, 'admin.php?page=hr_management#/payroll'];
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
-        $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
-        $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
         $this->addons = apply_filters( 'hrm_addons', array() );
         $this->addons_license = apply_filters( 'hrm_addons_license', array() );
 
-        if ( !empty( $this->addons ) ) {
-            add_submenu_page( 'hr_management', __( 'Updates', 'hrm' ), __( 'Updates', 'hrm' ), 'activate_plugins', 'hrm_addons_update', array( $this, 'addons_update' ) );
-        }
+        do_action( 'hrm_menu_before_load_scripts', $menu );
+
+        $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
+        $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
         if ( !empty( $this->addons_license ) ) {
             add_submenu_page( 'hr_management', __( 'License', 'hrm' ), __( 'License', 'hrm' ), 'activate_plugins', 'hrm_addons_license', array( $this, 'addons_license' ) );
         }
-        do_action( 'hrm_menu_before_load_scripts', $menu );
+        
         
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
     }

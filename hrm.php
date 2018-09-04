@@ -235,6 +235,7 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Payroll', 'hrm' ), $capability, 'admin.php?page=hr_management#/payroll'];
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
+        $submenu[$hrm_page_slug]['recruitment'] = [ __( 'Recruitment', 'hrm' ), 'read', 'admin.php?page=hr_management#/recruitment' ];
 
         $this->addons = apply_filters( 'hrm_addons', array() );
         $this->addons_license = apply_filters( 'hrm_addons_license', array() );

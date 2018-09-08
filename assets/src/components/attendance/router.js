@@ -6,6 +6,8 @@ import './shift/router';
 import hrm_attendace_records from './attendance-records.vue'
 import hrm_attendace_user_search from './attendance-user-search.vue'
 import hrm_attendace_configuration from './attendance-configuration.vue'
+import Reports from './attendance-report.vue'
+import Customize from './attendance-customize.vue'
 
 
 // let hrm_attendace_records = resolve => {
@@ -28,14 +30,14 @@ import hrm_attendace_configuration from './attendance-configuration.vue'
 
 import Empty from './empty.vue'
 
-let menu = [
+var menu = [
     { 
         path: 'attendance', 
         component: Empty, 
         name: 'attendance',
         meta: {
             label: 'Attendance',
-            order: 7
+            order: 1
         },
 
         children: HRMGetRegisterChildrenRoute('attendance',
@@ -62,6 +64,35 @@ let menu = [
     }
 ];
 
+
+
+if(typeof HRM_Shift_Vars == 'undefined') {
+
+    menu[0].children.push(
+        {
+            path: 'reports', 
+            name: 'attendance_reports',
+            component: Reports,
+            meta: {
+                label: 'Reports',
+                order: 4
+            }
+        }
+    );
+
+    menu[0].children.push(
+        {
+            path: 'attendance-customize', 
+            name: 'attendance_customize',
+            component: Customize,
+            meta: {
+                label: 'Customize',
+                order: 3
+            }
+        }
+    );
+}
+
 if ( hrm_user_can('manage_attendance') ) {
     menu[0].children.push(
         {
@@ -70,7 +101,7 @@ if ( hrm_user_can('manage_attendance') ) {
             name: 'attendance_configuration',
             meta: {
                 label: 'Configuration',
-                order: 1
+                order: 5
             }
         }
     );

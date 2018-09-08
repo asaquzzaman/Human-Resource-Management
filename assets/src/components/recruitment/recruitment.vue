@@ -1,30 +1,6 @@
 <template>
 	<div class="metabox-holder">
 		<div class="hrm-addon-block">
-			
-			<div class="hrm-block-content">
-				<div class="title">
-					<h1>HRM Front-End</h1>
-				</div>
-				<div class="hrm-block-description">
-					<span class="text">You will get back-end all feature in front-end</span>
-					<a href="http://wpspear.com/hrm/front-end/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
-					</a>
-				</div>
-			</div>
-
-			<div class="hrm-block-content">
-				<div class="title">
-					<h1>Attendance report & customize punch in/out</h1>
-				</div>
-				<div class="hrm-block-description">
-					<span class="text">Generate attendance reports for all employee or individual employee. You can also customize punch-in and punch-out</span>
-					<a href="http://wpspear.com/hrm/attendance-report/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
-					</a>
-				</div>
-			</div>
 
 			<div class="hrm-block-content">
 				<div class="title">

@@ -4,7 +4,7 @@
  * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.2' );
+        $this->define( 'HRM_VERSION', '2.2.3' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -177,6 +177,24 @@ class WP_Hrm {
         add_action( 'admin_menu', array($this, 'admin_menu') );
         add_action( 'init', array( $this, 'init' ) );
         add_action( 'init', 'hrm_set_capability' );
+        add_action( 'admin_notices', array( $this, 'hrm_banner' ) );
+    }
+
+    function hrm_banner() {
+        if( empty( $_GET['page'] ) ) {
+            return;
+        }
+        if( $_GET['page'] != 'hr_management' ) {
+            return;
+        }
+        ?>
+        <div id="message" class="updated notice notice-success">
+            <p>
+                WP HRM front-end version is available, please  
+                <a target="_blank" href="http://wpspear.com/hrm/front-end/"><strong>get it now!</strong></a>
+            </p>
+        </div>
+        <?php
     }
 
     function init_filter() {

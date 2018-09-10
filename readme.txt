@@ -5,7 +5,7 @@ Tags: hrm, human resource, human resource management, office management, industr
 Requires at least: 4.4
 Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -68,6 +68,14 @@ Here are some notable features that you may consider before diving in.
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
+
+= 2.2.3 - September 6, 2018 =
+
+ * [New] Admin notice for getting WP HRM front-end version. 
+ * [New] Recruitment menu.
+ * [Update] Attendance query.
+ * [Update] Attendance warning message.
+ * [Fix] Attendance menu order.
 
 = 2.2.2 - September 2, 2018 =
 

@@ -1,5 +1,6 @@
 <?php
 
+//HRM_Seeder::getInstance()->create_employees(50);
 class HRM_Seeder {
 	
 	private static $instance;
@@ -27,7 +28,7 @@ class HRM_Seeder {
 			$postdata['gender']           = array_rand(array('male' => '1', 'female'=> '2'));
 			$postdata['mobile']           = rand(11, 11);
 
-			Hrm_Employeelist::getInstance()->add_new_employer( $postdata );
+			Hrm_Employee::getInstance()->add_new_employee( $postdata );
 		}
 	}
 

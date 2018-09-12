@@ -4,7 +4,7 @@ namespace HRM\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use HRM\Models\Leave;
-use HRM\Core\Leave\Leave_Type_Transform;
+use HRM\Transformers\Leave_Type_Transform;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use HRM\Core\Transformer_Manager;
 use HRM\Core\Common\Resource_Editors;

@@ -515,15 +515,16 @@ class Hrm_Employee {
         return $this->get_personal_info($user_id);
     }
     function add_new_employee( $postdata ) {
-        $postdata['id'] = absint($postdata['id'] );
         if ( 
             isset( $postdata['id'] ) 
-                && 
+            && 
             ! empty( $postdata['id'] ) 
-        ) {
-            $user_id = $postdata['id'];
-            $this->update_empoyee( $user_id, $postdata );
-            return $user_id;
+            ) {
+            
+                $user_id = absint( $postdata['id'] );
+           
+                $this->update_empoyee( $user_id, $postdata );
+                return $user_id;
         }
 
         $validate = $this->new_admin_form_validate( $postdata );

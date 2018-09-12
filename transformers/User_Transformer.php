@@ -1,6 +1,6 @@
 <?php
 
-namespace HRM\Core\User;
+namespace HRM\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use HRM\Models\User;

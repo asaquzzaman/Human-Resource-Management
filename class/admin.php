@@ -1548,23 +1548,23 @@ class Hrm_Admin {
     function new_admin_form_validate( $postdata ) {
 
         if( empty($postdata['user_name']) ) {
-            return new WP_Error( 'error', __('Username required ', 'cpm' ) );
+            return new WP_Error( 'error', __('Username required ', 'hrm' ) );
         }
 
         if( empty($postdata['email']) ) {
-            return new WP_Error( 'error', __('Eamil required', 'cpm' ) );
+            return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
         }
 
         if ( ! is_email($postdata['email'] ) ) {
-            return new WP_Error( 'error', __('Invalid email', 'cpm' ) );
+            return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
         }
 
         if( username_exists( $postdata['user_name'] ) ) {
-            return new WP_Error( 'error', __('Username already exist', 'cpm' ) );
+            return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
         }
 
         if( email_exists( $postdata['email']) ) {
-            return new WP_Error( 'error', __('Email already exist', 'cpm' ) );
+            return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
         }
 
         return true;

@@ -344,8 +344,13 @@ class Hrm_Payroll {
             $all_components_id[] = $formula['id'];
         }
 
+        $formulas = apply_filters( 'hrm_before_salary_generator', $formulas, $postData );
+
         foreach ( $formulas['data'] as $key => $formula ) {
-            $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name, $salary_period );
+
+            if ( ! empty( $formula['formula'] ) ) {
+                $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name, $salary_period );
+            }
             
             if ( $formula['type'] == 'income' ) {
                $generate_gross = $generate_gross + $formulas['data'][$key]['amount']; 
@@ -388,13 +393,22 @@ class Hrm_Payroll {
                 'updated_by'           => get_current_user_id()
             );
             
-            $this->update_salary( $store_data );
+            $salary = $this->update_salary( $store_data );
+
+            if ( is_wp_error( $salary ) ) {
+                wp_send_json_error( array( 'error' => $salary->get_error_messages() ) );
+            }
         }
 
         wp_send_json_success($formulas);
     }
 
     function update_salary( $store_data ) {
+        $info = maybe_unserialize( $store_data['info'] );
+
+        if( $info['meta']['salaryMeta']['employeeGet'] < 0 ) {
+            return new WP_Error('employee_net_salary', 'Invalid net pay');
+        }; 
         $is_update = $store_data['is_update'];
         $start_date = date( 'Y-m-01', strtotime( $store_data['month'] ) );
         $end_date = date( 'Y-m-t', strtotime( $store_data['month'] ) );

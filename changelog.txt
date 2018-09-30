@@ -1,3 +1,10 @@
+= 2.2.5 - September 30, 2018 =
+
+ * [New] Vodeo tutorial for attendance, loan and recruitment. 
+ * [Fix] Percentage is not working for payroll formula.
+ * [Fix] Leave status does not change real time.
+ * [Fix] Does not update attendance schedule work day start.
+ 
 = 2.2.4 - September 12, 2018 =
 
  * [Fix] User transformer file missing. 

@@ -7,7 +7,7 @@
 					<h1>HRM Front-End</h1>
 				</div>
 				<div class="hrm-block-description">
-					<span class="text">You will get back-end all feature in front-end</span>
+					<span class="text">You will get back-end all feature in front-end.</span>
 					<a href="http://wpspear.com/hrm/front-end/" target="_blank" class="button button-primary hrm-link">
 						Get it now!
 					</a>
@@ -19,7 +19,7 @@
 					<h1>Attendance report & customize punch in/out</h1>
 				</div>
 				<div class="hrm-block-description">
-					<span class="text">Generate attendance reports for all employee or individual employee. You can also customize punch-in and punch-out</span>
+					<span class="text">Generate attendance reports for all employee or individual employee. You can also customize punch-in and punch-out.</span>
 					<a href="http://wpspear.com/hrm/attendance-report/" target="_blank" class="button button-primary hrm-link">
 						Get it now!
 					</a>
@@ -33,6 +33,18 @@
 				<div class="hrm-block-description">
 					<span class="text">Recruitment (hiring) refers to the overall process of attracting, shortlisting, selecting and appointing suitable candidates for jobs.</span>
 					<a href="http://wpspear.com/hrm/recruitment/" target="_blank" class="button button-primary hrm-link">
+						Get it now!
+					</a>
+				</div>
+			</div>
+
+			<div class="hrm-block-content">
+				<div class="title">
+					<h1>Loan</h1>
+				</div>
+				<div class="hrm-block-description">
+					<span class="text">HRM loan extension lets you manage the loan that your employees request for.</span>
+					<a href="http://wpspear.com/hrm/payroll-loan/" target="_blank" class="button button-primary hrm-link">
 						Get it now!
 					</a>
 				</div>

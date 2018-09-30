@@ -2,6 +2,7 @@
 HRMRegisterModule('attendance', 'attendance');
 
 import './shift/router';
+import './tutorial/router';
 
 import hrm_attendace_records from './attendance-records.vue'
 import hrm_attendace_user_search from './attendance-user-search.vue'

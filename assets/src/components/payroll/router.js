@@ -3,7 +3,9 @@ import './salary/router';
 import './formula/router';
 import './group/router';
 import './revision/router';
+import './tutorial/router';
 import Empty from './payroll.vue';
+import Loan from './loan.vue';
 
 
 let menu = [
@@ -21,6 +23,21 @@ let menu = [
         }
     }
 ];
+
+if(typeof HRM_Loan_Vars == 'undefined') {
+
+    menu[0].children.push(
+        {
+            path: 'loan', 
+            name: 'loan',
+            component: Loan,
+            meta: {
+                label: 'Loan',
+                order: 4
+            }
+        }
+    );
+}
 
 HRMRegisterChildrenRoute ('hrm_root', menu);
 

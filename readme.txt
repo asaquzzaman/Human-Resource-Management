@@ -5,7 +5,7 @@ Tags: hrm, human resource, human resource management, office management, industr
 Requires at least: 4.4
 Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,6 +19,19 @@ Manage your Business of Company HR (Human Resource) professionally and break dow
 WP HRM is a powerful WordPress plugin that turns your website into a fully functional employee management system. You can easily create unlimited number of employees, add their professional details, roles, employers and access permission.
 
 HR Management is all about people, not the paperwork. So, why waste your time on traditional systems and paperworks? Be organized and adapt the latest technology to build your very own HR Management system directly on your WordPress site using WP HRM (Human Resource Management).
+
+== Feature List  ==
+
+* **Dashboard**
+* **Organization Information**
+* **Departments**
+* **Designation** 
+* **Employee List**
+* **Individual Employee Profile**
+* **Payroll [how it works](https://youtu.be/wMyPhcZgPa4)**
+* **Attendance [how it works](https://youtu.be/oOAKppAN1o4)**
+* **Leave**
+* **Recruitment [how it works](https://youtu.be/1KtoBKnbnbw)**
 
 == Multi-Site ==
 
@@ -68,6 +81,13 @@ Here are some notable features that you may consider before diving in.
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
+
+= 2.2.5 - September 30, 2018 =
+
+ * [New] Vodeo tutorial for attendance, loan and recruitment. 
+ * [Fix] Percentage is not working for payroll formula.
+ * [Fix] Leave status does not change real time.
+ * [Fix] Does not update attendance schedule work day start.
 
 = 2.2.4 - September 12, 2018 =
 

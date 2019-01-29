@@ -354,7 +354,6 @@
 		    		},
 		    		type: 'POST',
 		    		success (res) {
-		    			console.log(res);
 		    			self.employees = res;
 		    		}
 		    	};

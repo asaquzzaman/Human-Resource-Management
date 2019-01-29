@@ -160,7 +160,7 @@
 		},
 		filters: {
 			filterEditValue (val) {
-				console.log(val);
+				
 			}
 		}
 	}

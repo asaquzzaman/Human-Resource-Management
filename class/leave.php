@@ -84,7 +84,13 @@ class Hrm_Leave {
         foreach( $users as $user ) {
             $args['emp_id'] = $user->ID;
             $user->leave_records = Hrm_Leave::getInstance()->get_leaves( $args );
-            $send[] = $user->data;
+            $send[] = [
+                'ID'            => $user->ID,
+                'display_name'  => $user->display_name,
+                'user_email'    => $user->user_email,
+                'leave_records' => $user->leave_records,
+                'avatar_url'    => get_avatar_url( $user->user_email )
+            ];
         }
 
         wp_send_json_success( $send );

@@ -58,7 +58,8 @@ class Hrm_Admin {
 
     function ajax_designation_filter() {
         check_ajax_referer('hrm_nonce');
-        $locations = $this->designation_filter($_POST);
+        $POST = wp_unslash( $_POST );
+        $locations = $this->designation_filter($POST);
 
         wp_send_json_success($locations);
     }
@@ -105,7 +106,8 @@ class Hrm_Admin {
 
     function ajax_notice_filter() {
         check_ajax_referer('hrm_nonce');
-        $locations = $this->notice_filter($_POST);
+        $POST = wp_unslash( $_POST );
+        $locations = $this->notice_filter($POST);
 
         wp_send_json_success($locations);
     }
@@ -163,7 +165,8 @@ class Hrm_Admin {
 
     function ajax_location_filter() {
         check_ajax_referer('hrm_nonce');
-        $locations = $this->location_filter($_POST);
+        $POST = wp_unslash( $_POST );
+        $locations = $this->location_filter($POST);
 
         wp_send_json_success($locations);
     }
@@ -249,8 +252,8 @@ class Hrm_Admin {
     }
 
     public static function profile_update_role( $user_id ) {
-
-        $postdata = $_POST;
+        $POST = wp_unslash( $_POST );
+        $postdata = $POST;
         // Bail if no user ID was passed
         if ( empty( $user_id ) ) {
             return;
@@ -338,7 +341,7 @@ class Hrm_Admin {
 
     // function admin_notice( $field_value = null ) {
     //     $user_id = get_current_user_id();
-    //     $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+    //     $redirect = ( isset( $POST['hrm_dataAttr']['redirect'] ) && !empty( $POST['hrm_dataAttr']['redirect'] ) ) ? $POST['hrm_dataAttr']['redirect'] : '';
 
     //     if ( $field_value !== null ) {
     //         $notice['id'] = array(
@@ -437,7 +440,7 @@ class Hrm_Admin {
 
 
     function get_projects( $tab, $subtab, $limit = '-1' ) {
-
+        $POST = wp_unslash( $_POST );
         $args = array(
             'posts_per_page' => $limit,
             'post_type'      => 'hrm_project',
@@ -449,8 +452,8 @@ class Hrm_Admin {
             add_filter( 'posts_where', array( $this, 'get_project_role' ), 10, 2 );
         }
 
-        if ( isset( $_POST['type'] ) && $_POST['type'] == '_search' ) {
-            $args['s'] = isset( $_POST['title'] ) ? trim( $_POST['title'] ) : '';
+        if ( isset( $POST['type'] ) && $POST['type'] == '_search' ) {
+            $args['s'] = isset( $POST['title'] ) ? trim( $POST['title'] ) : '';
             $args['post_type'] = array( 'hrm_project', 'hrm_task' );
         }
 
@@ -535,8 +538,8 @@ class Hrm_Admin {
     }
 
     function get_project_where( $where, &$wp_query ) {
-
-        $post_title = $_GET['title'];
+        $GET = wp_unslash( $_GET );
+        $post_title = $GET['title'];
         $where .= " AND post_title LIKE '%$post_title%'";
 
         return $where;
@@ -649,466 +652,6 @@ class Hrm_Admin {
         return $user_list;
     }
 
-    function language( $field_data = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_data['id'] ) ? $field_data['id'] : '',
-            );
-        }
-
-
-        $hidden_form['language'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['language'] ) ? $field_data['language'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_language';
-        $hidden_form['header'] = __('Add Language', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-
-    }
-
-    function admin_role_form ( $role_name = false, $display_name = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $role_name !== false ) {
-            $roles =  get_role( $role_name );
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => 'edit'
-            );
-        }
-
-        $page = hrm_page( false );
-        $menu_label = hrm_menu_label();
-        //hidden form
-        $hidden_form['role_name'] = array(
-            'label' =>  __( 'Role', 'hrm' ),
-            'type' => ( $role_name === false ) ? 'text' : 'hidden',
-            'required' => 'required',
-            'value' => ( $role_name === false ) ? '' : esc_attr( $role_name ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-        $hidden_form['display_name'] = array(
-            'label' =>  __( 'Display Name', 'hrm' ),
-            'type' => ( $display_name === null ) ? 'text' : 'hidden',
-            'value' => ( $display_name === null ) ? '' : esc_attr( $display_name ),
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $check_existence_tab = array();
-        $toggle_check = __( 'Toggle Check', 'hrm' );
-        foreach( $page as $tab => $tab_item )  {
-
-            if ( isset( $tab_item['tab'] ) && ( $tab_item['tab'] === false ) ) {
-                continue;
-            }
-
-            if ( apply_filters( 'hrm_exclude_from_permission_field', false, $tab, $tab_item ) ) {
-                continue;
-            }
-
-            $hidden_form[] = array(
-                'type' => 'html',
-                'content' => '<div class="postbox">
-                                <div  class="hrm-search-head"><h3>'.$menu_label[$tab].'
-                                    <a class="hrm-toggle button button-secondary hrm-permission-check-all" href="#">'.$toggle_check.'</a>
-                                    <span class="hrm-clear"><span>
-                                </h3>
-                                </div>
-                                <div class="hrm-permission-content">',
-            );
-
-            if ( $tab == hrm_employee_page() ) {
-                $hidden_form[] = array(
-                    'type' => 'html',
-                    'content' => __( 'Same as Employee Section', 'hrm' ),
-                );
-
-                $hidden_form[] = array(
-                    'type' => 'html',
-                    'content' => '</div>',
-                );
-                continue;
-            }
-
-            foreach ( $tab_item as $tab_name => $tab_name_itme ) {
-                if ( isset( $tab_name_itme['tab'] ) && ( $tab_name_itme['tab'] === false ) ) {
-                    continue;
-                }
-
-                $check_existence_tab[] = $tab_name;
-                $view                  = isset( $roles->capabilities[$tab_name.'_view'] ) ? 'view' : '';
-                $add                   = isset( $roles->capabilities[$tab_name.'_add'] ) ? 'add' : '';
-                $delete                = isset( $roles->capabilities[$tab_name.'_delete'] ) ? 'delete' : '';
-
-                $tab_role[] = array(
-                    'label' => __( 'View', 'hrm' ),
-                    'value' => 'view',
-                    'class' => 'hrm-cap-'.$tab_name.'_view hrm-permission-toggle-check',
-                    'checked' => ( $role_name === false ) ? 'view' : $view,
-                );
-
-                $hidden_form["remove_role[{$tab_name}_view]"] = array(
-                    'type' => 'hidden',
-                    'value' => '0',
-                );
-
-                $tab_role[] = array(
-                    'label' => __( 'Add', 'hrm' ),
-                    'value' => 'add',
-                    'class' => 'hrm-cap-'.$tab_name.'_add hrm-permission-toggle-check',
-                    'checked' => ( $role_name === false ) ? 'add' : $add,
-                );
-
-                $hidden_form["remove_role[{$tab_name}_add]"] = array(
-                    'type' => 'hidden',
-                    'value' => '0',
-                );
-
-                $tab_role[] = array(
-                    'label' => __( 'Delete', 'hrm' ),
-                    'value' => 'delete',
-                    'class' => 'hrm-cap-'.$tab_name.'_delete hrm-permission-toggle-check',
-                    'checked' => ( $role_name === false ) ? 'delete' : $delete,
-                );
-
-                $hidden_form["remove_role[{$tab_name}_delete]"] = array(
-                    'type' => 'hidden',
-                    'value' => '0',
-                );
-
-                if ( isset( $tab_name_itme['role'] ) && is_array( $tab_name_itme['role'] ) && count( $tab_name_itme['role'] ) ) {
-                    foreach ( $tab_name_itme['role'] as $role_value => $label ) {
-                        $checked = isset( $roles->capabilities[$tab_name.'_'.$role_value] ) ? $role_value : '';
-                        $tab_role[] = array(
-                            'label' => $label,
-                            'value' => $role_value,
-                            'class' => 'hrm-cap-'.$tab_name.'_'.$role_value. ' hrm-permission-toggle-check',
-                            'checked' => ( $role_name === false ) ? $role_value : $checked,
-                        );
-
-                        $hidden_form["remove_role[{$tab_name}_{$role_value}]"] = array(
-                            'type' => 'hidden',
-                            'value' => '0',
-                        );
-                    }
-                }
-
-                $hidden_form['cap['.$tab_name.'][]'] = array(
-                    'label'      => isset( $tab_name_itme['title'] ) ? $tab_name_itme['title'] : '',
-                    'type'       => 'checkbox',
-                    'desc'       => 'Choose access permission',
-                    'wrap_class' => 'hrm-parent-field',
-                    'fields'     => $tab_role,
-                );
-
-                $tab_role = '';
-
-                $tab_name_itme_submenus = isset( $tab_name_itme['submenu'] ) ? $tab_name_itme['submenu'] : array();
-                foreach ( $tab_name_itme_submenus as $submenu => $submenu_item ) {
-
-                    $view = isset( $roles->capabilities[$submenu.'_view'] ) ? 'view' : '';
-                    $add = isset( $roles->capabilities[$submenu.'_add'] ) ? 'add' : '';
-                    $delete = isset( $roles->capabilities[$submenu.'_delete'] ) ? 'delete' : '';
-
-                    $submenu_role[] = array(
-                        'label' => __( 'View', 'hrm' ),
-                        'value' => 'view',
-                        'class' => 'hrm-cap-'.$submenu.'_view' . ' hrm-cap-'.$tab_name.'-view-child' . ' hrm-cap-'.$tab_name. ' hrm-permission-toggle-check',
-                        'checked' => ( $role_name === false ) ? 'view' : $view,
-                    );
-
-                    $hidden_form["remove_role[{$submenu}_view]"] = array(
-                        'type' => 'hidden',
-                        'value' => '0',
-                    );
-
-                    $submenu_role[] = array(
-                        'label' => __( 'Add', 'hrm' ),
-                        'value' => 'add',
-                        'class' => 'hrm-cap-'.$submenu.'_add' . ' hrm-cap-'.$tab_name.'-add-child' . ' hrm-cap-'.$tab_name. ' hrm-permission-toggle-check',
-                        'checked' => ( $role_name === false ) ? 'add' : $add,
-                    );
-
-                    $hidden_form["remove_role[{$submenu}_add]"] = array(
-                        'type' => 'hidden',
-                        'value' => '0',
-                    );
-
-                    $submenu_role[] = array(
-                        'label' => __( 'Delete', 'hrm' ),
-                        'value' => 'delete',
-                        'class' => 'hrm-cap-'.$submenu.'_delete' . ' hrm-cap-'.$tab_name.'-delete-child' . ' hrm-cap-'.$tab_name. ' hrm-permission-toggle-check',
-                        'checked' => ( $role_name === false ) ? 'delete' : $delete,
-                    );
-
-                    $hidden_form["remove_role[{$submenu}_delete]"] = array(
-                        'type' => 'hidden',
-                        'value' => '0',
-                    );
-
-                    if ( isset( $submenu_item['role'] ) && is_array( $submenu_item['role'] ) && count( $submenu_item['role'] ) ) {
-                        foreach ( $submenu_item['role'] as $role_value => $label ) {
-                            $checked = isset( $roles->capabilities[$submenu.'_'.$role_value] ) ? $role_value : '';
-                            $submenu_role[] = array(
-                                'label' => $label,
-                                'value' => $role_value,
-                                'class' => 'hrm-cap-'.$submenu.'_'.$role_value . ' hrm-cap-'.$tab_name.'-delete-child' . ' hrm-cap-'.$tab_name. ' hrm-permission-toggle-check',
-                                'checked' => ( $role_name === false ) ? $role_value : $checked,
-                            );
-
-                            $hidden_form["remove_role[{$submenu}_{$role_value}]"] = array(
-                                'type' => 'hidden',
-                                'value' => '0',
-                            );
-                        }
-                    }
-
-                    $hidden_form['cap['.$submenu.'][]'] = array(
-                        'label'      => $submenu_item['title'],
-                        'type'       => 'checkbox',
-                        'desc'       => 'Choose access permission',
-                        'wrap_class' => 'hrm-child-field',
-                        'fields'     => $submenu_role,
-                    );
-                    $submenu_role = '';
-                }
-            }
-
-            $hidden_form[] = array(
-                'type' => 'html',
-                'content' => '</div></div>',
-            );
-        }
-
-        $hidden_form['header'] = false;
-        $hidden_form['form_wrap_class'] = 'hrm-premission-form-wrap';
-        $hidden_form['action'] = 'user_role';
-        $hidden_form['url'] = $redirect;
-
-        $hidden_form['submit_btn_disabled'] = true;
-        $hidden_form['submit_btn_value'] = __( 'To get this feature you have to purchase the HRM permission addon', 'hrm' );
-        $hidden_form['cancel_href'] = HRM_PERMISSION_PURCHASE_URL;
-        $hidden_form['cancel_text'] = __( 'Purchase HRM persmission addon', 'hrm' );
-        $hidden_form['cancel_btn_class'] = 'none';
-
-        $hidden_form = apply_filters( 'hrm_tab_subtab_access_permission_form', $hidden_form, $role_name, $display_name );
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function new_role_form( $role_name = false, $display_name = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $role_name !== false ) {
-            $roles =  get_role( $role_name );
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => 'edit'
-            );
-        }
-
-        $page = hrm_page();
-        $menu_label = hrm_menu_label();
-        //hidden form
-        $hidden_form['role_name'] = array(
-            'label' =>  __( 'Role', 'hrm' ),
-            'type' => ( $role_name === false ) ? 'text' : 'hidden',
-            'required' => 'required',
-            'value' => ( $role_name === false ) ? '' : esc_attr( $role_name ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-        $hidden_form['display_name'] = array(
-            'label' =>  __( 'Display Name', 'hrm' ),
-            'type' => ( $display_name === null ) ? 'text' : 'hidden',
-            'value' => ( $display_name === null ) ? '' : esc_attr( $display_name ),
-            'required' => 'required',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['header'] = __( 'New Role', 'hrm' );
-        $hidden_form['action'] = 'new_role';
-        $hidden_form['url'] = $redirect;
-
-        $hidden_form['submit_btn_disabled'] = true;
-        $hidden_form['submit_btn_value'] = __( 'To get this feature you have to purchase the HRM permission addon', 'hrm' );
-        $hidden_form['cancel_href'] = HRM_PERMISSION_PURCHASE_URL;
-        $hidden_form['cancel_text'] = __( 'Purchase HRM persmission addon', 'hrm' );
-        $hidden_form['cancel_btn_class'] = 'none';
-
-        $hidden_form = apply_filters( 'hrm_new_role_form_field', $hidden_form, $role_name, $display_name );
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function main_menu_access_permission_form( $role_name = false, $display_name = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $role_name !== false ) {
-            $roles =  get_role( $role_name );
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => 'edit'
-            );
-
-            $hidden_form['role_name'] = array(
-                'type'     => 'hidden',
-                'required' => 'required',
-                'value'    => $role_name,
-            );
-        }
-        $capabilities = isset( $roles->capabilities ) ? $roles->capabilities : array();
-
-        $menu_label = hrm_menu_label();
-        //unset( $menu_label[hrm_employee_page()] );
-
-        foreach( $menu_label as $menu_slug => $menu_name )  {
-
-            $hidden_form["page_access[$menu_slug]"] = array(
-                'label'      => $menu_name,
-                'type'       => 'checkbox',
-                //'desc'       => 'Choose access permission',
-                'wrap_class' => 'hrm-child-field',
-                'fields'     => array(
-                    array(
-                        'label' => __( 'View', 'hrm' ),
-                        'value' => 1,
-                        'checked' => isset( $capabilities[$menu_slug] ) && $capabilities[$menu_slug] == 1 ? 1 : '',
-                    )
-                )
-            );
-
-            $hidden_form["delete_page_access[$menu_slug]"] = array(
-                'type'       => 'hidden',
-                'value'     => '0'
-            );
-        }
-
-        $hidden_form['action'] = 'menu_access';
-        $hidden_form['header'] = __('Menu Access Control Form', 'hrm');
-        $hidden_form['url'] = $redirect;
-
-        $hidden_form['submit_btn_disabled'] = true;
-        $hidden_form['submit_btn_value'] = __( 'To get this feature you have to purchase the HRM permission addon', 'hrm' );
-        $hidden_form['cancel_href'] = HRM_PERMISSION_PURCHASE_URL;
-        $hidden_form['cancel_text'] = __( 'Purchase HRM persmission addon', 'hrm' );
-        $hidden_form['cancel_btn_class'] = 'none';
-
-        $hidden_form = apply_filters( 'hrm_main_menu_access_permission_form', $hidden_form, $role_name, $display_name );
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function project( $field_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        $country = hrm_Settings::getInstance()->country_list();
-        if ( $field_value !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-
-        $hidden_form['education_name'] = array(
-            'label' =>  __( 'Customer Name', 'hrm' ),
-            'class' => 'hrm-chosen',
-            'type' => 'select',
-            'extra' => array(
-                'multiple' => 'multiple'
-            ),
-            'option' => $country,
-            'selected' => isset( $field_value['education_name'] ) ? $field_value['education_name'] : '',
-        );
-        $hidden_form['project_name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['project_name'] ) ? $field_value['project_name'] : '',
-        );
-        $hidden_form['project_admin'] = array(
-            'label' =>  __( 'Project Admin', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['project_admin'] ) ? $field_value['project_admin'] : '',
-        );
-        $hidden_form['description'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'class' => 'hrm-des-field',
-            'type' => 'text',
-            'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
-        );
-
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_qualification_education';
-        $hidden_form['header'] = __('Add Skills', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
 
     function customer( $field_value = null ) {
         if( $field_value !== null ) {
@@ -1146,260 +689,8 @@ class Hrm_Admin {
         return $return_value;
     }
 
-    function education( $field_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_value !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden'
-,                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-        $hidden_form['education_name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['education_name'] ) ? $field_value['education_name'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_qualification_education';
-        $hidden_form['header'] = __('Add Skills', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function skills( $field_data = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $field_data !== null ) {
-            $hidden_form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_data['id'] ) ? $field_data['id'] : '',
-            );
-        }
 
 
-        $hidden_form['skill_name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_data['skill_name'] ) ? $field_data['skill_name'] : '',
-            'extra' => array(
-                'data-action' => 'skills',
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['skill_desc'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'type' => 'textarea',
-            'value' => isset( $field_data['skill_desc'] ) ? $field_data['skill_desc'] : '',
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_qualification_skills';
-        $hidden_form['header'] = __('Add Skills', 'hrm');
-        $hidden_form['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function admin_location( $set_form_field = null ) {
-        $country = hrm_Settings::getInstance()->country_list();
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $set_form_field !== null ) {
-            $location['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $set_form_field['id'] ) ? $set_form_field['id'] : '',
-            );
-        }
-
-        $location['name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['name'] ) ? $set_form_field['name'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $location['country'] = array(
-            'label' =>  __( 'Country', 'hrm' ),
-            'type' => 'select',
-            'option'=> $country,
-            'selected' => isset( $set_form_field['country'] ) ? $set_form_field['country'] : '',
-        );
-
-        $location['province'] = array(
-            'label' =>  __( 'State/Province', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['province'] ) ? $set_form_field['province'] : '',
-        );
-        $location['city'] = array(
-            'label' =>  __( 'City', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['city'] ) ? $set_form_field['city'] : '',
-        );
-
-        $location['address'] = array(
-            'label' =>  __( 'Address', 'hrm' ),
-            'type' => 'textarea',
-            'value' => isset( $set_form_field['address'] ) ? $set_form_field['address'] : '',
-        );
-
-        $location['zipcode'] = array(
-            'label' =>  __( 'Zip/Postal Code', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['zipcode'] ) ? $set_form_field['zipcode'] : '',
-        );
-        $location['phone'] = array(
-            'label' =>  __( 'Phone', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['phone'] ) ? $set_form_field['phone'] : '',
-        );
-
-        $location['fax'] = array(
-            'label' =>  __( 'Fax', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $set_form_field['fax'] ) ? $set_form_field['fax'] : '',
-        );
-        $location['notes'] = array(
-            'label' =>  __( 'Notes', 'hrm' ),
-            'type' => 'textarea',
-            'value' => isset( $set_form_field['notes'] ) ? $set_form_field['notes'] : '',
-        );
-        $location['action'] = 'ajax_referer_insert';
-        $location['table_option'] = 'hrm_location_option';
-        $location['header'] = 'Location';
-        $location['url'] = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $location );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function job_category_insert_form( $field_value = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        $add_field['id'] = array(
-            'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            'type' => 'hidden',
-        );
-        $add_field['job_category'] = array(
-            'label' =>  __( 'Category', 'hrm' ),
-            'type' => 'text',
-            'desc' => 'please insert category name',
-            'value' => isset( $field_value['job_category'] ) ? $field_value['job_category'] : '',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $add_field['active'] = array(
-
-            'label' => __( 'Status', 'hrm' ),
-            'type' => 'checkbox',
-            'desc' => 'please active this category',
-            'fields' => array(
-                array(
-                    'label' => __( 'active', 'hrm' ),
-                    'value' => 'yes',
-                    'checked' => isset( $field_value['active'] ) ? $field_value['active'] : '',
-                ),
-            )
-        );
-
-        $add_field['action'] = 'ajax_referer_insert';
-        $add_field['table'] = 'hrm_job_category';
-        $add_field['header'] = 'Job Catgory';
-        $add_field['table_option'] = 'hrm_job_category';
-        $add_field['url'] = $redirect;
-
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $add_field );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function job_title_insert_form( $field_value = null ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-
-        if ( $field_value !== null ) {
-
-            $job['id'] = array(
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-                'type' => 'hidden',
-            );
-        }
-        //hidden form
-        $job['job_title'] = array(
-            'label' =>  __( 'job Title', 'hrm' ),
-            'value' => isset( $field_value['job_title'] ) ? $field_value['job_title'] : '',
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-        $job['job_description'] = array(
-            'label' =>  __( 'Job Description', 'hrm' ),
-            'value' => isset( $field_value['job_description'] ) ? $field_value['job_description'] : '',
-            'type' => 'text',
-        );
-
-        $job['note'] = array(
-            'label' =>  __( 'Note', 'hrm' ),
-            'value' => isset( $field_value['note'] ) ? $field_value['note'] : '',
-            'type' => 'textarea',
-        );
-        $job['action'] = 'ajax_referer_insert';
-        $job['table_option'] = 'hrm_job_title_option';
-        $job['header'] = 'Job Title';
-        $job['url'] = $redirect;
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $job );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
 
     function get_user_role() {
         global $current_user;
@@ -1436,7 +727,7 @@ class Hrm_Admin {
     }
 
     function employee_image_upload_form($data) {
-        $employee_id     = isset( $_POST['id'] )  ?  $_POST['id'] : false;
+        $employee_id     = isset( $POST['id'] )  ?  $POST['id'] : false;
         $this->emp_upload_image($employee_id);
     }
 
@@ -1570,170 +861,6 @@ class Hrm_Admin {
         return true;
     }
 
-    function admin_list( $user_id = null ) {
-        global $wp_roles;
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( !$wp_roles ) {
-            $wp_roles = new WP_Roles();
-        }
-
-        $role_names = $wp_roles->get_names();
-
-        unset( $role_names['hrm_employee'] );
-
-        $current_user_role = $this->get_user_role();
-
-        $job_title    = json_decode( stripcslashes( $_POST['hrm_dataAttr']['job_title'] ) );
-        $job_category = json_decode( stripcslashes( $_POST['hrm_dataAttr']['job_category'] ) );
-        $location     = json_decode( stripcslashes( $_POST['hrm_dataAttr']['location'] ) );
-
-        $employer_id = isset( $employer->ID ) ? $employer->ID : false;
-        if ( $user_id === null ) {
-            $hidden_form['user_name'] = array(
-                'label' =>  __( 'User Name', 'hrm' ),
-                'type'  => 'text',
-                'extra' => array(
-                    'data-hrm_validation' => true,
-                    'data-hrm_required' => true,
-                    'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-                ),
-            );
-
-            $hidden_form['email'] = array(
-                'label' =>  __( 'E-mail', 'hrm' ),
-                'type'  => 'text',
-                'extra' => array(
-                    'data-hrm_validation' => true,
-                    'data-hrm_required' => true,
-                    'data-hrm_email' => true,
-                    'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-                    'data-hrm_email_error_msg'=> __( 'Please enter a valid email', 'hrm' ),
-                ),
-            );
-        } else {
-            $hidden_form['employer_id'] = array(
-                'value' => $user_id,
-                'type'  => 'hidden',
-            );
-        }
-
-        $hidden_form['emp_role'] = array(
-            'label'    => __( 'Role', 'hrm' ),
-            'type'     => 'select',
-            'option'   => $role_names,
-            'selected' => '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['first_name'] = array(
-            'label' =>  __( 'First Name', 'hrm' ),
-            'type'  => 'text',
-            'value' => get_user_meta( $user_id, 'first_name', true ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-        $hidden_form['last_name'] = array(
-            'label' =>  __( 'Last Name', 'hrm' ),
-            'type'  => 'text',
-            'value' => get_user_meta( $user_id, 'last_name', true ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $new_job_title_url = hrm_job_title();
-        $hidden_form['job_title'] = array(
-            'label' => __( 'Job Title', 'hrm' ),
-            'type' => 'select',
-            'option' => $job_title,
-            'selected' => get_user_meta( $user_id, '_job_title', true ),
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $new_job_title_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $category_url = hrm_job_category();
-        $hidden_form['job_category'] = array(
-            'label' => __( 'Job Category', 'hrm' ),
-            'type' => 'select',
-            'option' => $job_category,
-            'selected' => get_user_meta( $user_id, '_job_category', true ),
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $category_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $location_url = hrm_job_location();
-        $hidden_form['location'] = array(
-            'label' => __( 'Location', 'hrm' ),
-            'type' => 'select',
-            'option' => $location,
-            'selected' => get_user_meta( $user_id, '_location', true ),
-            'desc' => sprintf( '<a class="hrm-form-link" href="%s">%s</a>', $location_url,  __( 'Create New', 'hrm' ) ),
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $hidden_form['status'] = array(
-            'label' =>  __( 'status', 'hrm' ),
-            'type'  => 'select',
-            'option' => array(
-                'yes' => 'Enable',
-                'no' => 'Disable'
-            ),
-            'selected' => get_user_meta( $user_id, '_status', true )
-        );
-        $hidden_form['mobile'] = array(
-            'label' =>  __( 'Mobile Number', 'hrm' ),
-            'type'  => 'text',
-            'value' => get_user_meta( $user_id, '_mob_number', true )
-        );
-        $hidden_form['joined_date'] = array(
-            'label' =>  __( 'Joined Date', 'hrm' ),
-            'type'  => 'text',
-            'class' => 'hrm-datepicker',
-            'value' => get_user_meta( $user_id, '_joined_date', true )
-        );
-
-        $hidden_form['job_desc'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'type'  => 'textarea',
-            'value' => get_user_meta( $user_id, '_job_desc', true )
-        );
-
-
-        $hidden_form['action'] = 'update_user_role';
-        $hidden_form['header'] = 'Employer Information';
-        $hidden_form['url'] = $redirect;
-
-        ob_start();
-        $this->do_action();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
     function get_co_worker_field( $display_name, $user_id, $value = null ) {
         $name = str_replace(' ', '_', $display_name );
         $user = get_user_by( 'id', $user_id );
@@ -1831,12 +958,12 @@ class Hrm_Admin {
 
 
     function admin_init_action() {
-
-        if( isset( $_POST['hrm_search'] ) ) {
+        $POST = wp_unslash( $_POST );
+        if( isset( $POST['hrm_search'] ) ) {
             hrm_Settings::getInstance()->search();
         }
 
-        if( isset( $_POST['hrm_pagination'] ) ) {
+        if( isset( $POST['hrm_pagination'] ) ) {
             hrm_Settings::getInstance()->pagination_query_arg();
         }
 
@@ -1846,10 +973,12 @@ class Hrm_Admin {
     function search( $limit = null ) {
 
         check_ajax_referer( 'hrm_nonce' );
+        $GET = wp_unslash( $_GET );
+        $POST = wp_unslash( $_POST );
 
-        if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {
+        if( ! isset( $POST['table_option'] ) || empty( $POST['table_option'] ) ) {
 
-            foreach ($_GET as $key => $value) {
+            foreach ($GET as $key => $value) {
                 $data[$key] = $value;
             }
             unset( $data['pagenum'] );
@@ -1859,30 +988,30 @@ class Hrm_Admin {
             wp_redirect( $query_arg  );
         }
 
-        $table_option = get_option( $_POST['table_option'] );
+        $table_option = get_option( $POST['table_option'] );
         $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
 
 
         foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $_POST[$value] ) && ! empty( $_POST[$value] ) ) {
-                $data[$value] = urlencode( $_POST[$value] );
+            if( isset( $POST[$value] ) && ! empty( $POST[$value] ) ) {
+                $data[$value] = urlencode( $POST[$value] );
             }
 
-            if( isset( $_GET[$value] ) ) {
+            if( isset( $GET[$value] ) ) {
 
-                unset( $_GET[$value] );
+                unset( $GET[$value] );
             }
         }
 
 
 
         if( $data ) {
-            $data['table_option'] = $_POST['table_option'];
-            $data['_wpnonce'] = $_POST['_wpnonce'];
+            $data['table_option'] = $POST['table_option'];
+            $data['_wpnonce'] = $POST['_wpnonce'];
             $data['type'] = '_search';
         }
 
-        foreach ($_GET as $key => $value) {
+        foreach ($GET as $key => $value) {
             $data[$key] = $value;
         }
 
@@ -1895,16 +1024,17 @@ class Hrm_Admin {
 
     function search_query( $limit ) {
         check_ajax_referer( 'hrm_nonce' );
-        if( ! isset( $_GET['table_option'] ) && empty( $_GET['table_option'] ) ) {
+        $GET = wp_unslash( $_GET );
+        if( ! isset( $GET['table_option'] ) && empty( $GET['table_option'] ) ) {
             return;
         }
         $table_option['table_option'] = array();
-        $table_option = get_option( $_GET['table_option'] );
+        $table_option = get_option( $GET['table_option'] );
 
         $data = array();
         foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $_GET[$value] ) && ! empty( $_GET[$value] ) ) {
-                $data[] = $name .' LIKE ' ."'%".trim( $_GET[$value] ) ."%'";
+            if( isset( $GET[$value] ) && ! empty( $GET[$value] ) ) {
+                $data[] = $name .' LIKE ' ."'%".trim( $GET[$value] ) ."%'";
             }
         }
 
@@ -1914,7 +1044,7 @@ class Hrm_Admin {
         global $wpdb;
         $tabledb = $wpdb->prefix . $table_option['table_name'];
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
 
         $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
@@ -1924,7 +1054,8 @@ class Hrm_Admin {
     }
 
     function show_tab_page( $page = null ) {
-        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
+        $GET = wp_unslash( $_GET );
+        $tab = isset( $GET['tab'] ) ? $GET['tab'] : '';
         $menu = hrm_page();
 
 
@@ -1962,7 +1093,8 @@ class Hrm_Admin {
 
 
     function show_sub_tab_page( $page, $tab ) {
-        $subtab = isset( $_GET['sub_tab'] ) ? $_GET['sub_tab'] : '';
+        $GET = wp_unslash( $_GET );
+        $subtab = isset( $GET['sub_tab'] ) ? $GET['sub_tab'] : '';
         $menu = hrm_page();
 
         if( empty( $subtab ) && count( $menu['admin'][$tab]['submenu'] ) ) {
@@ -2001,9 +1133,10 @@ class Hrm_Admin {
 
     function hrm_query( $table, $limit ) {
         global $wpdb;
+        $GET = wp_unslash( $_GET );
         $tabledb = $wpdb->prefix . $table;
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
         $offset = ( $pagenum - 1 ) * $limit;
         $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc LIMIT $offset,$limit" );
         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
@@ -2012,8 +1145,8 @@ class Hrm_Admin {
     }
 
     function pagination( $total, $limit ) {
-
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $GET = wp_unslash( $_GET );
+        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
@@ -2032,7 +1165,7 @@ class Hrm_Admin {
 
 
     function admin_init() {
-        //var_dump( $_POST);
+        //var_dump( $POST);
     }
 
     function menu_section() {
@@ -2150,41 +1283,6 @@ class Hrm_Admin {
         return array();
     }
 
-    function pay_grade( $db_value = null ) {
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
-        if ( $db_value != null ) {
-            $form['id'] = array(
-                'type' => 'hidden',
-                'value' => isset( $db_value['id'] ) ? $db_value['id'] : ''
-            );
-        }
-
-        $form['name'] = array(
-            'label' => __( 'Name', 'hrm' ),
-            'value'=> isset( $db_value['name'] ) ? $db_value['name'] : '',
-            'type' => 'text',
-            'extra' => array(
-                'data-hrm_validation' => true,
-                'data-hrm_required' => true,
-                'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $form['action'] = 'ajax_referer_insert';
-        $form['table_option'] = 'hrm_pay_grade';
-        $form['header'] = 'Pay Grades';
-        $form['url'] = $redirect;
-
-        ob_start();
-        echo hrm_settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-
-    }
 
     function change_admin_status( $user_id, $status ) {
 
@@ -2217,8 +1315,9 @@ class Hrm_Admin {
 
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
-        $department  = self::update_department( $_POST );
-        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        $POST = wp_unslash( $_POST );
+        $department  = self::update_department( $POST );
+        $page_number = empty( $POST['page_number'] ) ? 1 : $POST['page_number'];
         //$departments    = self::get_departments(false, true);
         //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
 
@@ -2258,7 +1357,7 @@ class Hrm_Admin {
             'name'        => $postdata['title'],
             'active'      => $postdata['status'],
             'description' => $postdata['description'],
-            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $_POST['parent'] ),
+            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $POST['parent'] ),
         );
         $format = array( '%s', '%d', '%s', '%d' );
 
@@ -2282,7 +1381,8 @@ class Hrm_Admin {
 
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
-        $page_number = empty( $_POST['page_number'] ) ? 1 : $_POST['page_number'];
+        $POST = wp_unslash( $_POST );
+        $page_number = empty( $POST['page_number'] ) ? 1 : $POST['page_number'];
         
         $departments = self::get_departments( false, true );
         
@@ -2569,7 +1669,8 @@ class Hrm_Admin {
 
     public static function ajax_delete_department() {
         check_ajax_referer('hrm_nonce');
-        $results = self::delete_department( $_POST['dept_id'] );
+        $POST = wp_unslash( $_POST );
+        $results = self::delete_department( $POST['dept_id'] );
 
         $departments = self::get_departments( false, true );
         $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );

@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: WP human resource management
- * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
+ * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.5
+ * Version: 2.2.6
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.5' );
+        $this->define( 'HRM_VERSION', '2.2.6' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -136,8 +136,8 @@ class WP_Hrm {
         }
         ?>
          <div class="update-nag">
-            <?php printf( __( 'If you want the <strong>front-end</strong> version of <strong>wp human resource management</strong> plugin,
-            then please go & purchase it, <a href="http://mishubd.com/product/hrm-front-end/" target="_blank">HRM front-end</a>' )  ); ?>
+            <?php printf( 'If you want the <strong>front-end</strong> version of <strong>wp human resource management</strong> plugin,
+            then please go & purchase it, <a href="http://mishubd.com/product/hrm-front-end/" target="_blank">HRM front-end</a>'  ); ?>
         </div>
         <?php
     }
@@ -152,7 +152,7 @@ class WP_Hrm {
     }
 
     function init() {
-        //$this->migrate_db();
+        $request = wp_unslash( $_REQUEST );
         
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;
@@ -160,12 +160,12 @@ class WP_Hrm {
         } else {
             global $hrm_is_admin;
 
-            if ( isset( $_REQUEST['hrm_dataAttr']['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['hrm_dataAttr']['is_admin'];
-            } else if ( isset( $_REQUEST['hrm_attr']['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['hrm_attr']['is_admin'];
-            } else if ( isset( $_REQUEST['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['is_admin'];
+            if ( isset( $request['hrm_dataAttr']['is_admin'] ) ) {
+                $hrm_is_admin = $request['hrm_dataAttr']['is_admin'];
+            } else if ( isset( $request['hrm_attr']['is_admin'] ) ) {
+                $hrm_is_admin = $request['hrm_attr']['is_admin'];
+            } else if ( isset( $request['is_admin'] ) ) {
+                $hrm_is_admin = $request['is_admin'];
             }
         }
         hrm_check_financial_year();

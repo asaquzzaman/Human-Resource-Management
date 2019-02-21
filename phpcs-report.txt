@@ -1,0 +1,1244 @@
+
+FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/include/function.php
+--------------------------------------------------------------------------------
+FOUND 9 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 246 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$url'.
+ 246 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_event'.
+ 246 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_event'.
+ 246 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$active'.
+ 273 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$sub_url'.
+ 273 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$sub_event'.
+ 273 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$sub_event'.
+ 273 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$sub_active'.
+ 354 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$id'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...p-content/plugins/Human-Resource-Management/include/updates/update-1.2.php
+--------------------------------------------------------------------------------
+FOUND 10 ERRORS AFFECTING 10 LINES
+--------------------------------------------------------------------------------
+  25 | ERROR | Use placeholders and $wpdb->prepare(); found $table
+  28 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table at "ALTER TABLE {$table} ADD `description` TEXT
+     |       | NOT NULL AFTER `active`"
+  32 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table at "ALTER TABLE {$table} ADD `parent` INT NOT
+     |       | NULL AFTER `description`"
+  60 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table_name at "ALTER TABLE $table_name ADD
+     |       | `description` TINYTEXT NOT NULL"
+  61 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table_name at "ALTER TABLE $table_name ADD `parent`
+     |       | INT NOT NULL"
+  83 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 106 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 142 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 164 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 187 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+--------------------------------------------------------------------------------
+
+
+FILE: ...p-content/plugins/Human-Resource-Management/include/updates/update-2.0.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 7 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated variable
+   |       | $table at "DROP TABLE IF EXISTS $table"
+--------------------------------------------------------------------------------
+
+
+FILE: ...vs/hrm/wp-content/plugins/Human-Resource-Management/class/employeelist.php
+--------------------------------------------------------------------------------
+FOUND 5 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 54 | ERROR | All output should be run through an escaping function (like
+    |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 56 | ERROR | All output should be run through an escaping function (like
+    |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 72 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$delete'.
+ 72 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$file_url'.
+ 72 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$hidden'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/update.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 113 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 114 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'add_query_arg'.
+ 114 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 119 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/settings.php
+--------------------------------------------------------------------------------
+FOUND 194 ERRORS AFFECTING 153 LINES
+--------------------------------------------------------------------------------
+   33 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+   39 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+   51 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  134 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  135 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  136 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  137 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  138 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  178 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  179 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  180 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  181 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  182 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  222 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  223 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  224 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  225 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  226 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  260 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  261 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  262 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  263 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  264 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  313 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  314 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  315 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  316 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  317 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  344 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  397 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  398 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  399 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  400 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  401 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  450 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  451 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  452 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  453 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  454 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  509 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  510 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  511 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  512 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  513 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  568 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  569 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  570 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  571 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  572 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  607 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  608 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  609 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  610 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  611 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  649 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  650 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  651 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  652 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  653 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  678 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  679 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_tag'.
+  679 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_class'.
+  680 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_tag'.
+  680 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_class'.
+  681 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$id'.
+  681 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$label'.
+  681 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$required'.
+  683 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$desc'.
+  684 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_tag'.
+  685 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  701 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$parent_wrap_start_tag'.
+  701 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$attr'.
+  710 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$parent_wrap_start_tag'.
+  731 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  732 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap'.
+  733 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$html'.
+  734 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$wrap_close'.
+  735 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  750 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$visibility'.
+  752 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$heading'.
+  769 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  769 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  772 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  772 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  775 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  775 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  778 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  778 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  781 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  781 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  784 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  784 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  787 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  787 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  790 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  793 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  796 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  799 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  802 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  814 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  815 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  819 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  844 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form_wrap_class'.
+  849 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form'.
+  856 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form'.
+  871 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  871 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  874 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  874 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  877 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  877 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  880 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  880 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  883 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  883 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  886 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  886 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  889 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  889 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  892 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  895 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  898 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  901 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  904 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  918 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$submit_value'.
+  923 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$submit_value'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$cancel_href'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$cancel_btn_class'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$cancel_text'.
+  928 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  950 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form'.
+  955 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | 'get_permalink'.
+  968 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  968 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  971 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  971 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  974 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  974 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  977 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  977 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  980 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  980 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  983 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  983 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  986 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  986 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+  989 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  992 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  995 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  998 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1001 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1010 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 1034 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$class'.
+ 1036 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form'.
+ 1041 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | 'get_permalink'.
+ 1054 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1054 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1057 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1057 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1060 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1060 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1063 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1063 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1066 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1066 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1069 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1069 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1072 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1072 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1075 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1078 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1081 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1084 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$field_obj'.
+ 1087 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+ 1095 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 1148 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$add_btn_class'.
+ 1148 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$add_btn_name'.
+ 1152 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 1169 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$search'.
+ 1180 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$table'.
+ 1198 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$datatable'.
+ 1198 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$table'.
+ 1205 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$th_attr'.
+ 1205 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$val'.
+ 1213 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$odd_even'.
+ 1221 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$td_attr'.
+ 1221 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$val'.
+ 1233 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 1263 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT SQL_CALC_FOUND_ROWS * FROM
+      |       | $tabledb ORDER BY id desc"
+ 1265 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT SQL_CALC_FOUND_ROWS * FROM
+      |       | $tabledb ORDER BY id desc $limit"
+ 1265 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $limit at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | ORDER BY id desc $limit"
+ 1276 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT * FROM $table WHERE id = %d"
+ 1425 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$value'.
+ 1425 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$text'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...nts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/ajax.php
+--------------------------------------------------------------------------------
+FOUND 8 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+ 1025 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT id FROM $table"
+ 1065 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $search_field at "SELECT id, emp_lastname,
+      |       | emp_firstname $search_field FROM $tabledb WHERE $where ORDER BY
+      |       | id DESC"
+ 1065 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT id, emp_lastname, emp_firstname
+      |       | $search_field FROM $tabledb WHERE $where ORDER BY id DESC"
+ 1065 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $where at "SELECT id, emp_lastname, emp_firstname
+      |       | $search_field FROM $tabledb WHERE $where ORDER BY id DESC"
+ 1266 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $search_field at "SELECT id, $search_field FROM
+      |       | $tabledb WHERE $where ORDER BY id DESC"
+ 1266 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT id, $search_field FROM $tabledb
+      |       | WHERE $where ORDER BY id DESC"
+ 1266 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $where at "SELECT id, $search_field FROM $tabledb
+      |       | WHERE $where ORDER BY id DESC"
+ 1416 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT * FROM $table WHERE id = %d"
+--------------------------------------------------------------------------------
+
+
+
+FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/class/attendance.php
+--------------------------------------------------------------------------------
+FOUND 15 ERRORS AFFECTING 11 LINES
+--------------------------------------------------------------------------------
+  492 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $attendance_table at "SELECT * FROM $attendance_table
+      |       | WHERE `user_id` = %d AND shift_id = %d ORDER BY id DESC LIMIT
+      |       | 1"
+ 1032 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT * FROM {$table} WHERE 1=1 ORDER BY
+      |       | id DESC LIMIT 1"
+ 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT * FROM $table WHERE `date` >=
+      |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
+      |       | 1"
+ 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $current_time at "SELECT * FROM $table WHERE `date` >=
+      |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
+      |       | 1"
+ 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $user_id at "SELECT * FROM $table WHERE `date` >=
+      |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
+      |       | 1"
+ 1066 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT `start` FROM {$table} WHERE 1=1
+      |       | ORDER BY id DESC LIMIT 1"
+ 1074 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT `end` FROM {$table} WHERE 1=1 ORDER
+      |       | BY id DESC LIMIT 1"
+ 1082 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT `id` FROM {$table} WHERE 1=1 ORDER
+      |       | BY id DESC LIMIT 1"
+ 1090 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT `is_multi` FROM {$table} WHERE 1=1
+      |       | ORDER BY id DESC LIMIT 1"
+ 1206 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at             SELECT * FROM $table 
+      |       | 
+ 1207 | ERROR | Simple placeholders should not be quoted in the query string in
+      |       | $wpdb->prepare(). Found: '%s'.
+ 1207 | ERROR | Simple placeholders should not be quoted in the query string in
+      |       | $wpdb->prepare(). Found: '%s'.
+ 1209 | ERROR | Simple placeholders should not be quoted in the query string in
+      |       | $wpdb->prepare(). Found: '%s'.
+ 1332 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT SUM(total) FROM {$table} WHERE 1=1
+      |       | AND $query"
+ 1332 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $query at "SELECT SUM(total) FROM {$table} WHERE 1=1
+      |       | AND $query"
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/shift.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 42 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+    |       | variable $table at "Select * From $table"
+ 62 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+--------------------------------------------------------------------------------
+
+
+FILE: .../wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/upgrade.php
+--------------------------------------------------------------------------------
+FOUND 13 ERRORS AFFECTING 11 LINES
+--------------------------------------------------------------------------------
+  59 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '__'.
+  59 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'admin_url'.
+ 102 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 102 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$error'.
+ 283 | ERROR | Processing form data without nonce verification.
+ 309 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '__'.
+ 325 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 336 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$error'.
+ 348 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 351 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 355 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 358 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 368 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...ments/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/db.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+ 410 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 442 | ERROR | Use placeholders and $wpdb->prepare(); found $sql
+ 865 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table at "ALTER TABLE $table MODIFY punch_in
+     |       | TIMESTAMP"
+ 866 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+     |       | variable $table at "ALTER TABLE $table MODIFY punch_out
+     |       | TIMESTAMP"
+--------------------------------------------------------------------------------
+
+
+FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/employee.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 189 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$file_url'.
+ 189 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$delete'.
+ 189 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$hidden'.
+ 477 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/admin.php
+--------------------------------------------------------------------------------
+FOUND 49 ERRORS AFFECTING 35 LINES
+--------------------------------------------------------------------------------
+  240 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$checked'.
+  255 | ERROR | Processing form data without nonce verification.
+  312 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$currency_symbol'.
+  420 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT user_id, role FROM {$table} WHERE
+      |       | project_id = %d"
+  443 | ERROR | Processing form data without nonce verification.
+  619 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | 'hrm_Settings'.
+  635 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT user_id, role FROM {$table} WHERE
+      |       | project_id = %d"
+  742 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  744 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  748 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$image_attchment'.
+  748 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  760 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$delete'.
+  760 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$file_url'.
+  760 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$hidden'.
+  904 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | 'hrm_settings'.
+  904 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$user_id'.
+  904 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$form'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$display_name'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$user_id'.
+  927 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$display_name'.
+  928 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$user_id'.
+  933 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$key'.
+  933 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$name'.
+  940 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$display_name'.
+  951 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | 'ucfirst'.
+  952 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$id'.
+  953 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$first_name'.
+  953 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$last_name'.
+  961 | ERROR | Processing form data without nonce verification.
+ 1050 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT SQL_CALC_FOUND_ROWS * FROM
+      |       | $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit"
+ 1050 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $where at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | WHERE $where ORDER BY id desc LIMIT $offset,$limit"
+ 1050 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $offset at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | WHERE $where ORDER BY id desc LIMIT $offset,$limit"
+ 1050 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $limit at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | WHERE $where ORDER BY id desc LIMIT $offset,$limit"
+ 1066 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '__'.
+ 1080 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '__'.
+ 1105 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '__'.
+ 1119 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '__'.
+ 1141 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $tabledb at "SELECT SQL_CALC_FOUND_ROWS * FROM
+      |       | $tabledb ORDER BY id desc LIMIT $offset,$limit"
+ 1141 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $offset at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | ORDER BY id desc LIMIT $offset,$limit"
+ 1141 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $limit at "SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb
+      |       | ORDER BY id desc LIMIT $offset,$limit"
+ 1450 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at                 FROM        {$table}
+      |       | 
+ 1457 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 1467 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 1475 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at                 FROM        {$table}
+      |       | 
+ 1484 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 1501 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 1517 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 1717 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at              DELETE FROM {$table}
+      |       | 
+ 1718 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $dept_ids at              WHERE id IN ('$dept_ids')
+      |       | 
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/leave.php
+--------------------------------------------------------------------------------
+FOUND 62 ERRORS AFFECTING 48 LINES
+--------------------------------------------------------------------------------
+  314 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  317 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  323 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  324 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  325 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  326 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  327 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  328 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  329 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  334 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$current_user'.
+  335 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$current_user'.
+  336 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$get_duration'.
+  337 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_from'.
+  337 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  337 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_to'.
+  338 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post'.
+  339 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  340 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post'.
+  340 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  356 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  356 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$send_to_user'.
+  359 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  365 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  366 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  367 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  368 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  369 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  370 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  375 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$current_user'.
+  376 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$get_duration'.
+  377 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_from'.
+  377 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  377 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_to'.
+  378 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post'.
+  379 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$this'.
+  380 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post'.
+  380 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  441 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  444 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  444 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$prev_leave_satus'.
+  444 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  444 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$present_leave_satatus'.
+  450 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  451 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  452 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  453 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  454 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  455 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  456 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  461 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$leave_owner'.
+  462 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$leave_owner'.
+  463 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$leave_type'.
+  464 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_from'.
+  464 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  464 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$post_to'.
+  465 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$get_apply_leave'.
+  466 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$present_leave_satatus'.
+  467 | ERROR | All output should be run through an escaping function (see the
+      |       | Security sections in the WordPress Developer Handbooks), found
+      |       | '$leave_count'.
+  467 | ERROR | All output should be run through an escaping function (like
+      |       | esc_html_e() or esc_attr_e()), found '_e'.
+  788 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $table at "SELECT * FROM {$table} WHERE 1=1 AND
+      |       | $query"
+  788 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+      |       | variable $query at "SELECT * FROM {$table} WHERE 1=1 AND
+      |       | $query"
+ 1073 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/client.php
+--------------------------------------------------------------------------------
+FOUND 29 ERRORS AFFECTING 22 LINES
+--------------------------------------------------------------------------------
+  31 | ERROR | Processing form data without nonce verification.
+ 158 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'hrm_Settings'.
+ 265 | ERROR | Processing form data without nonce verification.
+ 355 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'hrm_Settings'.
+ 397 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_payment'.
+ 403 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$currency_symbol'.
+ 406 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 407 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_payment'.
+ 407 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 408 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_payment'.
+ 408 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 411 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_payment'.
+ 411 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 421 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 422 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$currency_symbol'.
+ 422 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_total_amount'.
+ 434 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 435 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 436 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 437 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 438 | ERROR | All output should be run through an escaping function (like
+     |       | esc_html_e() or esc_attr_e()), found '_e'.
+ 452 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$this'.
+ 460 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$project'.
+ 463 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$this'.
+ 463 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$partial_total_amount'.
+ 486 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$currency_symbol'.
+ 486 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$client_pay'.
+ 487 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$currency_symbol'.
+ 487 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$client_due'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...hrm/wp-content/plugins/Human-Resource-Management/templates/addons/menu.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 16 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$url'.
+ 16 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$active'.
+ 17 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$addon'.
+--------------------------------------------------------------------------------
+
+
+FILE: ...wp-content/plugins/Human-Resource-Management/templates/addons/licenses.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 8 | ERROR | All output should be run through an escaping function (see the
+   |       | Security sections in the WordPress Developer Handbooks), found
+   |       | '$license'.
+--------------------------------------------------------------------------------
+
+

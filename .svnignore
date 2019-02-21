@@ -22,3 +22,5 @@ package.json
 prev.json
 webpack.config.js
 /asset/js/src
+phpcs-report.txt
+phpcs.xml.dist

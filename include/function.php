@@ -628,20 +628,21 @@ function hrm_set_administrator_capability() {
 }
 
 function hrm_get_client_ip() {
+    $server = wp_unslash( $_SERVER );
     $ipaddress = '';
 
-    if ( isset($_SERVER['HTTP_CLIENT_IP'] ) ) {
-        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-    } else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else if ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-    } else if ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
-        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-    } else if ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
-        $ipaddress = $_SERVER['HTTP_FORWARDED'];
-    } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    if ( isset($server['HTTP_CLIENT_IP'] ) ) {
+        $ipaddress = $server['HTTP_CLIENT_IP'];
+    } else if ( isset( $server['HTTP_X_FORWARDED_FOR'] ) ) {
+        $ipaddress = $server['HTTP_X_FORWARDED_FOR'];
+    } else if ( isset( $server['HTTP_X_FORWARDED'] ) ) {
+        $ipaddress = $server['HTTP_X_FORWARDED'];
+    } else if ( isset( $server['HTTP_FORWARDED_FOR'] ) ) {
+        $ipaddress = $server['HTTP_FORWARDED_FOR'];
+    } else if ( isset( $server['HTTP_FORWARDED'] ) ) {
+        $ipaddress = $server['HTTP_FORWARDED'];
+    } else if ( isset( $server['REMOTE_ADDR'] ) ) {
+        $ipaddress = $server['REMOTE_ADDR'];
     } else {
         $ipaddress = 'UNKNOWN';
     }

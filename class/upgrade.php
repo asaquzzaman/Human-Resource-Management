@@ -280,19 +280,19 @@ class HRM_Upgrade {
      * @return void
      */
     function plugin_update() {
-
+        $POST = wp_unslash( $_POST );
         $errors = array();
-        if ( isset( $_POST['hrm_pro'] ) ) {
-            if ( empty( $_POST['email'] ) ) {
+        if ( isset( $POST['hrm_pro'] ) ) {
+            if ( empty( $POST['email'] ) ) {
                 $errors[] = __( 'Empty email address', 'hrm' );
             }
 
-            if ( empty( $_POST['license_key'] ) ) {
+            if ( empty( $POST['license_key'] ) ) {
                 $errors[] = __( 'Empty license key', 'hrm' );
             }
 
             if ( !$errors ) {
-                update_option( self::option, array('email' => $_POST['email'], 'key' => $_POST['license_key']) );
+                update_option( self::option, array('email' => $POST['email'], 'key' => $POST['license_key']) );
                 delete_transient( self::option );
 
                 $license_status = get_option( self::option );
@@ -310,7 +310,7 @@ class HRM_Upgrade {
             }
         }
 
-        if ( isset( $_POST['delete_license'] ) ) {
+        if ( isset( $POST['delete_license'] ) ) {
             delete_option( self::option );
             delete_transient( self::option );
             delete_option( self::option );

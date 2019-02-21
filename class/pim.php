@@ -66,29 +66,29 @@ class Hrm_Pim {
         return array();
     }
 
-    function show_tab_page( $page ) {
-        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
-        $menu = $this->menu_section();
+    // function show_tab_page( $page ) {
+    //     $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
+    //     $menu = $this->menu_section();
 
-        if( empty( $tab ) && count( $menu )  ) {
-            $tab = key( $menu );
-            $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
-            $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
+    //     if( empty( $tab ) && count( $menu )  ) {
+    //         $tab = key( $menu );
+    //         $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
+    //         $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
 
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        } else {
-            $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
-            $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
+    //         if( file_exists( $path ) ) {
+    //             require_once $path;
+    //         } else {
+    //             echo 'Page not found';
+    //         }
+    //     } else {
+    //         $file_name = isset( $menu[$tab]['file_name'] ) ? $menu[$tab]['file_name'] : '';
+    //         $path = dirname (__FILE__) . '/../templates/pim/' .$file_name. '.php';
 
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        }
-    }
+    //         if( file_exists( $path ) ) {
+    //             require_once $path;
+    //         } else {
+    //             echo 'Page not found';
+    //         }
+    //     }
+    // }
 }

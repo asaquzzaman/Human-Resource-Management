@@ -38,6 +38,7 @@ class Hrm_Leave {
 
     function get_dasboard_leaves() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
         $leaves = Hrm_Leave::getInstance()->get_leaves(
             array(
@@ -53,6 +54,7 @@ class Hrm_Leave {
 
     public static function ajax_get_employee_dropdown() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
         $employees = Hrm_Employeelist::getInstance()->get_employee_drop_down();
         $dropdown = array();
@@ -69,15 +71,16 @@ class Hrm_Leave {
 
     public static function search_emp_leave_records() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         $send = [];
         $users = get_users( array(
-            'search' => '*' . $_POST['user'] . '*',
+            'search' => '*' . $POST['user'] . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
         ));
 
         $args = [
-            'start_time' => date( 'Y-m-d', strtotime( $_POST['start'] ) ),
-            'end_time'   => date( 'Y-m-d', strtotime( $_POST['end'] ) ),
+            'start_time' => date( 'Y-m-d', strtotime( $POST['start'] ) ),
+            'end_time'   => date( 'Y-m-d', strtotime( $POST['end'] ) ),
             'per_page'   => 50, 
         ];
         
@@ -98,24 +101,25 @@ class Hrm_Leave {
 
     public static function ajax_get_leaves() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
         $args = array (
-            'start_time' => empty( $_POST['query']['start_time'] ) ? false : $_POST['query']['start_time'],
+            'start_time' => empty( $POST['query']['start_time'] ) ? false : $POST['query']['start_time'],
 
-            'end_time' =>  empty( $_POST['query']['end_time'] ) ? false : $_POST['query']['end_time'],
+            'end_time' =>  empty( $POST['query']['end_time'] ) ? false : $POST['query']['end_time'],
 
-            'emp_id' => empty( $_POST['query']['emp_id'] ) 
-                ? $_POST['emp_id'] 
-                : $_POST['query']['emp_id'],
+            'emp_id' => empty( $POST['query']['emp_id'] ) 
+                ? $POST['emp_id'] 
+                : $POST['query']['emp_id'],
 
         );
 
-        if ( !empty( $_POST['status'] ) ) {
-            $args['status'] = intval( $_POST['status'] );
+        if ( !empty( $POST['status'] ) ) {
+            $args['status'] = intval( $POST['status'] );
         }
         
         if ( ! hrm_user_can( 'manage_leave' ) ) {
-            $args['emp_id'] = $_POST['emp_id'];
+            $args['emp_id'] = $POST['emp_id'];
         }
 
         wp_send_json_success( self::getInstance()->get_leaves( $args ) );
@@ -238,7 +242,8 @@ class Hrm_Leave {
 
     public static function ajax_get_employee_leave_summery() {
         check_ajax_referer('hrm_nonce');
-        $employee_id = $_POST['employee_id'];
+        $POST = wp_unslash( $_POST );
+        $employee_id = $POST['employee_id'];
 
         wp_send_json_success(
             self::getInstance()->employee_leave_count( $employee_id )
@@ -517,7 +522,8 @@ class Hrm_Leave {
 
     public static function ajax_create_new_leave_type() {
         check_ajax_referer('hrm_nonce');
-        $postdata = $_POST;
+        $POST = wp_unslash( $_POST );
+        $postdata = $POST;
 
         $leave_type = self::getInstance()->new_leave_type( $postdata );
 
@@ -590,6 +596,7 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_type() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
         $leave_types = self::getInstance()->get_leave_types();
 
@@ -643,7 +650,8 @@ class Hrm_Leave {
 
     public static function ajax_create_new_holidays() {
         check_ajax_referer('hrm_nonce');
-        $postdata = $_POST;
+        $POST = wp_unslash( $_POST );
+        $postdata = $POST;
 
         $holiday = self::getInstance()->create_new_holidays( $postdata );
 
@@ -699,6 +707,7 @@ class Hrm_Leave {
 
     public static function ajax_get_holidays() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
         $holidays = self::getInstance()->get_holidays();
 
@@ -786,7 +795,8 @@ class Hrm_Leave {
 
     public static function ajax_save_work_week() {
         check_ajax_referer('hrm_nonce');
-        $postdata = $_POST;
+        $POST = wp_unslash( $_POST );
+        $postdata = $POST;
         $work_week = self::getInstance()->save_work_week( $postdata );
 
         wp_send_json_success(array( 
@@ -824,6 +834,7 @@ class Hrm_Leave {
 
     public static function ajax_get_work_week() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
       
         $work_week = self::get_work_week();
 
@@ -899,6 +910,7 @@ class Hrm_Leave {
  
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
         $leave_types = self::getInstance()->get_leave_types([
             'end_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
@@ -930,9 +942,10 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_record_events() {
         check_ajax_referer('hrm_nonce');
-        $start = date( 'Y-m-d', strtotime( $_POST['start'] ) );
-        $end = date( 'Y-m-d', strtotime( $_POST['end'] ) );
-        $emp_id = empty( $_POST['emp_id'] ) ? get_current_user_id() : intval( $_POST['emp_id'] );
+        $POST = wp_unslash( $_POST );
+        $start = date( 'Y-m-d', strtotime( $POST['start'] ) );
+        $end = date( 'Y-m-d', strtotime( $POST['end'] ) );
+        $emp_id = empty( $POST['emp_id'] ) ? get_current_user_id() : intval( $POST['emp_id'] );
 
         $records = self::getInstance()->get_leaves( array(
             'start_time' => $start,
@@ -949,8 +962,9 @@ class Hrm_Leave {
 
     public static function ajax_create_new_leave() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
-        $postdata    = $_POST;
+        $postdata    = $POST;
         $times       = empty( $postdata['time'] ) ? array() : $postdata['time'];
         $leave       = array();
         $return_data = array();
@@ -986,6 +1000,7 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_form_settings() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
         $settings = [
             'roles'   => hrm_get_roles(),
@@ -997,11 +1012,12 @@ class Hrm_Leave {
 
     public static function ajax_save_leave_form_settings() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
         $settings = [
-            'others_employee_leave' => wp_list_pluck( $_POST['others_employee_leave'], 'id' ),
-            'leave_types'           => wp_list_pluck( $_POST['leave_types'], 'id' ),
-            'apply_to'         => wp_list_pluck( $_POST['apply_to'], 'id' )
+            'others_employee_leave' => wp_list_pluck( $POST['others_employee_leave'], 'id' ),
+            'leave_types'           => wp_list_pluck( $POST['leave_types'], 'id' ),
+            'apply_to'         => wp_list_pluck( $POST['apply_to'], 'id' )
         ];
         
         self::getInstance()->save_leave_form_settings( $settings );
@@ -1015,8 +1031,9 @@ class Hrm_Leave {
 
     public static function ajax_update_leave() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
-        $postdata = $_POST;
+        $postdata = $POST;
 
         $update = self::getInstance()->update_leave( $postdata );
 
@@ -1036,7 +1053,8 @@ class Hrm_Leave {
 
     public static function ajax_delete_leave() {
         check_ajax_referer('hrm_nonce');
-        $leave_id = intval( $_POST['leave_id'] );
+        $POST = wp_unslash( $_POST );
+        $leave_id = intval( $POST['leave_id'] );
         self::getInstance()->delete_leave($leave_id);
         wp_send_json_success();
     }
@@ -1052,7 +1070,8 @@ class Hrm_Leave {
     }
 
     public static function ajax_delete_leave_type() {
-        $id = absint( $_POST['id'] );
+        $POST = wp_unslash( $_POST );
+        $id = absint( $POST['id'] );
         
         $delete = self::delete_leave_type( $id );
         
@@ -1083,7 +1102,8 @@ class Hrm_Leave {
 
     public static function ajax_delete_holiday() {
         check_ajax_referer('hrm_nonce');
-        $holiday_id = intval( $_POST['id'] );
+        $POST = wp_unslash( $_POST );
+        $holiday_id = intval( $POST['id'] );
         self::getInstance()->delete_holiday($holiday_id);
         wp_send_json_success();
     }

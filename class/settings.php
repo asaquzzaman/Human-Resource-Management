@@ -1273,214 +1273,214 @@ class Hrm_Settings {
     function edit_query( $table, $id ) {
         global $wpdb;
         $table = $wpdb->prefix . $table;
-        return $wpdb->get_row("SELECT * FROM $table WHERE id = $id", ARRAY_A );
+        return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
     }
 
 
-    function search( $limit = null ) {
-        check_ajax_referer( 'hrm_nonce' );
-        $data = false;
-        if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {
+    // function search( $limit = null ) {
+    //     check_ajax_referer( 'hrm_nonce' );
+    //     $data = false;
+    //     if( ! isset( $_POST['table_option'] ) || empty( $_POST['table_option'] ) ) {
 
-            foreach ($_GET as $key => $value) {
-                $data[$key] = urldecode( trim( $value ) );
-            }
+    //         foreach ($_GET as $key => $value) {
+    //             $data[$key] = urldecode( trim( $value ) );
+    //         }
 
-            $data['pagenum'] = 1;
-            $data['hrm_error'] = 'table_option';
-            $data['type'] = '_search';
-            $data = apply_filters( 'hrm_search_parm', $data );
+    //         $data['pagenum'] = 1;
+    //         $data['hrm_error'] = 'table_option';
+    //         $data['type'] = '_search';
+    //         $data = apply_filters( 'hrm_search_parm', $data );
 
-            $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-            wp_redirect( $query_arg  );
-            exit;
-        }
+    //         $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
+    //         wp_redirect( $query_arg  );
+    //         exit;
+    //     }
 
-        $table_option = get_option( $_POST['table_option'] );
-        $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
+    //     $table_option = get_option( $_POST['table_option'] );
+    //     $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
 
-        foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $_POST[$value] ) && ! empty( $_POST[$value] ) ) {
-                $data[$value] = urlencode( trim( $_POST[$value] ) );
-            }
+    //     foreach ( $table_option['table_option'] as $name => $value ) {
+    //         if( isset( $_POST[$value] ) && ! empty( $_POST[$value] ) ) {
+    //             $data[$value] = urlencode( trim( $_POST[$value] ) );
+    //         }
 
-            if( isset( $_GET[$value] ) ) {
-                unset( $_GET[$value] );
-            }
-        }
+    //         if( isset( $_GET[$value] ) ) {
+    //             unset( $_GET[$value] );
+    //         }
+    //     }
 
 
 
-        if( $data ) {
-            $data['table_option'] = $_POST['table_option'];
-            $data['_wpnonce'] = $_POST['_wpnonce'];
-            $data['type'] = '_search';
-        } else {
-            unset( $_GET['table_option'], $_GET['_wpnonce'], $_GET['type'] );
-        }
+    //     if( $data ) {
+    //         $data['table_option'] = $_POST['table_option'];
+    //         $data['_wpnonce'] = $_POST['_wpnonce'];
+    //         $data['type'] = '_search';
+    //     } else {
+    //         unset( $_GET['table_option'], $_GET['_wpnonce'], $_GET['type'] );
+    //     }
 
-        foreach ( $_GET as $key => $value ) {
-            $data[$key] = trim( $value );
-        }
+    //     foreach ( $_GET as $key => $value ) {
+    //         $data[$key] = trim( $value );
+    //     }
 
-        $data['pagenum'] = 1;
-        $data = apply_filters( 'hrm_search_parm', $data );
-        $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-        $query_arg = apply_filters( 'hrm_search_redirect', $query_arg, $data );
-        wp_redirect(  $query_arg );
-        exit();
-    }
+    //     $data['pagenum'] = 1;
+    //     $data = apply_filters( 'hrm_search_parm', $data );
+    //     $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
+    //     $query_arg = apply_filters( 'hrm_search_redirect', $query_arg, $data );
+    //     wp_redirect(  $query_arg );
+    //     exit();
+    // }
 
     function update_table_option( $table_option_name, $table_option ) {
        return update_option( $table_option_name, $table_option );
     }
 
 
-    function search_query( $post, $limit, $pagenum  ) {
+    // function search_query( $post, $limit, $pagenum  ) {
 
-        if( ! isset( $post['table_option'] ) || empty( $post['table_option'] ) ) {
-            return array();
-        }
+    //     if( ! isset( $post['table_option'] ) || empty( $post['table_option'] ) ) {
+    //         return array();
+    //     }
 
-        $table_option = get_option( $post['table_option'] );
+    //     $table_option = get_option( $post['table_option'] );
 
-        $data = array();
-        foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $post[$value] ) && ! empty( $post[$value] ) ) {
-                $data[] = $name .' LIKE ' ."'%".trim( $post[$value] ) ."%'";
-            }
-        }
+    //     $data = array();
+    //     foreach ( $table_option['table_option'] as $name => $value ) {
+    //         if( isset( $post[$value] ) && ! empty( $post[$value] ) ) {
+    //             $data[] = $name .' LIKE ' ."'%".trim( $post[$value] ) ."%'";
+    //         }
+    //     }
 
-        $data = apply_filters( 'hrm_search_query', $data, $table_option, $limit );
-        if ( !count( $data ) ) {
-            return array( 'total_row' => 0 );
-        }
-        $where = implode( $data, ' AND ');
+    //     $data = apply_filters( 'hrm_search_query', $data, $table_option, $limit );
+    //     if ( !count( $data ) ) {
+    //         return array( 'total_row' => 0 );
+    //     }
+    //     $where = implode( $data, ' AND ');
 
-        global $wpdb;
-        $tabledb = $wpdb->prefix . $table_option['table_name'];
-        $pagenum = absint( $pagenum );
-        $offset = ( $pagenum - 1 ) * $limit;
-        $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
+    //     global $wpdb;
+    //     $tabledb = $wpdb->prefix . $table_option['table_name'];
+    //     $pagenum = absint( $pagenum );
+    //     $offset = ( $pagenum - 1 ) * $limit;
+    //     $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
 
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
+    //     $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
 
-        return $results;
-    }
+    //     return $results;
+    // }
 
-    function pagination_query_arg() {
+    // function pagination_query_arg() {
 
-        foreach( $_GET as $key => $val ) {
-            $data[$key] = $val;
-        }
-        $data['pagination'] = $_POST['paginaton'];
-        $data['pagenum'] = 1;
-        $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-        $query_arg = apply_filters( 'hrm_pagination_redirect', $query_arg, $data );
-        wp_redirect( $query_arg  );
-        exit;
-    }
-
-
-    function pagination( $total, $limit = 1, $pagenum = false ) {
-
-        $num_of_pages = ceil( $total / $limit );
-
-        $page_links = paginate_links( array(
-            'base'               => add_query_arg( 'pagenum', '%#%' ),
-            'format'             => '',
-            'prev_text'          => __( '&laquo;', 'aag' ),
-            'next_text'          => __( '&raquo;', 'aag' ),
-            'add_args'           => false,
-            'total'              => $num_of_pages,
-            'current'            => $pagenum,
-            'before_page_number' => '<span class="button-secondary">',
-            'after_page_number'  => '</span>'
-        ) );
-
-        if ( $page_links ) {
-            return '<div class="hrm-pagination"><div class="tablenav"><div class="tablenav-pages" style="margin: 1em 0">' . $page_links . '</div></div></div>';
-        }
-    }
+    //     foreach( $_GET as $key => $val ) {
+    //         $data[$key] = $val;
+    //     }
+    //     $data['pagination'] = $_POST['paginaton'];
+    //     $data['pagenum'] = 1;
+    //     $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
+    //     $query_arg = apply_filters( 'hrm_pagination_redirect', $query_arg, $data );
+    //     wp_redirect( $query_arg  );
+    //     exit;
+    // }
 
 
-    function pagination_select() {
-        $selectd = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : 2;
-        $arg = array(
-            '-1'  => __( '--Select Pagination--', 'hrm' ),
-            '4'  => __( '10', 'hrm'),
-            '20'  => __( '20','hrm' ),
-            '50'  => __( '50', 'hrm' ),
-            '100' => __( '100', 'hrm' ),
-        );
+    // function pagination( $total, $limit = 1, $pagenum = false ) {
 
-        $select = apply_filters( 'hrm_pagination_select', $arg );
-        $select = ( is_array( $arg ) && count( $select ) ) ? $select : $arg;
+    //     $num_of_pages = ceil( $total / $limit );
 
-        ?>
-        <select id="hrm-pagination" name="paginaton">
-        <?php
-        foreach( $select as $value => $text ) {
-            ?>
-                <option value="<?php echo $value; ?>" <?php selected( $selectd, $value ); ?>><?php echo $text; ?></option>
+    //     $page_links = paginate_links( array(
+    //         'base'               => add_query_arg( 'pagenum', '%#%' ),
+    //         'format'             => '',
+    //         'prev_text'          => __( '&laquo;', 'aag' ),
+    //         'next_text'          => __( '&raquo;', 'aag' ),
+    //         'add_args'           => false,
+    //         'total'              => $num_of_pages,
+    //         'current'            => $pagenum,
+    //         'before_page_number' => '<span class="button-secondary">',
+    //         'after_page_number'  => '</span>'
+    //     ) );
 
-            <?php
-        }
-        echo '</select>';
-    }
+    //     if ( $page_links ) {
+    //         return '<div class="hrm-pagination"><div class="tablenav"><div class="tablenav-pages" style="margin: 1em 0">' . $page_links . '</div></div></div>';
+    //     }
+    // }
 
-    function conditional_query_val( $table, $fields = '*', $compare = array(), $row = false, $limit = 0, $pagenum = 1 ) {
 
-        if ( is_array( $fields ) && count( $fields ) ) {
-            $fields = implode( ', ', $fields );
-        }
+    // function pagination_select() {
+    //     $selectd = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : 2;
+    //     $arg = array(
+    //         '-1'  => __( '--Select Pagination--', 'hrm' ),
+    //         '4'  => __( '10', 'hrm'),
+    //         '20'  => __( '20','hrm' ),
+    //         '50'  => __( '50', 'hrm' ),
+    //         '100' => __( '100', 'hrm' ),
+    //     );
 
-        $offset = ( $pagenum - 1 ) * $limit;
+    //     $select = apply_filters( 'hrm_pagination_select', $arg );
+    //     $select = ( is_array( $arg ) && count( $select ) ) ? $select : $arg;
 
-        if ( $limit ) {
-            $limit = " LIMIT $offset,$limit";
-        } else {
-            $limit = '';
-        }
+    //     ?>
+    //     <select id="hrm-pagination" name="paginaton">
+    //     <?php
+    //     foreach( $select as $value => $text ) {
+    //         ?>
+    //             <option value="<?php echo $value; ?>" <?php selected( $selectd, $value ); ?>><?php echo $text; ?></option>
 
-        $where = array();
+    //         <?php
+    //     }
+    //     echo '</select>';
+    // }
 
-        foreach ($compare as $tb_field => $value ) {
-            if ( is_array( $value ) ) {
-                if ( ! count( $value ) ) {
-                    continue;
-                }
-                $in = implode( ',' , $value );
-                $where[] = "$tb_field IN ( $in )";
-            } else {
-                $where[] =  "$tb_field = '$value'";
-            }
-        }
+    // function conditional_query_val( $table, $fields = '*', $compare = array(), $row = false, $limit = 0, $pagenum = 1 ) {
 
-        $where = implode( ' AND ', $where );
-        $where = apply_filters( 'hrm_where_query', $where );
+    //     if ( is_array( $fields ) && count( $fields ) ) {
+    //         $fields = implode( ', ', $fields );
+    //     }
 
-        global $wpdb;
-        $table = $wpdb->prefix . $table;
+    //     $offset = ( $pagenum - 1 ) * $limit;
 
-        if ( empty( $where ) ) {
-            $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE 1=1 $limit" );
+    //     if ( $limit ) {
+    //         $limit = " LIMIT $offset,$limit";
+    //     } else {
+    //         $limit = '';
+    //     }
 
-            $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-            return $results;
-        }
+    //     $where = array();
 
-        if ( $row ) {
-            return $wpdb->get_row( "SELECT $fields FROM $table WHERE $where" );
-        } else {
+    //     foreach ($compare as $tb_field => $value ) {
+    //         if ( is_array( $value ) ) {
+    //             if ( ! count( $value ) ) {
+    //                 continue;
+    //             }
+    //             $in = implode( ',' , $value );
+    //             $where[] = "$tb_field IN ( $in )";
+    //         } else {
+    //             $where[] =  "$tb_field = '$value'";
+    //         }
+    //     }
+
+    //     $where = implode( ' AND ', $where );
+    //     $where = apply_filters( 'hrm_where_query', $where );
+
+    //     global $wpdb;
+    //     $table = $wpdb->prefix . $table;
+
+    //     if ( empty( $where ) ) {
+    //         $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE 1=1 $limit" );
+
+    //         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
+    //         return $results;
+    //     }
+
+    //     if ( $row ) {
+    //         return $wpdb->get_row( "SELECT $fields FROM $table WHERE $where" );
+    //     } else {
            
-            $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where $limit" );
+    //         $results = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $fields FROM $table WHERE $where $limit" );
 
-            $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-            return $results;
-        }
+    //         $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
+    //         return $results;
+    //     }
 
-    }
+    // }
 
     function country_list() {
         $list = include dirname( __FILE__ ) . '/../include/iso_country_codes.php';
@@ -1537,9 +1537,10 @@ class Hrm_Settings {
     }
 
     function send( $to, $subject, $message, $sender_id ) {
+        $server = wp_unslash( $_SERVER );
 
         $current_user = get_user_by( 'id', $sender_id );
-        $reply        = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $_SERVER['SERVER_NAME'] ) );;
+        $reply        = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $server['SERVER_NAME'] ) );;
         $reply_to     = "Reply-To: <$reply>";
         $content_type = 'Content-Type: text/html';
         $charset      = 'Charset: UTF-8';
@@ -1675,12 +1676,14 @@ class Hrm_Settings {
     public function hrm_email_settings () {
         check_ajax_referer('hrm_nonce');
 
+        $POST = wp_unslash( $_POST );
+
         $settings = get_option( 'hrm_email_settings', [
             'form_email' => get_bloginfo( 'admin_email' )
         ]);
 
-        $settings['form_email'] = (!empty($_POST['form_email']) && is_email( $_POST['form_email'] ) ) ? $_POST['form_email']: $settings['form_email'];
-        $settings['email_type'] = (!empty($_POST['email_type']) ) ? esc_attr( $_POST['email_type'] ) : $settings['email_type'];
+        $settings['form_email'] = (!empty($POST['form_email']) && is_email( $POST['form_email'] ) ) ? $POST['form_email']: $settings['form_email'];
+        $settings['email_type'] = (!empty($POST['email_type']) ) ? esc_attr( $POST['email_type'] ) : $settings['email_type'];
 
         update_option( 'hrm_email_settings', $settings);
         wp_send_json_success(true);

@@ -28,9 +28,9 @@ class HRM_Client {
     }
 
     function new_client_form( $client_id = false ) {
-
+        $POST = wp_unslash( $_POST );
         $country  = hrm_Settings::getInstance()->country_list();
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $redirect = ( isset( $POST['hrm_dataAttr']['redirect'] ) && !empty( $POST['hrm_dataAttr']['redirect'] ) ) ? $POST['hrm_dataAttr']['redirect'] : '';
         $post_id = isset( $post->ID ) ? intval( $post->ID ) : false;
 
         if ( $client_id ) {
@@ -262,8 +262,8 @@ class HRM_Client {
     }
 
     function new_client_partial_payment_form( $data = false ) {
-
-        $redirect = ( isset( $_POST['hrm_dataAttr']['redirect'] ) && !empty( $_POST['hrm_dataAttr']['redirect'] ) ) ? $_POST['hrm_dataAttr']['redirect'] : '';
+        $POST = wp_unslash( $_POST );
+        $redirect = ( isset( $POST['hrm_dataAttr']['redirect'] ) && !empty( $POST['hrm_dataAttr']['redirect'] ) ) ? $POST['hrm_dataAttr']['redirect'] : '';
 
         $clients_query = $this->get_clients();
         $clients = array();

@@ -76,6 +76,7 @@ class Hrm_Employee {
     }
 
     public static function ajax_get_employees() {
+        $POST = wp_unslash( $_POST );
         $postdata['page']  = $POST['page'];
         $employees = self::getInstance()->get_employees( $postdata );
         
@@ -83,6 +84,7 @@ class Hrm_Employee {
     }
 
     public static function  ajax_insert_employee() {
+        $POST = wp_unslash( $_POST );
         $postdata    = $POST;
         $employee_id = self::getInstance()->add_new_employee( $postdata );
         $employee    = self::getInstance()->get_employee( $employee_id );
@@ -475,10 +477,11 @@ class Hrm_Employee {
     public static function ajax_save_personal_info() {
         //check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
+        $FILES = wp_unslash( $_FILES );
         $user_id = json_decode( stripslashes( $POST['user_id'] ) );
         $user_id = empty( $user_id ) ? get_current_user_id() : intval( $user_id );
         
-        $result = self::getInstance()->save_personal_info( $POST, $_FILES, $user_id );
+        $result = self::getInstance()->save_personal_info( $POST, $FILES, $user_id );
         wp_send_json_success( $result );
     }
 

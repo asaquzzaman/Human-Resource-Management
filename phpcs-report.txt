@@ -105,7 +105,7 @@ FOUND 4 ERRORS AFFECTING 3 LINES
 
 FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/settings.php
 --------------------------------------------------------------------------------
-FOUND 194 ERRORS AFFECTING 153 LINES
+FOUND 192 ERRORS AFFECTING 152 LINES
 --------------------------------------------------------------------------------
    33 | ERROR | All output should be run through an escaping function (like
       |       | esc_html_e() or esc_attr_e()), found '_e'.
@@ -671,12 +671,6 @@ FOUND 194 ERRORS AFFECTING 153 LINES
       |       | ORDER BY id desc $limit"
  1276 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT * FROM $table WHERE id = %d"
- 1425 | ERROR | All output should be run through an escaping function (see the
-      |       | Security sections in the WordPress Developer Handbooks), found
-      |       | '$value'.
- 1425 | ERROR | All output should be run through an escaping function (see the
-      |       | Security sections in the WordPress Developer Handbooks), found
-      |       | '$text'.
 --------------------------------------------------------------------------------
 
 
@@ -710,55 +704,54 @@ FOUND 8 ERRORS AFFECTING 4 LINES
 --------------------------------------------------------------------------------
 
 
-
 FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/class/attendance.php
 --------------------------------------------------------------------------------
 FOUND 15 ERRORS AFFECTING 11 LINES
 --------------------------------------------------------------------------------
-  492 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+  429 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $attendance_table at "SELECT * FROM $attendance_table
       |       | WHERE `user_id` = %d AND shift_id = %d ORDER BY id DESC LIMIT
       |       | 1"
- 1032 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+  969 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT * FROM {$table} WHERE 1=1 ORDER BY
       |       | id DESC LIMIT 1"
- 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+  982 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT * FROM $table WHERE `date` >=
       |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
       |       | 1"
- 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+  982 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $current_time at "SELECT * FROM $table WHERE `date` >=
       |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
       |       | 1"
- 1045 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+  982 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $user_id at "SELECT * FROM $table WHERE `date` >=
       |       | '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT
       |       | 1"
- 1066 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1003 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT `start` FROM {$table} WHERE 1=1
       |       | ORDER BY id DESC LIMIT 1"
- 1074 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1011 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT `end` FROM {$table} WHERE 1=1 ORDER
       |       | BY id DESC LIMIT 1"
- 1082 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1019 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT `id` FROM {$table} WHERE 1=1 ORDER
       |       | BY id DESC LIMIT 1"
- 1090 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1027 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT `is_multi` FROM {$table} WHERE 1=1
       |       | ORDER BY id DESC LIMIT 1"
- 1206 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1143 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at             SELECT * FROM $table 
       |       | 
- 1207 | ERROR | Simple placeholders should not be quoted in the query string in
+ 1144 | ERROR | Simple placeholders should not be quoted in the query string in
       |       | $wpdb->prepare(). Found: '%s'.
- 1207 | ERROR | Simple placeholders should not be quoted in the query string in
+ 1144 | ERROR | Simple placeholders should not be quoted in the query string in
       |       | $wpdb->prepare(). Found: '%s'.
- 1209 | ERROR | Simple placeholders should not be quoted in the query string in
+ 1146 | ERROR | Simple placeholders should not be quoted in the query string in
       |       | $wpdb->prepare(). Found: '%s'.
- 1332 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1269 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $table at "SELECT SUM(total) FROM {$table} WHERE 1=1
       |       | AND $query"
- 1332 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
+ 1269 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated
       |       | variable $query at "SELECT SUM(total) FROM {$table} WHERE 1=1
       |       | AND $query"
 --------------------------------------------------------------------------------
@@ -828,18 +821,20 @@ FOUND 4 ERRORS AFFECTING 4 LINES
 
 FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/employee.php
 --------------------------------------------------------------------------------
-FOUND 4 ERRORS AFFECTING 2 LINES
+FOUND 6 ERRORS AFFECTING 4 LINES
 --------------------------------------------------------------------------------
- 189 | ERROR | All output should be run through an escaping function (see the
+  79 | ERROR | Processing form data without nonce verification.
+  87 | ERROR | Processing form data without nonce verification.
+ 191 | ERROR | All output should be run through an escaping function (see the
      |       | Security sections in the WordPress Developer Handbooks), found
      |       | '$file_url'.
- 189 | ERROR | All output should be run through an escaping function (see the
+ 191 | ERROR | All output should be run through an escaping function (see the
      |       | Security sections in the WordPress Developer Handbooks), found
      |       | '$delete'.
- 189 | ERROR | All output should be run through an escaping function (see the
+ 191 | ERROR | All output should be run through an escaping function (see the
      |       | Security sections in the WordPress Developer Handbooks), found
      |       | '$hidden'.
- 477 | ERROR | Processing form data without nonce verification.
+ 479 | ERROR | Processing form data without nonce verification.
 --------------------------------------------------------------------------------
 
 

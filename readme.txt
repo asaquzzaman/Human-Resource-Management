@@ -3,7 +3,7 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
-Tested up to: 5.0.3
+Tested up to: 5.1
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2
@@ -82,7 +82,7 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
-= 2.2.6 - January 29, 2019 =
+= 2.2.6 - February 23, 2019 =
 
  * [Fix] Security issue at leave apply time.
  * [Fix] Only Administrator and HR Manager can change leave status.

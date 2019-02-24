@@ -1022,7 +1022,7 @@ class Hrm_Ajax {
             $format = array( '%s');
             $update = $wpdb->update( $table, $data, array( 'id' => $id ), $format );
         } else {
-            $results = $wpdb->get_results("SELECT id FROM $table", ARRAY_A );
+            $results = $wpdb->get_results("SELECT id FROM " . $wpdb->prefix . "skill", ARRAY_A );
             $results = wp_list_pluck( $results, 'id' );
 
             foreach ( $POST['user_id'] as $key => $id ) {
@@ -1049,60 +1049,6 @@ class Hrm_Ajax {
         } else {
             wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
         }
-    }
-
-    function skill() {
-        check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
-        $search_field = 'emp_firstname';
-        $search_value = trim( $POST['search_value'] );
-        $where = $search_field .' LIKE ' ."'%".$search_value."%'";
-
-        global $wpdb;
-        $tabledb = $wpdb->prefix . 'employee';
-
-        $results = $wpdb->get_results("SELECT id, emp_lastname, emp_firstname $search_field FROM $tabledb WHERE $where ORDER BY id DESC");
-
-        if( $results ) {
-            foreach ($results as $key => $value) {
-
-                $data[] = array(
-                    'label' => $value->$search_field,
-                    'value' => $value->$search_field,
-                    'id' => $value->id,
-                    '_user_meta'=> Hrm_Admin::getInstance()->skill_user_meta( $value->id, $value->emp_firstname, $value->emp_lastname  ),
-                );
-            }
-        } else {
-            $data[] = array(
-                'label' => 'No user found !',
-            );
-        }
-
-        $user_info = json_encode( $data );
-        wp_send_json_success( $user_info );
-
-    }
-
-    function add_form_generator() {
-        check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $class_nam = isset( $POST['class_name'] ) ? $POST['class_name'] : '';
-        $function_nam = isset( $POST['function_name'] ) ? $POST['function_name'] : '';
-
-        if ( method_exists( $class_nam, 'getInstance' ) ) {
-            $data = $class_nam::getInstance()->$function_nam ();
-
-        } else if ( class_exists( $class_nam ) ) {
-            $new_instance = new $class_nam ();
-            $data = $new_instance->$function_nam();
-
-        } else if ( function_exists( $function_nam ) ) {
-            $data = $function_nam ();
-        }
-
-        wp_send_json_success( array( 'append_data' => $data ) );
     }
 
     function user_role_edit_form_prepare() {
@@ -1248,38 +1194,38 @@ class Hrm_Ajax {
         return true;
     }
 
-    function hrm_autocomplete_action() {
+    // function hrm_autocomplete_action() {
 
-        if( ! isset( $POST['table_option'] ) && empty( $POST['table_option'] ) ) {
-            wp_send_json_error( __( 'Error occured', 'hrm' ) );
-        }
-        $table_option['table_option'] = array();
-        $table_option = get_option( $POST['table_option'] );
+    //     if( ! isset( $POST['table_option'] ) && empty( $POST['table_option'] ) ) {
+    //         wp_send_json_error( __( 'Error occured', 'hrm' ) );
+    //     }
+    //     $table_option['table_option'] = array();
+    //     $table_option = get_option( $POST['table_option'] );
 
-        $search_field = $POST['search_field'];
-        $search_value = trim( $POST['search_value'] );
-        $where = $search_field .' LIKE ' ."'%".$search_value."%'";
+    //     $search_field = $POST['search_field'];
+    //     $search_value = trim( $POST['search_value'] );
+    //     $where = $search_field .' LIKE ' ."'%".$search_value."%'";
 
-        global $wpdb;
-        $tabledb = $wpdb->prefix . $table_option['table_name'];
+    //     global $wpdb;
+    //     $tabledb = $wpdb->prefix . $table_option['table_name'];
 
-        $results = $wpdb->get_results("SELECT id, $search_field FROM $tabledb WHERE $where ORDER BY id DESC");
+    //     $results = $wpdb->get_results("SELECT id, $search_field FROM $tabledb WHERE $where ORDER BY id DESC");
 
-        if( $results ) {
-            foreach ($results as $key => $value) {
-                $data[] = array(
-                    'label' => $value->$search_field,
-                    'value' => $value->$search_field,
-                    'id' => $value->id
-                );
-            }
-        } else {
-            wp_send_json_error( __( 'Error occured', 'hrm' ) );
-        }
+    //     if( $results ) {
+    //         foreach ($results as $key => $value) {
+    //             $data[] = array(
+    //                 'label' => $value->$search_field,
+    //                 'value' => $value->$search_field,
+    //                 'id' => $value->id
+    //             );
+    //         }
+    //     } else {
+    //         wp_send_json_error( __( 'Error occured', 'hrm' ) );
+    //     }
 
-        $user_info = json_encode( $data );
-        wp_send_json_success( $user_info );
-    }
+    //     $user_info = json_encode( $data );
+    //     wp_send_json_success( $user_info );
+    // }
 
     function singel_form_add() {
         //check_ajax_referer( 'hrm_nonce' );
@@ -1321,7 +1267,7 @@ class Hrm_Ajax {
             $lists[] = ['iso' => $key, 'country' => $value];
         }
         wp_send_json_success( [ 
-            'data'      => $info['data'],
+            'data'      => empty( $info['data'] ) ? [] : $info['data'],
             'countries' => $lists,
         ] );
     }

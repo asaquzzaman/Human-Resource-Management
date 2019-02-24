@@ -63,7 +63,8 @@ class Hrm_Employee {
     public function ajax_employee_filter() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
-        $POST['page'] = absint( $POST['page'] );
+        $POST['page'] = empty( $POST['page'] ) ? 1 : absint( $POST['page'] );
+        $POST['name'] = empty( $POST['name'] ) ? '' : $POST['name'];
         $postdata = [];
         $postdata['search']         = '*' . $POST['name'] . '*';
         $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
@@ -76,6 +77,7 @@ class Hrm_Employee {
     }
 
     public static function ajax_get_employees() {
+        check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         $postdata['page']  = $POST['page'];
         $employees = self::getInstance()->get_employees( $postdata );
@@ -84,6 +86,7 @@ class Hrm_Employee {
     }
 
     public static function  ajax_insert_employee() {
+        check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         $postdata    = $POST;
         $employee_id = self::getInstance()->add_new_employee( $postdata );
@@ -174,29 +177,6 @@ class Hrm_Employee {
         return false;
     }
 
-    function emp_upload_image($employee_id) {
-
-        $image_id        = get_user_meta( $employee_id, 'hrm_user_image_id', true );
-        $image_attchment = $this->get_image( $image_id );
-
-        ?>
-        <div id="hrm-user-image-wrap">
-            <?php
-            if ( $image_attchment ) {
-
-                $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
-                $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
-                $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" height="160" width="160"/></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name'] ) );
-
-                echo '<div class="hrm-uploaded-item">' . $file_url . ' ' . $delete . $hidden . '</div>';
-            } else {
-                echo get_avatar( $employee_id, 160 );
-            }
-            ?>
-
-        </div>
-        <?php
-    }
 
     function after_ajax_upload( $response, $file, $post ) {
         if ( !isset( $post['employee_id'] ) ) {
@@ -251,10 +231,10 @@ class Hrm_Employee {
     }
 
     function experiance_filter( $postdata ) {
-        $title       = $postdata['title'];
-        $from        = $postdata['from'];
-        $to          = $postdata['to'];
-        $employee_id = $postdata['employee_id'];
+        $title       = empty( $postdata['title'] ) ? '': $postdata['title'];
+        $from        = empty( $postdata['from'] ) ? '': $postdata['from'];
+        $to          = empty( $postdata['to'] ) ? '': $postdata['to'];
+        $employee_id = empty( $postdata['employee_id'] ) ? '': $postdata['employee_id'];
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
@@ -355,7 +335,7 @@ class Hrm_Employee {
         });
 
         $experiance = Skill::where('employee_id', $employee_id)
-            ->where( function($q) use($title, $from, $to) {
+            ->where( function($q) use($title) {
             if ( ! empty(  $title ) ) {
                 $q->where( 'skill', 'LIKE', '%' . $title . '%' );
             }
@@ -475,7 +455,7 @@ class Hrm_Employee {
     }
 
     public static function ajax_save_personal_info() {
-        //check_ajax_referer('hrm_nonce');
+        check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         $FILES = wp_unslash( $_FILES );
         $user_id = json_decode( stripslashes( $POST['user_id'] ) );
@@ -596,7 +576,7 @@ class Hrm_Employee {
         update_user_meta( $user_id, 'hrm_role',  $postdata['role'] );
         update_user_meta( $user_id, 'hrm_designation',  $postdata['designation'] );
 
-        if ( $postdata['employee_image'] ) {
+        if ( ! empty( $postdata['employee_image'] ) ) {
             $image_id = File_System::upload_base64_file( $postdata['employee_image'][0] );
             update_user_meta( $user_id, 'hrm_user_image_id', $image_id );
         }

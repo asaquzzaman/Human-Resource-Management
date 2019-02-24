@@ -28,7 +28,7 @@ class Hrm_Admin {
 
 
     function __construct() {
-        add_action( 'init', array($this, 'admin_init_action') );
+        //add_action( 'init', array($this, 'admin_init_action') );
         add_filter( 'hrm_search_parm', array( $this, 'project_search_parm' ), 10, 1 );
         add_action( 'text_field_before_input', array($this, 'task_budget_crrency_symbol'), 10, 2 );
         add_action( 'wp_ajax_hrm_organization_location_filter', array( $this, 'ajax_location_filter' ) );
@@ -210,47 +210,6 @@ class Hrm_Admin {
     
     }
 
-    /**
-     * Default interface for setting a HR role
-     *
-     * @param WP_User $profileuser User data
-     *
-     * @return bool Always false
-     */
-    public static function role_display( $profileuser ) {
-        // Bail if current user cannot edit users
-        if ( ! current_user_can( 'edit_user', $profileuser->ID ) || !current_user_can( 'manage_options') ) {
-            return;
-        }
-
-        $checked = in_array( hrm_manager_role_key(), $profileuser->roles ) ? 'checked' : '';
-        
-        ?>
-
-        <h3><?php esc_html_e( 'HRM', 'erp' ); ?></h3>
-
-        <table class="form-table">
-            <tbody>
-                <tr>
-                    <th><label for="erp-hr-role"><?php esc_html_e( 'HRM Manager', 'erp' ); ?></label></th>
-                    <td>
-                        <fieldset>
-                            <legend class="screen-reader-text"><span>HRM Manager</span></legend>
-                            <label for="hrm-manager">
-                                <input <?php echo $checked; ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
-                                Confirm HRM manager
-                            </label>
-                            <br>
-                        </fieldset>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-
-        <?php
-    }
-
     public static function profile_update_role( $user_id ) {
         $POST = wp_unslash( $_POST );
         $postdata = $POST;
@@ -301,18 +260,6 @@ class Hrm_Admin {
         );
 
         return new WP_User_Query( $arg );
-    }
-
-    function task_budget_crrency_symbol( $name, $element ) {
-        if ( $name == 'task_budget' ) {
-            $project_id = isset( $element['extra']['project_id'] ) ? $element['extra']['project_id'] : false;
-            if ( $project_id ) {
-                $currency_symbol = get_post_meta( $project_id, '_currency_symbol', true );
-                ?>
-                <div style="float: left;"><?php echo $currency_symbol; ?></div>
-                <?php
-            }
-        }
     }
 
     function get_general_info() {
@@ -417,7 +364,7 @@ class Hrm_Admin {
 
         $user_list = array();
         $table = $wpdb->prefix . 'hrm_user_role';
-        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM {$table} WHERE project_id = %d", $project_id ) );
+        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM " . $wpdb->prefix . "hrm_user_role WHERE project_id = %d", $project_id ) );
 
         if ( $project_users ) {
             foreach ($project_users as $row ) {
@@ -436,194 +383,6 @@ class Hrm_Admin {
 
         return $user_list;
 
-    }
-
-
-    function get_projects( $tab, $subtab, $limit = '-1' ) {
-        $POST = wp_unslash( $_POST );
-        $args = array(
-            'posts_per_page' => $limit,
-            'post_type'      => 'hrm_project',
-            'post_status'    => 'publish',
-        );
-
-        if ( hrm_user_can_access( $page, $tab, $subtab, $subtab.'_assign_project' ) ) {
-            add_filter('posts_join', array( $this, 'project_role_table' ) );
-            add_filter( 'posts_where', array( $this, 'get_project_role' ), 10, 2 );
-        }
-
-        if ( isset( $POST['type'] ) && $POST['type'] == '_search' ) {
-            $args['s'] = isset( $POST['title'] ) ? trim( $POST['title'] ) : '';
-            $args['post_type'] = array( 'hrm_project', 'hrm_task' );
-        }
-
-        $projects_query = new WP_Query( $args );
-        $posts['found_posts'] = $projects_query->found_posts;
-
-        $projects  = $projects_query->get_posts();
-        $tasks     = $this->get_tasks();
-        $sub_tasks = $this->get_sub_tasks();
-
-        $posts['posts'] = array_merge( $projects, $tasks, $sub_tasks );
-
-        remove_filter( 'posts_where', array($this, 'get_project_where'), 10, 2 );
-        remove_filter( 'posts_where', array($this, 'get_project_role'), 10, 2 );
-        remove_filter( 'posts_join', array($this, 'project_role_table'), 10, 2 );
-
-        return $posts;
-    }
-
-    function get_project_role( $where, &$wp_query ) {
-        $current_user_id = get_current_user_id();
-        $where .= " AND rl.user_id = $current_user_id";
-        return $where;
-    }
-
-    function project_role_table($join) {
-        global $wp_query, $wpdb;
-        $table = $wpdb->prefix . 'hrm_user_role';
-        $join .= "LEFT JOIN $table AS rl  ON $wpdb->posts.ID = rl.project_id";
-        return $join;
-    }
-
-    function get_tasks( $limit = -1 ) {
-        $args = array(
-            'posts_per_page' => $limit,
-            'post_type' => 'hrm_task',
-            'post_status' => 'publish',
-        );
-
-        return get_posts( $args );
-    }
-
-    function get_task_status( $task_id ) {
-        $coplete = get_post_meta( $task_id, '_completed', true );
-        if ( $coplete ) {
-            return '<span>' . __( 'Completed', 'hrm' ) . '</span>'; //class="hrm-complete-text";
-        }
-
-        $due_date = get_post_meta( $task_id, '_end_date', true );
-
-        if ( empty( $due_date ) ) {
-            return '<span>' . __( 'Running' ) . '</span>'; // class="hrm-running-text"
-        }
-
-        $due_date = strtotime( date( 'Y-m-d', strtotime( $due_date ) ) );
-        $today = strtotime( date( 'Y-m-d', time() ) );
-
-        if ( $due_date < $today ) {
-            return '<span>' . __( 'Outstanding' ) . '</span>'; // class="hrm-outstanding-text"
-        } else {
-            return '<span>' . __( 'Running' ) . '</span>'; //class="hrm-running-text"
-        }
-
-    }
-
-    function get_sub_tasks( $limit = -1 ) {
-        $args = array(
-            'posts_per_page' => $limit,
-            'post_type' => 'hrm_sub_task',
-            'post_status' => 'publish',
-        );
-
-        return get_posts( $args );
-    }
-
-    function project_post_groupby( $groupby ) {
-
-        global $wpdb;
-        $groupby = "{$wpdb->posts}.post_type";
-
-        return $groupby;
-    }
-
-    function get_project_where( $where, &$wp_query ) {
-        $GET = wp_unslash( $_GET );
-        $post_title = $GET['title'];
-        $where .= " AND post_title LIKE '%$post_title%'";
-
-        return $where;
-    }
-
-    function project_insert_form( $project = null ) {
-        $get_client = HRM_Client::getInstance()->get_clients();
-        $clients    = array();
-        $clients[-1] = __( '-Select-', 'hrm' );
-        foreach ( $get_client->results as $key => $client ) {
-            $clients[$client->ID] = $client->display_name;
-        }
-        if ( $project !== null ) {
-            $form['id'] = array(
-                'type'  => 'hidden',
-                'value' => isset( $project->ID ) ? $project->ID : '',
-            );
-        }
-        $form['title'] = array(
-            'label' => __( 'Title', 'hrm' ),
-            'type'  => 'text',
-            'value' => isset( $project->post_title ) ? $project->post_title : '',
-            'extra' => array(
-                'data-hrm_validation'         => true,
-                'data-hrm_required'           => true,
-                'data-hrm_required_error_msg' => __( 'This field is required', 'hrm' ),
-            ),
-        );
-
-        $form['description'] = array(
-            'label' => __( 'Description', 'hrm' ),
-            'type'  => 'textarea',
-            'class' => 'hrm-pro-des',
-            'value' => isset( $project->post_content ) ? $project->post_content : '',
-        );
-
-        $form['client'] = array(
-            'label'    => __( 'Client', 'hrm' ),
-            'type'     => 'select',
-            'class'    => 'hrm-chosen',
-            'option'   => $clients,
-            'selected' => isset( $project->ID ) ? get_post_meta( $project->ID, '_client', true ) : '',
-        );
-
-        $form['worker'] = array(
-            'label'       => __( 'Worker', 'hrm' ),
-            'type'        => 'text',
-            'class'       => 'hrm-project-autocomplete',
-            'extra'       => array( 'data-action' => 'project_worker' ),
-            'placeholder' => __( 'Add co-workers', 'hrm' ),
-        );
-
-        if ( $project !== null ) {
-            $user_lists = $this->get_co_worker( $project->ID );
-            foreach ( $user_lists as $id => $user_list ) {
-                $form['role['.$id.']'] = $this->get_co_worker_field( $user_list['name'], $id, $user_list['role']  );
-            }
-        }
-
-        $form['budget'] = array(
-            'label'       => __( 'Budget', 'hrm' ),
-            'type'        => 'text',
-            'placeholder' => __( 'Greater than budget utilize amount', 'hrm' ),
-            'desc'        => __( 'Budget amount should be greater than budget utilize amount', 'hrm' ),
-            'value'       => isset( $project->ID ) ? get_post_meta( $project->ID, '_budget', true ) : '',
-        );
-
-        $form['currency_symbol'] = array(
-            'label' => __( 'Currency Symbol', 'hrm' ),
-            'type'  => 'text',
-            'value' => isset( $project->ID ) ? get_post_meta( $project->ID, '_currency_symbol', true ) : '',
-        );
-
-        $form['action'] = 'add_project';
-        $form['header'] = __('Add Project', 'hrm');
-        ob_start();
-        echo hrm_Settings::getInstance()->hidden_form_generator( $form );
-
-        $return_value = array(
-            'append_data'          => ob_get_clean(),
-            'project_autocomplete' => true
-        );
-
-        return $return_value;
     }
 
     function get_co_worker( $project_id ) {
@@ -632,7 +391,7 @@ class Hrm_Admin {
 
         $user_list = array();
         $table = $wpdb->prefix . 'hrm_user_role';
-        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM {$table} WHERE project_id = %d", $project_id ) );
+        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM " . $wpdb->prefix . "hrm_user_role WHERE project_id = %d", $project_id ) );
 
         if ( $project_users ) {
             foreach ($project_users as $row ) {
@@ -651,46 +410,6 @@ class Hrm_Admin {
 
         return $user_list;
     }
-
-
-    function customer( $field_value = null ) {
-        if( $field_value !== null ) {
-            $hidden_form['customer_name'] = array(
-                'type' => 'hidden',
-                'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-            );
-        }
-        $hidden_form['customer_name'] = array(
-            'label' =>  __( 'Name', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['customer_name'] ) ? $field_value['customer_name'] : '',
-        );
-        $hidden_form['customer_desc'] = array(
-            'label' =>  __( 'Description', 'hrm' ),
-            'type' => 'text',
-            'value' => isset( $field_value['customer_desc'] ) ? $field_value['customer_desc'] : '',
-        );
-        $hidden_form['customer_deleted'] = array(
-            'type' => 'hidden',
-            'value' => isset( $field_value['customer_deleted'] ) ? $field_value['customer_deleted'] : '',
-
-        );
-
-        $hidden_form['action'] = 'ajax_referer_insert';
-        $hidden_form['table_option'] = 'hrm_project_customer';
-        $hidden_form['header'] = __('Add Customer', 'hrm');
-        ob_start();
-        hrm_Settings::getInstance()->hidden_form_generator( $hidden_form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-
-
 
     function get_user_role() {
         global $current_user;
@@ -729,43 +448,6 @@ class Hrm_Admin {
     function employee_image_upload_form($data) {
         $employee_id     = isset( $POST['id'] )  ?  $POST['id'] : false;
         $this->emp_upload_image($employee_id);
-    }
-
-    function emp_upload_image( $employee_id ) {
-
-        $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
-        $image_attchment = $this->get_image( $image_id );
-
-        ?>
-
-        <div id="hrm-upload-file-container" >
-            <div class="hrm-employee-pic-text"><strong><?php  _e( 'Profile Picture', 'hrm' ); ?></strong></div>
-            <div class="hrm-drop-area" id="hrm-drop-files-zone">
-                <a id="hrm-pickfiles" href="#"><?php _e( 'Change', 'hrm' ); ?></a>
-                <?php
-                if ( $image_attchment ) {
-                    ?>
-                    <!-- <a href="#" data-id="<?php echo $image_attchment['id']; ?>" class="hrm-delete-file"><?php _e( 'Delete', 'hrm' ); ?></a> -->
-                    <?php
-                }
-                ?>
-            </div>
-            <div id="hrm-user-image-wrap">
-                <?php
-                if ( $image_attchment ) {
-                    $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
-                    $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
-                    $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" height="160" width="160"/></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name'] ) );
-
-                    echo '<div class="hrm-uploaded-item">' . $delete.' '. $file_url  . $hidden . '</div>';
-                } else {
-                    echo get_avatar( $employee_id, 160 );
-                }
-                ?>
-
-            </div>
-        </div>
-        <?php
     }
 
     function add_new_employer( $postdata ) {
@@ -861,288 +543,81 @@ class Hrm_Admin {
         return true;
     }
 
-    function get_co_worker_field( $display_name, $user_id, $value = null ) {
-        $name = str_replace(' ', '_', $display_name );
-        $user = get_user_by( 'id', $user_id );
-
-        $fields = array();
-        if ( reset( $user->roles ) != 'hrm_employee' ) {
-            $fields[] = array(
-                'label'   => __( 'Manager', 'hrm' ),
-                'id'      => 'hrm-manager-'.$name,
-                'value'   => 'manager',
-                'checked' => isset( $value ) ? $value : '',
-            );
-
-            $fields[] = array(
-                'label'   => __( 'Client', 'hrm' ),
-                'id'      => 'hrm-client-'.$name,
-                'value'   => 'client',
-                'checked' => isset( $value ) ? $value : '',
-            );
-        }
-
-        $fields[] = array(
-            'label'   => __( 'Co-worker', 'hrm' ),
-            'id'      => 'hrm-co-worker-'.$name,
-            'value'   => 'co_worker',
-            'checked' => isset( $value ) ? $value : 'co_worker',
-        );
-
-        return $hidden_form = array(
-            'label'  => $display_name,
-            'type'   => 'radio',
-            'desc'   => 'Choose access permission',
-            'fields' => $fields,
-        );
-    }
-
-    function project_user_meta( $display_name, $user_id, $user ) {
-        $form = $this->get_co_worker_field( $display_name, $user_id );
-
-        ob_start();
-            echo hrm_settings::getInstance()->radio_field( 'role['.$user_id.']', $form );
-
-        $return_value = array(
-            'append_data' => ob_get_clean(),
-        );
-
-        return $return_value;
-    }
-
-    function create_user_meta( $display_name, $user_id, $role = null ) {
-        global $wp_roles;
-
-        $role = ( $role == null ) ? 'subscriber' : $role ;
-        if ( !$wp_roles ) {
-            $wp_roles = new WP_Roles();
-        }
-
-        $role_names = $wp_roles->get_names();
-
-        unset( $role_names['hrm_employee'] );
-        ob_start();
-        ?>
-            <div class="select-field">
-                <label id="<?php echo $display_name .'_'.$user_id; ?>"><?php echo $display_name; ?><em>*</em></label>
-                <input type="hidden" name="admin[]" value="<?php echo $user_id; ?>">
-                <select name="admin_role[]" data-required="required" data-required_error_msg="This field is required">
-                    <?php
-                        foreach( $role_names as $key => $name ) {
-                            ?>
-                            <option <?php selected( $role, $key ); ?> value="<?php echo $key; ?>"><?php echo $name; ?></option>
-                            <?php
-                        }
-                    ?>
-                </select>
-                <span class="hrm-delte-user-meta"></span>
-                <span class="hrm-clear"></span>
-                <span class="description"><?php printf( 'Select %s role', $display_name ); ?></span>
-            </div>
-        <?php
-
-        return ob_get_clean();
-    }
-
-    function skill_user_meta( $id, $first_name, $last_name ) {
-        ob_start();
-        ?>
-        <div>
-            <span class="hrm-delte-user-meta hrm-label-font"><?php echo ucfirst( $first_name .' '.$last_name ); ?></span>
-            <input type="hidden" value="<?php echo $id; ?>" name="user_id[]">
-            <input type="hidden" value="<?php echo $first_name .' '.$last_name; ?>" name="user_name[]">
-        </div>
-        <?php
-        return ob_get_clean();
-    }
-
-
-    function admin_init_action() {
-        $POST = wp_unslash( $_POST );
-        if( isset( $POST['hrm_search'] ) ) {
-            hrm_Settings::getInstance()->search();
-        }
+    // function admin_init_action() {
+    //     check_ajax_referer( 'hrm_nonce' );
+    //     $POST = wp_unslash( $_POST );
+    //     if( isset( $POST['hrm_search'] ) ) {
+    //         hrm_Settings::getInstance()->search();
+    //     }
 
-        if( isset( $POST['hrm_pagination'] ) ) {
-            hrm_Settings::getInstance()->pagination_query_arg();
-        }
+    //     if( isset( $POST['hrm_pagination'] ) ) {
+    //         hrm_Settings::getInstance()->pagination_query_arg();
+    //     }
 
-    }
+    // }
 
 
-    function search( $limit = null ) {
+    // function search( $limit = null ) {
 
-        check_ajax_referer( 'hrm_nonce' );
-        $GET = wp_unslash( $_GET );
-        $POST = wp_unslash( $_POST );
+    //     check_ajax_referer( 'hrm_nonce' );
+    //     $GET = wp_unslash( $_GET );
+    //     $POST = wp_unslash( $_POST );
 
-        if( ! isset( $POST['table_option'] ) || empty( $POST['table_option'] ) ) {
+    //     if( ! isset( $POST['table_option'] ) || empty( $POST['table_option'] ) ) {
 
-            foreach ($GET as $key => $value) {
-                $data[$key] = $value;
-            }
-            unset( $data['pagenum'] );
-            $data['hrm_error'] = 'table_option';
-            $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
+    //         foreach ($GET as $key => $value) {
+    //             $data[$key] = $value;
+    //         }
+    //         unset( $data['pagenum'] );
+    //         $data['hrm_error'] = 'table_option';
+    //         $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
 
-            wp_redirect( $query_arg  );
-        }
+    //         wp_redirect( $query_arg  );
+    //     }
 
-        $table_option = get_option( $POST['table_option'] );
-        $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
+    //     $table_option = get_option( $POST['table_option'] );
+    //     $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
 
+    //     foreach ( $table_option['table_option'] as $name => $value ) {
+    //         if( isset( $POST[$value] ) && ! empty( $POST[$value] ) ) {
+    //             $data[$value] = urlencode( $POST[$value] );
+    //         }
 
-        foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $POST[$value] ) && ! empty( $POST[$value] ) ) {
-                $data[$value] = urlencode( $POST[$value] );
-            }
+    //         if( isset( $GET[$value] ) ) {
 
-            if( isset( $GET[$value] ) ) {
+    //             unset( $GET[$value] );
+    //         }
+    //     }
 
-                unset( $GET[$value] );
-            }
-        }
+    //     if( $data ) {
+    //         $data['table_option'] = $POST['table_option'];
+    //         $data['_wpnonce'] = $POST['_wpnonce'];
+    //         $data['type'] = '_search';
+    //     }
 
+    //     foreach ($GET as $key => $value) {
+    //         $data[$key] = $value;
+    //     }
 
+    //     unset( $data['pagenum'] );
+    //     $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
 
-        if( $data ) {
-            $data['table_option'] = $POST['table_option'];
-            $data['_wpnonce'] = $POST['_wpnonce'];
-            $data['type'] = '_search';
-        }
+    //     wp_redirect(  $query_arg );
+    // }
 
-        foreach ($GET as $key => $value) {
-            $data[$key] = $value;
-        }
 
-        unset( $data['pagenum'] );
-        $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
+    // function hrm_query( $table, $limit ) {
+    //     global $wpdb;
+    //     $GET = wp_unslash( $_GET );
+    //     $tabledb = $wpdb->prefix . $table;
 
+    //     $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
+    //     $offset = ( $pagenum - 1 ) * $limit;
+    //     $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc LIMIT $offset,$limit" );
+    //     $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
 
-        wp_redirect(  $query_arg );
-    }
-
-    function search_query( $limit ) {
-        check_ajax_referer( 'hrm_nonce' );
-        $GET = wp_unslash( $_GET );
-        if( ! isset( $GET['table_option'] ) && empty( $GET['table_option'] ) ) {
-            return;
-        }
-        $table_option['table_option'] = array();
-        $table_option = get_option( $GET['table_option'] );
-
-        $data = array();
-        foreach ( $table_option['table_option'] as $name => $value ) {
-            if( isset( $GET[$value] ) && ! empty( $GET[$value] ) ) {
-                $data[] = $name .' LIKE ' ."'%".trim( $GET[$value] ) ."%'";
-            }
-        }
-
-        $where = implode( $data, ' AND ');
-
-
-        global $wpdb;
-        $tabledb = $wpdb->prefix . $table_option['table_name'];
-
-        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
-        $offset = ( $pagenum - 1 ) * $limit;
-
-        $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb WHERE $where ORDER BY id desc LIMIT $offset,$limit" );
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-
-        return $results;
-    }
-
-    function show_tab_page( $page = null ) {
-        $GET = wp_unslash( $_GET );
-        $tab = isset( $GET['tab'] ) ? $GET['tab'] : '';
-        $menu = hrm_page();
-
-
-        if( empty( $tab ) && count( $menu['admin'] )  ) {
-            $tab = key( $menu['admin'] );
-
-            if ( ! hrm_user_can_access( $page, $tab, null, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
-            $path = isset( $menu['admin'][$tab]['file_path'] ) ? $menu['admin'][$tab]['file_path'] : '';
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        } else {
-
-            if ( ! hrm_user_can_access( $page, $tab, null, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
-            $path = isset( $menu['admin'][$tab]['file_path'] ) ? $menu['admin'][$tab]['file_path'] : '';
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        }
-    }
-
-
-    function show_sub_tab_page( $page, $tab ) {
-        $GET = wp_unslash( $_GET );
-        $subtab = isset( $GET['sub_tab'] ) ? $GET['sub_tab'] : '';
-        $menu = hrm_page();
-
-        if( empty( $subtab ) && count( $menu['admin'][$tab]['submenu'] ) ) {
-
-            $subtab = key( $menu['admin'][$tab]['submenu'] );
-
-            if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
-                return false;
-            }
-
-            $path = isset( $menu['admin'][$tab]['submenu'][$subtab]['file_path'] ) ? $menu['admin'][$tab]['submenu'][$subtab]['file_path'] : '';
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        } else {
-
-            if ( ! hrm_user_can_access( $page, $tab, $subtab, 'view' ) ) {
-                printf( '<h1>%s</h1>', __( 'You do no have permission to access this page', 'cpm' ) );
-                return;
-            }
-
-            $path = isset( $menu['admin'][$tab]['submenu'][$subtab]['file_path'] ) ? $menu['admin'][$tab]['submenu'][$subtab]['file_path'] : '';
-
-
-            if( file_exists( $path ) ) {
-                require_once $path;
-            } else {
-                echo 'Page not found';
-            }
-        }
-    }
-
-    function hrm_query( $table, $limit ) {
-        global $wpdb;
-        $GET = wp_unslash( $_GET );
-        $tabledb = $wpdb->prefix . $table;
-
-        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
-        $offset = ( $pagenum - 1 ) * $limit;
-        $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc LIMIT $offset,$limit" );
-        $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-
-        return $results;
-    }
+    //     return $results;
+    // }
 
     function pagination( $total, $limit ) {
         $GET = wp_unslash( $_GET );
@@ -1447,7 +922,7 @@ class Hrm_Admin {
             $query =  $wpdb->prepare( 
                 "
                 SELECT      *
-                FROM        {$table}
+                FROM        " . $wpdb->prefix . "hrm_job_category
                 WHERE       1 = 1
                 AND         id = %d
                 ",
@@ -1460,7 +935,7 @@ class Hrm_Admin {
             
             $query = "
                 SELECT      SQL_CALC_FOUND_ROWS *
-                FROM        {$table}
+                FROM        " . $wpdb->prefix . "hrm_job_category
                 WHERE       1 = 1
                 ORDER BY    id ASC"; 
             
@@ -1472,7 +947,7 @@ class Hrm_Admin {
             $query =  $wpdb->prepare( 
                 "
                 SELECT      SQL_CALC_FOUND_ROWS *
-                FROM        {$table}
+                FROM        " . $wpdb->prefix . "hrm_job_category
                 WHERE       1 = 1
                 ORDER BY    id ASC
                 LiMIT       %d,%d
@@ -1489,14 +964,14 @@ class Hrm_Admin {
         
         if ( $dept_id && $results ) {
 
-            $query = "
+            $query = $wpdb->prepare("
                 SELECT      meta_value as department_id, count(meta_value) as num_of_employee
-                FROM        {$user_meta_table}
+                FROM        " . $wpdb->prefix . "usermeta
                 WHERE       1 = 1
-                AND         meta_key = '_job_category'
-                AND         meta_value = $dept_id
+                AND         meta_key = %s
+                AND         meta_value = %d
                 GROUP BY meta_value
-                ";
+                ", '_job_category', $dept_id);
                 
             $employee_counts = $wpdb->get_row($query);
             $results->number_of_employee = empty( $employee_counts->num_of_employee ) ? 0 : $employee_counts->num_of_employee;
@@ -1714,7 +1189,7 @@ class Hrm_Admin {
 
         $delete = $wpdb->query( 
             "
-             DELETE FROM {$table}
+             DELETE FROM " . $wpdb->prefix . "hrm_job_category
              WHERE id IN ('$dept_ids')
             "
         ); 

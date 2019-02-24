@@ -243,7 +243,13 @@ function hrm_get_header( $page, $tab, $subtab = false ) {
             $active = ( $tab == $key ) ? 'nav-tab-active' : '';
 
             $url = hrm_admin_menu_url( $key );
-            printf( '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>',$url, $tab_event['id'], $tab_event['title'], $active );
+            printf( 
+                '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>', 
+                esc_url( $url ), 
+                intval( $tab_event['id'] ), 
+                esc_attr( $tab_event['title'] ), 
+                esc_attr( $active ) 
+            );
         }
 
         ?>
@@ -270,7 +276,13 @@ function hrm_get_header( $page, $tab, $subtab = false ) {
                     $sub_active = ( $sub_key == $subtab ) ? 'hrm-sub-current' : '';
                     $sub_event['id'] = isset( $sub_event['id'] ) ? $sub_event['id'] : '';
                     $sub_url = hrm_admin_sub_menu_url( $tab, $sub_key );
-                    printf( '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',$sub_url , $sub_event['id'], $sub_event['title'], $sub_active );
+                    printf( 
+                        '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',
+                        esc_url( $sub_url ), 
+                        intval( $sub_event['id'] ), 
+                        esc_attr( $sub_event['title'] ), 
+                        esc_attr( $sub_active )
+                    );
                 }
             ?>
         </ul>
@@ -351,7 +363,7 @@ function hrm_page_slug() {
 function hrm_get_js_template( $file_path, $id ) {
    
     if ( file_exists( $file_path ) ) {
-        echo '<script type="text/html" id="tmpl-' . $id . '">' . "\n";
+        echo '<script type="text/html" id="tmpl-' . intval( $id ) . '">' . "\n";
         include_once $file_path;
         echo "\n" . '</script>' . "\n";
     }

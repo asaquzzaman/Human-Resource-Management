@@ -4,7 +4,7 @@ function hrm_work_experiance_tb_update() {
     global $wpdb;
     $table = $wpdb->prefix . 'hrm_work_experience';
 
-    $wpdb->query( "DROP TABLE IF EXISTS $table" );
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_work_experience" );
 }
 
 function hrm_create_workexperiance_table() {

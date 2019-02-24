@@ -426,7 +426,7 @@ class Hrm_Attendance {
         
         //if no schedule. Then check the last punch_out record. If last punch_out 0 then user can't punch_in. 
         //Otherwise user can punch_in 
-        $lst_atd = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $attendance_table WHERE `user_id` = %d AND shift_id = %d ORDER BY id DESC LIMIT 1", $user_id, $shift_id ) );
+        $lst_atd = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "hrm_attendance WHERE `user_id` = %d AND shift_id = %d ORDER BY id DESC LIMIT 1", $user_id, $shift_id ) );
 
         if ( !$lst_atd ) {
             return true;
@@ -915,8 +915,9 @@ class Hrm_Attendance {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         
-        $punch_in    = self::getInstance()->punch_in_validation();
+        $punch_in    = self::getInstance()->punch_in_validation( $POST );
         $office_time = self::getInstance()->get_office_time();
+        $allow_id = empty( $office_time->ip ) ? [] : $office_time->ip;
         
         //$office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
         //$office_closed_with_date = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
@@ -951,7 +952,7 @@ class Hrm_Attendance {
             // 'office_closed'                => $office_closed,
             // 'office_start_with_date_time'  => $office_start_with_date,
             // 'office_closed_with_date_time' => $office_closed_with_date,
-            'allow_ip'                     => self::getInstance()->process_ip( $office_time->ip ),
+            'allow_ip'                     => self::getInstance()->process_ip( $allow_id ),
             'employees_dropdown'           => Hrm_Employeelist::getInstance()->get_employee_drop_down()
         ));
     }
@@ -966,7 +967,7 @@ class Hrm_Attendance {
     function get_office_time() {
         global $wpdb;
         $table    = $wpdb->prefix . 'hrm_office_time';
-        $office_time = $wpdb->get_row( "SELECT * FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        $office_time = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "hrm_office_time WHERE 1=1 ORDER BY id DESC LIMIT 1" );
         
         return $office_time;
     }
@@ -979,7 +980,9 @@ class Hrm_Attendance {
         global $wpdb;
         $table = $wpdb->prefix . 'hrm_attendance';
 
-        $punch = $wpdb->get_row( "SELECT * FROM $table WHERE `date` >= '$current_time' AND `user_id` = $user_id ORDER BY id DESC LIMIT 1" );
+        $punch = $wpdb->get_row( 
+            $wpdb->prepare( "SELECT * FROM " . $wpdb->prefix . "hrm_attendance WHERE `date` >= %s AND `user_id` = %d ORDER BY id DESC LIMIT 1", $current_time, $user_id ) 
+        );
         
         $punch_in  = isset( $punch->punch_in ) ? $punch->punch_in : 0;
         $punch_out = isset( $punch->punch_out ) ? $punch->punch_out : 0;
@@ -1000,7 +1003,7 @@ class Hrm_Attendance {
     function office_start() {
         global $wpdb;
         $table    = $wpdb->prefix . 'hrm_office_time';
-        $start = $wpdb->get_var( "SELECT `start` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        $start = $wpdb->get_var( "SELECT `start` FROM " . $wpdb->prefix . "hrm_office_time WHERE 1=1 ORDER BY id DESC LIMIT 1" );
         
         return $start;
     }
@@ -1008,7 +1011,7 @@ class Hrm_Attendance {
     function office_closed() {
         global $wpdb;
         $table    = $wpdb->prefix . 'hrm_office_time';
-        $end = $wpdb->get_var( "SELECT `end` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        $end = $wpdb->get_var( "SELECT `end` FROM " . $wpdb->prefix . "hrm_office_time WHERE 1=1 ORDER BY id DESC LIMIT 1" );
         
         return $end;
     }
@@ -1016,7 +1019,7 @@ class Hrm_Attendance {
     function get_config_last_id() {
         global $wpdb;
         $table  = $wpdb->prefix . 'hrm_office_time';
-        $id = $wpdb->get_var( "SELECT `id` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        $id = $wpdb->get_var( "SELECT `id` FROM " . $wpdb->prefix . "hrm_office_time WHERE 1=1 ORDER BY id DESC LIMIT 1" );
         
         return $id;
     }
@@ -1024,7 +1027,7 @@ class Hrm_Attendance {
     function is_multi_attendance() {
         global $wpdb;
         $table    = $wpdb->prefix . 'hrm_office_time';
-        $is_multi = $wpdb->get_var( "SELECT `is_multi` FROM {$table} WHERE 1=1 ORDER BY id DESC LIMIT 1" );
+        $is_multi = $wpdb->get_var( "SELECT `is_multi` FROM " . $wpdb->prefix . "hrm_office_time WHERE 1=1 ORDER BY id DESC LIMIT 1" );
         
         return $is_multi;
     }
@@ -1140,10 +1143,10 @@ class Hrm_Attendance {
         $schedule_end   = date('Y-m-d ' . $last_hour .':59:59', strtotime(current_time('mysql') . '+1 day') );
 
         $punch = $wpdb->get_row( $wpdb->prepare("
-            SELECT * FROM $table 
-            WHERE ( punch_in >= '%s' AND punch_in <= '%s' ) 
+            SELECT * FROM " . $wpdb->prefix . "hrm_attendance 
+            WHERE ( punch_in >= %s AND punch_in <= %s ) 
             AND user_id = %d 
-            AND punch_out = '%s' 
+            AND punch_out = %s 
             ORDER BY id DESC LIMIT 1", $schedule_start, $schedule_end, $user_id, '0000-00-00 00:00:00' )
         );
 
@@ -1266,7 +1269,7 @@ class Hrm_Attendance {
             $query = $this->generate_query( $query_args );
             $table = $wpdb->prefix . 'hrm_attendance';
 
-            $items = $wpdb->get_var( "SELECT SUM(total) FROM {$table} WHERE 1=1 AND $query" );
+            $items = $wpdb->get_var( "SELECT SUM(total) FROM " . $wpdb->prefix . "hrm_attendance WHERE 1=1 AND $query" );
             
             if ( $items ) {
                 $items = $this->get_attendance_meta( $items );
@@ -1342,7 +1345,9 @@ class Hrm_Attendance {
             : $postdata['punch_out'];
 
         $order_by = isset( $postdata['order_by'] ) ? $postdata['order_by'] : 'id';
-
+        $per_page = empty( $postdata['per_page'] ) ? 100 : $postdata['per_page'];
+        $page     = empty( $postdata['page'] ) ? 1 : $postdata['page'];
+        
         if ( $id !== false  ) {
 
             $location = Attendance::find( $id );

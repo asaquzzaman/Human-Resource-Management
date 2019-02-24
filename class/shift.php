@@ -39,7 +39,7 @@ class HRM_Shift {
         $shift_tb = $wpdb->prefix . 'hrm_time_shift';
         $attendance = $wpdb->prefix . 'hrm_attendance'; 
 
-        $office_times = $wpdb->get_results("Select * From $table");
+        $office_times = $wpdb->get_results("Select * From " . $wpdb->prefix . "hrm_office_time");
 
         if ( $office_times ) {
             $active = end( $office_times );
@@ -58,8 +58,7 @@ class HRM_Shift {
             $wpdb->update( $attendance, ['config_id' => $wpdb->insert_id], ['config_id' => $time->id] );
         }
 
-        $sql = "alter table {$attendance} change config_id shift_id BIGINT";
-        $wpdb->query($sql) ;
+        $wpdb->query( "alter table " . $wpdb->prefix . "hrm_attendance change config_id shift_id BIGINT" ) ;
     }
 
     function shift_data_formating( $shift, $status, $name ) {

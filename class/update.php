@@ -110,13 +110,13 @@ class Hrm_Update {
         if ( ! is_null( HRM_VERSION ) && version_compare( HRM_VERSION, $latest_version_file_key, '<=' ) ) {
             ?>
                 <div id="message" class="updated">
-                    <p><?php _e( '<strong>WP HRM Data Update Required</strong> &#8211; We need to update your install to the latest version', 'hrm' ); ?></p>
-                    <p class="submit"><a href="<?php echo add_query_arg( [ 'HRM_do_update' => true ], $SERVER['REQUEST_URI'] ); ?>" class="HRM-update-btn button-primary"><?php _e( 'Run the updater', 'hrm' ); ?></a></p>
+                    <p><<strong>WP HRM Data Update Required</strong> We need to update your install to the latest version</p>
+                    <p class="submit"><a href="<?php echo esc_url( add_query_arg( [ 'HRM_do_update' => true ], esc_url( $SERVER['REQUEST_URI'] ) ) ); ?>" class="HRM-update-btn button-primary"><?php esc_html_e( 'Run the updater', 'hrm' ); ?></a></p>
                 </div>
 
                 <script type="text/javascript">
                     jQuery('.HRM-update-btn').click('click', function(){
-                        return confirm( '<?php _e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'hrm' ); ?>' );
+                        return confirm( '<?php esc_html_e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'hrm' ); ?>' );
                     });
                 </script>
             <?php

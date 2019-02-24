@@ -407,7 +407,7 @@ class Hrm_Db {
       global $wpdb;
       $table_name = $wpdb->prefix . 'hrm_personal_skill';
       $sql = "DROP TABLE IF EXISTS $table_name";
-      $wpdb->query($sql);
+      $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_personal_skill" );
 
       $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -439,7 +439,7 @@ class Hrm_Db {
       global $wpdb;
       $table_name = $wpdb->prefix . 'hrm_personal_education';
       $sql = "DROP TABLE IF EXISTS $table_name";
-      $wpdb->query($sql);
+      $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_personal_education" );
 
       $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -862,7 +862,7 @@ class Hrm_Db {
 
       $table = $wpdb->prefix . 'hrm_attendance';
 
-      $wpdb->query("ALTER TABLE $table MODIFY punch_in TIMESTAMP");
-      $wpdb->query("ALTER TABLE $table MODIFY punch_out TIMESTAMP");
+      $wpdb->query("ALTER TABLE " . $wpdb->prefix . "hrm_attendance MODIFY punch_in TIMESTAMP");
+      $wpdb->query("ALTER TABLE " . $wpdb->prefix . "hrm_attendance MODIFY punch_out TIMESTAMP");
     }
 }

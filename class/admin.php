@@ -66,7 +66,7 @@ class Hrm_Admin {
 
     function designation_filter( $postdata = [], $id = false  ) {
             
-        $title     = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $title     = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
         $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 
         $per_page = hrm_per_page();
@@ -114,10 +114,10 @@ class Hrm_Admin {
 
     function notice_filter( $postdata = [], $id = false  ) {
             
-        $title     = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $title     = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
         $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
-        $from      = empty( $postdata['from'] ) ? '' : $postdata['from'];
-        $to        = empty( $postdata['to'] ) ? '' : $postdata['to'];
+        $from      = empty( $postdata['from'] ) ? '' : sanitize_text_field( $postdata['from'] );
+        $to        = empty( $postdata['to'] ) ? '' : sanitize_text_field( $postdata['to'] );
         $per_page = hrm_per_page();
 
         if ( $id !== false  ) {
@@ -173,7 +173,7 @@ class Hrm_Admin {
 
     function location_filter( $postdata = [], $id = false  ) {
             
-        $name     = empty( $postdata['name'] ) ? '' : $postdata['name'];
+        $name     = empty( $postdata['name'] ) ? '' : sanitize_text_field( $postdata['name'] );
         $page     = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page = hrm_per_page();
 
@@ -446,13 +446,13 @@ class Hrm_Admin {
     }
 
     function employee_image_upload_form($data) {
-        $employee_id     = isset( $POST['id'] )  ?  $POST['id'] : false;
+        $employee_id     = isset( $POST['id'] )  ?  intval( $POST['id'] ) : false;
         $this->emp_upload_image($employee_id);
     }
 
     function add_new_employer( $postdata ) {
         if ( isset( $postdata['employer_id'] ) && !empty( $postdata['employer_id'] ) ) {
-            $user_id = $postdata['employer_id'];
+            $user_id = intval( $postdata['employer_id'] );
             $this->update_empoyer( $user_id, $postdata );
             return $user_id;
         }
@@ -468,9 +468,9 @@ class Hrm_Admin {
         $display_name = $first_name .' '. $last_name;
 
         $userdata = array(
-            'user_login' => $postdata['user_name'],
+            'user_login' => sanitize_user( $postdata['user_name'] ),
             'user_pass' =>  $random_password,
-            'user_email' => $postdata['email'],
+            'user_email' => sanitize_email( $postdata['email'] ),
             'first_name' => $first_name,
             'last_name' => $last_name,
             'display_name' => $display_name,
@@ -497,20 +497,20 @@ class Hrm_Admin {
     }
 
     function update_empoyer( $user_id, $postdata ) {
-        wp_update_user( array( 'ID' => $user_id, 'role' => $postdata['emp_role'] ) );
+        wp_update_user( array( 'ID' => $user_id, 'role' => sanitize_text_field( $postdata['emp_role'] ) ) );
         update_user_meta( $user_id, 'hrm_admin_level', 'admin' );
-        $display_name = $postdata['first_name'] . ' ' . $postdata['last_name'];
-        update_user_meta( $user_id, 'first_name', $postdata['first_name'] );
-        update_user_meta( $user_id, 'last_name', $postdata['last_name'] );
+        $display_name = sanitize_text_field( $postdata['first_name'] ) . ' ' . sanitize_text_field( $postdata['last_name'] );
+        update_user_meta( $user_id, 'first_name', sanitize_text_field( $postdata['first_name'] ) );
+        update_user_meta( $user_id, 'last_name', sanitize_text_field( $postdata['last_name'] ) );
 
         wp_update_user(array( 'ID' =>  $user_id, 'display_name' => $display_name));
-        update_user_meta( $user_id, '_job_title', $postdata['job_title'] );
+        update_user_meta( $user_id, '_job_title', sanitize_text_field( $postdata['job_title'] ) );
         update_user_meta( $user_id, '_job_category', $postdata['job_category'] );
-        update_user_meta( $user_id, '_location', $postdata['location'] );
-        update_user_meta( $user_id, '_job_desc', $postdata['job_desc'] );
-        update_user_meta( $user_id, '_status', $postdata['status'] );
-        update_user_meta( $user_id, '_mob_number', $postdata['mobile'] );
-        update_user_meta( $user_id, '_joined_date', hrm_date2mysql( $postdata['joined_date'] ) );
+        update_user_meta( $user_id, '_location', sanitize_text_field( $postdata['location'] ) );
+        update_user_meta( $user_id, '_job_desc', sanitize_textarea_field( $postdata['job_desc'] ) );
+        update_user_meta( $user_id, '_status', sanitize_text_field( $postdata['status'] ) );
+        update_user_meta( $user_id, '_mob_number', sanitize_text_field( $postdata['mobile'] ) );
+        update_user_meta( $user_id, '_joined_date', hrm_date2mysql( sanitize_text_field( $postdata['joined_date'] ) ) );
 
         $image = isset( $postdata['hrm_attachment'] ) ? $postdata['hrm_attachment'] : array();
         $image_id = is_array( $image ) && $image ? reset( $image ) : 0;
@@ -520,23 +520,23 @@ class Hrm_Admin {
 
     function new_admin_form_validate( $postdata ) {
 
-        if( empty($postdata['user_name']) ) {
+        if( empty( sanitize_user( $postdata['user_name'] ) ) ) {
             return new WP_Error( 'error', __('Username required ', 'hrm' ) );
         }
 
-        if( empty($postdata['email']) ) {
+        if( empty( sanitize_email( $postdata['email'] ) ) ) {
             return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
         }
 
-        if ( ! is_email($postdata['email'] ) ) {
+        if ( ! is_email( sanitize_email( $postdata['email'] ) ) ) {
             return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
         }
 
-        if( username_exists( $postdata['user_name'] ) ) {
+        if( username_exists( sanitize_user( $postdata['user_name'] ) ) ) {
             return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
         }
 
-        if( email_exists( $postdata['email']) ) {
+        if( email_exists( sanitize_email( $postdata['email'] ) ) ) {
             return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
         }
 
@@ -770,29 +770,29 @@ class Hrm_Admin {
         }
     }
 
-    function update_project_meta( $project_id, $post ) {
-        $budget = floatval( $post['budget'] );
-        $symbol = $post['currency_symbol'];
-        $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
-        if ( $budget >=  $budget_utilize ) {
-            update_post_meta( $project_id, '_budget', $budget );
-        }
-        $client = ( isset( $post['client'] ) && $post['client'] != '-1' ) ? $post['client'] : 0;
-        update_post_meta( $project_id, '_currency_symbol', $symbol );
-        update_post_meta( $project_id, '_client', $client );
+    // function update_project_meta( $project_id, $post ) {
+    //     $budget = floatval( $post['budget'] );
+    //     $symbol = $post['currency_symbol'];
+    //     $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
+    //     if ( $budget >=  $budget_utilize ) {
+    //         update_post_meta( $project_id, '_budget', $budget );
+    //     }
+    //     $client = ( isset( $post['client'] ) && $post['client'] != '-1' ) ? $post['client'] : 0;
+    //     update_post_meta( $project_id, '_currency_symbol', $symbol );
+    //     update_post_meta( $project_id, '_client', $client );
 
-        if ( empty( $budget_utilize ) ) {
-            update_post_meta( $project_id, '_project_budget_utilize', '0' );
-        } else {
-          update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );
-        }
-    }
+    //     if ( empty( $budget_utilize ) ) {
+    //         update_post_meta( $project_id, '_project_budget_utilize', '0' );
+    //     } else {
+    //       update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );
+    //     }
+    // }
 
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         $department  = self::update_department( $POST );
-        $page_number = empty( $POST['page_number'] ) ? 1 : $POST['page_number'];
+        $page_number = empty( $POST['page_number'] ) ? 1 : intval( $POST['page_number'] );
         //$departments    = self::get_departments(false, true);
         //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
 
@@ -818,7 +818,7 @@ class Hrm_Admin {
 
     public static function update_department( $postdata ) {
         
-        if ( empty( $postdata['title'] ) ) {
+        if ( empty( sanitize_text_field( $postdata['title'] ) ) ) {
             return new WP_Error( 'dept_title', __( 'Department title required', 'hrm' ) );
         }
 
@@ -829,10 +829,10 @@ class Hrm_Admin {
 
         $table = $wpdb->prefix . 'hrm_job_category'; 
         $data  = array(
-            'name'        => $postdata['title'],
-            'active'      => $postdata['status'],
-            'description' => $postdata['description'],
-            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $POST['parent'] ),
+            'name'        => sanitize_text_field( $postdata['title'] ),
+            'active'      => sanitize_text_field( $postdata['status'] ),
+            'description' => sanitize_textarea_field( $postdata['description'] ),
+            'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $postdata['parent'] ),
         );
         $format = array( '%s', '%d', '%s', '%d' );
 
@@ -857,7 +857,7 @@ class Hrm_Admin {
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
-        $page_number = empty( $POST['page_number'] ) ? 1 : $POST['page_number'];
+        $page_number = empty( $POST['page_number'] ) ? 1 : intval( $POST['page_number'] );
         
         $departments = self::get_departments( false, true );
         
@@ -1145,7 +1145,7 @@ class Hrm_Admin {
     public static function ajax_delete_department() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
-        $results = self::delete_department( $POST['dept_id'] );
+        $results = self::delete_department( intval( $POST['dept_id'] ) );
 
         $departments = self::get_departments( false, true );
         $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
@@ -1165,7 +1165,8 @@ class Hrm_Admin {
     public static function delete_department($dept_id) {
         
         global $wpdb;
-
+        $dept_id = !is_array( $dept_id ) ? [$dept_id] : $dept_id;
+        
         //get all employee
         $employess   = self::is_employee_exist_in_department( $dept_id );
         //filter department id from all employees
@@ -1197,7 +1198,7 @@ class Hrm_Admin {
         if ( $delete ) {
             return array( 'deleted_dept' => $dept_id, 'undone_dept' => $undone_dept ); 
         } else {
-            return new WP_Error( 'dept_unknoen', __( 'Something went wrong!', 'hrm' ) );
+            return new WP_Error( 'dept_unknoen', __( 'Something wrong!', 'hrm' ) );
         }
           
     }

@@ -42,8 +42,8 @@ class Hrm_Attendance {
         
 
         $results = [];
-        $punch_in  = empty(  $POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : $POST['punch_in'];
-        $punch_out = empty(  $POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : $POST['punch_out'];
+        $punch_in  = empty(  $POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : sanitize_text_field( $POST['punch_in'] );
+        $punch_out = empty(  $POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : sanitize_text_field( $POST['punch_out'] );
        
         
         if ( $POST['allEmployees'] == 'true' ) {
@@ -54,7 +54,7 @@ class Hrm_Attendance {
             }
 
         } else {
-            $user_id   = empty( $POST['user_id'] ) ? get_current_user_id() : $POST['user_id'];
+            $user_id   = empty( $POST['user_id'] ) ? get_current_user_id() : intval( $POST['user_id'] );
             $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out );
         }
         
@@ -62,6 +62,7 @@ class Hrm_Attendance {
     }
 
     function filter_attendance( $user_id, $punch_in, $punch_out ) {
+        $POST                    = wp_unslash( $_POST );
         $postdata                = $POST;
         $postdata['user_id']     = $user_id;
         $interval_array          = $this->date_to_array( $punch_in, $punch_out );
@@ -918,40 +919,11 @@ class Hrm_Attendance {
         $punch_in    = self::getInstance()->punch_in_validation( $POST );
         $office_time = self::getInstance()->get_office_time();
         $allow_id = empty( $office_time->ip ) ? [] : $office_time->ip;
-        
-        //$office_start_with_date  = date( 'Y-m-d 10:00', strtotime( current_time('mysql') ) );
-        //$office_closed_with_date = date( 'Y-m-d 18:00', strtotime( current_time('mysql') ) );
-
-        // Attendance default configuration saved
-        // if ( empty( $office_time ) ) {
-        //     $args = array(
-        //         'hrm_is_multi_attendance' => false,
-        //         'office_start'            => $office_start_with_date,
-        //         'office_closed'           => $office_closed_with_date
-        //     );
-
-        //     self::getInstance()->update_attendance_configuration( $args );
-        // }
 
         $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
-        //$office_start            = empty( $office_time->start ) ? '10:00 am' : hrm_get_time( $office_time->start );
-        //$office_closed           = empty( $office_time->end ) ? '06:00 pm' : hrm_get_time( $office_time->end );
-        //$office_start_with_date  = empty( $office_time->start ) ? $office_start_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->start ) );
-        //$office_closed_with_date = empty( $office_time->end ) ? $office_closed_with_date : date( 'Y-m-d h:i a', strtotime( $office_time->end ) );
-
 
         wp_send_json_success(array(
             'punch_in'                     => is_wp_error( $punch_in ) ? $punch_in->get_error_message() : true,
-            // 'punch_in_date'                => date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ),
-            // 'punch_out_date'               => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
-            // 'punch_in_formated_date'       => hrm_get_date( date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ),
-            // 'punch_out_formated_date'      => hrm_get_date( date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ) ),
-            // 'search_user_id'               => get_current_user_id(),
-            // 'hrm_is_multi_attendance'      => $multi_attend,
-            // 'office_start'                 => $office_start,
-            // 'office_closed'                => $office_closed,
-            // 'office_start_with_date_time'  => $office_start_with_date,
-            // 'office_closed_with_date_time' => $office_closed_with_date,
             'allow_ip'                     => self::getInstance()->process_ip( $allow_id ),
             'employees_dropdown'           => Hrm_Employeelist::getInstance()->get_employee_drop_down()
         ));

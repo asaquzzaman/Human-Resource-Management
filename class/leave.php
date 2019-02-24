@@ -74,7 +74,7 @@ class Hrm_Leave {
         $POST = wp_unslash( $_POST );
         $send = [];
         $users = get_users( array(
-            'search' => '*' . $POST['user'] . '*',
+            'search' => '*' . sanitize_text_field( $POST['user'] ) . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
         ));
 

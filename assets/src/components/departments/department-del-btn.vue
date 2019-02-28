@@ -23,13 +23,16 @@
     		},
 
     		deleteDepartment: function(dept_id) {
+                if(!confirm('Are you sure!')) {
+                    return false;
+                }
                 var is_continue = true;
 
                 this.$store.state.departments.departments.forEach(function(department) {
 
                     if ( dept_id.includes(department.id) ) {
                         if ( parseInt(department.number_of_employee) > 0 && is_continue ) {
-                            hrm.Toastr.success('The departments are contain employee you can not remove them');
+                            hrm.Toastr.warning('The department are contain employee, so you can not remove them');
                             is_continue = false;
                         }
                     }

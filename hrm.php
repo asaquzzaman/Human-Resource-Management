@@ -4,7 +4,7 @@
  * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.6
+ * Version: 2.2.7
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.6' );
+        $this->define( 'HRM_VERSION', '2.2.7' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -223,11 +223,7 @@ class WP_Hrm {
 
         update_option( 'hrm_admin', $logged_in_user_id );
         update_option( 'hrm_version', HRM_VERSION );
-       
-
-        // Hrm_Settings::getInstance()->update_financial_year( 
-        //     date( 'Y-07-01 H:i:s', strtotime( current_time('mysql') ) ) 
-        // );
+    
     }
 
 

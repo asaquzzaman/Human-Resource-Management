@@ -725,4 +725,12 @@ function hrm_get_avater( $user_id ) {
     return empty( $profile_pic ) ? get_avatar_url( $user_id ) : $profile_pic[0]['thumb'];
 }
 
+function hrmpr() {
+    $args = func_get_args();
+
+    foreach ( $args as $arg ) {
+        echo '<pre>'; print_r( $arg ); '</pre>';
+    }
+}
+
 

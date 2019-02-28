@@ -589,7 +589,7 @@ class Hrm_Employee {
         }
 
         if ( username_exists( $postdata['userName'] ) ) {
-            echo 'adkjfasd'; die();
+           
             return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
         }
 

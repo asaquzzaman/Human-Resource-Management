@@ -82,6 +82,13 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.2.7 - February 28, 2019 =
+
+ * [Fix] Department can not deleted.
+ * [Fix] Change _job_category to hrm_job_category user meta key.
+ * [Fix] HR manager can delete department yet it contain employee.
+ * [Fix] Does show the employee count in individual department.
+
 = 2.2.6 - February 23, 2019 =
 
  * [Fix] Security issue at leave apply time.

@@ -266,150 +266,6 @@ class Hrm_Admin {
         return get_option( 'hrm_general_info' );
     }
 
-    function task_complete( $task_id ) {
-        $update = update_post_meta( $task_id, '_completed', 1 );
-
-        if ( $update ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function task_incomplete( $task_id ) {
-        $update = update_post_meta( $task_id, '_completed', 0 );
-
-        if ( $update ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // function admin_notice( $field_value = null ) {
-    //     $user_id = get_current_user_id();
-    //     $redirect = ( isset( $POST['hrm_dataAttr']['redirect'] ) && !empty( $POST['hrm_dataAttr']['redirect'] ) ) ? $POST['hrm_dataAttr']['redirect'] : '';
-
-    //     if ( $field_value !== null ) {
-    //         $notice['id'] = array(
-    //             'type' => 'hidden',
-    //             'value' => isset( $field_value['id'] ) ? $field_value['id'] : '',
-    //         );
-    //     }
-
-    //     $notice['title'] = array(
-    //         'label' =>  __( 'Title', 'hrm' ),
-    //         'type' => 'text',
-    //         'value' => isset( $field_value['title'] ) ? $field_value['title'] : '',
-    //         'extra' => array(
-    //             'data-hrm_validation' => true,
-    //             'data-hrm_required' => true,
-    //             'data-hrm_required_error_msg'=> __( 'This field is required', 'hrm' ),
-    //         ),
-    //     );
-
-    //     $notice['description'] = array(
-    //         'label' =>  __( 'Description', 'hrm' ),
-    //         'class' => 'hrm-admin-notice-field',
-    //         'type' => 'textarea',
-    //         'value' => isset( $field_value['description'] ) ? $field_value['description'] : '',
-    //     );
-
-    //     $notice['user_id'] = array(
-    //         'type' => 'hidden',
-    //         'value' => isset( $user_id ) ? $user_id : '',
-    //     );
-    //     $notice['date'] = array(
-    //         'label' =>  __( 'date', 'hrm' ),
-    //         'type' => 'text',
-    //         'class' => 'hrm-datepicker',
-    //         'value' => isset( $field_value['date'] ) ? $field_value['date'] : '',
-    //     );
-
-    //     $notice['action'] = 'ajax_referer_insert';
-    //     $notice['table_option'] = 'hrm_notice';
-    //     $notice['header'] = 'Notice';
-    //     $notice['url'] = $redirect;
-    //     ob_start();
-    //     echo hrm_Settings::getInstance()->hidden_form_generator( $notice );
-
-    //     $return_value = array(
-    //         'append_data' => ob_get_clean(),
-    //     );
-
-    //     return $return_value;
-    // }
-
-    function project_search_parm( $data ) {
-        return $data;
-    }
-
-    function project_delete( $project_id ) {
-        global $wpdb;
-        $table = $wpdb->prefix . 'hrm_user_role';
-        $wpdb->delete( $table, array( 'project_id' => $project_id ), array('%d') );
-
-        $project_delete = wp_delete_post( $project_id, true );
-        if ( $project_delete ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    function get_project_assigned_user( $project_id ) {
-
-        global $wpdb;
-
-        $user_list = array();
-        $table = $wpdb->prefix . 'hrm_user_role';
-        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM " . $wpdb->prefix . "hrm_user_role WHERE project_id = %d", $project_id ) );
-
-        if ( $project_users ) {
-            foreach ($project_users as $row ) {
-                $user = get_user_by( 'id', $row->user_id );
-
-                if ( !is_wp_error( $user ) && $user ) {
-                    $user_list[$user->ID] = array(
-                        'id' => $user->ID,
-                        'email' => $user->user_email,
-                        'name' => $user->display_name,
-                        'role' => $row->role
-                    );
-                }
-            }
-        }
-
-        return $user_list;
-
-    }
-
-    function get_co_worker( $project_id ) {
-
-        global $wpdb;
-
-        $user_list = array();
-        $table = $wpdb->prefix . 'hrm_user_role';
-        $project_users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role FROM " . $wpdb->prefix . "hrm_user_role WHERE project_id = %d", $project_id ) );
-
-        if ( $project_users ) {
-            foreach ($project_users as $row ) {
-                $user = get_user_by( 'id', $row->user_id );
-
-                if ( !is_wp_error( $user ) && $user ) {
-                    $user_list[$user->ID] = array(
-                        'id' => $user->ID,
-                        'email' => $user->user_email,
-                        'name' => $user->display_name,
-                        'role' => $row->role
-                    );
-                }
-            }
-        }
-
-        return $user_list;
-    }
 
     function get_user_role() {
         global $current_user;
@@ -450,98 +306,7 @@ class Hrm_Admin {
         $this->emp_upload_image($employee_id);
     }
 
-    function add_new_employer( $postdata ) {
-        if ( isset( $postdata['employer_id'] ) && !empty( $postdata['employer_id'] ) ) {
-            $user_id = intval( $postdata['employer_id'] );
-            $this->update_empoyer( $user_id, $postdata );
-            return $user_id;
-        }
-        $validate = $this->new_admin_form_validate( $postdata );
 
-        if ( is_wp_error( $validate ) ) {
-            return $validate;
-        }
-
-        $random_password = wp_generate_password( 8, false );
-        $first_name = sanitize_text_field( $postdata['first_name'] );
-        $last_name = sanitize_text_field( $postdata['last_name'] );
-        $display_name = $first_name .' '. $last_name;
-
-        $userdata = array(
-            'user_login' => sanitize_user( $postdata['user_name'] ),
-            'user_pass' =>  $random_password,
-            'user_email' => sanitize_email( $postdata['email'] ),
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'display_name' => $display_name,
-            'role'  => 'hrm_employee'
-        );
-
-        $user_id = wp_insert_user( $userdata );
-
-        if( $user_id ) {
-            $image = isset( $postdata['hrm_attachment'] ) ? $postdata['hrm_attachment'] : array();
-            $image_id = is_array( $image ) && $image ? reset( $image ) : 0;
-            update_user_meta( $user_id, '_hrm_user_role', 'hrm_employee' );
-            update_user_meta( $user_id, '_hrm_user_image_id', $image_id );
-            $this->update_empoyer( $user_id, $postdata );
-
-            wp_new_user_notification( $user_id, $random_password );
-
-            return $user_id;
-
-        } else {
-            return false;
-        }
-
-    }
-
-    function update_empoyer( $user_id, $postdata ) {
-        wp_update_user( array( 'ID' => $user_id, 'role' => sanitize_text_field( $postdata['emp_role'] ) ) );
-        update_user_meta( $user_id, 'hrm_admin_level', 'admin' );
-        $display_name = sanitize_text_field( $postdata['first_name'] ) . ' ' . sanitize_text_field( $postdata['last_name'] );
-        update_user_meta( $user_id, 'first_name', sanitize_text_field( $postdata['first_name'] ) );
-        update_user_meta( $user_id, 'last_name', sanitize_text_field( $postdata['last_name'] ) );
-
-        wp_update_user(array( 'ID' =>  $user_id, 'display_name' => $display_name));
-        update_user_meta( $user_id, '_job_title', sanitize_text_field( $postdata['job_title'] ) );
-        update_user_meta( $user_id, '_job_category', $postdata['job_category'] );
-        update_user_meta( $user_id, '_location', sanitize_text_field( $postdata['location'] ) );
-        update_user_meta( $user_id, '_job_desc', sanitize_textarea_field( $postdata['job_desc'] ) );
-        update_user_meta( $user_id, '_status', sanitize_text_field( $postdata['status'] ) );
-        update_user_meta( $user_id, '_mob_number', sanitize_text_field( $postdata['mobile'] ) );
-        update_user_meta( $user_id, '_joined_date', hrm_date2mysql( sanitize_text_field( $postdata['joined_date'] ) ) );
-
-        $image = isset( $postdata['hrm_attachment'] ) ? $postdata['hrm_attachment'] : array();
-        $image_id = is_array( $image ) && $image ? reset( $image ) : 0;
-        update_user_meta( $user_id, '_hrm_user_image_id', $image_id );
-
-    }
-
-    function new_admin_form_validate( $postdata ) {
-
-        if( empty( sanitize_user( $postdata['user_name'] ) ) ) {
-            return new WP_Error( 'error', __('Username required ', 'hrm' ) );
-        }
-
-        if( empty( sanitize_email( $postdata['email'] ) ) ) {
-            return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
-        }
-
-        if ( ! is_email( sanitize_email( $postdata['email'] ) ) ) {
-            return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
-        }
-
-        if( username_exists( sanitize_user( $postdata['user_name'] ) ) ) {
-            return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
-        }
-
-        if( email_exists( sanitize_email( $postdata['email'] ) ) ) {
-            return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
-        }
-
-        return true;
-    }
 
     // function admin_init_action() {
     //     check_ajax_referer( 'hrm_nonce' );
@@ -971,7 +736,7 @@ class Hrm_Admin {
                 AND         meta_key = %s
                 AND         meta_value = %d
                 GROUP BY meta_value
-                ", '_job_category', $dept_id);
+                ", 'hrm_job_category', $dept_id);
                 
             $employee_counts = $wpdb->get_row($query);
             $results->number_of_employee = empty( $employee_counts->num_of_employee ) ? 0 : $employee_counts->num_of_employee;
@@ -984,7 +749,7 @@ class Hrm_Admin {
                 SELECT      meta_value as department_id, count(meta_value) as num_of_employee
                 FROM        {$user_meta_table}
                 WHERE       1 = 1
-                AND         meta_key = '_job_category'
+                AND         meta_key = 'hrm_job_category'
                 AND         meta_value IN ($dept_emps)
                 GROUP BY    meta_value
                 ";
@@ -1002,7 +767,7 @@ class Hrm_Admin {
         if ( $dept_id ) {
             return $results;
         }
-       
+        
         return array( 'total_dept' => $total_departments, 'departments' => $results );
     }
 
@@ -1145,7 +910,7 @@ class Hrm_Admin {
     public static function ajax_delete_department() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
-        $results = self::delete_department( intval( $POST['dept_id'] ) );
+        $results = self::delete_department( $POST['dept_id'] );
 
         $departments = self::get_departments( false, true );
         $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );
@@ -1211,7 +976,7 @@ class Hrm_Admin {
             'meta_query' => array(
 
                 array(
-                    'key'     => '_job_category',
+                    'key'     => 'hrm_job_category',
                     'value'   => $depts_id,
                     'compare' => 'IN'
                 )
@@ -1221,7 +986,7 @@ class Hrm_Admin {
         $users = new WP_User_Query( $args );
 
         foreach ( $users->results as $key => $user ) {
-            $user->department_id = get_user_meta( $user->id, '_job_category', true );
+            $user->department_id = get_user_meta( $user->id, 'hrm_job_category', true );
         }
 
         return $users->results;

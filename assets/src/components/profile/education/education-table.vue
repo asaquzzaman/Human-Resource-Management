@@ -19,7 +19,7 @@
 					
                     <td v-for="(field, field_index) in filterHeader(fields)">
                     	<span v-html="printCellData(record, field)"></span>
-                    	<div v-if="field.tbRowAction" class="row-actions">
+                    	<div v-if="field.tbRowAction && hasProfileEditPermission()" class="row-actions">
                     		<span class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a> | </span>
 	                    	<span class="trash"><a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
 	                    </div>
@@ -84,9 +84,11 @@
 
 <script>
 	import Mixin from './mixin'
+	import MainMixin from '@components/profile/mixin'
+
 
 	export default {
-		mixins: [Mixin],	
+		mixins: [Mixin, MainMixin],	
 		props: {
 			deleteCheckbox: {
 				type: [Boolean],

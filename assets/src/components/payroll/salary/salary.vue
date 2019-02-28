@@ -245,7 +245,8 @@
 					getDesignation: false,
 					getGroup: false,
 					getFormula: false
-				}
+				},
+				salaryId: false
 			}
 		},
 
@@ -444,7 +445,8 @@
 		            	category: self.salaryType,
 			        	category_id: self.categoryId.id,
 			        	isUpdate: self.isUpdate,
-			        	save: save
+			        	save: save,
+			        	salary_id: self.salaryId
 
 		            },
 
@@ -480,6 +482,9 @@
 		            },
 
 		            error: function(res) {
+		            	res.error.map( function( value, index ) {
+                            hrm.Toastr.error(value);
+                        });
 		            }
 		        };
 
@@ -537,7 +542,7 @@
 	                		return;
 	                	}
 
-
+	                	self.salaryId = res.data.id;
 	                	self.salary = res.data.salary;
 						self.salaryDay = res.data.month;
 

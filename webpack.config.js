@@ -3,6 +3,8 @@ const webpack        = require('webpack');
 const shell          = require('shelljs');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const outputPath     = path.resolve( __dirname, 'assets/js')
+const isProduction = (process.env.NODE_ENV == 'production')
+const plugins = []
 
 
 //Remove all webpack build file
@@ -10,6 +12,12 @@ shell.rm('-rf', outputPath)
 
 function resolve (dir) {
   return path.join(__dirname, './assets/src', dir)
+}
+
+if (isProduction) {
+    plugins.push(
+        new UglifyJsPlugin()
+    )
 }
 
 module.exports = {
@@ -52,8 +60,15 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/	
+                loader: 'babel-loader',
+                include: [
+                    resolve(''),
+                    path.resolve('node_modules/vue-color'),
+                    path.resolve('node_modules/vue-multiselect')
+                ],
+                query: {
+                    presets:[ "env", "stage-3" , "es2015" ]
+                }	
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
@@ -76,10 +91,7 @@ module.exports = {
 		]
 	},
 
-	plugins: [
-
-	  //new UglifyJsPlugin()
-	]
+	plugins: plugins
 }
 
 

@@ -11,7 +11,7 @@
 				<div class="inside">
 					<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 						<form @submit.prevent="saveConfiguration()">
-							<div class="hrm-form-field ">
+							<!-- <div class="hrm-form-field ">
 								<label for="">
 									Enabale multiple attendance
 									<em></em>
@@ -42,7 +42,7 @@
 								<input type="text"  :value="office_closed_with_date_time" class="hrm-date-time-picker-to" id="hrm-office-closed-date-field">
 								<span class="hrm-clear"></span>
 								<span class="description">Format: 2018-03-08 06:00 pm</span>
-							</div>
+							</div> -->
 
 							<div class="hrm-form-field ">
 								<label for=" ">
@@ -152,9 +152,9 @@
 
 				var request_data = {
 						_wpnonce: HRM_Vars.nonce,
-						hrm_is_multi_attendance: this.hrm_is_multi_attendance,
-						office_start: this.$store.state.attendance.office_start_with_date_time,
-						office_closed: this.$store.state.attendance.office_closed_with_date_time,
+						//hrm_is_multi_attendance: this.hrm_is_multi_attendance,
+						//office_start: this.$store.state.attendance.office_start_with_date_time,
+						//office_closed: this.$store.state.attendance.office_closed_with_date_time,
 						allow_ip: this.$store.state.attendance.allow_ip
 
 					},

@@ -27,16 +27,16 @@
 						<tr v-for="attendace in attendace_records">
 							
 							<td>{{ attendace.date }}</td>
-							<td>{{ attendace.punch_in }}</td>
-							<td v-html="attendace.punch_out"></td>
-							<td v-html="attendace.total"></td>
+							<td>{{ punchFormat( attendace.punch_in ) }}</td>
+							<td>{{ punchFormat(attendace.punch_out) }}</td>
+							<td>{{ attendace.second_to_time }}</td>
 						</tr>
-						<tr v-if="attendace_records.length">
+						<!-- <tr v-if="attendace_records.length">
 							<td><strong>Total Duration</strong></td>
 							<td>&#8211 &#8211</td>
 							<td>&#8211 &#8211</td>
 							<td><strong>{{ totalOfficeTime }}</strong></td>
-						</tr>
+						</tr> -->
 						<tr v-if="!attendace_records.length">
 							
 							<td colspan="4">No record found!</td>
@@ -81,7 +81,7 @@
 				return this.$store.state.attendance.totalOfficeTime;
 			},
 			attendace_records: function() {
-				return this.$store.state.attendance.attendance;
+				return this.$store.state.attendance.attendance.data;
 			},
 			punchInFormatedDate: function() {
 				let date = this.$store.state.attendance.punch_in_formated_date;
@@ -94,6 +94,17 @@
 			}
 		},
 		methods: {
+			punchFormat (dateTime) {
+				dateTime = new Date(dateTime);
+				let date = hrm.Moment(dateTime).format('MMM D, kk:mm');
+
+				if( date == 'Invalid date' ) {
+					return '00:00'
+				}
+
+				return date;
+			},
+
 			attendanceInit: function() {
 				var request_data = {
 					_wpnonce: HRM_Vars.nonce,

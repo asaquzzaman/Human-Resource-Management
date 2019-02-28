@@ -1,6 +1,6 @@
 <template>
 	<div>
-        <settings-header></settings-header>
+        
         <div class="metabox-holder">
             <div id="pm_general" class="group" style="">
                 <form @submit.prevent="selfGeneralSettings()" method="post" action="options.php">
@@ -32,7 +32,6 @@
 </template>
 <script>
 	import date_picker from './date-picker.vue';
-    import Header from './header.vue';
     import Mixin from './mixin'
     
     export default {
@@ -50,7 +49,6 @@
 
         components: {
             'hrm-datepickter': date_picker,
-            'settings-header': Header
         },
 
         methods: {

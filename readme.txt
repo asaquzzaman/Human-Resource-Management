@@ -3,7 +3,7 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
-Tested up to: 4.9.5
+Tested up to: 5.1
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2
@@ -19,6 +19,19 @@ Manage your Business of Company HR (Human Resource) professionally and break dow
 WP HRM is a powerful WordPress plugin that turns your website into a fully functional employee management system. You can easily create unlimited number of employees, add their professional details, roles, employers and access permission.
 
 HR Management is all about people, not the paperwork. So, why waste your time on traditional systems and paperworks? Be organized and adapt the latest technology to build your very own HR Management system directly on your WordPress site using WP HRM (Human Resource Management).
+
+== Feature List  ==
+
+* **Dashboard**
+* **Organization Information**
+* **Departments**
+* **Designation** 
+* **Employee List**
+* **Individual Employee Profile**
+* **Payroll [how it works](https://youtu.be/wMyPhcZgPa4)**
+* **Attendance [how it works](https://youtu.be/oOAKppAN1o4)**
+* **Leave**
+* **Recruitment [how it works](https://youtu.be/1KtoBKnbnbw)**
 
 == Multi-Site ==
 
@@ -69,7 +82,57 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
-= 2.1.3 - May 08, 2018 =
+= 2.2.6 - February 23, 2019 =
+
+ * [Fix] Security issue at leave apply time.
+ * [Fix] Only Administrator and HR Manager can change leave status.
+
+= 2.2.5 - September 30, 2018 =
+
+ * [New] Vodeo tutorial for attendance, loan and recruitment. 
+ * [Fix] Percentage is not working for payroll formula.
+ * [Fix] Leave status does not change real time.
+ * [Fix] Does not update attendance schedule work day start.
+
+= 2.2.4 - September 12, 2018 =
+
+ * [Fix] User transformer file missing. 
+ * [New] Mail settings does not seving.
+ * [Update] Pending leave query optimize.
+
+= 2.2.3 - September 6, 2018 =
+
+ * [New] Admin notice for getting WP HRM front-end version. 
+ * [New] Recruitment menu.
+ * [Update] Attendance query.
+ * [Update] Attendance warning message.
+ * [Fix] Attendance menu order.
+
+= 2.2.2 - September 2, 2018 =
+
+ * [Update] Punch in/out validation message.
+ * [Fix] Attendance shift is not deleted.
+ * [Fix] Attendance shift break is not update.
+ * [Fix] Leave type fatal error.
+
+= 2.2.1 - September 1, 2018 =
+
+ * [Fix] Menu order
+ * [Fix] Unicode as html for payroll component group record table.
+ * [Update] Description filed change by label for payroll formula create form.
+ * [Fix] % is not working at payroll formula create time.
+ * [Fix] Payroll group salary update conflict with individual employee salary
+ 
+
+= 2.2.0 - August 23, 2018 =
+
+ * [New] Attendance management system.
+ * [Fix] Dashboard notice and birthday.
+ * [Fix] Child department hierarchy.
+ * [Fix] Peanding leave does not appear.
+ * [Fix] JS make compitable for IE>8
+
+= 2.1.3 - May 09, 2018 =
 
  * [New] Include license management system
  * [Fix] Generate composer autoload for leave

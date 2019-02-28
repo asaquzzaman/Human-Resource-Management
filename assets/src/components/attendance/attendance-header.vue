@@ -32,7 +32,16 @@
         },
 
         created () {
+            var memuOrder = _.sortBy(this.menu, function(menu) {
+                if(typeof menu.meta.order != 'undefined') {
+                    return menu.meta.order;
+                }
 
+                return false;
+                
+            });
+
+            this.menu = memuOrder;
         },
 
         methods: {

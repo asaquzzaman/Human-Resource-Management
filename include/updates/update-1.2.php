@@ -22,14 +22,14 @@ function hrm_update_job_category_table() {
 
     global $wpdb;
     $table = $wpdb->prefix . 'hrm_job_category';
-    $cols = $wpdb->get_col( "DESC " . $table );
+    $cols = $wpdb->get_col( "DESC " . $wpdb->prefix . "hrm_job_category" );
 
     if ( ! in_array( 'description', $cols ) ) {
-        $wpdb->query( "ALTER TABLE {$table} ADD `description` TEXT NOT NULL AFTER `active`");
+        $wpdb->query( "ALTER TABLE " . $wpdb->prefix . "hrm_job_category ADD `description` TEXT NOT NULL AFTER `active`");
     }
 
     if ( ! in_array( 'parent', $cols ) ) {
-        $wpdb->query( "ALTER TABLE {$table} ADD `parent` INT NOT NULL AFTER `description`");
+        $wpdb->query( "ALTER TABLE " . $wpdb->prefix . "hrm_job_category ADD `parent` INT NOT NULL AFTER `description`");
     }
 }
 
@@ -57,8 +57,8 @@ function hrm_attendance_table() {
 function hrm_department() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_job_category';
-    $wpdb->query( "ALTER TABLE $table_name ADD `description` TINYTEXT NOT NULL" );
-    $wpdb->query( "ALTER TABLE $table_name ADD `parent` INT NOT NULL" );
+    $wpdb->query( "ALTER TABLE " . $wpdb->prefix . "hrm_job_category ADD `description` TINYTEXT NOT NULL" );
+    $wpdb->query( "ALTER TABLE " . $wpdb->prefix . "hrm_job_category ADD `parent` INT NOT NULL" );
 }
 
 function hrm_employer_role() {
@@ -79,8 +79,8 @@ function hrm_employer_role() {
 function hrm_leave_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_leave';
-    $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+    
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix .  "hrm_leave" );
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -102,8 +102,7 @@ function hrm_leave_table() {
 function hrm_leave_type_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_leave_type';
-    $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_leave_type" );
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} ( 
         `id` int(11) NOT NULL AUTO_INCREMENT, 
@@ -138,8 +137,8 @@ function hrm_relation() {
 function hrm_holiday_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_holiday';
-    $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_holiday" );
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
       `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -161,7 +160,7 @@ function hrm_personal_education_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_personal_education';
     $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_personal_education" );
 
     $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -184,7 +183,7 @@ function hrm_personal_skill_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'hrm_personal_skill';
     $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+    $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "hrm_personal_skill" );
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
       `id` int(11) NOT NULL AUTO_INCREMENT,

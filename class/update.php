@@ -24,6 +24,7 @@ class Hrm_Update {
             '1.1' => HRM_PATH . '/include/updates/update-1.1.php',
             '1.2' => HRM_PATH . '/include/updates/update-1.2.php',
             '2.0' => HRM_PATH . '/include/updates/update-2.0.php',
+            '2.1' => HRM_PATH . '/include/updates/update-2.1.php',
         );
         $this->init();
     }
@@ -100,6 +101,8 @@ class Hrm_Update {
         if ( ! current_user_can( 'update_plugins' ) || ! self::is_needs_update() ) {
             return;
         }
+
+        $SERVER = wp_unslash( $_SERVER );
         
         $last_file_key           = array_keys( self::$updates );
         $latest_version_file_key = end( $last_file_key );
@@ -107,13 +110,13 @@ class Hrm_Update {
         if ( ! is_null( HRM_VERSION ) && version_compare( HRM_VERSION, $latest_version_file_key, '<=' ) ) {
             ?>
                 <div id="message" class="updated">
-                    <p><?php _e( '<strong>WP HRM Data Update Required</strong> &#8211; We need to update your install to the latest version', 'hrm' ); ?></p>
-                    <p class="submit"><a href="<?php echo add_query_arg( [ 'HRM_do_update' => true ], $_SERVER['REQUEST_URI'] ); ?>" class="HRM-update-btn button-primary"><?php _e( 'Run the updater', 'hrm' ); ?></a></p>
+                    <p><<strong>WP HRM Data Update Required</strong> We need to update your install to the latest version</p>
+                    <p class="submit"><a href="<?php echo esc_url( add_query_arg( [ 'HRM_do_update' => true ], esc_url( $SERVER['REQUEST_URI'] ) ) ); ?>" class="HRM-update-btn button-primary"><?php esc_html_e( 'Run the updater', 'hrm' ); ?></a></p>
                 </div>
 
                 <script type="text/javascript">
                     jQuery('.HRM-update-btn').click('click', function(){
-                        return confirm( '<?php _e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'hrm' ); ?>' );
+                        return confirm( '<?php esc_html_e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'hrm' ); ?>' );
                     });
                 </script>
             <?php
@@ -133,7 +136,8 @@ class Hrm_Update {
      * @return void
      */
     public static function do_updates() {
-        if ( isset( $_GET['HRM_do_update'] ) && $_GET['HRM_do_update'] ) {
+         $GET = wp_unslash( $_GET );
+        if ( isset( $GET['HRM_do_update'] ) && $GET['HRM_do_update'] ) {
             $this->perform_updates();
         }
     }
@@ -150,6 +154,8 @@ class Hrm_Update {
             return;
         }
 
+        $SERVER = wp_unslash( $_SERVER );
+
         $installed_version = get_option( 'hrm_db_version' );
 
         foreach ( self::$updates as $version => $path ) {
@@ -159,7 +165,7 @@ class Hrm_Update {
             }
         }
 
-        $location = remove_query_arg( ['HRM_do_update'], $_SERVER['REQUEST_URI'] );
+        $location = remove_query_arg( ['HRM_do_update'], $SERVER['REQUEST_URI'] );
         wp_redirect( $location );
         exit();
     }

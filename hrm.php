@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: WP human resource management
- * Plugin URI: http://mishubd.com/plugin/human-resource-management-hrm/
+ * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.1.3
+ * Version: 2.2.6
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -80,10 +80,10 @@ class WP_Hrm {
     }
 
     function migrate_db() {
-        $migrater = new \HRM\Core\Database\Migrater();
+        // $migrater = new HRM\Core\Database();
         
-        $migrater->create_migrations_table();
-        $migrater->build_schema();
+        // $migrater->create_migrations_table();
+        // $migrater->build_schema();
     }
 
     function autoload( $class ) {
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.1.3' );
+        $this->define( 'HRM_VERSION', '2.2.6' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -136,8 +136,8 @@ class WP_Hrm {
         }
         ?>
          <div class="update-nag">
-            <?php printf( __( 'If you want the <strong>front-end</strong> version of <strong>wp human resource management</strong> plugin,
-            then please go & purchase it, <a href="http://mishubd.com/product/hrm-front-end/" target="_blank">HRM front-end</a>' )  ); ?>
+            <?php printf( 'If you want the <strong>front-end</strong> version of <strong>wp human resource management</strong> plugin,
+            then please go & purchase it, <a href="http://mishubd.com/product/hrm-front-end/" target="_blank">HRM front-end</a>'  ); ?>
         </div>
         <?php
     }
@@ -152,7 +152,7 @@ class WP_Hrm {
     }
 
     function init() {
-        $this->migrate_db();
+        $request = wp_unslash( $_REQUEST );
         
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;
@@ -160,12 +160,12 @@ class WP_Hrm {
         } else {
             global $hrm_is_admin;
 
-            if ( isset( $_REQUEST['hrm_dataAttr']['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['hrm_dataAttr']['is_admin'];
-            } else if ( isset( $_REQUEST['hrm_attr']['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['hrm_attr']['is_admin'];
-            } else if ( isset( $_REQUEST['is_admin'] ) ) {
-                $hrm_is_admin = $_REQUEST['is_admin'];
+            if ( isset( $request['hrm_dataAttr']['is_admin'] ) ) {
+                $hrm_is_admin = $request['hrm_dataAttr']['is_admin'];
+            } else if ( isset( $request['hrm_attr']['is_admin'] ) ) {
+                $hrm_is_admin = $request['hrm_attr']['is_admin'];
+            } else if ( isset( $request['is_admin'] ) ) {
+                $hrm_is_admin = $request['is_admin'];
             }
         }
         hrm_check_financial_year();
@@ -177,6 +177,24 @@ class WP_Hrm {
         add_action( 'admin_menu', array($this, 'admin_menu') );
         add_action( 'init', array( $this, 'init' ) );
         add_action( 'init', 'hrm_set_capability' );
+        add_action( 'admin_notices', array( $this, 'hrm_banner' ) );
+    }
+
+    function hrm_banner() {
+        if( empty( $_GET['page'] ) ) {
+            return;
+        }
+        if( $_GET['page'] != 'hr_management' ) {
+            return;
+        }
+        ?>
+        <div id="message" class="updated notice notice-success">
+            <p>
+                WP HRM front-end version is available, please  
+                <a target="_blank" href="http://wpspear.com/hrm/front-end/"><strong>get it now!</strong></a>
+            </p>
+        </div>
+        <?php
     }
 
     function init_filter() {
@@ -194,6 +212,7 @@ class WP_Hrm {
         Hrm_Dashboard::getInstance();
         Hrm_Attendance::getInstance();
         Hrm_Payroll::getInstance();
+        Hrm_Shift::getInstance();
     }
 
     function install() {
@@ -234,20 +253,21 @@ class WP_Hrm {
         $submenu[$hrm_page_slug][] = [__( 'Payroll', 'hrm' ), $capability, 'admin.php?page=hr_management#/payroll'];
         $submenu[$hrm_page_slug][] = [__( 'Attendance', 'hrm' ), $capability, 'admin.php?page=hr_management#/attendance'];
         $submenu[$hrm_page_slug][] = [__( 'Leave', 'hrm' ), $capability, 'admin.php?page=hr_management#/leave'];
-        $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
-        $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
+        $submenu[$hrm_page_slug]['recruitment'] = [ __( 'Recruitment', 'hrm' ), 'read', 'admin.php?page=hr_management#/recruitment' ];
 
         $this->addons = apply_filters( 'hrm_addons', array() );
         $this->addons_license = apply_filters( 'hrm_addons_license', array() );
 
-        if ( !empty( $this->addons ) ) {
-            add_submenu_page( 'hr_management', __( 'Updates', 'hrm' ), __( 'Updates', 'hrm' ), 'activate_plugins', 'hrm_addons_update', array( $this, 'addons_update' ) );
-        }
+        do_action( 'hrm_menu_before_load_scripts', $menu );
+
+        $submenu[$hrm_page_slug][] = [__( 'Settings', 'hrm' ), $capability, 'admin.php?page=hr_management#/settings'];
+        $submenu[$hrm_page_slug][] = [__( 'Add-Ons', 'hrm' ), $capability, 'admin.php?page=hr_management#/addons'];
 
         if ( !empty( $this->addons_license ) ) {
             add_submenu_page( 'hr_management', __( 'License', 'hrm' ), __( 'License', 'hrm' ), 'activate_plugins', 'hrm_addons_license', array( $this, 'addons_license' ) );
         }
-
+        
+        
         add_action( 'admin_print_styles-' . $menu, array( 'Hrm_Scripts', 'footer_tag' ) );
     }
 

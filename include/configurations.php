@@ -1,6 +1,6 @@
 <?php
 use HRM\Core\Config\Config;
 
-function config( $key = null ) {
+function hrm_config( $key = null ) {
     return Config::get( $key );
 }

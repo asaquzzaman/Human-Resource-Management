@@ -43,7 +43,9 @@ class Hrm_Payroll {
 
     function ajax_delete_salary() {
         check_ajax_referer('hrm_nonce');
-        $records = self::getInstance()->delete_salary( $_POST );
+        $POST = wp_unslash( $_POST );
+
+        $records = self::getInstance()->delete_salary( $POST );
         wp_send_json_success($records);
     }
 
@@ -56,7 +58,8 @@ class Hrm_Payroll {
 
     function ajax_insert_formula() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->insert_formula( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->insert_formula( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -116,16 +119,16 @@ class Hrm_Payroll {
         foreach ( $all_formulas['data'] as $key => $formula ) {
             $formulas_name[$formula['name']] = $formula['formula'];
         }
-
- 
+        
         return hrm_formula_replace( $salary, $defination, $formulas_name, $salary_period );
       
     }
 
     function ajax_check_formula_validity() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
-        $formula_val = self::getInstance()->formula_validator( $_POST['formula'] );
+        $formula_val = self::getInstance()->formula_validator( $POST['formula'] );
 
         if ( floatval( $formula_val ) ) {
             wp_send_json_success(
@@ -144,7 +147,8 @@ class Hrm_Payroll {
 
     function ajax_get_salary() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->get_salary( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->get_salary( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -209,7 +213,8 @@ class Hrm_Payroll {
 
     function ajax_fetch_statement() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->fetch_statement( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->fetch_statement( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -245,7 +250,8 @@ class Hrm_Payroll {
 
     function ajax_get_employee_salary() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->get_employee_salary( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->get_employee_salary( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -270,7 +276,8 @@ class Hrm_Payroll {
 
     function ajax_group_filter() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->group_filter( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->group_filter( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -316,7 +323,8 @@ class Hrm_Payroll {
 
     function ajax_generate_salary_statement() {
         check_ajax_referer('hrm_nonce');
-        $salary = self::getInstance()->generate_salary_statement( $_POST );
+        $POST = wp_unslash( $_POST );
+        $salary = self::getInstance()->generate_salary_statement( $POST );
 
         wp_send_json_success( $salary );
     }
@@ -345,8 +353,13 @@ class Hrm_Payroll {
             $all_components_id[] = $formula['id'];
         }
 
+        $formulas = apply_filters( 'hrm_before_salary_generator', $formulas, $postData );
+
         foreach ( $formulas['data'] as $key => $formula ) {
-            $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name, $salary_period );
+
+            if ( ! empty( $formula['formula'] ) ) {
+                $formulas['data'][$key]['amount'] = hrm_formula_replace( $salary, $formula['formula'], $formulas_name, $salary_period );
+            }
             
             if ( $formula['type'] == 'income' ) {
                $generate_gross = $generate_gross + $formulas['data'][$key]['amount']; 
@@ -389,13 +402,22 @@ class Hrm_Payroll {
                 'updated_by'           => get_current_user_id()
             );
             
-            $this->update_salary( $store_data );
+            $salary = $this->update_salary( $store_data );
+
+            if ( is_wp_error( $salary ) ) {
+                wp_send_json_error( array( 'error' => $salary->get_error_messages() ) );
+            }
         }
 
         wp_send_json_success($formulas);
     }
 
     function update_salary( $store_data ) {
+        $info = maybe_unserialize( $store_data['info'] );
+
+        if( $info['meta']['salaryMeta']['employeeGet'] < 0 ) {
+            return new WP_Error('employee_net_salary', 'Invalid net pay');
+        }; 
         $is_update = $store_data['is_update'];
         $start_date = date( 'Y-m-01', strtotime( $store_data['month'] ) );
         $end_date = date( 'Y-m-t', strtotime( $store_data['month'] ) );
@@ -412,7 +434,9 @@ class Hrm_Payroll {
             
             if ( $salary && $is_update ) {
                 $store_data = apply_filters( 'hrm_before_update_salary', $store_data, $salary );
-                $salary = $salary->update( $store_data );
+                if( $salary->category != 'designation' ) {
+                    $salary = $salary->update( $store_data );
+                }
             } else {
                 if ( !$salary ) {
                     $record = Salary::create( $store_data );
@@ -435,16 +459,19 @@ class Hrm_Payroll {
         foreach ( $users as $user ) {
             $salary_data = $store_data;
             $salary = Salary::where( 'employee_id', $user->ID )
-                // ->where( 'category_id', $store_data['category_id'] )
                 ->where( function($q) use( $start_date, $end_date ) {
                     $q->where( 'month', '>=', $start_date);
                     $q->where( 'month', '<=', $end_date);
                 })->first();
-
+            
             if ( $salary && $is_update ) {
                 $salary_data['employee_id'] = $user->ID;
                 $salary_data = apply_filters( 'hrm_before_update_salary', $salary_data, $salary );
-                $salary->update( $salary_data );
+                
+                if( $salary->category != 'employee' ) {
+                    $salary->update( $salary_data );
+                }
+                
             } else {
                 if ( !$salary ) {
                     $salary_data['employee_id'] = $user->ID;
@@ -506,15 +533,17 @@ class Hrm_Payroll {
 
     function ajax_update_formula() {
         check_ajax_referer('hrm_nonce');
-        $formula = self::getInstance()->update_formula( $_POST );
+        $POST = wp_unslash( $_POST );
+        $formula = self::getInstance()->update_formula( $POST );
 
         wp_send_json_success( $formula );
     }
 
     function ajax_delete_formula() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
         
-        self::getInstance()->delete_formula( $_POST['delete'] );
+        self::getInstance()->delete_formula( $POST['delete'] );
         wp_send_json_success();
     }
 
@@ -534,8 +563,9 @@ class Hrm_Payroll {
 
     function ajax_get_formula() {
     	check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
-    	$formula = self::getInstance()->get_formula( $_POST );
+    	$formula = self::getInstance()->get_formula( $POST );
 
     	wp_send_json_success( $formula );
     }

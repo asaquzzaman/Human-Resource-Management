@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use HRM\Core\Crud\Crud;
 
@@ -205,6 +204,34 @@ function hrm_second_to_time( $seconds ) {
     return $obj;
 }
 
+function hrm_second_to_time_short_form( $seconds ) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+}
+
+function hrm_get_second( $start, $end ) {
+    if( strtotime( $start ) < 0 ) {
+        return 0;
+    }
+
+    if( strtotime( $end ) < 0 ) {
+        return 0;
+    }
+
+    $start = date( 'H:i', strtotime( $start ) );
+    $end = date( 'H:i', strtotime( $end ) );
+
+    if (  $start > $end ) {
+        $end = date( 'Y-m-d H:i', strtotime( $end . '+1 day' ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    } else {
+        $end = date( 'Y-m-d H:i', strtotime( $end ) );
+        $start = date( 'Y-m-d H:i', strtotime( $start ) );
+    }
+
+    return strtotime( $end ) - strtotime( $start );
+}
+
 function hrm_get_header( $page, $tab, $subtab = false ) {
     $menu = hrm_page();
     ?>
@@ -216,7 +243,13 @@ function hrm_get_header( $page, $tab, $subtab = false ) {
             $active = ( $tab == $key ) ? 'nav-tab-active' : '';
 
             $url = hrm_admin_menu_url( $key );
-            printf( '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>',$url, $tab_event['id'], $tab_event['title'], $active );
+            printf( 
+                '<a href="%1$s" class="nav-tab %4$s" id="%2$s-tab">%3$s</a>', 
+                esc_url( $url ), 
+                intval( $tab_event['id'] ), 
+                esc_attr( $tab_event['title'] ), 
+                esc_attr( $active ) 
+            );
         }
 
         ?>
@@ -243,7 +276,13 @@ function hrm_get_header( $page, $tab, $subtab = false ) {
                     $sub_active = ( $sub_key == $subtab ) ? 'hrm-sub-current' : '';
                     $sub_event['id'] = isset( $sub_event['id'] ) ? $sub_event['id'] : '';
                     $sub_url = hrm_admin_sub_menu_url( $tab, $sub_key );
-                    printf( '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',$sub_url , $sub_event['id'], $sub_event['title'], $sub_active );
+                    printf( 
+                        '<li><a class="%4$s" href="%1$s" id="%2$s-tab">%3$s</a></li> | ',
+                        esc_url( $sub_url ), 
+                        intval( $sub_event['id'] ), 
+                        esc_attr( $sub_event['title'] ), 
+                        esc_attr( $sub_active )
+                    );
                 }
             ?>
         </ul>
@@ -324,29 +363,19 @@ function hrm_page_slug() {
 function hrm_get_js_template( $file_path, $id ) {
    
     if ( file_exists( $file_path ) ) {
-        echo '<script type="text/html" id="tmpl-' . $id . '">' . "\n";
+        echo '<script type="text/html" id="tmpl-' . intval( $id ) . '">' . "\n";
         include_once $file_path;
         echo "\n" . '</script>' . "\n";
     }
 }
 
-function hrm_load_orm() {
-    $capsule = new Capsule;
-   
-    $status = $capsule->addConnection( config('db') );
 
-    // Setup eloquent model events
-    $capsule->setEventDispatcher(new Dispatcher(new Container));
+function pr() {
+    $args = func_get_args();
 
-    // Make this Capsule instance available globally via static methods... (optional)
-    $capsule->setAsGlobal();
-
-    // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
-    $capsule->bootEloquent();
-}
-
-function pr($data) {
-    echo '<pre>'; print_r($data); '</pre>';
+    foreach ( $args as $arg ) {
+        echo '<pre>'; print_r( $arg ); '</pre>';
+    }
 }
 
 /**
@@ -471,7 +500,7 @@ function hrm_load_schema() {
     $files = glob( __DIR__ . "/../db/migrations/*.php" );
     
     $files = apply_filters( 'hrm_load_schema_files', $files );
-
+    
     if ( $files === false ) {
         throw new RuntimeException( "Failed to glob for migration files" );
     }
@@ -611,20 +640,21 @@ function hrm_set_administrator_capability() {
 }
 
 function hrm_get_client_ip() {
+    $server = wp_unslash( $_SERVER );
     $ipaddress = '';
 
-    if ( isset($_SERVER['HTTP_CLIENT_IP'] ) ) {
-        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-    } else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else if ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-    } else if ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
-        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-    } else if ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
-        $ipaddress = $_SERVER['HTTP_FORWARDED'];
-    } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    if ( isset($server['HTTP_CLIENT_IP'] ) ) {
+        $ipaddress = $server['HTTP_CLIENT_IP'];
+    } else if ( isset( $server['HTTP_X_FORWARDED_FOR'] ) ) {
+        $ipaddress = $server['HTTP_X_FORWARDED_FOR'];
+    } else if ( isset( $server['HTTP_X_FORWARDED'] ) ) {
+        $ipaddress = $server['HTTP_X_FORWARDED'];
+    } else if ( isset( $server['HTTP_FORWARDED_FOR'] ) ) {
+        $ipaddress = $server['HTTP_FORWARDED_FOR'];
+    } else if ( isset( $server['HTTP_FORWARDED'] ) ) {
+        $ipaddress = $server['HTTP_FORWARDED'];
+    } else if ( isset( $server['REMOTE_ADDR'] ) ) {
+        $ipaddress = $server['REMOTE_ADDR'];
     } else {
         $ipaddress = 'UNKNOWN';
     }
@@ -682,6 +712,17 @@ function hrm_employee_gender( $gender = false ) {
     );
 
     return $gender ? $data[$gender] : $data;
+}
+
+function hrm_tb_prefix() {
+    global $wpdb;
+
+    return $wpdb->prefix;
+}
+
+function hrm_get_avater( $user_id ) {
+    $profile_pic = Hrm_Employee::getInstance()->get_profile_picture( $user_id );
+    return empty( $profile_pic ) ? get_avatar_url( $user_id ) : $profile_pic[0]['thumb'];
 }
 
 

@@ -25,9 +25,7 @@ label em {
   clear: both;
   height: 0;
 }
-.hrm-clear {
-  
-}
+
 /* start commented backslash hack \*/
 .hrm-clear {
   height: 1%;
@@ -151,6 +149,10 @@ label em {
   display: inline-block;
   margin-bottom: 5px;
   width: 100%;
+}
+.hrm-texteditor {
+    width: 65%;
+    float: left;
 }
 #hrm-list-form .hrm-table-action-wrap .hrm-left-action {
   width: 100%;
@@ -1059,8 +1061,39 @@ label em {
 .preloader-container {
   top: calc(50% - 3.25em) !important;
 }
+.hrm-field-sets {
+  border: 1px solid #eee;
+}
+.hrm-field-sets .hrm-form-field-wrap {
+  float: left;
+  width: 50%;
+}
+.hrm-field-sets .hrm-field-set-content {
+  padding: 10px;
+}
+.hrm-field-sets .hrm-field-set-title {
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.hrm-field-sets .hrm-child-field input {
+  float: none !important;
+  display: block;
+}
+.hrm-field-sets .hrm-child-field {
+  margin-left: 21%;
+}
+#hrm-hidden-form .hrm-action-wrap {
+  margin-top: 15px;
+}
 
-
+.hrm-left, .hrm-label, .hrm-label-content {
+  float: left;
+}
+.hrm-label {
+  width: 30%;
+}
 
 
 

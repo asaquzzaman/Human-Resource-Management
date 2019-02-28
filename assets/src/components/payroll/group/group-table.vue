@@ -28,14 +28,14 @@
 
                     <td>
                     	<ul>
-                    		<li v-for="income in record.income">{{ getIncomeLabel(income) }}</li>
+                    		<li v-for="income in record.income" v-html="getIncomeLabel(income)"></li>
                     	</ul>
                     	
                     </td>
 
                     <td>
                     	<ul>
-                    		<li v-for="deduction in record.deduction">{{ getDeductionLabel(deduction) }}</li>
+                    		<li v-for="deduction in record.deduction" v-html="getDeductionLabel(deduction)"></li>
                     	</ul>
                     
                     </td>

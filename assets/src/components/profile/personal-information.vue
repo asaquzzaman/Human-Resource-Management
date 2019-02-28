@@ -39,12 +39,12 @@
 
 				        		</div>
 
-				        		<a @click.prevent="update(true)" class="button hrm-button-primary button-primary" href="#">Update</a>
+				        		<a @click.prevent="update(true)" v-if="hasProfileEditPermission()" class="button hrm-button-primary button-primary" href="#">Update</a>
 			        		</div>
 			        		
 			        		<form id="hrm-personal-gnrl-info" v-if="editMode" action="" @submit.prevent="selfSavePersonalInfo()" enctype="multipart/form-data">
 			        			<hrm-form-fields :fields="fields"></hrm-form-fields>
-			        			<input :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
+			        			<input  :disabled="canSubmit" type="submit" class="button hrm-button-primary button-primary">
 			        			<a @click.prevent="update(false)" class="button hrm-button-secondary button-secondary" href="#">cancel</a>
 			        			<div class="hrm-spinner" v-if="loading">Saving....</div>
 			        		</form>

@@ -5,7 +5,7 @@ class Hrm_Employeelist {
 
     public static function getInstance() {
         if( ! self::$_instance ) {
-            self::$_instance = new hrm_Employeelist();
+            self::$_instance = new self();
         }
 
         return self::$_instance;
@@ -37,49 +37,6 @@ class Hrm_Employeelist {
 
         return false;
     }
-
-    function employee_image_upload_form($data) {
-        $employee_id     = isset( $data['employer_id'] ) && is_array( $data['employer_id'] ) && $data['employer_id'] ? reset( $data['employer_id'] ) : false;
-        $this->emp_upload_image($employee_id);
-    }
-
-    function emp_upload_image($employee_id) {
-
-        $image_id        = get_user_meta( $employee_id, '_hrm_user_image_id', true );
-        $image_attchment = $this->get_image( $image_id );
-
-        ?>
-
-        <div id="hrm-upload-file-container" >
-            <div class="hrm-employee-pic-text"><strong><?php  _e( 'Profile Picture', 'hrm' ); ?></strong></div>
-            <div class="hrm-drop-area" id="hrm-drop-files-zone">
-                <a id="hrm-pickfiles" href="#"><?php _e( 'Change', 'hrm' ); ?></a>
-                <?php
-                if ( $image_attchment ) {
-                    ?>
-                    
-                    <?php
-                }
-                ?>
-            </div>
-            <div id="hrm-user-image-wrap">
-                <?php
-                if ( $image_attchment ) {
-                    $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
-                    $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
-                    $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" height="160" width="160"/></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name'] ) );
-
-                    echo '<div class="hrm-uploaded-item">' . $delete.' '. $file_url  . $hidden . '</div>';
-                } else {
-                    echo get_avatar( $employee_id, 160 );
-                }
-                ?>
-
-            </div>
-        </div>
-        <?php
-    }
-
 
     function employeer_search_query( $post, $limit, $pagenum ) {
         if ( !empty( $post['first_name'] ) ) {

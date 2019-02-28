@@ -1,6 +1,6 @@
 <?php
 
-namespace HRM\Core\User;
+namespace HRM\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use HRM\Models\User;
@@ -10,7 +10,6 @@ class User_Transformer extends TransformerAbstract {
     public function transform( User $user ) {
         $data = [
             'id'           => $user->ID,
-            'username'     => $user->user_login,
             'nicename'     => $user->user_nicename,
             'email'        => $user->user_email,
             'profile_url'  => $user->user_url,

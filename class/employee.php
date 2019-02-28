@@ -47,7 +47,8 @@ class Hrm_Employee {
 
     public static function ajax_delete_employee() {
         check_ajax_referer('hrm_nonce');
-        $employee_ids = $_POST['delete'];
+        $POST = wp_unslash( $_POST );
+        $employee_ids = $POST['delete'];
         self::getInstance()->delete_employee( $employee_ids );
 
         wp_send_json_success();
@@ -61,11 +62,14 @@ class Hrm_Employee {
 
     public function ajax_employee_filter() {
         check_ajax_referer('hrm_nonce');
-        $_POST['page'] = absint( $_POST['page'] );
+        $POST = wp_unslash( $_POST );
+        $POST['page'] = empty( $POST['page'] ) ? 1 : absint( $POST['page'] );
+        $POST['name'] = empty( $POST['name'] ) ? '' : $POST['name'];
         $postdata = [];
-        $postdata['search']         = '*' . $_POST['name'] . '*';
+        $postdata['search']         = '*' . $POST['name'] . '*';
         $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
-        $postdata['page']  = empty( $_POST['page'] ) ? 1 : absint( $_POST['page'] );
+        $postdata['page']  = empty( $POST['page'] ) ? 1 : absint( $POST['page'] );
+        $postdata['number'] = empty( $POST['number'] ) ? hrm_per_page() : $POST['number'];
         
         $employees = self::getInstance()->get_employees( $postdata );
         
@@ -73,14 +77,18 @@ class Hrm_Employee {
     }
 
     public static function ajax_get_employees() {
-        $postdata['page']  = $_POST['page'];
+        check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
+        $postdata['page']  = $POST['page'];
         $employees = self::getInstance()->get_employees( $postdata );
         
         wp_send_json_success( $employees );
     }
 
     public static function  ajax_insert_employee() {
-        $postdata    = $_POST;
+        check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
+        $postdata    = $POST;
         $employee_id = self::getInstance()->add_new_employee( $postdata );
         $employee    = self::getInstance()->get_employee( $employee_id );
         
@@ -100,14 +108,14 @@ class Hrm_Employee {
 
             'meta_query' => array(
                 array(
-                    'key' => 'hrm_birthday',
+                    'key' => '_birthday',
                     'value' => $today,
                     'type' => 'DATE',
                     'compare' => '>=' 
                 ),
 
                 array(
-                    'key' => 'hrm_birthday',
+                    'key' => '_birthday',
                     'type' => 'DATE',
                     'value' => $next_day,
                     'compare' => '<=' 
@@ -116,9 +124,9 @@ class Hrm_Employee {
         ));
 
         foreach ( $users->results as $key => $result ) {
-            $birthday                 = get_user_meta( $result->ID, 'hrm_birthday', true );
+            $birthday                 = get_user_meta( $result->ID, '_birthday', true );
             $result->data->birthday   = hrm_get_date( $birthday );
-            $result->data->avatar_url = get_avatar_url( $result->ID );
+            $result->data->avatar_url = hrm_get_avater( $result->ID );
         }
 
         wp_send_json_success( $users->results );
@@ -139,97 +147,6 @@ class Hrm_Employee {
 
             Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender );
         }
-    }
-
-    function get_salary_message_body( $last_recored, $post, $to_user ) {
-        $employer = wp_get_current_user();
-        $pay_grade = json_decode( stripcslashes( $post['pay_grade_js'] ), true );
-        $direct_deposit = $last_recored->direct_deposit != 'yes' ? __( 'Nothing', 'hrm' ) : $last_recored->direct_deposit;
-        ob_start();
-        ?>
-        <div style="width: 600px; background: #eee; padding: 5px;">
-        <table width="600" style="background: #fff; padding: 10px;">
-        <tr>
-            <td style="padding: 10px;"><?php sprintf( 'Hello, %s', $to_user->display_name ); ?></td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;"><?php _e( 'Your salaray details', 'hrm' ); ?></td>
-        </tr>
-        </table>
-        <table width="600" style="background: #fff; padding: 10px;">
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Employer Name', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $employer->display_name; ?></td>
-            </tr>
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Date', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo hrm_get_date2mysql( $last_recored->billing_date ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Grade', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $pay_grade[$last_recored->pay_grade]; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Salary Component', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->component; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Pay Frequency', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->pay_frequency( $last_recored->frequency ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Currency', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->currency; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Amount', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->amount; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Comments', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->comments; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Direct Deposit Details', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $direct_deposit; ?></td>
-            </tr>
-        <?php
-        if ( $last_recored->direct_deposit == 'yes' ) {
-            ?>
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Number', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->account_number; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Account Type', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $this->account_type( $last_recored->account_type ); ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Routing Number', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->routing; ?></td>
-            </tr>
-
-            <tr>
-                <th style="background: #f7f5f5; border: 1px solid #e1e1e1; text-align: left; padding-left: 8px;"><?php _e( 'Deposit Amount', 'hrm' ); ?></th>
-                <td style="border: 1px solid #eee; font-size: 12px; padding: 10px;"><?php echo $last_recored->dipo_amount; ?></td>
-            </tr>
-
-            <?php
-        }
-            ?>
-        </table>
-        </div>
-        <?php
-        return ob_get_clean();
     }
 
     function delete_file( $file_id, $force = true, $employee_id ) {
@@ -260,29 +177,6 @@ class Hrm_Employee {
         return false;
     }
 
-    function emp_upload_image($employee_id) {
-
-        $image_id        = get_user_meta( $employee_id, 'hrm_user_image_id', true );
-        $image_attchment = $this->get_image( $image_id );
-
-        ?>
-        <div id="hrm-user-image-wrap">
-            <?php
-            if ( $image_attchment ) {
-
-                $delete = sprintf( '<a href="#" data-id="%d" class="hrm-delete-file">%s</a>', $image_attchment['id'], __( 'Delete', 'hrm' ) );
-                $hidden = sprintf( '<input type="hidden" name="hrm_attachment[]" value="%d" />', $image_attchment['id'] );
-                $file_url = sprintf( '<a href="%1$s" target="_blank"><img src="%2$s" alt="%3$s" height="160" width="160"/></a>', $image_attchment['url'], $image_attchment['thumb'], esc_attr( $image_attchment['name'] ) );
-
-                echo '<div class="hrm-uploaded-item">' . $file_url . ' ' . $delete . $hidden . '</div>';
-            } else {
-                echo get_avatar( $employee_id, 160 );
-            }
-            ?>
-
-        </div>
-        <?php
-    }
 
     function after_ajax_upload( $response, $file, $post ) {
         if ( !isset( $post['employee_id'] ) ) {
@@ -331,15 +225,16 @@ class Hrm_Employee {
 
     public static function ajax_experiance_filter() {
         check_ajax_referer('hrm_nonce');
-        $result = self::getInstance()->experiance_filter( $_POST );
+        $POST = wp_unslash( $_POST );
+        $result = self::getInstance()->experiance_filter( $POST );
         wp_send_json_success( $result );
     }
 
     function experiance_filter( $postdata ) {
-        $title       = $postdata['title'];
-        $from        = $postdata['from'];
-        $to          = $postdata['to'];
-        $employee_id = $postdata['employee_id'];
+        $title       = empty( $postdata['title'] ) ? '': $postdata['title'];
+        $from        = empty( $postdata['from'] ) ? '': $postdata['from'];
+        $to          = empty( $postdata['to'] ) ? '': $postdata['to'];
+        $employee_id = empty( $postdata['employee_id'] ) ? '': $postdata['employee_id'];
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
@@ -376,7 +271,8 @@ class Hrm_Employee {
 
     public static function ajax_education_filter() {
         check_ajax_referer('hrm_nonce');
-        $result = self::getInstance()->education_filter( $_POST );
+        $POST = wp_unslash( $_POST );
+        $result = self::getInstance()->education_filter( $POST );
         wp_send_json_success( $result );
     }
 
@@ -421,7 +317,8 @@ class Hrm_Employee {
     
     public static function ajax_skill_filter() {
         check_ajax_referer('hrm_nonce');
-        $result = self::getInstance()->skill_filter( $_POST );
+        $POST = wp_unslash( $_POST );
+        $result = self::getInstance()->skill_filter( $POST );
         wp_send_json_success( $result );
     }
 
@@ -438,7 +335,7 @@ class Hrm_Employee {
         });
 
         $experiance = Skill::where('employee_id', $employee_id)
-            ->where( function($q) use($title, $from, $to) {
+            ->where( function($q) use($title) {
             if ( ! empty(  $title ) ) {
                 $q->where( 'skill', 'LIKE', '%' . $title . '%' );
             }
@@ -467,8 +364,9 @@ class Hrm_Employee {
 
     public static function ajax_get_employee_job_location() {
         check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
 
-        $user_id = empty( $_POST['employee_id'] ) ? get_current_user_id() : intval( $_POST['employee_id'] );
+        $user_id = empty( $POST['employee_id'] ) ? get_current_user_id() : intval( $POST['employee_id'] );
         $result = self::getInstance()->get_employee_job_location( $user_id );
         
         wp_send_json_success( $result );
@@ -484,7 +382,8 @@ class Hrm_Employee {
 
     public static function ajax_get_personal_info() {
         check_ajax_referer('hrm_nonce');
-        $user_id = empty( $_POST['employee_id'] ) ? get_current_user_id() : intval( $_POST['employee_id'] );
+        $POST = wp_unslash( $_POST );
+        $user_id = empty( $POST['employee_id'] ) ? get_current_user_id() : intval( $POST['employee_id'] );
         $result = self::getInstance()->get_personal_info( $user_id );
         wp_send_json_success( $result );
     }
@@ -556,11 +455,13 @@ class Hrm_Employee {
     }
 
     public static function ajax_save_personal_info() {
-        //check_ajax_referer('hrm_nonce');
-        $user_id = json_decode( stripslashes( $_POST['user_id'] ) );
+        check_ajax_referer('hrm_nonce');
+        $POST = wp_unslash( $_POST );
+        $FILES = wp_unslash( $_FILES );
+        $user_id = json_decode( stripslashes( $POST['user_id'] ) );
         $user_id = empty( $user_id ) ? get_current_user_id() : intval( $user_id );
         
-        $result = self::getInstance()->save_personal_info( $_POST, $_FILES, $user_id );
+        $result = self::getInstance()->save_personal_info( $POST, $FILES, $user_id );
         wp_send_json_success( $result );
     }
 
@@ -605,15 +506,16 @@ class Hrm_Employee {
         return $this->get_personal_info($user_id);
     }
     function add_new_employee( $postdata ) {
-        $postdata['id'] = absint($postdata['id'] );
         if ( 
             isset( $postdata['id'] ) 
-                && 
+            && 
             ! empty( $postdata['id'] ) 
-        ) {
-            $user_id = $postdata['id'];
-            $this->update_empoyee( $user_id, $postdata );
-            return $user_id;
+            ) {
+            
+                $user_id = absint( $postdata['id'] );
+           
+                $this->update_empoyee( $user_id, $postdata );
+                return $user_id;
         }
 
         $validate = $this->new_admin_form_validate( $postdata );
@@ -626,7 +528,7 @@ class Hrm_Employee {
         $first_name      = sanitize_text_field( $postdata['firstName'] );
         $last_name       = sanitize_text_field( $postdata['lastName'] );
         $display_name    = $first_name .' '. $last_name;
-
+        
         $userdata = array(
             'user_login'   => $postdata['userName'],
             'user_pass'    => $random_password,
@@ -674,7 +576,7 @@ class Hrm_Employee {
         update_user_meta( $user_id, 'hrm_role',  $postdata['role'] );
         update_user_meta( $user_id, 'hrm_designation',  $postdata['designation'] );
 
-        if ( $postdata['employee_image'] ) {
+        if ( ! empty( $postdata['employee_image'] ) ) {
             $image_id = File_System::upload_base64_file( $postdata['employee_image'][0] );
             update_user_meta( $user_id, 'hrm_user_image_id', $image_id );
         }

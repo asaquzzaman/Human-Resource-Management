@@ -9,6 +9,7 @@ import '@components/settings/router';
 import '@components/employee/router';
 import '@components/addons/router';
 import '@components/payroll/router';
+import '@components/recruitment/router';
 
 import Empty from '@components/common/empty.vue';
 

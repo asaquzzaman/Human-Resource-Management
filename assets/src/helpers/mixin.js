@@ -72,11 +72,11 @@ export default hrm.Vue.mixin({
             wp.ajax.send('get_departments', {
                 data: request_data,
                 success (res) {
-                    // self.$store.commit( 'departments/setDepartments', { 
-                    //     departments: res.departments, 
-                    //     'total_dept': res.total_dept,
-                    //     'dept_drop_down': res.dept_drop_down
-                    // });
+                    self.$store.commit( 'departments/setDepartments', { 
+                        departments: res.departments, 
+                        'total_dept': res.total_dept,
+                        'dept_drop_down': res.dept_drop_down
+                    });
                     
                     if ( typeof args.callback === 'function') {
                         args.callback(res);
@@ -88,6 +88,36 @@ export default hrm.Vue.mixin({
                 }
             });
 		},
+        dateTimeFormat(date) {
+            if ( typeof date === 'undefined' ) {
+                date = hrm.Moment().format();
+            }
+
+            date = new Date(date);
+
+            return hrm.Moment( date ).format('kk:mm');
+        },
+                /**
+         * WP settings date format convert to pm.Moment date format with time zone
+         * 
+         * @param  string date 
+         * 
+         * @return string      
+         */
+        shortDateFormat ( date ) {
+            if ( date == '' ) {
+                return;
+            }      
+
+            date = new Date(date);
+            date = hrm.Moment(date).format('YYYY-MM-DD');
+            if(date == 'Invalid date') {
+                return '';
+            }
+            var format = 'DD MMM';
+
+            return hrm.Moment( date ).format( String( format ) );
+        },
 		/**
          * WP settings date format convert to hrm.Moment date format with time zone
          * 
@@ -260,6 +290,30 @@ export default hrm.Vue.mixin({
             });
 
             return isFormValidate;
-        }
+        },
+
+        getDesignation (args) {
+            var self = this;
+
+            var postData = {
+                'class': 'Designation',
+                'method': 'gets',
+                'transformers': 'Designation_Transformer',
+                'page': 1,
+                'per_page': 1000
+            };
+            
+            var request_data = {
+                data: postData,
+                success: function(res) {
+
+                    if(typeof args.callback != 'undefined') {
+                        args.callback(res);
+                    }
+                }
+            };
+
+            self.httpRequest('hrm_get_records', request_data);
+        },
 	},
 });

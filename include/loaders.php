@@ -1,5 +1,5 @@
 <?php
-function load_configurations() {
+function hrm_load_configurations() {
     $files = glob( __DIR__ . "/../config/*.php" );
 
     if ( $files === false ) {

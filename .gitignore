@@ -11,10 +11,7 @@ build
 secret.json
 .netbeans.xml
 npm-debug.log
-composer.lock
 package-lock.json
 /node_modules/
-/asstes/js/*
+/assets/js/*
 /vendor/
-
-

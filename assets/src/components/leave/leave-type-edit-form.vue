@@ -115,6 +115,10 @@
 			}
 		},
 
+		created () {
+			this.leaveType.next_year = this.leaveType.next_year == '1' ? 1 : 0;
+		},
+
 		computed: {
 			departmentDropDown () {
 				return this.$store.state.leave.departmentDropDown;

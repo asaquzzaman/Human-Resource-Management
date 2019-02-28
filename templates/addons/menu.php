@@ -13,8 +13,8 @@
 				$active = !empty($_GET['tab']) && ($_GET['tab'] == $addon['key']) ? 'nav-tab-active' : '';
 				?>
 
-				<a href="<?php echo $url; ?>" class="<?php echo $active; ?>  nav-tab">
-					<?php echo $addon['label']; ?>
+				<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $active ); ?>  nav-tab">
+					<?php echo esc_attr( $addon['label'] ); ?>
 				</a>
 				<?php
 			}

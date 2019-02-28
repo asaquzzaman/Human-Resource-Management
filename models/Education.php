@@ -1,7 +1,7 @@
 <?php
 namespace HRM\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use HRM\Core\Database\Model as Eloquent;
 
 class Education extends Eloquent {
 
@@ -17,9 +17,7 @@ class Education extends Eloquent {
 		'year',
 		'score',
 		'start_date',
-		'end_date',
-		'created_by',
-		'updated_by'
+		'end_date'
     ];
 }
 

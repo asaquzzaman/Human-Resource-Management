@@ -5,7 +5,7 @@
                 <?php foreach ( $licenses as $key => $license ) {?>
 
                     <tr>
-                        <th scope="row"><?php echo $license['item_name'] . ' Licensing'; ?></th>
+                        <th scope="row"><?php echo esc_attr( $license['item_name'] ) . ' Licensing'; ?></th>
                         <td>
                             <?php 
 

@@ -1,8 +1,12 @@
 <template>
-	<router-view></router-view>
+	<div class="hrm-settings">
+		<settings-header></settings-header>
+		<router-view></router-view>
+	</div>
 </template>
 
 <script>
+	import SettingsHeader from './header.vue';
 	export default {
 		created () {
 			if ( this.$route.name === 'hrm_setting' ) {
@@ -12,6 +16,9 @@
 					}
 				);
 			};
+		},
+		components: {
+			SettingsHeader
 		}
 	}
 </script>

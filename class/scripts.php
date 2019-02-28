@@ -19,8 +19,6 @@ class Hrm_Scripts {
     public static function register_scripts() {
         $scripts = self::scripts();
 
-        do_action( 'hrm_before_load_script' );
-
         foreach ( $scripts as $script ) {
 
             wp_register_script( 
@@ -37,6 +35,7 @@ class Hrm_Scripts {
     public static function footer_tag() {
 
         wp_enqueue_media();
+        do_action( 'hrm_before_load_script' );
         wp_enqueue_script( 'hrm-scripts' );
 
         wp_localize_script( 'hrm-uploader', 'HRM_Vars', array(
@@ -50,6 +49,9 @@ class Hrm_Scripts {
             'success_msg'     => __( 'Changed Successfully', 'hrm' ),
             'current_user'    => wp_get_current_user(),
             'settings'        => Hrm_Settings::getInstance()->get_settings(),
+            "email_settings"  => get_option( 'hrm_email_settings', [
+                'form_email' => get_bloginfo( 'admin_email' )
+            ] ),
             'current_date'    => current_time( 'mysql' ),
             'financial_start' => hrm_financial_start_date(),
             'financial_end'   => hrm_financial_end_date(),

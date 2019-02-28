@@ -2,7 +2,7 @@
 
 namespace HRM\Core\Common;
 
-use HRM\Core\User\User_Transformer;
+use HRM\Transformers\User_Transformer;
 
 trait Resource_Editors {
 

@@ -45,6 +45,8 @@ module.exports = function(grunt) {
                     '!**/README.md',
                     '!**/customs.json',
                     '!nbproject',
+                    '!phpcs.xml.dist',
+                    '!phpcs-report.txt',
                     '!**/*~'
                 ],
                 dest: 'build/'

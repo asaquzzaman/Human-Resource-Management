@@ -210,6 +210,46 @@ class Hrm_Admin {
     
     }
 
+        /**
+     * Default interface for setting a HR role
+     *
+     * @param WP_User $profileuser User data
+     *
+     * @return bool Always false
+     */
+    public static function role_display( $profileuser ) {
+        // Bail if current user cannot edit users
+        if ( ! current_user_can( 'edit_user', $profileuser->ID ) || !current_user_can( 'manage_options') ) {
+            return;
+        }
+        $checked = in_array( hrm_manager_role_key(), $profileuser->roles ) ? 'checked' : '';
+        
+        ?>
+
+        <h3><?php esc_html_e( 'HRM', 'erp' ); ?></h3>
+
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th><label for="hrm-role"><?php esc_html_e( 'HRM Manager', 'erp' ); ?></label></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text"><span>HRM Manager</span></legend>
+                            <label for="hrm-manager">
+                                <input <?php echo $checked; ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
+                                Confirm HRM manager
+                            </label>
+                            <br>
+                        </fieldset>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <?php
+    }
+
     public static function profile_update_role( $user_id ) {
         $POST = wp_unslash( $_POST );
         $postdata = $POST;

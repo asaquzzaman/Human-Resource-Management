@@ -20,8 +20,21 @@
 					<button :disabled="punchInIsDisabled" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
 					<button :disabled="!punchInIsDisabled" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
 					<div class="message-punch-in-out">
-						<div class="error-punch-in-out" v-if="punchInIsDisabled">{{ hasPunchInError }}</div>
-						<div class="error-punch-in-out" v-if="!is_employee()">
+						<div class="error-punch-in-out" v-if="!is_employee() && !hasTimeShift">
+							<span>You do not create any time shift policy. Please create</span> 
+							<router-link 
+								:to="{
+									name: 'shift'
+								}">
+								<strong>shift</strong>
+							</router-link>
+							<span>at first</span> 
+						</div>
+						<div class="error-punch-in-out" v-if="is_employee() && !hasTimeShift">
+							Please contact your HR maanger to create attendance time shift policy.
+						</div>
+						<div class="error-punch-in-out" v-if="hasTimeShift && punchInIsDisabled">{{ hasPunchInError }}</div>
+						<div class="error-punch-in-out" v-if="hasTimeShift && !is_employee()">
 							(Only HRM emaployee and manager can punch in/out)
 						</div>
 					</div>
@@ -61,7 +74,7 @@
 			}
 		},
 		computed: {
-			punchInIsDisabled () {
+			punchInIsDisabled () { 
 				return this.$store.state.attendance.punch_in_status === true ? false : true;
 			},
 
@@ -76,6 +89,9 @@
 				) {
 					return this.$store.state.attendance.punch_in_status;
 				}
+			},
+			hasTimeShift () {
+				return this.$store.state.attendance.hasTimeShift;
 			}
 		},
 		components: {

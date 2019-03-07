@@ -11,38 +11,6 @@
 				<div class="inside">
 					<div class="hrm-attendance-configuration" id="hrm-hidden-form">
 						<form @submit.prevent="saveConfiguration()">
-							<!-- <div class="hrm-form-field ">
-								<label for="">
-									Enabale multiple attendance
-									<em></em>
-								</label>
-								<span class="hrm-checkbox-wrap">
-									<input type="checkbox" value="yes" id="hrm-multi-attendance-checkbox" v-model="hrm_is_multi_attendance">
-									<label class="hrm-radio" for="hrm-multi-attendance-checkbox">Enable</label>
-								</span>
-								<span class="hrm-clear"></span>
-								<span class="description">Enable multiple attendance for per day</span>
-							</div>
-
-							<div class="hrm-form-field ">
-								<label for="hrm-office-start-date-field">
-									Office start time
-									<em>   </em>
-								</label>
-								<input type="text" :value="office_start_with_date_time" class="hrm-date-time-picker-from" id="hrm-office-start-date-field">
-								<span class="hrm-clear"></span>
-								<span class="description">Format: 2018-03-08 06:00 pm</span>
-							</div>
-
-							<div class="hrm-form-field ">
-								<label for="hrm-office-closed-date-field">
-									Office closing time
-									<em>   </em>
-								</label>
-								<input type="text"  :value="office_closed_with_date_time" class="hrm-date-time-picker-to" id="hrm-office-closed-date-field">
-								<span class="hrm-clear"></span>
-								<span class="description">Format: 2018-03-08 06:00 pm</span>
-							</div> -->
 
 							<div class="hrm-form-field ">
 								<label for=" ">

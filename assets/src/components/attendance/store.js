@@ -15,11 +15,12 @@ export default {
 		office_closed_with_date_time: '',
 		allow_ip: '',
 		employessDropDown: [],
-		totalOfficeTime: 0
+		totalOfficeTime: 0,
+		hasTimeShift: false
 	},
 
 	mutations: {
-		setInitVal: function(state, res) {
+		setInitVal: function(state, res) { console.log(res.punch_in);
 			state.punch_out_date               = res.punch_out_date;
 			state.punch_in_date                = res.punch_in_date;
 			//state.search_user_id               = res.search_user_id;
@@ -33,6 +34,7 @@ export default {
 			state.office_closed_with_date_time = res.office_closed_with_date_time;
 			state.employessDropDown            = res.employees_dropdown;
 			state.allow_ip                     = res.allow_ip;
+			state.hasTimeShift                 = res.has_time_shift;
 		},
 		setAttendance: function(state, records) {
 

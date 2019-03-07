@@ -82,6 +82,11 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.2.8 - February 28, 2019 =
+
+ * [Fix] Missing function role_display.
+ 
+
 = 2.2.7 - February 28, 2019 =
 
  * [Fix] Department can not deleted.

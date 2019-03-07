@@ -1,7 +1,7 @@
 <template>
 	<div class="hrm-attendance">
 		<hrm-attendance-header></hrm-attendance-header>
-		<hrm-attendace-punch-in-out-btn></hrm-attendace-punch-in-out-btn>
+		<hrm-attendace-punch-in-out-btn v-if="isFetchRecord"></hrm-attendace-punch-in-out-btn>
 
 		<div class="metabox-holder hrm-attendance-records-wrap">
 			<div class="hrm-records-text">
@@ -91,7 +91,7 @@
 			punchOutFormatedDate: function() {
 				let date = this.$store.state.attendance.punch_out_formated_date;
 				return date ? date : this.lastDay();
-			}
+			},
 		},
 		methods: {
 			punchFormat (dateTime) {

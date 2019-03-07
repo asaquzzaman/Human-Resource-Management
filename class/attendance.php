@@ -34,7 +34,14 @@ class Hrm_Attendance {
         add_action( 'wp_ajax_hrm_get_attendance', array( $this, 'ajax_filter_attendance' ) );
     }
 
+    function has_time_shift() {
+        global $wpdb;
 
+        $tb_time_shift = $wpdb->prefix . 'hrm_time_shift';
+        $shift = $wpdb->get_var( "SELECT count(*) as count FROM $tb_time_shift" );
+
+        return empty( $shift ) ? false : true;
+    }
 
     function ajax_filter_attendance() {
         check_ajax_referer('hrm_nonce');
@@ -375,6 +382,7 @@ class Hrm_Attendance {
             return $common;
         }
 
+        return $this->can_punch_in( $user_id );
         if ( ! $this->can_punch_in( $user_id ) ) {
             return new WP_Error('hrm_punch_in_disabled', __( 'hrm_punch_in_disabled', 'hrm' ) );
         }
@@ -411,7 +419,7 @@ class Hrm_Attendance {
         $schedule = $this->has_policy( $dpartment->id );
 
         if ( ! $schedule ) {
-            return new WP_Error('hrm_user_role', __( 'You have no attendance shift policy', 'hrm' ) );
+            return new WP_Error('hrm_user_role', __( 'You have not assigned any attendance time shift policy', 'hrm' ) );
         }
     }
 
@@ -436,18 +444,22 @@ class Hrm_Attendance {
         if ( strtotime( $lst_atd->punch_out ) > 0 ) {
             return true;
         }
+
         
-        $schedule_start = date( $current_date . ' H:i:s', strtotime( $schedule->punch_start ) );
-        $schedule_end   = date( 'Y-m-d H:i:s', strtotime( $schedule_start . ' + 24 hours' ) );
         $punch_in       = date( 'Y-m-d H:i:s', strtotime( $lst_atd->punch_in ) );
+        $punch_in_date = date( 'Y-m-d', strtotime( $punch_in ) );
+        $punch_in_date_schedule_start = date( $punch_in_date . ' H:i:s', strtotime( $schedule->punch_start ) );
+        $punch_in_date_schedule_end   = date( 'Y-m-d H:i:s', strtotime( $punch_in_date_schedule_start . ' + 24 hours' ) );
 
-        //var_dump( $schedule_start, $punch_in, $schedule_end ); die();
-
-        if ( $punch_in < $schedule_end ) {
-            return false;
+        $current_time = date( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) ) );
+        
+        //var_dump( $punch_in, $punch_in_date_schedule_start, $punch_in_date_schedule_end, $current_time); die();
+        
+        if ( $current_time > $punch_in_date_schedule_end ) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     // $begin is the shift first time. 
@@ -915,17 +927,21 @@ class Hrm_Attendance {
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
+
+        $self  = self::getInstance();
         
-        $punch_in    = self::getInstance()->punch_in_validation( $POST );
-        $office_time = self::getInstance()->get_office_time();
+        $has_time_shift = $self->has_time_shift(); 
+        $punch_in    = $self->punch_in_validation( $POST );
+        $office_time = $self->get_office_time();
         $allow_id = empty( $office_time->ip ) ? [] : $office_time->ip;
 
         $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
 
         wp_send_json_success(array(
-            'punch_in'                     => is_wp_error( $punch_in ) ? $punch_in->get_error_message() : true,
-            'allow_ip'                     => self::getInstance()->process_ip( $allow_id ),
-            'employees_dropdown'           => Hrm_Employeelist::getInstance()->get_employee_drop_down()
+            'has_time_shift'     => $self->has_time_shift(),
+            'punch_in'           => $punch_in,
+            'allow_ip'           => $self->process_ip( $allow_id ),
+            'employees_dropdown' => Hrm_Employeelist::getInstance()->get_employee_drop_down()
         ));
     }
 

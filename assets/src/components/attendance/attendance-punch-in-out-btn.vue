@@ -87,7 +87,16 @@
 						&&
 					this.$store.state.attendance.punch_in_status != 'hrm_punch_in_disabled'
 				) {
-					return this.$store.state.attendance.punch_in_status;
+					if(
+						typeof this.$store.state.attendance.punch_in_status.errors !== 'undefined'
+							&&
+
+						typeof this.$store.state.attendance.punch_in_status.errors.hrm_user_role !== 'undefined'
+					) {
+						return this.$store.state.attendance.punch_in_status.errors.hrm_user_role[0];
+					}
+					
+					return '';
 				}
 			},
 			hasTimeShift () {

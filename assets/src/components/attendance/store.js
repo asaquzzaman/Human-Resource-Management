@@ -20,7 +20,7 @@ export default {
 	},
 
 	mutations: {
-		setInitVal: function(state, res) { console.log(res.punch_in);
+		setInitVal: function(state, res) { 
 			state.punch_out_date               = res.punch_out_date;
 			state.punch_in_date                = res.punch_in_date;
 			//state.search_user_id               = res.search_user_id;

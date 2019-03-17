@@ -9,7 +9,7 @@
 				<div class="hrm-block-description">
 					<span class="text">Recruitment (hiring) refers to the overall process of attracting, shortlisting, selecting and appointing suitable candidates for jobs.</span>
 					<a href="http://wpspear.com/hrm/recruitment/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
+						Get it now free!
 					</a>
 				</div>
 			</div>

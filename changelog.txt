@@ -1,3 +1,9 @@
+= 2.2.9 - March 17, 2019 =
+
+ * [New] Providing loan moude as free.
+ * [New] Attendance report & customize module is now free.
+ * [New] Recruitment module is now free.
+ 
 = 2.2.8 - March 09, 2019 =
 
  * [Fix] Missing function role_display.

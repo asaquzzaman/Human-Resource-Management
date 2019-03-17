@@ -21,7 +21,7 @@
 				<div class="hrm-block-description">
 					<span class="text">Generate attendance reports for all employee or individual employee. You can also customize punch-in and punch-out.</span>
 					<a href="http://wpspear.com/hrm/attendance-report/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
+						Get it now free!
 					</a>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 				<div class="hrm-block-description">
 					<span class="text">Recruitment (hiring) refers to the overall process of attracting, shortlisting, selecting and appointing suitable candidates for jobs.</span>
 					<a href="http://wpspear.com/hrm/recruitment/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
+						Get it now free!
 					</a>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 				<div class="hrm-block-description">
 					<span class="text">HRM loan extension lets you manage the loan that your employees request for.</span>
 					<a href="http://wpspear.com/hrm/payroll-loan/" target="_blank" class="button button-primary hrm-link">
-						Get it now!
+						Get it now free!
 					</a>
 				</div>
 			</div>

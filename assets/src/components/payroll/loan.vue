@@ -10,7 +10,7 @@
 					<div class="hrm-block-description">
 						<span class="text">HRM loan extension lets you manage the loan that your employees request for.</span>
 						<a href="http://wpspear.com/hrm/payroll-loan/" target="_blank" class="button button-primary hrm-link">
-							Get it now!
+							Get it now free!
 						</a>
 					</div>
 				</div>

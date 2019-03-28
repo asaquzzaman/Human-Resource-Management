@@ -82,6 +82,10 @@ If you want to turn your WordPress site into a full-fledged employee management 
 
 == Changelog ==
 
+= 2.2.10 - March 17, 2019 =
+
+ * [Fix] config.js change to handler.js.
+
 = 2.2.9 - March 17, 2019 =
 
  * [New] Providing loan moude as free.

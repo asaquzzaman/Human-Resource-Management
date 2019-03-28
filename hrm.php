@@ -4,7 +4,7 @@
  * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.9
+ * Version: 2.2.10
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -105,7 +105,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.9' );
+        $this->define( 'HRM_VERSION', '2.2.10' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -130,7 +130,7 @@ class WP_Hrm {
     }
 
     function fornt_end() {
-         $license_status = get_option( 'hrm_front_end_license' );
+        $license_status = get_option( 'hrm_front_end_license' );
         if ( isset( $license_status->request_status ) ) {
             return;
         }
@@ -185,6 +185,9 @@ class WP_Hrm {
             return;
         }
         if( $_GET['page'] != 'hr_management' ) {
+            return;
+        }
+        if ( class_exists('hrm_front') ) {
             return;
         }
         ?>

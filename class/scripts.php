@@ -93,7 +93,7 @@ class Hrm_Scripts {
 
             'hrm-config' => [
                 'id'         => 'hrm-config',
-                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/config.js',
+                'url'        => plugin_dir_url( dirname( __FILE__ ) ) . 'assets/vendor/handler.js',
                 'dependency' => ['jquery'],
                 'in_footer'  => true
             ],

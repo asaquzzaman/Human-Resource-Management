@@ -3,9 +3,9 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
-Tested up to: 5.1.1
+Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: trunk
+Stable tag: 2.2.12
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -81,6 +81,21 @@ Here are some notable features that you may consider before diving in.
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
 == Changelog ==
+
+= 2.2.12 - Jul 09, 2019 =
+
+ * **New** Shift details for individual user.
+ * **Update** Disabled punch out button if there is not shift policy.
+ * **Update** Update warning message for punch in/out.
+ * **Fix** Multiple department assinged in multiple attendense time shift.
+ * **Fix** General information update problem.
+
+= 2.2.11 - April 09, 2019 =
+
+ * [Fix] Some spelling mistake
+ * [Update] Notice query
+ * [Update] Designation loading effect
+ * [Update] Attendance records user dropdown change multiselect to normar dropdown
 
 = 2.2.10 - March 17, 2019 =
 

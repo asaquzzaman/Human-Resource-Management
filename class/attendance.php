@@ -935,14 +935,26 @@ class Hrm_Attendance {
         $office_time = $self->get_office_time();
         $allow_id = empty( $office_time->ip ) ? [] : $office_time->ip;
 
-        $multi_attend            = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
+        $multi_attend = empty( $office_time->is_multi ) ? 0 : $office_time->is_multi;
 
-        wp_send_json_success(array(
-            'has_time_shift'     => $self->has_time_shift(),
-            'punch_in'           => $punch_in,
-            'allow_ip'           => $self->process_ip( $allow_id ),
-            'employees_dropdown' => Hrm_Employeelist::getInstance()->get_employee_drop_down()
-        ));
+        wp_send_json_success(
+            array(
+                'has_time_shift'     => $self->has_time_shift(),
+                'punch_in'           => $punch_in,
+                'allow_ip'           => $self->process_ip( $allow_id ),
+                'employees_dropdown' => Hrm_Employeelist::getInstance()->get_employee_drop_down(),
+                'shift_details'      => $self->get_shift_details()
+            )
+        );
+    }
+
+    function get_shift_details( $user_id = false ) {
+        $user_id = $user_id ? $user_id : get_current_user_id();
+        $department = (new Hrm_Admin)->get_employee_department( $user_id );
+
+        $shift = ( new HRM_Shift )->get_shift_by_department( $department->id );
+        
+        return $shift;
     }
 
     function process_ip( $ip ) {

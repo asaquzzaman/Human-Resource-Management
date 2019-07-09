@@ -40,7 +40,7 @@
                             <label for="status">Status<em>   </em></label>
                             <select v-model="status" class="status" name="status" id="status" data-placeholder="-- Chose --">
                                 <option value="1">Enable</option>
-                                <option value="0">Desable</option>
+                                <option value="0">Disable</option>
                             </select>
                             <span class="hrm-clear"></span>
                             <span class="description">Choose department status</span>

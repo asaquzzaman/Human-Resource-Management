@@ -336,11 +336,15 @@
 				self.canSubmit = true;
 
 				var postData = this.generateFieldData(this.fields);
-
 				postData.push({
 					name: 'user_id',
-					value: self.$route.params.employeeId
+					value: self.$route.params.employeeId,
 				})
+
+				// postData.push({
+				// 	name: '_wpnonce',
+				// 	value: HRM_Vars.nonce
+				// })
 
 				var args = {
 					data: postData,
@@ -449,6 +453,7 @@
 	            	});
 	                
 	            });
+	            data.append( '_wpnonce', HRM_Vars.nonce );
 				
 	            var request_data = {
 	                data: data,

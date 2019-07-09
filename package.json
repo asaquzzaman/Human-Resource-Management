@@ -1,6 +1,6 @@
 {
   "name": "HRM",
-  "version": "2.2.10",
+  "version": "2.2.12",
   "description": "Human resourcee management",
   "main": "index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "hrm": "webpack",
     "build": "webpack-dev-server",
-    "watch": "webpack --progress --colors --watch",
+    "dev": "webpack --progress --colors --watch",
     "reset": "NODE_ENV=production webpack --progress --colors"
   },
   "repository": {

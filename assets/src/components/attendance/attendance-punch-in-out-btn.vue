@@ -18,24 +18,24 @@
 					</div>
 					<!-- :disabled="isDisabled()" -->
 					<button :disabled="punchInIsDisabled" class="button hrm-button-primary button-primary" @click.prevent="punchIn()">Punch In</button>
-					<button :disabled="!punchInIsDisabled" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
+					<button :disabled="isActivePunchOutBtn()" class="button hrm-button-secondary button-secondary" @click.prevent="punchOut()">Punch Out</button>
 					<div class="message-punch-in-out">
 						<div class="error-punch-in-out" v-if="!is_employee() && !hasTimeShift">
-							<span>You do not create any time shift policy. Please create</span> 
+							<span>You do not create any working shift. Please</span> 
 							<router-link 
 								:to="{
 									name: 'shift'
 								}">
-								<strong>shift</strong>
+								<strong>create</strong>
 							</router-link>
 							<span>at first</span> 
 						</div>
 						<div class="error-punch-in-out" v-if="is_employee() && !hasTimeShift">
-							Please contact your HR maanger to create attendance time shift policy.
+							You do not have assigned any work shift policy. Please contact your HR manager.
 						</div>
 						<div class="error-punch-in-out" v-if="hasTimeShift && punchInIsDisabled">{{ hasPunchInError }}</div>
 						<div class="error-punch-in-out" v-if="hasTimeShift && !is_employee()">
-							(Only HRM emaployee and manager can punch in/out)
+							(Only HR emaployee and manager can punch in/out)
 						</div>
 					</div>
 				</div>
@@ -107,6 +107,16 @@
 			'clock': Clock
 		},
 		methods: {
+			isActivePunchOutBtn () {
+				if(!this.hasTimeShift) {
+					return true;
+				}
+				if( !this.punchInIsDisabled ) {
+					return true;
+				}
+
+				return false;
+			},
 			is_employee () {
 				var roles = HRM_Vars.current_user.roles;
 				var status = false;

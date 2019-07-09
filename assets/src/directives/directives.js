@@ -58,7 +58,7 @@ var HRM_Admin = {
                 vnodeContext.$emit( 'hrm_date_picker', { field: 'datetimepicker_from', date_time: dateText } );
             }
         });
-
+        
         jQuery( ".hrm-date-time-picker-to" ).datetimepicker({
             dateFormat: 'yy-mm-dd',
             changeMonth: true,

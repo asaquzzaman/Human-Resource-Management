@@ -270,7 +270,7 @@ class HRM_Shift {
 
     function validation( $postData ) {
         global $wpdb;
-        $departments = $postData['departments'];
+        $departments = $this->filter_departments( $postData['times'] );
         $shift_id = isset( $postData['id'] ) ? $postData['id'] : false;
 
         $time_shift = hrm_tb_prefix() . 'hrm_time_shift';
@@ -292,12 +292,43 @@ class HRM_Shift {
             }
 
             if ( count( $hasDept['departments'] ) ) {
-                $message = $hasDept['departments'][0]['name'] . ' department already exist in ' . $hasDept['name'];
+                $message = $hasDept['departments'][0]['name'] . ' department already exist in ' . $hasDept['name'] . ' time shift.';
                 return new WP_Error('time', $message );
             }
         }
         
         return true;
+    }
+
+    function get_shift_by_department( $departments ) {
+        global $wpdb;
+        
+        $time_shift = hrm_tb_prefix() . 'hrm_time_shift';
+        $relation_tb = hrm_tb_prefix() . 'hrm_relation';
+
+        $department_ids = is_array( $departments ) ? $departments : [$departments];
+        
+        $collection = Shift::with([
+                'departments'=> function($q) use( $relation_tb, $department_ids )  {
+                        $q->whereIn( $relation_tb.'.to', $department_ids )
+                          ->where( $relation_tb.'.type', 'time_shift_department' );
+                    }
+            ])
+            ->where('status', '1');
+
+        $resource = new Collection( $collection->get(), new Shift_Transformer );
+
+        $shift = $this->get_response( $resource );
+
+        if ( is_array( $departments ) ) {
+            return $shift;
+        }
+
+        if ( ! empty( $shift ) ) {
+            return $shift['data'][0];
+        }
+
+        return [];
     }
 
 	function ajax_get_shift() {

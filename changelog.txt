@@ -1,3 +1,18 @@
+= 2.2.12 - Jul 09, 2019 =
+
+ * **New** Shift details for individual user.
+ * **Update** Disabled punch out button if there is not shift policy.
+ * **Update** Update warning message for punch in/out.
+ * **Fix** Multiple department assinged in multiple attendense time shift.
+ * **Fix** General information update problem.
+
+= 2.2.11 - April 09, 2019 =
+
+ * [Fix] Some spelling mistake
+ * [Update] Notice query
+ * [Update] Designation loading effect
+ * [Update] Attendance records user dropdown change multiselect to normar dropdown
+ 
 = 2.2.10 - March 17, 2019 =
 
  * [Fix] config.js change to handler.js.

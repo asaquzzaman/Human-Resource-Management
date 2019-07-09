@@ -16,7 +16,8 @@ export default {
 		allow_ip: '',
 		employessDropDown: [],
 		totalOfficeTime: 0,
-		hasTimeShift: false
+		hasTimeShift: false,
+		shiftDetails: {}
 	},
 
 	mutations: {
@@ -35,6 +36,7 @@ export default {
 			state.employessDropDown            = res.employees_dropdown;
 			state.allow_ip                     = res.allow_ip;
 			state.hasTimeShift                 = res.has_time_shift;
+			state.shiftDetails                 = res.shift_details;
 		},
 		setAttendance: function(state, records) {
 

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="wp-heading-inline">Work Experiance</h1>
+		<h1 class="wp-heading-inline">Work Experience</h1>
 		<a v-if="hasProfileEditPermission()" @click.prevent="showHideNewRecordForm('toggle')" class="page-title-action">Add New</a>
 
 		<profile-menu></profile-menu>

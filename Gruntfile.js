@@ -95,11 +95,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-run' );
 
 
-    grunt.registerTask( 'release', [
+    grunt.registerTask( 'concat', [
         'concat'
     ]);
 
-    grunt.registerTask( 'zip', [
+    grunt.registerTask( 'release', [
         'clean',
         'run',
         'copy',

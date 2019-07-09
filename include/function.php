@@ -370,7 +370,7 @@ function hrm_get_js_template( $file_path, $id ) {
 }
 
 
-function pr() {
+function hr_pr() {
     $args = func_get_args();
 
     foreach ( $args as $arg ) {

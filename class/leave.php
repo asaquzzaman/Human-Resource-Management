@@ -34,6 +34,16 @@ class Hrm_Leave {
     function __construct() {
         add_filter( 'hrm_change_data', array( $this, 'update_holiday_data' ), 10, 5 );
         add_action( 'wp_ajax_hrm_get_dashboard_leaves', array( $this, 'get_dasboard_leaves' ) );
+        add_action( 'wp_ajax_leave_init', array( $this, 'ajax_leave_init' ) );
+        add_action( 'wp_ajax_get_leaves', array( $this, 'ajax_get_leaves' ) );
+    }
+
+
+    function ajax_leave_init() {
+        check_ajax_referer('hrm_nonce');
+        wp_send_json_success([
+            'employee_role' => Hrm_Employee::getInstance()->get_current_user_hr_role()
+        ]);
     }
 
     function get_dasboard_leaves() {
@@ -104,7 +114,7 @@ class Hrm_Leave {
         $POST = wp_unslash( $_POST );
 
         $POST['query'] = empty( $POST['query'] ) ? [] : $POST['query'];
-        $POST['emp_id'] = empty( $POST['emp_id'] ) ? get_current_user_id() : $POST['emp_id'];
+        $POST['emp_id'] = empty( $POST['emp_id'] ) ? '' : $POST['emp_id'];
         
         $args = array (
             'start_time' => empty( $POST['query']['start_time'] ) ? false : $POST['query']['start_time'],
@@ -112,7 +122,7 @@ class Hrm_Leave {
             'end_time' =>  empty( $POST['query']['end_time'] ) ? false : $POST['query']['end_time'],
 
             'emp_id' => empty( $POST['query']['emp_id'] ) 
-                ? $POST['emp_id'] 
+                ? $POST['emp_id']
                 : $POST['query']['emp_id'],
 
         );
@@ -167,18 +177,22 @@ class Hrm_Leave {
             return $page;
         });
         
-        if ( false === $items ) { 
+         if ( false === $items ) { 
 
             $leaves = Leave::with('leaveType');
 
-            if ( hrm_user_can( 'manage_leave' ) ) {
-                if ( !empty( $args['emp_id'] ) ) {
-                    $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
-                }
-            } else {
-                $emp_id = empty( $args['emp_id'] ) ? get_current_user_id() : absint( $args['emp_id'] );
-                $leaves = $leaves->where( 'emp_id', $emp_id );
+            if ( !empty( $args['emp_id'] ) ) {
+                $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
             }
+
+            // if ( hrm_user_can( 'manage_leave' ) ) {
+            //     if ( !empty( $args['emp_id'] ) ) {
+            //         $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
+            //     }
+            // } else {
+            //     $emp_id = empty( $args['emp_id'] ) ? get_current_user_id() : absint( $args['emp_id'] );
+            //     $leaves = $leaves->where( 'emp_id', $emp_id );
+            // }
             
 
             if ( !empty( $args['start_time'] ) ) {
@@ -192,7 +206,7 @@ class Hrm_Leave {
             if ( !empty( $args['status'] ) ) {
                 $leaves = $leaves->where( 'status', $args['status'] );
             }
-  
+            
             if ( empty( $args['id'] ) ) {
                 $leaves           = $leaves->paginate( $args['per_page'] );
                 $leave_collection = $leaves->getCollection();

@@ -55,7 +55,7 @@
 					</tr>
 					<tr v-if="!records.length">
 						
-						<td colspan="4">No record found!</td>
+						<td colspan="5">No record found!</td>
 					</tr>
 				</tbody>
 			</table>

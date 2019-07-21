@@ -273,8 +273,8 @@ class Hrm_Admin {
         if ( $new_role ) {
             $user->add_role( $new_role );
         } else if ( count( $user->roles ) >= 1 ) {
+
             $user->remove_role( hrm_manager_role_key() );
-            $user->add_role( hrm_employee_role_key() );
         }
     }
 

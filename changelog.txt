@@ -1,3 +1,9 @@
+= 2.2.13 - Jul 21, 2019 =
+
+ * **Fix** Only HR manager and employee can leave apply.
+ * **Fix** Manager can not apply other employee leave.
+ * **Fix** Update user role from WP user profile.
+ 
 = 2.2.12 - Jul 09, 2019 =
 
  * **New** Shift details for individual user.

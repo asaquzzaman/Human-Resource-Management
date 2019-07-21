@@ -31,8 +31,12 @@
 						</router-link>
 						<div class="hrm-clear"></div>
 						<div class="row-actions">
-                    		<span v-if="manageEmployee() || record.can_update" class="edit"><a @click.prevent="recordEditForm(record)" href="#">Edit</a></span>
-	                    	<span v-if="manageEmployee()" class="trash"> | <a @click.prevent="selfDelete(record)" href="#">Delete</a> </span>
+                    		<span v-if="manageEmployee() || record.can_update" class="edit">
+                    			<a @click.prevent="recordEditForm(record)" href="#">Edit</a>
+                    		</span>
+	                    	<span v-if="manageEmployee()" class="trash"> | 
+	                    		<a @click.prevent="selfDelete(record)" href="#">Delete</a> 
+	                    	</span>
 	                    </div>
 
 					</td>

@@ -708,6 +708,17 @@ class Hrm_Employee {
 
         return $this->get_response( $resource );
     }
+
+    function get_current_user_hr_role() {
+        global $current_user;
+        $roles = hrm_get_roles();
+
+        foreach ( $current_user->roles as $key => $role ) {
+            if ( array_key_exists( $role, $roles ) ) {
+                return $role;
+            }
+        }
+    }
 }
 
 

@@ -96,7 +96,6 @@ var HRM_Leave_Apply_Calendar = {
 						var holidays = HRM_Leave_Apply_Calendar.render_holidays(start._d, end._d, res.holidays);
 						events      = events.concat( weekend, holidays );
 						context.apply_emp_lev_records = res.records;
-						
 						context.loadingStop('hrm-leave-records-form');
 
 				    	callback(events);
@@ -208,7 +207,11 @@ var HRM_Leave_Apply_Calendar = {
 			index = context.getIndex(lv_records.meta.types, selected_leave_type.id, 'id'),
 			lv_type = lv_records.meta.types[index],
 			count = context.apply_leave_date.length + lv_type.count;
-
+		
+		if(typeof lv_type.leave_type_name != 'undefined' && lv_type.leave_type_name == 'Extra') {
+			return true;
+		}
+		
 		if (lv_type.entitlement > count) {
 			return true;
 		}

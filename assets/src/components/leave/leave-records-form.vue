@@ -234,6 +234,16 @@
 						self.leave_types    = res.leave_types.data;
 						self.administrators = res.apply_to;
 						self.holidays = res.holidays;
+
+						self.leave_types.unshift({
+							count: 0,
+							entitle_from: "",
+							entitle_to: "",
+							entitlement: 365,
+							id: 0,
+							leave_type_name: "Extra",
+							name: 'Extra'
+						});
 	                },
 
 	                error: function(res) {

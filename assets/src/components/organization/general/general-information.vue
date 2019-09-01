@@ -305,8 +305,14 @@
 				});
 				args.data.push({
 					name: 'table_option',
-					value: 'hrm_general_info'
+					value: 'hrm_general_info',
 				});
+
+				args.data.push({
+					name: '_wpnonce',
+					value: HRM_Vars.nonce,
+				});
+				
 	            var request_data = {
 	                data: args.data,
 	                type: 'POST',

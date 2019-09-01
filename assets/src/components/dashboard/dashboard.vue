@@ -76,7 +76,30 @@
 
 						<div id="postbox-container-1" class="postbox-container">
 							<div class="meta-box-sortables ui-sortable">
-								
+								<div class="postbox ">
+									<h2 class="hndle ui-sortable-handle">
+										<span class="">Notice Board</span> 
+									</h2>
+									<div class="inside">
+										<div class="pm-notice-body">
+											
+											<ul v-if="notices.length" class="hrm-notice-ul">
+												<li v-for="notice in notices">
+													<a @click.prevent="popUpNotice(notice)" href="#">{{ notice.title }}</a>
+													<span><i class="far fa-calendar-alt"></i>{{ notice.date }}</span>
+													<div v-if="notice.popup">
+														<div v-hrm-dialog :title="notice.title">
+															<p class="hrm-popup-date"><i class="far fa-calendar-alt"></i>{{ notice.date }}</p>
+															<p v-html="notice.description"></p> 
+														</div>
+													</div>
+												</li>
+												
+											</ul>
+											<div class="pm-notice-nothing-found" v-if="!notices.length">Nothing found</div>
+										</div>
+									</div>
+								</div>
 
 								<div id="dashboard_activity" class="postbox ">
 									<h2 class="hndle ui-sortable-handle">
@@ -105,91 +128,7 @@
 												<!-- <div class="pm-attendance-nothing-found" v-if="!present.length">Nothing found</div> -->
 											</div>
 											
-											<!-- <div v-if="attendance.absent">
-												<ul v-for="punchOut in absent" class="hrm-attendance-ul">
-													<li>
-														<img class="hrm-dashboard-avatar" :src="punchOut.avatar_url">
-														{{ punchOut.display_name }}
-													</li>
-													<li>No Time Available</li>
-												</ul>
-												<div class="pm-attendance-nothing-found" v-if="!absent.length">Nothing found</div>
-											</div>
-											
-											<div v-if="attendance.earlyEnter">
-												<ul v-for="firstEntry in earlyEnter" class="hrm-attendance-ul">
-													<li>
-														<img class="hrm-dashboard-avatar" :src="firstEntry.avatar_url">
-														{{ firstEntry.display_name }}
-													</li>
-													<li>{{ firstEntry.punch_in_time }}</li>
-												</ul>
-												<div class="pm-attendance-nothing-found" v-if="!earlyEnter.length">Nothing found</div>
-											</div>
-											
-											<div v-if="attendance.earlyLeave">
-												<ul v-for="firstLeave in earlyLeave" class="hrm-attendance-ul">
-													<li>
-														<img class="hrm-dashboard-avatar" :src="firstLeave.avatar_url">
-														{{ firstLeave.display_name }}
-													</li>
-													<li>{{ firstLeave.punch_out_time }}</li>
-												</ul>
-												<div class="pm-attendance-nothing-found" v-if="!earlyLeave.length">Nothing found</div>
-											</div>
-											
-											<div v-if="attendance.lateLeave">
-												<ul v-for="firstOut in lateLeave" class="hrm-attendance-ul">
-													<li>
-														<img class="hrm-dashboard-avatar" :src="firstOut.avatar_url">
-														{{ firstOut.display_name }}
-													</li>
-													<li>{{ firstOut.punch_out_time }}</li>
-												</ul>
-												<div class="pm-attendance-nothing-found" v-if="!lateLeave.length">Nothing found</div>
-											</div> -->
-										</div>
-
-										<!-- <div id="">
-											<div id="" class="activity-block">
-												<ul class="subsubsub">
-													<li class="all">
-														<a @click.prevent="attendanceTab('present')" href="#l">Present<span class="count">(<span class="all-count">{{ present.length }}</span>)</span></a> |
-													</li>
-													<li class="moderated">
-														<a @click.prevent="attendanceTab('absent')" href="#">Absent<span class="count">(<span class="pending-count">{{ absent.length }}</span>)</span></a> |
-													</li>
-													<li class="approved">
-														<a @click.prevent="attendanceTab('earlyEnter')" href="#">Early Enter<span class="count">(<span class="approved-count">{{ earlyEnter.length }}</span>)</span></a> |
-													</li>
-													<li class="spam">
-														<a @click.prevent="attendanceTab('earlyLeave')" href="#">Early Leave<span class="count">(<span class="spam-count">{{ earlyLeave.length }}</span>)</span></a> |
-													</li>
-													<li class="spam">
-														<a @click.prevent="attendanceTab('lateLeave')" href="#">Late Leave<span class="count">(<span class="spam-count">{{ lateLeave.length }}</span>)</span></a> 
-													</li>
-												</ul>
-											</div>
-										</div>
- -->									</div>
-								</div>
-
-
-
-								<div class="postbox ">
-									<h2 class="hndle ui-sortable-handle">
-										<span class="">Birthday</span> 
-									</h2>
-									<div class="inside">
-										<div class="pm-birthday-body">
-											<ul v-for="birth in birthday" class="hrm-attendance-ul">
-												<li>
-													<img class="hrm-dashboard-avatar" :src="birth.data.avatar_url">
-													{{ birth.data.display_name }}
-												</li>
-												<li>{{ birth.data.birthday }}</li>
-											</ul>
-											<div class="pm-birthday-nothing-found" v-if="!birthday.length">Nothing found</div>
+						
 										</div>
 									</div>
 								</div>
@@ -202,9 +141,8 @@
 						
 						<div id="postbox-container-2" class="postbox-container">
 							<div  class="meta-box-sortables ui-sortable">
-								
 
-								<div class="postbox ">
+								<div class="postbox">
 									<h2 class="hndle ui-sortable-handle hrm-leave-h2">
 										<span class="">Pending Leave</span> 
 										<span class="">Type</span> 
@@ -215,8 +153,16 @@
 											<ul v-for="leave in leaves" class="hrm-attendance-ul">
 												
 												<li>
-													<img class="hrm-dashboard-avatar" :src="leave.employee.data.avatar_url">
-													{{ leave.employee.data.display_name }}
+													<img class="hrm-dashboard-avatar" :src="leave.avatar">
+													<router-link class="hrm-profile-link" :to="{
+																name: 'employee_general_information',
+																params: {
+																	employeeId: leave.employee.data.ID
+																}
+															}">
+																{{ leave.employee.data.display_name }}
+														</router-link>
+													
 												</li>
 												<li>{{ leave.leave_type.data.name }}</li>
 											</ul>
@@ -225,31 +171,69 @@
 									</div>
 								</div>
 
-								<div class="postbox ">
+								<div id="dashboard_activity" class="postbox ">
 									<h2 class="hndle ui-sortable-handle">
-										<span class="">Notice Board</span> 
+										<span>Absent ({{ absent.length }})</span>
 									</h2>
 									<div class="inside">
-										<div class="pm-notice-body">
+										<div class="pm-present-body">
 											
-											<ul v-if="notices.length" class="hrm-notice-ul">
-												<li v-for="notice in notices">
-													<a @click.prevent="popUpNotice(notice)" href="#">{{ notice.title }}</a>
-													<span><i class="far fa-calendar-alt"></i>{{ notice.date }}</span>
-													<div v-if="notice.popup">
-														<div v-hrm-dialog :title="notice.title">
-															<p class="hrm-popup-date"><i class="far fa-calendar-alt"></i>{{ notice.date }}</p>
-															<p v-html="notice.description"></p> 
-														</div>
-													</div>
-												</li>
-												
-											</ul>
-											<div class="pm-notice-nothing-found" v-if="!notices.length">Nothing found</div>
+											<div v-if="attendance.absent">
+												<ul v-for="out in absent" class="hrm-attendance-ul">
+													<li>
+														<img class="hrm-dashboard-avatar" :src="out.avatar">
+														<router-link class="hrm-profile-link" :to="{
+																name: 'employee_general_information',
+																params: {
+																	employeeId: out.ID
+																}
+															}">
+																{{ out.display_name }}
+														</router-link>
+														
+													</li>
+												</ul>
+
+												<!-- <div class="pm-attendance-nothing-found" v-if="!present.length">Nothing found</div> -->
+											</div>
+											
+						
 										</div>
 									</div>
 								</div>
+								
+							</div>	
+						</div>
 
+						<div id="postbox-container-1" class="postbox-container">
+							<div  class="meta-box-sortables ui-sortable">
+								
+
+								<div class="postbox ">
+									<h2 class="hndle ui-sortable-handle">
+										<span class="">Birthday</span> 
+									</h2>
+									<div class="inside">
+										<div class="pm-birthday-body">
+											<ul v-for="birth in birthday" class="hrm-attendance-ul">
+												<li>
+													<img class="hrm-dashboard-avatar" :src="birth.data.avatar_url">
+													<router-link class="hrm-profile-link" :to="{
+																name: 'employee_general_information',
+																params: {
+																	employeeId: birth.data.ID
+																}
+															}">
+																{{ birth.data.display_name }}
+														</router-link>
+													
+												</li>
+												<li>{{ birth.data.birthday }}</li>
+											</ul>
+											<div class="pm-birthday-nothing-found" v-if="!birthday.length">Nothing found</div>
+										</div>
+									</div>
+								</div>
 							</div>	
 						</div>
 					</div>
@@ -284,7 +268,7 @@
 				attendanceLabel: 'Present',
 				attendance: {
 					present: true,
-					absent: false,
+					absent: true,
 					earlyEnter: false,
 					earlyLeave: false,
 					lateLeave: false
@@ -529,6 +513,9 @@
 		content: " ";
 		clear: both;
 		height: 0;
+	}
+	.hrm-attendance-ul {
+		display: flex;
 	}
 	.hrm-attendance-ul li {
 		display: inline-block;

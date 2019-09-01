@@ -4,7 +4,7 @@
  * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.13
+ * Version: 2.2.14
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -37,6 +37,28 @@
  */
 
 require_once dirname (__FILE__) . '/vendor/autoload.php';
+
+if ( version_compare( phpversion(), '5.6.0', '<' ) ) {
+    add_action( 'admin_notices',  'hrm_php_version_notice'  );
+    return;
+}
+
+/**
+* php version notices
+*  @return void
+*/
+function hrm_php_version_notice() {
+    
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+    $php_version = phpversion();
+    ?>
+        <div class="error notice" id="pm-php-notice" style="padding: 1em; position: relative;">
+            <p><?php echo sprintf( esc_html__("Your current PHP version is <strong>{$php_version}</strong>. You need to upgrade your PHP version to <strong>5.6 or later</strong> to run Human Resource Management.", "wedevs-project-manager" ) ); ?></p>
+        </div>
+    <?php 
+}
 
 class WP_Hrm {
 
@@ -105,7 +127,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.13' );
+        $this->define( 'HRM_VERSION', '2.2.14' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );

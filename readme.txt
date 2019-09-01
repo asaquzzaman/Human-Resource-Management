@@ -5,7 +5,7 @@ Tags: hrm, human resource, human resource management, office management, industr
 Requires at least: 4.4
 Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 2.2.13
+Stable tag: 2.2.14
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -30,7 +30,7 @@ HR Management is all about people, not the paperwork. So, why waste your time on
 * **Individual Employee Profile**
 * **Payroll [how it works](https://youtu.be/wMyPhcZgPa4)**
 * **Attendance [how it works](https://youtu.be/oOAKppAN1o4)**
-* **Leave**
+* **Leave [how it works](https://youtu.be/quOCckX6-aI)**
 * **Recruitment [how it works](https://youtu.be/1KtoBKnbnbw)**
 
 == Multi-Site ==
@@ -80,7 +80,27 @@ Here are some notable features that you may consider before diving in.
 
 If you want to turn your WordPress site into a full-fledged employee management system, give WP HRM a try and see the magic!
 
+== Screenshots ==
+
+1. HRM Dashboard
+2. Set organization information
+3. Department lists
+4. Designation lists
+5. Employee lists
+5. Employee profile
+7. Payroll
+8. Attendance
+9. Leave management
+10. Recruitment
+
 == Changelog ==
+
+= 2.2.14 - Sep 01, 2019 =
+
+ * **New** Dashboard absent section.
+ * **New** Leave management video tutorial.
+ * **Fix** Organization general info is not updating.
+ * **Update** Plugin screenshot.
 
 = 2.2.13 - Jul 21, 2019 =
 

@@ -184,15 +184,6 @@ class Hrm_Leave {
             if ( !empty( $args['emp_id'] ) ) {
                 $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
             }
-
-            // if ( hrm_user_can( 'manage_leave' ) ) {
-            //     if ( !empty( $args['emp_id'] ) ) {
-            //         $leaves = $leaves->where( 'emp_id', $args['emp_id'] );
-            //     }
-            // } else {
-            //     $emp_id = empty( $args['emp_id'] ) ? get_current_user_id() : absint( $args['emp_id'] );
-            //     $leaves = $leaves->where( 'emp_id', $emp_id );
-            // }
             
 
             if ( !empty( $args['start_time'] ) ) {

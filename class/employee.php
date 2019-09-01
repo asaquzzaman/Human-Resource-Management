@@ -563,8 +563,10 @@ class Hrm_Employee {
         wp_update_user( array(
             'ID'           =>  $user_id,
             'display_name' => $display_name,
-            'role'         => $postdata['role']
         ) );
+
+        $user = new \WP_User( $user_id );
+        $user->set_role( $postdata['role'] );
 
         update_user_meta( $user_id, 'hrm_job_category', $postdata['department'] );
         update_user_meta( $user_id, 'hrm_location', $postdata['location'] );

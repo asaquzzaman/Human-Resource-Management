@@ -35,23 +35,27 @@ class Hrm_Dashboard {
 
     function get_administrators() {
         $admins = get_users([
-            'role' => 'administrator'
+            'role' => 'administrator',
         ]);
-
+        
         foreach ( $admins as $key => $value ) {
-            $value->avatar = get_avatar_url( $value->ID );
+            unset( $value->user_login );
+            unset( $value->user_pass );
+            $value->avatar = hrm_get_avater( $value->ID );
         }
-
+        
         return $admins;
     }
 
     function get_hrm_managers() {
         $managers = get_users([
-            'role' => hrm_manager_role_key()
+            'role' => hrm_manager_role_key(),
         ]);
-
+        
         foreach ( $managers as $key => $value ) {
-            $value->avatar = get_avatar_url( $value->ID );
+            unset( $value->user_login );
+            unset( $value->user_pass );
+            $value->avatar = hrm_get_avater( $value->ID );
         }
 
         return $managers;
@@ -59,7 +63,7 @@ class Hrm_Dashboard {
 
     function total_employees() {
         $employees = new WP_User_Query([
-            'role'   => hrm_employee_role_key(),
+            'role__in'   => [hrm_employee_role_key(),hrm_manager_role_key()],
             'number' => 1
         ]);
 

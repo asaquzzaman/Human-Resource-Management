@@ -11,6 +11,7 @@ import Hrm_Leave_Requests from './leave-requests.vue'
 import Hrm_Leave_Pending from './leave-pending.vue'
 import Hrm_Leave_Cancel from './leave-cancel.vue'
 import Hrm_Leave_Approve from './leave-approve.vue'
+import Tutorial from './tutorial.vue'
 
 
 
@@ -160,7 +161,7 @@ if (hrm_user_can('manage_leave')) {
             component: Hrm_Leave_Configuration, 
             name: 'leave_configuration',
             meta: {
-                label: 'Configuration'
+                label: 'Configuration',
             },
 
             children: [
@@ -203,6 +204,17 @@ if (hrm_user_can('manage_leave')) {
         }
     );
 }
+
+menu[0].children.push(         
+    {
+        path: 'tutorial', 
+        component: Tutorial, 
+        name: 'leave_tutorial',
+        meta: {
+            label: 'Tutorial',
+        }
+    }
+)
 
 HRMRegisterChildrenRoute ('hrm_root', menu);
 

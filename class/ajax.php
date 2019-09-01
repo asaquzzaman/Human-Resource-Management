@@ -128,6 +128,31 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_hrm_delete_record', 'hrm_ajax_delete_records' );
     }
 
+    
+    function singel_form_add() {
+        check_ajax_referer('hrm_nonce');
+        if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
+            wp_send_json_error( array( 'error_msg' => __('Update Failed', 'hrm') ) );
+        }
+        $data = array();
+        $field = get_option( $_POST['table_option'] );
+        if( count( $field['field_dif'] ) ) {
+            foreach( $field['field_dif'] as $key => $name ) {
+                $data[$name] = isset( $_POST[$name] ) ? esc_attr( $_POST[$name] ) : '';
+            }
+        }
+        $field['data'] = $data;
+        $update = false;
+        if( count( $field['field_dif'] ) ) {
+            $update = update_option( $_POST['table_option'], $field );
+        }
+        if( $update ) {
+            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
+        } else {
+            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
+        }
+    }
+
     function user_can() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );

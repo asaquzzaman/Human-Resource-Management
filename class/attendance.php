@@ -749,8 +749,40 @@ class Hrm_Attendance {
         
         wp_send_json_success(array(
             'present' => $send_data,
+            'absent' => $this->get_absents()
         ));
         
+    }
+
+    public function get_absents() {
+        global $wpdb;
+
+        $tb_att = $wpdb->prefix . 'hrm_attendance';
+
+        $args = array(
+            'role__in' => array_keys( hrm_get_roles() ),
+            'number'   => -1,  
+            'fields' => ['ID', 'user_email', 'display_name']
+        );
+
+        $query       = new WP_User_Query( $args );
+        $employees   = $query->get_results();
+        $today       = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ); 
+        $query       = "SELECT user_id FROM $tb_att WHERE DATE(punch_in)='%s'";
+        $results     = $wpdb->get_results( $wpdb->prepare( $query, $today, $today ) );
+        $presents_id = wp_list_pluck( $results, 'user_id' );
+        $response    = [];
+
+        foreach ( $employees as $key => $employee ) {
+            if ( in_array( $employee->ID, $presents_id ) ) {
+                continue;
+            }
+
+            $employee->avatar = hrm_get_avater( $employee->ID );
+            $response[] = $employee;
+        }
+        
+        return $response;
     }
 
     public function get_early_enter( $employees, $attendances, $leaves, $office_time ) {
@@ -894,35 +926,35 @@ class Hrm_Attendance {
         return $data;
     }
 
-    public function get_absents( $employees, $attendances, $leaves ) {
-        $filter_attendances = [];
-        $fileter_leaves = [];
-        $data = [];
+    // public function get_absents( $employees, $attendances, $leaves ) {
+    //     $filter_attendances = [];
+    //     $fileter_leaves = [];
+    //     $data = [];
         
-        foreach ( $leaves as $key => $leave ) {
-            $fileter_leaves[$leave['emp_id']] = $leave;
-        }
+    //     foreach ( $leaves as $key => $leave ) {
+    //         $fileter_leaves[$leave['emp_id']] = $leave;
+    //     }
 
-        foreach ( $attendances as $key => $attendance ) {
-            $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
-        }
+    //     foreach ( $attendances as $key => $attendance ) {
+    //         $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
+    //     }
 
-        foreach ( $filter_attendances as $user_id => $filter_attendance ) {
-            $filter_attendances[$user_id] = date( 'h:i:s a', min($filter_attendance) );
-        }
+    //     foreach ( $filter_attendances as $user_id => $filter_attendance ) {
+    //         $filter_attendances[$user_id] = date( 'h:i:s a', min($filter_attendance) );
+    //     }
 
-        foreach ( $employees as $key => $emp ) {
-            if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
-                $emp->data->leave = $fileter_leaves[$emp->ID];
-            }
+    //     foreach ( $employees as $key => $emp ) {
+    //         if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
+    //             $emp->data->leave = $fileter_leaves[$emp->ID];
+    //         }
 
-            if ( ! array_key_exists( $emp->ID, $filter_attendances ) ) {
-                $data[] = $emp->data;
-            }
-        }
+    //         if ( ! array_key_exists( $emp->ID, $filter_attendances ) ) {
+    //             $data[] = $emp->data;
+    //         }
+    //     }
         
-        return $data;
-    }
+    //     return $data;
+    // }
 
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');

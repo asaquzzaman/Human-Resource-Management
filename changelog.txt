@@ -1,3 +1,10 @@
+= 2.2.14 - Sep 01, 2019 =
+
+ * **New** Dashboard absent section.
+ * **New** Leave management video tutorial.
+ * **Fix** Organization general info is not updating.
+ * **Update** Plugin screenshot.
+ 
 = 2.2.13 - Jul 21, 2019 =
 
  * **Fix** Only HR manager and employee can leave apply.

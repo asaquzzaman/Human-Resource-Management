@@ -29,7 +29,8 @@ class Leave_Transformer extends TransformerAbstract
             'emp_id'     => $item->emp_id,
             'start_time' => $item->start_time,
             'end_time'   => $item->end_time,
-            'apply_at'   => $item->created_at
+            'apply_at'   => $item->created_at,
+            'avatar'     => hrm_get_avater( $item->emp_id )
         ];
 
     }

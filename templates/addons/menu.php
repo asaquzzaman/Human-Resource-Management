@@ -2,6 +2,7 @@
 
 	<h2 class="nav-tab-wrapper">
 		<?php
+			$GET = wp_unslash( $_GET );
 			foreach ( $addons as $key => $addon ) {
 				$url = add_query_arg(
 					array(
@@ -10,7 +11,7 @@
 					), 
 					admin_url('admin.php')
 				);
-				$active = !empty($_GET['tab']) && ($_GET['tab'] == $addon['key']) ? 'nav-tab-active' : '';
+				$active = !empty($GET['tab']) && ($GET['tab'] == $addon['key']) ? 'nav-tab-active' : '';
 				?>
 
 				<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $active ); ?>  nav-tab">

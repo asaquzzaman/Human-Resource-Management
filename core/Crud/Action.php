@@ -33,7 +33,7 @@ abstract class Action implements Pattern {
 		$page         = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 		$transformers = $postdata['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
-		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : $postdata['per_page'];
+		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : intval( $postdata['per_page'] );
 
 		Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -54,7 +54,7 @@ abstract class Action implements Pattern {
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();
 		$id           = (int) $postdata['id'];
-		$transformers = $postdata['transformers'];
+		$transformers = sanitize_text_field( $postdata['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 
 
@@ -69,7 +69,7 @@ abstract class Action implements Pattern {
 		$model        = $this->get_model();
 		$postdata     = $this->get_post_data();	
 		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
-		$transformers = $postdata['transformers'];
+		$transformers = sanitize_text_field( $postdata['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 		
 		$crated = $model::create( $postdata );
@@ -110,7 +110,7 @@ abstract class Action implements Pattern {
 		$postdata     = $this->get_post_data();
 		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
 		$fillable     = $model->getFillable();
-		$transformers = $postdata['transformers'];
+		$transformers = sanitize_text_field( $postdata['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 		$update_data  = [];
 		$record       = $model::where( 'id', $postdata['id'] )->first();

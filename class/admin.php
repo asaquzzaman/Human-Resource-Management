@@ -236,7 +236,7 @@ class Hrm_Admin {
                         <fieldset>
                             <legend class="screen-reader-text"><span>HRM Manager</span></legend>
                             <label for="hrm-manager">
-                                <input <?php echo $checked; ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
+                                <input <?php echo esc_html( $checked ); ?> name="hrm_manager" type="checkbox" id="hrm-manager" value="hrm_manager" >
                                 Confirm HRM manager
                             </label>
                             <br>
@@ -823,10 +823,10 @@ class Hrm_Admin {
      * @return void
      */
     public static function display_rows_hierarchical( $departments, $pagenum = 1, $per_page = 20 ) {
-        
+        $REQUEST = wp_unslash( $_REQUEST );
         $level = 0;
 
-        if ( empty( $_REQUEST['s'] ) ) {
+        if ( empty( $REQUEST['s'] ) ) {
 
             $top_level_departments = array();
             $children_departments = array();

@@ -37,9 +37,8 @@ class Hrm_Attendance {
     function has_time_shift() {
         global $wpdb;
 
-        $tb_time_shift = $wpdb->prefix . 'hrm_time_shift';
-        $shift = $wpdb->get_var( "SELECT count(*) as count FROM $tb_time_shift" );
-
+        $shift = $wpdb->get_var( "SELECT count(*) as count FROM {$wpdb->prefix}hrm_time_shift");
+        
         return empty( $shift ) ? false : true;
     }
 
@@ -57,21 +56,20 @@ class Hrm_Attendance {
             $employees = Hrm_Employeelist::getInstance()->get_employee();
 
             foreach ( $employees as $key => $employee ) {
-                $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out );
+                $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out, $POST );
             }
 
         } else {
             $user_id   = empty( $POST['user_id'] ) ? get_current_user_id() : intval( $POST['user_id'] );
-            $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out );
+            $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out, $POST );
         }
         
         wp_send_json_success( $results );
     }
 
-    function filter_attendance( $user_id, $punch_in, $punch_out ) {
-        $POST                    = wp_unslash( $_POST );
-        $postdata                = $POST;
-        $postdata['user_id']     = $user_id;
+    function filter_attendance( $user_id, $punch_in, $punch_out, $postdata ) {
+        
+        $postdata['user_id']     = (int) $user_id;
         $interval_array          = $this->date_to_array( $punch_in, $punch_out );
         $this->total_worked_time = 0;
 
@@ -756,9 +754,6 @@ class Hrm_Attendance {
 
     public function get_absents() {
         global $wpdb;
-
-        $tb_att = $wpdb->prefix . 'hrm_attendance';
-
         $args = array(
             'role__in' => array_keys( hrm_get_roles() ),
             'number'   => -1,  
@@ -768,8 +763,7 @@ class Hrm_Attendance {
         $query       = new WP_User_Query( $args );
         $employees   = $query->get_results();
         $today       = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ); 
-        $query       = "SELECT user_id FROM $tb_att WHERE DATE(punch_in)='%s'";
-        $results     = $wpdb->get_results( $wpdb->prepare( $query, $today, $today ) );
+        $results     = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM {$wpdb->prefix}hrm_attendance WHERE DATE(punch_in)=%s", $today ) );
         $presents_id = wp_list_pluck( $results, 'user_id' );
         $response    = [];
 
@@ -1219,16 +1213,16 @@ class Hrm_Attendance {
         if ( ! empty( $POST['search'] ) ) {
             $postdata = $POST['search'];
 
-            if ( ! empty( $postdata['punch_in'] ) && hrm_validateDate( $postdata['punch_in'], 'Y-m-d' ) ) {
-                $args['punch_in'] = $postdata['punch_in'] .' '. '00:00:00'; 
+            if ( ! empty( $postdata['punch_in'] ) && hrm_validateDate( sanitize_text_field( $postdata['punch_in'] ), 'Y-m-d' ) ) {
+                $args['punch_in'] = sanitize_text_field( $postdata['punch_in'] ) .' '. '00:00:00'; 
             }
 
-            if ( ! empty( $postdata['punch_out'] ) && hrm_validateDate( $postdata['punch_out'], 'Y-m-d' ) ) {
-                $args['punch_out'] = $postdata['punch_out'] .' '. '24:59:59'; 
+            if ( ! empty( $postdata['punch_out'] ) && hrm_validateDate( sanitize_text_field( $postdata['punch_out'] ), 'Y-m-d' ) ) {
+                $args['punch_out'] = sanitize_text_field( $postdata['punch_out'] ) .' '. '24:59:59'; 
             }
 
             if ( ! empty( $postdata['user_id'] ) && intval( $postdata['user_id'] ) > 0 ) {
-                $args['user_id'] = $postdata['user_id']; 
+                $args['user_id'] = intval( $postdata['user_id'] ); 
             }
         }
 
@@ -1238,9 +1232,9 @@ class Hrm_Attendance {
             wp_send_json_success( array(
                 'attendance'              => $attendance,
                 'punch_in_formated_date'  => hrm_get_date( $args['punch_in'] ),
-                'punch_out_formated_date' => hrm_get_date( $postdata['punch_out'] ),
-                'punch_in_date'           => $postdata['punch_in'],
-                'punch_out_date'          => $postdata['punch_out']
+                'punch_out_formated_date' => hrm_get_date( sanitize_text_field( $postdata['punch_out'] ) ),
+                'punch_in_date'           => sanitize_text_field( $postdata['punch_in'] ),
+                'punch_out_date'          => sanitize_text_field( $postdata['punch_out'] )
                 //'total_time'              => self::getInstance()->count_office_time( $attendance )
             ) );
         }
@@ -1301,7 +1295,7 @@ class Hrm_Attendance {
             $query = $this->generate_query( $query_args );
             $table = $wpdb->prefix . 'hrm_attendance';
 
-            $items = $wpdb->get_var( "SELECT SUM(total) FROM " . $wpdb->prefix . "hrm_attendance WHERE 1=1 AND $query" );
+            $items = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(total) FROM " . $wpdb->prefix . "hrm_attendance WHERE 1=1 AND %s", $query ) );
             
             if ( $items ) {
                 $items = $this->get_attendance_meta( $items );
@@ -1366,19 +1360,19 @@ class Hrm_Attendance {
 
     function get_attendance( $postdata = [] ) {
         global $wpdb;
-        $id        = empty( $postdata['id'] ) ? false : $postdata['id'];
-        $user_id   = !isset( $postdata['user_id'] ) ? get_current_user_id() : $postdata['user_id'];
-        $punch_in  = !isset(  $postdata['punch_in'] ) 
+        $id        = empty( intval( $postdata['id'] ) ) ? false : intval( $postdata['id'] );
+        $user_id   = !isset( $postdata['user_id'] ) ? get_current_user_id() : intval( $postdata['user_id'] );
+        $punch_in  = !isset( $postdata['punch_in'] ) 
             ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
-            : $postdata['punch_in'];
+            : sanitize_text_field( $postdata['punch_in'] );
 
-        $punch_out = !isset(  $postdata['punch_out'] ) 
+        $punch_out = !isset( $postdata['punch_out'] ) 
             ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
-            : $postdata['punch_out'];
+            : sanitize_text_field( $postdata['punch_out'] );
 
-        $order_by = isset( $postdata['order_by'] ) ? $postdata['order_by'] : 'id';
-        $per_page = empty( $postdata['per_page'] ) ? 100 : $postdata['per_page'];
-        $page     = empty( $postdata['page'] ) ? 1 : $postdata['page'];
+        $order_by = isset( $postdata['order_by'] ) ? sanitize_text_field( $postdata['order_by'] ) : 'id';
+        $per_page = empty( $postdata['per_page'] ) ? 100 : intval( $postdata['per_page'] );
+        $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         
         if ( $id !== false  ) {
 
@@ -1667,7 +1661,7 @@ class Hrm_Attendance {
 
         $table  = $wpdb->prefix . 'hrm_office_time';
 
-        $ip       = $postdata['allow_ip'];
+        $ip       = sanitize_text_field( $postdata['allow_ip'] );
         $string   = str_replace(' ', '', $ip);
         $allow_ip = explode('|', $string);
         $allow_ip = array_filter( $allow_ip, function( $ip ) {
@@ -1705,9 +1699,9 @@ class Hrm_Attendance {
 
         wp_send_json_success(array(
             'success'  => __( 'Successfully update attendance configuration', 'hrm' ),
-            'start'    => $postdata['office_start'],
-            'end'      => $postdata['closed'],
-            'is_multi' => $postdata['closed'],
+            'start'    => sanitize_text_field( $postdata['office_start'] ),
+            'end'      => sanitize_text_field( $postdata['closed'] ),
+            'is_multi' => sanitize_text_field( $postdata['closed'] ),
         ));
     }
 }

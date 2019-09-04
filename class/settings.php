@@ -234,7 +234,8 @@ class Hrm_Settings {
 
     public static function ajax_update_settings() {
         check_ajax_referer('hrm_nonce');
-        self::getInstance()->update_settings($_POST);
+        $POST = wp_unslash( $_POST );
+        self::getInstance()->update_settings($POST);
 
         wp_send_json_success();
     }

@@ -154,16 +154,16 @@ class Hrm_Payroll {
     }
 
     function get_salary( $postData ) {
-        $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : $postData['from'];
+        $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : sanitize_text_field( $postData['from'] );
         $start_date  = date( 'Y-m-01', strtotime( $salary_date ) );
         $end_date    = date( 'Y-m-t', strtotime( $salary_date ) );
         $page        = empty( $postData['page'] ) ? 1 : intval( $postData['page'] );
-        $id          = empty( $postData['id'] ) ? false : $postData['id'];
+        $id          = empty( $postData['id'] ) ? false : intval( $postData['id'] );
 
         $per_page = hrm_per_page();
 
         if ( hrm_user_can( 'manage_payroll' ) ) {
-            $employee_id = empty( $postData['employee_id'] ) ? '' : $postData['employee_id'];
+            $employee_id = empty( $postData['employee_id'] ) ? '' : intval( $postData['employee_id'] );
         } else {
             $employee_id = get_current_user_id();
         }
@@ -220,9 +220,9 @@ class Hrm_Payroll {
     }
 
     function fetch_statement( $postData ) {
-        $id = $postData['id'];
-        $type = $postData['type'];
-        $date = $postData['salaryDay'];
+        $id = intval( $postData['id'] );
+        $type = sanitize_text_field( $postData['type'] );
+        $date = sanitize_text_field( $postData['salaryDay'] );
 
         $start_date = date( 'Y-m-01', strtotime( $date ) );
         $end_date = date( 'Y-m-t', strtotime( $date ) );
@@ -257,7 +257,7 @@ class Hrm_Payroll {
     }
 
     function get_employee_salary( $postData ) {
-        $salary_id = $postData['salary_id'];
+        $salary_id = intval( $postData['salary_id'] );
 
         if ( intval( $salary_id )  ) {
 
@@ -283,7 +283,7 @@ class Hrm_Payroll {
     }
 
     function group_filter( $postData ) {
-        $name = empty( $postData['name'] ) ? false : $postData['name'];
+        $name = empty( $postData['name'] ) ? false : sanitize_text_field( $postData['name'] );
         $id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
         $per_page = hrm_per_page();
         $page   = empty(  $postData['page'] ) ? 1 : intval( $postData['page'] );
@@ -330,8 +330,8 @@ class Hrm_Payroll {
     }
 
     function generate_salary_statement( $postData ) {
-        $salary         = $postData['salary'];
-        $group          = empty( $postData['group'] ) ? 0 : $postData['group'];
+        $salary         = sanitize_text_field( $postData['salary'] );
+        $group          = empty( $postData['group'] ) ? 0 : sanitize_text_field( $postData['group'] );
         $salary_period  = $postData['salary_period'] == 'monthly' ? true : false;
         $formulas       = $all_formulas = $this->get_formula();
         $formulas_name  = array();
@@ -387,7 +387,7 @@ class Hrm_Payroll {
         if ( $is_save ) {
 
             $store_data = array(
-                'month'                => date( 'Y-m-d', strtotime( $postData['month'] ) ),
+                'month'                => date( 'Y-m-d', strtotime( sanitize_text_field( $postData['month'] ) ) ),
                 'category'             => $postData['category'],
                 'category_id'          => $postData['category_id'],
                 'employee_id'          => $postData['category'] == 'employee' ? $postData['category_id'] : 0,
@@ -571,8 +571,8 @@ class Hrm_Payroll {
     }
 
     function get_formula( $postData = array() ) {
-		$name = empty( $postData['name'] ) ? false : $postData['name'];
-		$id   = empty( $postData['id'] ) ? false : $postData['id'];
+		$name = empty( $postData['name'] ) ? false : sanitize_text_field( $postData['name'] );
+		$id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
         $status = 'enable';
         $page = 1;
         $per_page = 100000;

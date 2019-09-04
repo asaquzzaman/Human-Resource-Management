@@ -64,12 +64,12 @@ class Hrm_Employee {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
         $POST['page'] = empty( $POST['page'] ) ? 1 : absint( $POST['page'] );
-        $POST['name'] = empty( $POST['name'] ) ? '' : $POST['name'];
+        $POST['name'] = empty( $POST['name'] ) ? '' : sanitize_text_field( $POST['name'] );
         $postdata = [];
-        $postdata['search']         = '*' . $POST['name'] . '*';
+        $postdata['search']         = '*' . sanitize_text_field( $POST['name'] ) . '*';
         $postdata['search_columns'] = array( 'user_login', 'user_email', 'user_nicename' );
         $postdata['page']  = empty( $POST['page'] ) ? 1 : absint( $POST['page'] );
-        $postdata['number'] = empty( $POST['number'] ) ? hrm_per_page() : $POST['number'];
+        $postdata['number'] = empty( $POST['number'] ) ? hrm_per_page() : intval( $POST['number'] );
         
         $employees = self::getInstance()->get_employees( $postdata );
         
@@ -79,7 +79,7 @@ class Hrm_Employee {
     public static function ajax_get_employees() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
-        $postdata['page']  = $POST['page'];
+        $postdata['page']  = intval( $POST['page'] );
         $employees = self::getInstance()->get_employees( $postdata );
         
         wp_send_json_success( $employees );
@@ -205,7 +205,7 @@ class Hrm_Employee {
     }
 
     function edit_my_info( $postdata, $table_options ) {
-        $id = $postdata['user_id'];
+        $id = intval( $postdata['user_id'] );
         $user_id = false;
 
         foreach ( $table_options as $db_field => $form_field ) {
@@ -231,10 +231,10 @@ class Hrm_Employee {
     }
 
     function experiance_filter( $postdata ) {
-        $title       = empty( $postdata['title'] ) ? '': $postdata['title'];
-        $from        = empty( $postdata['from'] ) ? '': $postdata['from'];
-        $to          = empty( $postdata['to'] ) ? '': $postdata['to'];
-        $employee_id = empty( $postdata['employee_id'] ) ? '': $postdata['employee_id'];
+        $title       = empty( $postdata['title'] ) ? '': sanitize_text_field( $postdata['title'] );
+        $from        = empty( $postdata['from'] ) ? '': sanitize_text_field( $postdata['from'] );
+        $to          = empty( $postdata['to'] ) ? '': sanitize_text_field( $postdata['to'] );
+        $employee_id = empty( $postdata['employee_id'] ) ? '': intval( $postdata['employee_id'] );
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
@@ -277,10 +277,10 @@ class Hrm_Employee {
     }
 
     function education_filter( $postdata ) {
-        $title       = empty( $postdata['title'] ) ? '' : $postdata['title'];
-        $from        = empty( $postdata['from'] ) ? '' : $postdata['from'];
-        $to          = empty( $postdata['to'] ) ? '' : $postdata['to'];
-        $employee_id = $postdata['employee_id'];
+        $title       = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
+        $from        = empty( $postdata['from'] ) ? '' : sanitize_text_field( $postdata['from'] );
+        $to          = empty( $postdata['to'] ) ? '' : sanitize_text_field( $postdata['to'] );
+        $employee_id = intval( $postdata['employee_id'] );
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
@@ -323,10 +323,10 @@ class Hrm_Employee {
     }
 
     function skill_filter( $postdata ) {
-        $title       = empty( $postdata['title'] ) ? '' : $postdata['title'];
+        $title       = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
         // $from        = empty( $postdata['from'] ) ? '' : $postdata['from'];
         // $to          = empty( $postdata['to'] ) ? '' : $postdata['to'];
-        $employee_id = $postdata['employee_id'];
+        $employee_id = intval( $postdata['employee_id'] );
         $page        = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page    = hrm_per_page();
 
@@ -530,13 +530,13 @@ class Hrm_Employee {
         $display_name    = $first_name .' '. $last_name;
         
         $userdata = array(
-            'user_login'   => $postdata['userName'],
+            'user_login'   => sanitize_user( $postdata['userName'] ),
             'user_pass'    => $random_password,
-            'user_email'   => $postdata['email'],
+            'user_email'   => sanitize_email( $postdata['email'] ),
             'first_name'   => $first_name,
             'last_name'    => $last_name,
             'display_name' => $display_name,
-            'role'         => $postdata['role']
+            'role'         => sanitize_text_field( $postdata['role'] )
         );
 
         $user_id = wp_insert_user( $userdata );
@@ -554,11 +554,11 @@ class Hrm_Employee {
 
     function update_empoyee( $user_id, $postdata ) {
         
-        $display_name = $postdata['firstName'] . ' ' . $postdata['lastName'];
-        $join_date    = empty( $postdata['joiningDate'] ) ? current_time( 'mysql' ) : $postdata['joiningDate'];
+        $display_name = sanitize_text_field( $postdata['firstName'] ) . ' ' . sanitize_text_field( $postdata['lastName'] );
+        $join_date    = empty( $postdata['joiningDate'] ) ? current_time( 'mysql' ) : sanitize_text_field( $postdata['joiningDate'] );
         
-        update_user_meta( $user_id, 'first_name', $postdata['firstName'] );
-        update_user_meta( $user_id, 'last_name', $postdata['lastName'] );
+        update_user_meta( $user_id, 'first_name', sanitize_text_field( $postdata['firstName'] ) );
+        update_user_meta( $user_id, 'last_name', sanitize_text_field( $postdata['lastName'] ) );
 
         wp_update_user( array(
             'ID'           =>  $user_id,
@@ -568,18 +568,18 @@ class Hrm_Employee {
         $user = new \WP_User( $user_id );
         $user->set_role( $postdata['role'] );
 
-        update_user_meta( $user_id, 'hrm_job_category', $postdata['department'] );
-        update_user_meta( $user_id, 'hrm_location', $postdata['location'] );
-        update_user_meta( $user_id, 'hrm_job_desc', $postdata['description'] );
-        update_user_meta( $user_id, 'hrm_status', $postdata['status'] );
-        update_user_meta( $user_id, 'hrm_mob_number', $postdata['mobileNumber'] );
+        update_user_meta( $user_id, 'hrm_job_category', sanitize_text_field( $postdata['department'] ) );
+        update_user_meta( $user_id, 'hrm_location', sanitize_text_field( $postdata['location'] ) );
+        update_user_meta( $user_id, 'hrm_job_desc', sanitize_text_field( $postdata['description'] ) );
+        update_user_meta( $user_id, 'hrm_status', sanitize_text_field( $postdata['status'] ) );
+        update_user_meta( $user_id, 'hrm_mob_number', sanitize_text_field( $postdata['mobileNumber'] ) );
         update_user_meta( $user_id, 'hrm_joined_date', hrm_date2mysql( $join_date ) );
-        update_user_meta( $user_id, 'hrm_gender',  $postdata['gender'] );
-        update_user_meta( $user_id, 'hrm_role',  $postdata['role'] );
-        update_user_meta( $user_id, 'hrm_designation',  $postdata['designation'] );
+        update_user_meta( $user_id, 'hrm_gender',  sanitize_text_field( $postdata['gender'] ) );
+        update_user_meta( $user_id, 'hrm_role',  sanitize_text_field( $postdata['role'] ) );
+        update_user_meta( $user_id, 'hrm_designation',  sanitize_text_field( $postdata['designation'] ) );
 
         if ( ! empty( $postdata['employee_image'] ) ) {
-            $image_id = File_System::upload_base64_file( $postdata['employee_image'][0] );
+            $image_id = File_System::upload_base64_file( sanitize_text_field( $postdata['employee_image'][0] ) );
             update_user_meta( $user_id, 'hrm_user_image_id', $image_id );
         }
     }
@@ -615,7 +615,7 @@ class Hrm_Employee {
         if ( !empty( $post['first_name'] ) ) {
             $meta[] =   array(
                 'key'     => 'first_name',
-                'value'   =>  trim( $post['first_name'] ),
+                'value'   =>  trim( sanitize_text_field( $post['first_name'] ) ),
                 'compare' => 'LIKE'
             );
         }
@@ -623,7 +623,7 @@ class Hrm_Employee {
         if ( !empty( $post['last_name'] ) ) {
             $meta[] = array(
                 'key'     => 'last_name',
-                'value'   =>  trim( $post['last_name'] ),
+                'value'   =>  trim( sanitize_text_field( $post['last_name'] ) ),
                 'compare' => 'LIKE'
             );
         }
@@ -631,7 +631,7 @@ class Hrm_Employee {
         if ( !empty( $post['status'] ) ) {
             $meta[] = array(
                 'key'     => '_status',
-                'value'   =>  trim( $post['status'] ),
+                'value'   =>  trim( sanitize_text_field( $post['status'] ) ),
                 'compare' => 'LIKE'
             );
         }
@@ -639,7 +639,7 @@ class Hrm_Employee {
         if ( !empty( $post['mobile'] ) ) {
             $meta[] = array(
                 'key'     => '_mob_number',
-                'value'   =>  trim( $post['mobile'] ),
+                'value'   =>  trim( sanitize_text_field( $post['mobile'] ) ),
                 'compare' => 'LIKE'
             );
         }
@@ -653,7 +653,7 @@ class Hrm_Employee {
         $offset = ( $pagenum - 1 ) * $limit;
 
         $args = array(
-            'search'         => !empty( $post['user'] ) ? trim( $post['user'] ) : '',
+            'search'         => !empty( $post['user'] ) ? trim( sanitize_text_field( $post['user'] ) ) : '',
             'search_columns' => array( 'user_login', 'user_email' ),
             'meta_query'     => $meta,
             'number'         => $limit,

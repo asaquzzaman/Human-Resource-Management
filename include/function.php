@@ -5,7 +5,8 @@ use HRM\Core\Crud\Crud;
 
 function hrm_ajax_delete_records() {
     check_ajax_referer('hrm_nonce');
-    $records = hrm_delete_records( $_POST );
+    $POST = wp_unslash( $_POST );
+    $records = hrm_delete_records( $POST );
     wp_send_json_success($records);
 }
 
@@ -15,7 +16,8 @@ function hrm_delete_records($postdata) {
 
 function hrm_ajax_get_records() {
     check_ajax_referer('hrm_nonce');
-    $records = hrm_get_records( $_POST );
+    $POST = wp_unslash( $_POST );
+    $records = hrm_get_records( $POST );
     wp_send_json_success($records);
 }
 
@@ -25,9 +27,9 @@ function hrm_get_records($postdata) {
 
 function hrm_ajax_insert_records() {
     check_ajax_referer('hrm_nonce');
-    
+    $POST = wp_unslash( $_POST );
     wp_send_json_success(
-        hrm_insert_records( $_POST )
+        hrm_insert_records( $POST )
     );
 }
 
@@ -37,9 +39,9 @@ function hrm_insert_records( $postdata ) {
 
 function hrm_ajax_update_records() {
     check_ajax_referer('hrm_nonce');
-
+    $POST = wp_unslash( $_POST );
     wp_send_json_success(
-        hrm_update_records( $_POST )
+        hrm_update_records( $POST )
     );
 }
 
@@ -295,6 +297,7 @@ function hrm_get_employee_id() {
     $menu  = hrm_page();
     $page  = $query['page'];
     $tab   = $query['tab'];
+    $GET   = wp_unslash( $_GET );
 
     if ( !isset( $menu[$page][$tab]['nested_tab'] ) ) {
         return false;
@@ -304,21 +307,22 @@ function hrm_get_employee_id() {
         return false;
     }
 
-    $employee_id = !empty( $_GET['employee_id'] ) ? intval( $_GET['employee_id'] ) : false;
+    $employee_id = !empty( $GET['employee_id'] ) ? intval( $GET['employee_id'] ) : false;
 
     return $employee_id;
 }
 
 function hrm_pagenum() {
-    return isset( $_REQUEST['pagenum'] ) ? intval( $_REQUEST['pagenum'] ) : 1;
+    $REQUEST = wp_unslash( $_REQUEST );
+    return isset( $REQUEST['pagenum'] ) ? intval( $REQUEST['pagenum'] ) : 1;
 }
 
 function hrm_result_limit() {
-
-    if ( isset( $_REQUEST['limit'] ) && $_REQUEST['limit'] != '-1' ) {
-        return intval( $_REQUEST['limit'] );
-    } else if ( isset( $_REQUEST['hrm_attr']['limit'] ) && $_REQUEST['hrm_attr']['limit'] != '-1' ) {
-        return intval( $_REQUEST['hrm_attr']['limit'] );
+    $REQUEST = wp_unslash( $_REQUEST );
+    if ( isset( $REQUEST['limit'] ) && $REQUEST['limit'] != '-1' ) {
+        return intval( $REQUEST['limit'] );
+    } else if ( isset( $REQUEST['hrm_attr']['limit'] ) && $REQUEST['hrm_attr']['limit'] != '-1' ) {
+        return intval( $REQUEST['hrm_attr']['limit'] );
     } else {
         return 2;
     }
@@ -535,10 +539,11 @@ function hrm_get_current_financial_id() {
 
 function hrm_can_load_footer_tag() {
     $query_args = hrm_get_query_args();
+    $GET = wp_unslash( $_GET );
     $page       = $query_args['page'];
     $tab        = $query_args['tab'];
     $subtab     = $query_args['subtab'];
-    $vue        = ! empty( $_GET['active'] ) && $_GET['active'] == 'vue' ? true : false;
+    $vue        = ! empty( $GET['active'] ) && $GET['active'] == 'vue' ? true : false;
 
 
     if ( 

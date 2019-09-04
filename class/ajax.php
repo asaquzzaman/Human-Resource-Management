@@ -21,7 +21,8 @@ class Hrm_Ajax {
 
         add_action( 'wp_ajax_ajax_referer_insert', array( $this, 'add_new_data' ) );
         add_action( 'wp_ajax_hrm_form_edit', array( $this, 'edit' ) );
-        add_action( 'wp_ajax_single_form', array( $this, 'singel_form_add' ) );
+        //add_action( 'wp_ajax_single_form', array( $this, 'singel_form_add' ) );
+        add_action( 'wp_ajax_update_general_info', array( $this, 'update_general_info' ) );
         add_action( 'wp_ajax_hrm_get_organigation_info', array( $this, 'get_organization_info' ) );
         add_action( 'wp_ajax_hrm_delete', array( $this, 'delete' ) );
         add_action( 'wp_ajax_hrm_autocomplete', array( $this, 'hrm_autocomplete_action' ) );
@@ -127,30 +128,30 @@ class Hrm_Ajax {
         add_action( 'wp_ajax_hrm_get_records', 'hrm_ajax_get_records' );
         add_action( 'wp_ajax_hrm_delete_record', 'hrm_ajax_delete_records' );
     }
-
     
-    function singel_form_add() {
+
+    function update_general_info() {
         check_ajax_referer('hrm_nonce');
-        if( ! isset( $_POST['table_option'] ) && empty( $_POST['table_option'] ) ) {
-            wp_send_json_error( array( 'error_msg' => __('Update Failed', 'hrm') ) );
+        
+        $POST = wp_unslash( $_POST );
+
+        if ( hrm_current_user_role() != hrm_manager_role_key() && !hrm_is_current_user_administrator() ) {
+            wp_send_json_error( array( 'success_msg' => __( 'Something went wrong!', 'hrm' ) ) );
         }
-        $data = array();
-        $field = get_option( $_POST['table_option'] );
-        if( count( $field['field_dif'] ) ) {
-            foreach( $field['field_dif'] as $key => $name ) {
-                $data[$name] = isset( $_POST[$name] ) ? esc_attr( $_POST[$name] ) : '';
-            }
-        }
-        $field['data'] = $data;
-        $update = false;
-        if( count( $field['field_dif'] ) ) {
-            $update = update_option( $_POST['table_option'], $field );
-        }
-        if( $update ) {
-            wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
-        } else {
-            wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
-        }
+        update_option( 'organization_name', sanitize_text_field( $POST['organization_name'] ) );
+        update_option( 'tax_id', sanitize_text_field( $POST['tax_id'] ) );
+        update_option( 'registration_number', sanitize_text_field( $POST['registration_number'] ) );
+        update_option( 'phone', sanitize_text_field( $POST['phone'] ) );
+        update_option( 'fax', sanitize_text_field( $POST['fax'] ) );
+        update_option( 'addres_street_1', sanitize_text_field( $POST['addres_street_1'] ) );
+        update_option( 'address_street_2', sanitize_text_field( $POST['address_street_2'] ) );
+        update_option( 'city', sanitize_text_field( $POST['city'] ) );
+        update_option( 'state_province', sanitize_text_field( $POST['state_province'] ) );
+        update_option( 'zip', sanitize_text_field( $POST['zip'] ) );
+        update_option( 'country', sanitize_text_field( $POST['country'] ) );
+        update_option( 'note', sanitize_textarea_field( $POST['note'] ) );
+
+        wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
     }
 
     function user_can() {
@@ -180,27 +181,6 @@ class Hrm_Ajax {
         wp_send_json_success(array( 'success_msg' => __( 'Deleted successfull', 'hrm' ), 'content' => $content ) );
     }
 
-    // function edit_file() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $post = $POST;
-    //     $edit_form = HRM_File::getInstance()->file_upload_form( $post );
-    //     wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'append_data' => $edit_form['append_data'], 'tinymce_id' => $edit_form['tinymce_id'] ) );
-    // }
-
-    // function file_upload() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $post = $POST;
-    //     $content = HRM_File::getInstance()->file_user_set( $post );
-    //     if ( $content ) {
-    //         wp_send_json_success( array( 'success_msg' => __( 'Updated successfully' ), 'content' => $content['content'] ) );
-    //     } else {
-    //         wp_send_json_error( array( 'error_msg' => __( 'No file found!', 'hrm' ) ) );
-    //     }
-
-    // }
-
     function hrm_delete_file() {
         check_ajax_referer('hrm_nonce');
         $POST = wp_unslash( $_POST );
@@ -212,383 +192,22 @@ class Hrm_Ajax {
         wp_send_json_success(array( 'success_msg' => __( 'Deleted successfull', 'hrm' ) ) );
     }
 
-    // function single_tab_user_role() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $post = $POST;
-    //     hrm_single_tab_user_role_change( $post );
-    // }
+    function get_organization_info() {
+        $info          = [
+            'organization_name'   => get_option( 'organization_name' ),
+            'tax_id'              => get_option( 'tax_id', sanitize_text_field( $POST['tax_id'] ) ),
+            'registration_number' => get_option( 'registration_number' ),
+            'phone'               => get_option( 'phone' ),
+            'fax'                 => get_option( 'fax' ),
+            'addres_street_1'     => get_option( 'addres_street_1' ),
+            'address_street_2'    => get_option( 'address_street_2' ),
+            'city'                => get_option( 'city' ),
+            'state_province'      => get_option( 'state_province' ),
+            'zip'                 => get_option( 'zip' ),
+            'country'             => get_option( 'country' ),
+            'note'                => get_option( 'note' ),
+        ];
 
-    // function time_editable() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $post = $POST;
-
-    //     $edit_form = Hrm_Time::getInstance()->generate_edit_form( $post );
-    //     wp_send_json_success( array( 'content' => $edit_form ) );
-    // }
-
-    // function change_admin_status() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $user_id = intval( $POST['user_id'] );
-    //     $status = sanitize_text_field( $POST['status'] );
-    //     $changed = Hrm_Admin::getInstance()->change_admin_status( $user_id, $status );
-
-    //     if ( $changed ) {
-    //         wp_send_json_success();
-    //     } else {
-    //         wp_send_json_error();
-    //     }
-    // }
-
-    // function edit_my_info() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $postdata = $POST;
-    //     $table_option = get_option( $postdata['table_option'] );
-    //     $user_id = hrm_employee::getInstance()->edit_my_info( $postdata, $table_option );
-    //     if ( $user_id ) {
-    //         wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
-    //     } else {
-    //         wp_send_json_error();
-    //     }
-    // }
-
-    // function edit_employer() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $id = $POST['id'];
-    //     $user = get_user_by( 'id', $id );
-    //     $data = hrm_Employeelist::getInstance()->new_employee_form( $user );
-    //     wp_send_json_success( array('success_msg' => __( 'Update successfull', 'hrm' ), 'append_data' => $data ) );
-    // }
-
-    // function add_employer() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-
-    //     $post = $POST;
-    //     $url = $POST['url'];
-    //     $user_id = hrm_Employeelist::getInstance()->add_new_employer( $post );
-
-    //     if ( isset( $user_id->errors ) ) {
-    //         wp_send_json_error( array( 'error_msg' => __( 'User name or E-mail already exist', 'hrm' ), 'redirect' => $url ) );
-    //     } else {
-    //         $page    = $POST['page'];
-    //         $tab     = $POST['tab'];
-    //         $subtab  = $POST['subtab'];
-    //         $req_frm = urldecode( $POST['req_frm'] );
-
-    //         ob_start();
-    //             require_once $req_frm;
-    //         wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Update successfull', 'hrm' ) ) );
-    //     }
-    // }
-
-    // function update_status() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $postdata = $POST;
-    //     $update = hrm_Leave::getInstance()->update_status( $postdata );
-    //     if ( $update ) {
-    //         wp_send_json_success( array( 'success_msg' => __( 'Successfully update leave status', 'hrm' ) ) );
-    //     } else {
-    //        wp_send_json_error( array( 'error_msg' => __( 'Failed to update leave status', 'hrm' ) ) );
-    //     }
-    // }
-
-    // function new_leave() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $postdata = $POST;
-    //     $update = hrm_Leave::getInstance()->new_leave( $postdata );
-    //     if ( isset( $update['error_msg'] ) ) {
-    //         wp_send_json_error( array( 'error_msg' => $update['error_msg'] ) );
-    //     }
-    //     if( $update ) {
-    //         $page    = $POST['page'];
-    //         $tab     = $POST['tab'];
-    //         $subtab  = $POST['subtab'];
-    //         $req_frm = urldecode( $POST['req_frm'] );
-            /*$POST['type'] = '_search';
-            $POST['emp_id'] = $POST['name'];
-            $POST['type_id'] = $POST['type_id'];*/
-
-            //unset( $POST['from'], $POST['to'], $POST['status'], $POST['comments'] );
-
-    //         ob_start();
-    //             require_once $req_frm;
-    //         wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Updated successfully', 'hrm' )  ) );
-    //     } else {
-    //         wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
-    //     }
-    // }
-
-    // function find_project_worker() {
-    //     $users = get_users( array(
-    //         'search' => '*' . $POST['search_admin'] . '*',
-    //         'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-    //     ) );
-    //     $data = array();
-    //     foreach( $users as $user) {
-    //         $data[] = array(
-    //             'label' => $user->display_name,
-    //             '_user_meta' => Hrm_Admin::getInstance()->project_user_meta( $user->display_name, $user->ID, $user ),
-    //         );
-    //     }
-    //     if( count($data) ) {
-    //         $user_info = json_encode( $data );
-    //     } else {
-    //         $data[] = array(
-    //             'label' => __( 'No user found!', 'hrm'),//'<div class="no-user-wrap"><p>' . __( 'No user found!', 'hrm' ) . '</p> <span class="button-primary">' . __( 'Create a new user?', 'hrm' ) . '</span></div>',
-    //             'value' => 'hrm_create_user',
-    //             '_user_meta' =>'',
-    //         );
-    //         $user_info = json_encode( $data );
-    //     }
-
-    //     wp_send_json_success( $user_info );
-    // }
-
-    // function insert_user( $project_id, $user_id, $role ) {
-    //     global $wpdb;
-    //     $table = $wpdb->prefix . 'hrm_user_role';
-    //     $data = array(
-    //         'project_id' => $project_id,
-    //         'user_id' => $user_id,
-    //         'role' => $role,
-    //     );
-    //     $format = array( '%d', '%d', '%s' );
-    //     $wpdb->insert( $table, $data, $format );
-    // }
-
-    // function skill_add() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $id = isset( $POST['id'] ) ? $POST['id'] : '';
-    //     global $wpdb;
-    //     $table = $wpdb->prefix . 'skill';
-
-    //     $user_name = isset( $POST['user_name'] ) ? $POST['user_name'] : '';
-
-    //     $url = $POST['url'];
-
-    //     if( ! empty( $id ) ) {
-    //         $data = array(
-    //             'description' => $POST['skill_desc'],
-    //         );
-    //         $format = array( '%s');
-    //         $update = $wpdb->update( $table, $data, array( 'id' => $id ), $format );
-    //     } else {
-    //         $results = $wpdb->get_results("SELECT id FROM " . $wpdb->prefix . "skill", ARRAY_A );
-    //         $results = wp_list_pluck( $results, 'id' );
-
-    //         foreach ( $POST['user_id'] as $key => $id ) {
-
-    //             if ( in_array( $id, $results ) ) {
-    //                 $update = true;
-    //                 continue;
-    //             }
-
-    //             $data = array(
-    //                 'id' => $id,
-    //                 'name' => $user_name[$key],
-    //                 'description' => $POST['skill_desc'],
-    //             );
-    //             $format = array( '%d', '%s', '%s');
-
-    //             $update = $wpdb->insert( $table, $data, $format );
-    //         }
-
-    //     }
-
-    //     if( $update ) {
-    //         wp_send_json_success( array( 'success_msg' => __( 'Update successfull', 'hrm' ), 'redirect' => $url ) );
-    //     } else {
-    //         wp_send_json_error( array( 'error_msg' => __( 'Update Failed', 'hrm' ) ) );
-    //     }
-    // }
-
-    // function user_role_edit_form_prepare() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $data = $POST['class_name']::getInstance()->$POST['function_name'] ( $POST['id'] );
-
-    //     wp_send_json_success( array( 'append_data' => $data ) );
-    // }
-
-    // function user_role_update() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $post = $POST;
-    //     Hrm_Admin::getInstance()->add_new_employer( $post );
-    //     $page    = $POST['page'];
-    //     $tab     = $POST['tab'];
-    //     $subtab  = $POST['subtab'];
-    //     $req_frm = urldecode( $POST['req_frm'] );
-
-    //     ob_start();
-    //         require_once $req_frm;
-    //     wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Update successful', 'hrm' ) ) );
-    // }
-
-    // function user_delete() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-
-    //     if ( isset( $POST['hrm_check'] ) && is_array( $POST['hrm_check'] ) && count( $POST['hrm_check'] ) ) {
-
-    //         foreach( $POST['hrm_check'] as $user_id => $value ) {
-
-    //             $delete_user = wp_delete_user( $user_id );
-    //         }
-    //     }
-    //     if( $delete_user ) {
-    //         $page    = $POST['page'];
-    //         $tab     = $POST['tab'];
-    //         $subtab  = $POST['subtab'];
-    //         $req_frm = urldecode( $POST['req_frm'] );
-
-    //         ob_start();
-    //             require_once $req_frm;
-    //         wp_send_json_success( array( 'content' => ob_get_clean(), 'success_msg' => __( 'Delete user successfully', 'hrm' ) ) );
-    //     } else {
-    //         wp_send_json_error( array( 'error_msg' => __( 'Delete Failed', 'hrm' ) ) );
-    //     }
-
-    // }
-
-    // function get_user_role() {
-
-    //     $data = $POST['class_name']::getInstance()->$POST['function_name'] ( $POST['role_name'], $POST['display_name'] );
-
-    //     wp_send_json_success( array( 'append_data' => $data ) );
-    // }
-
-    // function search_users() {
-    //     check_ajax_referer('hrm_nonce');
-    //     $POST = wp_unslash( $_POST );
-    //     $send = [];
-    //     $users = get_users( array(
-    //         'search' => '*' . $POST['user'] . '*',
-    //         'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
-    //     ));
-        
-    //     foreach( $users as $user ) {
-    //         $send[] = $user->data;
-    //     }
-        
-    //     wp_send_json_success( $send );
-    // }
-
-
-
-    // function create_user() {
-
-    //     parse_str( $POST['data'], $postdata );
-
-    //     $validate = $this->new_admin_form_validate( $postdata );
-
-    //     if ( is_wp_error( $validate ) ) {
-    //         wp_send_json_error( $validate->errors['error'][0] );
-    //     }
-
-    //     $random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-    //     $first_name = sanitize_text_field( $postdata['first_name'] );
-    //     $last_name = sanitize_text_field( $postdata['last_name'] );
-    //     $display_name = $first_name .' '. $last_name;
-
-    //     $userdata = array(
-    //         'user_login'   => $postdata['admin_name'],
-    //         'user_pass'    =>  $random_password,
-    //         'user_email'   => $postdata['admin_email'],
-    //         'first_name'   => $first_name,
-    //         'last_name'    => $last_name,
-    //         'display_name' => $display_name,
-    //     );
-
-    //     $user_id = wp_insert_user( $userdata );
-
-    //     if( $user_id ) {
-    //         update_user_meta( $user_id, '_user_flag', 1 );
-    //         update_user_meta( $user_id, 'first_name', $first_name );
-    //         update_user_meta( $user_id, 'last_name', $last_name );
-    //         update_user_meta( $user_id, 'hrm_admin_level', 'admin' );
-
-    //         wp_new_user_notification( $user_id, $random_password );
-
-    //         $user_meta = Hrm_Admin::getInstance()->create_user_meta( $display_name, $user_id );
-    //         wp_send_json_success( array(
-    //             'success_msg' => __('Create admin successfull', 'hrm'),
-    //              '_user_meta' => $user_meta,
-    //         ));
-    //     } else {
-    //         wp_send_json_error( array( 'error_msg' => __('Unknown Error!', 'hrm') ) );
-    //     }
-    // }
-
-    // function new_admin_form_validate( $postdata ) {
-
-    //     if( empty($postdata['admin_name']) ) {
-    //         return new WP_Error( 'error', __('Username required ', 'hrm' ) );
-    //     }
-
-    //     if( empty($postdata['admin_email']) ) {
-    //         return new WP_Error( 'error', __('Eamil required', 'hrm' ) );
-    //     }
-
-    //     if ( ! is_email($postdata['admin_email'] ) ) {
-    //         return new WP_Error( 'error', __('Invalid email', 'hrm' ) );
-    //     }
-
-    //     if( username_exists( $postdata['admin_name'] ) ) {
-    //         return new WP_Error( 'error', __('Username already exist', 'hrm' ) );
-    //     }
-
-    //     if( email_exists( $postdata['admin_email']) ) {
-    //         return new WP_Error( 'error', __('Email already exist', 'hrm' ) );
-    //     }
-
-    //     return true;
-    // }
-
-    // function hrm_autocomplete_action() {
-
-    //     if( ! isset( $POST['table_option'] ) && empty( $POST['table_option'] ) ) {
-    //         wp_send_json_error( __( 'Error occured', 'hrm' ) );
-    //     }
-    //     $table_option['table_option'] = array();
-    //     $table_option = get_option( $POST['table_option'] );
-
-    //     $search_field = $POST['search_field'];
-    //     $search_value = trim( $POST['search_value'] );
-    //     $where = $search_field .' LIKE ' ."'%".$search_value."%'";
-
-    //     global $wpdb;
-    //     $tabledb = $wpdb->prefix . $table_option['table_name'];
-
-    //     $results = $wpdb->get_results("SELECT id, $search_field FROM $tabledb WHERE $where ORDER BY id DESC");
-
-    //     if( $results ) {
-    //         foreach ($results as $key => $value) {
-    //             $data[] = array(
-    //                 'label' => $value->$search_field,
-    //                 'value' => $value->$search_field,
-    //                 'id' => $value->id
-    //             );
-    //         }
-    //     } else {
-    //         wp_send_json_error( __( 'Error occured', 'hrm' ) );
-    //     }
-
-    //     $user_info = json_encode( $data );
-    //     wp_send_json_success( $user_info );
-    // }
-
-
-    function get_organization_info(){
-        $info          = get_option( 'hrm_general_info', array() );
         $country_lists = hrm_Settings::getInstance()->country_list();
         $lists         = [];
         
@@ -596,15 +215,10 @@ class Hrm_Ajax {
             $lists[] = ['iso' => $key, 'country' => $value];
         }
         wp_send_json_success( [ 
-            'data'      => empty( $info['data'] ) ? [] : $info['data'],
+            'data'      => empty( $info ) ? [] : $info,
             'countries' => $lists,
         ] );
     }
 
-    // function edit_query( $table, $id ) {
-    //     global $wpdb;
-    //     $table = $wpdb->prefix . $table;
-    //     return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
-    // }
 }
 

@@ -1,0 +1,24 @@
+
+FILE: /Users/wedevs/Documents/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/admin.php
+----------------------------------------------------------------------------------------------------------------------------------------
+FOUND 7 ERRORS AFFECTING 7 LINES
+----------------------------------------------------------------------------------------------------------------------------------------
+ 254 | ERROR | Processing form data without nonce verification.
+ 737 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 747 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 764 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 781 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 797 | ERROR | Use placeholders and $wpdb->prepare(); found $query
+ 999 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated variable $dept_ids at              WHERE id IN ('$dept_ids')
+     |       | 
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+FILE: /Users/wedevs/Documents/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/leave.php
+-------------------------------------------------------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+-------------------------------------------------------------------------------------------------------------------------------
+ 659 | ERROR | Use placeholders and $wpdb->prepare(); found interpolated variable $query at "hrm_holiday WHERE 1=1 AND $query"
+-------------------------------------------------------------------------------------------------------------------------------
+
+

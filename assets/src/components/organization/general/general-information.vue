@@ -172,8 +172,11 @@
 						name: 'country',
 						editMode: false,
 						default: '&#8211 &#8211',
-						filter (val) {
-							return val.country;
+						filter (val, self) {
+							
+							let index = self.getIndex( self.fields, 'country', 'name' );
+							let country_index = self.getIndex( self.fields[index].options, val, 'iso' );
+							return typeof self.fields[index].options[country_index] == 'undefined' ? '' : self.fields[index].options[country_index].country;
 						}
 					},
 					{
@@ -216,7 +219,7 @@
 					return field.default;
 				}
 
-				if (typeof field.filter !== 'undefined') {
+				if (typeof field.filter != 'undefined') {
 					return field.filter(value, this);
 				}
 				return value;
@@ -286,12 +289,23 @@
 				var formated = [];
 
 				data.forEach(function(val) {
-					formated.push(
-						{	
-							'name': val.name,
-							'value': val.model
-						}
-					);
+					if(val.name == 'country') {
+						formated.push(
+							{	
+								'name': val.name,
+								'value': val.model.iso
+							}
+						);
+
+					} else {
+						formated.push(
+							{	
+								'name': val.name,
+								'value': val.model
+							}
+						);
+					}
+					
 				});
 
 				return formated;
@@ -301,7 +315,7 @@
 				var self = this;
 				args.data.push({
 					name: 'action',
-					value: 'single_form'
+					value: 'update_general_info'
 				});
 				args.data.push({
 					name: 'table_option',
@@ -312,6 +326,7 @@
 					name: '_wpnonce',
 					value: HRM_Vars.nonce,
 				});
+				
 				
 	            var request_data = {
 	                data: args.data,
@@ -333,7 +348,7 @@
 	            };
 	            
 	            self.httpRequest('single_form', request_data);
-			}
+			},
 
 		}
 	}

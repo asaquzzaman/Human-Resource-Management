@@ -1,3 +1,8 @@
+= 2.2.15 - Sep 04, 2019 =
+
+ * **Fix** Some security issue.
+ * **Fix** Data filtering issue.
+ 
 = 2.2.14 - Sep 01, 2019 =
 
  * **New** Dashboard absent section.

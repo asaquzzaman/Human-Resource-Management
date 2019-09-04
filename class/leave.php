@@ -330,14 +330,14 @@ class Hrm_Leave {
     function status_update_message( $postdata, $prev_leave_row ) {
         global $wpdb;
         $table  = $wpdb->prefix . 'hrm_leave';
-        $get_apply_leave = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', '*', array( 'id' => $postdata['leave_id'] ), true );
+        $get_apply_leave = Hrm_Settings::getInstance()->conditional_query_val( 'hrm_leave', '*', array( 'id' => intval( $postdata['leave_id'] ) ), true );
 
         $leave_owner = get_user_by( 'id', $get_apply_leave->emp_id );
 
         $to = $leave_owner->user_email;
         $subject = __( 'Human Resource Management - Leave status changes', 'hrm' );
         $sender_id = get_current_user_id();
-        $message = $this->status_update_message_body( $get_apply_leave, $leave_owner, $postdata['status'], $prev_leave_row );
+        $message = $this->status_update_message_body( $get_apply_leave, $leave_owner, sanitize_text_field( $postdata['status'] ), $prev_leave_row );
 
         Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender_id );
     }
@@ -420,7 +420,7 @@ class Hrm_Leave {
         if ( $id ) {
             $format = array( '%s', '%d' );
             $data = array(
-                'leave_type_name' => $postdata['leave_type'],
+                'leave_type_name' => sanitize_text_field( $postdata['leave_type'] ),
                 'carry'           => $next_year ? 1 : 0,
             );
 
@@ -430,8 +430,8 @@ class Hrm_Leave {
         } else {
 
             $data = array(
-                'leave_type_name' => $postdata['leave_type'],
-                'entitlement'     => $postdata['entitlement'],
+                'leave_type_name' => sanitize_text_field( $postdata['leave_type'] ),
+                'entitlement'     => sanitize_text_field( $postdata['entitlement'] ),
                 'entitle_from'    => hrm_financial_start_date(),
                 'entitle_to'      => hrm_financial_end_date(),
                 'f_year'          => $next_year
@@ -451,7 +451,7 @@ class Hrm_Leave {
         
         $this->add_relation( 'leave_type', $departments, $id );
 
-        $leave_type = Leave_Type::find( $data['id'] );
+        $leave_type = Leave_Type::find( intval( $data['id'] ) );
 
         $resource = new Item( $leave_type, new Leave_Type_Transform ); 
 
@@ -544,8 +544,8 @@ class Hrm_Leave {
 
         if ( $id ) {
             $data = array(
-                'name'        => $postdata['name'],
-                'description' => $postdata['description']
+                'name'        => sanitize_text_field( $postdata['name'] ),
+                'description' => sanitize_text_field( $postdata['description'] )
             );
             $format = array( '%s', '%s' );
             
@@ -557,10 +557,10 @@ class Hrm_Leave {
 
         } else {
             $data = array(
-                'name'        => $postdata['name'],
-                'from'        => $postdata['from'],
-                'to'          => $postdata['to'],
-                'description' => $postdata['description'],
+                'name'        => sanitize_text_field( $postdata['name'] ),
+                'from'        => sanitize_text_field( $postdata['from'] ),
+                'to'          => sanitize_text_field( $postdata['to'] ),
+                'description' => sanitize_text_field( $postdata['description'] ),
                 'f_year'      => hrm_get_current_financial_id()
             );
             $format = array( '%s', '%s', '%s', '%s' );
@@ -680,22 +680,22 @@ class Hrm_Leave {
         $prev_work_week = get_option( 'hrm_work_week' );
         
         if ( empty( $prev_work_week ) ) {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : $postdata['saturday'];
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : $postdata['sunday'];
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : $postdata['monday'];
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : $postdata['tuesday'];
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : $postdata['wednesday'];
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : $postdata['thursday'];
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : $postdata['friday'];
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : sanitize_text_field( $postdata['saturday'] );
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : sanitize_text_field( $postdata['sunday'] );
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : sanitize_text_field( $postdata['monday'] );
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : sanitize_text_field( $postdata['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : sanitize_text_field( $postdata['wednesday'] );
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : sanitize_text_field( $postdata['thursday'] );
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : sanitize_text_field( $postdata['friday'] );
         
         } else {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : $postdata['saturday'];
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : $postdata['sunday'];
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : $postdata['monday'];
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : $postdata['tuesday'];
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : $postdata['wednesday'];
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : $postdata['thursday'];
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : $postdata['friday'];
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : sanitize_text_field( $postdata['saturday'] );
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : sanitize_text_field( $postdata['sunday'] );
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : sanitize_text_field( $postdata['monday'] );
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : sanitize_text_field( $postdata['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : sanitize_text_field( $postdata['wednesday'] );
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : sanitize_text_field( $postdata['thursday'] );
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : sanitize_text_field( $postdata['friday'] );
         }
 
         update_option( 'hrm_work_week', $prev_work_week );
@@ -836,7 +836,7 @@ class Hrm_Leave {
         $POST = wp_unslash( $_POST );
         
         $postdata    = $POST;
-        $times       = empty( $postdata['time'] ) ? array() : $postdata['time'];
+        $times       = empty( $postdata['time'] ) ? array() : sanitize_text_field( $postdata['time'] );
         $leave       = array();
         $return_data = array();
         $postdata['transformers'] = 'Leave_Transformer';
@@ -909,7 +909,7 @@ class Hrm_Leave {
         $update = self::getInstance()->update_leave( $postdata );
 
         if ( $update ) {
-            $update = self::getInstance()->get_leaves(['id' => $postdata['id']]);
+            $update = self::getInstance()->get_leaves(['id' => intval( $postdata['id'] ) ]);
 
             wp_send_json_success($update);
         }

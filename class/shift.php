@@ -114,7 +114,8 @@ class HRM_Shift {
 
     function ajax_delete_shift() {
         check_ajax_referer('hrm_nonce');
-        $shift = self::getInstance()->delete_shift( $_POST );
+        $POST = wp_unslash( $_POST );
+        $shift = self::getInstance()->delete_shift( $POST );
         
         wp_send_json_success( $shift );
     }
@@ -133,7 +134,8 @@ class HRM_Shift {
 
     function ajax_add_shift() {
         check_ajax_referer('hrm_nonce');
-        $shift = self::getInstance()->add_shift( $_POST );
+        $POST = wp_unslash( $_POST );
+        $shift = self::getInstance()->add_shift( $POST );
         
         if (  isset( $shift['success'] ) &&  $shift['success'] === false ) {
             wp_send_json_error( $shift );
@@ -145,12 +147,12 @@ class HRM_Shift {
     function add_shift( $postData ) {
         $validation = $this->validation( $postData );
 
-        $postData['departments'] = $this->filter_departments( $postData['times'] );
+        $postData['departments'] = $this->filter_departments( sanitize_text_field( $postData['times'] ) );
         
         if ( ! is_wp_error( $validation ) ) {
             $current_date           = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
-            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
+            $postData['punch_start'] = $current_date .' '. trim( sanitize_text_field( $postData['punch_start'] ) );
+            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $postData['punch_start'] ) ) );
             $postData['times']      = maybe_serialize( $postData['times'] ); 
 
             $store = hrm_insert_records( $postData );
@@ -176,7 +178,8 @@ class HRM_Shift {
 
     function ajax_update_shift() {
         check_ajax_referer('hrm_nonce');
-        $shift = self::getInstance()->update_shift( $_POST );
+        $POST = wp_unslash( $_POST );
+        $shift = self::getInstance()->update_shift( $POST );
 
         
         if (  isset( $shift['success'] ) &&  $shift['success'] === false ) {
@@ -226,8 +229,8 @@ class HRM_Shift {
         if ( ! is_wp_error( $validation ) ) {
             $postData = $this->filter_shift_data( $postData );
             $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['punch_start'] = $current_date .' '. trim($postData['punch_start']);
-            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( $postData['punch_start'] ) );
+            $postData['punch_start'] = $current_date .' '. trim( sanitize_text_field( $postData['punch_start'] ) );
+            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $postData['punch_start'] ) ) );
             $postData['times'] = maybe_serialize( $postData['times'] ); 
 
 
@@ -252,7 +255,7 @@ class HRM_Shift {
             if ( $delete ) {
                 Relation::whereIn('to', $delete)
                     ->where('type', 'time_shift_department')
-                    ->where('from', $postData['id'])
+                    ->where('from', intval( $postData['id'] ) )
                     ->delete();
             }
             
@@ -271,7 +274,7 @@ class HRM_Shift {
     function validation( $postData ) {
         global $wpdb;
         $departments = $this->filter_departments( $postData['times'] );
-        $shift_id = isset( $postData['id'] ) ? $postData['id'] : false;
+        $shift_id = isset( $postData['id'] ) ? intval( $postData['id'] ) : false;
 
         $time_shift = hrm_tb_prefix() . 'hrm_time_shift';
         $relation_tb = hrm_tb_prefix() . 'hrm_relation';
@@ -334,16 +337,17 @@ class HRM_Shift {
 	function ajax_get_shift() {
 
 		check_ajax_referer('hrm_nonce');
-        $shift = self::getInstance()->get_shift( $_POST );
+        $POST = wp_unslash( $_POST );
+        $shift = self::getInstance()->get_shift( $POST );
 
         wp_send_json_success( $shift );
 	}
 
 	function get_shift( $postData ) {
         
-        $status   = empty( $postData['status'] ) ? 1 : $postData['status'];
-        $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : $postData['per_page'];
-        $id       = empty( $postData['id'] ) ? false : $postData['id'];
+        $status   = empty( $postData['status'] ) ? 1 : sanitize_text_field( $postData['status'] );
+        $per_page = empty( $postData['per_page'] ) ? hrm_per_page() : intval( $postData['per_page'] );
+        $id       = empty( $postData['id'] ) ? false : intval( $postData['id'] );
         $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 
         Paginator::currentPageResolver(function () use ($page) {

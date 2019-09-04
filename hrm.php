@@ -4,7 +4,7 @@
  * Plugin URI: http://wpspear.com/hrm/
  * Description: Organization, Industries and Office management
  * Author: asaquzzaman
- * Version: 2.2.14
+ * Version: 2.2.15
  * Author URI: http://mishubd.com
  * License: GPL2
  * TextDomain: hrm
@@ -127,7 +127,7 @@ class WP_Hrm {
      * @return type
      */
     private function define_constants() {
-        $this->define( 'HRM_VERSION', '2.2.14' );
+        $this->define( 'HRM_VERSION', '2.2.15' );
         $this->define( 'HRM_DB_VERSION', '2.0' );
         $this->define( 'HRM_PATH', dirname( __FILE__ ) );
         $this->define( 'HRM_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates' );
@@ -203,10 +203,11 @@ class WP_Hrm {
     }
 
     function hrm_banner() {
-        if( empty( $_GET['page'] ) ) {
+        $GET = wp_unslash( $_GET );
+        if( empty( $GET['page'] ) ) {
             return;
         }
-        if( $_GET['page'] != 'hr_management' ) {
+        if( $GET['page'] != 'hr_management' ) {
             return;
         }
         if ( class_exists('hrm_front') ) {

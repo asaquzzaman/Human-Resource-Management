@@ -5,7 +5,7 @@ Tags: hrm, human resource, human resource management, office management, industr
 Requires at least: 4.4
 Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 2.2.14
+Stable tag: 2.2.15
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -94,6 +94,11 @@ If you want to turn your WordPress site into a full-fledged employee management 
 10. Recruitment
 
 == Changelog ==
+
+= 2.2.15 - Sep 04, 2019 =
+
+ * **Fix** Some security issue.
+ * **Fix** Data filtering issue.
 
 = 2.2.14 - Sep 01, 2019 =
 

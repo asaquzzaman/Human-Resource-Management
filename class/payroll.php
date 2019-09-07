@@ -43,9 +43,14 @@ class Hrm_Payroll {
 
     function ajax_delete_salary() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
+        
+        $postdata = [
+            'delete' => isset( $_POST['delete'] ) ? hrm_clean( $_POST['delete'] ) : '',
+            'class'  => isset( $_POST['class'] ) ? hrm_clean( $_POST['class'] ) : '',
+            'method' => isset( $_POST['method'] ) ? hrm_clean( $_POST['method'] ) : '',
+        ];
 
-        $records = self::getInstance()->delete_salary( $POST );
+        $records = self::getInstance()->delete_salary( $postdata );
         wp_send_json_success($records);
     }
 
@@ -58,8 +63,19 @@ class Hrm_Payroll {
 
     function ajax_insert_formula() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $salary = self::getInstance()->insert_formula( $POST );
+      
+        $postdata = [
+            'class'        => isset( $_POST['class'] ) ? hrm_clean( $_POST['class'] ) : '',
+            'method'       => isset( $_POST['method'] ) ? hrm_clean( $_POST['method'] ) : '',
+            'transformers' => isset( $_POST['transformers'] ) ? hrm_clean( $_POST['transformers'] ) : '',
+            'name'         => isset( $_POST['name'] ) ? hrm_clean( $_POST['name'] ) : '',
+            'formula'      => isset( $_POST['formula'] ) ? hrm_clean( $_POST['formula'] ) : '',
+            'status'       => isset( $_POST['status'] ) ? hrm_clean( $_POST['status'] ) : '',
+            'type'         => isset( $_POST['type'] ) ? hrm_clean( $_POST['type'] ) : '',
+            'description'  => isset( $_POST['description'] ) ? hrm_clean( $_POST['description'] ) : '',
+        ];
+
+        $salary = self::getInstance()->insert_formula( $postdata );
 
         wp_send_json_success( $salary );
     }
@@ -126,9 +142,12 @@ class Hrm_Payroll {
 
     function ajax_check_formula_validity() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
-        $formula_val = self::getInstance()->formula_validator( $POST['formula'] );
+        $postdata = [
+            'formula' => isset( $_POST['formula'] ) ? hrm_clean( $_POST['formula'] ) : '',
+        ];
+        
+        $formula_val = self::getInstance()->formula_validator( $postdata['formula'] );
 
         if ( floatval( $formula_val ) ) {
             wp_send_json_success(
@@ -147,14 +166,21 @@ class Hrm_Payroll {
 
     function ajax_get_salary() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
+        
+        $postdata = [
+            'from'        => isset( $_POST['from'] ) ? hrm_clean( $_POST['from'] ) : '',
+            'page'        => isset( $_POST['page'] ) ? hrm_clean( $_POST['page'] ) : '',
+            'id'          => isset( $_POST['id'] ) ? hrm_clean( $_POST['id'] ) : '',
+            'employee_id' => isset( $_POST['employee_id'] ) ? hrm_clean( $_POST['employee_id'] ) : '',
+        ];
+
         $salary = self::getInstance()->get_salary( $POST );
 
         wp_send_json_success( $salary );
     }
 
     function get_salary( $postData ) {
-        $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : sanitize_text_field( $postData['from'] );
+        $salary_date  = empty( $postData['from'] ) ? current_time( 'mysql' ) : hrm_clean( $postData['from'] );
         $start_date  = date( 'Y-m-01', strtotime( $salary_date ) );
         $end_date    = date( 'Y-m-t', strtotime( $salary_date ) );
         $page        = empty( $postData['page'] ) ? 1 : intval( $postData['page'] );
@@ -213,16 +239,22 @@ class Hrm_Payroll {
 
     function ajax_fetch_statement() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $salary = self::getInstance()->fetch_statement( $POST );
+        
+        $postdata = [
+            'id'        => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'type'      => isset( $_POST['type'] ) ? hrm_clean( $_POST['type'] ) : '',
+            'salaryDay' => isset( $_POST['salaryDay'] ) ? hrm_clean( $_POST['salaryDay'] ) : '',
+        ];
+
+        $salary = self::getInstance()->fetch_statement( $postdata );
 
         wp_send_json_success( $salary );
     }
 
     function fetch_statement( $postData ) {
         $id = intval( $postData['id'] );
-        $type = sanitize_text_field( $postData['type'] );
-        $date = sanitize_text_field( $postData['salaryDay'] );
+        $type = hrm_clean( $postData['type'] );
+        $date = hrm_clean( $postData['salaryDay'] );
 
         $start_date = date( 'Y-m-01', strtotime( $date ) );
         $end_date = date( 'Y-m-t', strtotime( $date ) );
@@ -250,8 +282,12 @@ class Hrm_Payroll {
 
     function ajax_get_employee_salary() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $salary = self::getInstance()->get_employee_salary( $POST );
+        
+        $postdata = [
+            'salary_id' => isset( $_POST['salary_id'] ) ? hrm_clean( $_POST['salary_id'] ) : '',
+        ];
+
+        $salary = self::getInstance()->get_employee_salary( $postdata );
 
         wp_send_json_success( $salary );
     }
@@ -276,14 +312,21 @@ class Hrm_Payroll {
 
     function ajax_group_filter() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $salary = self::getInstance()->group_filter( $POST );
+        
+        $postdata = [
+            'id' => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'name' => isset( $_POST['name'] ) ? hrm_clean( $_POST['name'] ) : '',
+            'page' => isset( $_POST['page'] ) ? intval( $_POST['page'] ) : '',
+
+        ];
+
+        $salary = self::getInstance()->group_filter( $postdata );
 
         wp_send_json_success( $salary );
     }
 
     function group_filter( $postData ) {
-        $name = empty( $postData['name'] ) ? false : sanitize_text_field( $postData['name'] );
+        $name = empty( $postData['name'] ) ? false : hrm_clean( $postData['name'] );
         $id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
         $per_page = hrm_per_page();
         $page   = empty(  $postData['page'] ) ? 1 : intval( $postData['page'] );
@@ -323,15 +366,26 @@ class Hrm_Payroll {
 
     function ajax_generate_salary_statement() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $salary = self::getInstance()->generate_salary_statement( $POST );
+        
+        $postdata = [
+            'id'            => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'salary'        => isset( $_POST['salary'] ) ? hrm_clean( $_POST['salary'] ) : '',
+            'group'         => isset( $_POST['group'] ) ? hrm_clean( $_POST['group'] ) : '',
+            'salary_period' => isset( $_POST['salary_period'] ) ? hrm_clean( $_POST['salary_period'] ) : '',
+            'save'          => isset( $_POST['save'] ) ? hrm_clean( $_POST['save'] ) : '',
+            'isUpdate'      => isset( $_POST['isUpdate'] ) ? hrm_clean( $_POST['isUpdate'] ) : '',
+            'category'      => isset( $_POST['category'] ) ? hrm_clean( $_POST['category'] ) : '',
+            'category_id'   => isset( $_POST['category_id'] ) ? hrm_clean( $_POST['category_id'] ) : '',
+        ];
+
+        $salary = self::getInstance()->generate_salary_statement( $postdata );
 
         wp_send_json_success( $salary );
     }
 
     function generate_salary_statement( $postData ) {
-        $salary         = sanitize_text_field( $postData['salary'] );
-        $group          = empty( $postData['group'] ) ? 0 : sanitize_text_field( $postData['group'] );
+        $salary         = hrm_clean( $postData['salary'] );
+        $group          = empty( $postData['group'] ) ? 0 : hrm_clean( $postData['group'] );
         $salary_period  = $postData['salary_period'] == 'monthly' ? true : false;
         $formulas       = $all_formulas = $this->get_formula();
         $formulas_name  = array();
@@ -387,7 +441,7 @@ class Hrm_Payroll {
         if ( $is_save ) {
 
             $store_data = array(
-                'month'                => date( 'Y-m-d', strtotime( sanitize_text_field( $postData['month'] ) ) ),
+                'month'                => date( 'Y-m-d', strtotime( hrm_clean( $postData['month'] ) ) ),
                 'category'             => $postData['category'],
                 'category_id'          => $postData['category_id'],
                 'employee_id'          => $postData['category'] == 'employee' ? $postData['category_id'] : 0,
@@ -533,17 +587,20 @@ class Hrm_Payroll {
 
     function ajax_update_formula() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $formula = self::getInstance()->update_formula( $POST );
+        $postdata = [
+            'id'      => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'formula' => isset( $_POST['formula'] ) ? hrm_clean( $_POST['formula'] ) : '',
+        ];
+
+        $formula = self::getInstance()->update_formula( $postdata );
 
         wp_send_json_success( $formula );
     }
 
     function ajax_delete_formula() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
-        self::getInstance()->delete_formula( $POST['delete'] );
+        self::getInstance()->delete_formula( hrm_clean( $_POST['delete'] ) );
         wp_send_json_success();
     }
 
@@ -563,18 +620,22 @@ class Hrm_Payroll {
 
     function ajax_get_formula() {
     	check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
+        
+        $postdata = [
+            'id'      => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'name' => isset( $_POST['name'] ) ? hrm_clean( $_POST['name'] ) : '',
+        ];
 
-    	$formula = self::getInstance()->get_formula( $POST );
+    	$formula = self::getInstance()->get_formula( $postdata );
 
     	wp_send_json_success( $formula );
     }
 
     function get_formula( $postData = array() ) {
-		$name = empty( $postData['name'] ) ? false : sanitize_text_field( $postData['name'] );
-		$id   = empty( $postData['id'] ) ? false : intval( $postData['id'] );
-        $status = 'enable';
-        $page = 1;
+        $name     = empty( $postData['name'] ) ? false : hrm_clean( $postData['name'] );
+        $id       = empty( $postData['id'] ) ? false : intval( $postData['id'] );
+        $status   = 'enable';
+        $page     = 1;
         $per_page = 100000;
       
 

@@ -58,15 +58,20 @@ class Hrm_Admin {
 
     function ajax_designation_filter() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $locations = $this->designation_filter($POST);
+
+        $postdata = [
+            'title' => hrm_clean( $_POST['title'] ),
+            'page'  => intval( $_POST['page'] )
+        ];
+
+        $locations = $this->designation_filter( $postdata );
 
         wp_send_json_success($locations);
     }
 
     function designation_filter( $postdata = [], $id = false  ) {
             
-        $title     = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
+        $title     = empty( $postdata['title'] ) ? '' : hrm_clean( $postdata['title'] );
         $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
 
         $per_page = hrm_per_page();
@@ -106,18 +111,25 @@ class Hrm_Admin {
 
     function ajax_notice_filter() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $locations = $this->notice_filter($POST);
+
+        $postdata = [
+            'title' => hrm_clean( $_POST['title'] ),
+            'from'  => hrm_clean( $_POST['from'] ),
+            'to'    => hrm_clean( $_POST['to'] ),
+            'page'  => intval( $_POST['page'] )
+        ];
+
+        $locations = $this->notice_filter( $postdata );
 
         wp_send_json_success($locations);
     }
 
     function notice_filter( $postdata = [], $id = false  ) {
             
-        $title     = empty( $postdata['title'] ) ? '' : sanitize_text_field( $postdata['title'] );
+        $title     = empty( $postdata['title'] ) ? '' : hrm_clean( $postdata['title'] );
         $page      = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
-        $from      = empty( $postdata['from'] ) ? '' : sanitize_text_field( $postdata['from'] );
-        $to        = empty( $postdata['to'] ) ? '' : sanitize_text_field( $postdata['to'] );
+        $from      = empty( $postdata['from'] ) ? '' : hrm_clean( $postdata['from'] );
+        $to        = empty( $postdata['to'] ) ? '' : hrm_clean( $postdata['to'] );
         $per_page = hrm_per_page();
 
         if ( $id !== false  ) {
@@ -165,15 +177,20 @@ class Hrm_Admin {
 
     function ajax_location_filter() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $locations = $this->location_filter($POST);
 
-        wp_send_json_success($locations);
+        $postdata = [
+            'name' => hrm_clean( $_POST['name'] ),
+            'page'  => intval( $_POST['page'] )
+        ];
+        
+        $locations = $this->location_filter( $postdata );
+
+        wp_send_json_success( $locations );
     }
 
     function location_filter( $postdata = [], $id = false  ) {
             
-        $name     = empty( $postdata['name'] ) ? '' : sanitize_text_field( $postdata['name'] );
+        $name     = empty( $postdata['name'] ) ? '' : hrm_clean( $postdata['name'] );
         $page     = empty(  $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         $per_page = hrm_per_page();
 
@@ -251,15 +268,14 @@ class Hrm_Admin {
     }
 
     public static function profile_update_role( $user_id ) {
-        $POST = wp_unslash( $_POST );
-        $postdata = $POST;
+
         // Bail if no user ID was passed
         if ( empty( $user_id ) ) {
             return;
         }
 
         // AC role we want the user to have
-        $new_role = isset( $postdata['hrm_manager'] ) ? sanitize_text_field( $postdata['hrm_manager'] ) : false;
+        $new_role = isset( $_POST['hrm_manager'] ) ? hrm_clean( $_POST['hrm_manager'] ) : false;
 
 
         // Bail if current user cannot promote the passing user
@@ -346,87 +362,8 @@ class Hrm_Admin {
         $this->emp_upload_image($employee_id);
     }
 
-
-
-    // function admin_init_action() {
-    //     check_ajax_referer( 'hrm_nonce' );
-    //     $POST = wp_unslash( $_POST );
-    //     if( isset( $POST['hrm_search'] ) ) {
-    //         hrm_Settings::getInstance()->search();
-    //     }
-
-    //     if( isset( $POST['hrm_pagination'] ) ) {
-    //         hrm_Settings::getInstance()->pagination_query_arg();
-    //     }
-
-    // }
-
-
-    // function search( $limit = null ) {
-
-    //     check_ajax_referer( 'hrm_nonce' );
-    //     $GET = wp_unslash( $_GET );
-    //     $POST = wp_unslash( $_POST );
-
-    //     if( ! isset( $POST['table_option'] ) || empty( $POST['table_option'] ) ) {
-
-    //         foreach ($GET as $key => $value) {
-    //             $data[$key] = $value;
-    //         }
-    //         unset( $data['pagenum'] );
-    //         $data['hrm_error'] = 'table_option';
-    //         $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-
-    //         wp_redirect( $query_arg  );
-    //     }
-
-    //     $table_option = get_option( $POST['table_option'] );
-    //     $table_option['table_option'] = ( isset( $table_option['table_option'] ) && is_array( $table_option['table_option'] ) ) ? $table_option['table_option'] : array();
-
-    //     foreach ( $table_option['table_option'] as $name => $value ) {
-    //         if( isset( $POST[$value] ) && ! empty( $POST[$value] ) ) {
-    //             $data[$value] = urlencode( $POST[$value] );
-    //         }
-
-    //         if( isset( $GET[$value] ) ) {
-
-    //             unset( $GET[$value] );
-    //         }
-    //     }
-
-    //     if( $data ) {
-    //         $data['table_option'] = $POST['table_option'];
-    //         $data['_wpnonce'] = $POST['_wpnonce'];
-    //         $data['type'] = '_search';
-    //     }
-
-    //     foreach ($GET as $key => $value) {
-    //         $data[$key] = $value;
-    //     }
-
-    //     unset( $data['pagenum'] );
-    //     $query_arg = add_query_arg( $data, admin_url( 'admin.php' ));
-
-    //     wp_redirect(  $query_arg );
-    // }
-
-
-    // function hrm_query( $table, $limit ) {
-    //     global $wpdb;
-    //     $GET = wp_unslash( $_GET );
-    //     $tabledb = $wpdb->prefix . $table;
-
-    //     $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
-    //     $offset = ( $pagenum - 1 ) * $limit;
-    //     $results = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM $tabledb ORDER BY id desc LIMIT $offset,$limit" );
-    //     $results['total_row'] = $wpdb->get_var("SELECT FOUND_ROWS()" );
-
-    //     return $results;
-    // }
-
     function pagination( $total, $limit ) {
-        $GET = wp_unslash( $_GET );
-        $pagenum = isset( $GET['pagenum'] ) ? absint( $GET['pagenum'] ) : 1;
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
@@ -552,8 +489,6 @@ class Hrm_Admin {
 
         );
 
-
-
         $menu = apply_filters( 'hrm_admin_menu_tabs', $sections );
 
         if( ! empty( $menu ) && is_array( $menu ) ) {
@@ -575,29 +510,19 @@ class Hrm_Admin {
         }
     }
 
-    // function update_project_meta( $project_id, $post ) {
-    //     $budget = floatval( $post['budget'] );
-    //     $symbol = $post['currency_symbol'];
-    //     $budget_utilize = get_post_meta( $project_id, '_project_budget_utilize', true );
-    //     if ( $budget >=  $budget_utilize ) {
-    //         update_post_meta( $project_id, '_budget', $budget );
-    //     }
-    //     $client = ( isset( $post['client'] ) && $post['client'] != '-1' ) ? $post['client'] : 0;
-    //     update_post_meta( $project_id, '_currency_symbol', $symbol );
-    //     update_post_meta( $project_id, '_client', $client );
-
-    //     if ( empty( $budget_utilize ) ) {
-    //         update_post_meta( $project_id, '_project_budget_utilize', '0' );
-    //     } else {
-    //       update_post_meta( $project_id, '_project_budget_utilize', $budget_utilize );
-    //     }
-    // }
-
     public static function ajax_update_department() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $department  = self::update_department( $POST );
-        $page_number = empty( $POST['page_number'] ) ? 1 : intval( $POST['page_number'] );
+
+        $postdata = [
+            'title'       => hrm_clean( $_POST['title'] ),
+            'status'      => hrm_clean( $_POST['status'] ),
+            'description' => hrm_clean( $_POST['description'] ),
+            'parent'      => hrm_clean( $_POST['parent'] ),
+            'dept_id'     => intval( $_POST['dept_id'] )
+        ];
+        
+        $department  = self::update_department( $postdata );
+        $page_number = empty( $_POST['page_number'] ) ? 1 : intval( $_POST['page_number'] );
         //$departments    = self::get_departments(false, true);
         //$formated_depts = self::get_department_by_hierarchical( $departments['departments'] );
 
@@ -623,7 +548,7 @@ class Hrm_Admin {
 
     public static function update_department( $postdata ) {
         
-        if ( empty( sanitize_text_field( $postdata['title'] ) ) ) {
+        if ( empty( hrm_clean( $postdata['title'] ) ) ) {
             return new WP_Error( 'dept_title', __( 'Department title required', 'hrm' ) );
         }
 
@@ -634,8 +559,8 @@ class Hrm_Admin {
 
         $table = $wpdb->prefix . 'hrm_job_category'; 
         $data  = array(
-            'name'        => sanitize_text_field( $postdata['title'] ),
-            'active'      => sanitize_text_field( $postdata['status'] ),
+            'name'        => hrm_clean( $postdata['title'] ),
+            'active'      => hrm_clean( $postdata['status'] ),
             'description' => sanitize_textarea_field( $postdata['description'] ),
             'parent'      => empty( $postdata['parent'] ) || ( $postdata['parent'] == '-1' ) ? 0 : absint( $postdata['parent'] ),
         );
@@ -661,8 +586,8 @@ class Hrm_Admin {
 
     public static function ajax_get_departments() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $page_number = empty( $POST['page_number'] ) ? 1 : intval( $POST['page_number'] );
+        
+        $page_number = empty( $_POST['page_number'] ) ? 1 : intval( $_POST['page_number'] );
         
         $departments = self::get_departments( false, true );
         
@@ -823,10 +748,10 @@ class Hrm_Admin {
      * @return void
      */
     public static function display_rows_hierarchical( $departments, $pagenum = 1, $per_page = 20 ) {
-        $REQUEST = wp_unslash( $_REQUEST );
+        
         $level = 0;
 
-        if ( empty( $REQUEST['s'] ) ) {
+        if ( empty( hrm_clean( $_REQUEST['s'] ) ) ) {
 
             $top_level_departments = array();
             $children_departments = array();
@@ -877,11 +802,6 @@ class Hrm_Admin {
             }
         }
 
-
-        // foreach ( $to_display as $department_id => $level ) {
-
-        //     $this->single_row( $department_id, $level );
-        // }
         return $to_display;
     }
 
@@ -949,8 +869,8 @@ class Hrm_Admin {
 
     public static function ajax_delete_department() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $results = self::delete_department( $POST['dept_id'] );
+        
+        $results = self::delete_department( hrm_clean( $_POST['dept_id'] ) );
 
         $departments = self::get_departments( false, true );
         $dept_drop_down = self::get_department_by_hierarchical( $departments['departments'], 1, 1000 );

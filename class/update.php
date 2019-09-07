@@ -101,8 +101,6 @@ class Hrm_Update {
         if ( ! current_user_can( 'update_plugins' ) || ! self::is_needs_update() ) {
             return;
         }
-
-        $SERVER = wp_unslash( $_SERVER );
         
         $last_file_key           = array_keys( self::$updates );
         $latest_version_file_key = end( $last_file_key );
@@ -111,7 +109,7 @@ class Hrm_Update {
             ?>
                 <div id="message" class="updated">
                     <p><<strong>WP HRM Data Update Required</strong> We need to update your install to the latest version</p>
-                    <p class="submit"><a href="<?php echo esc_url( add_query_arg( [ 'HRM_do_update' => true ], esc_url( $SERVER['REQUEST_URI'] ) ) ); ?>" class="HRM-update-btn button-primary"><?php esc_html_e( 'Run the updater', 'hrm' ); ?></a></p>
+                    <p class="submit"><a href="<?php echo esc_url( add_query_arg( [ 'HRM_do_update' => true ], esc_url( $_SERVER['REQUEST_URI'] ) ) ); ?>" class="HRM-update-btn button-primary"><?php esc_html_e( 'Run the updater', 'hrm' ); ?></a></p>
                 </div>
 
                 <script type="text/javascript">
@@ -136,8 +134,7 @@ class Hrm_Update {
      * @return void
      */
     public static function do_updates() {
-         $GET = wp_unslash( $_GET );
-        if ( isset( $GET['HRM_do_update'] ) && $GET['HRM_do_update'] ) {
+        if ( isset( $_GET['HRM_do_update'] ) && esc_attr( $_GET['HRM_do_update'] ) ) {
             $this->perform_updates();
         }
     }
@@ -154,8 +151,6 @@ class Hrm_Update {
             return;
         }
 
-        $SERVER = wp_unslash( $_SERVER );
-
         $installed_version = get_option( 'hrm_db_version' );
 
         foreach ( self::$updates as $version => $path ) {
@@ -165,7 +160,7 @@ class Hrm_Update {
             }
         }
 
-        $location = remove_query_arg( ['HRM_do_update'], $SERVER['REQUEST_URI'] );
+        $location = remove_query_arg( ['HRM_do_update'], hrm_clean( $_SERVER['REQUEST_URI'] ) );
         wp_redirect( $location );
         exit();
     }

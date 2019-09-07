@@ -167,10 +167,9 @@ class Hrm_Settings {
     }
 
     function send( $to, $subject, $message, $sender_id ) {
-        $server = wp_unslash( $_SERVER );
-
+        
         $current_user = get_user_by( 'id', $sender_id );
-        $reply        = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $server['SERVER_NAME'] ) );;
+        $reply        = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( hrm_clean( $_SERVER['SERVER_NAME'] ) ) );
         $reply_to     = "Reply-To: <$reply>";
         $content_type = 'Content-Type: text/html';
         $charset      = 'Charset: UTF-8';
@@ -234,8 +233,12 @@ class Hrm_Settings {
 
     public static function ajax_update_settings() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        self::getInstance()->update_settings($POST);
+        
+        $postdata = [
+            'hrm_financial_year' => isset( $_POST['hrm_financial_year'] ) ? hrm_clean( $_POST['hrm_financial_year'] ) : '',
+        ];
+
+        self::getInstance()->update_settings($postdata);
 
         wp_send_json_success();
     }
@@ -307,14 +310,12 @@ class Hrm_Settings {
     public function hrm_email_settings () {
         check_ajax_referer('hrm_nonce');
 
-        $POST = wp_unslash( $_POST );
-
         $settings = get_option( 'hrm_email_settings', [
             'form_email' => get_bloginfo( 'admin_email' )
         ]);
 
-        $settings['form_email'] = (!empty($POST['form_email']) && is_email( $POST['form_email'] ) ) ? $POST['form_email']: $settings['form_email'];
-        $settings['email_type'] = (!empty($POST['email_type']) ) ? esc_attr( $POST['email_type'] ) : $settings['email_type'];
+        $settings['form_email'] = !empty( $_POST['form_email'] ) && is_email( $_POST['form_email'] ) ? sanitize_email( $_POST['form_email'] ) : $settings['form_email'];
+        $settings['email_type'] = !empty( $_POST['email_type'] )  ? hrm_clean( $_POST['email_type'] ) : $settings['email_type'];
 
         update_option( 'hrm_email_settings', $settings);
         wp_send_json_success(true);

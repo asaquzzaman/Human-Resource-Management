@@ -18,10 +18,30 @@ class Salary_Group extends Eloquent {
         'updated_by',
     ];
 
-    public static function sanitize( $postData ) {
-        $postData['income'] = maybe_serialize( $postData['income'] );
-        $postData['deduction'] = maybe_serialize( $postData['deduction'] );
+    private static $_instance;
 
-        return $postData;
+    public static function getInstance() {
+        if ( !self::$_instance ) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
+    public static function sanitize() {
+        $instance = self::getInstance();
+        $postdata = [];
+
+        foreach ( $instance->fillable as $key => $fillable ) {
+            
+            if ( isset( $_POST[$fillable] ) ) {
+                $postdata[$fillable] = hrm_clean( $_POST[$fillable] );
+            }
+        }
+
+        $postdata['income'] = maybe_serialize( $postdata['income'] );
+        $postdata['deduction'] = maybe_serialize( $postdata['deduction'] );
+
+        return $postdata;
     }
 }

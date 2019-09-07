@@ -133,59 +133,59 @@ class Hrm_Ajax {
     function update_general_info() {
         check_ajax_referer('hrm_nonce');
         
-        $POST = wp_unslash( $_POST );
-
         if ( hrm_current_user_role() != hrm_manager_role_key() && !hrm_is_current_user_administrator() ) {
             wp_send_json_error( array( 'success_msg' => __( 'Something went wrong!', 'hrm' ) ) );
         }
-        update_option( 'organization_name', sanitize_text_field( $POST['organization_name'] ) );
-        update_option( 'tax_id', sanitize_text_field( $POST['tax_id'] ) );
-        update_option( 'registration_number', sanitize_text_field( $POST['registration_number'] ) );
-        update_option( 'phone', sanitize_text_field( $POST['phone'] ) );
-        update_option( 'fax', sanitize_text_field( $POST['fax'] ) );
-        update_option( 'addres_street_1', sanitize_text_field( $POST['addres_street_1'] ) );
-        update_option( 'address_street_2', sanitize_text_field( $POST['address_street_2'] ) );
-        update_option( 'city', sanitize_text_field( $POST['city'] ) );
-        update_option( 'state_province', sanitize_text_field( $POST['state_province'] ) );
-        update_option( 'zip', sanitize_text_field( $POST['zip'] ) );
-        update_option( 'country', sanitize_text_field( $POST['country'] ) );
-        update_option( 'note', sanitize_textarea_field( $POST['note'] ) );
+        update_option( 'organization_name', hrm_clean( $_POST['organization_name'] ) );
+        update_option( 'tax_id', hrm_clean( $_POST['tax_id'] ) );
+        update_option( 'registration_number', hrm_clean( $_POST['registration_number'] ) );
+        update_option( 'phone', hrm_clean( $_POST['phone'] ) );
+        update_option( 'fax', hrm_clean( $_POST['fax'] ) );
+        update_option( 'addres_street_1', hrm_clean( $_POST['addres_street_1'] ) );
+        update_option( 'address_street_2', hrm_clean( $_POST['address_street_2'] ) );
+        update_option( 'city', hrm_clean( $_POST['city'] ) );
+        update_option( 'state_province', hrm_clean( $_POST['state_province'] ) );
+        update_option( 'zip', hrm_clean( $_POST['zip'] ) );
+        update_option( 'country', hrm_clean( $_POST['country'] ) );
+        update_option( 'note', hrm_clean( $_POST['note'] ) );
 
         wp_send_json_success( array( 'success_msg' => __( 'Updated Successfully', 'hrm' ) ) );
     }
 
     function user_can() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
-        $user_id = intval( $post['user_id'] );
-        $cap = $post['cap'];
+        $user_id = intval( $_POST['user_id'] );
+        $cap = hrm_clean( $_POST['cap'] );
 
         wp_send_json_success( hrm_user_can( $cap, $user_id ) );
     }
 
     function punch_form_status() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        Hrm_Time::getInstance()->punch_form_status( $POST );
+
+        $postdata = [
+            'status' => hrm_clean( $_POST['status'] ),
+        ];
+        
+        Hrm_Time::getInstance()->punch_form_status( $postdata );
         wp_send_json_success( array( 'success_msg' => __( 'Save changes!', 'hrm' ) ) );
     }
 
     function hrm_profile_pic_del() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $file_id = (isset( $POST['file_id'] )) ? intval( $POST['file_id'] ) : 0;
-        $employee_id = (isset( $POST['employee_id'] )) ? intval( $POST['employee_id'] ) : 0;
-        $content = Hrm_Employee::getInstance()->delete_file( $file_id, true, $employee_id );
+        
+        $file_id     = isset( $_POST['file_id'] ) ? intval( $_POST['file_id'] ) : 0;
+        $employee_id = isset( $_POST['employee_id'] ) ? intval( $_POST['employee_id'] ) : 0;
+        $content     = Hrm_Employee::getInstance()->delete_file( $file_id, true, $employee_id );
 
         wp_send_json_success(array( 'success_msg' => __( 'Deleted successfull', 'hrm' ), 'content' => $content ) );
     }
 
     function hrm_delete_file() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
-        $file_id = (isset( $POST['file_id'] )) ? intval( $POST['file_id'] ) : 0;
+        
+        $file_id = isset( $_POST['file_id'] ) ? intval( $_POST['file_id'] ) : 0;
 
         HRM_File::getInstance()->delete_file( $file_id, true );
 
@@ -195,7 +195,7 @@ class Hrm_Ajax {
     function get_organization_info() {
         $info          = [
             'organization_name'   => get_option( 'organization_name' ),
-            'tax_id'              => get_option( 'tax_id', sanitize_text_field( $POST['tax_id'] ) ),
+            'tax_id'              => get_option( 'tax_id' ),
             'registration_number' => get_option( 'registration_number' ),
             'phone'               => get_option( 'phone' ),
             'fax'                 => get_option( 'fax' ),

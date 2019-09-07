@@ -6,6 +6,16 @@ use HRM\Models\Department;
 
 class Designation extends Eloquent {
 
+    private static $_instance;
+
+    public static function getInstance() {
+        if ( !self::$_instance ) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
     protected $primaryKey = 'id';
     protected $table      = 'hrm_designation';
     public $timestamps    = true;
@@ -20,5 +30,19 @@ class Designation extends Eloquent {
 
     public function dept() {
         return $this->hasOne( 'HRM\Models\Department', 'id', 'department' );
+    }
+
+    public static function sanitize() {
+        $instance = self::getInstance();
+        $postdata = [];
+
+        foreach ( $instance->fillable as $key => $fillable ) {
+            
+            if ( isset( $_POST[$fillable] ) ) {
+                $postdata[$fillable] = hrm_clean( $_POST[$fillable] );
+            }
+        }
+
+        return $postdata;
     }
 }

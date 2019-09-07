@@ -21,8 +21,8 @@ class Crud extends Action {
 	 *
 	 * @return  void
 	 */
-	public function set_post_data( $postdata ) {
-		$this->postdata = $postdata;
+	public function set_post_data() {
+		$this->postdata = [];
 	}
 
 	/**
@@ -77,8 +77,8 @@ class Crud extends Action {
 
 	public static function ajax_data_process() {
 		check_ajax_referer('hrm_nonce');
-		$POST = wp_unslash( $_POST );
-		$success = self::data_process( $POST );
+		
+		$success = self::data_process();
 
 		if ( is_wp_error( $success ) ) {
 			wp_send_json_error( array(
@@ -91,13 +91,13 @@ class Crud extends Action {
 		));
 	}
 
-	public static function data_process( $postdata ) {
+	public static function data_process() {
 
-		$class  = isset( $postdata['class'] ) ? sanitize_text_field( $postdata['class'] ) : '';
-		$method = isset( $postdata['method'] ) ? sanitize_text_field( $postdata['method'] ) : '';
+		$class  = isset( $_POST['class'] ) ? hrm_clean( $_POST['class'] ) : '';
+		$method = isset( $_POST['method'] ) ? hrm_clean( $_POST['method'] ) : '';
 		$self   = self::getInstance();
 
-		$self->set_post_data( $postdata );
+		$self->set_post_data();
 		$self->set_class( $class );
 		$self->set_method( $method );
 		

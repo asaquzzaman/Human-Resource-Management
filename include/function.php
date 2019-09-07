@@ -5,48 +5,46 @@ use HRM\Core\Crud\Crud;
 
 function hrm_ajax_delete_records() {
     check_ajax_referer('hrm_nonce');
-    $POST = wp_unslash( $_POST );
-    $records = hrm_delete_records( $POST );
-    wp_send_json_success($records);
+
+    $records = hrm_delete_records();
+    wp_send_json_success( $records );
 }
 
-function hrm_delete_records($postdata) {
-    return Crud::data_process( $postdata );
+function hrm_delete_records() {
+    return Crud::data_process();
 }
 
 function hrm_ajax_get_records() {
     check_ajax_referer('hrm_nonce');
-    $POST = wp_unslash( $_POST );
-    $records = hrm_get_records( $POST );
-    wp_send_json_success($records);
+
+    $records = hrm_get_records();
+    wp_send_json_success( $records );
 }
 
-function hrm_get_records($postdata) {
-    return Crud::data_process( $postdata );
+function hrm_get_records() {
+    return Crud::data_process();
 }
 
 function hrm_ajax_insert_records() {
     check_ajax_referer('hrm_nonce');
-    $POST = wp_unslash( $_POST );
-    wp_send_json_success(
-        hrm_insert_records( $POST )
-    );
+    
+    $records = hrm_insert_records();
+    wp_send_json_success( $records );
 }
 
-function hrm_insert_records( $postdata ) {
-    return Crud::data_process( $postdata );
+function hrm_insert_records() {
+    return Crud::data_process();
 }
 
 function hrm_ajax_update_records() {
     check_ajax_referer('hrm_nonce');
-    $POST = wp_unslash( $_POST );
-    wp_send_json_success(
-        hrm_update_records( $POST )
-    );
+
+    $records = hrm_update_records();
+    wp_send_json_success( $records );
 }
 
-function hrm_update_records($postdata) {
-    return Crud::data_process( $postdata );
+function hrm_update_records() {
+    return Crud::data_process();
 }
 
 
@@ -297,8 +295,7 @@ function hrm_get_employee_id() {
     $menu  = hrm_page();
     $page  = $query['page'];
     $tab   = $query['tab'];
-    $GET   = wp_unslash( $_GET );
-
+    
     if ( !isset( $menu[$page][$tab]['nested_tab'] ) ) {
         return false;
     }
@@ -307,22 +304,22 @@ function hrm_get_employee_id() {
         return false;
     }
 
-    $employee_id = !empty( $GET['employee_id'] ) ? intval( $GET['employee_id'] ) : false;
+    $employee_id = !empty( $_GET['employee_id'] ) ? intval( $_GET['employee_id'] ) : false;
 
     return $employee_id;
 }
 
 function hrm_pagenum() {
-    $REQUEST = wp_unslash( $_REQUEST );
-    return isset( $REQUEST['pagenum'] ) ? intval( $REQUEST['pagenum'] ) : 1;
+    
+    return isset( $_REQUEST['pagenum'] ) ? intval( $_REQUEST['pagenum'] ) : 1;
 }
 
 function hrm_result_limit() {
-    $REQUEST = wp_unslash( $_REQUEST );
-    if ( isset( $REQUEST['limit'] ) && $REQUEST['limit'] != '-1' ) {
-        return intval( $REQUEST['limit'] );
-    } else if ( isset( $REQUEST['hrm_attr']['limit'] ) && $REQUEST['hrm_attr']['limit'] != '-1' ) {
-        return intval( $REQUEST['hrm_attr']['limit'] );
+    
+    if ( isset( $_REQUEST['limit'] ) && $_REQUEST['limit'] != '-1' ) {
+        return intval( $_REQUEST['limit'] );
+    } else if ( isset( $_REQUEST['hrm_attr']['limit'] ) && intval( $_REQUEST['hrm_attr']['limit'] ) != '-1' ) {
+        return intval( $_REQUEST['hrm_attr']['limit'] );
     } else {
         return 2;
     }
@@ -539,11 +536,11 @@ function hrm_get_current_financial_id() {
 
 function hrm_can_load_footer_tag() {
     $query_args = hrm_get_query_args();
-    $GET = wp_unslash( $_GET );
+    
     $page       = $query_args['page'];
     $tab        = $query_args['tab'];
     $subtab     = $query_args['subtab'];
-    $vue        = ! empty( $GET['active'] ) && $GET['active'] == 'vue' ? true : false;
+    $vue        = ! empty( $_GET['active'] ) && esc_attr( $_GET['active'] ) == 'vue' ? true : false;
 
 
     if ( 
@@ -645,21 +642,21 @@ function hrm_set_administrator_capability() {
 }
 
 function hrm_get_client_ip() {
-    $server = wp_unslash( $_SERVER );
+    
     $ipaddress = '';
 
-    if ( isset($server['HTTP_CLIENT_IP'] ) ) {
-        $ipaddress = $server['HTTP_CLIENT_IP'];
-    } else if ( isset( $server['HTTP_X_FORWARDED_FOR'] ) ) {
-        $ipaddress = $server['HTTP_X_FORWARDED_FOR'];
-    } else if ( isset( $server['HTTP_X_FORWARDED'] ) ) {
-        $ipaddress = $server['HTTP_X_FORWARDED'];
-    } else if ( isset( $server['HTTP_FORWARDED_FOR'] ) ) {
-        $ipaddress = $server['HTTP_FORWARDED_FOR'];
-    } else if ( isset( $server['HTTP_FORWARDED'] ) ) {
-        $ipaddress = $server['HTTP_FORWARDED'];
-    } else if ( isset( $server['REMOTE_ADDR'] ) ) {
-        $ipaddress = $server['REMOTE_ADDR'];
+    if ( isset($_SERVER['HTTP_CLIENT_IP'] ) ) {
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    } else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else if ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+    } else if ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
+        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+    } else if ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
+        $ipaddress = $_SERVER['HTTP_FORWARDED'];
+    } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
     } else {
         $ipaddress = 'UNKNOWN';
     }
@@ -735,6 +732,21 @@ function hrmpr() {
 
     foreach ( $args as $arg ) {
         echo '<pre>'; print_r( $arg ); '</pre>';
+    }
+}
+
+/**
+ * Clean variables using hrm_clean. Arrays are cleaned recursively.
+ * Non-scalar values are ignored.
+ *
+ * @param string|array $var Data to sanitize.
+ * @return string|array
+ */
+function hrm_clean( $var ) {
+    if ( is_array( $var ) ) {
+        return array_map( 'hrm_clean', $var );
+    } else {
+        return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
     }
 }
 

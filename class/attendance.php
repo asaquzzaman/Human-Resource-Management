@@ -14,9 +14,9 @@ class Hrm_Attendance {
     use Transformer_Manager;
     private static $_instance;
 
-    public $unique_ids = array();
-    private $relation = 'AND';
-    public $total_over_time = 0;
+    public $unique_ids        = array();
+    private $relation         = 'AND';
+    public $total_over_time   = 0;
     public $total_worked_time = 0;
 
     public static function getInstance() {
@@ -44,24 +44,32 @@ class Hrm_Attendance {
 
     function ajax_filter_attendance() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        
 
         $results = [];
-        $punch_in  = empty(  $POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : sanitize_text_field( $POST['punch_in'] );
-        $punch_out = empty(  $POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : sanitize_text_field( $POST['punch_out'] );
+        $punch_in  = empty( $_POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : hrm_clean( $_POST['punch_in'] );
+        $punch_out = empty( $_POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : hrm_clean( $_POST['punch_out'] );
        
         
-        if ( $POST['allEmployees'] == 'true' ) {
+        if ( $_POST['allEmployees'] == 'true' ) {
             $employees = Hrm_Employeelist::getInstance()->get_employee();
 
+            $postdata = [
+                'id'        => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : false, 
+                'user_id'   => isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : false,
+                'punch_in'  => isset( $_POST['punch_in'] ) ? hrm_clean( $_POST['punch_in'] ) : false,
+                'punch_out' => isset( $_POST['punch_out'] ) ? hrm_clean( $_POST['punch_out'] ) : false,
+                'order_by'  => isset( $_POST['order_by'] ) ? hrm_clean( $_POST['order_by'] ) : false,
+                'per_page'  => isset( $_POST['per_page'] ) ? hrm_clean( $_POST['per_page'] ) : false,
+                'page'      => isset( $_POST['page'] ) ? hrm_clean( $_POST['page'] ) : false,
+            ];
+
             foreach ( $employees as $key => $employee ) {
-                $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out, $POST );
+                $results[] = $this->filter_attendance( $employee->id, $punch_in, $punch_out, $postdata );
             }
 
         } else {
-            $user_id   = empty( $POST['user_id'] ) ? get_current_user_id() : intval( $POST['user_id'] );
-            $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out, $POST );
+            $user_id   = empty( $_POST['user_id'] ) ? get_current_user_id() : intval( $_POST['user_id'] );
+            $results[] = $this->filter_attendance( $user_id, $punch_in, $punch_out, $postdata );
         }
         
         wp_send_json_success( $results );
@@ -88,7 +96,6 @@ class Hrm_Attendance {
             'to' => $punch_out
         ]);
 
-        
         $department          = Hrm_Admin::getInstance()->get_employee_department( $user_id );
         $work_week           = Hrm_Leave::getInstance()->work_week_array($punch_in, $punch_out);
         $exclud_dates        = array_merge( $leaves, $holidays, $work_week );
@@ -278,7 +285,7 @@ class Hrm_Attendance {
         return $times;
     }
 
-    function second_to($seconds) {
+    function second_to( $seconds ) {
       $t = round($seconds);
       return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
     }
@@ -331,15 +338,17 @@ class Hrm_Attendance {
 
     function ajax_save_punch_in() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
-        $post = $POST;
-        $punch = self::getInstance()->punch_in($post);
+        $postdata = [
+            'user_id' => isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : false
+        ];
+
+        $punch = self::getInstance()->punch_in( $postdata );
         
          wp_send_json_success( array(
             'can_punch_in' => self::getInstance()->can_punch_in(),
-            'attendance' => self::getInstance()->get_attendance(),
-            'success' => __( 'Punch in active', 'hrm' ),
+            'attendance'   => self::getInstance()->get_attendance(),
+            'success'      => __( 'Punch in active', 'hrm' ),
         ));
         
     }
@@ -714,7 +723,6 @@ class Hrm_Attendance {
 
     public function get_dashboard_attendance() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
         $employees = Hrm_Employeelist::getInstance()->get_employee(true);
 
@@ -920,44 +928,16 @@ class Hrm_Attendance {
         return $data;
     }
 
-    // public function get_absents( $employees, $attendances, $leaves ) {
-    //     $filter_attendances = [];
-    //     $fileter_leaves = [];
-    //     $data = [];
-        
-    //     foreach ( $leaves as $key => $leave ) {
-    //         $fileter_leaves[$leave['emp_id']] = $leave;
-    //     }
-
-    //     foreach ( $attendances as $key => $attendance ) {
-    //         $filter_attendances[$attendance->user_id][] = strtotime( $attendance->punch_in );
-    //     }
-
-    //     foreach ( $filter_attendances as $user_id => $filter_attendance ) {
-    //         $filter_attendances[$user_id] = date( 'h:i:s a', min($filter_attendance) );
-    //     }
-
-    //     foreach ( $employees as $key => $emp ) {
-    //         if ( array_key_exists( $emp->ID, $fileter_leaves )  ) {
-    //             $emp->data->leave = $fileter_leaves[$emp->ID];
-    //         }
-
-    //         if ( ! array_key_exists( $emp->ID, $filter_attendances ) ) {
-    //             $data[] = $emp->data;
-    //         }
-    //     }
-        
-    //     return $data;
-    // }
-
     public static function attendance_init() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
+        
         $self  = self::getInstance();
+        $postdata = [
+            'user_id' => isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : false
+        ];
         
         $has_time_shift = $self->has_time_shift(); 
-        $punch_in    = $self->punch_in_validation( $POST );
+        $punch_in    = $self->punch_in_validation( $postdata );
         $office_time = $self->get_office_time();
         $allow_id = empty( $office_time->ip ) ? [] : $office_time->ip;
 
@@ -1060,7 +1040,6 @@ class Hrm_Attendance {
 
     public static function ajax_punch_in() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
         $punch_id = self::getInstance()->punch_in();
 
@@ -1133,7 +1112,6 @@ class Hrm_Attendance {
 
     public static function ajax_punch_out() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
         $update = self::getInstance()->punch_out();
 
@@ -1206,19 +1184,18 @@ class Hrm_Attendance {
 
     public static function ajax_get_attendance() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
         $args = array();
         
-        if ( ! empty( $POST['search'] ) ) {
-            $postdata = $POST['search'];
+        if ( ! empty( $_POST['search'] ) ) {
+            $postdata = hrm_clean( $_POST['search'] );
 
-            if ( ! empty( $postdata['punch_in'] ) && hrm_validateDate( sanitize_text_field( $postdata['punch_in'] ), 'Y-m-d' ) ) {
-                $args['punch_in'] = sanitize_text_field( $postdata['punch_in'] ) .' '. '00:00:00'; 
+            if ( ! empty( $postdata['punch_in'] ) && hrm_validateDate( hrm_clean( $postdata['punch_in'] ), 'Y-m-d' ) ) {
+                $args['punch_in'] = hrm_clean( $postdata['punch_in'] ) .' '. '00:00:00'; 
             }
 
-            if ( ! empty( $postdata['punch_out'] ) && hrm_validateDate( sanitize_text_field( $postdata['punch_out'] ), 'Y-m-d' ) ) {
-                $args['punch_out'] = sanitize_text_field( $postdata['punch_out'] ) .' '. '24:59:59'; 
+            if ( ! empty( $postdata['punch_out'] ) && hrm_validateDate( hrm_clean( $postdata['punch_out'] ), 'Y-m-d' ) ) {
+                $args['punch_out'] = hrm_clean( $postdata['punch_out'] ) .' '. '24:59:59'; 
             }
 
             if ( ! empty( $postdata['user_id'] ) && intval( $postdata['user_id'] ) > 0 ) {
@@ -1232,9 +1209,9 @@ class Hrm_Attendance {
             wp_send_json_success( array(
                 'attendance'              => $attendance,
                 'punch_in_formated_date'  => hrm_get_date( $args['punch_in'] ),
-                'punch_out_formated_date' => hrm_get_date( sanitize_text_field( $postdata['punch_out'] ) ),
-                'punch_in_date'           => sanitize_text_field( $postdata['punch_in'] ),
-                'punch_out_date'          => sanitize_text_field( $postdata['punch_out'] )
+                'punch_out_formated_date' => hrm_get_date( hrm_clean( $postdata['punch_out'] ) ),
+                'punch_in_date'           => hrm_clean( $postdata['punch_in'] ),
+                'punch_out_date'          => hrm_clean( $postdata['punch_out'] )
                 //'total_time'              => self::getInstance()->count_office_time( $attendance )
             ) );
         }
@@ -1364,13 +1341,13 @@ class Hrm_Attendance {
         $user_id   = !isset( $postdata['user_id'] ) ? get_current_user_id() : intval( $postdata['user_id'] );
         $punch_in  = !isset( $postdata['punch_in'] ) 
             ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
-            : sanitize_text_field( $postdata['punch_in'] );
+            : hrm_clean( $postdata['punch_in'] );
 
         $punch_out = !isset( $postdata['punch_out'] ) 
             ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
-            : sanitize_text_field( $postdata['punch_out'] );
+            : hrm_clean( $postdata['punch_out'] );
 
-        $order_by = isset( $postdata['order_by'] ) ? sanitize_text_field( $postdata['order_by'] ) : 'id';
+        $order_by = isset( $postdata['order_by'] ) ? hrm_clean( $postdata['order_by'] ) : 'id';
         $per_page = empty( $postdata['per_page'] ) ? 100 : intval( $postdata['per_page'] );
         $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
         
@@ -1661,7 +1638,7 @@ class Hrm_Attendance {
 
         $table  = $wpdb->prefix . 'hrm_office_time';
 
-        $ip       = sanitize_text_field( $postdata['allow_ip'] );
+        $ip       = hrm_clean( $postdata['allow_ip'] );
         $string   = str_replace(' ', '', $ip);
         $allow_ip = explode('|', $string);
         $allow_ip = array_filter( $allow_ip, function( $ip ) {
@@ -1689,8 +1666,11 @@ class Hrm_Attendance {
 
     public static function ajax_attendance_configuration() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $postdata = $POST;
+
+        $postdata = [
+            'allow_ip' => isset( $_POST['allow_ip'] ) ? hrm_clean( $_POST['allow_ip'] ) : ''
+        ];
+        
         $configuration = Hrm_Attendance::getInstance()->update_attendance_configuration( $postdata );
         
         if ( is_wp_error( $configuration ) ) {
@@ -1699,9 +1679,9 @@ class Hrm_Attendance {
 
         wp_send_json_success(array(
             'success'  => __( 'Successfully update attendance configuration', 'hrm' ),
-            'start'    => sanitize_text_field( $postdata['office_start'] ),
-            'end'      => sanitize_text_field( $postdata['closed'] ),
-            'is_multi' => sanitize_text_field( $postdata['closed'] ),
+            'start'    => hrm_clean( $_POST['office_start'] ),
+            'end'      => hrm_clean( $_POST['closed'] ),
+            'is_multi' => hrm_clean( $_POST['closed'] ),
         ));
     }
 }

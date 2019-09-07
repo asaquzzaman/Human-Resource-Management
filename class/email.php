@@ -54,9 +54,9 @@ class HRM_Email {
     }
     
     public static function send( $to, $subject, $message, $headers = [], $attachments = null ) {
-        $server = wp_unslash( $_SERVER );
+        
         $blogname     = self::getInstance()->get_blogname();
-        $no_reply     = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $server['SERVER_NAME'] ) );
+        $no_reply     = 'no-reply@' . preg_replace( '#^www\.#', '', strtolower( $_SERVER['SERVER_NAME'] ) );
         $content_type = 'Content-Type: text/html';
         $charset      = 'Charset: UTF-8';
         $from_email   = self::getInstance()->from_email();

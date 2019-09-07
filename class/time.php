@@ -16,7 +16,7 @@ class Hrm_Time {
     }
 
     function punch_form_status( $post ) {
-        update_option( 'hrm_punch_form_status', $post['status'] );
+        update_option( 'hrm_punch_form_status', hrm_clean( $post['status'] ) );
     }
 
     function get_individual_punch( $limit, $pagenum, $post = null ) {

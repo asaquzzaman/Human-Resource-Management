@@ -93,7 +93,7 @@ class WP_Hrm {
         $this->instantiate();
         $this->init_action();
         $this->init_filter();
-
+        
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
@@ -174,7 +174,6 @@ class WP_Hrm {
     }
 
     function init() {
-        $request = wp_unslash( $_REQUEST );
         
         if ( ! defined( 'DOING_AJAX' ) ) {
             global $hrm_is_admin;
@@ -182,12 +181,8 @@ class WP_Hrm {
         } else {
             global $hrm_is_admin;
 
-            if ( isset( $request['hrm_dataAttr']['is_admin'] ) ) {
-                $hrm_is_admin = $request['hrm_dataAttr']['is_admin'];
-            } else if ( isset( $request['hrm_attr']['is_admin'] ) ) {
-                $hrm_is_admin = $request['hrm_attr']['is_admin'];
-            } else if ( isset( $request['is_admin'] ) ) {
-                $hrm_is_admin = $request['is_admin'];
+            if ( isset( $_REQUEST['is_admin'] ) ) {
+                $hrm_is_admin = intval( $_REQUEST['is_admin'] );
             }
         }
         hrm_check_financial_year();
@@ -203,11 +198,11 @@ class WP_Hrm {
     }
 
     function hrm_banner() {
-        $GET = wp_unslash( $_GET );
+        
         if( empty( $GET['page'] ) ) {
             return;
         }
-        if( $GET['page'] != 'hr_management' ) {
+        if( esc_attr( $_GET['page'] ) != 'hr_management' ) {
             return;
         }
         if ( class_exists('hrm_front') ) {

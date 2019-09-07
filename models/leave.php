@@ -50,6 +50,16 @@ class Leave extends Eloquent {
 		'end_time',
     ];
 
+    private static $_instance;
+
+    public static function getInstance() {
+        if ( !self::$_instance ) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
     public function setEmpIdAttribute( $value ) {
         $this->attributes['emp_id'] = absint( $value ) > 0 ? $value : get_current_user_id();
     }
@@ -72,6 +82,20 @@ class Leave extends Eloquent {
 
     public function user() {
         return $this->hasOne( 'HRM\Models\User', 'ID', 'emp_id' );
+    }
+
+    public static function sanitize() {
+        $instance = self::getInstance();
+        $postdata = [];
+
+        foreach ( $instance->fillable as $key => $fillable ) {
+            
+            if ( isset( $_POST[$fillable] ) ) {
+                $postdata[$fillable] = hrm_clean( $_POST[$fillable] );
+            }
+        }
+
+        return $postdata;
     }
 }
 

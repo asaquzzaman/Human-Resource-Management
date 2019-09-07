@@ -20,7 +20,7 @@ abstract class Action implements Pattern {
 	private $class;
 	private $method;
 
-	abstract protected function set_post_data( $postdata );
+	abstract protected function set_post_data();
 	abstract protected function get_post_data();
 	abstract protected function set_class( $class_name );
 	abstract protected function get_class();
@@ -29,11 +29,11 @@ abstract class Action implements Pattern {
 
 	public function gets() {
 		$model        = $this->get_model();
-		$postdata     = $this->get_post_data();
-		$page         = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
-		$transformers = $postdata['transformers'];
+		$postdata     = method_exists( $model, 'sanitize' ) ? $model::sanitize() : [];
+		$page         = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
+		$transformers = $_POST['transformers'];
 		$transformers = "HRM\\Transformers\\$transformers";
-		$per_page     = empty( $postdata['per_page'] ) ? hrm_per_page() : intval( $postdata['per_page'] );
+		$per_page     = empty( $_POST['per_page'] ) ? hrm_per_page() : intval( $_POST['per_page'] );
 
 		Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -52,9 +52,9 @@ abstract class Action implements Pattern {
 	}
 	public function show() {
 		$model        = $this->get_model();
-		$postdata     = $this->get_post_data();
-		$id           = (int) $postdata['id'];
-		$transformers = sanitize_text_field( $postdata['transformers'] );
+		$postdata     = method_exists( $model, 'sanitize' ) ? $model::sanitize() : [];
+		$id           = (int) $_POST['id'];
+		$transformers = hrm_clean( $_POST['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 
 
@@ -67,9 +67,9 @@ abstract class Action implements Pattern {
 	public function create() {
 
 		$model        = $this->get_model();
-		$postdata     = $this->get_post_data();	
-		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
-		$transformers = sanitize_text_field( $postdata['transformers'] );
+		//$postdata     = $this->get_post_data();	
+		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize() : [];
+		$transformers = hrm_clean( $_POST['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 		
 		$crated = $model::create( $postdata );
@@ -85,35 +85,35 @@ abstract class Action implements Pattern {
         return $this->get_response( $resource, $message );
 	}
 
-	public function create_validation() {
-		$class = $this->get_model();
+	// public function create_validation() {
+	// 	$class = $this->get_model();
 
-		if ( empty( $class->validation_rules ) ) {
-			return true;
-		}
+	// 	if ( empty( $class->validation_rules ) ) {
+	// 		return true;
+	// 	}
 		
-		array_walk( $class->validation_rules, array( $this, 'filter_post_data' ) );
-	}
+	// 	array_walk( $class->validation_rules, array( $this, 'filter_post_data' ) );
+	// }
 
-	public function filter_post_data( $rules, $name ) {
-		$postdata = $this->get_post_data();
+	// public function filter_post_data( $rules, $name ) {
+	// 	$postdata = $this->get_post_data();
 
-		//Trait init method for individual field validation
-		$this->get_rules( $postdata, $name, $rules );
+	// 	//Trait init method for individual field validation
+	// 	$this->get_rules( $postdata, $name, $rules );
 
-		//set default data for individual field
-		$this->set_post_data( $this->postdata );
-	}
+	// 	//set default data for individual field
+	// 	$this->set_post_data( $this->postdata );
+	// }
 
 	public function update() {
 		$model        = $this->get_model();
-		$postdata     = $this->get_post_data();
-		$postdata     = method_exists($model, 'sanitize') ? $model::sanitize( $postdata ) : $postdata;
+		//$postdata     = $this->get_post_data();
+		$postdata     = method_exists( $model, 'sanitize' ) ? $model::sanitize() : [];
 		$fillable     = $model->getFillable();
-		$transformers = sanitize_text_field( $postdata['transformers'] );
+		$transformers = hrm_clean( $_POST['transformers'] );
 		$transformers = "HRM\\Transformers\\$transformers";
 		$update_data  = [];
-		$record       = $model::where( 'id', $postdata['id'] )->first();
+		$record       = $model::where( 'id', intval( $_POST['id'] ) )->first();
 
 		$postdata = apply_filters( 'before_'. $model->getTableName().'_update', $postdata );
 
@@ -142,16 +142,14 @@ abstract class Action implements Pattern {
 
 	public function delete() {
 		$model    = $this->get_model();
-		$postdata = $this->get_post_data();
-		$delete   = $postdata['delete'];
+
+		$delete   = hrm_clean( $_POST['delete'] );
 
 		if ( is_array($delete) ) {
 			$Object =  $model::whereIn( 'id', $delete );
 		} else {
 			$Object = $model::where( 'id', $delete );
 		}
-
-		$Object = apply_filters( 'before_'. $model->getTableName().'_delete', $Object,  $postdata );
 
 	    $Object->delete();
 

@@ -48,8 +48,7 @@ class Hrm_Leave {
 
     function get_dasboard_leaves() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
+ 
         $leaves = Hrm_Leave::getInstance()->get_leaves(
             array(
                 'start_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
@@ -64,7 +63,6 @@ class Hrm_Leave {
 
     public static function ajax_get_employee_dropdown() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
         $employees = Hrm_Employeelist::getInstance()->get_employee_drop_down();
         $dropdown = array();
@@ -81,16 +79,16 @@ class Hrm_Leave {
 
     public static function search_emp_leave_records() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
+        
         $send = [];
         $users = get_users( array(
-            'search' => '*' . sanitize_text_field( $POST['user'] ) . '*',
+            'search' => '*' . hrm_clean( $_POST['user'] ) . '*',
             'search_columns' => array( 'user_login', 'user_email', 'nicename' ),
         ));
 
         $args = [
-            'start_time' => date( 'Y-m-d', strtotime( $POST['start'] ) ),
-            'end_time'   => date( 'Y-m-d', strtotime( $POST['end'] ) ),
+            'start_time' => date( 'Y-m-d', strtotime( hrm_clean( $_POST['start'] ) ) ),
+            'end_time'   => date( 'Y-m-d', strtotime( hrm_clean( $_POST['end'] ) ) ),
             'per_page'   => 50, 
         ];
         
@@ -111,28 +109,27 @@ class Hrm_Leave {
 
     public static function ajax_get_leaves() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
-        $POST['query'] = empty( $POST['query'] ) ? [] : $POST['query'];
-        $POST['emp_id'] = empty( $POST['emp_id'] ) ? '' : $POST['emp_id'];
+        
+        $_POST['query'] = empty( $_POST['query'] ) ? [] : hrm_clean( $_POST['query'] );
+        $_POST['emp_id'] = empty( $_POST['emp_id'] ) ? '' : hrm_clean( $_POST['emp_id'] );
         
         $args = array (
-            'start_time' => empty( $POST['query']['start_time'] ) ? false : $POST['query']['start_time'],
+            'start_time' => empty( $_POST['query']['start_time'] ) ? false : hrm_clean( $_POST['query']['start_time'] ),
 
-            'end_time' =>  empty( $POST['query']['end_time'] ) ? false : $POST['query']['end_time'],
+            'end_time' =>  empty( $_POST['query']['end_time'] ) ? false : hrm_clean( $_POST['query']['end_time'] ),
 
-            'emp_id' => empty( $POST['query']['emp_id'] ) 
-                ? $POST['emp_id']
-                : $POST['query']['emp_id'],
+            'emp_id' => empty( $_POST['query']['emp_id'] ) 
+                ? hrm_clean( $_POST['emp_id'] )
+                : hrm_clean( $_POST['query']['emp_id'] ),
 
         );
 
-        if ( !empty( $POST['status'] ) ) {
-            $args['status'] = intval( $POST['status'] );
+        if ( !empty( $_POST['status'] ) ) {
+            $args['status'] = intval( $_POST['status'] );
         }
         
         if ( ! hrm_user_can( 'manage_leave' ) ) {
-            $args['emp_id'] = $POST['emp_id'];
+            $args['emp_id'] = hrm_clean( $_POST['emp_id'] );
         }
 
         wp_send_json_success( self::getInstance()->get_leaves( $args ) );
@@ -250,8 +247,8 @@ class Hrm_Leave {
 
     public static function ajax_get_employee_leave_summery() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $employee_id = $POST['employee_id'];
+        
+        $employee_id = hrm_clean( $_POST['employee_id'] );
 
         wp_send_json_success(
             self::getInstance()->employee_leave_count( $employee_id )
@@ -271,8 +268,8 @@ class Hrm_Leave {
         if ( $table != 'hrm_holiday' ) {
             return $data;
         }
-        $from = !empty( $post['from'] ) ? date( 'Y-m-d', strtotime( $post['from'] ) ) : date( 'Y-m-d', time() );
-        $to = empty( $post['to'] ) ? $from : date( 'Y-m-d', strtotime( $post['to'] ) );
+        $from = !empty( $post['from'] ) ? date( 'Y-m-d', strtotime( hrm_clean( $post['from'] ) ) ) : date( 'Y-m-d', time() );
+        $to = empty( $post['to'] ) ? $from : date( 'Y-m-d', strtotime( hrm_clean( $post['to'] ) ) );
 
         if ( $from >= $to  ) {
             $data['to'] = $from;
@@ -337,7 +334,7 @@ class Hrm_Leave {
         $to = $leave_owner->user_email;
         $subject = __( 'Human Resource Management - Leave status changes', 'hrm' );
         $sender_id = get_current_user_id();
-        $message = $this->status_update_message_body( $get_apply_leave, $leave_owner, sanitize_text_field( $postdata['status'] ), $prev_leave_row );
+        $message = $this->status_update_message_body( $get_apply_leave, $leave_owner, hrm_clean( $postdata['status'] ), $prev_leave_row );
 
         Hrm_Settings::getInstance()->send( $to, $subject, $message, $sender_id );
     }
@@ -393,8 +390,15 @@ class Hrm_Leave {
 
     public static function ajax_create_new_leave_type() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $postdata = $POST;
+
+        $postdata = [
+            'id'          => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'nextYear'    => isset( $_POST['nextYear'] ) ? hrm_clean( $_POST['nextYear'] ) : '',
+            'departments' => isset( $_POST['departments'] ) ? hrm_clean( $_POST['departments'] ) : '',
+            'leave_type'  => isset( $_POST['leave_type'] ) ? hrm_clean( $_POST['leave_type'] ) : '',
+            'leave_type'  => isset( $_POST['leave_type'] ) ? hrm_clean( $_POST['leave_type'] ) : '',
+            'entitlement' => isset( $_POST['entitlement'] ) ? hrm_clean( $_POST['entitlement'] ) : '',
+        ];
 
         $leave_type = self::getInstance()->new_leave_type( $postdata );
 
@@ -420,7 +424,7 @@ class Hrm_Leave {
         if ( $id ) {
             $format = array( '%s', '%d' );
             $data = array(
-                'leave_type_name' => sanitize_text_field( $postdata['leave_type'] ),
+                'leave_type_name' => hrm_clean( $postdata['leave_type'] ),
                 'carry'           => $next_year ? 1 : 0,
             );
 
@@ -430,8 +434,8 @@ class Hrm_Leave {
         } else {
 
             $data = array(
-                'leave_type_name' => sanitize_text_field( $postdata['leave_type'] ),
-                'entitlement'     => sanitize_text_field( $postdata['entitlement'] ),
+                'leave_type_name' => hrm_clean( $postdata['leave_type'] ),
+                'entitlement'     => hrm_clean( $postdata['entitlement'] ),
                 'entitle_from'    => hrm_financial_start_date(),
                 'entitle_to'      => hrm_financial_end_date(),
                 'f_year'          => $next_year
@@ -467,7 +471,6 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_type() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
         $leave_types = self::getInstance()->get_leave_types();
 
@@ -521,9 +524,17 @@ class Hrm_Leave {
 
     public static function ajax_create_new_holidays() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $postdata = $POST;
 
+        $postdata = [
+            'id'          => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '',
+            'name'        => isset( $_POST['name'] ) ? hrm_clean( $_POST['name'] ) : '',
+            'description' => isset( $_POST['description'] ) ? hrm_clean( $_POST['description'] ) : '',
+            'name'        => isset( $_POST['name'] ) ? hrm_clean( $_POST['name'] ) : '',
+            'from'        => isset( $_POST['from'] ) ? hrm_clean( $_POST['from'] ) : '',
+            'to'          => isset( $_POST['to'] ) ? hrm_clean( $_POST['to'] ) : '',
+            'description' => isset( $_POST['description'] ) ? hrm_clean( $_POST['description'] ) : '',
+        ];
+        
         $holiday = self::getInstance()->create_new_holidays( $postdata );
 
         if ( is_wp_error( $holiday ) ) {
@@ -544,8 +555,8 @@ class Hrm_Leave {
 
         if ( $id ) {
             $data = array(
-                'name'        => sanitize_text_field( $postdata['name'] ),
-                'description' => sanitize_text_field( $postdata['description'] )
+                'name'        => hrm_clean( $postdata['name'] ),
+                'description' => hrm_clean( $postdata['description'] )
             );
             $format = array( '%s', '%s' );
             
@@ -557,10 +568,10 @@ class Hrm_Leave {
 
         } else {
             $data = array(
-                'name'        => sanitize_text_field( $postdata['name'] ),
-                'from'        => sanitize_text_field( $postdata['from'] ),
-                'to'          => sanitize_text_field( $postdata['to'] ),
-                'description' => sanitize_text_field( $postdata['description'] ),
+                'name'        => hrm_clean( $postdata['name'] ),
+                'from'        => hrm_clean( $postdata['from'] ),
+                'to'          => hrm_clean( $postdata['to'] ),
+                'description' => hrm_clean( $postdata['description'] ),
                 'f_year'      => hrm_get_current_financial_id()
             );
             $format = array( '%s', '%s', '%s', '%s' );
@@ -578,7 +589,6 @@ class Hrm_Leave {
 
     public static function ajax_get_holidays() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
         $holidays = self::getInstance()->get_holidays();
 
@@ -666,8 +676,17 @@ class Hrm_Leave {
 
     public static function ajax_save_work_week() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $postdata = $POST;
+
+        $postdata = [
+            'saturday'  => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'sunday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'monday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'tuesday'   => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'wednesday' => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'thursday'  => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+            'friday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
+        ];
+        
         $work_week = self::getInstance()->save_work_week( $postdata );
 
         wp_send_json_success(array( 
@@ -680,22 +699,22 @@ class Hrm_Leave {
         $prev_work_week = get_option( 'hrm_work_week' );
         
         if ( empty( $prev_work_week ) ) {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : sanitize_text_field( $postdata['saturday'] );
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : sanitize_text_field( $postdata['sunday'] );
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : sanitize_text_field( $postdata['monday'] );
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : sanitize_text_field( $postdata['tuesday'] );
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : sanitize_text_field( $postdata['wednesday'] );
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : sanitize_text_field( $postdata['thursday'] );
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : sanitize_text_field( $postdata['friday'] );
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : hrm_clean( $postdata['saturday'] );
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : hrm_clean( $postdata['sunday'] );
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : hrm_clean( $postdata['monday'] );
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : hrm_clean( $postdata['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : hrm_clean( $postdata['wednesday'] );
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : hrm_clean( $postdata['thursday'] );
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : hrm_clean( $postdata['friday'] );
         
         } else {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : sanitize_text_field( $postdata['saturday'] );
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : sanitize_text_field( $postdata['sunday'] );
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : sanitize_text_field( $postdata['monday'] );
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : sanitize_text_field( $postdata['tuesday'] );
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : sanitize_text_field( $postdata['wednesday'] );
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : sanitize_text_field( $postdata['thursday'] );
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : sanitize_text_field( $postdata['friday'] );
+            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : hrm_clean( $postdata['saturday'] );
+            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : hrm_clean( $postdata['sunday'] );
+            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : hrm_clean( $postdata['monday'] );
+            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : hrm_clean( $postdata['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : hrm_clean( $postdata['wednesday'] );
+            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : hrm_clean( $postdata['thursday'] );
+            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : hrm_clean( $postdata['friday'] );
         }
 
         update_option( 'hrm_work_week', $prev_work_week );
@@ -705,8 +724,7 @@ class Hrm_Leave {
 
     public static function ajax_get_work_week() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-      
+        
         $work_week = self::get_work_week();
 
         wp_send_json_success(array( 
@@ -781,7 +799,6 @@ class Hrm_Leave {
  
     public static function get_leave_records_init_data() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
         
         $leave_types = self::getInstance()->get_leave_types([
             'end_time' => date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) ),
@@ -789,10 +806,9 @@ class Hrm_Leave {
         ]);
         $holidays = self::getInstance()->get_holidays();
         $work_week = self::getInstance()->get_work_week();
-        $apply_to    = new WP_User_Query( array(
+        $apply_to  = new WP_User_Query( array(
             'role'   => 'administrator',
         ));
-
 
         $send_administrators = array();
 
@@ -813,10 +829,10 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_record_events() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $start = date( 'Y-m-d', strtotime( $POST['start'] ) );
-        $end = date( 'Y-m-d', strtotime( $POST['end'] ) );
-        $emp_id = empty( $POST['emp_id'] ) ? get_current_user_id() : intval( $POST['emp_id'] );
+        
+        $start = date( 'Y-m-d', strtotime( hrm_clean( $_POST['start'] ) ) );
+        $end = date( 'Y-m-d', strtotime( hrm_clean( $_POST['end'] ) ) );
+        $emp_id = empty( $_POST['emp_id'] ) ? get_current_user_id() : intval( $_POST['emp_id'] );
 
         $records = self::getInstance()->get_leaves( array(
             'start_time' => $start,
@@ -833,10 +849,19 @@ class Hrm_Leave {
 
     public static function ajax_create_new_leave() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        
-        $postdata    = $POST;
-        $times       = empty( $postdata['time'] ) ? array() : sanitize_text_field( $postdata['time'] );
+
+        $postdata = [
+            'comments'           => isset( $_POST['comments'] ) ? $_POST['comments'] : '', 
+            'type'               => isset( $_POST['type'] ) ? $_POST['type'] : '', 
+            'emp_id'             => isset( $_POST['emp_id'] ) ? $_POST['emp_id'] : '', 
+            'time'               => isset( $_POST['time'] ) ? $_POST['time'] : '', 
+            'disable_leave_type' => isset( $_POST['disable_leave_type'] ) ? $_POST['disable_leave_type'] : '', 
+            'status'             => isset( $_POST['status'] ) ? $_POST['status'] : '', 
+            'class'              => isset( $_POST['class'] ) ? $_POST['class'] : '', 
+            'method'             => isset( $_POST['method'] ) ? $_POST['method'] : '', 
+        ];
+
+        $times       = empty( $postdata['time'] ) ? array() : hrm_clean( $postdata['time'] );
         $leave       = array();
         $return_data = array();
         $postdata['transformers'] = 'Leave_Transformer';
@@ -848,9 +873,6 @@ class Hrm_Leave {
             $postdata['end_time']   = date( 'Y-m-d', strtotime( $time ) );
             
             $return_data[]  = Crud::data_process( $postdata );
-
-           // $resource = new Item( $leave, new Leave_Transformer );
-            //$return_data[] = self::getInstance()->get_response( $resource );
         }
 
         if ( is_wp_error( $leave ) ) {
@@ -871,7 +893,6 @@ class Hrm_Leave {
 
     public static function ajax_get_leave_form_settings() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
         $settings = [
             'roles'   => hrm_get_roles(),
@@ -883,12 +904,11 @@ class Hrm_Leave {
 
     public static function ajax_save_leave_form_settings() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-
+        
         $settings = [
-            'others_employee_leave' => wp_list_pluck( $POST['others_employee_leave'], 'id' ),
-            'leave_types'           => wp_list_pluck( $POST['leave_types'], 'id' ),
-            'apply_to'         => wp_list_pluck( $POST['apply_to'], 'id' )
+            'others_employee_leave' => wp_list_pluck( hrm_clean( $_POST['others_employee_leave'] ), 'id' ),
+            'leave_types'           => wp_list_pluck( hrm_clean( $_POST['leave_types'] ), 'id' ),
+            'apply_to'         => wp_list_pluck( hrm_clean( $_POST['apply_to'] ), 'id' )
         ];
         
         self::getInstance()->save_leave_form_settings( $settings );
@@ -902,29 +922,26 @@ class Hrm_Leave {
 
     public static function ajax_update_leave() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
 
-        $postdata = $POST;
-
-        $update = self::getInstance()->update_leave( $postdata );
+        $update = self::getInstance()->update_leave();
 
         if ( $update ) {
-            $update = self::getInstance()->get_leaves(['id' => intval( $postdata['id'] ) ]);
+            $update = self::getInstance()->get_leaves(['id' => intval( $_POST['id'] ) ]);
 
             wp_send_json_success($update);
         }
         wp_send_json_error();
     }
 
-    public function update_leave( $postdata ) {
-        $postdata['transformers'] = 'Leave_Transformer';
-        return Crud::data_process( $postdata );
+    public function update_leave() {
+        $_POST['transformers'] = 'Leave_Transformer';
+        return Crud::data_process();
     }
 
     public static function ajax_delete_leave() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $leave_id = intval( $POST['leave_id'] );
+        
+        $leave_id = intval( $_POST['leave_id'] );
         self::getInstance()->delete_leave($leave_id);
         wp_send_json_success();
     }
@@ -939,8 +956,8 @@ class Hrm_Leave {
 
     public static function ajax_delete_leave_type() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $id = absint( $POST['id'] );
+        
+        $id = absint( $_POST['id'] );
         
         $delete = self::getInstance()->delete_leave_type( $id );
         
@@ -970,8 +987,8 @@ class Hrm_Leave {
 
     public static function ajax_delete_holiday() {
         check_ajax_referer('hrm_nonce');
-        $POST = wp_unslash( $_POST );
-        $holiday_id = intval( $POST['id'] );
+        
+        $holiday_id = intval( $_POST['id'] );
         self::getInstance()->delete_holiday($holiday_id);
         wp_send_json_success();
     }

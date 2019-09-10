@@ -202,7 +202,7 @@ class WP_Hrm {
         if( empty( $GET['page'] ) ) {
             return;
         }
-        if( esc_attr( $_GET['page'] ) != 'hr_management' ) {
+        if( hrm_clean( $_GET['page'] ) != 'hr_management' ) {
             return;
         }
         if ( class_exists('hrm_front') ) {

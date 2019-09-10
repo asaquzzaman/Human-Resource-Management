@@ -14,7 +14,7 @@ trait Transformer_Manager {
         $manager->setSerializer( new DataArraySerializer() );
 
         if ( isset( $_GET['with'] ) ) {
-            $manager->parseIncludes( esc_attr( $_GET['with'] ) );
+            $manager->parseIncludes( hrm_clean( $_GET['with'] ) );
         }
 
         if ($resource) {
@@ -33,7 +33,7 @@ trait Transformer_Manager {
         $manager->setSerializer( new DataArraySerializer() );
 
         if ( isset( $_GET['with'] ) ) {
-            $manager->parseIncludes( esc_attr( $_GET['with'] ) );
+            $manager->parseIncludes( hrm_clean( $_GET['with'] ) );
         }
 
         if ($resource) {

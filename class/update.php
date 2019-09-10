@@ -134,7 +134,7 @@ class Hrm_Update {
      * @return void
      */
     public static function do_updates() {
-        if ( isset( $_GET['HRM_do_update'] ) && esc_attr( $_GET['HRM_do_update'] ) ) {
+        if ( isset( $_GET['HRM_do_update'] ) && hrm_clean( $_GET['HRM_do_update'] ) ) {
             $this->perform_updates();
         }
     }

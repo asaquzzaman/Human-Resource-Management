@@ -540,7 +540,7 @@ function hrm_can_load_footer_tag() {
     $page       = $query_args['page'];
     $tab        = $query_args['tab'];
     $subtab     = $query_args['subtab'];
-    $vue        = ! empty( $_GET['active'] ) && esc_attr( $_GET['active'] ) == 'vue' ? true : false;
+    $vue        = ! empty( $_GET['active'] ) && hrm_clean( $_GET['active'] ) == 'vue' ? true : false;
 
 
     if ( 

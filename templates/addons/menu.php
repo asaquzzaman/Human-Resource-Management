@@ -11,7 +11,7 @@
 					), 
 					admin_url('admin.php')
 				);
-				$active = !empty($_GET['tab']) && ( esc_attr( $_GET['tab'] ) == $addon['key'] ) ? 'nav-tab-active' : '';
+				$active = !empty($_GET['tab']) && ( hrm_clean( $_GET['tab'] ) == $addon['key'] ) ? 'nav-tab-active' : '';
 				?>
 
 				<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $active ); ?>  nav-tab">

@@ -1,29 +1,356 @@
 
-FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/email.php
+FILE: ...ugins/Human-Resource-Management/core/common/Traits/Transformer_Manager.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 17 | ERROR | Missing wp_unslash() before sanitization.
+ 17 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+ 36 | ERROR | Missing wp_unslash() before sanitization.
+ 36 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+--------------------------------------------------------------------------------
+
+
+FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/core/Crud/Action.php
+--------------------------------------------------------------------------------
+FOUND 25 ERRORS AFFECTING 9 LINES
+--------------------------------------------------------------------------------
+  33 | ERROR | Processing form data without nonce verification.
+  34 | ERROR | Detected usage of a non-validated input variable: $_POST
+  34 | ERROR | Missing wp_unslash() before sanitization.
+  34 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+  34 | ERROR | Processing form data without nonce verification.
+  36 | ERROR | Processing form data without nonce verification.
+  56 | ERROR | Detected usage of a non-validated input variable: $_POST
+  57 | ERROR | Detected usage of a non-validated input variable: $_POST
+  57 | ERROR | Missing wp_unslash() before sanitization.
+  57 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+  57 | ERROR | Processing form data without nonce verification.
+  72 | ERROR | Detected usage of a non-validated input variable: $_POST
+  72 | ERROR | Missing wp_unslash() before sanitization.
+  72 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+  72 | ERROR | Processing form data without nonce verification.
+ 113 | ERROR | Detected usage of a non-validated input variable: $_POST
+ 113 | ERROR | Missing wp_unslash() before sanitization.
+ 113 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 113 | ERROR | Processing form data without nonce verification.
+ 116 | ERROR | Detected usage of a non-validated input variable: $_POST
+ 116 | ERROR | Processing form data without nonce verification.
+ 146 | ERROR | Detected usage of a non-validated input variable: $_POST
+ 146 | ERROR | Missing wp_unslash() before sanitization.
+ 146 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 146 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/core/Crud/Crud.php
+--------------------------------------------------------------------------------
+FOUND 8 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 96 | ERROR | Processing form data without nonce verification.
+ 96 | ERROR | Missing wp_unslash() before sanitization.
+ 96 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 96 | ERROR | Processing form data without nonce verification.
+ 97 | ERROR | Processing form data without nonce verification.
+ 97 | ERROR | Missing wp_unslash() before sanitization.
+ 97 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 97 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: .../wp-content/plugins/Human-Resource-Management/core/Transformer_Manager.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 16 | ERROR | Missing wp_unslash() before sanitization.
+ 16 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+ 28 | ERROR | Missing wp_unslash() before sanitization.
+ 28 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+--------------------------------------------------------------------------------
+
+
+FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/include/function.php
+--------------------------------------------------------------------------------
+FOUND 14 ERRORS AFFECTING 7 LINES
+--------------------------------------------------------------------------------
+ 543 | ERROR | Missing wp_unslash() before sanitization.
+ 543 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+ 649 | ERROR | Missing wp_unslash() before sanitization.
+ 649 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 651 | ERROR | Missing wp_unslash() before sanitization.
+ 651 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 653 | ERROR | Missing wp_unslash() before sanitization.
+ 653 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 655 | ERROR | Missing wp_unslash() before sanitization.
+ 655 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 657 | ERROR | Missing wp_unslash() before sanitization.
+ 657 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 659 | ERROR | Missing wp_unslash() before sanitization.
+ 659 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+--------------------------------------------------------------------------------
+
+
+FILE: ...edevs/hrm/wp-content/plugins/Human-Resource-Management/models/Relation.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 36 | ERROR | Processing form data without nonce verification.
+ 37 | ERROR | Missing wp_unslash() before sanitization.
+ 37 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 37 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Formula.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 39 | ERROR | Processing form data without nonce verification.
+ 40 | ERROR | Missing wp_unslash() before sanitization.
+ 40 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 40 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: .../wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Salary.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 42 | ERROR | Processing form data without nonce verification.
+ 43 | ERROR | Missing wp_unslash() before sanitization.
+ 43 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 43 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/hrm/wp-content/plugins/Human-Resource-Management/models/Salary_Group.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 37 | ERROR | Processing form data without nonce verification.
+ 38 | ERROR | Missing wp_unslash() before sanitization.
+ 38 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 38 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...vs/hrm/wp-content/plugins/Human-Resource-Management/models/Designation.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 41 | ERROR | Processing form data without nonce verification.
+ 42 | ERROR | Missing wp_unslash() before sanitization.
+ 42 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 42 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...evs/hrm/wp-content/plugins/Human-Resource-Management/models/attendance.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 39 | ERROR | Processing form data without nonce verification.
+ 40 | ERROR | Missing wp_unslash() before sanitization.
+ 40 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 40 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/user.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 37 | ERROR | Processing form data without nonce verification.
+ 38 | ERROR | Missing wp_unslash() before sanitization.
+ 38 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 38 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Shift.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 43 | ERROR | Processing form data without nonce verification.
+ 44 | ERROR | Missing wp_unslash() before sanitization.
+ 44 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 44 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/meta.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 36 | ERROR | Processing form data without nonce verification.
+ 37 | ERROR | Missing wp_unslash() before sanitization.
+ 37 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 37 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Skill.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 35 | ERROR | Processing form data without nonce verification.
+ 36 | ERROR | Missing wp_unslash() before sanitization.
+ 36 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 36 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Holiday.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 36 | ERROR | Processing form data without nonce verification.
+ 37 | ERROR | Missing wp_unslash() before sanitization.
+ 37 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 37 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...rm/wp-content/plugins/Human-Resource-Management/models/Work_Experience.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 38 | ERROR | Processing form data without nonce verification.
+ 39 | ERROR | Missing wp_unslash() before sanitization.
+ 39 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 39 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...evs/hrm/wp-content/plugins/Human-Resource-Management/models/Department.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 36 | ERROR | Processing form data without nonce verification.
+ 37 | ERROR | Missing wp_unslash() before sanitization.
+ 37 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 37 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...edevs/hrm/wp-content/plugins/Human-Resource-Management/models/Location.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 39 | ERROR | Processing form data without nonce verification.
+ 40 | ERROR | Missing wp_unslash() before sanitization.
+ 40 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 40 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...devs/hrm/wp-content/plugins/Human-Resource-Management/models/Education.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 39 | ERROR | Processing form data without nonce verification.
+ 40 | ERROR | Missing wp_unslash() before sanitization.
+ 40 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 40 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...evs/hrm/wp-content/plugins/Human-Resource-Management/models/leave-type.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 43 | ERROR | Processing form data without nonce verification.
+ 44 | ERROR | Missing wp_unslash() before sanitization.
+ 44 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 44 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: .../wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/Notice.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 35 | ERROR | Processing form data without nonce verification.
+ 36 | ERROR | Missing wp_unslash() before sanitization.
+ 36 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 36 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...hrm/wp-content/plugins/Human-Resource-Management/models/Financial_Year.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 32 | ERROR | Processing form data without nonce verification.
+ 33 | ERROR | Missing wp_unslash() before sanitization.
+ 33 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 33 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/models/leave.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 93 | ERROR | Processing form data without nonce verification.
+ 94 | ERROR | Missing wp_unslash() before sanitization.
+ 94 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 94 | ERROR | Processing form data without nonce verification.
+--------------------------------------------------------------------------------
+
+
+FILE: .../Documents/wedevs/hrm/wp-content/plugins/Human-Resource-Management/hrm.php
 --------------------------------------------------------------------------------
 FOUND 2 ERRORS AFFECTING 1 LINE
 --------------------------------------------------------------------------------
+ 205 | ERROR | Missing wp_unslash() before sanitization.
+ 205 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+--------------------------------------------------------------------------------
+
+
+FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/email.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 1 LINE
+--------------------------------------------------------------------------------
  59 | ERROR | Detected usage of a non-validated input variable: $_SERVER
+ 59 | ERROR | Missing wp_unslash() before sanitization.
  59 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+--------------------------------------------------------------------------------
+
+
+FILE: ...s/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/update.php
+--------------------------------------------------------------------------------
+FOUND 8 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 112 | ERROR | Detected usage of a non-validated input variable: $_SERVER
+ 112 | ERROR | Missing wp_unslash() before sanitization.
+ 112 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 137 | ERROR | Missing wp_unslash() before sanitization.
+ 137 | ERROR | Detected usage of a non-sanitized input variable: $_GET
+ 163 | ERROR | Detected usage of a non-validated input variable: $_SERVER
+ 163 | ERROR | Missing wp_unslash() before sanitization.
+ 163 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
 --------------------------------------------------------------------------------
 
 
 FILE: ...wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/settings.php
 --------------------------------------------------------------------------------
-FOUND 6 ERRORS AFFECTING 3 LINES
+FOUND 9 ERRORS AFFECTING 4 LINES
 --------------------------------------------------------------------------------
- 239 | ERROR | Missing wp_unslash() before sanitization.
- 239 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 172 | ERROR | Detected usage of a non-validated input variable: $_SERVER
+ 172 | ERROR | Missing wp_unslash() before sanitization.
+ 172 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
+ 238 | ERROR | Missing wp_unslash() before sanitization.
+ 238 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 317 | ERROR | Missing wp_unslash() before sanitization.
+ 317 | ERROR | Missing wp_unslash() before sanitization.
  318 | ERROR | Missing wp_unslash() before sanitization.
- 318 | ERROR | Missing wp_unslash() before sanitization.
- 319 | ERROR | Missing wp_unslash() before sanitization.
- 319 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 318 | ERROR | Detected usage of a non-sanitized input variable: $_POST
 --------------------------------------------------------------------------------
 
 
 FILE: ...nts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/ajax.php
 --------------------------------------------------------------------------------
-FOUND 41 ERRORS AFFECTING 15 LINES
+FOUND 43 ERRORS AFFECTING 15 LINES
 --------------------------------------------------------------------------------
  139 | ERROR | Detected usage of a non-validated input variable: $_POST
  139 | ERROR | Missing wp_unslash() before sanitization.
@@ -59,6 +386,8 @@ FOUND 41 ERRORS AFFECTING 15 LINES
  149 | ERROR | Missing wp_unslash() before sanitization.
  149 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  150 | ERROR | Detected usage of a non-validated input variable: $_POST
+ 150 | ERROR | Missing wp_unslash() before sanitization.
+ 150 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  158 | ERROR | Detected usage of a non-validated input variable: $_POST
  159 | ERROR | Detected usage of a non-validated input variable: $_POST
  159 | ERROR | Missing wp_unslash() before sanitization.
@@ -73,12 +402,14 @@ FILE: .../wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/payroll.
 --------------------------------------------------------------------------------
 FOUND 61 ERRORS AFFECTING 30 LINES
 --------------------------------------------------------------------------------
+  48 | ERROR | Missing wp_unslash() before sanitization.
+  48 | ERROR | Detected usage of a non-sanitized input variable: $_POST
   49 | ERROR | Missing wp_unslash() before sanitization.
   49 | ERROR | Detected usage of a non-sanitized input variable: $_POST
   50 | ERROR | Missing wp_unslash() before sanitization.
   50 | ERROR | Detected usage of a non-sanitized input variable: $_POST
-  51 | ERROR | Missing wp_unslash() before sanitization.
-  51 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+  68 | ERROR | Missing wp_unslash() before sanitization.
+  68 | ERROR | Detected usage of a non-sanitized input variable: $_POST
   69 | ERROR | Missing wp_unslash() before sanitization.
   69 | ERROR | Detected usage of a non-sanitized input variable: $_POST
   70 | ERROR | Missing wp_unslash() before sanitization.
@@ -93,26 +424,26 @@ FOUND 61 ERRORS AFFECTING 30 LINES
   74 | ERROR | Detected usage of a non-sanitized input variable: $_POST
   75 | ERROR | Missing wp_unslash() before sanitization.
   75 | ERROR | Detected usage of a non-sanitized input variable: $_POST
-  76 | ERROR | Missing wp_unslash() before sanitization.
-  76 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 148 | ERROR | Missing wp_unslash() before sanitization.
- 148 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 147 | ERROR | Missing wp_unslash() before sanitization.
+ 147 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 171 | ERROR | Missing wp_unslash() before sanitization.
+ 171 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  172 | ERROR | Missing wp_unslash() before sanitization.
  172 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  173 | ERROR | Missing wp_unslash() before sanitization.
  173 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  174 | ERROR | Missing wp_unslash() before sanitization.
  174 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 175 | ERROR | Missing wp_unslash() before sanitization.
- 175 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 245 | ERROR | Missing wp_unslash() before sanitization.
+ 245 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  246 | ERROR | Missing wp_unslash() before sanitization.
  246 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 247 | ERROR | Missing wp_unslash() before sanitization.
- 247 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 288 | ERROR | Missing wp_unslash() before sanitization.
- 288 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 319 | ERROR | Missing wp_unslash() before sanitization.
- 319 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 287 | ERROR | Missing wp_unslash() before sanitization.
+ 287 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 318 | ERROR | Missing wp_unslash() before sanitization.
+ 318 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 372 | ERROR | Missing wp_unslash() before sanitization.
+ 372 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  373 | ERROR | Missing wp_unslash() before sanitization.
  373 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  374 | ERROR | Missing wp_unslash() before sanitization.
@@ -125,15 +456,13 @@ FOUND 61 ERRORS AFFECTING 30 LINES
  377 | ERROR | Detected usage of a non-sanitized input variable: $_POST
  378 | ERROR | Missing wp_unslash() before sanitization.
  378 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 379 | ERROR | Missing wp_unslash() before sanitization.
- 379 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 593 | ERROR | Missing wp_unslash() before sanitization.
- 593 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 604 | ERROR | Detected usage of a non-validated input variable: $_POST
- 604 | ERROR | Missing wp_unslash() before sanitization.
- 604 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 627 | ERROR | Missing wp_unslash() before sanitization.
- 627 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 592 | ERROR | Missing wp_unslash() before sanitization.
+ 592 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 603 | ERROR | Detected usage of a non-validated input variable: $_POST
+ 603 | ERROR | Missing wp_unslash() before sanitization.
+ 603 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 626 | ERROR | Missing wp_unslash() before sanitization.
+ 626 | ERROR | Detected usage of a non-sanitized input variable: $_POST
 --------------------------------------------------------------------------------
 
 
@@ -174,22 +503,24 @@ FOUND 28 ERRORS AFFECTING 13 LINES
 
 FILE: ...ts/wedevs/hrm/wp-content/plugins/Human-Resource-Management/class/shift.php
 --------------------------------------------------------------------------------
-FOUND 14 ERRORS AFFECTING 7 LINES
+FOUND 16 ERRORS AFFECTING 8 LINES
 --------------------------------------------------------------------------------
- 139 | ERROR | Missing wp_unslash() before sanitization.
- 139 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 140 | ERROR | Missing wp_unslash() before sanitization.
- 140 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 141 | ERROR | Missing wp_unslash() before sanitization.
- 141 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 190 | ERROR | Missing wp_unslash() before sanitization.
- 190 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 191 | ERROR | Missing wp_unslash() before sanitization.
- 191 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 192 | ERROR | Missing wp_unslash() before sanitization.
- 192 | ERROR | Detected usage of a non-sanitized input variable: $_POST
- 356 | ERROR | Missing wp_unslash() before sanitization.
- 356 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 119 | ERROR | Missing wp_unslash() before sanitization.
+ 119 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 143 | ERROR | Missing wp_unslash() before sanitization.
+ 143 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 144 | ERROR | Missing wp_unslash() before sanitization.
+ 144 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 145 | ERROR | Missing wp_unslash() before sanitization.
+ 145 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 194 | ERROR | Missing wp_unslash() before sanitization.
+ 194 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 195 | ERROR | Missing wp_unslash() before sanitization.
+ 195 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 196 | ERROR | Missing wp_unslash() before sanitization.
+ 196 | ERROR | Detected usage of a non-sanitized input variable: $_POST
+ 360 | ERROR | Missing wp_unslash() before sanitization.
+ 360 | ERROR | Detected usage of a non-sanitized input variable: $_POST
 --------------------------------------------------------------------------------
 
 
@@ -427,6 +758,15 @@ FOUND 98 ERRORS AFFECTING 47 LINES
  944 | ERROR | Detected usage of a non-validated input variable: $_POST
  960 | ERROR | Detected usage of a non-validated input variable: $_POST
  991 | ERROR | Detected usage of a non-validated input variable: $_POST
+--------------------------------------------------------------------------------
+
+
+FILE: ...hrm/wp-content/plugins/Human-Resource-Management/templates/addons/menu.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 14 | ERROR | Missing wp_unslash() before sanitization.
+ 14 | ERROR | Detected usage of a non-sanitized input variable: $_GET
 --------------------------------------------------------------------------------
 
 

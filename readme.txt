@@ -3,9 +3,9 @@
 Contributors: asaquzzaman
 Tags: hrm, human resource, human resource management, office management, industries management, organization management, population management, worker catalog, employee catalog, employer catalog, labour catalog.
 Requires at least: 4.4
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 2.2.15
+Stable tag: 2.2.16
 License: GPLv2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -94,6 +94,10 @@ If you want to turn your WordPress site into a full-fledged employee management 
 10. Recruitment
 
 == Changelog ==
+
+= 2.2.16 - Sep 10, 2019 =
+
+ * **Fix** There was a problem with new leave creation.
 
 = 2.2.15 - Sep 04, 2019 =
 

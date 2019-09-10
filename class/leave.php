@@ -864,15 +864,15 @@ class Hrm_Leave {
         $times       = empty( $postdata['time'] ) ? array() : hrm_clean( $postdata['time'] );
         $leave       = array();
         $return_data = array();
-        $postdata['transformers'] = 'Leave_Transformer';
+        $_POST['transformers'] = 'Leave_Transformer';
         
         
         foreach ( $times as $key => $time ) {
 
-            $postdata['start_time'] = date( 'Y-m-d', strtotime( $time ) );
-            $postdata['end_time']   = date( 'Y-m-d', strtotime( $time ) );
+            $_POST['start_time'] = date( 'Y-m-d', strtotime( $time ) );
+            $_POST['end_time']   = date( 'Y-m-d', strtotime( $time ) );
             
-            $return_data[]  = Crud::data_process( $postdata );
+            $return_data[]  = Crud::data_process();
         }
 
         if ( is_wp_error( $leave ) ) {

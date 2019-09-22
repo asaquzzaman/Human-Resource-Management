@@ -402,7 +402,7 @@ class Hrm_Payroll {
             $get_group     = $this->group_filter(array('id' => $group));
             $components_id = array_merge( $get_group['data']['income'], $get_group['data']['deduction'] );
             $formulas = $this->get_formula( array( 'id' => $components_id ) );
-        }
+        } 
 
         foreach ( $all_formulas['data'] as $key => $formula ) {
             $formulas_name[$formula['name']] = $formula['formula'];
@@ -639,13 +639,12 @@ class Hrm_Payroll {
 
     function get_formula( $postData = array() ) {
         $name     = empty( $postData['name'] ) ? false : hrm_clean( $postData['name'] );
-        $id       = empty( $postData['id'] ) ? false : intval( $postData['id'] );
+        $id       = empty( $postData['id'] ) ? false : hrm_clean( $postData['id'] );
         $status   = 'enable';
         $page     = 1;
         $per_page = 100000;
       
-
-       if ( $id !== false && !is_array( $id )  ) {
+        if ( $id !== false && !is_array( $id )  ) {
 
             $formual = Formula::find( $id );
             
@@ -675,7 +674,7 @@ class Hrm_Payroll {
         })
         ->orderBy( 'id', 'DESC' )
         ->paginate( $per_page );
-    
+        
         $collection = $formual->getCollection();
 
         $resource = new Collection( $collection, new Formula_Transformer );

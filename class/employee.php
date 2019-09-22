@@ -9,7 +9,7 @@ use HRM\Models\Education;
 use HRM\Models\Department;
 use HRM\Models\Designation;
 use HRM\Models\Skill;
-use HRM\Transformers\Work_Experiance_Transformer;
+use HRM\Transformers\Work_Experience_Transformer;
 use HRM\Transformers\Education_Transformer;
 use HRM\Transformers\Skill_Transformer;
 use HRM\Core\File_System\File_System;
@@ -289,7 +289,7 @@ class Hrm_Employee {
     
         $collection = $experiance->getCollection();
 
-        $resource = new Collection( $collection, new Work_Experiance_Transformer );
+        $resource = new Collection( $collection, new Work_Experience_Transformer );
         $resource->setPaginator( new IlluminatePaginatorAdapter( $experiance ) );
 
         return $this->get_response( $resource );
@@ -579,7 +579,7 @@ class Hrm_Employee {
 
         if( $user_id ) {
             $this->update_empoyee( $user_id, $postdata );
-            wp_new_user_notification( $user_id, $random_password );
+            wp_new_user_notification( $user_id, null, 'both' );
             
             return $user_id;
 

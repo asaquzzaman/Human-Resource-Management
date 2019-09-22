@@ -61,7 +61,7 @@
 					postData['employee_id']  = this.$route.params.employeeId;
 					postData['class']        = 'Work_Experience';
 					postData['method']       = 'create';
-					postData['transformers'] = 'Work_Experiance_Transformer';
+					postData['transformers'] = 'Work_Experience_Transformer';
 
 				if (!this.formValidation(this.fields, postData)) {
 					return false;

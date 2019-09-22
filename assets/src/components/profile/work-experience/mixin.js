@@ -153,7 +153,7 @@ export default {
 			var postData = {
 				'class': 'Work_Experience',
 				'method': 'gets',
-				'transformers': 'Work_Experiance_Transformer',
+				'transformers': 'Work_Experience_Transformer',
 				'page': this.$route.params.current_page_number
 			};
 			

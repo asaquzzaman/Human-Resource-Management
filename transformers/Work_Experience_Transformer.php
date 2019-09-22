@@ -9,7 +9,7 @@ use HRM\Core\Common\Resource_Editors;
 use League\Fractal\Resource\Item;
 use HRM\Models\Work_Experience;
     
-class Work_Experiance_Transformer extends TransformerAbstract
+class Work_Experience_Transformer extends TransformerAbstract
 {
     use Resource_Editors, Transformer_Manager;
 

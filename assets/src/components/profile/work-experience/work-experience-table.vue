@@ -195,7 +195,7 @@
 				var self = this;
 				record['class'] = 'Work_Experience';
 				record['method'] = 'update';
-				record['transformers'] = 'Work_Experiance_Transformer';
+				record['transformers'] = 'Work_Experience_Transformer';
 
 				var args = {
 					data: record,

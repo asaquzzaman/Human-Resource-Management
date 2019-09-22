@@ -751,7 +751,7 @@ class Hrm_Admin {
         
         $level = 0;
 
-        if ( empty( hrm_clean( $_REQUEST['s'] ) ) ) {
+        if ( empty( $_REQUEST['s'] ) ) {
 
             $top_level_departments = array();
             $children_departments = array();

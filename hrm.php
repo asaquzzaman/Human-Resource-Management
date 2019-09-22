@@ -93,7 +93,7 @@ class WP_Hrm {
         $this->instantiate();
         $this->init_action();
         $this->init_filter();
-        
+        //$this->migrate_db();
         register_activation_hook( __FILE__, array($this, 'install') );
     }
 
@@ -102,10 +102,10 @@ class WP_Hrm {
     }
 
     function migrate_db() {
-        // $migrater = new HRM\Core\Database();
+        $migrater = new HRM\Core\Database();
         
-        // $migrater->create_migrations_table();
-        // $migrater->build_schema();
+        $migrater->create_migrations_table();
+        $migrater->build_schema();
     }
 
     function autoload( $class ) {
@@ -195,6 +195,7 @@ class WP_Hrm {
         add_action( 'init', array( $this, 'init' ) );
         add_action( 'init', 'hrm_set_capability' );
         add_action( 'admin_notices', array( $this, 'hrm_banner' ) );
+        add_action( 'map_meta_cap', 'hrm_map_meta_cap', 10, 4 );
     }
 
     function hrm_banner() {
@@ -219,7 +220,7 @@ class WP_Hrm {
     }
 
     function init_filter() {
-        add_action( 'map_meta_cap', 'hrm_map_meta_cap', 10, 4 );
+        hrm_load_schema();
     }
 
 

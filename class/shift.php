@@ -157,15 +157,15 @@ class HRM_Shift {
     function add_shift( $postData ) {
         $validation = $this->validation( $postData );
 
-        $postData['departments'] = $this->filter_departments( hrm_clean( $postData['times'] ) );
+        $postData['departments'] = $_POST['departments'] = $this->filter_departments( hrm_clean( $postData['times'] ) );
         
         if ( ! is_wp_error( $validation ) ) {
-            $current_date           = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['punch_start'] = $current_date .' '. trim( hrm_clean( $postData['punch_start'] ) );
-            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( hrm_clean( $postData['punch_start'] ) ) );
-            $postData['times']      = maybe_serialize( $postData['times'] ); 
+            $current_date            = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $postData['punch_start'] = $_POST['punch_start'] = $current_date .' '. trim( hrm_clean( $postData['punch_start'] ) );
+            $postData['punch_start'] = $_POST['punch_start'] = date( 'Y-m-d H:i:s', strtotime( hrm_clean( $postData['punch_start'] ) ) );
+            $postData['times']       = $_POST['times'] = maybe_serialize( $postData['times'] ); 
 
-            $store = hrm_insert_records( $postData );
+            $store = hrm_insert_records();
             
             foreach ( $postData['departments'] as $key => $department_id) {
                 Relation::create(array(
@@ -180,10 +180,9 @@ class HRM_Shift {
         } else {
             return [
                 'success' => false,
-                'error' => [$validation->get_error_message()]
+                'error'   => [$validation->get_error_message()]
             ];
         }
-
     }
 
     function ajax_update_shift() {
@@ -222,6 +221,18 @@ class HRM_Shift {
 
     function filter_shift_data( $postData ) {
         
+        foreach ( $_POST['times'] as $key => $time ) {
+
+            if( empty( $time['breakStatus'] ) || $time['breakStatus'] == 'false' ) {
+                $_POST['times'][$key]['breaks'][0] = [
+                    'breakBegin'   => '',
+                    'breakEnd'     => '',
+                    'breakHours'   => '',
+                    'breakMinutes' => ''
+                ];
+            }
+        }
+
         foreach ( $postData['times'] as $key => $time ) {
 
             if( empty( $time['breakStatus'] ) || $time['breakStatus'] == 'false' ) {
@@ -241,14 +252,14 @@ class HRM_Shift {
         global $wpdb;
         $validation = $this->validation( $postData );
 
-        $postData['departments'] = $this->filter_departments( $postData['times'] );
+        $postData['departments'] = $_POST['departments'] = $this->filter_departments( $postData['times'] );
         
         if ( ! is_wp_error( $validation ) ) {
-            $postData = $this->filter_shift_data( $postData );
-            $current_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-            $postData['punch_start'] = $current_date .' '. trim( hrm_clean( $postData['punch_start'] ) );
-            $postData['punch_start'] = date( 'Y-m-d H:i:s', strtotime( hrm_clean( $postData['punch_start'] ) ) );
-            $postData['times'] = maybe_serialize( $postData['times'] ); 
+            $postData                = $this->filter_shift_data( $postData );
+            $current_date            = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+            $postData['punch_start'] = $_POST['punch_start'] = $current_date .' '. trim( hrm_clean( $postData['punch_start'] ) );
+            $postData['punch_start'] = $_POST['punch_start'] = date( 'Y-m-d H:i:s', strtotime( hrm_clean( $postData['punch_start'] ) ) );
+            $postData['times']       = $_POST['times'] = maybe_serialize( $postData['times'] ); 
 
 
             $hasRelations = Relation::where('from', $postData['id'])
@@ -276,7 +287,7 @@ class HRM_Shift {
                     ->delete();
             }
             
-            $store = hrm_update_records( $postData );
+            $store = hrm_update_records();
 
             return $store;
             

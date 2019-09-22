@@ -174,7 +174,7 @@ class Hrm_Payroll {
             'employee_id' => isset( $_POST['employee_id'] ) ? hrm_clean( $_POST['employee_id'] ) : '',
         ];
 
-        $salary = self::getInstance()->get_salary( $POST );
+        $salary = self::getInstance()->get_salary( $postdata );
 
         wp_send_json_success( $salary );
     }
@@ -245,14 +245,14 @@ class Hrm_Payroll {
             'type'      => isset( $_POST['type'] ) ? hrm_clean( $_POST['type'] ) : '',
             'salaryDay' => isset( $_POST['salaryDay'] ) ? hrm_clean( $_POST['salaryDay'] ) : '',
         ];
-
+        //hr_pr($postdata); die();
         $salary = self::getInstance()->fetch_statement( $postdata );
 
         wp_send_json_success( $salary );
     }
 
     function fetch_statement( $postData ) {
-        $id = intval( $postData['id'] );
+        $id   = intval( $postData['id'] );
         $type = hrm_clean( $postData['type'] );
         $date = hrm_clean( $postData['salaryDay'] );
 
@@ -260,7 +260,7 @@ class Hrm_Payroll {
         $end_date = date( 'Y-m-t', strtotime( $date ) );
 
         if ( $type == 'employee' ) {
-             $salary = Salary::where('category_id', $id)
+             $salary = Salary::where('employee_id', $id)
                 ->where( function($q) use( $start_date, $end_date ) {
                     $q->where( 'month', '>=', $start_date);
                     $q->where( 'month', '<=', $end_date);
@@ -376,6 +376,8 @@ class Hrm_Payroll {
             'isUpdate'      => isset( $_POST['isUpdate'] ) ? hrm_clean( $_POST['isUpdate'] ) : '',
             'category'      => isset( $_POST['category'] ) ? hrm_clean( $_POST['category'] ) : '',
             'category_id'   => isset( $_POST['category_id'] ) ? hrm_clean( $_POST['category_id'] ) : '',
+            'month'         => isset( $_POST['month'] ) ? hrm_clean( $_POST['month'] ) : '',
+            'salary_id'     => isset( $_POST['salary_id'] ) ? hrm_clean( $_POST['salary_id'] ) : '',
         ];
 
         $salary = self::getInstance()->generate_salary_statement( $postdata );
@@ -384,17 +386,17 @@ class Hrm_Payroll {
     }
 
     function generate_salary_statement( $postData ) {
-        $salary         = hrm_clean( $postData['salary'] );
-        $group          = empty( $postData['group'] ) ? 0 : hrm_clean( $postData['group'] );
-        $salary_period  = $postData['salary_period'] == 'monthly' ? true : false;
-        $formulas       = $all_formulas = $this->get_formula();
-        $formulas_name  = array();
-        $generate_gross = 0;
-        $deduction      = 0;
-        $all_components_id = array();
+        $salary               = hrm_clean( $postData['salary'] );
+        $group                = empty( $postData['group'] ) ? 0 : hrm_clean( $postData['group'] );
+        $salary_period        = $postData['salary_period'] == 'monthly' ? true : false;
+        $formulas             = $all_formulas = $this->get_formula();
+        $formulas_name        = array();
+        $generate_gross       = 0;
+        $deduction            = 0;
+        $all_components_id    = array();
         $salary_components_id = array();
-        $is_save = $postData['save'] == 'true' ? true : false;
-        $is_update = $postData['isUpdate'] == 'true' ? true : false;
+        $is_save              = $postData['save'] == 'true' ? true : false;
+        $is_update            = $postData['isUpdate'] == 'true' ? true : false;
 
         if ( $group ) {
             $get_group     = $this->group_filter(array('id' => $group));
@@ -408,7 +410,7 @@ class Hrm_Payroll {
         }
 
         $formulas = apply_filters( 'hrm_before_salary_generator', $formulas, $postData );
-
+        
         foreach ( $formulas['data'] as $key => $formula ) {
 
             if ( ! empty( $formula['formula'] ) ) {
@@ -423,7 +425,9 @@ class Hrm_Payroll {
                $deduction = $deduction + $formulas['data'][$key]['amount']; 
             }
 
-            $salary_components_id[] = $formula['id'];
+            if ( isset( $formula['id'] ) ) {
+                $salary_components_id[] = $formula['id'];    
+            }
         }
 
         $actual_salary = $salary;
@@ -488,9 +492,11 @@ class Hrm_Payroll {
             
             if ( $salary && $is_update ) {
                 $store_data = apply_filters( 'hrm_before_update_salary', $store_data, $salary );
-                if( $salary->category != 'designation' ) {
+                
+                //if( $salary->category != 'designation' ) {
                     $salary = $salary->update( $store_data );
-                }
+                //}
+            
             } else {
                 if ( !$salary ) {
                     $record = Salary::create( $store_data );

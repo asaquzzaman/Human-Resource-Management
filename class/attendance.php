@@ -48,9 +48,18 @@ class Hrm_Attendance {
         $results = [];
         $punch_in  = empty( $_POST['punch_in'] ) ? date( 'Y-m-d 00:00:00', strtotime( date( 'Y-m-01' ) ) ) : hrm_clean( $_POST['punch_in'] );
         $punch_out = empty( $_POST['punch_out'] ) ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) : hrm_clean( $_POST['punch_out'] );
-       
+
+         $postdata = [
+            'id'        => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : false, 
+            'user_id'   => isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : false,
+            'punch_in'  => isset( $_POST['punch_in'] ) ? hrm_clean( $_POST['punch_in'] ) : false,
+            'punch_out' => isset( $_POST['punch_out'] ) ? hrm_clean( $_POST['punch_out'] ) : false,
+            'order_by'  => isset( $_POST['order_by'] ) ? hrm_clean( $_POST['order_by'] ) : false,
+            'per_page'  => isset( $_POST['per_page'] ) ? hrm_clean( $_POST['per_page'] ) : false,
+            'page'      => isset( $_POST['page'] ) ? hrm_clean( $_POST['page'] ) : false,
+        ];
         
-        if ( $_POST['allEmployees'] == 'true' ) {
+        if ( isset( $_POST['allEmployees'] ) && $_POST['allEmployees'] == 'true' ) {
             $employees = Hrm_Employeelist::getInstance()->get_employee();
 
             $postdata = [
@@ -1054,7 +1063,6 @@ class Hrm_Attendance {
             'attendance'      => $attendance,
             'punch_id'        => $punch_id,
             'punch_in_status' => self::getInstance()->punch_in_status(),
-            'total_time'      => self::getInstance()->count_office_time( $attendance )
         ) );
     }
 
@@ -1124,8 +1132,7 @@ class Hrm_Attendance {
         wp_send_json_success( array(
             'success'         => __( 'Attendance has been updated successfully', 'hrm' ),
             'attendance'      => $attendance,
-            'can_punch_in' => self::getInstance()->can_punch_in( get_current_user_id() ),
-            'total_time'      => self::getInstance()->count_office_time( $attendance )
+            'can_punch_in' => self::getInstance()->can_punch_in( get_current_user_id() )
         ) );
     }
 
@@ -1140,7 +1147,10 @@ class Hrm_Attendance {
 
         global $wpdb;
 
-        $table    = $wpdb->prefix . 'hrm_attendance';
+        $table = $wpdb->prefix . 'hrm_attendance';
+
+        $dpartment = Hrm_Admin::get_employee_department( $user_id );
+        $schedule = $this->has_policy( $dpartment->id );
 
         $schedule_start = date( 'Y-m-d H:i:s', strtotime( $schedule->punch_start ) );
         $last_hour      = date('H', strtotime( $schedule_start . '-1 hour') );
@@ -1337,19 +1347,19 @@ class Hrm_Attendance {
 
     function get_attendance( $postdata = [] ) {
         global $wpdb;
-        $id        = empty( intval( $postdata['id'] ) ) ? false : intval( $postdata['id'] );
-        $user_id   = !isset( $postdata['user_id'] ) ? get_current_user_id() : intval( $postdata['user_id'] );
-        $punch_in  = !isset( $postdata['punch_in'] ) 
-            ? date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) 
-            : hrm_clean( $postdata['punch_in'] );
+        $id        = !isset( $postdata['id'] ) ? false : intval( $postdata['id'] );
+        $id        = empty( $id ) ? false : $id;
+        $user_id   = isset( $postdata['user_id'] ) && ! empty( $postdata['user_id'] ) ? intval( $postdata['user_id'] ) : get_current_user_id();
+        $punch_in  = isset( $postdata['punch_in'] ) && ! empty( $postdata['punch_in'] ) 
+            ? hrm_clean( $postdata['punch_in'] ) : date( 'Y-m-d', strtotime( date( 'Y-m-01' ) ) ) ;
 
-        $punch_out = !isset( $postdata['punch_out'] ) 
-            ? date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) ) 
-            : hrm_clean( $postdata['punch_out'] );
+        $punch_out = isset( $postdata['punch_out'] ) && ! empty( $postdata['punch_out'] ) 
+            ? hrm_clean( $postdata['punch_out'] )
+            : date( 'Y-m-d 24:59:59', strtotime( current_time( 'mysql' ) ) );
 
-        $order_by = isset( $postdata['order_by'] ) ? hrm_clean( $postdata['order_by'] ) : 'id';
-        $per_page = empty( $postdata['per_page'] ) ? 100 : intval( $postdata['per_page'] );
-        $page     = empty( $postdata['page'] ) ? 1 : intval( $postdata['page'] );
+        $order_by = isset( $postdata['order_by'] ) && ! empty( $postdata['order_by'] ) ? hrm_clean( $postdata['order_by'] ) : 'id';
+        $per_page = isset( $postdata['per_page'] ) && ! empty( $postdata['per_page'] ) ? intval( $postdata['per_page'] ) : 100;
+        $page     = isset( $postdata['page'] ) && !empty( $postdata['page'] ) ? intval( $postdata['page'] ) : 1;
         
         if ( $id !== false  ) {
 
@@ -1679,9 +1689,9 @@ class Hrm_Attendance {
 
         wp_send_json_success(array(
             'success'  => __( 'Successfully update attendance configuration', 'hrm' ),
-            'start'    => hrm_clean( $_POST['office_start'] ),
-            'end'      => hrm_clean( $_POST['closed'] ),
-            'is_multi' => hrm_clean( $_POST['closed'] ),
+            'start'    => isset( $_POST['office_start'] ) ? hrm_clean( $_POST['office_start'] ) : '',
+            'end'      => isset( $_POST['closed'] ) ? hrm_clean( $_POST['closed'] ) : '',
+            'is_multi' => isset( $_POST['closed'] ) ? hrm_clean( $_POST['closed'] ) : '',
         ));
     }
 }

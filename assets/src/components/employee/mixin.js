@@ -248,7 +248,7 @@ export default {
                 }
             };
 
-            self.httpRequest('hrm_get_records', request_data);
+            self.httpRequest('hrm_get_designation', request_data);
 		},
 
 		getLocations (args) {

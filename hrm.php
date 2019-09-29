@@ -235,6 +235,7 @@ class WP_Hrm {
         Hrm_Attendance::getInstance();
         Hrm_Payroll::getInstance();
         Hrm_Shift::getInstance();
+        Hrm_Designation::getInstance();
     }
 
     function install() {

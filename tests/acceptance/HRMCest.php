@@ -1,18 +1,20 @@
 <?php 
+use \Codeception\Util\Locator;
 
 class HRMCest
 {
-	public $SigninCest;
-	
-    public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I, \Step\Acceptance\Login $login)
     {
-    	require_once dirname(__FILE__) . '/SigninCest.php';
-    	$this->SigninCest = new SigninCest();
+        
+        if ( ! $login->hasElement( Locator::find( 'div', ['id'=>'hrm'] ) ) ) {
+            $login->asAdmin();
+        }
     }
 
-    // tests
-    public function hrm(AcceptanceTester $I)
+    public function allTest(AcceptanceTester $I, \Page\Acceptance\Leave $leave)
     {
-    	$this->SigninCest->loginSuccessfully($I);
+        
+        
     }
 }
+

@@ -21,13 +21,13 @@
 								
 								<div class="row-actions">
 									<span class="edit">
-										<a @click.prevent="showHideLeaveTypeUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
+										<a class="leave-type-edit-btn" @click.prevent="showHideLeaveTypeUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
 											Edit
 										</a> 
 									</span>
 									|
 									<span class="edit">
-										<a @click.prevent="selfDeleteLeaveType(record)" href="#" aria-label="Edit “Hello world!”">
+										<a class="leave-type-delete-btn" @click.prevent="selfDeleteLeaveType(record)" href="#" aria-label="Edit “Hello world!”">
 											Delete
 										</a> 
 									</span>

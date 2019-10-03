@@ -19,6 +19,27 @@ class Leave
         $this->configuration();
     }
 
+    public function multiselect( $number ) {
+        $I = $this->acceptanceTester;
+
+        $I->click('.multiselect__select');
+        $I->waitForElement( '.multiselect__element', 30 );
+        $element = Locator::find( 'li', ['class' => 'multiselect__element'] );
+        $I->click(Locator::elementAt( $element, $number ));
+    }
+
+    public function lastElement( $tag, $clas, $number = false ) {
+        $I = $this->acceptanceTester;
+
+        $element = Locator::find( $tag, ['class' => $clas] );
+
+        if ( $number === false ) {
+            return Locator::lastElement( $element );
+        } 
+        
+        return Locator::elementAt( $element, $number );
+    }
+
     public function configuration() {
         $I = $this->acceptanceTester;
 
@@ -33,16 +54,26 @@ class Leave
         $I->waitForElement( '#hrm-leave-type-form', 30 );
         $I->waitForElement( '.multiselect__content-wrapper', 30 );
         $I->fillField('leave_type', $I->faker()->name);
-        $I->fillField('entitlement', $I->faker()->randomDigit);
-        $I->fillField('.multiselect__input', 'development');
-        $I->fillField('.multiselect__input', '');
-        $I->wait(3);
-        $I->click('.multiselect__element');
+        $this->multiselect(1);
+        $I->fillField('entitlement', $I->faker()->randomDigitNot(0));
+        //$this->multiselect(2);
+        $I->click(Locator::find( 'input', ['id'=>'hrm-next-year'] ));
         $I->click(Locator::find( 'input', ['type' => 'submit'] ));
+        $I->waitForElementNotVisible('.hrm-slide-up');
+        $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
+        $I->click( $this->lastElement( 'a', 'leave-type-edit-btn' ) );
+        //$I->wait(1);
+        $I->waitForElementVisible( "//input[@name = 'post_title']", 30 );
+        
+        $I->fillField('post_title', $I->faker()->name);
+        $I->click('.ptitle');
+        $this->multiselect(2);
+        //$this->multiselect(3);
+        $I->wait(5);
+        $I->click('submit');
 
-       
+        
 
-     
         $I->wait(30);
     }
 

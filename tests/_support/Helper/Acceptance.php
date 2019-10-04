@@ -15,4 +15,8 @@ class Acceptance extends \Codeception\Module
 		return \Faker\Factory::create();
 	}
 
+	public function site_url() {
+		return $this->getModule('WebDriver')->_getUrl();
+	}
+
 }

@@ -43,13 +43,16 @@ class Leave
     public function configuration() {
         $I = $this->acceptanceTester;
 
-        $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ), 30 );
-        $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ) );
-        $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ), 30 );
-        $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ) );
-        $I->waitForElement( Locator::find( 'h2', ['class' => 'nav-tab-wrapper'] ), 30 );
-        $I->click( 'Configuration' );
+        // $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ), 30 );
+        // $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ) );
+        // $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ), 30 );
+        // $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ) );
+        // $I->waitForElement( Locator::find( 'h2', ['class' => 'nav-tab-wrapper'] ), 30 );
+        // $I->click( 'Configuration' );
+        
+        $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/records/' );
         $I->executeJS('window.scrollTo(0,0);');
+        $I->click( 'Configuration' );
         $I->click( Locator::find( 'a', ['class' => 'page-title-action hrm-btn'] ) );
         $I->waitForElement( '#hrm-leave-type-form', 30 );
         $I->waitForElement( '.multiselect__content-wrapper', 30 );
@@ -69,8 +72,11 @@ class Leave
         $I->click('.ptitle');
         $this->multiselect(2);
         //$this->multiselect(3);
-        $I->wait(5);
         $I->click('submit');
+        $I->waitForElement( ['css' => 'tr.hrm-tr:last-child .row-actions'], 30 );
+        $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
+        $I->click(['css' => 'tr.hrm-tr:last-child .row-actions .leave-type-delete-btn']);
+        $I->acceptPopup();
 
         
 

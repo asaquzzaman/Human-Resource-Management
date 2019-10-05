@@ -43,7 +43,7 @@
 
 							<div class="hrm-form-field">
 								<label>
-									Leave type  
+									Apply Leave 
 									<em></em>
 								</label>
 								<div class="hrm-multiselect">
@@ -68,7 +68,7 @@
 							        </hrm-multiselect>               
 							    </div>
 							    <span class="hrm-clear"></span>
-							    <span class="description">This roles can aplly leave type enable/disable option</span>
+							    <span class="description">This roles can apply others employee leave</span>
 							</div>
 
 							<div v-if="false" class="hrm-form-field">

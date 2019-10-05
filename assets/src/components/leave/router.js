@@ -197,7 +197,7 @@ if (hrm_user_can('manage_leave')) {
                     component: Hrm_Leave_form_settings, 
                     name: 'leave_form_settings',
                     meta: {
-                        label: 'Leave Form'
+                        label: 'Settings'
                     }
                 }
             ]

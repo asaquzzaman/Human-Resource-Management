@@ -16,7 +16,7 @@
 
 				</thead>
 				<tbody>
-					<tr :data-recordId="pendingLeave.id" :id="'hrm-tr-' + pendingLeave.id" v-for="pendingLeave in pendingLeaves">
+					<tr class="leave-action-tr" :data-recordId="pendingLeave.id" :id="'hrm-tr-' + pendingLeave.id" v-for="pendingLeave in pendingLeaves">
 						
 						<td>
 
@@ -48,10 +48,10 @@
 						<td>{{ dateFormat(pendingLeave.end_time) }}</td>
 
 						<td>
-							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 1)" class="button button-secondary">
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 1)" class="restore button button-secondary">
 								<i class="fas fa-undo" aria-hidden="true"></i>
 							</button>
-							<button class="button button-secondary" v-if="canManamgeLeave()" @click.prevent="selfLeaveDelete(pendingLeave.id)">
+							<button class="delete button button-secondary" v-if="canManamgeLeave()" @click.prevent="selfLeaveDelete(pendingLeave.id)">
 								<i class="fas fa-trash" aria-hidden="true"></i>
 							</button>
 							<div v-if="!canManamgeLeave()">Not available</div>

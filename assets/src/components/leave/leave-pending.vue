@@ -62,13 +62,13 @@
 
 						<td v-if="!pendingLeave.metaSummeryDisplay">
 							
-							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 2)" class="button button-secondary">
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 2)" class="approve button button-secondary">
 								<i class="fas fa-check"></i>
 							</button>
-							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 3)" class="button button-secondary">
+							<button v-if="canManamgeLeave()" @click.prevent="selfUpdateLeaveStatus(pendingLeave, 3)" class="cancel button button-secondary">
 								<i class="fas fa-ban"></i>
 							</button>
-							<button class="button button-secondary" @click.prevent="selfLeaveDelete(pendingLeave.id)">
+							<button class="delete button button-secondary" @click.prevent="selfLeaveDelete(pendingLeave.id)">
 								<i class="fas fa-trash"></i>
 							</button>
 						</td>

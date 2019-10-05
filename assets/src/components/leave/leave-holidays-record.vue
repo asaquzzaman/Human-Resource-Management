@@ -18,13 +18,13 @@
 							{{ record.name }}
 							<div class="row-actions">
 								<span class="edit">
-									<a @click.prevent="showHideHolidayUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
+									<a class="holiday-edit-btn" @click.prevent="showHideHolidayUpdateForm('toggle', record)" href="#" aria-label="Edit “Hello world!”">
 										Edit
 									</a> 
 								</span>
 								|
 								<span class="edit">
-									<a @click.prevent="selfDeleteHoliday(record)" href="#" aria-label="Edit “Hello world!”">
+									<a class="hrm-delete-btn holiday-delete-btn" @click.prevent="selfDeleteHoliday(record)" href="#" aria-label="Edit “Hello world!”">
 										Delete
 									</a> 
 								</span>

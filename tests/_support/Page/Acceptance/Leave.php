@@ -16,7 +16,9 @@ class Leave
 
 
     public function start() {
-        $this->configuration();
+        //$this->configuration();
+        //$this->work_week();
+        $this->holiday();
     }
 
     public function multiselect( $number ) {
@@ -42,13 +44,6 @@ class Leave
 
     public function configuration() {
         $I = $this->acceptanceTester;
-
-        // $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ), 30 );
-        // $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/dashboard'] ) );
-        // $I->waitForElementVisible( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ), 30 );
-        // $I->click( Locator::find( 'a', ['href' => 'admin.php?page=hr_management#/leave'] ) );
-        // $I->waitForElement( Locator::find( 'h2', ['class' => 'nav-tab-wrapper'] ), 30 );
-        // $I->click( 'Configuration' );
         
         $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/records/' );
         $I->executeJS('window.scrollTo(0,0);');
@@ -62,6 +57,8 @@ class Leave
         //$this->multiselect(2);
         $I->click(Locator::find( 'input', ['id'=>'hrm-next-year'] ));
         $I->click(Locator::find( 'input', ['type' => 'submit'] ));
+
+        //Edit
         $I->waitForElementNotVisible('.hrm-slide-up');
         $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
         $I->click( $this->lastElement( 'a', 'leave-type-edit-btn' ) );
@@ -77,10 +74,56 @@ class Leave
         $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
         $I->click(['css' => 'tr.hrm-tr:last-child .row-actions .leave-type-delete-btn']);
         $I->acceptPopup();
+    }
 
+    public function work_week() {
+        $I = $this->acceptanceTester;
         
+        $I->amOnPage('/wp-admin/admin.php?page=hr_management#/leave/leave-configuration/work-week');
+        $I->waitForElement( '.hrm-attendance-configuration', 10 );
+        $I->wait(2);
+        $I->selectOption( Locator::find( 'select', ['name' => 'saturday'] ), 'Non-Working Day' );
+        $I->selectOption( Locator::find( 'select', ['name' => 'sunday'] ), 'Non-Working Day' );
+        
+        $I->wait(3);
+    }
 
-        $I->wait(30);
+    public function holiday() {
+        $I = $this->acceptanceTester;
+        
+        $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/leave-configuration/holidays' );
+
+        //Create
+        $I->click( Locator::find( 'a', ['class' => 'page-title-action hrm-btn'] ) );
+        $I->wait(1);
+        $I->fillField(Locator::find( 'input', ['name' => 'name'] ), $I->faker()->name);
+        $I->click( Locator::find( 'input', ['name' => 'from'] ));
+        $I->waitForElement( '.ui-datepicker-calendar', 10 );
+        $I->click( 10 );
+        $I->waitForElementNotVisible('.ui-datepicker-calendar');
+        $I->click( Locator::find( 'input', ['name' => 'to'] ));
+        $I->waitForElement( '.ui-datepicker-calendar', 10 );
+        $I->click( 15 );
+        $I->fillField('.holiday-description', $I->faker()->text);
+        $I->click( 'Save changes' );
+
+        //Edit
+        $I->wait(2);
+        $I->waitForElementVisible( ".hrm-tr", 30 );
+        $I->moveMouseOver(['css' => '.hrm-tr:last-child'] );
+        $I->click( ['css' => 'tr.hrm-tr:last-child .holiday-edit-btn'] );
+        $I->waitForElementVisible( "//input[@name = 'post_title']", 30 );
+        $I->fillField(Locator::find( 'input', ['name' => 'post_title'] ), $I->faker()->name);
+        $I->fillField('.holiday-description', $I->faker()->text);
+        $I->click( 'Submit' );
+
+        //Delete
+        $I->wait(2);
+        $I->waitForElement( ['css' => 'tr.hrm-tr:last-child .row-actions'], 30 );
+        $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
+        $I->click(['css' => 'tr.hrm-tr:last-child .row-actions .hrm-delete-btn']);
+        $I->acceptPopup();
+
     }
 
 }

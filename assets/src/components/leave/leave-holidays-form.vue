@@ -47,7 +47,7 @@
 							<label for="hrm-leave-description-textarea-field">
 								Description
 							</label>
-							<textarea v-model="description"></textarea>  
+							<textarea class="holiday-description" v-model="description"></textarea>  
 							<span class="hrm-clear"></span>
 							<span class="description"></span>
 						</div>

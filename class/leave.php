@@ -677,17 +677,8 @@ class Hrm_Leave {
     public static function ajax_save_work_week() {
         check_ajax_referer('hrm_nonce');
 
-        $postdata = [
-            'saturday'  => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'sunday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'monday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'tuesday'   => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'wednesday' => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'thursday'  => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-            'friday'    => isset( $_POST['saturday'] ) ? hrm_clean( $_POST['saturday'] ) : '',
-        ];
-        
-        $work_week = self::getInstance()->save_work_week( $postdata );
+
+        $work_week = self::getInstance()->save_work_week();
 
         wp_send_json_success(array( 
             'work_week'  => $work_week, 
@@ -696,25 +687,25 @@ class Hrm_Leave {
     }
 
     public function save_work_week( $postdata ) {
-        $prev_work_week = get_option( 'hrm_work_week' );
+        $prev_work_week = $this->get_work_week();
         
         if ( empty( $prev_work_week ) ) {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? 'full' : hrm_clean( $postdata['saturday'] );
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? 'full' : hrm_clean( $postdata['sunday'] );
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? 'full' : hrm_clean( $postdata['monday'] );
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? 'full' : hrm_clean( $postdata['tuesday'] );
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? 'full' : hrm_clean( $postdata['wednesday'] );
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? 'full' : hrm_clean( $postdata['thursday'] );
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? 'full' : hrm_clean( $postdata['friday'] );
+            $prev_work_week['saturday']  = empty( $_POST['saturday'] ) ? 'full' : hrm_clean( $_POST['saturday'] );
+            $prev_work_week['sunday']    = empty( $_POST['sunday'] ) ? 'full' : hrm_clean( $_POST['sunday'] );
+            $prev_work_week['monday']    = empty( $_POST['monday'] ) ? 'full' : hrm_clean( $_POST['monday'] );
+            $prev_work_week['tuesday']   = empty( $_POST['tuesday'] ) ? 'full' : hrm_clean( $_POST['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $_POST['wednesday'] ) ? 'full' : hrm_clean( $_POST['wednesday'] );
+            $prev_work_week['thursday']  = empty( $_POST['thursday'] ) ? 'full' : hrm_clean( $_POST['thursday'] );
+            $prev_work_week['friday']    = empty( $_POST['friday'] ) ? 'full' : hrm_clean( $_POST['friday'] );
         
         } else {
-            $prev_work_week['saturday']  = empty( $postdata['saturday'] ) ? $prev_work_week['saturday'] : hrm_clean( $postdata['saturday'] );
-            $prev_work_week['sunday']    = empty( $postdata['sunday'] ) ? $prev_work_week['sunday'] : hrm_clean( $postdata['sunday'] );
-            $prev_work_week['monday']    = empty( $postdata['monday'] ) ? $prev_work_week['monday'] : hrm_clean( $postdata['monday'] );
-            $prev_work_week['tuesday']   = empty( $postdata['tuesday'] ) ? $prev_work_week['tuesday'] : hrm_clean( $postdata['tuesday'] );
-            $prev_work_week['wednesday'] = empty( $postdata['wednesday'] ) ? $prev_work_week['wednesday'] : hrm_clean( $postdata['wednesday'] );
-            $prev_work_week['thursday']  = empty( $postdata['thursday'] ) ? $prev_work_week['thursday'] : hrm_clean( $postdata['thursday'] );
-            $prev_work_week['friday']    = empty( $postdata['friday'] ) ? $prev_work_week['friday'] : hrm_clean( $postdata['friday'] );
+            $prev_work_week['saturday']  = empty( $_POST['saturday'] ) ? $prev_work_week['saturday'] : hrm_clean( $_POST['saturday'] );
+            $prev_work_week['sunday']    = empty( $_POST['sunday'] ) ? $prev_work_week['sunday'] : hrm_clean( $_POST['sunday'] );
+            $prev_work_week['monday']    = empty( $_POST['monday'] ) ? $prev_work_week['monday'] : hrm_clean( $_POST['monday'] );
+            $prev_work_week['tuesday']   = empty( $_POST['tuesday'] ) ? $prev_work_week['tuesday'] : hrm_clean( $_POST['tuesday'] );
+            $prev_work_week['wednesday'] = empty( $_POST['wednesday'] ) ? $prev_work_week['wednesday'] : hrm_clean( $_POST['wednesday'] );
+            $prev_work_week['thursday']  = empty( $_POST['thursday'] ) ? $prev_work_week['thursday'] : hrm_clean( $_POST['thursday'] );
+            $prev_work_week['friday']    = empty( $_POST['friday'] ) ? $prev_work_week['friday'] : hrm_clean( $_POST['friday'] );
         }
 
         update_option( 'hrm_work_week', $prev_work_week );

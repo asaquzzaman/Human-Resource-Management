@@ -21,7 +21,7 @@
 					</label>
 					<div class="hrm-inline-edit-field">
 						<span class="input-text-wrap">
-							<input  type="text" v-model="holiday.description" name="post_title" class="ptitle hrm-input-width" value="">
+							<input  type="text" v-model="holiday.description" name="description" class="ptitle hrm-input-width holiday-description" value="">
 						</span>
 					</div>
 				</div>
@@ -29,7 +29,7 @@
 
 			<p class="submit inline-edit-save">
 				<button @click.prevent="showHideHolidayUpdateForm('toggle', holiday)" type="button" class="button cancel alignleft">Cancel</button>			
-				<input :disabled="!canSubmit" type="submit" value="submit" class="button button-primary save alignright">
+				<input :disabled="!canSubmit" type="submit" value="Submit" class="button button-primary save alignright">
 				<br class="clear">
 			</p>
 		</form>

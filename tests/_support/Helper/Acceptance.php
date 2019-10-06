@@ -19,4 +19,8 @@ class Acceptance extends \Codeception\Module
 		return $this->getModule('WebDriver')->_getUrl();
 	}
 
+	public function delete_cookies() {
+		$this->getModule('WebDriver')->webDriver->manage()->deleteAllCookies();
+	}
+
 }

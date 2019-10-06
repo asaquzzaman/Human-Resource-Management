@@ -8,7 +8,19 @@ class Login extends \AcceptanceTester
 		$I = $this;
 
         $I->amOnPage('/wp-login.php');
+        $I->wait(1);
         $I->fillField('log', 'admin');
+        $I->fillField('pwd', 'admin');
+        $I->click('wp-submit');
+	}
+
+	public function asEmployee() 
+	{
+		$I = $this;
+
+        $I->amOnPage('/wp-login.php');
+        $I->wait(1);
+        $I->fillField('log', 'employee');
         $I->fillField('pwd', 'admin');
         $I->click('wp-submit');
 	}

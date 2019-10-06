@@ -1,6 +1,8 @@
 <?php
 namespace Page\Acceptance;
 use \Codeception\Util\Locator;
+use \Codeception\Util\ActionSequence;
+
 
 class Leave 
 {
@@ -16,12 +18,16 @@ class Leave
 
 
     public function start() {
-        // $this->configuration();
-        // $this->work_week();
-        // $this->holiday();
-        // $this->settings();
-        // $this->pending();
-        $this->pending();
+        $I = $this->acceptanceTester;
+
+        $this->configuration();
+        $I->wait(2);
+        $this->leave();
+        $I->wait(2);
+        $this->requested_leave();
+
+        $I->wait(2);
+
     }
 
     public function holiday() {
@@ -58,13 +64,52 @@ class Leave
         $I->waitForElement( ['css' => 'tr.hrm-tr:last-child .row-actions'], 30 );
         $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
         $I->click(['css' => 'tr.hrm-tr:last-child .row-actions .hrm-delete-btn']);
+        $I->wait(1);
         $I->acceptPopup();
 
     }
 
-    public function pending() {
+    public function leave() {
         $I = $this->acceptanceTester;
         
+        $I->amOnPage('/wp-login.php');
+        $I->wait(1);
+        $I->fillField('log', 'employee');
+        $I->fillField('pwd', 'admin');
+        $I->click('wp-submit');
+
+        $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/records' );
+
+        //Create
+        $I->waitForElement( '.page-title-action', 10);
+        $I->wait(1);
+        $I->click( Locator::find( 'a', ['class' => 'page-title-action hrm-btn'] ) );
+        $I->wait(1);
+        $I->waitForElementNotVisible('.preloader');
+        $this->multiselect(2);
+        $I->fillField('.leave-description', $I->faker()->text);
+
+       
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-11' ) . "']"] );
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-12' ) . "']"] ); 
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-13' ) . "']"] );
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-14' ) . "']"] );
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-15' ) . "']"] );
+        $I->click( ['css' => ".fc-content-skeleton td[data-date='" . date( 'Y-m-16' ) . "']"] );      
+
+        
+        $I->click('Save changes');
+    }
+
+    public function requested_leave() {
+        $I = $this->acceptanceTester;
+
+        $I->amOnPage('/wp-login.php');
+        $I->wait(1);
+        $I->fillField('log', 'admin');
+        $I->fillField('pwd', 'admin');
+        $I->click('wp-submit');
+
         $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/leave-request/pending' );
 
         $I->waitForElement( ['css' => 'tr.leave-action-tr:first-child .approve'], 10);
@@ -84,9 +129,8 @@ class Leave
         $I->click( ['css' => 'tr.leave-action-tr:first-child .restore']);
         $I->wait(2);
         $I->click( ['css' => 'tr.leave-action-tr:first-child .delete']);
+        $I->wait(1);
         $I->acceptPopup();
-
-        $I->wait(20);
     }
 
     public function multiselect( $number ) {
@@ -111,6 +155,17 @@ class Leave
     }
 
     public function configuration() {
+        $I = $this->acceptanceTester;
+        $this->type();
+        $I->wait(2);
+        $this->work_week();
+        $I->wait(2);
+        $this->holiday();
+        $I->wait(2);
+        $this->settings();
+    }
+
+    public function type() {
         $I = $this->acceptanceTester;
         
         $I->amOnPage( '/wp-admin/admin.php?page=hr_management#/leave/records/' );
@@ -141,6 +196,7 @@ class Leave
         $I->waitForElement( ['css' => 'tr.hrm-tr:last-child .row-actions'], 30 );
         $I->moveMouseOver(['css' => 'tr.hrm-tr:last-child'] );
         $I->click(['css' => 'tr.hrm-tr:last-child .row-actions .leave-type-delete-btn']);
+        $I->wait(1);
         $I->acceptPopup();
     }
 
@@ -153,7 +209,6 @@ class Leave
         $I->selectOption( Locator::find( 'select', ['name' => 'saturday'] ), 'Non-Working Day' );
         $I->selectOption( Locator::find( 'select', ['name' => 'sunday'] ), 'Non-Working Day' );
         
-        $I->wait(3);
     }
 
     public function settings() {
@@ -167,8 +222,6 @@ class Leave
         $I->wait(2);
         $this->multiselect(1);
         $I->click( 'Save changes' );
-
-        $I->wait(20);
     }
 
 }

@@ -109,7 +109,7 @@
 							<em></em>
 						</label>
 						<span class="hrm-checkbox-wrap">
-							<textarea v-model="comments"></textarea>
+							<textarea class="leave-description" v-model="comments"></textarea>
 							<label for="hrm-disable-leave-type-checkbox" class="hrm-radio"></label>
 						</span>
 						<span class="hrm-clear"></span>

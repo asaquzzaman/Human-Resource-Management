@@ -16,7 +16,7 @@
 					                    <label for="title">
 					                        Shift Name<em>*</em>
 					                    </label>
-					                    <input type="text" v-model="shift.name"  required="required"> 
+					                    <input class="shift-name" type="text" v-model="shift.name"  required="required"> 
 					                    <span class="hrm-clear"></span> 
 					                    <span class="description"></span>
 					                </div>
@@ -27,7 +27,7 @@
 					                    <label for="title">
 					                        Start work day<em>*</em>
 					                    </label>
-					                    <input type="text" @blur="checkTimeValidation()" placeholder="08:00" v-model="shift.start" required="required">
+					                    <input class="start-work-day" type="text" @blur="checkTimeValidation()" placeholder="08:00" v-model="shift.start" required="required">
 					                    <span class="hrm-clear"></span> 
 					                    <span class="description">24 Hour Format</span>
 					                </div>
@@ -38,7 +38,7 @@
 					                    <label for="title">
 					                        Active
 					                    </label>
-					                    <input type="checkbox" v-model="shift.status"> 
+					                    <input class="active" type="checkbox" v-model="shift.status"> 
 					                    <span class="hrm-clear"></span> 
 					                    <span class="description"></span>
 					                </div>
@@ -58,7 +58,7 @@
 						                    <label for="title">
 						                        Shift Begin <em>*</em>
 						                    </label>
-						                    <input type="text" @blur="checkTimeValidation(time)" placeholder="10:00" v-model="time.begin" required="required">
+						                    <input class="shift-begin" type="text" @blur="checkTimeValidation(time)" placeholder="10:00" v-model="time.begin" required="required">
 						                    
 						                    <span class="hrm-clear"></span> 
 						                    <span class="description">24 Hour Format</span>
@@ -115,7 +115,7 @@
 						                    <label for="title">
 						                        Shift End <em>*</em>
 						                    </label>
-						                    <input type="text" @blur="checkTimeValidation(time)" placeholder="18:00" v-model="time.end" required="required">
+						                    <input class="shift-end" type="text" @blur="checkTimeValidation(time)" placeholder="18:00" v-model="time.end" required="required">
 						                    <span class="hrm-clear"></span> 
 						                    <span class="description">24 Hour Format</span>
 						                </div>
@@ -126,8 +126,8 @@
 						                    <label for="title">
 						                        Work Duration
 						                    </label>
-						                    <input @blur="checkTimeValidation()" class="hrm-shift-time-hour" required="required" step="1" v-model="time.workHours" min="0" type="number">Hour
-						                    <input @blur="checkTimeValidation()" class="hrm-shift-time-minute" required="required" step="1"  min="0" v-model="time.workMinutes" type="number">Minute
+						                    <input @blur="checkTimeValidation()" class="hrm-shift-time-hour work-shift-time-hour" required="required" step="1" v-model="time.workHours" min="0" type="number">Hour
+						                    <input @blur="checkTimeValidation()" class="hrm-shift-time-minute work-shift-time-minute" required="required" step="1"  min="0" v-model="time.workMinutes" type="number">Minute
 						                    
 						                    <span class="hrm-clear"></span> 
 						                    <span class="description"></span>
@@ -157,7 +157,7 @@
 								                    <label for="title">
 								                        Break Begin <em>*</em>
 								                    </label> 
-								                    <input required="required" @blur="checkTimeValidation()"  placeholder="13:00" v-model="rest.breakBegin" type="text">
+								                    <input class="break-begin" required="required" @blur="checkTimeValidation()"  placeholder="13:00" v-model="rest.breakBegin" type="text">
 								                    <span class="hrm-clear"></span> 
 								                    <span class="description">24 Hour Format</span>
 								                </div>
@@ -168,8 +168,8 @@
 								                    <label for="title">
 								                        Break Duration
 								                    </label>
-								                    <input disabled="disabled" class="hrm-shift-time-hour" :value="breakDurationHours(rest)"   type="text">Hour
-								                    <input disabled="disabled" class="hrm-shift-time-minute" :value="breakDurationMinutes(rest)"  type="text">Minute
+								                    <input disabled="disabled" class="hrm-shift-time-hour break-shift-time-hour" :value="breakDurationHours(rest)"   type="text">Hour
+								                    <input disabled="disabled" class="hrm-shift-time-minute brak-shift-time-minute" :value="breakDurationMinutes(rest)"  type="text">Minute
 								                    
 								                    <span class="hrm-clear"></span> 
 								                    <span class="description"></span>
@@ -185,7 +185,7 @@
 								                    <label for="title">
 								                        Break End <em>*</em>
 								                    </label>
-								                    <input required="required" @blur="checkTimeValidation()" placeholder="14:00" v-model="rest.breakEnd" type="text">
+								                    <input class="break-end" required="required" @blur="checkTimeValidation()" placeholder="14:00" v-model="rest.breakEnd" type="text">
 								                    <span class="hrm-clear"></span> 
 								                    <span class="description">24 Hour Format</span> 
 								                </div>

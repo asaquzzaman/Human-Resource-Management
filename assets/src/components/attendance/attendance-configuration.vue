@@ -17,7 +17,7 @@
 									Allow IP
 									<em>   </em>
 								</label>
-								<textarea type="textarea" value="" placeholder="IP seperated by pipe &quot;|&quot;" v-model="allow_ip"></textarea>
+								<textarea class="protected-ip" type="textarea" value="" placeholder="IP seperated by pipe &quot;|&quot;" v-model="allow_ip"></textarea>
 								<span class="hrm-clear"></span>
 								<span class="description">Employee can puch in/out only from this IP</span>
 							</div>

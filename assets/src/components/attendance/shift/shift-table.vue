@@ -72,8 +72,8 @@
 				</tr>
 
 				<tr v-if="!records.length">
-					<td colspan="3">
-						No result found!
+					<td colspan="4">
+						<span class="no-result-found">No result found!</span>
 					</td>
 				</tr>
             </tbody>

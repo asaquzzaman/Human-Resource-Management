@@ -2,9 +2,9 @@
 
 use \Codeception\Util\Locator;
 use \Codeception\Util\ActionSequence;
-use \Page\Acceptance\Leave;
+use \Page\Acceptance\Attendance;
 
-class LeaveCest
+class AttendanceCest
 {
     public function _before(AcceptanceTester $I, \Step\Acceptance\Login $login)
     {
@@ -16,10 +16,10 @@ class LeaveCest
 
 
     //tests
-    public function LeaveTest(AcceptanceTester $I)
+    public function AttendanceTest(AcceptanceTester $I)
     {
         
-        (new Leave($I) )->start();	
+        (new Attendance($I) )->start();	
     	
     }
 

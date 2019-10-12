@@ -1,6 +1,6 @@
 {
   "name": "HRM",
-  "version": "2.2.16",
+  "version": "2.2.17",
   "description": "Human resourcee management",
   "main": "index.js",
   "directories": {

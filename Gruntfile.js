@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     '!phpunit.xml',
                     '!export.sh',
                     '!.gitignore',
+                    '!.env',
                     '!.gitmodules',
                     '!npm-debug.log',
                     '!plugin-deploy.sh',
@@ -75,9 +76,19 @@ module.exports = function(grunt) {
                 args: ['run', 'reset']
             },
 
+            removeDev:{
+                cmd: 'composer',
+                args: ['install', '--no-dev']
+            },
+
             dumpautoload:{
                 cmd: 'composer',
                 args: ['dumpautoload', '-o']
+            },
+
+            composerInstall:{
+                cmd: 'composer',
+                args: ['install']
             },
         }
     });
@@ -95,14 +106,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-run' );
 
 
-    grunt.registerTask( 'concat', [
-        'concat'
-    ]);
-
     grunt.registerTask( 'release', [
         'clean',
-        'run',
+        'run:reset',
+        'run:removeDev',
+        'run:dumpautoload',
         'copy',
-        'compress'
+        'compress',
+        'run:composerInstall',
+        'run:dumpautoload',
     ])
 };
